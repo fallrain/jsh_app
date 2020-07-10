@@ -83,7 +83,7 @@
     <view class='login-protocol-wrap'>
       <j-radio
         :type="2"
-        v-model="isRead"
+        :checked.sync="isRead"
       ></j-radio>
       <text class='login-protocol-text'>我已阅读并同意《软件许可及服务条款》</text>
     </view>

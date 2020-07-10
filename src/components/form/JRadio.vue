@@ -1,5 +1,5 @@
 <template>
-  <view class="j-radio" @click="toggle">
+  <view class="j-radio" @tap="toggle">
     <template v-if="type===1">
       <template v-if="checked===1">
         <view class="iconfont iconradio"></view>
@@ -23,10 +23,6 @@
 export default {
   name: 'JRadio',
   // 修改双向绑定的属性和事件
-  model: {
-    prop: 'checked',
-    event: 'upOutside'
-  },
   props: {
     type: {
       type: Number,
@@ -48,7 +44,7 @@ export default {
   methods: {
     toggle() {
       /* 切换选中状态 */
-      this.$emit('upOutside', this.checked ^ 1);
+      this.$emit('update:checked', this.checked ^ 1);
     }
   }
 };
