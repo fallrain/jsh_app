@@ -188,6 +188,7 @@ export default {
   .login-main {
     background: #fff;
     min-height: 100vh;
+    padding-top: 180*100/1334 + vh;
     padding-left: 24px;
     padding-right: 24px;
     padding-bottom: 24px;
@@ -198,7 +199,8 @@ export default {
     height: 184px;
     background: url('~@/assets/img/login/login-haier.png') no-repeat;
     background-size: 100%;
-    margin: 180*100/1334 + vh auto 0 auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .login-banner-title {

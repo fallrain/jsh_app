@@ -12,6 +12,7 @@
   }
 
   .uni-numbox {
+    height: 40px;
 
     .uni-numbox--text {
       font-size: 24px;
@@ -22,11 +23,18 @@
   .uni-numbox__value {
     width: 58px;
     min-height: auto;
+    height: 40px;
     font-size: 28px;
   }
 
   .uni-numbox__value {
     color: #999;
+  }
+
+  .uni-numbox__plus,
+  .uni-numbox__minus {
+    height: 40px;
+    line-height: 40px;
   }
 }
 
@@ -97,10 +105,10 @@
 
 @mixin jGoodsItem-cnt-opts-btn {
   display: inline-block;
-  height: 34px;
+  height: 40px;
   padding-left: 16px;
   padding-right: 16px;
-  line-height: 34px;
+  line-height: 40px;
   font-size: 24px;
   border-radius: 8px;
 }
