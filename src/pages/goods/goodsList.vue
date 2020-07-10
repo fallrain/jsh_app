@@ -50,7 +50,10 @@
             </view>
           </view>
           <view class="goodsList-drawer-filter-head-ads-wrap">
-            <view class="goodsList-drawer-filter-head">
+            <view
+              class="goodsList-drawer-filter-head"
+              @tap="showDeliveryAddress"
+            >
               <view>
                 <text>配送至</text>
               </view>
@@ -95,6 +98,9 @@
         </view>
       </view>
     </uni-drawer>
+    <j-choose-delivery-address
+      :show.sync="isShowAddressDrawer"
+    ></j-choose-delivery-address>
   </view>
 </template>
 
@@ -104,11 +110,14 @@ import {
 } from '@dcloudio/uni-ui';
 import JGoodsItem from '../../components/goods/JGoodsItem';
 import JHeadTab from '../../components/form/JHeadTab';
+import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import './css/goodsList.scss';
+
 
 export default {
   name: 'goodsList',
   components: {
+    JChooseDeliveryAddress,
     JHeadTab,
     JGoodsItem,
     uniDrawer
@@ -138,8 +147,8 @@ export default {
           goodsName: '海尔BCD-123123家用250L对开门冰箱  高品质除菌保鲜只能无氟速冻冰箱……'
         }
       ],
-      // 是否展示搜索产品侧边抽屉
-      isShowSearchFilter: false,
+      // 是否展示地址侧边抽屉
+      isShowAddressDrawer: false,
       tabs: [
         {
           name: '综合'
@@ -249,7 +258,6 @@ export default {
     },
     showFilter() {
       /* 展示filter */
-      this.isShowSearchFilter = true;
       this.$refs.goodsFilterDrawer.open();
     },
     toggleExpand(item) {
@@ -272,6 +280,10 @@ export default {
         filterItem.isChecked = !filterItem.isChecked;
       }
     },
+    showDeliveryAddress() {
+      /* 展示配送地址 */
+      this.isShowAddressDrawer = true;
+    }
   }
 };
 </script>
