@@ -188,14 +188,14 @@ export default {
   .login-main {
     background: #fff;
     min-height: 100vh;
-    padding-left: 24rpx;
-    padding-right: 24rpx;
-    padding-bottom: 24rpx;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
   }
 
   .login-banner {
-    width: 638rpx;
-    height: 184rpx;
+    width: 638px;
+    height: 184px;
     background: url('~@/assets/img/login/login-haier.png') no-repeat;
     background-size: 100%;
     margin: 180*100/1334 + vh auto 0 auto;
@@ -203,23 +203,23 @@ export default {
 
   .login-banner-title {
     color: #333;
-    font-size: 36rpx;
-    line-height: 50rpx;
+    font-size: 36px;
+    line-height: 50px;
     text-align: center;
   }
 
 
   @mixin login-btn {
     width: 100%;
-    height: 84rpx;
-    font-size: 30rpx;
-    border-radius: 47rpx;
+    height: 84px;
+    font-size: 30px;
+    border-radius: 47px;
     text-align: center;
   }
 
   .login-default-btn {
     @include login-btn;
-    border: 1rpx solid #2283E2;
+    border: 1px solid #2283E2;
     color: #2283E2;
     background: #fff;
   }
@@ -231,8 +231,8 @@ export default {
   }
 
   .login-btns-wrap {
-    margin-top: 56rpx;
-    margin-bottom: 40rpx;
+    margin-top: 56px;
+    margin-bottom: 40px;
   }
 
   .login-protocol-wrap {
@@ -248,14 +248,14 @@ export default {
 
   .login-protocol-text {
     color: #666;
-    font-size: 28rpx;
-    line-height: 40rpx;
+    font-size: 28px;
+    line-height: 40px;
   }
 
   .login-other-wrap {
     position: relative;
-    height: 28rpx;
-    margin-top: 120rpx;
+    height: 28px;
+    margin-top: 120px;
   }
 
   .login-other-line {
@@ -263,7 +263,7 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     width: 100%;
-    height: 1rpx;
+    height: 1px;
     background: #F6F6F6;
   }
 
@@ -273,21 +273,21 @@ export default {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 180rpx;
-    height: 28rpx;
-    line-height: 28rpx;
+    width: 180px;
+    height: 28px;
+    line-height: 28px;
     background: #fff;
     color: #BABABA;
-    font-size: 20rpx;
+    font-size: 20px;
     text-align: center;
   }
 
   .login-other-btns {
-    margin-top: 40rpx;
+    margin-top: 40px;
     text-align: center;
 
     .iconfont {
-      font-size: 60rpx;
+      font-size: 60px;
       color: #B3B1B1;
     }
   }
@@ -295,37 +295,37 @@ export default {
   .login-btm-wrap {
     display: flex;
     align-items: center;
-    margin-top: 138rpx;
-    margin-bottom: 66rpx;
-    padding-left: 24rpx;
-    padding-right: 24rpx;
+    margin-top: 138px;
+    margin-bottom: 66px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .login-btm-text {
     color: #2283E2;
-    font-size: 24rpx;
+    font-size: 24px;
   }
 
   .login-btm-line {
-    width: 1rpx;
-    height: 20rpx;
+    width: 1px;
+    height: 20px;
     background: #DFDEDE;
-    margin-left: 24rpx;
-    margin-right: 24rpx;
+    margin-left: 24px;
+    margin-right: 24px;
   }
 
   .login-pwd-icon-wrap {
 
     .iconfont {
       color: #666;
-      font-size: 26rpx;
+      font-size: 26px;
     }
   }
 
   .login-get-sms-code {
-    width: 140rpx;
+    width: 140px;
     color: #2283E2;
-    font-size: 28rpx;
+    font-size: 28px;
   }
 
 </style>

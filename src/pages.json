@@ -17,6 +17,12 @@
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
+		},
+		{
+			"path": "pages/goods/goodsList",
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
 		}
 	],
 	"globalStyle": {

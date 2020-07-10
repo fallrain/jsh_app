@@ -53,12 +53,12 @@ export default {
   .j-radio {
     display: flex;
     align-items: center;
-    font-size: 28rpx;
+    font-size: 28px;
     color: #969796;
-    margin-top: 5rpx;
+    margin-top: 5px;
 
     .iconfont {
-      font-size: 36rpx;
+      font-size: 36px;
       color: #2283E2;
 
       &:before {
@@ -80,7 +80,7 @@ export default {
   }
 
   .j-radio-inf {
-    margin-left: 5rpx;
+    margin-left: 5px;
     color: #474E66;
   }
 </style>

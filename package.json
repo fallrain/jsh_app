@@ -24,6 +24,7 @@
     "@dcloudio/uni-mp-alipay": "^2.0.0-27920200618002",
     "@dcloudio/uni-mp-weixin": "^2.0.0-27920200618002",
     "@dcloudio/uni-stat": "^2.0.0-27920200618002",
+    "@dcloudio/uni-ui": "^1.2.3",
     "core-js": "^3.6.5",
     "deepmerge": "^4.2.2",
     "flyio": "^0.6.2",

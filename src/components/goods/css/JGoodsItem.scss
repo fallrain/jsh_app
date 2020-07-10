@@ -1,0 +1,141 @@
+.jGoodsItem {
+  display: flex;
+  padding: 24px;
+  border-bottom: 1px solid #F5F5F5;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:first-child {
+    border-bottom: 1px solid #F5F5F5;
+  }
+
+  .uni-numbox {
+
+    .uni-numbox--text {
+      font-size: 24px;
+      color: #999;
+    }
+  }
+
+  .uni-numbox__value {
+    width: 58px;
+    min-height: auto;
+    font-size: 28px;
+  }
+
+  .uni-numbox__value {
+    color: #999;
+  }
+}
+
+.jGoodsItem-left {
+  width: 238px;
+  height: 238px;
+  flex-shrink: 0;
+
+  image {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.jGoodsItem-cnt {
+  flex-grow: 1;
+}
+
+.jGoodsItem-cnt-goodsName {
+  color: #333;
+  font-size: 24px;
+  line-height: 34px;
+}
+
+.jGoodsItem-cnt-price-tips {
+  margin-top: 12px;
+}
+
+.jGoodsItem-cnt-price-tips-item {
+  display: inline-block;
+  padding: 2px 8px;
+  line-height: 28px;
+  color: #999;
+  background: #F2F2F7;
+  font-size: 20px;
+  margin-left: 20px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.jGoodsItem-cnt-price-inf {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.jGoodsItem-cnt-price {
+  margin-right: 20px;
+  color: #ED2856;
+  font-size: 32px;
+}
+
+.jGoodsItem-cnt-price-inf-item {
+  margin-right: 20px;
+  color: #666;
+  font-size: 20px;
+}
+
+.jGoodsItem-cnt-opts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+@mixin jGoodsItem-cnt-opts-btn {
+  display: inline-block;
+  height: 34px;
+  padding-left: 16px;
+  padding-right: 16px;
+  line-height: 34px;
+  font-size: 24px;
+  border-radius: 8px;
+}
+
+.jGoodsItem-cnt-opts-primary {
+  @include jGoodsItem-cnt-opts-btn;
+  background: #ED2856;
+  color: #fff;
+}
+
+.jGoodsItem-cnt-opts-default {
+  @include jGoodsItem-cnt-opts-btn;
+  background: #fff;
+  color: #ED2856;
+}
+
+.jGoodsItem-tags {
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.jGoodsItem-tag-item {
+  display: inline-block;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 4px;
+  border: 1px solid #ED2856;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 16px;
+  color: #ED2856;
+  margin-right: 12px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}

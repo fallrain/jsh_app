@@ -44,18 +44,18 @@ export default {
   .jInput-wrap {
     display: flex;
     align-items: center;
-    border-bottom: 1.5rpx solid #d3d3d3;
+    border-bottom: 1.5px solid #d3d3d3;
     width: 100%;
   }
 
   .jInput {
     box-sizing: border-box;
     flex-grow: 1;
-    height: 84rpx;
-    padding-left: 40rpx;
-    padding-right: 40rpx;
+    height: 84px;
+    padding-left: 40px;
+    padding-right: 40px;
     color: #666;
-    font-size: 28rpx;
+    font-size: 28px;
 
     &::-webkit-input-placeholder {
       color: #BDCADA;
