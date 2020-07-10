@@ -10,15 +10,21 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 view,
 input,
 button,
 text,
 label,
-image{
+image {
   box-sizing: border-box;
 }
 
 button {
-  margin: 0
+  margin: 0;
+  border-radius: 0;
+
+  &:after {
+    display: none;
+  }
 }
