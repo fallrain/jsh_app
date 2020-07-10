@@ -51,6 +51,7 @@ module.exports = {
     parser: 'babel-eslint',
   },
   globals: {
-    wx: 'readonly'
+    wx: 'readonly',
+    uni: 'readonly'
   },
 };

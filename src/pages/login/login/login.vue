@@ -71,6 +71,7 @@
     <view class="login-btns-wrap">
       <Button
         class="login-primary-btn"
+        @click="login"
       >登录
       </Button>
       <Button
@@ -102,8 +103,14 @@
 </template>
 
 <script>
+import {
+  mapMutations
+} from 'vuex';
 import JInput from '../../../components/form/JInput';
 import JRadio from '../../../components/form/JRadio';
+import {
+  USER
+} from '../../../store/mutationsTypes';
 
 export default {
   name: 'Login',
@@ -140,26 +147,39 @@ export default {
     };
   },
   methods: {
+    ...mapMutations([
+      USER.UPDATE_USER
+    ]),
     hasReadHandleChange(hasReadCheckedList) {
       /* 已读事件 */
       this.hasReadCheckedList = hasReadCheckedList;
     },
-
     togglePwdStyle() {
       /* 切换密码框样式 */
       this.isHidePwd = !this.isHidePwd;
     },
-
     toggleSMSLogin() {
       /* 切换短信验证码登录 */
       this.loginType = this.loginType === 'SMS' ? 'account' : 'SMS';
     },
-
     getSMSCode() {
       /* 获取短信验证码 */
-      alert('验证码是6666');
+      uni.showModal({
+        title: '',
+        content: '666',
+      });
+    },
+    login() {
+      uni.showModal({
+        title: '',
+        content: '登录成功',
+      });
+      this[USER.UPDATE_USER]({
+        account: 'a0008949',
+        name: '程江涛',
+        mobile: '190110119120'
+      });
     }
-
   }
 };
 </script>
