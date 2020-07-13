@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App';
 import store from './store';
+import '@/assets/css/var.scss';
 import '@/assets/font/iconfont.css';
 import '@/assets/css/base.scss';
 import '@/assets/css/comone.scss';

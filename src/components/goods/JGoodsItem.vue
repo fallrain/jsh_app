@@ -42,7 +42,7 @@
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
-import './css/JGoodsItem.scss';
+import './css/jGoodsItem.scss';
 
 export default {
   name: 'JGoodsItem',
