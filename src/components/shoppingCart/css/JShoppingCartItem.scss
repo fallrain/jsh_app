@@ -1,4 +1,5 @@
 .jShoppingCartItem {
+  margin-bottom: 24px;
   padding-top: 16px;
   padding-left: 16px;
   border-radius: 14px;
@@ -34,6 +35,8 @@
   .uni-numbox__value {
     @include uni-num-h;
     min-height: 38px;
+    color: $theme-color;
+    font-size: 22px;
   }
 
   .uni-numbox__minus {
@@ -109,8 +112,11 @@
 
 .jShoppingCartItem-cnt-check {
   flex-shrink: 0;
-  font-size: 30px;
   color: #CFCFCF;
+
+  .iconfont {
+    font-size: 30px;
+  }
 
   .iconfont.active {
     color: $theme-color;
@@ -132,6 +138,7 @@
 
 .jShoppingCartItem-cnt-price-inf {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   min-height: 100%;
   margin-top: 12px;
@@ -147,6 +154,7 @@
   margin-right: 6px;
   color: #666;
   font-size: 20px;
+  line-height: 20px;
 }
 
 .jShoppingCartItem-cnt-like {
@@ -233,7 +241,7 @@
   font-size: 24px;
   color: #333;
   background: #F7F7F8;
-  border-radius:8px;
+  border-radius: 8px;
 
   .iconfont {
     font-size: 18px;

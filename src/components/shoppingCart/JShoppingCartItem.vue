@@ -77,6 +77,7 @@ export default {
     choose(item) {
       /* 选中本商品 */
       this.$set(item, 'checked', !item.checked);
+      item.checked = !item.checked;
     }
   }
 };

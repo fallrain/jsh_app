@@ -11,7 +11,8 @@
     <view class="shoppingCart-ads">
       <view class="shoppingCart-ads-total">共4件宝贝</view>
       <view class="shoppingCart-ads-detail">
-        <i class="iconfont iconicon-"></i> 配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792
+        <view class="iconfont iconicon-"></view>
+        <text>配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792</text>
       </view>
     </view>
     <view class="shoppingCart-list">
