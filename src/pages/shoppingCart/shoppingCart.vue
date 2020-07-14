@@ -20,6 +20,8 @@
         v-for="(goods,index) in shoppingList"
         :key="index"
         :goods="goods"
+        :index="index"
+        @change="goodsChange"
       ></j-shopping-cart-item>
     </view>
   </view>
@@ -39,19 +41,29 @@ export default {
     return {
       shoppingList: [
         {
-          checked: false
+          checked: false,
+          isCreditMode: false
         },
         {
-          checked: true
+          checked: true,
+          isCreditMode: false
         },
         {
-          checked: false
+          checked: false,
+          isCreditMode: false
         },
         {
-          checked: false
+          checked: false,
+          isCreditMode: false
         }
       ]
     };
   },
+  methods: {
+    goodsChange(goods, index) {
+      this.shoppingList[index] = goods;
+      this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
+    }
+  }
 };
 </script>

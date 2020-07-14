@@ -16,7 +16,7 @@
     <view class="jShoppingCartItem-cnt">
       <view
         class="jShoppingCartItem-cnt-check"
-        @tap="choose(goods)"
+        @tap="choose"
       >
         <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
       </view>
@@ -41,10 +41,11 @@
       </view>
       <view class="jShoppingCartItem-btm-text">库存：10</view>
       <view class="jShoppingCartItem-btm-switch-wrap">
-        <switch
-          class="jShoppingCartItem-btm-switch"
-          color="#ED2856"
-        ></switch>
+        <j-switch
+          :active.sync="goods.isCreditMode"
+          @change="isCreditModeChange"
+        >
+        </j-switch>
         <text class="jShoppingCartItem-btm-switch-text mr32">信用模式</text>
       </view>
       <view class="jShoppingCartItem-btm-version-picker">
@@ -59,25 +60,36 @@
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
+import JSwitch from '../form/JSwitch';
 import './css/JShoppingCartItem.scss';
+
 
 export default {
   name: 'JShoppingCartItem',
   components: {
+    JSwitch,
     uniNumberBox
   },
   props: {
     goods: {
-      type: Object,
-      default: () => {
-      }
+      type: Object
+    },
+    index: {
+      type: [String, Number]
     }
   },
   methods: {
-    choose(item) {
+    choose() {
       /* 选中本商品 */
-      this.$set(item, 'checked', !item.checked);
-      item.checked = !item.checked;
+      const {
+        checked
+      } = this.goods;
+      this.goods.checked = !checked;
+      this.$emit('change', this.goods, this.index);
+    },
+    isCreditModeChange() {
+      /* switch change */
+      this.$emit('change', this.goods, this.index);
     }
   }
 };

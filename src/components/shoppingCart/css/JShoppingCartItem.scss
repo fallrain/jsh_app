@@ -202,6 +202,11 @@
   font-size: 24px;
 }
 
+.jShoppingCartItem-btm-switch-wrap {
+  display: flex;
+  align-items: center;
+}
+
 .jShoppingCartItem-btm-switch {
   .uni-switch-input {
     width: 40px;
@@ -234,6 +239,8 @@
 }
 
 .jShoppingCartItem-btm-version-picker {
+  display: flex;
+  align-items: center;
   height: 38px;
   line-height: 38px;
   padding-left: 8px;
