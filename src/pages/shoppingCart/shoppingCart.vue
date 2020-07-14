@@ -24,6 +24,10 @@
         @change="goodsChange"
       ></j-shopping-cart-item>
     </view>
+    <j-failure-goods-list
+      :list="failureGoodsList"
+      @change="failureGoodsListChange"
+    ></j-failure-goods-list>
     <j-shopping-cart-btm
       :checked.sync="isCheckAll"
       @checkAll="checkAll"
@@ -34,11 +38,14 @@
 import JShoppingCartTab from '../../components/shoppingCart/JShoppingCartTab';
 import JShoppingCartItem from '../../components/shoppingCart/JShoppingCartItem';
 import JShoppingCartBtm from '../../components/shoppingCart/JShoppingCartBtm';
+import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import './css/shoppingCart.scss';
+
 
 export default {
   name: 'shoppingCart',
   components: {
+    JFailureGoodsList,
     JShoppingCartBtm,
     JShoppingCartItem,
     JShoppingCartTab
@@ -63,8 +70,19 @@ export default {
           isCreditMode: false
         }
       ],
+      failureGoodsList: [
+        {
+          checked: false,
+        },
+        {
+          checked: false,
+        },
+        {
+          checked: false,
+        }
+      ],
       // 是否全选
-      isCheckAll: false
+      isCheckAll: false,
     };
   },
   methods: {
@@ -77,6 +95,9 @@ export default {
       this.shoppingList.forEach((v) => {
         v.checked = checked;
       });
+    },
+    failureGoodsListChange(list) {
+      this.failureGoodsList = list;
     }
   }
 };

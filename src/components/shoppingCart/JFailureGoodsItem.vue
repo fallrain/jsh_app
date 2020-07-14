@@ -1,0 +1,102 @@
+<template>
+  <view class="jFailureGoodsItem">
+    <view
+      class="jShoppingCartItem-cnt-check"
+      @tap="choose"
+    >
+      <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
+    </view>
+    <view class="jShoppingCartItem-cnt-img-wrap">
+      <image src="@/assets/img/goods/example-fridge.jpg"></image>
+    </view>
+    <view class="jFailureGoodsItem-cnt">
+      <view class="jFailureGoodsItem-cnt-head">
+        <view class="jFailureGoodsItem-cnt-head-tag mr10">失效</view>
+        <text class="jFailureGoodsItem-cnt-head-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温除高品质家用静音全自动10KG洗烘一体高温除高品质</text>
+      </view>
+      <view class="jFailureGoodsItem-cnt-btm">
+        <div class="jFailureGoodsItem-cnt-btm-tag">客户未签约</div>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+export default {
+  name: 'JFailureGoodsItem',
+  props: {
+    // 选中
+    checked: {
+      type: Boolean,
+      default: false
+    },
+    // 索引
+    index: {
+      type: Number,
+    }
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    choose() {
+      /* 选中 */
+      const checked = !this.checked;
+      this.$emit('update:checked', checked);
+      this.$emit('change', checked, this.index);
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+  .jFailureGoodsItem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 198px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #EDE9E9;
+  }
+
+  .jFailureGoodsItem-cnt {
+    display: flex;
+    min-height: 150px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-right: 40px;
+  }
+
+  .jFailureGoodsItem-cnt-head {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 24px;
+  }
+
+  .jFailureGoodsItem-cnt-head-text {
+    color: #999;
+    font-size: 24px;
+  }
+
+  .jFailureGoodsItem-cnt-head-tag {
+    display: inline-block;
+    height: 28px;
+    background: #999;
+    border-radius: 14px;
+    font-size: 16px;
+    line-height: 28px;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    color: #fff;
+  }
+
+  .jFailureGoodsItem-cnt-btm-tag {
+    color: #999;
+    font-size: 24px;
+  }
+</style>

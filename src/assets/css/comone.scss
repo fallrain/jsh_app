@@ -53,3 +53,20 @@
 }
 
 /*margin end*/
+
+/*购物车*/
+
+.jShoppingCartItem-cnt-check {
+  flex-shrink: 0;
+  color: #CFCFCF;
+
+  .iconfont {
+    font-size: 30px;
+  }
+
+  .iconfont.active {
+    color: $theme-color;
+  }
+}
+
+/*购物车 end*/
