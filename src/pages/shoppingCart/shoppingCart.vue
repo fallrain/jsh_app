@@ -24,16 +24,22 @@
         @change="goodsChange"
       ></j-shopping-cart-item>
     </view>
+    <j-shopping-cart-btm
+      :checked.sync="isCheckAll"
+      @checkAll="checkAll"
+    ></j-shopping-cart-btm>
   </view>
 </template>
 <script>
 import JShoppingCartTab from '../../components/shoppingCart/JShoppingCartTab';
 import JShoppingCartItem from '../../components/shoppingCart/JShoppingCartItem';
+import JShoppingCartBtm from '../../components/shoppingCart/JShoppingCartBtm';
 import './css/shoppingCart.scss';
 
 export default {
   name: 'shoppingCart',
   components: {
+    JShoppingCartBtm,
     JShoppingCartItem,
     JShoppingCartTab
   },
@@ -56,13 +62,21 @@ export default {
           checked: false,
           isCreditMode: false
         }
-      ]
+      ],
+      // 是否全选
+      isCheckAll: false
     };
   },
   methods: {
     goodsChange(goods, index) {
       this.shoppingList[index] = goods;
       this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
+    },
+    checkAll(checked) {
+      /* 全部选择回调函数 */
+      this.shoppingList.forEach((v) => {
+        v.checked = checked;
+      });
     }
   }
 };
