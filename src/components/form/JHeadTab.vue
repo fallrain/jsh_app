@@ -1,35 +1,59 @@
 <template>
   <view class="jHeadTab-wrap">
-    <view class="jHeadTab-list">
-      <view
-        class="jHeadTab-item"
-        v-for="(item,index) in tabs"
-        :key="index"
-        @tap="tabHandle(item.handler)"
-      >
-        <text>{{item.name}}</text>
+    <view class="jHeadTab-list-wrap">
+      <view class="jHeadTab-list">
         <view
-          v-if="item.icon"
-          :class="['iconfont',item.icon]"
-        ></view>
+          class="jHeadTab-item"
+          v-for="(item,index) in tabs"
+          :key="index"
+          @tap="tabHandle(item.handler)"
+        >
+          <text>{{item.name}}</text>
+          <view
+            v-if="item.icon"
+            :class="['iconfont',item.icon]"
+          ></view>
+        </view>
+      </view>
+      <view :class="['jHeadTab-pop-tab-list',isExpend && 'isExpend']">
+        <view
+          :class="[
+          'jHeadTab-pop-tab-item',
+          item.show && 'active',
+        ]"
+          v-for="(item,index) in popTabs"
+          :key="index"
+        >
+          <view
+            @tap="showSecondCategory(item)"
+            class="jHeadTab-pop-tab-item-text-wrap"
+          >
+            <text class="jHeadTab-pop-tab-item-text">{{item.name}}</text>
+            <view class="iconfont iconxia jHeadTab-pop-tab-item-icon"></view>
+          </view>
+        </view>
       </view>
     </view>
-    <view class="jHeadTab-pop-tab-list">
-      <view
-        class="jHeadTab-pop-tab-item"
-        v-for="(item,index) in popTabs"
-        :key="index"
-      >
-        <text>{{item.name}}</text>
-        <view class="iconfont iconxia"></view>
-      </view>
-    </view>
+    <j-head-tab-picker
+      v-for="(pickerItem,pIndex) in popTabs"
+      :key="pIndex"
+      :show.sync="pickerItem.show"
+      @showChange="tabPickerChange"
+      v-model="pickerItem.children"
+    >
+    </j-head-tab-picker>
   </view>
 </template>
 
 <script>
+import JHeadTabPicker from './JHeadTabPicker';
+import './css/jHeadTab.scss';
+
 export default {
   name: 'JHeadTab',
+  components: {
+    JHeadTabPicker
+  },
   props: {
     // 顶部tab配置信息
     tabs: {
@@ -41,18 +65,50 @@ export default {
     return {
       popTabs: [
         {
-          name: '品牌'
+          name: '品牌',
+          show: false,
+          children: [
+            {
+              name: '海尔',
+              checked: false
+            },
+            {
+              name: '卡萨帝',
+              checked: false
+            },
+            {
+              name: '统帅',
+              checked: false
+            },
+            {
+              name: '摩卡',
+              checked: false
+            },
+            {
+              name: 'GE',
+              checked: false
+            },
+            {
+              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
+              checked: false
+            }
+          ]
         },
         {
-          name: '类目'
+          name: '类目',
+          show: false,
         },
         {
-          name: '一级类目'
+          name: '一级类目',
+          show: false,
         },
         {
-          name: '二级类目'
+          name: '二级类目',
+          show: false,
         }
-      ]
+      ],
+      // 扩展
+      isExpend: false
     };
   },
   methods: {
@@ -62,60 +118,15 @@ export default {
     },
     tabTagHandle() {
       /* tag tab 点击事件 */
+    },
+    showSecondCategory(item) {
+      /* 展示二级类目 */
+      item.show = !item.show;
+      this.isExpend = item.show;
+    },
+    tabPickerChange(show) {
+      this.isExpend = show;
     }
   }
 };
 </script>
-
-<style lang="scss">
-  .jHeadTab-wrap {
-    padding: 24px;
-    background: #fff;
-  }
-
-  .jHeadTab-list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .jHeadTab-item {
-    display: flex;
-    align-items: center;
-    color: #333;
-    font-size: 24px;
-
-    &.active {
-      color: #2283E2;
-    }
-
-    .iconfont {
-      font-size: 20px;
-    }
-  }
-
-  .jHeadTab-pop-tab-list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 24px;
-
-    .iconfont {
-      font-size: 8px;
-    }
-  }
-
-  .jHeadTab-pop-tab-item {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    background: #F2F2F7;
-    border-radius: 22px;
-    color: #666;
-    font-size: 24px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-</style>

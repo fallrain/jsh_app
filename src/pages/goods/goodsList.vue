@@ -5,11 +5,13 @@
       :tabs="tabs"
       @tabClick="tabClick"
     ></j-head-tab>
-    <j-goods-item
-      v-for="(item,index) in list"
-      :key="index"
-      :goods="item"
-    ></j-goods-item>
+    <view class="goodsList-items-wrap">
+      <j-goods-item
+        v-for="(item,index) in list"
+        :key="index"
+        :goods="item"
+      ></j-goods-item>
+    </view>
     <uni-drawer
       ref="goodsFilterDrawer"
       mode="right"
