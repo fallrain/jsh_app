@@ -10,7 +10,10 @@
     </j-shopping-cart-tab>
     <view class="shoppingCart-ads">
       <view class="shoppingCart-ads-total">共4件宝贝</view>
-      <view class="shoppingCart-ads-detail">
+      <view
+        class="shoppingCart-ads-detail"
+        @tap="showAdsPicker"
+      >
         <view class="iconfont iconicon-"></view>
         <text>配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792</text>
       </view>
@@ -32,6 +35,9 @@
       :checked.sync="isCheckAll"
       @checkAll="checkAll"
     ></j-shopping-cart-btm>
+    <j-address-picker
+      :show.sync="isShowAdsPicker"
+    ></j-address-picker>
   </view>
 </template>
 <script>
@@ -39,12 +45,14 @@ import JShoppingCartTab from '../../components/shoppingCart/JShoppingCartTab';
 import JShoppingCartItem from '../../components/shoppingCart/JShoppingCartItem';
 import JShoppingCartBtm from '../../components/shoppingCart/JShoppingCartBtm';
 import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
+import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import './css/shoppingCart.scss';
 
 
 export default {
   name: 'shoppingCart',
   components: {
+    JAddressPicker,
     JFailureGoodsList,
     JShoppingCartBtm,
     JShoppingCartItem,
@@ -83,6 +91,8 @@ export default {
       ],
       // 是否全选
       isCheckAll: false,
+      // 是否显示配送地址选择
+      isShowAdsPicker: false
     };
   },
   methods: {
@@ -98,6 +108,10 @@ export default {
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
+    },
+    showAdsPicker() {
+      /* 地址选择展示 */
+      this.isShowAdsPicker = true;
     }
   }
 };
