@@ -48,11 +48,17 @@
         </j-switch>
         <text class="jShoppingCartItem-btm-switch-text mr32">信用模式</text>
       </view>
-      <view class="jShoppingCartItem-btm-version-picker">
+      <view
+        class="jShoppingCartItem-btm-version-picker"
+        @tap="showSpecifications"
+      >
         <text>版本规格</text>
         <i class="iconfont iconxia"></i>
       </view>
     </view>
+    <j-version-specifications
+      :show.sync="isShowSpecifications"
+    ></j-version-specifications>
   </view>
 </template>
 
@@ -61,12 +67,13 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 import JSwitch from '../form/JSwitch';
+import JVersionSpecifications from './JVersionSpecifications';
 import './css/JShoppingCartItem.scss';
-
 
 export default {
   name: 'JShoppingCartItem',
   components: {
+    JVersionSpecifications,
     JSwitch,
     uniNumberBox
   },
@@ -77,6 +84,12 @@ export default {
     index: {
       type: [String, Number]
     }
+  },
+  data() {
+    return {
+      // 是否显示版本规格
+      isShowSpecifications: false
+    };
   },
   methods: {
     choose() {
@@ -90,6 +103,10 @@ export default {
     isCreditModeChange() {
       /* switch change */
       this.$emit('change', this.goods, this.index);
+    },
+    showSpecifications() {
+      /* 显示版本规格 */
+      this.isShowSpecifications = true;
     }
   }
 };
