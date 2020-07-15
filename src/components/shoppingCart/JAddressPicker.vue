@@ -20,7 +20,7 @@
         >
           <view
             class="jAddressPicker-cnt-item-head"
-            @tap="choose(item)"
+            @tap="choose(item,index)"
           >
             <view
               :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icondui']"
@@ -35,7 +35,7 @@
               :class="['jAddressPicker-cnt-detail-item',detail.checked && 'active']"
               v-for="(detail,dIndex) in item.children"
               :key="dIndex"
-              @tap="checkDetail(detail,item.children)"
+              @tap="checkDetail(detail,item.children,item)"
             >{{detail.name}}
             </view>
           </view>
@@ -111,24 +111,29 @@ export default {
     close() {
       this.$emit('update:show', false);
     },
-    choose(item) {
+    choose(item, index) {
       /* 选中一个item */
-      this.pickerList.forEach((v) => {
+      this.pickerList.forEach((v, i) => {
         v.checked = false;
-        if (v.children) {
+        // 存在children 且不是当前的item
+        if (v.children && index !== undefined && index !== i) {
           v.children.forEach((child) => {
             child.checked = false;
           });
         }
       });
-      item.checked = !item.checked;
+      item.checked = true;
     },
-    checkDetail(item, list) {
+    checkDetail(item, list, parent) {
       /* 选中一个人详细地址 */
       list.forEach((v) => {
         v.checked = false;
       });
       item.checked = true;
+      // 选中上级
+      if (!parent.checked) {
+        this.choose(parent);
+      }
     }
   }
 };
