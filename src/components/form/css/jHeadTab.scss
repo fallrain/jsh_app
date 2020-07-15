@@ -1,7 +1,7 @@
 .jHeadTab-wrap {
   position: relative;
   background: #fff;
-  height: 138px;
+  height: 130px;
 }
 
 .jHeadTab-list-wrap{
@@ -19,6 +19,7 @@
   padding-left: 28px;
   padding-right: 28px;
   background: #fff;
+  height: 38px;
 }
 
 .jHeadTab-item {
@@ -45,10 +46,7 @@ $jHeadTab-pop-tab-list: 24px;
   padding-right: 12px;
   padding-bottom: $jHeadTab-pop-tab-list;
   background: #fff;
-
-  .iconfont {
-    font-size: 8px;
-  }
+  height: 92px;
 
   &.isExpend {
     padding-bottom: 0;

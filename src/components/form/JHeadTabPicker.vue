@@ -19,10 +19,15 @@
     <view class="jHeadTabPicker-btn-wrap">
       <button
         class="jHeadTabPicker-btn-default"
+        type="button"
         @tap="confirm"
       >确定
       </button>
-      <button class="jHeadTabPicker-btn-primary">重置</button>
+      <button
+        class="jHeadTabPicker-btn-primary"
+        type="button"
+      >重置
+      </button>
     </view>
   </view>
 </template>
@@ -35,6 +40,10 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    // 索引
+    index: {
+      type: Number
     },
     // picker数据
     value: {
@@ -75,7 +84,7 @@ export default {
         v.checked = false;
       });
       item.checked = true;
-      this.$emit('change', this.value);
+      this.$emit('change', this.value, this.index);
     }
   }
 };
@@ -101,6 +110,7 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
+    height: 80px;
   }
 
   @mixin jHeadTabPicker-btn {
@@ -110,6 +120,7 @@ export default {
     line-height: 80px;
     font-size: 24px;
     text-align: center;
+    border: 1px solid $theme-color;
   }
 
   .jHeadTabPicker-btn-default {
@@ -122,7 +133,6 @@ export default {
   .jHeadTabPicker-btn-primary {
     @include jHeadTabPicker-btn;
     background: #fff;
-    border: 1px solid $theme-color;
     color: $theme-color;
     border-bottom-right-radius: 10px;
   }
@@ -164,15 +174,16 @@ export default {
     display: none;
     transform: translateY(-50%);
     color: $theme-color;
-    font-size: 30px;
+    font-size: 26px;
   }
 
   .jHeadTabPicker-item-text {
+    white-space: nowrap;
     font-size: 24px;
     color: #333;
   }
 
-  .jHeadTabPicker-in{
+  .jHeadTabPicker-in {
     transform: translateY(0);
   }
 </style>

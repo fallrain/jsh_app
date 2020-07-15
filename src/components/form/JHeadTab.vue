@@ -37,9 +37,11 @@
     <j-head-tab-picker
       v-for="(pickerItem,pIndex) in popTabs"
       :key="pIndex"
+      :index="pIndex"
       :show.sync="pickerItem.show"
-      @showChange="tabPickerChange"
+      @showChange="tabPickerShowChange"
       v-model="pickerItem.children"
+      @change="tabPickerChange"
     >
     </j-head-tab-picker>
   </view>
@@ -124,8 +126,11 @@ export default {
       item.show = !item.show;
       this.isExpend = item.show;
     },
-    tabPickerChange(show) {
+    tabPickerShowChange(show) {
       this.isExpend = show;
+    },
+    tabPickerChange(children, index) {
+      this.popTabs[index].children = children;
     }
   }
 };
