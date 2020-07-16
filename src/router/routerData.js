@@ -6,5 +6,6 @@ const data = [
   'pages/shoppingCart/shoppingCart',
   'pages/productDetail/productDetail',
   'pages/category/category',
+  'pages/market/marketList'
 ];
 export default { data };

@@ -41,7 +41,13 @@
 			"style": {
 				"navigationBarTitleText": "分类"
 			}
-		}
+		},
+    {
+      "path": "pages/market/marketList",
+      "style": {
+        "navigationBarTitleText": "营销活动"
+      }
+    }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
