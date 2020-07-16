@@ -43,6 +43,17 @@
                         <view class="textRow col-33">数量：0.00</view>
                     </view>
                 </view>
+                <view class="textTalRow">
+                    <view class="uni-flex uni-row textSenRow">
+                        <view class="textRow col-60">名称：TJ2020033333</view>
+                        <view class="textRow col-40">价格：¥ 5949.71</view>
+                    </view>
+                    <view class="uni-flex uni-row textSenRow">
+                        <view class="textRow col-40">有效期：2021-01-01</view>
+                        <view class="textRow col-25">直扣：0.00</view>
+                        <view class="textRow col-33">数量：0.00</view>
+                    </view>
+                </view>
                 <view class="lineHigt"></view>
                 <view class="uni-flex uni-row textTalRow">
                     <view class="text col-90 borderLeft">
