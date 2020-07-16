@@ -11,7 +11,7 @@
       <text class="jShoppingCartItem-head-text">预定金比例：16%</text>
       <view class="jShoppingCartItem-head-line"></view>
       <text class="jShoppingCartItem-head-text">直发订单</text>
-      <view class="jShoppingCartItem-head-close iconfont iconguanbi"></view>
+      <view class="jShoppingCartItem-head-close iconfont iconcross"></view>
     </view>
     <view class="jShoppingCartItem-cnt">
       <view

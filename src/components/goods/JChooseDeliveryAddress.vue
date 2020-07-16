@@ -9,7 +9,7 @@
         <view class="jChooseDeliveryAddressDrawer-head">
           <text>配送至</text>
           <i
-            class="iconfont iconguanbi"
+            class="iconfont iconcross"
             @tap="hide"
           ></i>
         </view>
@@ -25,7 +25,7 @@
             >
               <i
                 v-if="item.checked"
-                class="iconfont icondui"
+                class="iconfont icontick"
               ></i>
             </view>
             <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.name}}</view>
@@ -118,7 +118,7 @@ export default {
     }
   }
 
-  .jChooseDeliveryAddressDrawer-list{
+  .jChooseDeliveryAddressDrawer-list {
     margin-top: 10px;
   }
 
@@ -146,5 +146,9 @@ export default {
   .jChooseDeliveryAddressDrawer-item-check {
     width: 52px;
     margin-right: 18px;
+
+    .iconfont {
+      font-size: 36px;
+    }
   }
 </style>

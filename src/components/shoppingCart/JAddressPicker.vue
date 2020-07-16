@@ -8,7 +8,7 @@
       <view class="jAddressPicker-head">
         <text class="jAddressPicker-head-title">配送至</text>
         <view
-          class="iconfont iconguanbi jAddressPicker-head-close"
+          class="iconfont iconcross jAddressPicker-head-close"
           @tap="close"
         ></view>
       </view>
@@ -23,22 +23,37 @@
             @tap="choose(item,index)"
           >
             <view
-              :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icondui']"
+              :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icontick']"
             ></view>
             <text class="jAddressPicker-cnt-item-text">{{item.name}}</text>
+            <view
+              v-if="item.children"
+              :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
+              @tap="toggleExpand(item)"
+            ></view>
           </view>
-          <view
-            class="jAddressPicker-cnt-detail"
-            v-if="item.children"
+          <block
+            v-if="item.children && item.isExpand"
           >
             <view
-              :class="['jAddressPicker-cnt-detail-item',detail.checked && 'active']"
-              v-for="(detail,dIndex) in item.children"
-              :key="dIndex"
-              @tap="checkDetail(detail,item.children,item)"
-            >{{detail.name}}
+              class="jAddressPicker-cnt-detail"
+            >
+              <view
+                :class="['jAddressPicker-cnt-detail-item',detail.checked && 'active']"
+                v-for="(detail,dIndex) in item.children"
+                :key="dIndex"
+                @tap="checkDetail(detail,item.children,item)"
+              >
+                <view
+                  class="jVersionSpecifications-pop-detail-item-check"
+                  v-if="detail.checked"
+                >
+                  <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+                </view>
+                <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
+              </view>
             </view>
-          </view>
+          </block>
         </view>
       </view>
     </view>
@@ -72,11 +87,32 @@ export default {
         },
         {
           name: '异地云仓',
-          checked: false
+          childrenType: 'short',
+          checked: false,
+          children: [
+            {
+              name: '北京云仓',
+              checked: false,
+            },
+            {
+              name: '上海云仓',
+              checked: false,
+            },
+            {
+              name: '重庆云仓',
+              checked: false,
+            },
+            {
+              name: '青岛云仓',
+              checked: false,
+            }
+          ]
         },
         {
           name: '配送至',
           checked: false,
+          isExpand: true,
+          childrenType: 'long',
           children: [
             {
               name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
@@ -134,6 +170,10 @@ export default {
       if (!parent.checked) {
         this.choose(parent);
       }
+    },
+    toggleExpand(item) {
+      /* 展开收起 */
+      item.isExpand = !item.isExpand;
     }
   }
 };

@@ -97,11 +97,20 @@
   }
 }
 
+.jVersionSpecifications-pop-detail-head-title-arrow {
+  color: #999;
+
+  &.active {
+    transform: rotateX(180deg);
+  }
+}
+
 .jVersionSpecifications-pop-detail-list {
 
 }
 
 .jVersionSpecifications-pop-detail-item {
+  position: relative;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -109,8 +118,10 @@
   min-height: 100px;
   background: #F7F7F8;
   border-radius: 10px;
-  padding: 12px 30px;
+  padding: 12px 40px 12px 30px;
   margin-bottom: 20px;
+  border: 1px solid #F7F7F8;
+  overflow: hidden;
 
   &:last-child {
     margin-bottom: 0;
@@ -156,7 +167,7 @@
   color: #333;
 }
 
-.jVersionSpecifications-btn-wrap{
+.jVersionSpecifications-btn-wrap {
   position: absolute;
   bottom: 0;
   width: 100%;

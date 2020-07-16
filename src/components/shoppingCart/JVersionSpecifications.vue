@@ -32,14 +32,31 @@
         >
           <view class="jVersionSpecifications-pop-detail-head">
             <text class="jVersionSpecifications-pop-detail-head-title">{{item.title}}</text>
+            <view
+              :class="[
+                'jVersionSpecifications-pop-detail-head-title-arrow iconfont iconxia',
+                !item.isExpand && 'active'
+              ]"
+              @tap="toggleExpand(item)"
+            >
+            </view>
           </view>
-          <view class="jVersionSpecifications-pop-detail-list">
+          <view
+            v-if="item.isExpand"
+            class="jVersionSpecifications-pop-detail-list"
+          >
             <div
               :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
               v-for="(version,vIndex) in item.list"
               :key="vIndex"
               @tap="handleClick(version,item.list)"
             >
+              <view
+                class="jVersionSpecifications-pop-detail-item-check"
+                v-if="version.checked"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+              </view>
               <view class="jVersionSpecifications-pop-detail-item-name-wrap mb8">
                 <view class="jVersionSpecifications-pop-detail-item-name">名称：</view>
                 <view class="jVersionSpecifications-pop-detail-item-val-type1">{{version.name}}</view>
@@ -100,6 +117,7 @@ export default {
       data: [
         {
           title: '特价版本',
+          isExpand: true,
           list: [
             {
               name: 'TJ2020033333',
@@ -119,6 +137,7 @@ export default {
         },
         {
           title: '调货版本',
+          isExpand: true,
           list: [
             {
               name: 'TJ2020033333',
@@ -138,6 +157,7 @@ export default {
         },
         {
           title: '工程版本',
+          isExpand: true,
           list: [
             {
               name: 'TJ2020033333',
@@ -179,6 +199,10 @@ export default {
       });
       version.checked = !curChecked;
       this.$emit('change', this.data);
+    },
+    toggleExpand(item) {
+      /* 选择规格展开or收起 */
+      item.isExpand = !item.isExpand;
     },
     confirm() {
       /* 确定 */

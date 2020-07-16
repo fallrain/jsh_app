@@ -11,7 +11,7 @@
         @tap="choose(item)"
       >
         <view
-          :class="['jHeadTabPicker-item-check iconfont icondui']"
+          :class="['jHeadTabPicker-item-check iconfont icontick']"
         ></view>
         <text class="jHeadTabPicker-item-text">{{item.name}}</text>
       </view>

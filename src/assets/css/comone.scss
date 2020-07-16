@@ -121,3 +121,29 @@
 }
 
 /*商品列表 end*/
+
+/*购物车*/
+
+.jVersionSpecifications-pop-detail-item-check {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+  background: $theme-color;
+  color: #fff;
+  float: right;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+}
+
+.jVersionSpecifications-pop-detail-item-check-icon {
+  position: absolute;
+  top: 28%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 24px;
+}
+
+/*购物车 end*/
