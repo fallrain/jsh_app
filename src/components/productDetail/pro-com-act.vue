@@ -13,7 +13,7 @@
             <view class="text col-90 borderLeft">
               <view class="afterr">{{act.name}}</view>
             </view>
-            <view class="text borderLeft iconxia"></view>
+            <view class="text borderLeft iconfont iconxia"></view>
           </view>
           <view v-for="(ls,index) in act.list" :key="ls.name" class="textTalRow" @click="checkAct(indexA,index)">
             <view class="uni-flex uni-row textSenRow" :class="{'isNoCheck':!ls.isCheck,'isYesCheckTop':ls.isCheck}">
@@ -41,7 +41,7 @@
   </view>
 </template>
 
-<script>
+<script scoped>
 export default {
   name: 'proComAct',
   components: {
@@ -99,7 +99,7 @@ export default {
     display: -webkit-flex;
   }
   .popup {
-    margin-top: -50%;
+    margin-top: -63%;
     z-index: 999;
     background-color: #ffffff;
     height: 70%;
