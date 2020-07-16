@@ -34,7 +34,7 @@
         </view>
         <view class="uni-flex uni-row" style="padding-left: 5px;">
           <view class="text text2 col-20" style="-webkit-flex: 1;flex: 1;">数&nbsp;&nbsp;&nbsp;量：</view>
-          <view class="text col-25" style="-webkit-flex: 1;flex: 1;">
+          <view class="" style="-webkit-flex: 1;flex: 1;">
             <uni-number-box :value="numberValue" @change="change" />
           </view>
         </view>
@@ -45,12 +45,14 @@
 </template>
 
 <script>
-import UniNumberBox from '../../components/uniUi/uni-extend/uni-number-box';
+import {
+  uniNumberBox
+} from '@dcloudio/uni-ui';
 
 export default {
   name: 'proComNum',
   components: {
-    UniNumberBox
+    uniNumberBox
   },
   props: {// 父级传来的数据
     isShow: {// 页面是否显示
@@ -80,8 +82,24 @@ export default {
   }
 };
 </script>
-
-<style>
+<style scoped>
+  /deep/ .uni-numbox {
+    height: 70px;
+    width: 200px;
+  }
+  /deep/ .uni-numbox__minus{
+    height: 70px;
+    width: 70px;
+  }
+  /deep/ .uni-numbox__value{
+    height: 70px;
+    width: 60px;
+    color: #999999;
+  }
+  /deep/ .uni-numbox__plus{
+    height: 70px;
+    width: 70px;
+  }
   .mask {
     position: fixed;
     z-index: 998;
@@ -93,10 +111,10 @@ export default {
     display: -webkit-flex;
   }
   .popup {
-    margin-top: -50%;
+    margin-top: -30%;
     z-index: 999;
     background-color: #ffffff;
-    height: 55%;
+    height: 70%;
     width: 100%;
     position:fixed;
   }

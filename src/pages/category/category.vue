@@ -2,9 +2,6 @@
   <view class="">
     <view class="isFixed">
       <uni-search-bar @confirm="search" @input="input" @cancel="cancel" />
-      <view class="">
-        <text class="">当前输入为：{{ searchVal }}</text>
-      </view>
     </view>
     <view class="nav">
       <view class="nav-left">
@@ -31,7 +28,9 @@
   </view>
 </template>
 <script>
-import uniSearchBar from '../../components/uniUi/uni-extend/uni-search-bar';
+import {
+  uniSearchBar
+} from '@dcloudio/uni-ui';
 
 export default {
   name: 'Category',
@@ -136,7 +135,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+  /deep/ .uni-searchbar{
+    height: 80px;
+  }
+  /deep/ .uni-searchbar__box{
+    height: 60px;
+  }
   .isFixed{
     background-color:#Fff;
     z-index:999;
