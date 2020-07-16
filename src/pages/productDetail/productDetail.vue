@@ -15,50 +15,59 @@
       </swiper>
     </uni-swiper-dot>
     <view class="uni-common-mt" id="goods">
-      <view class="uni-flex uni-row">
-        <view class="text col-40 larger" style="color: red;margin: auto;text-align: center;">¥29384.11</view>
-        <view class="text col-50 smaller" style="margin: auto;">建议零售价：¥2934.11</view>
-        <view class="text col-10 smaller" style="margin: auto;">💗</view>
+      <view class="uni-flex uni-row padding-15">
+        <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥29384.11</view>
+        <view class="text col smaller" style="margin: auto;">建议零售价：¥2934.11</view>
+        <view class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
       </view>
-      <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
-        <view class="text modeller"><image src="/static/logo.png" style="width: 20px;height: 20px;"></image>海尔滚筒洗衣机BCD-150WLDPEK风冷两门风冷除菌（自动除霜）念白360度全白色滚筒洗衣机，高温杀菌高品质简约设计。</view>
+      <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
+        <view class="text modeller">
+          <image src="/static/logo.png" style="width: 20px;height: 20px;"></image>
+          海尔滚筒洗衣机BCD-150WLDPEK风冷两门风冷除菌（自动除霜）念白360度全白色滚筒洗衣机，高温杀菌高品质简约设计。
+        </view>
       </view>
       <view class="lineHigt"></view>
-      <view class="uni-flex uni-row">
+      <view class="uni-flex uni-row padding-8">
         <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">编&nbsp;&nbsp;&nbsp;码：BH03S00AA</view>
         <view class="text smaller" style="-webkit-flex: 1;flex: 1;">型&nbsp;&nbsp;&nbsp;号：BCD-611WDIEU1(EX)</view>
       </view>
-      <view class="uni-flex uni-row">
+      <view class="uni-flex uni-row padding-8">
         <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">供&nbsp;&nbsp;&nbsp;价：￥ 4099.00</view>
         <view class="text smaller" style="-webkit-flex: 1;flex: 1;">台&nbsp;&nbsp;&nbsp;返：0.00</view>
       </view>
-      <view class="uni-flex uni-row">
+      <view class="uni-flex uni-row padding-8">
         <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">返&nbsp;&nbsp;&nbsp;利：FHQ</view>
         <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：0.80%</view>
       </view>
-      <view class="uni-flex uni-row">
-        <view class="text smaller" style="width: 15%;">活&nbsp;&nbsp;&nbsp;动：</view>
-        <view class="text" style="width: 70%;">
-          <view class="smaller" @click="showAct('OPEN')" v-for="ack in activityList" style="width:25%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;">{{ack.name}}</view>
+      <view class="uni-flex uni-row padding-8">
+        <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
+        <view class="col-70 text">
+          <view class="smaller" @click="showAct('OPEN')" v-for="ack in activityList" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack.name}}</view>
         </view>
-        <view class="text smaller" style="width: 15%;">箭头</view>
+        <view class="col-10 text smaller">
+          <view class="text-center iconfont iconyou"></view>
+        </view>
       </view>
       <pro-com-act :info="ActInfo" :isShowAct="ActType==='OPEN'" @closeAct="showAct('')" @checkedAct="checkedAct"></pro-com-act>
       <view class="lineHigt"></view>
-      <view class="uni-flex uni-row">
-        <view class="text smaller" style="width: 18%;">已&nbsp;&nbsp;&nbsp;选：</view>
-        <view class="text" style="width: 67%;" @click="showNum('OPEN')">
+      <view class="uni-flex uni-row padding-8">
+        <view class="col text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
+        <view class="col-70 text" @click="showNum('OPEN')">
           <view class="smaller">{{productNum}}件</view>
         </view>
-        <view class="text smaller" style="width: 15%;">箭头</view>
+        <view class="col-10 text smaller">
+          <view class="text-center iconfont iconyou"></view>
+        </view>
       </view>
       <pro-com-num :isShow="MunType==='OPEN'" :info="showModal" @closeNum="showNum('')" @checkedNum="checkedNum"></pro-com-num>
-      <view class="uni-flex uni-row">
-        <view class="text smaller" style="width: 18%;">配送至：</view>
-        <view class="text" style="width: 67%;">
+      <view class="uni-flex uni-row padding-8">
+        <view class="col text smaller">配送至：</view>
+        <view class="col-70 text">
           <view class="smaller">(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室至:</view>
         </view>
-        <view class="text smaller" style="width: 15%;">箭头</view>
+        <view class="col-10 text smaller">
+          <view class="text-center iconfont iconyou"></view>
+        </view>
       </view>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
@@ -314,7 +323,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
   .prevent {
     width: 100%;
     height: 100%;

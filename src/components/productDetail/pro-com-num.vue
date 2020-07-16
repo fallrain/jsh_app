@@ -111,7 +111,7 @@ export default {
     display: -webkit-flex;
   }
   .popup {
-    margin-top: -30%;
+    margin-top: -45%;
     z-index: 999;
     background-color: #ffffff;
     height: 70%;
