@@ -13,6 +13,7 @@
 
 <script>
 /* eslint-disable import/no-cycle */
+// 此文件无路由功能
 import routerData from '@/router/routerData';
 
 export default {
