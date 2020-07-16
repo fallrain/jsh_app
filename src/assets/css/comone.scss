@@ -24,10 +24,6 @@
   margin-top: 116px;
 }
 
-.mb8 {
-  margin-bottom: 8px;
-}
-
 .ml20 {
   margin-left: 20px;
 }
@@ -36,8 +32,14 @@
   margin-left: 26px;
 }
 
-.mb12 {
+.mb8 {
+  margin-bottom: 8px;
+}
+.mb12{
   margin-bottom: 12px;
+}
+.mb16{
+  margin-bottom: 16px;
 }
 
 .mr6 {
@@ -55,7 +57,9 @@
 .mr12 {
   margin-right: 12px;
 }
-
+.mr20{
+  margin-right: 20px;
+}
 .mr32 {
   margin-right: 32px;
 }
@@ -271,3 +275,24 @@
 }
 
 /*购物车 end*/
+
+/*flex start*/
+.dis-flex{
+  display: flex;
+}
+.flex-grow-1{
+  flex-grow: 1;
+}
+.flex-w{
+  flex-wrap: wrap;
+}
+.justify-c{
+  justify-content: center;
+}
+.justify-sb{
+  justify-content: space-between;
+}
+.justify-se{
+  justify-content: space-evenly;
+}
+/*flex end*/
