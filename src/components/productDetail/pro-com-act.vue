@@ -87,8 +87,7 @@ export default {
   }
 };
 </script>
-
-<style>
+<style scoped>
   .mask {
     position: fixed;
     z-index: 998;
@@ -100,7 +99,7 @@ export default {
     display: -webkit-flex;
   }
   .popup {
-    margin-top: -60%;
+    margin-top: -50%;
     z-index: 999;
     background-color: #ffffff;
     height: 70%;
@@ -110,7 +109,7 @@ export default {
   .sorrowC{
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 75%;
+    height: 80%;
   }
   .top{
     width: 92%;
@@ -128,8 +127,8 @@ export default {
     text-align: center;
     background-color: #ED2856;
     color: #FFFFFF;
-    margin-top: 10px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
     border-bottom-left-radius: 50px;
     border-top-left-radius: 50px;
   }
@@ -140,8 +139,8 @@ export default {
     text-align: center;
     background-color: #F2F2F7;
     color: #666666;
-    margin-top: 10px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
     border-bottom-right-radius: 50px;
     border-top-right-radius: 50px;
   }

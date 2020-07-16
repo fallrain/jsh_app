@@ -131,9 +131,9 @@
 import {
   uniSwiperDot
 } from '@dcloudio/uni-ui';
-import proComNum from './pro-com-num';
-import proComAct from './pro-com-act';
-import proComShip from './pro-com-ship';
+import proComNum from '../../components/productDetail/pro-com-num';
+import proComAct from '../../components/productDetail/pro-com-act';
+import proComShip from '../../components/productDetail/pro-com-ship';
 
 export default {
   name: 'ProductDetail',
