@@ -3,6 +3,8 @@ const data = [
   'pages/index/index',
   'pages/login/login/login',
   'pages/goods/goodsList',
-  'pages/shoppingCart/shoppingCart'
+  'pages/shoppingCart/shoppingCart',
+  'pages/productDetail/productDetail',
+  'pages/category/category',
 ];
 export default { data };
