@@ -11,7 +11,9 @@
 .mt60 {
   margin-top: 60px;
 }
-
+.mr20{
+  margin-right: 20px;
+}
 .mt116 {
   margin-top: 116px;
 }
@@ -23,5 +25,29 @@
 .mb12{
   margin-bottom: 12px;
 }
+.mb16{
+  margin-bottom: 16px;
+}
 
 /*margin end*/
+
+/*flex start*/
+.dis-flex{
+  display: flex;
+}
+.flex-grow-1{
+  flex-grow: 1;
+}
+.flex-w{
+  flex-wrap: wrap;
+}
+.justify-c{
+  justify-content: center;
+}
+.justify-sb{
+  justify-content: space-between;
+}
+.justify-se{
+  justify-content: space-evenly;
+}
+/*flex end*/
