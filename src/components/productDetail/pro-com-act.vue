@@ -9,16 +9,16 @@
       <view class="sorrowC">
         <view class="lineHigt"></view>
         <view class="textTalRow" v-for="(act,indexA) in info" :key="act.name">
-          <view class="uni-flex uni-row">
+          <view class="uni-flex uni-row" @click="changeSe(act)">
             <view class="text col-90 borderLeft">
               <view class="afterr">{{act.name}}</view>
             </view>
-            <view class="text borderLeft iconfont iconxia"></view>
+            <view class="col-10 text-center text borderLeft" :class="['iconfont iconxia',!act.isSe && 'active']"></view>
           </view>
-          <view v-for="(ls,index) in act.list" :key="ls.name" class="textTalRow" @click="checkAct(indexA,index)">
+          <view v-show="act.isSe" v-for="(ls,index) in act.list" :key="ls.name" class="textTalRow" @click="checkAct(indexA,index)">
             <view class="uni-flex uni-row textSenRow" :class="{'isNoCheck':!ls.isCheck,'isYesCheckTop':ls.isCheck}">
-              <view class="textRow col-60">{{ls.num}}名称：TJ2020033333</view>
-              <view class="textRow col-40">价格：¥ 5949.71</view>
+              <view class="textRow col-60">{{ls.num}}名称：<span style="font-size: 14px;">TJ2020033333</span></view>
+              <view class="textRow col-40">价格：<span style="font-size: 14px;color: #ED2856;">¥ 5949.71</span></view>
             </view>
             <view class="uni-flex uni-row textSenRow" :class="{'isNoCheck':!ls.isCheck,'isYesCheckBot':ls.isCheck}">
               <view class="textRow col-40">有效期：2021-01-01</view>
@@ -60,12 +60,15 @@ export default {
   },
   data() {
     return {
-      numberValue: 0
+      numberValue: []
     };
   },
   methods: {
     close() {
       this.$emit('closeAct', 'close');
+    },
+    changeSe(se) {
+      se.isSe = !se.isSe;
     },
     checkAct(a, b) { // 选择活动
       for (let i = 0; i < this.info.length; i++) {
@@ -77,12 +80,17 @@ export default {
       console.log(b);
       this.info[a].list[b].isCheck = true;
       console.log(this.info);
+      this.numberValue = this.info;
     },
     putAct() { // 确认
       this.$emit('checkedAct', this.numberValue);
     },
     refresh() { // 重置
-
+      for (let i = 0; i < this.info.length; i++) {
+        for (let j = 0; j < this.info[i].list.length; j++) {
+          this.info[i].list[j].isCheck = false;
+        }
+      }
     }
   }
 };
@@ -155,6 +163,7 @@ export default {
   }
   .afterr {
     margin-top: 20px;
+    margin-left: 20px;
     padding-left: 10px;
     border-left: 6px solid #ED2856;
     font-size: 24px;
@@ -189,5 +198,8 @@ export default {
     color: #ED2856;
     border: 1px #ED2856 solid;
     border-top: none;
+  }
+  .active {
+    transform: rotateX(180deg);
   }
 </style>
