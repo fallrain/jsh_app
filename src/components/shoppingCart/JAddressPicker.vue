@@ -39,7 +39,11 @@
               class="jAddressPicker-cnt-detail"
             >
               <view
-                :class="['jAddressPicker-cnt-detail-item',detail.checked && 'active']"
+                :class="[
+                  'jAddressPicker-cnt-detail-item',
+                  detail.checked && 'active',
+                  item.childrenType==='short' && 'short'
+                ]"
                 v-for="(detail,dIndex) in item.children"
                 :key="dIndex"
                 @tap="checkDetail(detail,item.children,item)"
@@ -89,6 +93,7 @@ export default {
           name: '异地云仓',
           childrenType: 'short',
           checked: false,
+          isExpand: true,
           children: [
             {
               name: '北京云仓',

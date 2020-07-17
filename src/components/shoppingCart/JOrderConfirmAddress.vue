@@ -1,0 +1,58 @@
+<template>
+  <view class="jOrderConfirmAddress-wrap">
+    <view class="jOrderConfirmAddress">
+      <view class="jOrderConfirmAddress-head">
+        <view class="jOrderConfirmAddress-head-icon iconfont iconicon-"></view>
+        <view class="jOrderConfirmAddress-head-text">配送至</view>
+      </view>
+      <view class="jOrderConfirmAddress-cnt">
+        (88003222）山东省青岛市市北区重庆路路街道重庆南路1589号甲A栋4座2034室
+      </view>
+      <view class="jOrderConfirmAddress-cnt-btm">
+        <view class="jOrderConfirmAddress-cnt-btm-type">
+          <view class="iconfont iconqiche jOrderConfirmAddress-cnt-btm-icon"></view>
+          <text class="jOrderConfirmAddress-cnt-btm-text">配送方式</text>
+        </view>
+        <view class="jOrderConfirmAddress-cnt-btm-radios">
+          <j-radio-group
+            :groups="radioGroups"
+            @change="radioGroupChange"
+          ></j-radio-group>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import './css/jOrderConfirmAddress.scss';
+import JRadioGroup from '../form/JRadioGroup';
+
+
+export default {
+  name: 'JOrderConfirmAddress',
+  components: {
+    JRadioGroup,
+  },
+  data() {
+    return {
+      radioGroups: [
+        {
+          inf: '自提',
+          checked: true
+        },
+        {
+          inf: '配送',
+          checked: false
+        }
+      ]
+    };
+  },
+  methods: {
+    radioGroupChange(radioGroup) {
+      /* radioGroupChange */
+      this.radioGroups = radioGroup;
+    }
+  }
+};
+</script>
