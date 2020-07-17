@@ -4,6 +4,7 @@ const data = [
   'pages/login/login/login',
   'pages/goods/goodsList',
   'pages/shoppingCart/shoppingCart',
+  'pages/shoppingCart/orderConfirm',
   'pages/productDetail/productDetail',
   'pages/category/category',
   'pages/market/marketList'
