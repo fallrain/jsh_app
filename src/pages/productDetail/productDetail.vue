@@ -71,7 +71,7 @@
       </view>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
-        <view class="text col-40 modeller">热门推荐</view>
+        <view class="padding-30 col-40 modeller">热门推荐</view>
       </view>
       <view class="uni-flex uni-row">
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
@@ -83,7 +83,7 @@
       </view>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row" id="specs">
-        <view class="text col-40 modeller">规格参数</view>
+        <view class="padding-30 col-40 modeller">规格参数</view>
       </view>
       <view style="padding: 10px;">
         <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;">
@@ -127,7 +127,7 @@
       </view>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row" id="details">
-        <view class="text col-40 modeller">图文详情</view>
+        <view class=" col-40 modeller padding-30">图文详情</view>
       </view>
       <view class="uni-flex uni-row">
         <image style="width: 100%;" mode="widthFix" src="http://file.c.haier.net/images/2016/06/29/2011b90fbb70780dd37bee60aa21e5b1.jpg"></image>
@@ -217,10 +217,10 @@ export default {
         { id: 1, name: '套餐', isCheck: false }
       ], // 活动列表
       ActInfo: [
-        { id: 1, name: '特价', list: [{ num: 1, name: '特价2', isCheck: false, }, { num: 1, name: '特价3', isCheck: false, }] },
-        { id: 1, name: '工程', list: [{ num: 1, name: '特价3', isCheck: false, }, { num: 1, name: '特价4', isCheck: false, }] },
-        { id: 1, name: '样机', list: [{ num: 1, name: '特价4', isCheck: false, }, { num: 1, name: '特价5', isCheck: false, }] },
-        { id: 1, name: '套餐', list: [{ num: 1, name: '特价5', isCheck: false, }, { num: 1, name: '特价6', isCheck: false, }] }
+        { id: 1, name: '特价', isSe: true, list: [{ num: 1, name: '特价2', isCheck: false, }, { num: 1, name: '特价3', isCheck: false, }] },
+        { id: 1, name: '工程', isSe: true, list: [{ num: 1, name: '特价3', isCheck: false, }, { num: 1, name: '特价4', isCheck: false, }] },
+        { id: 1, name: '样机', isSe: true, list: [{ num: 1, name: '特价4', isCheck: false, }, { num: 1, name: '特价5', isCheck: false, }] },
+        { id: 1, name: '套餐', isSe: true, list: [{ num: 1, name: '特价5', isCheck: false, }, { num: 1, name: '特价6', isCheck: false, }] }
       ],
       activity: '', // 选择的活动类型
       activityInfo: '', // 选择的活动具体内容
@@ -267,18 +267,6 @@ export default {
       this.current = e.detail.current;
       console.log(e);
     },
-    chosePlay(ee) {
-      for (let i = 0; i < this.activityList.length; i++) {
-        this.activityList[i].isCheck = false;
-        if (ee.name === this.activityList[i].name) {
-          this.activityList[i].isCheck = true;
-        } else {
-
-        }
-      }
-      console.log(this.activityList);
-    },
-
     // 选择数量的popup
     showNum(e) { // 点击打开页面
       if (e === 'OPEN') {
@@ -301,9 +289,10 @@ export default {
       this.isUps = false;
       this.productNum = e;
     },
-    checkedAct(e) {
+    checkedAct(e) { // 活动选择的内容
       this.ActType = '';
       this.isUps = false;
+      this.ActInfo = e;
     },
     checkCut(e) {
       this.goodsCheck = false;
