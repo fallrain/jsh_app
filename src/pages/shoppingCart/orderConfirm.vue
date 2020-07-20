@@ -6,6 +6,7 @@
       <j-order-confirm-item
         v-for="(goods,index) in goodsList"
         :key="index"
+        :index="index"
         @change="goodsChange"
         :goodsList="goods"
       ></j-order-confirm-item>
@@ -105,7 +106,7 @@ export default {
   methods: {
     goodsChange(list, index) {
       /* 商品 change */
-      this.goodsList[index] = list;
+      this.$set(this.goodsList, index, list);
     },
     showPayer() {
       /* 展示付款地址 */

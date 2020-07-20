@@ -46,7 +46,7 @@
           @change="isCreditModeChange"
         >
         </j-switch>
-        <text class="jShoppingCartItem-btm-switch-text mr32">信用模式</text>
+        <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
       </view>
       <view
         class="jShoppingCartItem-btm-version-picker"

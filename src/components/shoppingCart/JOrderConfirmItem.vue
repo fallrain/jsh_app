@@ -87,6 +87,10 @@ export default {
       type: Array,
       default: () => []
     },
+    // 索引
+    index: {
+      type: Number
+    }
   },
   data() {
     return {
