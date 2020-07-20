@@ -2,7 +2,7 @@
   <view class="jOrderConfirmAddress-wrap">
     <view class="jOrderConfirmAddress">
       <view class="jOrderConfirmAddress-head">
-        <view class="jOrderConfirmAddress-head-icon iconfont iconicon-"></view>
+        <view class="jOrderConfirmAddress-head-icon iconfont iconlocal"></view>
         <view class="jOrderConfirmAddress-head-text">配送至</view>
       </view>
       <view class="jOrderConfirmAddress-cnt">
@@ -10,7 +10,7 @@
       </view>
       <view class="jOrderConfirmAddress-cnt-btm">
         <view class="jOrderConfirmAddress-cnt-btm-type">
-          <view class="iconfont iconqiche jOrderConfirmAddress-cnt-btm-icon"></view>
+          <view class="iconfont iconcar jOrderConfirmAddress-cnt-btm-icon"></view>
           <text class="jOrderConfirmAddress-cnt-btm-text">配送方式</text>
         </view>
         <view class="jOrderConfirmAddress-cnt-btm-radios">

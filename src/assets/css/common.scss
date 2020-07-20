@@ -8,6 +8,10 @@
   margin-top: 16px;
 }
 
+.mt24 {
+  margin-top: 24px;
+}
+
 .mt40 {
   margin-top: 40px;
 }
@@ -24,6 +28,10 @@
   margin-top: 116px;
 }
 
+.ml10 {
+  margin-left: 10px;
+}
+
 .ml20 {
   margin-left: 20px;
 }
@@ -32,13 +40,23 @@
   margin-left: 26px;
 }
 
+.ml40 {
+  margin-left: 40px;
+}
+
+.ml48 {
+  margin-left: 40px;
+}
+
 .mb8 {
   margin-bottom: 8px;
 }
-.mb12{
+
+.mb12 {
   margin-bottom: 12px;
 }
-.mb16{
+
+.mb16 {
   margin-bottom: 16px;
 }
 
@@ -57,9 +75,11 @@
 .mr12 {
   margin-right: 12px;
 }
-.mr20{
+
+.mr20 {
   margin-right: 20px;
 }
+
 .mr32 {
   margin-right: 32px;
 }
@@ -244,18 +264,23 @@
   display: flex;
   flex-direction: row;
 }
+
 .uni-flex-item {
   flex: 1;
 }
+
 .uni-row {
   flex-direction: row;
 }
+
 .uni-column {
   flex-direction: column;
 }
+
 .text-center {
   text-align: center;
 }
+
 /*col end*/
 
 /*购物车*/
@@ -341,22 +366,28 @@
 /*购物车 end*/
 
 /*flex start*/
-.dis-flex{
+.dis-flex {
   display: flex;
 }
-.flex-grow-1{
+
+.flex-grow-1 {
   flex-grow: 1;
 }
-.flex-w{
+
+.flex-w {
   flex-wrap: wrap;
 }
-.justify-c{
+
+.justify-c {
   justify-content: center;
 }
-.justify-sb{
+
+.justify-sb {
   justify-content: space-between;
 }
-.justify-se{
+
+.justify-se {
   justify-content: space-evenly;
 }
+
 /*flex end*/

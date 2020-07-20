@@ -4,7 +4,7 @@ import store from './store';
 import '@/assets/css/var.scss';
 import '@/assets/font/iconfont.css';
 import '@/assets/css/base.scss';
-import '@/assets/css/comone.scss';
+import '@/assets/css/common.scss';
 
 
 Vue.config.productionTip = false;
