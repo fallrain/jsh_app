@@ -7,6 +7,7 @@ const data = [
   'pages/shoppingCart/orderConfirm',
   'pages/productDetail/productDetail',
   'pages/category/category',
-  'pages/market/marketList'
+  'pages/market/marketList',
+  'pages/orderList/orderList'
 ];
 export default { data };

@@ -12,11 +12,11 @@
         </scroll-view>
       </view>
       <view class="nav-right">
-        <view v-for="child in subCategoryList">
+        <view v-for="child in subCategoryList" :key="child.NAME">
           <view class="uni-flex uni-row">{{child.NAME}}</view>
           <view class="lineHigt"></view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
-            <view v-for="childed in child.hdg" class="nav-right-item">
+            <view v-for="childed in child.hdg" :key="childed.NAME" class="nav-right-item">
               <image :src="childed.LOGO"/>
               <view class="">{{childed.NAME}}</view>
             </view>
