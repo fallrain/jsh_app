@@ -6,11 +6,39 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
-      "icon_id": "10487467",
-      "name": "汽车",
-      "font_class": "qiche",
-      "unicode": "e68e",
-      "unicode_decimal": 59022
+      "icon_id": "15989881",
+      "name": "local",
+      "font_class": "local",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "15989831",
+      "name": "money",
+      "font_class": "money",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "15989832",
+      "name": "car",
+      "font_class": "car",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "15985505",
+      "name": "tree",
+      "font_class": "tree",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "15985506",
+      "name": "cancel",
+      "font_class": "cancel",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
     },
     {
       "icon_id": "15949782",
@@ -130,13 +158,6 @@
       "font_class": "gouwuchezhengpin",
       "unicode": "e610",
       "unicode_decimal": 58896
-    },
-    {
-      "icon_id": "12687385",
-      "name": "地址",
-      "font_class": "icon-",
-      "unicode": "e666",
-      "unicode_decimal": 58982
     },
     {
       "icon_id": "14112850",

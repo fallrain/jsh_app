@@ -1,17 +1,28 @@
 <template>
   <view
     :class="[
-      'jSwitch',
+      'jSwitch-wrap',
       active && animationIng && 'active',
       !active && animationIng && 'active-reverse',
-      forwardEnd && 'jSwitch-forwardEnd'
     ]"
     @tap="handleClick"
   >
     <view
-      @animationend="handleAnimationend"
-      :class="['jSwitch-dot',forwardEnd ?'jSwitch-dot-end':'jSwitch-dot-begin']"
-    ></view>
+      :class="[
+        'jSwitch',
+        forwardEnd && 'jSwitch-forwardEnd'
+      ]"
+    >
+      <view
+        @animationend="handleAnimationend"
+        :class="['jSwitch-dot',forwardEnd ?'jSwitch-dot-end':'jSwitch-dot-begin']"
+      ></view>
+    </view>
+    <view
+      v-if="inf"
+      :class="['jSwitch-cnt',active && 'active']"
+    >{{inf}}
+    </view>
   </view>
 </template>
 
@@ -23,6 +34,9 @@ export default {
       type: Boolean,
       default: false
     },
+    inf: {
+      type: [Number, String]
+    }
   },
   data() {
     return {
@@ -45,6 +59,23 @@ export default {
 </script>
 
 <style lang="scss">
+  .jSwitch-wrap {
+    display: flex;
+    align-items: center;
+
+    &.active {
+      .jSwitch-dot {
+        animation: jSwitch-move .2s;
+      }
+    }
+
+    &.active-reverse {
+      .jSwitch-dot {
+        animation: jSwitch-move-reverse .2s;
+      }
+    }
+  }
+
   .jSwitch {
     position: relative;
     width: 40px;
@@ -52,18 +83,6 @@ export default {
     border-radius: 11px;
     border: 1px solid #EDE9E9;
     background: #EDE9E9;
-
-    &.active {
-      .jSwitch-dot {
-        animation: jSwitch-move .3s;
-      }
-    }
-
-    &.active-reverse {
-      .jSwitch-dot {
-        animation: jSwitch-move-reverse .3s;
-      }
-    }
   }
 
   .jSwitch-forwardEnd {
@@ -109,6 +128,16 @@ export default {
     to {
       left: 0;
       transform: translateX(1%) translateY(-50%);
+    }
+  }
+
+  .jSwitch-cnt {
+    color: #333;
+    margin-left: 8px;
+    font-size: 24px;
+
+    &.active {
+      color: $theme-color;
     }
   }
 </style>

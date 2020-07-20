@@ -14,7 +14,7 @@
         class="shoppingCart-ads-detail"
         @tap="showAdsPicker"
       >
-        <view class="iconfont iconicon-"></view>
+        <view class="iconfont iconlocal"></view>
         <text>配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792</text>
       </view>
     </view>
