@@ -32,8 +32,16 @@
   margin-left: 10px;
 }
 
+.ml14 {
+  margin-left: 10px;
+}
+
 .ml20 {
   margin-left: 20px;
+}
+
+.ml24 {
+  margin-left: 24px;
 }
 
 .ml26 {
@@ -287,6 +295,54 @@
 
 /*col end*/
 
+/*flex start*/
+.dis-flex {
+  display: flex;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.flex-w {
+  flex-wrap: wrap;
+}
+
+.justify-c {
+  justify-content: center;
+}
+
+.justify-sb {
+  justify-content: space-between;
+}
+
+.justify-se {
+  justify-content: space-evenly;
+}
+
+/*flex end*/
+
+/*公共*/
+
+// 商品标题
+.j-flex-aic {
+  display: flex;
+  align-items: center;
+}
+
+.j-goods-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 28px;
+  line-height: 40px;
+  color: #333;
+}
+
+/*公共 end*/
+
 /*购物车*/
 
 .jShoppingCartItem-cnt-check {
@@ -368,30 +424,3 @@
 }
 
 /*购物车 end*/
-
-/*flex start*/
-.dis-flex {
-  display: flex;
-}
-
-.flex-grow-1 {
-  flex-grow: 1;
-}
-
-.flex-w {
-  flex-wrap: wrap;
-}
-
-.justify-c {
-  justify-content: center;
-}
-
-.justify-sb {
-  justify-content: space-between;
-}
-
-.justify-se {
-  justify-content: space-evenly;
-}
-
-/*flex end*/
