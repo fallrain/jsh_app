@@ -1,5 +1,5 @@
 <template>
-  <view class="order_more">
+  <view v-show="isOrderMore" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
       <view class="order_more_text"><view class="iconfont iconqiche order_more_iconStyle"></view>自助作废</view>
@@ -12,7 +12,13 @@
 
 <script>
 export default {
-  name: 'orderListItemMore'
+  name: 'orderListItemMore',
+  props: {
+    isOrderMore: {
+      type: Boolean,
+      default: false
+    }
+  }
 };
 </script>
 

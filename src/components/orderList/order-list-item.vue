@@ -42,7 +42,7 @@
       <view class="col-25 produceDetailItem-btm"><view class="iconfont iconqiche iconStyle"></view>查看物流</view>
       <view class="col-25 produceDetailItem-btm"><view class="iconfont iconqiche iconStyle"></view>订单节点</view>
     </view>
-    <order-list-item-more></order-list-item-more>
+    <order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>
   </view>
 </template>
 
@@ -63,9 +63,16 @@ export default {
       type: [String, Number]
     }
   },
+  data() {
+    return {
+      isOrderMore: false
+    };
+  },
   methods: {
     getMore() {
+      this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
+      console.log(this.isOrderMore);
     }
   }
 };
