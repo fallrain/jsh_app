@@ -10,7 +10,7 @@
       :key="index"
       :activity="item"
     ></j-activity-item>
-    <uni-drawer
+   <!-- <uni-drawer
       ref="marketFilterDrawer"
       mode="right"
     >
@@ -97,7 +97,81 @@
           </button>
         </view>
       </view>
-    </uni-drawer>
+    </uni-drawer>-->
+    <j-drawer
+      ref="filterDrawer"
+      :show.sync="isShowFilterDrawer"
+      @filterReset="filterReset"
+      @filterConfirm="filterConfirm"
+    >
+      <view
+        v-for="(item,index) in filterInputs"
+        :key="index"
+        class="marketList-drawer-filter">
+        <view class="marketList-drawer-filter-head">
+          <view>
+            <text>{{item.name}}</text>
+          </view>
+        </view>
+        <view
+          class="marketList-drawer-filter-list"
+        >
+          <input
+            class="marketList-drawer-filter-input"
+            type="text"
+            v-model="item.value"
+            :placeholder="`请输入${item.name}`"
+          >
+        </view>
+      </view>
+      <view
+        v-for="(item,index) in filterList"
+        :key="index"
+      >
+        <view class="marketList-drawer-filter">
+          <view class="marketList-drawer-filter-head">
+            <view>
+              <text>{{item.name}}</text>
+              <text class="marketList-drawer-filter-head-tips">{{item.tips}}</text>
+            </view>
+            <i
+              class="iconfont iconxia"
+              :class="[
+                      !item.isExpand && 'reverse'
+                    ]"
+              @click="toggleExpand(item)"
+            ></i>
+          </view>
+          <view
+            class="marketList-drawer-filter-list"
+            v-show="item.isExpand"
+          >
+            <view
+              v-for="(filterItem,filterIndex) in item.data"
+              :key="filterIndex"
+              class="marketList-drawer-filter-list-item"
+              :class="[filterItem.isChecked && 'active']"
+              @click="choose(filterItem,item.data,item.type)"
+            >{{filterItem.value}}
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="marketList-drawer-filter-head-ads-wrap">
+        <view
+          class="marketList-drawer-filter-head"
+          @tap="showDeliveryAddress"
+        >
+          <view>
+            <text>配送至</text>
+          </view>
+          <i class="iconfont iconyou marketList-drawer-filter-head-icon-right"></i>
+        </view>
+        <view class="marketList-drawer-filter-head-ads">
+          (8800212607)李沧区重庆中路420号沃李沧区重庆中路420号沃
+        </view>
+      </view>
+    </j-drawer>
     <j-choose-delivery-address
       :show.sync="isShowAddressDrawer"
     ></j-choose-delivery-address>
@@ -105,9 +179,8 @@
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
+
+import JDrawer from '../../components/form/JDrawer';
 import JActivityItem from '../../components/market/JActivityItem';
 import JMarketHeadTab from '../../components/market/JMarketHeadTab';
 import JChooseDeliveryAddress from '../../components/market/JChooseDeliveryAddress';
@@ -120,7 +193,7 @@ export default {
     JChooseDeliveryAddress,
     JMarketHeadTab,
     JActivityItem,
-    uniDrawer
+    JDrawer
   },
   data() {
     return {
@@ -181,6 +254,8 @@ export default {
           ]
         }
       ],
+      // 是否展示筛选侧边抽屉
+      isShowFilterDrawer: false,
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
       tabs: [
@@ -194,83 +269,66 @@ export default {
           handler: 'showFilter'
         }
       ],
+      filterInputs: [
+        {
+          name: '产品名称',
+          val: ''
+        },
+        {
+          name: '产品编码',
+          val: ''
+        },
+        {
+          name: '活动名称',
+          val: ''
+        }
+      ],
       filterList: [
         {
-          name: '筛选',
+          name: '产品组',
           isExpand: true,
           type: 'checkbox',
           data: [
             {
               key: '1',
-              value: '抢单',
+              value: '冰箱',
               isChecked: false
             },
             {
               key: '2',
-              value: '反向定制',
+              value: '洗衣机',
               isChecked: false
             }, {
               key: '3',
-              value: '套餐',
+              value: '热水器',
               isChecked: false
             }, {
               key: '4',
-              value: '组合',
+              value: '电视机',
               isChecked: false
             }, {
               key: 'sp',
-              value: '商品',
+              value: '电脑',
               isChecked: false
             }, {
               key: 'CHD',
-              value: '特价',
-              isChecked: false
-            },
-            {
-              key: 'gc',
-              value: '工程',
-              isChecked: false
-            },
-            {
-              key: 'yj',
-              value: '样机',
-              isChecked: false
-            },
-            {
-              key: 'rz',
-              value: '融资',
+              value: '厨房用品',
               isChecked: false
             }
           ]
         },
         {
-          name: '筛选',
+          name: '产品状态',
           isExpand: true,
           type: 'radio',
           data: [
             {
               key: '1',
-              value: '机壳',
+              value: '全部',
               isChecked: false
             }, {
               key: '2',
-              value: '巨划算',
-              isChecked: false
-            }
-          ]
-        },
-        {
-          name: '有货商品',
-          isExpand: true,
-          type: 'checkbox',
-          data: [
-            {
-              key: '1',
-              value: 'RRS库存',
-              isChecked: false
-            }, {
-              key: '2',
-              value: 'TC库存',
+              value: '有效',
               isChecked: false
             }
           ]
@@ -286,7 +344,13 @@ export default {
     },
     showFilter() {
       /* 展示filter */
-      this.$refs.marketFilterDrawer.open();
+      this.isShowFilterDrawer = true;
+    },
+    filterReset() {
+      console.log('重置');
+    },
+    filterConfirm() {
+      console.log('确认');
     },
     toggleExpand(item) {
       /* 展开或者收起 */

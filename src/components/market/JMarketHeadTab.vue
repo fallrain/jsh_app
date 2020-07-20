@@ -1,5 +1,5 @@
 <template>
-  <view class="jHeadTab-wrap">
+  <view class="jMarkeyTab-warp">
     <view class="jHeadTab-list">
       <view
         class="jHeadTab-item"
@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .jHeadTab-wrap {
+  .jMarkeyTab-warp {
     padding: 24px;
     background: #fff;
   }
