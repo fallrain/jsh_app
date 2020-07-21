@@ -2,7 +2,7 @@
   <view class="orList">
     <view class="padding-8">
       <view>111</view>
-      <order-list-item v-for="(iten,index) in productList" :key="index" :info="iten" :index="index"></order-list-item>
+      <order-list-item v-for="(iten,index) in productList" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
     </view>
   </view>
 </template>
@@ -19,6 +19,14 @@ export default {
     return {
       productList: [{ name: '111' }, { name: '121' }, { name: '131' }]
     };
+  },
+  methods: {
+    goDetail(e) {
+      uni.navigateTo({
+        url: '/pages/orderList/orderDetail?id=1&name=uniapp'
+      });
+      console.log(e);
+    }
   }
 };
 </script>
