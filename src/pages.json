@@ -66,6 +66,14 @@
       "style": {
         "navigationBarTitleText": "订单列表"
       }
+    },
+    {
+      "path": "pages/orderList/orderDetail",
+      "style": {
+        "navigationBarTitleText": "订单详情",
+        "navigationBarBackgroundColor": "#ED2856",
+        "navigationBarTextStyle": "white"
+      }
     }
   ],
   "globalStyle": {
