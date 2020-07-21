@@ -1,5 +1,6 @@
 {
-  "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
       "path": "pages/nav/nav",
       "style": {
@@ -34,6 +35,12 @@
       "path": "pages/shoppingCart/orderConfirm",
       "style": {
         "navigationBarTitleText": "订单确认"
+      }
+    },
+    {
+      "path": "pages/shoppingCart/orderConfirmRemarks",
+      "style": {
+        "navigationBarTitleText": "备注"
       }
     },
     {
