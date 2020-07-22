@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "devh5": "npm run dev:h5",
-    "build": "npm run build:h5",
+    "buildh5": "npm run build:h5",
     "build:custom": "cross-env NODE_ENV=production uniapp-cli custom",
     "build:h5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build",
     "build:mp-alipay": "cross-env NODE_ENV=production UNI_PLATFORM=mp-alipay vue-cli-service uni-build",
