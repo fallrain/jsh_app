@@ -1,0 +1,92 @@
+.marketDetail {
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding-bottom: 124px;
+}
+
+.marketDetail-tab-picker {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: $theme-color;
+
+  .iconfont {
+    font-size: 20px;
+  }
+}
+
+.marketDetail-order-infor {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  color: #666;
+  font-size: 24px;
+}
+
+.marketDetail-ads-detail {
+  position: relative;
+  padding: 26px 50px 26px 70px;
+  font-size: 28px;
+  color: $theme-color;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .iconfont {
+    display: inline-block;
+    font-size: 34px;
+    margin-right: 12px;
+    vertical-align: bottom;
+  }
+  .right-style{
+    color: #999;
+    position: absolute;
+    top: 28px;
+    right: 0px;
+  }
+}
+
+.marketDetail-ads-total {
+  flex-shrink: 0;
+  margin-right: 10px;
+  max-width: 600px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.marketDetail-orders{
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 20px;
+  color: #999;
+  padding: 24px 0px;
+}
+.marketDetail-requirement{
+  padding: 24px;
+}
+.marketDetail-list {
+  padding: 0 24px;
+}
+.text-theme{
+  color: $theme-color;
+}
+.br-b-grey{
+  border-bottom: 2px solid #F5F5F5;
+}
+.text-333{
+  color: #333;
+}
+.text-999{
+  color: #999;
+}
+.w200{
+  width: 200px;
+}
+.w230{
+  width: 230px;
+}

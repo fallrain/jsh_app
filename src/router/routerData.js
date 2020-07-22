@@ -9,6 +9,7 @@ const data = [
   'pages/productDetail/productDetail',
   'pages/category/category',
   'pages/market/marketList',
+  'pages/market/marketDetail',
   'pages/orderList/orderList'
 ];
 export default { data };
