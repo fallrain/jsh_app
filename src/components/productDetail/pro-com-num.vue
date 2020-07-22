@@ -9,7 +9,7 @@
       <view class="content">
         <view class="uni-flex uni-row">
           <view class="text uni-flex" style="width: 88px;height: 88px;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
-            <image src="/static/logo.png" style="width: 88px;height: 88px;"></image>
+            <image src="@/assets/img/goods/example-fridge.jpg" style="width: 88px;height: 88px;"></image>
           </view>
           <view class="uni-flex uni-column" style="-webkit-flex: 1;flex: 1;-webkit-justify-content: space-between;justify-content: space-between;padding-left: 20px;">
             <view class="uni-flex uni-row" style="font-size: 16px;color: #333333;">
