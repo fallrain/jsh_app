@@ -1,0 +1,43 @@
+.orderConfirm {
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding: 24px 24px 140px 24px;
+}
+
+.orderConfirm-list {
+  margin-top: 24px;
+}
+
+.orderConfirm-btm {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: #fff;
+  border-top: 1px solid #CDCDCD;
+  justify-content: flex-end;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.orderConfirm-btm-text {
+  color: #333;
+  font-size: 24px;
+}
+
+.orderConfirm-btm-price{
+  color: $theme-color;
+  font-size: 28px;
+}
+
+.orderConfirm-btm-btn {
+  display: inline-block;
+  width: 154px;
+  height: 42px;
+  line-height: 42px;
+  background: $theme-color;
+  border-radius: 21px;
+  font-size: 24px;
+  color: #fff;
+}

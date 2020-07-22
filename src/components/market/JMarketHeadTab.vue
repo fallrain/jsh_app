@@ -1,0 +1,72 @@
+<template>
+  <view class="JMarketHeadTab">
+    <view class="jMarketTab-warp">
+      <view class="jHeadTab-list">
+        <view
+          class="jHeadTab-item"
+          v-for="(item,index) in tabs"
+          :key="index"
+          @tap="tabHandle(item.handler)"
+        >
+          <text>{{item.name}}</text>
+          <view
+            v-if="item.icon"
+            :class="['iconfont',item.icon]"
+          ></view>
+        </view>
+      </view>
+    </view>
+    <j-head-tab-picker
+      v-for="(pickerItem,pIndex) in tabs"
+      :key="pIndex"
+      :index="pIndex"
+      :show.sync="pickerItem.show"
+      v-model="pickerItem.children"
+      @change="tabPickerChange"
+    >
+    </j-head-tab-picker>
+  </view>
+</template>
+
+<script>
+import './css/JMarketHeadTab.scss';
+import JHeadTabPicker from '../form/JHeadTabPicker';
+
+export default {
+  name: 'JMarketHeadTab',
+  components: {
+    JHeadTabPicker
+  },
+  props: {
+    // 顶部tab配置信息
+    tabs: {
+      type: Array,
+      default: () => []
+    },
+    // 类别下拉菜单控制
+    typeShow: false
+  },
+  data() {
+    return {
+    };
+  },
+  watch: {
+    typeShow(val) {
+      this.tabs[0].show = val;
+    }
+  },
+  methods: {
+    tabHandle(handler) {
+      /* tab 点击事件 */
+      this.$emit('tabClick', handler);
+    },
+    tabTagHandle() {
+      /* tag tab 点击事件 */
+    },
+    tabPickerChange(children, index) {
+      this.tabs[index].children = children;
+      console.log(this.tabs);
+    }
+  }
+};
+</script>
