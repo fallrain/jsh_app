@@ -5,9 +5,16 @@ import '@/assets/css/var.scss';
 import '@/assets/font/iconfont.css';
 import '@/assets/css/base.scss';
 import '@/assets/css/common.scss';
-
+import {
+  hGet,
+  hPost,
+  hPostJson
+} from '@/lib/request';
 
 Vue.config.productionTip = false;
+Vue.prototype.hGet = hGet;
+Vue.prototype.hPost = hPost;
+Vue.prototype.hPostJson = hPostJson;
 
 App.mpType = 'app';
 
