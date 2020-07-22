@@ -5,7 +5,7 @@
       <text class="produceDetailItem-head-text">整单订单：202006191745435</text>
       <text class="produceDetailItem-head-text-status">订单成功</text>
     </view>
-    <view class="produceDetailItem-cnt">
+    <view class="produceDetailItem-cnt" @click="goDetail">
       <view class="produceDetailItem-cnt-img">
         <image src="@/assets/img/goods/example-fridge.jpg"></image>
       </view>
@@ -73,6 +73,9 @@ export default {
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
       console.log(this.isOrderMore);
+    },
+    goDetail() {
+      this.$emit('goDetail', this.index);
     }
   }
 };
