@@ -122,7 +122,7 @@ export default {
     height: 75%;
   }
   .textSenRow-ship {
-    padding: 20px;
+    padding: 30px;
   }
   .textRow-ship {
     text-align: left;
