@@ -188,6 +188,7 @@ export default {
   .nav-right {
     margin-left: 25%;
     width: 75%;
+    border-left: 1px #eeeeee solid;
   }
   .bordered {
     border: 1px #eeeeee solid;
