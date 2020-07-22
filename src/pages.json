@@ -82,7 +82,16 @@
         "navigationBarBackgroundColor": "#ED2856",
         "navigationBarTextStyle": "white"
       }
+    },
+    {
+      "path": "pages/messageInfoList/messageInfoList",
+      "style": {
+        "navigationBarTitleText": "消息列表"
+        
+      }
+     
     }
+
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
