@@ -6,15 +6,21 @@
     <view class="nav">
       <view class="nav-left">
         <scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower">
-          <view @click="cateClick(item,index)" :key="index" :class="index==categoryActive?'active':''"  v-for="(item,index) in categoryList" class="scroll-view-item bordered">
-            {{item.NAME}}
+          <view @click="cateClick(item,index)" :key="index" v-for="(item,index) in categoryList" class="scroll-view-item">
+            <view :class="index==categoryActive?'active':'noActive'" >{{item.NAME}}</view>
           </view>
         </scroll-view>
       </view>
       <view class="nav-right">
+        <view class="nav-right-titlePic">
+          <image src="@/assets/img/goods/example-fridge.jpg"/>
+        </view>
         <view v-for="child in subCategoryList" :key="child.NAME">
-          <view class="uni-flex uni-row">{{child.NAME}}</view>
-          <view class="lineHigt"></view>
+          <view class="uni-flex uni-row" style="padding-left: 34%;">
+            <view class="category-line"></view>
+            <view class="category-title">{{child.NAME}}</view>
+            <view class="category-line"></view>
+          </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="childed in child.hdg" :key="childed.NAME" class="nav-right-item">
               <image :src="childed.LOGO"/>
@@ -83,9 +89,9 @@ export default {
   },
   onLoad() {
     this.categoryList = [
-      { id: 0, NAME: 'aa1', LOGO: 'http://placehold.it/50x50' },
-      { id: 1, NAME: 'dd2', LOGO: 'http://placehold.it/50x50' },
-      { id: 2, NAME: 'bdg3', LOGO: 'http://placehold.it/50x50' },
+      { id: 0, NAME: '水洗空冷', LOGO: 'http://placehold.it/50x50' },
+      { id: 1, NAME: '电视电脑', LOGO: 'http://placehold.it/50x50' },
+      { id: 2, NAME: '厨房卫浴', LOGO: 'http://placehold.it/50x50' },
       { id: 3, NAME: 'jsh4', LOGO: 'http://placehold.it/50x50' },
       { id: 4, NAME: 'teg5', LOGO: 'http://placehold.it/50x50' },
       { id: 5, NAME: 'djh6', LOGO: 'http://placehold.it/50x50' },
@@ -148,12 +154,6 @@ export default {
     position: sticky;
     top: 88px;
   }
-  .scroll-view-item {
-    height: 100px;
-    line-height: 100px;
-    text-align: center;
-    font-size: 36px;
-  }
   .scroll-Y {
     height: 100%;
   }
@@ -162,33 +162,66 @@ export default {
     width: 100%;
   }
   .nav-left {
-    width: 30%;
+    width: 25%;
     position: fixed;
     height: 70%;/*左侧滑动展示区域高度*/
     overflow: auto;
     float: left;
   }
+  .scroll-view-item {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 28px;
+  }
+  .active {
+    margin-top: 50px;
+    height: 40px;
+    line-height: 40px;
+    border-left: 8px #ED2856 solid;
+    color: #ED2856;
+  }
+  .noActive {
+    margin-top: 50px;
+    color: #666666;
+  }
   .nav-right {
-    margin-left: 30%;
-    width: 70%;
+    margin-left: 25%;
+    width: 75%;
   }
   .bordered {
     border: 1px #eeeeee solid;
   }
-  .lineHigt {
-    background-color: #F5F5F5;
-    height: 5px;
+  .category-title {
+    height: 84px;
+    line-height: 84px;
+    font-size: 28px;
+    color: #666666;
+    padding-left: 20px;
+    padding-right: 20px;
   }
-  .active {
-    color: #F24544;
+  .category-line {
+    background-color: #979797;
+    height: 2px;
+    width: 20px;
+    margin-top: 40px;
+  }
+  .nav-right-titlePic {
+    padding: 20px 20px 10px 20px;
+    width: 100%;
+    height: 240px;
+  }
+  .nav-right-titlePic image{
+    width: 100%;
+    height: 100%;
   }
   .nav-right-item {
     width: 33%;
-    height: 220px;
+    height: 190px;
     float: left;
     text-align: center;
-    /*padding: 11px;*/
-    font-size: 26px;
+    color: #666666;
+    font-size: 24px;
   }
   .nav-right-item image{
     width: 100px;
