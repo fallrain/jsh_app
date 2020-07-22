@@ -62,20 +62,21 @@
       <pro-com-num :isShow="MunType==='OPEN'" :info="showModal" @closeNum="showNum('')" @checkedNum="checkedNum"></pro-com-num>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">配送至：</view>
-        <view class="col-70 text">
-          <view class="smaller">(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室至:</view>
+        <view class="col-70 text" @click="showShip('OPEN')">
+          <view class="smaller">{{ShipInfo}}</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
+      <pro-com-ship :isShowShip="ShipType==='OPEN'" @closeShip="showShip('')" @checkedShip="checkedShip"></pro-com-ship>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
         <view class="padding-30 col-40 modeller">热门推荐</view>
       </view>
       <view class="uni-flex uni-row">
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
-          <view v-for="ieen in categoryList" class="scroll-view-item_H">
+          <view v-for="ieen in categoryList" :key="ieen.NAME" class="scroll-view-item_H">
             <image :src="ieen.LOGO" style="height: 76px;width: 76px;"/>
             <view class="smaller">{{ieen.NAME}}<br>{{ieen.NAME}}</view>
           </view>
@@ -228,6 +229,8 @@ export default {
       showModal: ' parent say', // 数量popup数据传输
       MunType: '', // 数量页面参数，判断是否展示
       productNum: 1, // 商品数量数量
+      ShipType: '', // 送达方，是否显示
+      ShipInfo: '(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室至:', //
       scrollTop: 0,
       old: {
         scrollTop: 0
@@ -284,6 +287,14 @@ export default {
       }
       this.ActType = e;
     },
+    showShip(e) { // 地址选择页面
+      if (e === 'OPEN') {
+        this.isUps = true;
+      } else {
+        this.isUps = false;
+      }
+      this.ShipType = e;
+    },
     checkedNum(e) { // 数量选择页面
       this.MunType = '';
       this.isUps = false;
@@ -293,6 +304,11 @@ export default {
       this.ActType = '';
       this.isUps = false;
       this.ActInfo = e;
+    },
+    checkedShip(e) { // 选择的地址
+      this.ShipType = '';
+      this.isUps = false;
+      this.ShipInfo = e;
     },
     checkCut(e) {
       this.goodsCheck = false;

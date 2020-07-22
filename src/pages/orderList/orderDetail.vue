@@ -8,7 +8,7 @@
           <view class="orderDetail-head-two">预计到货日期：2019-07-20</view>
         </view>
         <view class="orderDetail-head-img">
-          <image src="@/assets/img/goods/example-fridge.jpg" style="width: 100%;height: 100%;"></image>
+          <image src="@/assets/img/orderDetail/car.png" style="width: 100%;height: 100%;margin-top: 5px;"></image>
         </view>
       </view>
       <view>
@@ -20,19 +20,30 @@
       <view>
         <order-detail-info></order-detail-info>
       </view>
+      <view>
+        <order-detail-base></order-detail-base>
+      </view>
+      <view>
+        <order-detail-flow></order-detail-flow>
+      </view>
     </view>
+    <view class="order-detail-line"></view>
   </view>
 </template>
 
 <script>
 import orderDetailAddress from '../../components/orderList/order-detail-address';
 import orderDetailInfo from '../../components/orderList/order-detail-info';
+import orderDetailBase from '../../components/orderList/order-detail-base';
+import orderDetailFlow from '../../components/orderList/order-detail-flow';
 
 export default {
   name: 'orderDetail',
   components: {
     orderDetailAddress,
-    orderDetailInfo
+    orderDetailInfo,
+    orderDetailBase,
+    orderDetailFlow
   },
   onLoad(option) {
     console.log(option.id); // 打印出上个页面传递的参数。
@@ -62,25 +73,24 @@ export default {
     position: relative;
     display: flex;
     align-items: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 80px;
-    padding-right: 20px;
+    padding: 20px 20px 20px 80px;
   }
   .orderDetail-head-img {
-    margin-left: 50px;
+    margin-left: 60px;
     flex-shrink: 0;
-    width: 152px;
-    height: 152px;
+    width: 190px;
+    height: 170px;
   }
   .orderDetail-head-one {
     color: #FFFFFF;
     font-size: 34px;
     margin-bottom: 20px;
+    font-weight:300;
   }
   .orderDetail-head-two {
     color: #FFFFFF;
     font-size: 24px;
     margin-bottom: 10px;
+    font-weight:300;
   }
 </style>

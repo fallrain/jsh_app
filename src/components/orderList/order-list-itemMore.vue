@@ -2,10 +2,10 @@
   <view v-show="isOrderMore" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text"><view class="iconfont iconqiche order_more_iconStyle"></view>自助作废</view>
-      <view class="order_more_text"><view class="iconfont iconqiche order_more_iconStyle"></view>更改付款方</view>
-      <view class="order_more_text"><view class="iconfont iconqiche order_more_iconStyle"></view>统舱统配确认</view>
-      <view class="order_more_text"><view class="iconfont iconqiche order_more_iconStyle"></view>前往结算</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>自助作废</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>更改付款方</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>统舱统配确认</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>前往结算</view>
     </view>
   </view>
 </template>
@@ -50,7 +50,7 @@ export default {
     padding-bottom: 20px;
   }
   .order_more_iconStyle {
-    transform: rotateY(180deg);
+    /*transform: rotateY(180deg);*/
     margin-top: auto;
     margin-right: 6px;
   }
