@@ -55,8 +55,6 @@ import './css/JProductItem.scss';
 export default {
   name: 'jProductItem',
   components: {
-    // JVersionSpecifications,
-    // JSwitch,
     uniNumberBox
   },
   props: {

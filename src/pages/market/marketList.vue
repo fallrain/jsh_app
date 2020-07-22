@@ -3,6 +3,7 @@
     <j-market-head-tab
       class="mb12"
       :tabs="tabs"
+      :typeShow="isShowType"
       @tabClick="tabClick"
     ></j-market-head-tab>
     <j-activity-item
@@ -10,94 +11,6 @@
       :key="index"
       :activity="item"
     ></j-activity-item>
-   <!-- <uni-drawer
-      ref="marketFilterDrawer"
-      mode="right"
-    >
-      <view class="marketList-drawer">
-        <view class="marketList-drawer-cnt-list">
-          <view
-            v-for="(item,index) in filterList"
-            :key="index"
-          >
-            <view class="marketList-drawer-filter">
-              <view class="marketList-drawer-filter-head">
-                <view>
-                  <text>{{item.name}}</text>
-                  <text class="marketList-drawer-filter-head-tips">{{item.tips}}</text>
-                </view>
-                <i
-                  class="iconfont iconxia"
-                  :class="[
-                      !item.isExpand && 'reverse'
-                    ]"
-                  @click="toggleExpand(item)"
-                ></i>
-              </view>
-              <view
-                class="marketList-drawer-filter-list"
-                v-show="item.isExpand"
-              >
-                <view
-                  v-for="(filterItem,filterIndex) in item.data"
-                  :key="filterIndex"
-                  class="marketList-drawer-filter-list-item"
-                  :class="[filterItem.isChecked && 'active']"
-                  @click="choose(filterItem,item.data,item.type)"
-                >{{filterItem.value}}
-                </view>
-              </view>
-            </view>
-          </view>
-          <view class="marketList-drawer-filter-head-ads-wrap">
-            <view
-              class="marketList-drawer-filter-head"
-              @tap="showDeliveryAddress"
-            >
-              <view>
-                <text>配送至</text>
-              </view>
-              <i class="iconfont iconyou marketList-drawer-filter-head-icon-right"></i>
-            </view>
-            <view class="marketList-drawer-filter-head-ads">
-              (8800212607)李沧区重庆中路420号沃李沧区重庆中路420号沃
-            </view>
-          </view>
-          <view class="marketList-drawer-filter-head-ads-wrap">
-            <view class="marketList-drawer-filter-head">
-              <view>
-                <text>价格区间</text>
-              </view>
-            </view>
-            <view class="marketList-drawer-filter-price-range">
-              <input
-                class="marketList-drawer-filter-price-ipt"
-                type="text"
-                placeholder="最低价格"
-              >
-              <view class="marketList-drawer-filter-price-line"></view>
-              <input
-                class="marketList-drawer-filter-price-ipt"
-                type="text"
-                placeholder="最高价格"
-              >
-            </view>
-          </view>
-        </view>
-        <view class="marketList-drawer-btn-wrap">
-          <button
-            type="button"
-            class="marketList-drawer-btn-confirm"
-          >确定
-          </button>
-          <button
-            type="button"
-            class="marketList-drawer-btn-reset"
-          >重置
-          </button>
-        </view>
-      </view>
-    </uni-drawer>-->
     <j-drawer
       ref="filterDrawer"
       :show.sync="isShowFilterDrawer"
@@ -106,7 +19,7 @@
     >
       <view
         v-for="(item,index) in filterInputs"
-        :key="index"
+        :key="index+'^-^'"
         class="marketList-drawer-filter">
         <view class="marketList-drawer-filter-head">
           <view>
@@ -258,10 +171,18 @@ export default {
       isShowFilterDrawer: false,
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
+      isShowType: false,
       tabs: [
         {
           name: '活动类别',
-          icon: 'iconxia'
+          icon: 'iconxia',
+          show: false,
+          handler: 'showType',
+          children: [
+            { name: '全部', checked: false },
+            { name: '套餐', checked: false },
+            { name: '组合', checked: false }
+          ]
         },
         {
           name: '筛选',
@@ -345,6 +266,10 @@ export default {
     showFilter() {
       /* 展示filter */
       this.isShowFilterDrawer = true;
+    },
+    showType() {
+      /* 展示类别 */
+      this.isShowType = !this.isShowType;
     },
     filterReset() {
       console.log('重置');

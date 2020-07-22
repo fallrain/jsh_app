@@ -44,7 +44,8 @@
     </view>
     <view class="marketDetail-list">
       <j-product-item
-        v-for="(goods,index) in shoppingList"
+        :groupType="groupType"
+        v-for="(goods,index) in activityList"
         :key="index"
         :goods="goods"
         :index="index"
@@ -61,7 +62,6 @@
 <script>
 import JProductItem from '../../components/market/JProductItem';
 import JProductBtm from '../../components/market/JProductBtm';
-import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import './css/marketDetail.scss';
 
@@ -70,26 +70,31 @@ export default {
   name: 'marketDetail',
   components: {
     JAddressPicker,
-    JFailureGoodsList,
     JProductItem,
     JProductBtm
   },
   data() {
     return {
-      shoppingList: [
+      // 0 套餐 1 组合
+      groupType: 0,
+      // activityList type 0:主产品 1：配比产品 2：失效产品
+      activityList: [
         {
-          checked: false,
+          type: 0,
           isCreditMode: false
         },
         {
+          type: 1,
           checked: true,
           isCreditMode: false
         },
         {
+          type: 2,
           checked: false,
           isCreditMode: false
         },
         {
+          type: 3,
           checked: false,
           isCreditMode: false
         }

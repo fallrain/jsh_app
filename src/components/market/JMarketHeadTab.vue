@@ -1,64 +1,59 @@
 <template>
-  <view class="jMarkeyTab-warp">
-    <view class="jHeadTab-list">
-      <view
-        class="jHeadTab-item"
-        v-for="(item,index) in tabs"
-        :key="index"
-        @tap="tabHandle(item.handler)"
-      >
-        <text>{{item.name}}</text>
+  <view class="JMarketHeadTab">
+    <view class="jMarketTab-warp">
+      <view class="jHeadTab-list">
         <view
-          v-if="item.icon"
-          :class="['iconfont',item.icon]"
-        ></view>
+          class="jHeadTab-item"
+          v-for="(item,index) in tabs"
+          :key="index"
+          @tap="tabHandle(item.handler)"
+        >
+          <text>{{item.name}}</text>
+          <view
+            v-if="item.icon"
+            :class="['iconfont',item.icon]"
+          ></view>
+        </view>
       </view>
     </view>
-    <view v-if="secondTab" class="jHeadTab-pop-tab-list">
-      <view
-        class="jHeadTab-pop-tab-item"
-        v-for="(item,index) in popTabs"
-        :key="index"
-      >
-        <text>{{item.name}}</text>
-        <view class="iconfont iconxia"></view>
-      </view>
-    </view>
+    <j-head-tab-picker
+      v-for="(pickerItem,pIndex) in tabs"
+      :key="pIndex"
+      :index="pIndex"
+      :show.sync="pickerItem.show"
+      v-model="pickerItem.children"
+      @change="tabPickerChange"
+    >
+    </j-head-tab-picker>
   </view>
 </template>
 
 <script>
+import './css/JMarketHeadTab.scss';
+import JHeadTabPicker from '../form/JHeadTabPicker';
+
 export default {
-  name: 'JHeadTab',
+  name: 'JMarketHeadTab',
+  components: {
+    JHeadTabPicker
+  },
   props: {
     // 顶部tab配置信息
     tabs: {
       type: Array,
       default: () => []
     },
-    // 顶部tab配置信息
-    secondTab: {
-      type: Boolean,
-      default: () => false
-    }
+    // 类别下拉菜单控制
+    typeShow: false
   },
   data() {
     return {
-      popTabs: [
-        {
-          name: '品牌'
-        },
-        {
-          name: '类目'
-        },
-        {
-          name: '一级类目'
-        },
-        {
-          name: '二级类目'
-        }
-      ]
     };
+  },
+  watch: {
+    typeShow(val) {
+      this.tabs[0].show = val;
+    }
   },
   methods: {
     tabHandle(handler) {
@@ -67,61 +62,11 @@ export default {
     },
     tabTagHandle() {
       /* tag tab 点击事件 */
+    },
+    tabPickerChange(children, index) {
+      this.tabs[index].children = children;
+      console.log(this.tabs);
     }
   }
 };
 </script>
-
-<style lang="scss">
-  .jMarkeyTab-warp {
-    padding: 24px;
-    background: #fff;
-  }
-
-  .jHeadTab-list {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .jHeadTab-item {
-    display: flex;
-    align-items: center;
-    color: #333;
-    font-size: 24px;
-
-    &.active {
-      color: #2283E2;
-    }
-
-    .iconfont {
-      margin-left: 8px;
-      font-size: 20px;
-    }
-  }
-
-  .jHeadTab-pop-tab-list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 24px;
-
-    .iconfont {
-      font-size: 8px;
-    }
-  }
-
-  .jHeadTab-pop-tab-item {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    background: #F2F2F7;
-    border-radius: 22px;
-    color: #666;
-    font-size: 24px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-</style>
