@@ -1,77 +1,47 @@
 <template>
   <view v-show="isShowShip">
-    <view class="mask" @click="close"></view>
-    <view class="popup">
-      <view class="top" @click="close">
-        <view style="color: #333333; font-size: 15px;">配送至</view>
-        <view style="color: #ED2856;">X</view>
+    <view class="mask-ship" @click="close"></view>
+    <view class="popup-ship">
+      <view class="top-ship" @click="close">
+        <view class="top-ship-title">配送至</view>
+        <view class="top-ship-but">X</view>
       </view>
-      <view class="content sorrowC">
-        <view class="lineHigt"></view>
-        <view class="uni-flex uni-row textTalRow">
-          <view class="text col-90 borderLeft">
-            <view class="afterr">特价版本</view>
-          </view>
-          <view class="text borderLeft">2</view>
-        </view>
-        <view class="textTalRow" @click="checkAct('11')">
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-60">名称：TJ2020033333</view>
-            <view class="textRow col-40">价格：¥ 5949.71</view>
-          </view>
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-40">有效期：2021-01-01</view>
-            <view class="textRow col-25">直扣：0.00</view>
-            <view class="textRow col-33">数量：0.00</view>
+      <view class="sorrowC-ship">
+        <view @click="checkAct('11')">
+          <view class="uni-flex uni-row textSenRow-ship">
+            <view class="textTick-ship col-15 iconfont icontick"></view>
+            <view class="textRow-ship col-80">(8800212607)李沧区重庆中路420号</view>
           </view>
         </view>
-        <view class="lineHigt"></view>
-        <view class="uni-flex uni-row textTalRow">
-          <view class="text col-90 borderLeft">
-            <view class="afterr">特价版本</view>
-          </view>
-          <view class="text borderLeft">2</view>
-        </view>
-        <view class="textTalRow">
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-60">名称：TJ2020033333</view>
-            <view class="textRow col-40">价格：¥ 5949.71</view>
-          </view>
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-40">有效期：2021-01-01</view>
-            <view class="textRow col-25">直扣：0.00</view>
-            <view class="textRow col-33">数量：0.00</view>
+        <view class="line-ship"></view>
+        <view @click="checkAct('11')">
+          <view class="uni-flex uni-row textSenRow-ship ">
+            <view class="textTick-ship col-15 iconfont icontick"></view>
+            <view class="textRow-ship col-80">(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室</view>
           </view>
         </view>
-        <view class="textTalRow">
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-60">名称：TJ2020033333</view>
-            <view class="textRow col-40">价格：¥ 5949.71</view>
-          </view>
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-40">有效期：2021-01-01</view>
-            <view class="textRow col-25">直扣：0.00</view>
-            <view class="textRow col-33">数量：0.00</view>
+        <view class="line-ship"></view>
+        <view @click="checkAct('11')">
+          <view class="uni-flex uni-row textSenRow-ship">
+            <view class="textTick-ship col-15 iconfont icontick"></view>
+            <view class="textRow-ship col-80">(8800212607)李沧区黑龙江中路342号甲A栋G座2039室</view>
           </view>
         </view>
-        <view class="lineHigt"></view>
-        <view class="uni-flex uni-row textTalRow">
-          <view class="text col-90 borderLeft">
-            <view class="afterr">特价版本</view>
-          </view>
-          <view class="text borderLeft">2</view>
-        </view>
-        <view class="textTalRow">
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-60">名称：TJ2020033333</view>
-            <view class="textRow col-40">价格：¥ 5949.71</view>
-          </view>
-          <view class="uni-flex uni-row textSenRow">
-            <view class="textRow col-40">有效期：2021-01-01</view>
-            <view class="textRow col-25">直扣：0.00</view>
-            <view class="textRow col-33">数量：0.00</view>
+        <view class="line-ship"></view>
+        <view @click="checkAct('11')">
+          <view class="uni-flex uni-row textSenRow-ship">
+            <view class="textTick-ship col-15 iconfont icontick"></view>
+            <view class="textRow-ship col-80">(8800212607)李沧区重庆中路420号</view>
           </view>
         </view>
+        <view class="line-ship"></view>
+        <view @click="checkAct('11')">
+          <view class="uni-flex uni-row textSenRow-ship">
+            <view class="textTick-ship col-15 iconfont icontick" :class="checkShip ? 'cheched' :''"></view>
+            <view class="textRow-ship col-80" :class="checkShip ? 'cheched' :''">(8800212607)李沧区重庆中路420号</view>
+          </view>
+        </view>
+        <view class="line-ship"></view>
       </view>
     </view>
   </view>
@@ -88,34 +58,31 @@ export default {
       default: true
     },
     info: {// 图片以及产品数据
-      type: String,
-      default: 'hello'
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   data() {
     return {
-      numberValue: 0
+      checkShip: false
     };
   },
   methods: {
     close() {
       this.$emit('closeShip', 'close');
     },
-    checkAct(value) { // 选择活动
-      this.numberValue = value;
-    },
-    putAct() { // 确认
-      this.$emit('checkedShip', this.numberValue);
-    },
-    refresh() { // 重置
-
+    checkAct() { // 选择活动
+      this.checkShip = !this.checkShip;
+      this.$emit('checkedShip', this.checkShip);
     }
   }
 };
 </script>
 
 <style>
-  .mask {
+  .mask-ship {
     position: fixed;
     z-index: 998;
     top: 0;
@@ -125,7 +92,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     display: -webkit-flex;
   }
-  .popup {
+  .popup-ship {
     margin-top: -60%;
     z-index: 999;
     background-color: #ffffff;
@@ -133,12 +100,7 @@ export default {
     width: 100%;
     position:fixed;
   }
-  .sorrowC{
-    overflow-x: hidden;
-    overflow-y: scroll;
-    height: 75%;
-  }
-  .top{
+  .top-ship{
     width: 92%;
     margin: 0 4%;
     display: flex;
@@ -146,34 +108,39 @@ export default {
     justify-content: space-between;
     background-color: #FFFFFF;
   }
-  .textTalRow {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
+  .top-ship-title{
+    padding: 20px 0 20px 30px;
+    color: #333333;
+    font-size: 30px;
   }
-  .borderLeft {
-    height: 70px;
-    line-height: 70px;
-  }
-  .afterr {
-    margin-top: 20px;
-    padding-left: 10px;
-    border-left: 6px solid #ED2856;
-    font-size: 24px;
+  .top-ship-but{
+    padding: 20px 1px 20px 0;
     color: #ED2856;
-    height: 30px;
-    line-height: 30px;
+    font-size: 18px;
   }
-  .textSenRow {
-    padding-left: 20px;
+  .sorrowC-ship{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 75%;
   }
-  .textRow {
+  .textSenRow-ship {
+    padding: 30px;
+  }
+  .textRow-ship {
     text-align: left;
-    color: #999999;
-    font-size: 20px;
+    color: #666666;
+    font-size: 28px;
   }
-  .lineHigt {
+  .textTick-ship {
+    text-align: center;
+    color: #ffffff;
+    font-size: 32px;
+  }
+  .line-ship {
     background-color: #F0F0F0;
     height: 2px;
+  }
+  .cheched {
+    color: #ED2856;
   }
 </style>

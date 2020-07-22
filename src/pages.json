@@ -28,7 +28,9 @@
     {
       "path": "pages/shoppingCart/shoppingCart",
       "style": {
-        "navigationBarTitleText": "购物车"
+        "navigationBarTitleText": "购物车",
+        "navigationStyle": "custom",
+        "transparentTitle": "always"
       }
     },
     {
@@ -84,8 +86,11 @@
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
+    "navigationBarTitleText": "",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "mp-alipay": {
+    "gestureBack": "YES"
   }
 }
