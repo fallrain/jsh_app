@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      // 是否显示版本规格
+      // 是否显示 版本规格
       isShowSpecifications: false
     };
   },
