@@ -58,8 +58,10 @@ export default {
       default: true
     },
     info: {// 图片以及产品数据
-      type: String,
-      default: 'hello'
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   data() {
