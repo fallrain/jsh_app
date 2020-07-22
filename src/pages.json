@@ -62,6 +62,12 @@
       }
     },
     {
+      "path": "pages/market/marketDetail",
+      "style": {
+        "navigationBarTitleText": "营销活动详情"
+      }
+    },
+    {
       "path": "pages/orderList/orderList",
       "style": {
         "navigationBarTitleText": "订单列表"

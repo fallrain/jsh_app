@@ -1,0 +1,53 @@
+.jProductBtm {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: 100px;
+  padding-left: 40px;
+  padding-right: 18px;
+  background: #fff;
+  @mixin uni-num-h {
+    height: 38px;
+    line-height: 38px;
+  }
+  .uni-numbox {
+    @include uni-num-h;
+  }
+  .uni-numbox--text {
+    color: #999;
+    font-size: 26px;
+  }
+  .uni-numbox__plus {
+    @include uni-num-h;
+  }
+  .uni-numbox__value {
+    @include uni-num-h;
+    min-height: 38px;
+    font-size: 22px;
+  }
+  .uni-numbox__minus {
+    height: 38px;
+    line-height: 38px;
+  }
+}
+.jProductBtm-left{
+}
+.jProductBtm-right{
+  display: flex;
+}
+.jProductBtm-right-btn {
+  display: inline-block;
+  height: 42px;
+  margin-left: auto;
+  line-height: 42px;
+  text-align: center;
+  background: $theme-color;
+  border-radius: 21px;
+  color: #fff;
+  font-size: 24px;
+}
