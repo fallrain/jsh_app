@@ -83,7 +83,6 @@
   top: 0;
   width:138px;
   height:42px;
-  background:#ED2856;
   border-radius:20px 0px 20px 0px;
   color: #fff;
   font-size: 28px;
@@ -271,4 +270,13 @@
 
 .text-666{
   color: #666;
+}
+.bg-theme{
+  background: $theme-color;
+}
+.bg-primary{
+  background: #2283E2;
+}
+.bg-999{
+  background: #999;
 }

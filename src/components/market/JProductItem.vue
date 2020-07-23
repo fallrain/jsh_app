@@ -1,9 +1,20 @@
 <template>
   <view class="jProductItem">
-    <view class="jProductItem-head">
+    <view v-if="groupType === 0" class="jProductItem-head">
       <view
-        class="jProductItem-tag"
+        v-if="goods.type === 0"
+        class="jProductItem-tag bg-theme"
       >主产品
+      </view>
+      <view
+        v-if="goods.type === 1"
+        class="jProductItem-tag bg-primary"
+      >配比产品
+      </view>
+      <view
+        v-if="goods.type === 2"
+        class="jProductItem-tag bg-999"
+      >失效产品
       </view>
       <view class="jProductItem-btm-tags mt8">
         <view class="jProductItem-btm-tag">异</view>
@@ -29,7 +40,7 @@
         </view>
       </view>
     </view>
-    <view class="jProductItem-btm">
+    <view v-if="groupType === 0" class="jProductItem-btm">
       <view
         class="jProductItem-btm-version-picker"
         @tap="showSpecifications"
@@ -43,10 +54,28 @@
         <uni-number-box></uni-number-box>
       </view>
     </view>
+    <view v-if="groupType === 1" class="jProductItem-btm">
+      <view class="dis-flex">
+        <view class="jProductItem-btm-tags mt8">
+          <view class="jProductItem-btm-tag">异</view>
+          <view class="jProductItem-btm-tag">云</view>
+          <view class="jProductItem-btm-tag">统</view>
+        </view>
+        <view class="fs20 text-666 mr12">库存：456</view>
+      </view>
+      <view class="">
+        <j-switch
+          :active.sync="goods.isSend"
+          inf="直发"
+          @change="isCreditModeChange"
+        ></j-switch>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
+import JSwitch from '../form/JSwitch';
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
@@ -55,7 +84,8 @@ import './css/JProductItem.scss';
 export default {
   name: 'jProductItem',
   components: {
-    uniNumberBox
+    uniNumberBox,
+    JSwitch
   },
   props: {
     goods: {
@@ -63,23 +93,19 @@ export default {
     },
     index: {
       type: [String, Number]
+    },
+    groupType: {
+      type: Number
     }
   },
   data() {
     return {
       // 是否显示 版本规格
-      isShowSpecifications: false
+      isShowSpecifications: false,
+      isSend: false
     };
   },
   methods: {
-    choose() {
-      /* 选中本商品 */
-      const {
-        checked
-      } = this.goods;
-      this.goods.checked = !checked;
-      this.$emit('change', this.goods, this.index);
-    },
     isCreditModeChange() {
       /* switch change */
       this.$emit('change', this.goods, this.index);

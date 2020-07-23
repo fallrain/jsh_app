@@ -9,7 +9,7 @@
         <text>配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792</text>
         <view class="iconfont iconyou right-style"></view>
       </view>
-      <view class="marketDetail-orders br-b-grey">
+      <view v-if="groupType === 0" class="marketDetail-orders br-b-grey">
         <view>
           <view><span class="text-theme fs36">7</span>件</view>
           <view>已选主产品</view>
@@ -27,7 +27,7 @@
           <view>还需配比产品</view>
         </view>
       </view>
-      <view class="marketDetail-requirement fs20">
+      <view v-if="groupType === 0" class="marketDetail-requirement fs20">
         <view class="dis-flex mb24">
           <view class="w230 text-999">主产品起订金额限定</view>
           <view class="w200 text-333">0.00 / ¥1000.00</view>
@@ -76,27 +76,27 @@ export default {
   data() {
     return {
       // 0 套餐 1 组合
-      groupType: 0,
+      groupType: 1,
       // activityList type 0:主产品 1：配比产品 2：失效产品
       activityList: [
         {
           type: 0,
-          isCreditMode: false
+          isSend: false
         },
         {
           type: 1,
           checked: true,
-          isCreditMode: false
+          isSend: false
         },
         {
           type: 2,
           checked: false,
-          isCreditMode: false
+          isSend: true
         },
         {
-          type: 3,
+          type: 1,
           checked: false,
-          isCreditMode: false
+          isSend: false
         }
       ],
       failureGoodsList: [
