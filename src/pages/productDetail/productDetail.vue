@@ -5,7 +5,7 @@
       <view @click="checkCut(1)" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
       <view @click="checkCut(2)" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>
     </view>
-    <uni-swiper-dot :info="info" :current="current" :mode="mode" :dots-styles="dotsStyles" field="content">
+    <uni-swiper-dot :info="info" :current="current" :mode="mode" field="content">
       <swiper class="swiper-box" @change="changePic">
         <swiper-item v-for="(item, index) in info" :key="index">
           <view :class="item.colorClass" class="swiper-item">
@@ -165,7 +165,9 @@ export default {
       specsCheck: false,
       detailsCheck: false,
       yuanH: uni.upx2px(100),
-      isF: false,
+      isF: false, // 顶部导航是否显示
+      current: 0, // 轮播图第几张
+      mode: 'round', // 轮播图底部按钮样式
       categoryList: [
         { id: 0, NAME: 'wwww.32', LOGO: 'http://placehold.it/50x50' },
         { id: 1, NAME: 'dd2', LOGO: 'http://placehold.it/50x50' },
@@ -199,13 +201,6 @@ export default {
           content: '内容 C'
         }
       ],
-      current: 0, // 轮播图第几张
-      mode: 'round', // 轮播图底部按钮样式
-      dotsStyles: { backgroundColor: 'rgba(255, 90, 95,0.3)',
-        border: '1px rgba(255, 90, 95,0.3) solid',
-        color: '#fff',
-        selectedBackgroundColor: 'rgba(255, 90, 95,0.9)',
-        selectedBorder: '1px rgba(255, 90, 95,0.9) solid' }, // 轮播图底部按钮样式
       activityList: [
         { id: 1, name: '特价', isCheck: false },
         { id: 1, name: '工程', isCheck: false },
@@ -220,11 +215,8 @@ export default {
       ],
       activity: '', // 选择的活动类型
       activityInfo: '', // 选择的活动具体内容
-      ActType: '', // 活动选择popup是否展示
-      isShowAct: false,
-      isShowNum: false,
-      showModal: ' parent say', // 数量popup数据传输
-      MunType: '', // 数量页面参数，判断是否展示
+      isShowAct: false, // 活动选择popup是否展示
+      isShowNum: false, // 数量页面参数，判断是否展示
       productNum: 1, // 商品数量数量
       ShipType: '', // 送达方，是否显示
       ShipInfo: '(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室至:', //
@@ -269,12 +261,6 @@ export default {
     // 选择数量的popup
     showNum() { // 点击打开页面
       this.isShowNum = true;
-      // if (e === 'OPEN') {
-      //   this.isUps = true;
-      // } else {
-      //   this.isUps = false;
-      // }
-      // this.MunType = e;
     },
     showAct() { // 活动选择页面
       this.isShowAct = true;
@@ -288,8 +274,6 @@ export default {
       this.ShipType = e;
     },
     checkedNum(e) { // 数量选择页面
-      this.MunType = '';
-      this.isUps = false;
       this.productNum = e;
     },
     checkedAct(e) { // 活动选择的内容
