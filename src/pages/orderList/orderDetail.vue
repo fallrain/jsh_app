@@ -26,6 +26,10 @@
       <view>
         <order-detail-flow></order-detail-flow>
       </view>
+      <view class="order-detail-fot-high"></view>
+      <view class="orderDetail-foot">
+        <order-detail-foot></order-detail-foot>
+      </view>
     </view>
     <view class="order-detail-line"></view>
   </view>
@@ -36,6 +40,7 @@ import orderDetailAddress from '../../components/orderList/order-detail-address'
 import orderDetailInfo from '../../components/orderList/order-detail-info';
 import orderDetailBase from '../../components/orderList/order-detail-base';
 import orderDetailFlow from '../../components/orderList/order-detail-flow';
+import orderDetailFoot from '../../components/orderList/order-detail-foot';
 
 export default {
   name: 'orderDetail',
@@ -43,7 +48,8 @@ export default {
     orderDetailAddress,
     orderDetailInfo,
     orderDetailBase,
-    orderDetailFlow
+    orderDetailFlow,
+    orderDetailFoot
   },
   onLoad(option) {
     console.log(option.id); // 打印出上个页面传递的参数。
@@ -92,5 +98,16 @@ export default {
     font-size: 24px;
     margin-bottom: 10px;
     font-weight:300;
+  }
+  .order-detail-fot-high {
+    background-color: #F5F5F5;
+    height: 94px;
+  }
+  .orderDetail-foot {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 88px;
+    background-color: #FFFFFF;
   }
 </style>
