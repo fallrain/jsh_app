@@ -42,13 +42,13 @@
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
         <view class="col-70 text">
-          <view class="smaller" @click="showAct('OPEN')" v-for="ack in activityList" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack.name}}</view>
+          <view class="smaller" @click="showAct" v-for="ack in activityList" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack.name}}</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-act :info="ActInfo" :isShowAct="ActType==='OPEN'" @closeAct="showAct('')" @checkedAct="checkedAct"></pro-com-act>
+      <pro-com-act :info="ActInfo" :show.sync="isShowAct" @isCheckAct="checkedAct"></pro-com-act>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
@@ -199,18 +199,13 @@ export default {
           content: '内容 C'
         }
       ],
-      dotStyle: [// 轮播图底部按钮样式
-        {
-          backgroundColor: 'rgba(255, 90, 95,0.3)',
-          border: '1px rgba(255, 90, 95,0.3) solid',
-          color: '#fff',
-          selectedBackgroundColor: 'rgba(255, 90, 95,0.9)',
-          selectedBorder: '1px rgba(255, 90, 95,0.9) solid'
-        }
-      ],
       current: 0, // 轮播图第几张
       mode: 'round', // 轮播图底部按钮样式
-      dotsStyles: {}, // 轮播图底部按钮样式
+      dotsStyles: { backgroundColor: 'rgba(255, 90, 95,0.3)',
+        border: '1px rgba(255, 90, 95,0.3) solid',
+        color: '#fff',
+        selectedBackgroundColor: 'rgba(255, 90, 95,0.9)',
+        selectedBorder: '1px rgba(255, 90, 95,0.9) solid' }, // 轮播图底部按钮样式
       activityList: [
         { id: 1, name: '特价', isCheck: false },
         { id: 1, name: '工程', isCheck: false },
@@ -226,6 +221,7 @@ export default {
       activity: '', // 选择的活动类型
       activityInfo: '', // 选择的活动具体内容
       ActType: '', // 活动选择popup是否展示
+      isShowAct: false,
       showModal: ' parent say', // 数量popup数据传输
       MunType: '', // 数量页面参数，判断是否展示
       productNum: 1, // 商品数量数量
@@ -252,7 +248,6 @@ export default {
     // console.log(uni.getSystemInfoSync().screenHeight)
   },
   onLoad() {
-    this.dotsStyles = this.dotStyle[0];
   },
   methods: {
     // 滑动
@@ -279,13 +274,8 @@ export default {
       }
       this.MunType = e;
     },
-    showAct(e) { // 活动选择页面
-      if (e === 'OPEN') {
-        this.isUps = true;
-      } else {
-        this.isUps = false;
-      }
-      this.ActType = e;
+    showAct() { // 活动选择页面
+      this.isShowAct = true;
     },
     showShip(e) { // 地址选择页面
       if (e === 'OPEN') {
@@ -301,9 +291,7 @@ export default {
       this.productNum = e;
     },
     checkedAct(e) { // 活动选择的内容
-      this.ActType = '';
-      this.isUps = false;
-      this.ActInfo = e;
+      console.log(e);
     },
     checkedShip(e) { // 选择的地址
       this.ShipType = '';
