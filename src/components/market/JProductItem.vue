@@ -56,7 +56,7 @@
     </view>
     <view v-if="groupType === 1" class="jProductItem-btm">
       <view class="dis-flex">
-        <view class="jProductItem-btm-tags mt8">
+        <view class="jProductItem-btm-tags mr34">
           <view class="jProductItem-btm-tag">异</view>
           <view class="jProductItem-btm-tag">云</view>
           <view class="jProductItem-btm-tag">统</view>
@@ -95,14 +95,13 @@ export default {
       type: [String, Number]
     },
     groupType: {
-      type: Number
+      type: [String, Number]
     }
   },
   data() {
     return {
       // 是否显示 版本规格
       isShowSpecifications: false,
-      isSend: false
     };
   },
   methods: {

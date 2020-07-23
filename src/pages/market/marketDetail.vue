@@ -118,17 +118,8 @@ export default {
   },
   methods: {
     goodsChange(goods, index) {
-      this.shoppingList[index] = goods;
-      this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
-    },
-    checkAll(checked) {
-      /* 全部选择回调函数 */
-      this.shoppingList.forEach((v) => {
-        v.checked = checked;
-      });
-    },
-    failureGoodsListChange(list) {
-      this.failureGoodsList = list;
+      this.activityList[index] = goods;
+      this.activityList = JSON.parse(JSON.stringify(this.activityList));
     },
     showAdsPicker() {
       /* 地址选择展示 */

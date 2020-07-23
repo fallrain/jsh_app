@@ -34,7 +34,7 @@ export default {
   props: {
     active: {
       type: Boolean,
-      default: false
+      default: true
     },
     inf: {
       type: [Number, String]
@@ -45,6 +45,15 @@ export default {
       animationIng: false,
       forwardEnd: false
     };
+  },
+  watch: {
+    active(val) {
+      debugger
+      this.forwardEnd = val;
+    }
+  },
+  created() {
+    this.handleAnimationend();
   },
   methods: {
     handleClick() {
