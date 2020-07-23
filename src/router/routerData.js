@@ -11,6 +11,6 @@ const data = [
   'pages/market/marketList',
   'pages/market/marketDetail',
   'pages/orderList/orderList',
-  'pages/messageInfoList/messageInfoList' 
+  'pages/messageInfoList/messageInfoList'
 ];
 export default { data };

@@ -86,10 +86,15 @@
     {
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
-        "navigationBarTitleText": "消息列表"
-        
+        "navigationBarTitleText": "消息列表"       
       }
      
+    },
+    {
+      "path": "pages/messageInfoList/messageInfoListDetail",
+      "style": {
+        "navigationBarTitleText": "消息列表详情"       
+      }     
     }
 
   ],

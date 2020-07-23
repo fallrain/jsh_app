@@ -12,9 +12,9 @@
             <view class="textRow vertical-line"></view>
             <view class="textRow message-category">消息类别</view>
           </view>
-          <view v-for="(item,index) in messageList" :key="index" class="textTalRow" @click="showDetail">
+          <view v-for="(item,index) in messageList" :key="index" class="textTalRow" @tap="showDetail(item.id,item)">
             <view class="uni-flex uni-row" >
-                <view class="textRow littletitle">{{item.littletitle}}</view>
+                <view class="textRow littleTitle">{{item.littleTitle}}</view>
                 <view class="textRow title">{{item.title}}</view>
                 <view class="textRow time">{{item.time}}</view>
             </view>
@@ -30,7 +30,7 @@
 import messageInfoListTab from './messageInfoListTab';
 
 export default {
-  name: 'Message',
+  name: 'messageInfoList',
   components: {
     messageInfoListTab
   },
@@ -59,42 +59,48 @@ export default {
       this.unread = 2;
       this.messageList = [
         {
-          littletitle:"建店押金",
+          id:1,
+          littleTitle:"建店押金",
           title: '整车扣款信息提醒',
           time: '2020-07-13 12:31:00',
           info: '尊敬的客户您提报的整车订单，订单200021623445...',
           isNew: true
         },
          {
-          littletitle:"扣款提醒",
+          id:2,
+          littleTitle:"扣款提醒",
           title: '整车扣款信息提醒',
           time: '2020-07-13 12:31:00',
           info: '尊敬的客户您提报的整车订单，订单200021623445...',
           isNew: true
         }, 
         {
-          littletitle:"订单详情",
+          id:3,
+          littleTitle:"订单详情",
           title: '整车扣款信息提醒',
           time: '2020-07-13 12:31:00',
           info: '尊敬的客户您提报的整车订单，订单200021623445...',
           isNew: false
         }, 
         {
-          littletitle:"其他",
+          id:4,
+          littleTitle:"其他",
           title: '整车扣款信息提醒',
           time: '2020-07-13 12:31:00',
           info: '尊敬的客户您提报的整车订单，订单200021623445...',
           isNew: false
         },
         {
-          littletitle:"订单详情",
+          id:5,
+          littleTitle:"订单详情",
           title: '整车扣款信息提醒',
           time: '2020-07-13 12:31:00',
           info: '尊敬的客户您提报的整车订单，订单200021623445...',
           isNew: false
         }, 
         {
-          littletitle:"订单详情",
+          id:6,
+          littleTitle:"订单详情",
           title: '整车扣款信息提醒',
           time: '2020-07-13 12:31:00',
           info: '尊敬的客户您提报的整车订单，订单200021623445...',
@@ -102,7 +108,13 @@ export default {
         }
       ];
     },
-    showDetail() {
+    showDetail(id,item) {
+       
+      console.log(id,JSON.stringify(item))
+      uni.navigateTo({
+         url: '/pages/messageInfoList/messageInfoListDetail?id='+ id + '&item='+ JSON.stringify(item)
+      })
+     
     },
     readAll() {
     }
@@ -171,7 +183,7 @@ export default {
       margin-bottom:24px;
         .uni-flex{
           text-align:center;
-          .littletitle{
+          .littleTitle{
             width:88px;
             height:32px;
             background:rgba(237,40,86,1);
