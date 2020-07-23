@@ -10,6 +10,7 @@ const data = [
   'pages/category/category',
   'pages/market/marketList',
   'pages/market/marketDetail',
-  'pages/orderList/orderList'
+  'pages/orderList/orderList',
+  'pages/messageInfoList/messageInfoList' 
 ];
 export default { data };

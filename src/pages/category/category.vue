@@ -24,7 +24,7 @@
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="childed in child.hdg" :key="childed.NAME" class="nav-right-item">
               <image :src="childed.LOGO"/>
-              <view class="">{{childed.NAME}}</view>
+              <view class="">{{childed.NAME}}</view>   
             </view>
           </view>
         </view>
