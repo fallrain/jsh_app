@@ -87,9 +87,17 @@
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
         "navigationBarTitleText": "消息列表"
-        
+
       }
-     
+
+    },
+    {
+      "path": "pages/mine/myBaseInfo",
+      "style": {
+        "navigationBarTitleText": "基本信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+
     }
 
   ],
