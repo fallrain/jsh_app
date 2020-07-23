@@ -134,7 +134,8 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      checkedInfo: []
     };
   },
   watch: {
@@ -163,10 +164,12 @@ export default {
         }
       }
       this.info[a].list[b].isCheck = true;
+      this.checkedInfo = this.info[a].list[b];
+      this.checkedInfo.title = `${this.info[a].title}：${this.info[a].list[b].name}`;
     },
     putAct() { // 确认
       this.$emit('update:show', false);
-      this.$emit('isCheckAct', this.info);
+      this.$emit('isCheckAct', this.info, this.checkedInfo);
     },
     refresh() { // 重置
       for (let i = 0; i < this.info.length; i++) {
@@ -174,6 +177,7 @@ export default {
           this.info[i].list[j].isCheck = false;
         }
       }
+      this.checkedInfo = [];
     }
   }
 };

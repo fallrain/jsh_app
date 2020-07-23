@@ -1,5 +1,5 @@
 <template>
-  <view :class="isUps == true ? 'prevent' : ''">
+  <view :class="isUps === true ? 'prevent' : ''">
     <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">
       <view @click="checkCut(0)" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
       <view @click="checkCut(1)" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
@@ -18,7 +18,8 @@
       <view class="uni-flex uni-row padding-15">
         <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥29384.11</view>
         <view class="text col smaller" style="margin: auto;">建议零售价：¥2934.11</view>
-        <view class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
+        <view v-if="1>2" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
+        <view v-else class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"></view>
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
         <view class="text modeller">
@@ -39,10 +40,19 @@
         <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">返&nbsp;&nbsp;&nbsp;利：FHQ</view>
         <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：0.80%</view>
       </view>
-      <view class="uni-flex uni-row padding-8">
+      <view v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
+        <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
+        <view class="col-70 text" >
+          <view class="smaller" @click="showAct" v-for="ack in ActInfo" :key="ack.name" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack.name}}</view>
+        </view>
+        <view class="col-10 text smaller">
+          <view class="text-center iconfont iconyou"></view>
+        </view>
+      </view>
+      <view v-else class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
         <view class="col-70 text">
-          <view class="smaller" @click="showAct" v-for="ack in activityList" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack.name}}</view>
+          <view class="smaller" @click="showAct" style="border: 1px #ED2856 solid;background-color: #FFEDF1;color: #ED2856;border-radius: 30px;text-align: center;">{{CheckActivityInfo.title}}</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
@@ -86,46 +96,7 @@
       <view class="uni-flex uni-row" id="specs">
         <view class="padding-30 col-40 modeller">规格参数</view>
       </view>
-      <view style="padding: 10px;">
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;">
-          <view class="textGui minLar uni-bold" style="color: #333333;">主体</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">品牌</view>
-          <view class="textGui minLar">卡萨帝</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">型号</view>
-          <view class="textGui minLar">BCD-520WICHU1</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">机身颜色</view>
-          <view class="textGui minLar">帛拉帝【钛金】</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">类别</view>
-          <view class="textGui minLar">三门</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;">
-          <view class="textGui minLar uni-bold" style="color: #333333;">主体</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">品牌</view>
-          <view class="textGui minLar">卡萨帝</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">型号</view>
-          <view class="textGui minLar">BCD-520WICHU1</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">机身颜色</view>
-          <view class="textGui minLar">帛拉帝【钛金】</view>
-        </view>
-        <view class="uni-flex uni-row" style="border: 2px solid #EFEFEF;border-top: none;">
-          <view class="textGui minLar col-40" style="text-align: right; border-right: 2px solid #EFEFEF;">类别</view>
-          <view class="textGui minLar">三门</view>
-        </view>
-      </view>
+      <pro-specs></pro-specs>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row" id="details">
         <view class=" col-40 modeller padding-30">图文详情</view>
@@ -134,6 +105,8 @@
         <image style="width: 100%;" mode="widthFix" src="http://file.c.haier.net/images/2016/06/29/2011b90fbb70780dd37bee60aa21e5b1.jpg"></image>
       </view>
     </view>
+    <view class="product-detail-fot-high"></view>
+    <view class="product-detail-foot"><pro-com-foot></pro-com-foot></view>
   </view>
 </template>
 
@@ -144,6 +117,9 @@ import {
 import proComNum from '../../components/productDetail/pro-com-num';
 import proComAct from '../../components/productDetail/pro-com-act';
 import proComShip from '../../components/productDetail/pro-com-ship';
+import proSpecs from '../../components/productDetail/pro-specs';
+import proComFoot from '../../components/productDetail/pro-com-foot';
+import './css/productDetail.scss';
 
 export default {
   name: 'ProductDetail',
@@ -151,7 +127,9 @@ export default {
     uniSwiperDot,
     proComNum,
     proComAct,
-    proComShip
+    proComShip,
+    proSpecs,
+    proComFoot
   },
   data() {
     return {
@@ -201,20 +179,14 @@ export default {
           content: '内容 C'
         }
       ],
-      activityList: [
-        { id: 1, name: '特价', isCheck: false },
-        { id: 1, name: '工程', isCheck: false },
-        { id: 1, name: '样机', isCheck: false },
-        { id: 1, name: '套餐', isCheck: false }
-      ], // 活动列表
+      // 活动列表
       ActInfo: [
         { id: 1, name: '特价', isSe: true, list: [{ num: 1, name: '特价2', isCheck: false, }, { num: 1, name: '特价3', isCheck: false, }] },
         { id: 1, name: '工程', isSe: true, list: [{ num: 1, name: '特价3', isCheck: false, }, { num: 1, name: '特价4', isCheck: false, }] },
         { id: 1, name: '样机', isSe: true, list: [{ num: 1, name: '特价4', isCheck: false, }, { num: 1, name: '特价5', isCheck: false, }] },
         { id: 1, name: '套餐', isSe: true, list: [{ num: 1, name: '特价5', isCheck: false, }, { num: 1, name: '特价6', isCheck: false, }] }
       ],
-      activity: '', // 选择的活动类型
-      activityInfo: '', // 选择的活动具体内容
+      CheckActivityInfo: '', // 选择的活动具体内容
       isShowAct: false, // 活动选择popup是否展示
       isShowNum: false, // 数量页面参数，判断是否展示
       productNum: 1, // 商品数量数量
@@ -276,8 +248,10 @@ export default {
     checkedNum(e) { // 数量选择页面
       this.productNum = e;
     },
-    checkedAct(e) { // 活动选择的内容
-      console.log(e);
+    checkedAct(e, n) { // 活动选择的内容
+      console.log('youmeiypu');
+      this.CheckActivityInfo = n;
+      console.log(this.CheckActivityInfo);
     },
     checkedShip(e) { // 选择的地址
       this.ShipType = '';
@@ -301,92 +275,3 @@ export default {
 };
 
 </script>
-
-<style scoped>
-  .prevent {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-  }
-  .swiper-box {
-    height: 400px;
-  }
-  .swiper-item {
-    /* #ifndef APP-NVUE */
-    display: flex;
-    /* #endif */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #999;
-    color: #fff;
-  }
-  .image {
-    width: 100%;
-  }
-  .text {
-    margin: 5px 5px;
-    padding: 0 10px;
-    text-align: left;
-    color: #777;
-  }
-  .lineHigt {
-    background-color: #F5F5F5;
-    height: 10px;
-  }
-  .lineHigtT {
-    background-color: #EAEAEA;
-    height: 2px;
-  }
-  .smaller {
-    font-size: 24px;
-  }
-  .modeller {
-    font-size: 32px;
-    color: #333333;
-  }
-  .minLar {
-    font-size: 24px;
-    color: #999999;
-  }
-  .larger {
-    font-size: 40px;
-  }
-  .scroll-view_H {
-    white-space: nowrap;
-    width: 100%;
-  }
-  .scroll-view-item_H {
-    display: inline-block;
-    width: 30%;
-    text-align: center;
-    font-size: 36px;
-  }
-  .textGui {
-    margin: 5px 5px;
-    padding: 0 10px;
-    height: 60px;
-    line-height: 60px;
-  }
-  .st {
-    height: 100px;
-    width: 750px;
-    background-color: #FFFFFF;
-    z-index: 10;
-    font-size: 32px;
-    color: #666666;
-  }
-  .sticky-fixed {
-    position: sticky;
-    top: 88px;
-    z-index: 10;
-  }
-  .checkedCut {
-    border-bottom: 8px solid #ED2856;
-    color: #ED2856;
-  }
-
-</style>
