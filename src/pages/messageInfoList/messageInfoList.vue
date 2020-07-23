@@ -25,7 +25,7 @@
           </view>
         </view>
     </view>
-</template>
+</template> 
 <script>
 import messageInfoListTab from './messageInfoListTab';
 

@@ -24,7 +24,7 @@ export default {
           name: '消息',
           active: true
         }, {
-          id: '2',
+          id: '2', 
           name: '任务',
           active: false
         }
