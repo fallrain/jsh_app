@@ -1,0 +1,119 @@
+.pro-num-pop {
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 120px;
+  background: #fff;
+}
+
+.pro-num-head {
+  display: flex;
+  padding-bottom: 10px;
+  .pro-num-head-title{
+    padding-left: 30px;
+    padding-right: 89%;
+    color: #333333;
+    font-size: 30px;
+  }
+  .pro-num-head-but{
+    font-size: 32px;
+    color: $theme-color;
+  }
+}
+
+.pro-num-pop-detail-wrap {
+  padding-left: 24px;
+  max-height: 766px;
+  overflow-y: auto;
+}
+
+.pro-num-pop-name {
+  color: #999999;
+  font-size: 24px;
+}
+.pro-num-pop-val {
+  font-size: 24px;
+  color: #333333;
+}
+
+.pro-num-pop-wrap {
+  display: flex;
+  padding: 10px;
+}
+
+.pro-num-pop-wrap2 {
+  display: flex;
+  align-items: center;
+  width: 40%;
+  height: 40px;
+}
+.pro-num-pop-wrap3 {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  height: 40px;
+}
+.pro-num-pop-wrap4 {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+}
+
+.pro-num-btn-wrap {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  height: 100px;
+  background: #fff;
+}
+.pro-num-btn {
+  margin: 20px;
+  text-align: center;
+  color: #FFFFFF;
+  border-radius: 20px;
+  width: 100%;
+  background-color: $theme-color;
+  height: 70px;
+  line-height: 70px;
+}
+.pro-num-line {
+  background-color: #F5F5F5;
+  height: 5px;
+  margin-top: 10px;
+}
+/*数量输入框*/
+.number{
+  .uni-numbox {
+    height: 40px;
+    width: 154px;
+    color: #999999;
+    font-size: 28px;
+    .uni-numbox__minus{
+      width: 50px;
+      height: 44px;
+      background-color: #FFFFFF;
+      border-right-width:1px;
+      .uni-numbox--text{
+        color: #999999;
+        font-size: 32px;
+      }
+    }
+    .uni-numbox__value{
+      width: 54px;
+      height: 40px;
+    }
+    .uni-numbox__plus{
+      width: 50px;
+      height: 44px;
+      background-color: #FFFFFF;
+      border-left-width:1px;
+      .uni-numbox--text{
+        color: #999999;
+        font-size: 32px;
+        padding-bottom: 2px;
+      }
+    }
+  }
+}

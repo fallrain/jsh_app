@@ -52,14 +52,14 @@
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
-        <view class="col-70 text" @click="showNum('OPEN')">
+        <view class="col-70 text" @click="showNum">
           <view class="smaller">{{productNum}}件</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-num :isShow="MunType==='OPEN'" :info="showModal" @closeNum="showNum('')" @checkedNum="checkedNum"></pro-com-num>
+      <pro-com-num :show.sync="isShowNum" @checkedNum="checkedNum"></pro-com-num>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">配送至：</view>
         <view class="col-70 text" @click="showShip('OPEN')">
@@ -222,6 +222,7 @@ export default {
       activityInfo: '', // 选择的活动具体内容
       ActType: '', // 活动选择popup是否展示
       isShowAct: false,
+      isShowNum: false,
       showModal: ' parent say', // 数量popup数据传输
       MunType: '', // 数量页面参数，判断是否展示
       productNum: 1, // 商品数量数量
@@ -266,13 +267,14 @@ export default {
       console.log(e);
     },
     // 选择数量的popup
-    showNum(e) { // 点击打开页面
-      if (e === 'OPEN') {
-        this.isUps = true;
-      } else {
-        this.isUps = false;
-      }
-      this.MunType = e;
+    showNum() { // 点击打开页面
+      this.isShowNum = true;
+      // if (e === 'OPEN') {
+      //   this.isUps = true;
+      // } else {
+      //   this.isUps = false;
+      // }
+      // this.MunType = e;
     },
     showAct() { // 活动选择页面
       this.isShowAct = true;
