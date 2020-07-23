@@ -1,0 +1,96 @@
+.prevent {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+.swiper-box {
+  height: 400px;
+}
+.swiper-item {
+  /* #ifndef APP-NVUE */
+  display: flex;
+  /* #endif */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #999;
+  color: #fff;
+}
+.image {
+  width: 100%;
+}
+.text {
+  margin: 5px 5px;
+  padding: 0 10px;
+  text-align: left;
+  color: #777;
+}
+.lineHigt {
+  background-color: #F5F5F5;
+  height: 10px;
+}
+.lineHigtT {
+  background-color: #EAEAEA;
+  height: 2px;
+}
+.smaller {
+  font-size: 24px;
+}
+.modeller {
+  font-size: 32px;
+  color: #333333;
+}
+.minLar {
+  font-size: 24px;
+  color: #999999;
+}
+.larger {
+  font-size: 40px;
+}
+.scroll-view_H {
+  white-space: nowrap;
+  width: 100%;
+}
+.scroll-view-item_H {
+  display: inline-block;
+  width: 30%;
+  text-align: center;
+  font-size: 36px;
+}
+.textGui {
+  margin: 5px 5px;
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+}
+.st {
+  height: 100px;
+  width: 750px;
+  background-color: #FFFFFF;
+  z-index: 10;
+  font-size: 32px;
+  color: #666666;
+}
+.sticky-fixed {
+  position: sticky;
+  top: 88px;
+  z-index: 10;
+}
+.checkedCut {
+  border-bottom: 8px solid #ED2856;
+  color: #ED2856;
+}
+.product-detail-fot-high {
+  background-color: #F5F5F5;
+  height: 120px;
+}
+.product-detail-foot {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 88px;
+  background-color: #FFFFFF;
+}

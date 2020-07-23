@@ -31,7 +31,6 @@
         <order-detail-foot></order-detail-foot>
       </view>
     </view>
-    <view class="order-detail-line"></view>
   </view>
 </template>
 
