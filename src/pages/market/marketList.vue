@@ -99,7 +99,6 @@ import JMarketHeadTab from '../../components/market/JMarketHeadTab';
 import JChooseDeliveryAddress from '../../components/market/JChooseDeliveryAddress';
 import './css/marketList.scss';
 
-
 export default {
   name: 'marketList',
   components: {
@@ -257,7 +256,28 @@ export default {
       ]
     };
   },
+  created() {
+    this.getActivityList();
+  },
   methods: {
+    getActivityList() {
+      console.log(11)
+      this.marketService.activityList({
+        activityId: '',
+        activityName: '',
+        activityType: '',
+        isCheckProduct: false,
+        pageNum: 1,
+        pageSize: 5,
+        productCode: '',
+        productGroup: [],
+        productName: '',
+        saletoCode: '8700010462',
+        sendtoCode: '8700010462'
+      }).then((res) => {
+        console.log(res);
+      });
+    },
     tabClick(handler) {
       if (handler) {
         this[handler]();

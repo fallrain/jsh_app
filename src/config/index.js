@@ -1,7 +1,7 @@
 export default {
   h5: {
     development: {
-      baseUrl: ''
+      baseUrl: 'https://new.jsh.com'
     },
     production: {
       baseUrl: ''
