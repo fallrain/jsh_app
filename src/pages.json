@@ -88,6 +88,22 @@
 
       }
 
+    },
+    {
+      "path": "pages/mine/myBaseInfo",
+      "style": {
+        "navigationBarTitleText": "基本信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+
+    },
+    {
+      "path": "pages/mine/mySignInfo",
+      "style": {
+        "navigationBarTitleText": "签约信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+
     }
 
   ],
