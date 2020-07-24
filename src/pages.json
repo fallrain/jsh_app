@@ -28,9 +28,7 @@
     {
       "path": "pages/shoppingCart/shoppingCart",
       "style": {
-        "navigationBarTitleText": "购物车",
-        "navigationStyle": "custom",
-        "transparentTitle": "always"
+        "navigationBarTitleText": "购物车"
       }
     },
     {
@@ -87,9 +85,9 @@
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
         "navigationBarTitleText": "消息列表"
-        
+
       }
-     
+
     }
 
   ],

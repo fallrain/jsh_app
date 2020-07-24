@@ -1,14 +1,14 @@
 import {
-  hGet,
-  hPost,
-  hPostJson
+  jGet,
+  jPost,
+  jPostJson
 } from '@/lib/request';
 
 const plugin = {
   install(Vue) {
-    Vue.prototype.hGet = hGet;
-    Vue.prototype.hPost = hPost;
-    Vue.prototype.hPostJson = hPostJson;
+    Vue.prototype.jGet = jGet;
+    Vue.prototype.jPost = jPost;
+    Vue.prototype.jPostJson = jPostJson;
   }
-}
+};
 export default plugin;

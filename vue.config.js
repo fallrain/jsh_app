@@ -10,8 +10,8 @@ module.exports = {
     port: 8098,
     compress: true,
     proxy: {
-      '/api': {
-        target: 'https://',
+      '/new/api': {
+        target: 'http://mall.jsh.com',
         changeOrigin: true,
         // pathRewrite: {
         //   '^/api': ''
