@@ -39,8 +39,8 @@
     <view class="uni-flex uni-row produceDetailItem-btm-row">
       <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
       <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
-      <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       <view class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
+      <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
     </view>
     <order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>
   </view>
