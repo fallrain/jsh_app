@@ -3,12 +3,12 @@ import configJs from '@/config';
 let curConfig;
 const {
   VUE_APP_PLATFORM,
-  NODE_ENV
+  VUE_APP_MODE
 } = process.env;
 if (VUE_APP_PLATFORM === 'h5') {
-  curConfig = configJs.h5[NODE_ENV];
+  curConfig = configJs.h5[VUE_APP_MODE];
 } else {
-  curConfig = configJs['mp-alipay'][NODE_ENV];
+  curConfig = configJs['mp-alipay'][VUE_APP_MODE];
 }
 // 是否已经提示错误，同时间只显示一个
 let isShowModal = false;
