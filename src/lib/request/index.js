@@ -1,6 +1,18 @@
-// const config = require('../../config/config.env.js');
+import configJs from '@/config';
+
+let curConfig;
+const {
+  VUE_APP_PLATFORM,
+  NODE_ENV
+} = process.env;
+if (VUE_APP_PLATFORM === 'h5') {
+  curConfig = configJs.h5[NODE_ENV];
+} else {
+  curConfig = configJs['mp-alipay'][NODE_ENV];
+}
 // 是否已经提示错误，同时间只显示一个
 let isShowModal = false;
+
 function showModal(params, showCancel = false, confirmText = '关闭', cb) {
   if (isShowModal) {
     return;
@@ -27,7 +39,7 @@ function showModal(params, showCancel = false, confirmText = '关闭', cb) {
   });
 }
 
-function showToast(msg, status) {
+function showError(msg, status) {
   /* 统一提示错误 */
   let message;
   if (msg) {
@@ -42,60 +54,80 @@ function showToast(msg, status) {
   }
   showModal(message);
 }
-function hSend(option) {
-  const cfg = option.cfg || {};
-  const header = {};
 
+function jSend(option) {
+  const selfOptions = JSON.parse(JSON.stringify(option));
+  const cfg = selfOptions.cfg || {};
+  delete selfOptions.cfg;
+  const token = uni.getStorageSync('token') || '';
+  const header = {
+    Authorization: `Bearer ${token}`,
+    ...cfg.headers
+  };
+  // url前缀
+  selfOptions.url = `${curConfig.baseUrl}/new/api/${selfOptions.url}`;
   return new Promise((resolve) => {
     uni.showLoading({
       mask: true
     });
-    uni.request({
-      ...option,
+    const requestOptions = {
+      ...selfOptions,
       header,
-      success({ data }) {
+      success(response) {
+        const {
+          data,
+          statusCode
+        } = response;
         uni.hideLoading();
         resolve(data);
-        if (!option.cfg.noToast) {
+        if (cfg.noToast === false) {
           let status;
           if (data.status !== undefined) {
             status = data.status;
           }
-          showToast(data.msg, status);
+          showError(data.msg, status);
         }
-
-        showModal(data.msg);
+        if (data.code !== '1') {
+          showError(data.msg, statusCode);
+        }
       },
       fail() {
         uni.hideLoading();
-        showModal('请求失败');
-        return resolve(false);
+        showError('请求失败');
+        return resolve({
+          code: '-1'
+        });
       }
-    });
+    };
+    uni.request(requestOptions);
   });
 }
 
-function hPost(...args) {
-  return hSend({
+function jPost(...args) {
+  return jSend({
+    url: args[0],
+    data: args[1],
+    method: 'POST',
+    cfg: {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      ...args[2]
+    }
+  });
+}
+
+function jPostJson(...args) {
+  return jSend({
     url: args[0],
     data: args[1],
     method: 'post',
-    contentType: 'application/x-www-form-urlencoded',
     cfg: args[2]
   });
 }
 
-function hPostJson(...args) {
-  return hSend({
-    url: args[0],
-    data: args[1],
-    method: 'post',
-    cfg: args[2]
-  });
-}
-
-function hGet(...args) {
-  return hSend({
+function jGet(...args) {
+  return jSend({
     url: args[0],
     data: args[1],
     method: 'get',
@@ -104,8 +136,9 @@ function hGet(...args) {
     }
   });
 }
-function hGetImage(...args) {
-  return hSend({
+
+function jGetImage(...args) {
+  return jSend({
     url: args[0],
     data: args[1],
     method: 'get',
@@ -118,9 +151,9 @@ function hGetImage(...args) {
 }
 
 module.exports = {
-  hSend,
-  hGet,
-  hPost,
-  hPostJson,
-  hGetImage
+  jSend,
+  jGet,
+  jPost,
+  jPostJson,
+  jGetImage
 };

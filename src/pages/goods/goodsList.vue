@@ -115,7 +115,6 @@ import JHeadTab from '../../components/form/JHeadTab';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import './css/goodsList.scss';
 
-
 export default {
   name: 'goodsList',
   components: {
@@ -126,29 +125,7 @@ export default {
   },
   data() {
     return {
-      list: [
-        {
-          goodsName: '海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高品质滚筒洗衣机……'
-        },
-        {
-          goodsName: '海尔BCD-123123家用250L对开门冰箱  高品质除菌保鲜只能无氟速冻冰箱……'
-        },
-        {
-          goodsName: '海尔BCD-123123家用250L对开门冰箱  高品质除菌保鲜只能无氟速冻冰箱……'
-        },
-        {
-          goodsName: '海尔BCD-123123家用250L对开门冰箱  高品质除菌保鲜只能无氟速冻冰箱……'
-        },
-        {
-          goodsName: '海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高品质滚筒洗衣机……'
-        },
-        {
-          goodsName: '海尔BCD-123123家用250L对开门冰箱  高品质除菌保鲜只能无氟速冻冰箱……'
-        },
-        {
-          goodsName: '海尔BCD-123123家用250L对开门冰箱  高品质除菌保鲜只能无氟速冻冰箱……'
-        }
-      ],
+      list: [],
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
       tabs: [
@@ -252,7 +229,28 @@ export default {
       ]
     };
   },
+  created() {
+    this.getPageInf();
+  },
   methods: {
+    getPageInf() {
+      this.getGoodsList();
+    },
+    async getGoodsList() {
+      const { code, data } = await this.commodityService.goodsList({
+        pageNum: 1,
+        pageSize: 15,
+        customerCode: 8800273632,
+        sendTo: 8800273632,
+        name: '排名第一'
+      });
+      if (code === '1') {
+        const {
+          page
+        } = data;
+        this.list = page.result;
+      }
+    },
     tabClick(handler) {
       if (handler) {
         this[handler]();

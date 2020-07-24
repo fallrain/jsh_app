@@ -4,8 +4,8 @@
       <image src="@/assets/img/goods/example-fridge.jpg"></image>
     </view>
     <view class="jGoodsItem-cnt">
-      <view class="jGoodsItem-cnt-goodsName">
-        {{goods.goodsName}}
+      <view class="jGoodsItem-cnt-goodsName j-goods-title">
+        {{goods.productName | rmHtml}}
       </view>
       <view class="jGoodsItem-cnt-price-tips">
         <view class="jGoodsItem-cnt-price-tips-item">直扣：92.31%</view>

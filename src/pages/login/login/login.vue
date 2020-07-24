@@ -11,7 +11,7 @@
         <j-input
           key='accountUser'
           name='account'
-          value="form.account"
+          v-model="form.account"
           placeholder='请输入登录账号'
           handChange="this.valChange"
         ></j-input>
@@ -143,7 +143,7 @@ export default {
       // 登录方式，默认账户密码
       loginType: 'account',
       // 是否已读
-      isRead: 1
+      isRead: true
     };
   },
   methods: {
@@ -170,6 +170,7 @@ export default {
       });
     },
     login() {
+      uni.setStorageSync('token', this.form.account);
       uni.showModal({
         title: '',
         content: '登录成功',

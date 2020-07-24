@@ -8,6 +8,8 @@
       :type="type"
       :password="password"
       :placeholder="placeholder"
+      :value="selfValue"
+      @input="valChange"
     >
     <view class='jInput-right'>
       <slot></slot>
@@ -34,8 +36,20 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      selfValue: this.value
+    };
+  },
+  watch: {
+    selfValue(val) {
+      this.$emit('input', val);
+    }
+  },
   methods: {
-
+    valChange({ detail: { value } }) {
+      this.selfValue = value;
+    }
   }
 };
 </script>
