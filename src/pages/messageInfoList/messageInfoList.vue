@@ -10,16 +10,19 @@
             <view class="textRow unread">共{{unread}}条消息未读</view>
             <view class="textRow read" @click="readAll">全部已读</view>
             <view class="textRow vertical-line"></view>
-            <view class="textRow message-category">消息类别</view>
+            <view class="textRow message-category">
+              消息类别
+            </view>
+            <i class="iconfont iconxia message-icon"> </i>
           </view>
-          <view v-for="(item,index) in messageList" :key="index" class="textTalRow" @click="showDetail">
+          <view v-for="(item,index) in messageList" :key="index" class="textTalRow" @tap="showDetail(item.id,item)">
             <view class="uni-flex uni-row" >
-                <view class="textRow littletitle">{{item.littletitle}}</view>
-                <view class="textRow title">{{item.title}}</view>
-                <view class="textRow time">{{item.time}}</view>
+                <view class="textRow littleTitle">{{item.typeNameShow}}</view>
+                <view class="textRow title">整车扣款信息提醒</view>
+                <view class="textRow time">{{item.createTime}}</view>
             </view>
             <view class="uni-flex uni-row">
-                <view class="textRow info">{{item.info}}</view>
+                <view class="textRow info">尊敬的客户您提报的整车订单，订单200021623445...</view>
                 <view class="textRow spot isNew" v-show="item.isNew"></view>
             </view>
           </view>
@@ -27,10 +30,11 @@
     </view>
 </template> 
 <script>
-import messageInfoListTab from './messageInfoListTab';
+import messageInfoListTab from './messageInfoListTab'
+import jPost from '../../lib/request'
 
 export default {
-  name: 'Message',
+  name: 'messageInfoList',
   components: {
     messageInfoListTab
   },
@@ -51,65 +55,104 @@ export default {
       tabIndex: 1,
       unread: 0,
       messageList: []
-    };
+    }
+ 
   },
+ 
   methods: {
-    tabClick(data) {
-      this.tabIndex = data;
+    async tabClick(item){
+      this.tabIndex = data; 
       this.unread = 2;
-      this.messageList = [
-        {
-          littletitle:"建店押金",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: true
-        },
-         {
-          littletitle:"扣款提醒",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: true
-        }, 
-        {
-          littletitle:"订单详情",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        }, 
-        {
-          littletitle:"其他",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        },
-        {
-          littletitle:"订单详情",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        }, 
-        {
-          littletitle:"订单详情",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        }
-      ];
+      const param = {
+        pageNum: 1,
+        pageSize: 10,
+        unitId: "8700014608_admin",
+        typeName: "",
+        createDateStr: ""
+      };
+      const { code , data } = await this.messageService.messageList(param);
+      if (code === '1') {
+        const {
+          list
+        } = data;
+        // console.log(page.result);
+        this.messageList = list
+      }
+      console.log(this.messageList);
     },
-    showDetail() {
+ 
+
+
+    // tabClick(data) {
+    //   this.tabIndex = data; 
+    //   this.unread = 2;
+    //   this.messageList = [
+    //     {
+    //       id:1,
+    //       littleTitle:"建店押金",
+    //       title: '整车扣款信息提醒',
+    //       time: '2020-07-13 12:31:00',
+    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
+    //       isNew: true
+    //     },
+    //      {
+    //       id:2,
+    //       littleTitle:"扣款提醒",
+    //       title: '整车扣款信息提醒',
+    //       time: '2020-07-13 12:31:00',
+    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
+    //       isNew: true
+    //     }, 
+    //     {
+    //       id:3,
+    //       littleTitle:"订单详情",
+    //       title: '整车扣款信息提醒',
+    //       time: '2020-07-13 12:31:00',
+    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
+    //       isNew: false
+    //     }, 
+    //     {
+    //       id:4,
+    //       littleTitle:"其他",
+    //       title: '整车扣款信息提醒',
+    //       time: '2020-07-13 12:31:00',
+    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
+    //       isNew: false
+    //     },
+    //     {
+    //       id:5,
+    //       littleTitle:"订单详情",
+    //       title: '整车扣款信息提醒',
+    //       time: '2020-07-13 12:31:00',
+    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
+    //       isNew: false
+    //     }, 
+    //     {
+    //       id:6,
+    //       littleTitle:"订单详情",
+    //       title: '整车扣款信息提醒',
+    //       time: '2020-07-13 12:31:00',
+    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
+    //       isNew: false
+    //     }
+    //   ];
+
+    // },
+    showDetail(id,item) {   
+      console.log(id,JSON.stringify(item))
+      uni.navigateTo({
+         url: '/pages/messageInfoList/messageInfoListDetail?id='+ id + '&item='+ JSON.stringify(item)
+      })    
     },
     readAll() {
     }
+
+
   },
 
   onLoad() {
     this.tabClick(1);
+  
   }
 };
 </script>
@@ -142,7 +185,7 @@ export default {
         font-weight:400;
         color:rgba(237,40,86,1);
         line-height:34px;
-        margin:0px 44px 24px 16px;
+        margin:0px 34px 24px 16px;
       }
       .vertical-line{
         width:2px;
@@ -158,7 +201,12 @@ export default {
         font-weight:400;
         color:rgba(237,40,86,1);
         line-height:34px;
-        margin:0px 0px 24px 44px;
+        margin:0px 8px 24px 34px;
+      }
+      .message-icon{
+        font-size:10px;
+        color:rgba(237,40,86,1);
+        margin-top:10px;
       }
     }
   
@@ -171,7 +219,7 @@ export default {
       margin-bottom:24px;
         .uni-flex{
           text-align:center;
-          .littletitle{
+          .littleTitle{
             width:88px;
             height:32px;
             background:rgba(237,40,86,1);

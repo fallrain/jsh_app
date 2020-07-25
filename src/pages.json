@@ -90,6 +90,14 @@
 
     },
     {
+      "path": "pages/messageInfoList/messageInfoListDetail",
+      "style": {
+        "navigationBarTitleText": "消息详情列表"
+
+      }
+
+    },
+    {
       "path": "pages/mine/myBaseInfo",
       "style": {
         "navigationBarTitleText": "基本信息",
