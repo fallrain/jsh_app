@@ -1,13 +1,8 @@
 <template>
   <view class="mineSignInfo-bg">
-    <view class="mineSignInfo">
+    <view class="mineSignInfo" v-for="(item,index) in signList" :key="index">
       <view class="mineSignInfo-group">
-        <mine-sign-info></mine-sign-info>
-      </view>
-    </view>
-    <view class="mineSignInfo">
-      <view class="mineSignInfo-group">
-        <mine-sign-info></mine-sign-info>
+        <mine-sign-info :info="item" :index="index" ></mine-sign-info>
       </view>
     </view>
   </view>
@@ -20,6 +15,42 @@ export default {
   name: 'mySignInfo',
   components: {
     mineSignInfo
+  },
+  data() {
+    return {
+      signList: [],
+      total: 0,
+      pageNo: 1
+    };
+  },
+  created() {
+    this.getSignList(this.pageNo);
+  },
+  methods: {
+    async getSignList(pageNo) {
+      const { code, data } = await this.mineServer.mineSignList('8800012497', pageNo);
+      if (code === '1') {
+        const { contractMessageDtoList } = data;
+        if (pageNo === 1) {
+          this.signList = [];
+        }
+        this.signList = this.signList.concat(contractMessageDtoList);
+        this.pageNo = this.pageNo + 1;
+      }
+      this.total = data.total;
+      console.log(data);
+    },
+    viewNextPage() {
+      console.log('查看更多');
+    }
+  },
+  onReachBottom() {
+    console.log('到底了，该加页了');
+    if (this.total > (this.pageNo - 1) * 15) {
+      this.getSignList(this.pageNo);
+    } else {
+      console.log('到底了，没数了');
+    }
   }
 };
 </script>
