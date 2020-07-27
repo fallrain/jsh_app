@@ -5,40 +5,45 @@
       <view @click="checkCut(1)" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
       <view @click="checkCut(2)" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>
     </view>
-    <uni-swiper-dot :info="info" :current="current" :mode="mode" field="content">
+    <uni-swiper-dot :info="detailInfo.images" :current="current" :mode="mode" field="content">
       <swiper class="swiper-box" @change="changePic">
-        <swiper-item v-for="(item, index) in info" :key="index">
-          <view :class="item.colorClass" class="swiper-item">
-            <image class="image" :src="item.url" mode="aspectFill" />
+        <swiper-item v-for="(item, index) in detailInfo.images" :key="index">
+          <view class="swiper-item">
+            <image class="image" :src="item.masterImage" mode="aspectFill" />
           </view>
         </swiper-item>
       </swiper>
     </uni-swiper-dot>
     <view class="uni-common-mt" id="goods">
       <view class="uni-flex uni-row padding-15">
-        <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥29384.11</view>
-        <view class="text col smaller" style="margin: auto;">建议零售价：¥2934.11</view>
+        <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥ {{detailInfo.price.invoicePrice}}</view>
+        <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice}}</view>
         <view v-if="1>2" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
         <view v-else class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"></view>
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
         <view class="text modeller">
           <image src="/static/logo.png" style="width: 20px;height: 20px;"></image>
-          海尔滚筒洗衣机BCD-150WLDPEK风冷两门风冷除菌（自动除霜）念白360度全白色滚筒洗衣机，高温杀菌高品质简约设计。
+          {{detailInfo.product.productName}}
         </view>
       </view>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">编&nbsp;&nbsp;&nbsp;码：BH03S00AA</view>
-        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">型&nbsp;&nbsp;&nbsp;号：BCD-611WDIEU1(EX)</view>
+        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">编&nbsp;&nbsp;&nbsp;码：{{detailInfo.product.productCode}}</view>
+        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">型&nbsp;&nbsp;&nbsp;号：{{detailInfo.product.productDescribe}}</view>
       </view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">供&nbsp;&nbsp;&nbsp;价：￥ 4099.00</view>
-        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">台&nbsp;&nbsp;&nbsp;返：0.00</view>
+        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">供&nbsp;&nbsp;&nbsp;价：￥{{detailInfo.price.supplyPrice}}</view>
+        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">台&nbsp;&nbsp;&nbsp;返：{{detailInfo.price.rebateMoney}}</view>
       </view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">返&nbsp;&nbsp;&nbsp;利：FHQ</view>
-        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：0.80%</view>
+        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">返&nbsp;&nbsp;&nbsp;利：
+          <span v-if="detailInfo.price.rebatePolicy===0">COM</span>
+          <span v-else-if="detailInfo.price.rebatePolicy===1">BF</span>
+          <span v-else-if="detailInfo.price.rebatePolicy===2">FHQ</span>
+          <span v-else-if="detailInfo.price.rebatePolicy===5">BZK</span>
+        </view>
+        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：{{detailInfo.price.rebateRate}}%</view>
       </view>
       <view v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
@@ -96,13 +101,13 @@
       <view class="uni-flex uni-row" id="specs">
         <view class="padding-30 col-40 modeller">规格参数</view>
       </view>
-      <pro-specs></pro-specs>
+      <pro-specs :attributesMap="detailInfo.attributesMap"></pro-specs>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row" id="details">
         <view class=" col-40 modeller padding-30">图文详情</view>
       </view>
       <view class="uni-flex uni-row">
-        <image style="width: 100%;" mode="widthFix" src="http://file.c.haier.net/images/2016/06/29/2011b90fbb70780dd37bee60aa21e5b1.jpg"></image>
+        <image style="width: 100%;" mode="widthFix" :src="detailInfo.longImages[0]"></image>
       </view>
     </view>
     <view class="product-detail-fot-high"></view>
@@ -133,6 +138,7 @@ export default {
   },
   data() {
     return {
+      detailInfo: [],
       isUps: false,
       tabs: [
         { id: 'goods', name: '宝贝' },
@@ -161,23 +167,6 @@ export default {
         { id: 144, NAME: 'djh12', LOGO: 'http://placehold.it/50x50' },
         { id: 15, NAME: 'yeg13', LOGO: 'http://placehold.it/50x50' },
         { id: 16, NAME: 'odj14', LOGO: 'http://placehold.it/50x50' }
-      ],
-      info: [// 轮播图信息
-        {
-          colorClass: 'uni-bg-red',
-          url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg',
-          content: '内容 A'
-        },
-        {
-          colorClass: 'uni-bg-green',
-          url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
-          content: '内容 B'
-        },
-        {
-          colorClass: 'uni-bg-blue',
-          url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg',
-          content: '内容 C'
-        }
       ],
       // 活动列表
       ActInfo: [
@@ -214,23 +203,25 @@ export default {
   },
   onLoad() {
   },
+  created() {
+    this.getProductDetail('GA0SZ0009', '8800012497', '8800012497');
+  },
   methods: {
-    // 滑动
-    scroll(e) {
-      // console.log(e)
+    async getProductDetail(codePro, codeSale, codeSend) {
+      const { code, data } = await this.productDetailService.productDetail(codePro, codeSale, codeSend);
+      if (code === '1') {
+        this.detailInfo = data;
+      }
+      console.log(data);
+    },
+    changePic(e) { // 轮播图切换显示
+      this.current = e.detail.current;
+    },
+    scroll(e) { // 滑动
       this.old.scrollTop = e.detail.scrollTop;
     },
-    upper(e) {
-      console.log(e);
-    },
-    lower(e) {
-      console.log(e);
-    },
-    changePic(e) {
-      this.current = e.detail.current;
-      console.log(e);
-    },
-    // 选择数量的popup
+    upper(e) { console.log(e); },
+    lower(e) { console.log(e); },
     showNum() { // 点击打开页面
       this.isShowNum = true;
     },
@@ -262,14 +253,41 @@ export default {
       this.goodsCheck = false;
       this.specsCheck = false;
       this.detailsCheck = false;
+      const query = uni.createSelectorQuery();
       if (e < 1) {
         this.goodsCheck = true;
+        query.select('#goods').boundingClientRect((data) => {
+          console.log(`得到布局位置信息${JSON.stringify(data)}`);
+          console.log(`节点离页面顶部的距离为${data.top}`);
+          uni.pageScrollTo({
+            scrollTop: data.top,
+          });
+        }).exec();
       } else if (e > 1) {
         this.detailsCheck = true;
+        // query.select('#details').boundingClientRect((data) => {
+        //   console.log(`得到布局位置信息${JSON.stringify(data)}`);
+        //   console.log(`节点离页面顶部的距离为${data.top}`);
+        //   uni.pageScrollTo({
+        //     scrollTop: data.top,
+        //   });
+        // }).exec();
+        uni.createSelectorQuery().select('#details').boundingClientRect((res) => {
+          uni.pageScrollTo({
+            scrollTop: res.top
+          });
+        }).exec();
       } else {
         this.specsCheck = true;
+        query.select('#specs').boundingClientRect((data) => {
+          console.log(`得到布局位置信息${JSON.stringify(data)}`);
+          console.log(`节点离页面顶部的距离为${data.top}`);
+          uni.pageScrollTo({
+            scrollTop: data.top,
+          });
+        }).exec();
       }
-      document.getElementById(this.tabs[e].id).scrollIntoView();
+      // document.getElementById(this.tabs[e].id).scrollIntoView();
     }
   }
 };
