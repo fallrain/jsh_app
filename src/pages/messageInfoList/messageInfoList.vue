@@ -1,29 +1,31 @@
 <template>
     <view class="message">
-        <messageInfoListTab :tabs="tabs" 
+        <messageInfoListTab 
+            :tabs="tabs" 
             @tabClick="tabClick"
+            @tabmsg="tabmsg"
         >
         </messageInfoListTab>
         
         <view class="message-concent"> 
           <view class="uni-flex uni-info" >
-            <view class="textRow unread">共{{unread}}条消息未读</view>
-            <view class="textRow read" @click="readAll">全部已读</view>
-            <view class="textRow vertical-line"></view>
-            <view class="textRow message-category">
+            <view class=" message-unread">共{{unread}}条消息未读</view>
+            <view class=" message-read" @click="readAll">全部已读</view>
+            <view class=" message-vertical-line"></view>
+            <view class=" message-category">
               消息类别
             </view>
             <i class="iconfont iconxia message-icon"> </i>
           </view>
-          <view v-for="(item,index) in messageList" :key="index" class="textTalRow" @tap="showDetail(item.id,item)">
+          <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.id,item)">
             <view class="uni-flex uni-row" >
-                <view class="textRow littleTitle">{{item.typeNameShow}}</view>
-                <view class="textRow title">整车扣款信息提醒</view>
-                <view class="textRow time">{{item.createTime}}</view>
+                <view class="message-littleTitle">{{item.typeNameShow}}</view>
+                <view class="message-title">整车扣款信息提醒</view>
+                <view class="message-time">{{item.createTime}}</view>
             </view>
             <view class="uni-flex uni-row">
-                <view class="textRow info">尊敬的客户您提报的整车订单，订单200021623445...</view>
-                <view class="textRow spot isNew" v-show="item.isNew"></view>
+                <view class="message-info">尊敬的客户您提报的整车订单，订单200021623445...</view>
+                <view class="message-spot isNew" v-show="item.isNew"></view>
             </view>
           </view>
         </view>
@@ -38,30 +40,35 @@ export default {
   components: {
     messageInfoListTab
   },
+
   data() {
     return {
-      tabs: [
-        {
-          id: '1',
-          name: '消息',
-          active: true
-        }, 
-        {
-          id: '2',
-          name: '任务',
-          active: false
-        }
-      ],
+      // tabs: [
+      //   {
+      //     id: '1',
+      //     name: '消息',
+      //     active: true
+      //   }, 
+      //   {
+      //     id: '2',
+      //     name: '任务',
+      //     active: false
+      //   }
+      // ],
+
       tabIndex: 1,
       unread: 0,
-      messageList: []
+      messageList: [],
+      messageactive:0
     }
  
   },
  
-  methods: {
-    async tabClick(item){
-      this.tabIndex = data; 
+  methods:{
+    async tabClick(item,index){
+      console.log(index)
+      // this.tabs = e
+      this.tabIndex = index; 
       this.unread = 2;
       const param = {
         pageNum: 1,
@@ -76,9 +83,10 @@ export default {
           list
         } = data;
         // console.log(page.result);
-        this.messageList = list
+        this.messageList = list;
+         console.log(this.tabIndex);
       }
-      console.log(this.messageList);
+     
     },
  
 
@@ -167,7 +175,7 @@ export default {
     width:750px;
     padding:24px;
     .uni-info{
-      .unread{
+      .message-unread{
           width:176px;
           height:34px;
           font-size:24px;
@@ -177,7 +185,7 @@ export default {
           line-height:34px;
           margin:0px 200px 24px 16px;
       }
-      .read{
+      .message-read{
         width:96px;
         height:34px;
         font-size:24px;
@@ -187,7 +195,7 @@ export default {
         line-height:34px;
         margin:0px 34px 24px 16px;
       }
-      .vertical-line{
+      .message-vertical-line{
         width:2px;
         height:26px;
         background:#C4C4C4;
@@ -210,7 +218,7 @@ export default {
       }
     }
   
-    .textTalRow{
+    .message-textTalRow{
       width:702px;
       height:142px;
       background:rgba(255,255,255,1);
@@ -219,7 +227,7 @@ export default {
       margin-bottom:24px;
         .uni-flex{
           text-align:center;
-          .littleTitle{
+          .message-littleTitle{
             width:88px;
             height:32px;
             background:rgba(237,40,86,1);
@@ -232,7 +240,7 @@ export default {
             margin:8px 12px 8px 0px;
           }
 
-          .title{
+          .message-title{
             width:272px;
             height:48px;
             font-size:34px;
@@ -242,7 +250,7 @@ export default {
             line-height:48px;
             margin-right:44px;
           }
-          .time{
+          .message-time{
             width:238px;
             height:34px;
             font-size:24px;
@@ -253,7 +261,7 @@ export default {
             text-align:right;
             margin:8px 0 6px 0px;
           }
-          .info{
+          .message-info{
             width:616px;
             height:34px;
             font-size:24px;
@@ -267,7 +275,7 @@ export default {
             text-overflow:ellipsis;
             text-align:left;
           }
-          .spot{
+          .message-spot{
             width:16px;
             height:16px;
             background:rgba(237,40,86,1);
