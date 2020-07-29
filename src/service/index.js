@@ -5,6 +5,7 @@ import productDetailService from './productDetail/productDetail.service';
 import mineServer from './mine/mine.server';
 import customerServer from './customer/customer.service';
 import catalogServer from './category/category.service';
+import orderServer from './order/order.server';
 
 export default {
   install(Vue) {
@@ -16,5 +17,6 @@ export default {
     Vue.prototype.mineServer = mineServer;
     Vue.prototype.customerServer = customerServer;
     Vue.prototype.catalogServer = catalogServer;
+    Vue.prototype.orderServer = orderServer;
   }
 };

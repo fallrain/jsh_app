@@ -142,11 +142,13 @@ export default {
   data() {
     return {
       stock: {}, // 库存
-      footButtong: { isSale: false,
+      footButtong: { // 底部按钮是否显示问题
+        isSale: false,
         isActi: false,
-        isSaleLe: false }, // 底部按钮是否显示问题
+        isSaleLe: false
+      },
       ISGUANZHU: false, // 商品关注
-      detailInfo: [],
+      detailInfo: [], // 商品信息
       isUps: false,
       tabs: [
         { id: 'goods', name: '宝贝' },
