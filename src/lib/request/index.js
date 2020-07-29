@@ -87,7 +87,7 @@ function jSend(option) {
         if (cfg.noToast) {
           return;
         }
-        if (data.code !== '1') {
+        if (data.code !== '1' && data.code !== '200') {
           showError(data.msg, statusCode);
         }
       },
