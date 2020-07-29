@@ -8,14 +8,14 @@
       <view class="pro-num-pop-detail-wrap">
         <view class="uni-flex uni-row">
           <view class="text uni-flex" style="width: 88px;height: 88px;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
-            <image src="@/assets/img/goods/example-fridge.jpg" style="width: 88px;height: 88px;"></image>
+            <image :src="infos.images[0].masterImage" style="width: 88px;height: 88px;"></image>
           </view>
           <view class="uni-flex uni-column" style="-webkit-flex: 1;flex: 1;-webkit-justify-content: space-between;justify-content: space-between;padding-left: 20px;">
             <view class="uni-flex uni-row" style="font-size: 16px;color: #333333;">
-              海尔1215DHB(C) 家用静音全自动10KG洗烘一体高高品质……
+              {{infos.product.productName}}
             </view>
             <view class="uni-flex uni-row">
-              <view style="font-size: 20px;color: #ED2856;"> ¥ 29384.21</view>
+              <view style="font-size: 20px;color: #ED2856;"> ¥ {{infos.price.invoicePrice}}</view>
             </view>
           </view>
         </view>
@@ -23,15 +23,20 @@
         <view class="pro-num-pop-wrap">
           <view class="pro-num-pop-wrap2 mb8">
             <view class="pro-num-pop-name">供&nbsp;&nbsp;&nbsp;价：</view>
-            <view class="pro-num-pop-val">￥ 4099.00</view>
+            <view class="pro-num-pop-val">￥ {{infos.price.supplyPrice}}</view>
           </view>
           <view class="pro-num-pop-wrap3 mb8">
             <view class="pro-num-pop-name">台&nbsp;&nbsp;&nbsp;返：</view>
-            <view class="pro-num-pop-val">0.00</view>
+            <view class="pro-num-pop-val">{{infos.price.rebateMoney}}</view>
           </view>
           <view class="pro-num-pop-wrap3">
             <view class="pro-num-pop-name">返&nbsp;&nbsp;&nbsp;利：</view>
-            <view class="pro-num-pop-val">0.00</view>
+            <view class="pro-num-pop-val">
+              <span v-if="infos.price.rebatePolicy===0">COM</span>
+              <span v-else-if="infos.price.rebatePolicy===1">BF</span>
+              <span v-else-if="infos.price.rebatePolicy===2">FHQ</span>
+              <span v-else-if="infos.price.rebatePolicy===5">BZK</span>
+            </view>
           </view>
         </view>
         <view class="pro-num-pop-wrap">
@@ -40,8 +45,8 @@
             <view class="pro-num-pop-val">222</view>
           </view>
           <view class="pro-num-pop-wrap3">
-            <view class="pro-num-pop-name">直扣价：</view>
-            <view class="pro-num-pop-val">0.00</view>
+            <view class="pro-num-pop-name">直扣率：</view>
+            <view class="pro-num-pop-val">{{infos.price.rebateRate}}%</view>
           </view>
         </view>
         <view class="pro-num-pop-wrap">
@@ -76,6 +81,12 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    infos: {// 商品信息
+      type: Array,
+      default() {
+        return {};
+      }
     }
   },
   data() {

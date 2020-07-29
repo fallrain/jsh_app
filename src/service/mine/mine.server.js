@@ -1,4 +1,4 @@
-import url from '../url/mine.url';
+import url from '../url/mineCustomer.url';
 import {
   jGet
 } from '@/lib/request';

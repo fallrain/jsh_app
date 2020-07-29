@@ -7,8 +7,10 @@ const urls = {
   },
   mineSignList(code, pageNo) { // 我的-签约信息
     return `/getCustomerSigned/${code}?pageNum=${pageNo}&pageSize=15`;
-  }
-  // https://new.jsh.com/new/api/customer/getCustomerSigned/8800012497?pageNum=1&pageSize=15//签约详情
+  },
+  productQueryInter: '/customer/queryCustomerInterestProductByAccount', // 商品详情-查询是否已关注
+  productAddInter: '/customer/addInterestProduct', // 商品详情-添加关注
+  productRemoveInter: '/customer/removeInterestProduct', // 商品详情-取消关注
 };
 util.addPrefix(baseURL, urls);
 export default urls;
