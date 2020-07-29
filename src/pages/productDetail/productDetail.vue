@@ -56,7 +56,7 @@
       </view>
       <view v-show="detailInfo.activities.length>0" v-else class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
-        <view class="col-70 text" @click="showAct" >
+        <view class="col-70 text" @click="showAct">
           <view class="smaller" style="border: 1px #ED2856 solid;background-color: #FFEDF1;color: #ED2856;border-radius: 30px;text-align: center;">{{CheckActivityInfo.title}}</view>
         </view>
         <view class="col-10 text smaller">
@@ -188,7 +188,7 @@ export default {
   onLoad() {
   },
   created() {
-    this.getProductDetail('DH1WS1D49', '8800012497', '8800012497');
+    this.getProductDetail('BH03Y50AE', '8800012497', '8800012497');
     this.getHostLost('8800012497', '8800012497');
     this.productQueryInter();
   },
@@ -214,7 +214,7 @@ export default {
     async productQueryInter() {
       const { code, data } = await this.productDetailService.productQueryInter({
         account: '8800012497',
-        productCodeList: ['DH1WS1D49']
+        productCodeList: ['BH03Y50AE']
       });
       if (code === '1') {
         if (data.length > 0) {
@@ -238,7 +238,7 @@ export default {
       if (this.detailInfo.tjPrice.tj.length > 0) { // 特价
         const tj = { title: '特价版本', isMore: true, isSe: true, list: [] };
         this.detailInfo.tjPrice.tj.forEach((lis) => {
-          const a = { name: 'TJ2020033333', price: '5949.71', time: ' 2021-01-01', kou: '20', num: '96', isCheck: false };
+          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
           tj.list.push(a);
         });
         this.ActInfo.push(tj);
@@ -246,7 +246,7 @@ export default {
       if (this.detailInfo.tjPrice.gc.length > 0) { // 工程
         const gc = { title: '工程版本', isMore: true, isSe: true, list: [] };
         this.detailInfo.tjPrice.gc.forEach((lis) => {
-          const a = { name: 'TJ2020033333', price: '5949.71', time: ' 2021-01-01', kou: '20', num: '96', isCheck: false };
+          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
           gc.list.push(a);
         });
         this.ActInfo.push(gc);
@@ -254,7 +254,7 @@ export default {
       if (this.detailInfo.tjPrice.yj.length > 0) { // 样机
         const yj = { title: '样机版本', isMore: true, isSe: true, list: [] };
         this.detailInfo.tjPrice.yj.forEach((lis) => {
-          const a = { name: 'TJ2020033333', price: '5949.71', time: ' 2021-01-01', kou: '20', num: '96', isCheck: false };
+          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
           yj.list.push(a);
         });
         this.ActInfo.push(yj);

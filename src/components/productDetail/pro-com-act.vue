@@ -17,11 +17,11 @@
               <view class="jVersionSpecifications-pop-detail-item-check" v-if="version.isCheck">
                 <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
               </view>
-              <view class="pro-act-pop-detail-item-name-wrap mb8">
+              <view class="pro-act-pop-detail-item-name-wrap0 mb8">
                 <view class="pro-act-pop-detail-item-name">名称：</view>
                 <view class="pro-act-pop-detail-item-val-type1">{{version.name}}</view>
               </view>
-              <view class="pro-act-pop-detail-item-name-wrap mb8">
+              <view class="pro-act-pop-detail-item-name-wrap1 mb8">
                 <view class="pro-act-pop-detail-item-name">价格：</view>
                 <view class="pro-act-pop-detail-item-val-type2">¥ {{version.price}}</view>
               </view>
