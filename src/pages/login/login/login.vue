@@ -14,6 +14,7 @@
           v-model="form.account"
           placeholder='请输入登录账号'
           handChange="this.valChange"
+          :maxLength="300"
         ></j-input>
       </view>
       <view class='mt60'>
@@ -178,7 +179,10 @@ export default {
       this[USER.UPDATE_USER]({
         account: 'a0008949',
         name: '程江涛',
-        mobile: '190110119120'
+        mobile: '190110119120',
+        customerCode: '8800273632',
+        saletoCode: '8800273632',
+        sendtoCode: '8800273632',
       });
     }
   }

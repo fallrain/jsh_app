@@ -88,35 +88,6 @@
   color: #999;
 }
 
-.goodsList-drawer-filter-list {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-
-.goodsList-drawer-filter-list-item {
-  width: 160px;
-  height: 52px;
-  margin-bottom: 32px;
-  margin-right: 32px;
-  background: #F7F7F8;
-  border-radius: 26px;
-  color: #666;
-  text-align: center;
-  line-height: 60px;
-  font-size: 24px;
-
-
-  &.active {
-    color: #ED2856;
-    background: #FFF5F7;
-  }
-
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
-}
-
 .goodsList-drawer-filter-head-ads-wrap {
   padding-right: 30px;
 
@@ -164,6 +135,7 @@
   margin-left: 34px;
   margin-right: 34px;
 }
+
 
 .goodsList-search-tab {
   position: absolute;

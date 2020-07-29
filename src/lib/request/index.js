@@ -68,9 +68,7 @@ function jSend(option) {
   selfOptions.url = `${curConfig.baseUrl}/new/api/${selfOptions.url}`;
   return new Promise((resolve) => {
     if (!cfg.noLoading) {
-      uni.showLoading({
-        mask: true
-      });
+      uni.showLoading();
     }
     const requestOptions = {
       ...selfOptions,
