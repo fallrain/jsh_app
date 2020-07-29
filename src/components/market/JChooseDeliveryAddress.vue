@@ -16,7 +16,7 @@
         <view class="jChooseDeliveryAddressDrawer-list">
           <view
             :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
-            v-for="(item,index) in list"
+            v-for="(item,index) in addressList"
             :key="index"
             @tap="check(item)"
           >
@@ -28,7 +28,7 @@
                 class="iconfont icondui"
               ></i>
             </view>
-            <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.name}}</view>
+            <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.address}}</view>
           </view>
         </view>
       </view>
@@ -47,7 +47,14 @@ export default {
     uniDrawer
   },
   props: {
-    show: Boolean
+    show: Boolean,
+    // 地址列表
+    addressList: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
   },
   data() {
     return {
@@ -88,6 +95,7 @@ export default {
         this.$set(v, 'checked', false);
       });
       this.$set(item, 'checked', true);
+      this.$emit('changeAddress', item);
     },
     hide() {
       this.$emit('update:show', false);

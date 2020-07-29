@@ -2,7 +2,7 @@
   <view class="orList">
     <view class="padding-8">
       <view><j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick"></j-tab></view>
-      <order-list-item v-for="(iten,index) in productList" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
+      <order-list-item v-for="(iten,index) in orderListInfo" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
     </view>
   </view>
 </template>
@@ -19,57 +19,76 @@ export default {
   },
   data() {
     return {
-      productList: [{ name: '111' }, { name: '121' }, { name: '131' }],
+      orderListInfo: [{ name: '111' }, { name: '121' }, { name: '131' }],
       tabs: [
         {
-          id: 'qbdn',
+          id: 7,
           name: '全部订单',
           active: true
         },
         {
-          id: 'dkk',
+          id: 0,
           name: '待扣款',
           active: false
         },
         {
-          id: 'dfh',
+          id: 1,
           name: '待发货',
           active: false
         },
         {
-          id: 'yfh',
+          id: 2,
           name: '已发货',
           active: false
         },
         {
-          id: 'yqs',
+          id: 3,
           name: '已签收',
           active: false
         },
         {
-          id: 'ykp',
+          id: 5,
           name: '已开票',
           active: false
         },
         {
-          id: 'yqx',
+          id: 6,
           name: '已取消',
           active: false
         },
         {
-          id: 'wljd',
+          id: 8,
           name: '物流拒单',
           active: false
         },
         {
-          id: 'thdd',
+          id: '7',
           name: '退货订单',
           active: false
         }
       ],
+      total: 0,
+      pageNo: 1
     };
   },
+  created() {
+    this.orderList(7, this.pageNo);
+  },
   methods: {
+    async orderList(e, pgNo) {
+      const { code, data } = await this.orderServer.orderList({
+        jshi_order_channel: 'ZY',
+        jshi_saleto_code: '8800012497',
+        orderStatusSelf: e,
+        pageNo: pgNo,
+        pageSize: 10
+      });
+      if (code === '200') {
+        this.orderListInfo = data.dataList;
+      }
+      console.log(data);
+      console.log(this.imageUel);
+    },
     goDetail(e) {
       uni.navigateTo({
         url: '/pages/orderList/orderDetail?id=1&name=uniapp'
@@ -79,6 +98,7 @@ export default {
     tabClick(e) {
       this.tabs = e;
       console.log(e);
+      this.orderList(e, this.pageNo);
     }
   }
 };

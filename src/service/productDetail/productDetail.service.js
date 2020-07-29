@@ -12,7 +12,7 @@ export default {
   },
   productStock(data) {
     /* 产品-库存 */
-    return jPost(url.productStock, data);
+    return jPostJson(url.productStock, data);
   },
   productHostList(codeSale, codeSend) {
     /* 产品详情 */
