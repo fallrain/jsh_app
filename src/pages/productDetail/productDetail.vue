@@ -141,7 +141,10 @@ export default {
   },
   data() {
     return {
-      footButtong: [], // 底部按钮是否显示问题
+      stock: {}, // 库存
+      footButtong: { isSale: false,
+        isActi: false,
+        isSaleLe: false }, // 底部按钮是否显示问题
       ISGUANZHU: false, // 商品关注
       detailInfo: [],
       isUps: false,
@@ -188,9 +191,10 @@ export default {
   onLoad() {
   },
   created() {
-    this.getProductDetail('BH03Y50AE', '8800012497', '8800012497');
-    this.getHostLost('8800012497', '8800012497');
-    this.productQueryInter();
+    this.getProductDetail('AA9VJ7000', '8800012497', '8800012497');// 获取产品详情
+    this.getHostLost('8800012497', '8800012497');// 获取热门推荐列表
+    this.productQueryInter();// 产品是否关注
+    this.productStock();// 获取数量页面的库存字段
   },
   methods: {
     async getProductDetail(codePro, codeSale, codeSend) {
@@ -198,7 +202,14 @@ export default {
       if (code === '1') {
         this.detailInfo = data;
         this.footButtong.isSale = this.detailInfo.product.isSale;
-        if (this.detailInfo.activities.length < 1) {
+        if (this.detailInfo.activities.length > 0) {
+          this.footButtong.isActi = false;
+          this.detailInfo.activities.forEach((ee) => {
+            if (ee === '套餐' || ee === '组合') {
+              this.footButtong.isActi = true;
+            }
+          });
+        } else {
           this.footButtong.isActi = false;
         }
       }
@@ -224,6 +235,17 @@ export default {
         }
       }
     },
+    async productStock() {
+      const { code, data } = await this.productDetailService.productStock({
+        productCodes: ['BH03Y50AE'],
+        saletoCode: '8800012497',
+        sendtoCode: '8800012497'
+      });
+      if (code === '1') {
+        this.stock = data;
+        console.log(this.stock);
+      }
+    },
     changePic(e) { // 轮播图切换显示
       this.current = e.detail.current;
     },
@@ -238,7 +260,7 @@ export default {
       if (this.detailInfo.tjPrice.tj.length > 0) { // 特价
         const tj = { title: '特价版本', isMore: true, isSe: true, list: [] };
         this.detailInfo.tjPrice.tj.forEach((lis) => {
-          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+          const a = { titleLe: '特价版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
           tj.list.push(a);
         });
         this.ActInfo.push(tj);
@@ -246,7 +268,7 @@ export default {
       if (this.detailInfo.tjPrice.gc.length > 0) { // 工程
         const gc = { title: '工程版本', isMore: true, isSe: true, list: [] };
         this.detailInfo.tjPrice.gc.forEach((lis) => {
-          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+          const a = { titleLe: '工程版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
           gc.list.push(a);
         });
         this.ActInfo.push(gc);
@@ -254,7 +276,7 @@ export default {
       if (this.detailInfo.tjPrice.yj.length > 0) { // 样机
         const yj = { title: '样机版本', isMore: true, isSe: true, list: [] };
         this.detailInfo.tjPrice.yj.forEach((lis) => {
-          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+          const a = { titleLe: '样机版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
           yj.list.push(a);
         });
         this.ActInfo.push(yj);
@@ -262,15 +284,15 @@ export default {
       if (this.detailInfo.arbitrages.length > 0) { // 套餐
         const tc = { title: '套餐', isMore: false, isSe: true, list: [] };
         this.detailInfo.arbitrages.forEach((lis) => {
-          const a = { name: lis.activityName, time: lis.endTime };
+          const a = { titleLe: '套餐', name: lis.activityName, time: lis.endTime };
           tc.list.push(a);
         });
         this.ActInfo.push(tc);
       }
       if (this.detailInfo.composes.length > 0) { // 组合
-        const zh = { title: '抢单', isMore: false, isSe: true, list: [] };
+        const zh = { title: '组合', isMore: false, isSe: true, list: [] };
         this.detailInfo.composes.forEach((lis) => {
-          const a = { name: lis.activityName, time: lis.endTime };
+          const a = { titleLe: '组合', name: lis.activityName, time: lis.endTime };
           zh.list.push(a);
         });
         this.ActInfo.push(zh);
@@ -278,7 +300,7 @@ export default {
       if (this.detailInfo.flashSales.length > 0) { // 抢单
         const qd = { title: '抢单', isMore: false, isSe: true, list: [] };
         this.detailInfo.flashSales.forEach((lis) => {
-          const a = { name: lis.activityName, time: lis.endTime };
+          const a = { titleLe: '抢单', name: lis.activityName, time: lis.endTime };
           qd.list.push(a);
         });
         this.ActInfo.push(qd);
@@ -297,8 +319,11 @@ export default {
       this.productNum = e;
     },
     checkedAct(e, n) { // 活动选择的内容
-      console.log('youmeiypu');
+      console.log('youmeiyou');
       this.CheckActivityInfo = n;
+      if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本')) {
+        this.footButtong.isSaleLe = true;
+      }
       console.log(this.CheckActivityInfo);
     },
     checkedShip(e) { // 选择的地址

@@ -5,13 +5,13 @@
         <view class="proCom-foot-shoppingCart iconfont icongouwuchezhengpin"></view>
         <view class="proCom-foot-shoppingCart-text">购物车</view>
       </view>
-      <view v-if="info.isSale" class="proCom-foot-inf2" @click="putcar">
+      <view v-if="info.isSale||(!info.isSale&&info.isSaleLe)" class="proCom-foot-inf2" @click="putcar">
         <view class="proCom-foot-inf3">加入购物车</view>
       </view>
-      <view v-if="!info.isSale" class="proCom-foot-inf2">
+      <view v-if="!info.isSale&&!info.isSaleLe" class="proCom-foot-inf2">
         <view class="proCom-foot-inf4">加入购物车</view>
       </view>
-      <view class="proCom-foot-inf2" @click="putplay">
+      <view v-show="info.isActi" class="proCom-foot-inf2" @click="putplay">
         <view :class="{'proCom-foot-inf5':0<1,'proCom-foot-inf6':1<1}">参加活动</view>
       </view>
     </view>
@@ -23,17 +23,18 @@ export default {
   name: 'proComFoot',
   props: {// 父级传来的数据
     info: {// 是否显示图标以及图标变色问题
-      type: Array,
+      type: Object,
       default() {
-        return [];
+        return {};
       }
     }
   },
   methods: {
     goCarList() {
-      uni.navigateTo({
-        url: '/pages/shoppingCart/shoppingCart'
-      });
+      console.log(this.info);
+      // uni.navigateTo({
+      //   url: '/pages/shoppingCart/shoppingCart'
+      // });
     },
     putcar() {
       console.log(2);
