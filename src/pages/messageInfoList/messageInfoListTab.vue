@@ -1,13 +1,14 @@
 <template>
   <view class="messageTab">
-    <view class="messageTab-list"  >
+    <view class="messageTab-list">
       <view
         :class="['messageTab-item',tab.active && 'active']"
-        v-for="(tab) in tabs"
+        v-for="(tab,index) in tabs"
         :key="tab.id"
-        @tap="tabClick(tab)"
+        :id="'item' + index"
+        @tap="tabClick(tab,index)"
       >
-        <text class="messageTab-name">{{tab.name}}</text>
+        <view class="messageTab-name">{{tab.name}}</view>
       </view>
     </view>
   </view>
@@ -15,37 +16,34 @@
 
 <script>
 export default {
-  props: {
-    tabs: {
-      // type: [],
-      default: [
+  name: 'MessageTab',
+  data() {
+    return {
+      tabs: [
         {
           id: '1',
           name: '消息',
           active: true
-        }, {
-          id: '2', 
+        },
+        {
+          id: '2',
           name: '任务',
           active: false
         }
-      ]
-    },
-  },
-  name: 'MessageTab',
-  data() {
-    return {
-      
+      ],
     };
   },
   methods: {
-    tabClick(item) {
+    tabClick(item, index) {
       /* tab 点击事件 */
-      this.tabs.forEach((v) => {
-        v.active = false
+      this.tabs.forEach((v, i) => {
+        v.active = false;
+        console.log(v.active);
       })
       item.active = true;
-      this.$emit('tabClick', item);
-      // console.log(item)
+      console.log(item.active)
+      this.$emit('tabClick', index);
+      // console.log(this.messageactive)
     }
   }
 };
@@ -60,55 +58,30 @@ export default {
   .messageTab-list{
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding-left: 16px;
+    justify-content: space-around;
+    // padding-left: 16px;
     width:750px;
     height:88px;
-    
+
 
   }
   .messageTab-item {
     position: relative;
-    width:351px;
-    height:70px;
-    background:rgba(255,255,255,1);
-    line-height:70px;
-    font-size: 28px;  
-    margin-right: 60px;
-    text-align: center;
-    font-size:34px;
+    font-size:30px;
     font-family:PingFangSC-Light,PingFang SC;
     font-weight:300;
-    // .messageTab-item .tab-name{
-    //   width:351px;
-    //   height:70px;
-    //   font-size:34px;
-    //   font-family:PingFangSC-Light,PingFang SC;
-    //   font-weight:300;
-    //   color:rgba(51,51,51,1);
-    //   line-height:44px;
-    //   text-align: center;
-    //   margin-top:10px;
-    // }
+    color:rgba(51,51,51,1);
+    line-height:40px;
     .messageTab-name{
-      display:block;
+      width:60px;
       height:70px;
-    }
-  //   &.active {
-  //     width:48px;
-  //     height:6px;
-  //     background:rgba(237,40,86,1);
 
-  //   &:after{
-  //     content: '';
-  //     display: block;
-  //     position: absolute;
-  //     top: 100%;
-  //     left: 0;
-  //     right: 0;
-  //     height: 4px;
-  //     background: rgba(237,40,86,1);
-  //   }
-  // }
-}
+    }
+
+  }
+  .messageTab-item.active {
+        border-bottom: 6px #ED2856 solid;
+        color: #ED2856;
+
+    }
 </style>
