@@ -6,29 +6,28 @@
     <view class="nav">
       <view class="nav-left">
         <scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower">
-          <view @click="cateClick(item,index)" :key="index" v-for="(item,index) in categoryList" class="scroll-view-item">
-            <view :class="index==categoryActive?'active':'noActive'" >{{item.NAME}}</view>
+          <view @click="cateClick(index)" :key="index" v-for="(item,index) in categoryList" class="scroll-view-item">
+            <view :class="index==categoryActive?'active':'noActive'" >{{item.title}}</view>
           </view>
         </scroll-view>
       </view>
       <view class="nav-right">
         <view class="nav-right-titlePic">
-          <image src="@/assets/img/goods/example-fridge.jpg"/>
+          <image :src="subCategoryList.images[0].pictureUrl"/>
         </view>
-        <view v-for="child in subCategoryList" :key="child.NAME">
+        <view v-for="(child,indexC) in subCategoryList.subCats" :key="indexC">
           <view class="uni-flex uni-row" style="padding-left: 34%;">
             <view class="category-line"></view>
-            <view class="category-title">{{child.NAME}}</view>
+            <view class="category-title">{{child.title}}</view>
             <view class="category-line"></view>
           </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
-            <view v-for="childed in child.hdg" :key="childed.NAME" class="nav-right-item">
-              <image :src="childed.LOGO"/>
-              <view class="">{{childed.NAME}}</view>   
+            <view v-for="childed in child.subCats" :key="childed.title" class="nav-right-item">
+              <image :src="categoryList[0].images[0].pictureUrl"/>
+              <view class="">{{childed.title}}</view>
             </view>
           </view>
         </view>
-
       </view>
     </view>
   </view>
@@ -45,15 +44,26 @@ export default {
   },
   data() {
     return {
+      categoryList: [],
+      subCategoryList: [],
       searchVal: '',
       categoryActive: 0,
-      data: {
-        categoryList: [],
-        subCategoryList: [],
-      },
     };
   },
+  created() {
+    this.catalog();
+  },
   methods: {
+    async catalog() {
+      const { code, data } = await this.catalogServer.catalog();
+      if (code === '1') {
+        this.categoryList = data;
+        this.subCategoryList = this.categoryList[0];
+        this.categoryActive = 0;
+      }
+      console.log(data);
+      console.log(this.imageUel);
+    },
     search(res) {
       uni.showToast({
         title: `搜索：${res.value}`,
@@ -70,9 +80,6 @@ export default {
       });
     },
     onBackPress() {
-      // #ifdef APP-PLUS
-      plus.key.hideSoftKeybord();
-      // #endif
     },
     // 滑动
     upper(e) {
@@ -81,57 +88,14 @@ export default {
     lower(e) {
       console.log(e);
     },
-    cateClick(categroy, index) {
+    cateClick(index) {
+      console.log(index);
       this.categoryActive = index;
-      console.log(categroy);
+      this.subCategoryList = this.categoryList[index];
       console.log(this.categoryActive);
     },
   },
   onLoad() {
-    this.categoryList = [
-      { id: 0, NAME: '水洗空冷', LOGO: 'http://placehold.it/50x50' },
-      { id: 1, NAME: '电视电脑', LOGO: 'http://placehold.it/50x50' },
-      { id: 2, NAME: '厨房卫浴', LOGO: 'http://placehold.it/50x50' },
-      { id: 3, NAME: 'jsh4', LOGO: 'http://placehold.it/50x50' },
-      { id: 4, NAME: 'teg5', LOGO: 'http://placehold.it/50x50' },
-      { id: 5, NAME: 'djh6', LOGO: 'http://placehold.it/50x50' },
-      { id: 1222, NAME: 'aa7', LOGO: 'http://placehold.it/50x50' },
-      { id: 13, NAME: 'dd8', LOGO: 'http://placehold.it/50x50' },
-      { id: 133, NAME: 'bdg9', LOGO: 'http://placehold.it/50x50' },
-      { id: 1333, NAME: 'jsh10', LOGO: 'http://placehold.it/50x50' },
-      { id: 14, NAME: 'teg11', LOGO: 'http://placehold.it/50x50' },
-      { id: 144, NAME: 'djh12', LOGO: 'http://placehold.it/50x50' },
-      { id: 15, NAME: 'yeg13', LOGO: 'http://placehold.it/50x50' },
-      { id: 16, NAME: 'odj14', LOGO: 'http://placehold.it/50x50' }
-    ];
-    this.subCategoryList = [
-      { NAME: '分类品1',
-        hdg: [{ NAME: '分类1:商品1', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品2', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品3', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品4', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品5', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品6', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品7', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品8', LOGO: 'http://placehold.it/50x50' }] },
-      { NAME: '分类品2',
-        hdg: [{ NAME: '分类1:商品1', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品2', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品3', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品4', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品5', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品6', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品7', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品8', LOGO: 'http://placehold.it/50x50' }] },
-      { NAME: '分类品3',
-        hdg: [{ NAME: '分类1:商品1', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品2', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品3', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品4', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品5', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品6', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品7', LOGO: 'http://placehold.it/50x50' },
-          { NAME: '分类1:商品8', LOGO: 'http://placehold.it/50x50' }] }];
     uni.getSystemInfo({
       success: (res) => {
         this.height = res.screenHeight * 0.8;
@@ -152,7 +116,7 @@ export default {
     background-color:#Fff;
     z-index:999;
     position: sticky;
-    top: 88px;
+    top: 0;
   }
   .scroll-Y {
     height: 100%;

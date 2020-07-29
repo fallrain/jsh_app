@@ -22,6 +22,7 @@
       :index="pIndex"
       :show.sync="pickerItem.show"
       v-model="pickerItem.children"
+      @confirm="tabPickerConfirm"
       @change="tabPickerChange"
     >
     </j-head-tab-picker>
@@ -62,6 +63,10 @@ export default {
     },
     tabTagHandle() {
       /* tag tab 点击事件 */
+    },
+    tabPickerConfirm() {
+      // 确认选择
+      this.$emit('tabPickerConfirm', this.tabs);
     },
     tabPickerChange(children, index) {
       this.tabs[index].children = children;

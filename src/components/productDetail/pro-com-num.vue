@@ -25,11 +25,13 @@
             <view class="pro-num-pop-name">供&nbsp;&nbsp;&nbsp;价：</view>
             <view class="pro-num-pop-val">￥ {{infos.price.supplyPrice}}</view>
           </view>
-          <view class="pro-num-pop-wrap3 mb8">
+          <view class="pro-num-pop-wrap2 mb8">
             <view class="pro-num-pop-name">台&nbsp;&nbsp;&nbsp;返：</view>
             <view class="pro-num-pop-val">{{infos.price.rebateMoney}}</view>
           </view>
-          <view class="pro-num-pop-wrap3">
+        </view>
+        <view class="pro-num-pop-wrap">
+          <view class="pro-num-pop-wrap2">
             <view class="pro-num-pop-name">返&nbsp;&nbsp;&nbsp;利：</view>
             <view class="pro-num-pop-val">
               <span v-if="infos.price.rebatePolicy===0">COM</span>
@@ -38,13 +40,7 @@
               <span v-else-if="infos.price.rebatePolicy===5">BZK</span>
             </view>
           </view>
-        </view>
-        <view class="pro-num-pop-wrap">
           <view class="pro-num-pop-wrap2">
-            <view class="pro-num-pop-name">库&nbsp;&nbsp;&nbsp;存：</view>
-            <view class="pro-num-pop-val">222</view>
-          </view>
-          <view class="pro-num-pop-wrap3">
             <view class="pro-num-pop-name">直扣率：</view>
             <view class="pro-num-pop-val">{{infos.price.rebateRate}}%</view>
           </view>
@@ -53,6 +49,24 @@
           <view class="pro-num-pop-wrap4">
             <view class="pro-num-pop-name">数&nbsp;&nbsp;&nbsp;量：</view>
             <view class="number"><uni-number-box :value="numberValue" @change="changeNum" /></view>
+          </view>
+        </view>
+        <view class="pro-num-line"></view>
+        <view v-for="(sto,index) in stock" :key="index">
+          <view class="pro-num-pop-wrap">
+            <view class="pro-num-pop-wrap4">
+              <view class="pro-num-pop-name">库&nbsp;&nbsp;&nbsp;存：</view>
+              <view class="pro-num-pop-val">{{sto.stockTotalNum}}</view>
+            </view>
+          </view>
+          <view class="pro-num-pop-wrap" v-for="(store,indexA) in sto.storeInfo" :key="indexA">
+            <view class="pro-num-pop-wrap4">
+              <view class="marker_num"></view>
+              <view class="pro-num-pop-name">{{store.stockType}}</view>
+              <view class="pro-num-pop-val-gry">{{store.qty}}</view>
+              <view class="pro-num-pop-name">台，预计到货时间：</view>
+              <view class="pro-num-pop-val-gry">{{store.arrivalTime}}</view>
+            </view>
           </view>
         </view>
       </view>
@@ -83,6 +97,12 @@ export default {
       default: false
     },
     infos: {// 商品信息
+      type: Array,
+      default() {
+        return {};
+      }
+    },
+    stock: {// 商品库存信息
       type: Array,
       default() {
         return {};

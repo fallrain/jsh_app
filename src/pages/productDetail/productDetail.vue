@@ -45,16 +45,16 @@
         </view>
         <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：{{detailInfo.price.rebateRate}}%</view>
       </view>
-      <view v-show="detailInfo.activities.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
+      <view v-show="ActListInfo.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
         <view class="col-70 text" >
-          <view class="smaller" @click="showAct" v-for="ack in detailInfo.activities" :key="ack" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack}}</view>
+          <view class="smaller" @click="showAct" v-for="ack in ActListInfo" :key="ack" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack}}</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <view v-show="detailInfo.activities.length>0" v-else class="uni-flex uni-row padding-8">
+      <view v-show="ActListInfo.length>0" v-else class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
         <view class="col-70 text" @click="showAct">
           <view class="smaller" style="border: 1px #ED2856 solid;background-color: #FFEDF1;color: #ED2856;border-radius: 30px;text-align: center;">{{CheckActivityInfo.title}}</view>
@@ -74,7 +74,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-num :show.sync="isShowNum" :infos="detailInfo" @checkedNum="checkedNum"></pro-com-num>
+      <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo" @checkedNum="checkedNum"></pro-com-num>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">配送至：</view>
         <view class="col-70 text" @click="showShip('OPEN')">
@@ -141,9 +141,14 @@ export default {
   },
   data() {
     return {
-      footButtong: [], // 底部按钮是否显示问题
+      stock: {}, // 库存
+      footButtong: { // 底部按钮是否显示问题
+        isSale: false,
+        isActi: false,
+        isSaleLe: false
+      },
       ISGUANZHU: false, // 商品关注
-      detailInfo: [],
+      detailInfo: [], // 商品信息
       isUps: false,
       tabs: [
         { id: 'goods', name: '宝贝' },
@@ -158,6 +163,7 @@ export default {
       current: 0, // 轮播图第几张
       mode: 'round', // 轮播图底部按钮样式
       hostList: [], // 热门推荐横向列表
+      ActListInfo: [], // 活动列表展示的标签
       ActInfo: [], // 活动列表
       CheckActivityInfo: '', // 选择的活动具体内容
       isShowAct: false, // 活动选择popup是否展示
@@ -188,9 +194,10 @@ export default {
   onLoad() {
   },
   created() {
-    this.getProductDetail('BH03Y50AE', '8800012497', '8800012497');
-    this.getHostLost('8800012497', '8800012497');
-    this.productQueryInter();
+    this.getProductDetail('GA0SZ0009', '8800012497', '8800012497');// 获取产品详情
+    this.getHostLost('8800012497', '8800012497');// 获取热门推荐列表
+    this.productQueryInter();// 产品是否关注
+    this.productStock();// 获取数量页面的库存字段
   },
   methods: {
     async getProductDetail(codePro, codeSale, codeSend) {
@@ -198,8 +205,68 @@ export default {
       if (code === '1') {
         this.detailInfo = data;
         this.footButtong.isSale = this.detailInfo.product.isSale;
-        if (this.detailInfo.activities.length < 1) {
-          this.footButtong.isActi = false;
+        if (this.detailInfo.activities.length > 0) {
+          this.detailInfo.activities.forEach((ee) => {
+            if (ee === '套餐' || ee === '组合') {
+              this.footButtong.isActi = true;
+            }
+          });
+        }
+        this.ActListInfo = [];
+        this.ActInfo = [];
+        if (this.detailInfo.tjPrice.tj.length > 0) { // 特价
+          this.ActListInfo.push('特价');
+          const tj = { title: '特价版本', isMore: true, isSe: true, list: [] };
+          this.detailInfo.tjPrice.tj.forEach((lis) => {
+            const a = { titleLe: '特价版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+            tj.list.push(a);
+          });
+          this.ActInfo.push(tj);
+        }
+        if (this.detailInfo.tjPrice.gc.length > 0) { // 工程
+          this.ActListInfo.push('工程');
+          const gc = { title: '工程版本', isMore: true, isSe: true, list: [] };
+          this.detailInfo.tjPrice.gc.forEach((lis) => {
+            const a = { titleLe: '工程版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+            gc.list.push(a);
+          });
+          this.ActInfo.push(gc);
+        }
+        if (this.detailInfo.tjPrice.yj.length > 0) { // 样机
+          this.ActListInfo.push('样机');
+          const yj = { title: '样机版本', isMore: true, isSe: true, list: [] };
+          this.detailInfo.tjPrice.yj.forEach((lis) => {
+            const a = { titleLe: '样机版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+            yj.list.push(a);
+          });
+          this.ActInfo.push(yj);
+        }
+        if (this.detailInfo.arbitrages.length > 0) { // 套餐
+          this.ActListInfo.push('套餐');
+          const tc = { title: '套餐', isMore: false, isSe: true, list: [] };
+          this.detailInfo.arbitrages.forEach((lis) => {
+            const a = { titleLe: '套餐', name: lis.activityName, time: lis.endTime };
+            tc.list.push(a);
+          });
+          this.ActInfo.push(tc);
+        }
+        if (this.detailInfo.composes.length > 0) { // 组合
+          this.ActListInfo.push('组合');
+          const zh = { title: '组合', isMore: false, isSe: true, list: [] };
+          this.detailInfo.composes.forEach((lis) => {
+            const a = { titleLe: '组合', name: lis.activityName, time: lis.endTime };
+            zh.list.push(a);
+          });
+          this.ActInfo.push(zh);
+        }
+        if (this.detailInfo.flashSales.length > 0) { // 抢单
+          this.ActListInfo.push('抢单');
+          const qd = { title: '抢单', isMore: false, isSe: true, list: [] };
+          this.detailInfo.flashSales.forEach((lis) => {
+            const a = { titleLe: '抢单', name: lis.activityName, time: lis.endTime };
+            qd.list.push(a);
+          });
+          this.ActInfo.push(qd);
         }
       }
       console.log(data);
@@ -214,7 +281,7 @@ export default {
     async productQueryInter() {
       const { code, data } = await this.productDetailService.productQueryInter({
         account: '8800012497',
-        productCodeList: ['BH03Y50AE']
+        productCodeList: ['GA0SZ0009']
       });
       if (code === '1') {
         if (data.length > 0) {
@@ -222,6 +289,17 @@ export default {
         } else {
           this.ISGUANZHU = false;
         }
+      }
+    },
+    async productStock() {
+      const { code, data } = await this.productDetailService.productStock({
+        productCodes: ['GA0SZ0009'],
+        saletoCode: '8800012497',
+        sendtoCode: '8800012497'
+      });
+      if (code === '1') {
+        this.stock = data;
+        console.log(this.stock);
       }
     },
     changePic(e) { // 轮播图切换显示
@@ -234,55 +312,6 @@ export default {
       this.isShowNum = true;
     },
     showAct() { // 活动选择页面
-      this.ActInfo = [];
-      if (this.detailInfo.tjPrice.tj.length > 0) { // 特价
-        const tj = { title: '特价版本', isMore: true, isSe: true, list: [] };
-        this.detailInfo.tjPrice.tj.forEach((lis) => {
-          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
-          tj.list.push(a);
-        });
-        this.ActInfo.push(tj);
-      }
-      if (this.detailInfo.tjPrice.gc.length > 0) { // 工程
-        const gc = { title: '工程版本', isMore: true, isSe: true, list: [] };
-        this.detailInfo.tjPrice.gc.forEach((lis) => {
-          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
-          gc.list.push(a);
-        });
-        this.ActInfo.push(gc);
-      }
-      if (this.detailInfo.tjPrice.yj.length > 0) { // 样机
-        const yj = { title: '样机版本', isMore: true, isSe: true, list: [] };
-        this.detailInfo.tjPrice.yj.forEach((lis) => {
-          const a = { name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
-          yj.list.push(a);
-        });
-        this.ActInfo.push(yj);
-      }
-      if (this.detailInfo.arbitrages.length > 0) { // 套餐
-        const tc = { title: '套餐', isMore: false, isSe: true, list: [] };
-        this.detailInfo.arbitrages.forEach((lis) => {
-          const a = { name: lis.activityName, time: lis.endTime };
-          tc.list.push(a);
-        });
-        this.ActInfo.push(tc);
-      }
-      if (this.detailInfo.composes.length > 0) { // 组合
-        const zh = { title: '抢单', isMore: false, isSe: true, list: [] };
-        this.detailInfo.composes.forEach((lis) => {
-          const a = { name: lis.activityName, time: lis.endTime };
-          zh.list.push(a);
-        });
-        this.ActInfo.push(zh);
-      }
-      if (this.detailInfo.flashSales.length > 0) { // 抢单
-        const qd = { title: '抢单', isMore: false, isSe: true, list: [] };
-        this.detailInfo.flashSales.forEach((lis) => {
-          const a = { name: lis.activityName, time: lis.endTime };
-          qd.list.push(a);
-        });
-        this.ActInfo.push(qd);
-      }
       this.isShowAct = true;
     },
     showShip(e) { // 地址选择页面
@@ -297,8 +326,11 @@ export default {
       this.productNum = e;
     },
     checkedAct(e, n) { // 活动选择的内容
-      console.log('youmeiypu');
+      console.log('youmeiyou');
       this.CheckActivityInfo = n;
+      if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本')) {
+        this.footButtong.isSaleLe = true;
+      }
       console.log(this.CheckActivityInfo);
     },
     checkedShip(e) { // 选择的地址

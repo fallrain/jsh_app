@@ -3,12 +3,12 @@ import configJs from '@/config';
 let curConfig;
 const {
   VUE_APP_PLATFORM,
-  NODE_ENV
+  VUE_APP_MODE
 } = process.env;
 if (VUE_APP_PLATFORM === 'h5') {
-  curConfig = configJs.h5[NODE_ENV];
+  curConfig = configJs.h5[VUE_APP_MODE];
 } else {
-  curConfig = configJs['mp-alipay'][NODE_ENV];
+  curConfig = configJs['mp-alipay'][VUE_APP_MODE];
 }
 // 是否已经提示错误，同时间只显示一个
 let isShowModal = false;
@@ -67,9 +67,11 @@ function jSend(option) {
   // url前缀
   selfOptions.url = `${curConfig.baseUrl}/new/api/${selfOptions.url}`;
   return new Promise((resolve) => {
-    uni.showLoading({
-      mask: true
-    });
+    if (!cfg.noLoading) {
+      uni.showLoading({
+        mask: true
+      });
+    }
     const requestOptions = {
       ...selfOptions,
       header,
@@ -78,21 +80,21 @@ function jSend(option) {
           data,
           statusCode
         } = response;
-        uni.hideLoading();
-        resolve(data);
-        if (cfg.noToast === false) {
-          let status;
-          if (data.status !== undefined) {
-            status = data.status;
-          }
-          showError(data.msg, status);
+        if (!cfg.noLoading) {
+          uni.hideLoading();
         }
-        if (data.code !== '1') {
+        resolve(data);
+        if (cfg.noToast) {
+          return;
+        }
+        if (data.code !== '1' && data.code !== '200') {
           showError(data.msg, statusCode);
         }
       },
       fail() {
-        uni.hideLoading();
+        if (!cfg.noLoading) {
+          uni.hideLoading();
+        }
         showError('请求失败');
         return resolve({
           code: '-1'
@@ -149,7 +151,13 @@ function jGetImage(...args) {
     }
   });
 }
-
+export {
+  jSend,
+  jGet,
+  jPost,
+  jPostJson,
+  jGetImage
+};
 module.exports = {
   jSend,
   jGet,

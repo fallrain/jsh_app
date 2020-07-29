@@ -1,17 +1,23 @@
 export default {
   h5: {
-    development: {
+    dev: {
       baseUrl: 'https://new.jsh.com'
     },
-    production: {
+    sit: {
+      baseUrl: ''
+    },
+    prod: {
       baseUrl: ''
     }
   },
   'mp-alipay': {
-    development: {
+    dev: {
       baseUrl: 'https://new.jsh.com'
     },
-    production: {
+    sit: {
+      baseUrl: 'https://new.jsh.com'
+    },
+    prod: {
       baseUrl: 'https://new.jsh.com'
     }
   }

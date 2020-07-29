@@ -9,6 +9,8 @@ module.exports = {
     host: '0.0.0.0',
     port: 8098,
     compress: true,
+    open: true,
+    openPage: 'pages/nav/nav',
     proxy: {
       '/new/api': {
         // target: 'http://mall.jsh.com',
