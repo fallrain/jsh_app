@@ -1,7 +1,7 @@
 <template>
   <view class="jGoodsItem">
     <view class="jGoodsItem-left">
-      <image src="@/assets/img/goods/example-fridge.jpg"></image>
+      <image :src="goods.image.masterImage"></image>
     </view>
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-goodsName j-goods-title">

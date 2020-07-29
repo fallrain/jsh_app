@@ -6,6 +6,6 @@ import {
 export default {
   goodsList(data) {
     /* 商品列表 */
-    return jPost(urls.goodsList, data);
+    return jPost(urls.goodsList, data, { noLoading: true });
   },
 };

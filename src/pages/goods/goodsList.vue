@@ -1,17 +1,37 @@
 <template>
   <view class="goodsList">
-    <j-head-tab
-      class="mb12"
-      :tabs="tabs"
-      @tabClick="tabClick"
-    ></j-head-tab>
-    <view class="goodsList-items-wrap">
-      <j-goods-item
-        v-for="(item,index) in list"
-        :key="index"
-        :goods="item"
-      ></j-goods-item>
+    <view class="goodsList-head-wrap">
+      <view class="goodsList-search-tab j-flex-aic">
+        <j-search-input></j-search-input>
+        <button
+          type="button"
+          class="goodsList-search-tab-btn ml22"
+        >搜索
+        </button>
+      </view>
+      <j-head-tab
+        class="mb12"
+        :tabs="tabs"
+        @tabClick="tabClick"
+      ></j-head-tab>
     </view>
+    <mescroll-body
+      ref="mescrollRef"
+      @init="mescrollInit"
+      :up="jMescrollUpOptions"
+      :down="jMescrollDownOptions"
+      @down="jMescrollDownCallback"
+      @up="upCallback"
+    >
+      <view class="goodsList-items-wrap">
+        <j-goods-item
+          v-for="(item,index) in list"
+          :key="index"
+          :goods="item"
+        ></j-goods-item>
+      </view>
+    </mescroll-body>
+
     <uni-drawer
       ref="goodsFilterDrawer"
       mode="right"
@@ -113,15 +133,26 @@ import {
 import JGoodsItem from '../../components/goods/JGoodsItem';
 import JHeadTab from '../../components/form/JHeadTab';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
+import JSearchInput from '../../components/form/JSearchInput';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import './css/goodsList.scss';
+
 
 export default {
   name: 'goodsList',
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
+    JSearchInput,
     JChooseDeliveryAddress,
     JHeadTab,
     JGoodsItem,
-    uniDrawer
+    uniDrawer,
+    MescrollBody
   },
   data() {
     return {
@@ -130,19 +161,39 @@ export default {
       isShowAddressDrawer: false,
       tabs: [
         {
-          name: '综合'
+          name: '综合',
+          active: true
         },
         {
-          name: '最新上架'
+          name: '最新上架',
+          active: false,
+          condition: {
+            sortDirection: 'desc',
+            sortType: 'saletime'
+          }
         },
         {
+          id: 'price',
           name: '价格',
-          icon: 'iconpaixu-'
+          icon: [
+            'iconpaixujiantoushang',
+            'iconpaixujiantouxia'
+          ],
+          iconClass: '',
+          active: false,
+          condition: {
+            sortDirection: 'desc',
+            sortType: 'price'
+          }
         },
         {
           name: '筛选',
-          icon: 'iconshaixuan',
-          handler: 'showFilter'
+          icon: [
+            'iconshaixuan'
+          ],
+          handler: 'showFilter',
+          noSearch: true,
+          active: false
         }
       ],
       filterList: [
@@ -234,26 +285,64 @@ export default {
   },
   methods: {
     getPageInf() {
-      this.getGoodsList();
     },
-    async getGoodsList() {
-      const { code, data } = await this.commodityService.goodsList({
-        pageNum: 1,
-        pageSize: 15,
+    async upCallback(pages) {
+      /* 上推加载 */
+      const scrollView = await this.getGoodsList(pages);
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+    },
+    getSearchCondition(pages) {
+      /* 获取不同条件下搜索的传参 */
+      let condition = {
+        pageNum: pages.num,
+        pageSize: pages.size,
         customerCode: 8800273632,
         sendTo: 8800273632,
-        name: '排名第一'
-      });
+      };
+      const tab = this.tabs.find(v => v.active);
+      // 如果存在条件，则塞入条件
+      condition = {
+        ...condition,
+        ...tab.condition
+      };
+      return condition;
+    },
+    async getGoodsList(pages) {
+      /* 搜索产品列表 */
+      const condition = this.getSearchCondition(pages);
+      const { code, data } = await this.commodityService.goodsList(condition);
+      const scrollView = {};
       if (code === '1') {
         const {
           page
         } = data;
-        this.list = page.result;
+        if (pages.num === 1) {
+          this.list = page.result;
+        } else {
+          this.list = this.list.concat(page.result);
+        }
+        scrollView.pageSize = page.pageSize;
+        scrollView.total = page.total;
+      } else {
+        this.mescroll.endErr();
       }
+      return scrollView;
     },
-    tabClick(handler) {
-      if (handler) {
-        this[handler]();
+    tabClick(tabs, tab, index) {
+      /* 顶部双层tab栏目，第一层点击事件 */
+      this.tabs = tabs;
+      // tab为价格的时候，降序升序操作
+      if (tab.id === 'price') {
+        const sortDirection = tab.condition.sortDirection;
+        tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+        tab.iconClass = tab.condition.sortDirection;
+        this.tabs[index] = tab;
+      }
+      if (!tab.noSearch) {
+        this.mescroll.resetUpScroll(true);
+      }
+      if (tab.handler) {
+        this[tab.handler]();
       }
     },
     showFilter() {
@@ -287,7 +376,3 @@ export default {
   }
 };
 </script>
-
-<style>
-
-</style>

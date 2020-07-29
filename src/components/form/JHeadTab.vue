@@ -3,16 +3,22 @@
     <view class="jHeadTab-list-wrap">
       <view class="jHeadTab-list">
         <view
-          class="jHeadTab-item"
+          :class="['jHeadTab-item', item.active && 'active']"
           v-for="(item,index) in tabs"
           :key="index"
-          @tap="tabHandle(item.handler)"
+          @tap="tabHandle(item,index)"
         >
           <text>{{item.name}}</text>
           <view
             v-if="item.icon"
-            :class="['iconfont',item.icon]"
-          ></view>
+            :class="['jHeadTab-icon-wrap',item.iconClass]"
+          >
+            <view
+              v-for="(iconItem,iconIndex) in item.icon"
+              :key="iconIndex"
+              :class="['iconfont',iconItem]"
+            ></view>
+          </view>
         </view>
       </view>
       <view :class="['jHeadTab-pop-tab-list',isExpend && 'isExpend']">
@@ -114,9 +120,13 @@ export default {
     };
   },
   methods: {
-    tabHandle(handler) {
+    tabHandle(item, index) {
       /* tab 点击事件 */
-      this.$emit('tabClick', handler);
+      this.tabs.forEach((v) => {
+        v.active = false;
+      });
+      item.active = true;
+      this.$emit('tabClick', this.tabs, item, index);
     },
     tabTagHandle() {
       /* tag tab 点击事件 */

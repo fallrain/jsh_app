@@ -1,9 +1,44 @@
 .goodsList {
   min-height: 100vh;
+  padding-top: 256px;
   background: #F5F5F5;
 
   .uni-drawer__content {
     width: 608px !important;
+  }
+}
+
+.goodsList-head-wrap {
+  position: fixed;
+  top: var(--window-top);
+  z-index: 99;
+  width: 100%;
+  padding-top: 104px;
+
+  .jHeadTab-icon-wrap {
+    .iconfont {
+      font-size: 24px;
+    }
+
+    &.desc {
+      .iconfont:first-child {
+        color: #333;
+      }
+
+      .iconfont:last-child {
+        color: $theme-color;
+      }
+    }
+
+    &.asc {
+      .iconfont:first-child {
+        color: $theme-color;
+      }
+
+      .iconfont:last-child {
+        color: #333;
+      }
+    }
   }
 }
 
@@ -128,4 +163,27 @@
   background: #DBDBDB;
   margin-left: 34px;
   margin-right: 34px;
+}
+
+.goodsList-search-tab {
+  position: absolute;
+  top: 0;
+  z-index: 99;
+  height: 104px;
+  background: #fff;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.goodsList-search-tab-btn {
+  display: inline-block;
+  width: 160px;
+  height: 56px;
+  line-height: 56px;
+  text-align: center;
+  background: $theme-color;
+  border-radius: 28px;
+  color: #fff;
+  font-size: 28px;
 }

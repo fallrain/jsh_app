@@ -67,9 +67,11 @@ function jSend(option) {
   // url前缀
   selfOptions.url = `${curConfig.baseUrl}/new/api/${selfOptions.url}`;
   return new Promise((resolve) => {
-    uni.showLoading({
-      mask: true
-    });
+    if (!cfg.noLoading) {
+      uni.showLoading({
+        mask: true
+      });
+    }
     const requestOptions = {
       ...selfOptions,
       header,
@@ -78,21 +80,21 @@ function jSend(option) {
           data,
           statusCode
         } = response;
-        uni.hideLoading();
+        if (!cfg.noLoading) {
+          uni.hideLoading();
+        }
         resolve(data);
-        if (cfg.noToast === false) {
-          let status;
-          if (data.status !== undefined) {
-            status = data.status;
-          }
-          showError(data.msg, status);
+        if (cfg.noToast) {
+          return;
         }
         if (data.code !== '1') {
           showError(data.msg, statusCode);
         }
       },
       fail() {
-        uni.hideLoading();
+        if (!cfg.noLoading) {
+          uni.hideLoading();
+        }
         showError('请求失败');
         return resolve({
           code: '-1'
@@ -149,7 +151,13 @@ function jGetImage(...args) {
     }
   });
 }
-
+export {
+  jSend,
+  jGet,
+  jPost,
+  jPostJson,
+  jGetImage
+};
 module.exports = {
   jSend,
   jGet,
