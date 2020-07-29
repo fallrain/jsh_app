@@ -2,180 +2,107 @@
   <view>
     <view class="mineBaseInfo">
       <view class="mineBaseInfo-group">
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">客户编码</view>
-          </template>
+        <j-cell :titleWrap="false" title="客户编码">
           <template #right>
-            <view class="mineBaseInfo-right">8800101954</view>
+            <view class="mineBaseInfo-right">{{baseList.customerCode}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">客户名称</view>
-          </template>
+        <j-cell :titleWrap="false" title="客户名称">
           <template #right>
-            <view class="mineBaseInfo-right">宏程永泰商贸有限公司</view>
+            <view class="mineBaseInfo-right">{{baseList.customerName}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">客户编码</view>
-          </template>
+        <j-cell :titleWrap="false" title="建户时间">
           <template #right>
-            <view class="mineBaseInfo-right">8800101954</view>
+            <view class="mineBaseInfo-right">{{baseList.createdDate}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">客户名称</view>
-          </template>
+        <j-cell :titleWrap="false" title="子户">
           <template #right>
-            <view class="mineBaseInfo-right">宏程永泰商贸有限公司</view>
-          </template>
-        </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">建户时间</view>
-          </template>
-          <template #right>
-            <view class="mineBaseInfo-right">2010-08-27</view>
-          </template>
-        </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">子户</view>
-          </template>
-          <template #right>
-            <view class="mineBaseInfo-right">无</view>
+            <view class="mineBaseInfo-right">{{baseList.subsidiary}}</view>
           </template>
         </j-cell>
       </view>
     </view>
     <view class="mineBaseInfo">
       <view class="mineBaseInfo-group">
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">自有/传统</view>
-          </template>
+        <j-cell :titleWrap="false" title="自有/传统">
           <template #right>
-            <view class="mineBaseInfo-right">自有渠道</view>
+            <view class="mineBaseInfo-right">{{baseList.zyOrCtChannel}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">大渠道</view>
-          </template>
+        <j-cell :titleWrap="false" title="大渠道">
           <template #right>
-            <view class="mineBaseInfo-right">战略直营(M)</view>
+            <view class="mineBaseInfo-right">{{baseList.channel}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">小渠道</view>
-          </template>
+        <j-cell :titleWrap="false" title="小渠道">
           <template #right>
-            <view class="mineBaseInfo-right">纯三专海尔成套专卖(HA001)</view>
+            <view class="mineBaseInfo-right">{{baseList.subChannel}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">中心小微</view>
-          </template>
+        <j-cell :titleWrap="false" title="中心小微">
           <template #right>
-            <view class="mineBaseInfo-right">青岛中心(12A02)</view>
+            <view class="mineBaseInfo-right">{{baseList.regionTrade}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">网格小微编码</view>
-          </template>
+        <j-cell :titleWrap="false" title="网格小微编码">
           <template #right>
-            <view class="mineBaseInfo-right">QD0002040500B999</view>
+            <view class="mineBaseInfo-right">{{baseList.reseauRegionCode}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">网格小微名称</view>
-          </template>
+        <j-cell :titleWrap="false" title="网格小微名称">
           <template #right>
-            <view class="mineBaseInfo-right">青岛市北网格小微1</view>
+            <view class="mineBaseInfo-right">{{baseList.reseauRegionName}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">销售组织</view>
-          </template>
+        <j-cell :titleWrap="false" title="销售组织">
           <template #right>
-            <view class="mineBaseInfo-right">重庆新日日顺家电销售有限公司</view>
+            <view class="mineBaseInfo-right">{{baseList.salesGroup}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">交易类型</view>
-          </template>
+        <j-cell :titleWrap="false" title="交易类型">
           <template #right>
-            <view class="mineBaseInfo-right">直营客户</view>
+            <view class="mineBaseInfo-right">{{baseList.dealType}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">集采/地采</view>
-          </template>
+        <j-cell :titleWrap="false" title="集采/地采">
           <template #right>
-            <view class="mineBaseInfo-right">地采</view>
+            <view class="mineBaseInfo-right">{{baseList.diCaiOrJiCai}}</view>
           </template>
         </j-cell>
       </view>
     </view>
     <view class="mineBaseInfo">
       <view class="mineBaseInfo-group">
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">子账号</view>
-          </template>
+        <j-cell :titleWrap="false" title="子账号">
           <template #right>
-            <view class="mineBaseInfo-right">19<view @click="viewDetail" class="mineBaseInfo-detail">查看详情</view></view>
+            <view class="mineBaseInfo-right">{{baseList.subAccount}}<view @click="viewDetail" class="mineBaseInfo-detail">查看详情</view></view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">省/市/区/县</view>
-          </template>
+        <j-cell :titleWrap="false" title="省/市/区/县">
           <template #right>
-            <view class="mineBaseInfo-right">山东/青岛/李沧区</view>
+            <view class="mineBaseInfo-right">{{baseList.addressProvinceCityArea}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">详细地址</view>
-          </template>
+        <j-cell :titleWrap="false" title="详细地址">
           <template #right>
-            <view class="mineBaseInfo-right">青山路616号1单元202</view>
+            <view class="mineBaseInfo-right">{{baseList.specificAddress}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">法人</view>
-          </template>
+        <j-cell :titleWrap="false" title="法人">
           <template #right>
-            <view class="mineBaseInfo-right">李芳芳</view>
+            <view class="mineBaseInfo-right">{{baseList.legalPerson}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">税号</view>
-          </template>
+        <j-cell :titleWrap="false" title="税号">
           <template #right>
-            <view class="mineBaseInfo-right">98765456789</view>
+            <view class="mineBaseInfo-right">{{baseList.taxCode}}</view>
           </template>
         </j-cell>
-        <j-cell :titleWrap="false">
-          <template #title>
-            <view class="mineBaseInfo-left">合作年限</view>
-          </template>
+        <j-cell :titleWrap="false" title="合作年限">
           <template #right>
-            <view class="mineBaseInfo-right">9年</view>
+            <view class="mineBaseInfo-right">{{baseList.cooperationTerm}}</view>
           </template>
         </j-cell>
       </view>
@@ -193,7 +120,22 @@ export default {
   components: {
     JCell
   },
+  data() {
+    return {
+      baseList: {}
+    };
+  },
+  created() {
+    this.getBaseInfo();
+  },
   methods: {
+    async getBaseInfo() {
+      const { code, data } = await this.mineServer.mineBaseInfo('8800012497');
+      if (code === '1') {
+        this.baseList = data;
+      }
+      console.log(data);
+    },
     viewDetail() {
       console.log('进入子账号详情');
     }

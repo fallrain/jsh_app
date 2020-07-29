@@ -1,49 +1,44 @@
 <template>
   <view class="specs-cont">
-    <view class="uni-flex uni-row specs-head-border">
-      <view class="specs-head-text">主体</view>
+    <view :class="showler ? '' : 'showType'">
+      <view v-for="(item,index) in attributesMap" :key="index">
+        <view class="uni-flex uni-row specs-head-border">
+          <view class="specs-head-text">{{index}}</view>
+        </view>
+        <view class="uni-flex uni-row specs-info-border" v-for="(iitn,indexA) in item" :key="indexA">
+          <view class="specs-head-info-left col-40">{{iitn.attributeName}}</view>
+          <view class="specs-head-info-right">{{iitn.attributeValue}}</view>
+        </view>
+      </view>
     </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">品牌</view>
-      <view class="specs-head-info-right">卡萨帝</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">型号</view>
-      <view class="specs-head-info-right">BCD-520WICHU1</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">机身颜色</view>
-      <view class="specs-head-info-right">帛拉帝【钛金】</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">类别</view>
-      <view class="specs-head-info-right">三门</view>
-    </view>
-    <view class="uni-flex uni-row specs-head-border">
-      <view class="specs-head-text">主体</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">品牌</view>
-      <view class="specs-head-info-right">卡萨帝</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">型号</view>
-      <view class="specs-head-info-right">BCD-520WICHU1</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">机身颜色</view>
-      <view class="specs-head-info-right">帛拉帝【钛金】</view>
-    </view>
-    <view class="uni-flex uni-row specs-info-border">
-      <view class="specs-head-info-left col-40">类别</view>
-      <view class="specs-head-info-right">三门</view>
+    <view class="specs-info-show" @click="showLer">
+      {{showler ? '收起' : '展开'}}
+      <view :class="['iconfont iconxia',showler && 'specs-info-active']" style="padding-left: 4px;padding-top: 4px;"></view>
     </view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'proSpecs'
+  name: 'proSpecs',
+  props: {// 父级传来的数据
+    attributesMap: {// 数据
+      type: Array,
+      default() {
+        return [];
+      }
+    }
+  },
+  data() {
+    return {
+      showler: false
+    };
+  },
+  methods: {
+    showLer() {
+      this.showler = !this.showler;
+    }
+  }
 };
 </script>
 
@@ -67,21 +62,33 @@ export default {
     font-size: 24px;
   }
   .specs-head-info-left {
-    margin: 5px 5px;
+    margin: 10px;
     padding: 0 10px;
-    height: 60px;
-    line-height: 60px;
     font-size: 24px;
     color: #999999;
     text-align: right;
     border-right: 2px solid #EFEFEF;
   }
   .specs-head-info-right {
-    margin: 5px 5px;
+    margin: 10px;
     padding: 0 10px;
-    height: 60px;
-    line-height: 60px;
     font-size: 24px;
     color: #999999;
+  }
+  .specs-info-show {
+    display: flex;
+    padding-left: 45%;
+    color: #999999;
+    font-size: 24px;
+    padding-bottom: 10px;
+  }
+  .showType{
+    max-height:520px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden
+  }
+  .specs-info-active {
+    transform: rotateX(180deg);
   }
 </style>
