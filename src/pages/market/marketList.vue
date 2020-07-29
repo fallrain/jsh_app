@@ -207,7 +207,7 @@ export default {
   computed: {
     fomrmateDate() {
       return (val) => {
-        this.bUtil.formatDate(val);
+        this.jshUtil.formatDate(val);
       };
     }
   },
