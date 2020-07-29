@@ -35,6 +35,11 @@
   color: #333333;
 }
 
+.pro-num-pop-val-gry {
+  font-size: 24px;
+  color: $theme-color;
+}
+
 .pro-num-pop-wrap {
   display: flex;
   padding: 10px;
@@ -43,7 +48,7 @@
 .pro-num-pop-wrap2 {
   display: flex;
   align-items: center;
-  width: 40%;
+  width: 50%;
   height: 40px;
 }
 .pro-num-pop-wrap3 {
@@ -116,4 +121,11 @@
       }
     }
   }
+}
+.marker_num {
+  width: 8px;
+  height: 8px;
+  border-radius: 100px;
+  background-color: $theme-color;
+  margin-right: 4px;
 }
