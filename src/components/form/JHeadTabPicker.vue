@@ -26,6 +26,7 @@
       <button
         class="jHeadTabPicker-btn-primary"
         type="button"
+        @tap="reset"
       >重置
       </button>
     </view>
@@ -74,9 +75,15 @@ export default {
       /* 关闭 */
       this.$emit('update:show', false);
     },
+    reset() {
+      this.value.forEach((v) => {
+        v.checked = false;
+      });
+    },
     confirm() {
       /* 确定 */
       this.close();
+      this.$emit('confirm');
     },
     choose(item) {
       /* 选中 */

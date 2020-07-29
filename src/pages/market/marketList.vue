@@ -5,10 +5,11 @@
       :tabs="tabs"
       :typeShow="isShowType"
       @tabClick="tabClick"
+      @tabPickerConfirm="tabPickerConfirm"
     ></j-market-head-tab>
     <j-activity-item
       v-for="(item,index) in list"
-      :key="index"
+      :key="index+'^-^'"
       :activity="item"
     ></j-activity-item>
     <j-drawer
@@ -81,12 +82,14 @@
           <i class="iconfont iconyou marketList-drawer-filter-head-icon-right"></i>
         </view>
         <view class="marketList-drawer-filter-head-ads">
-          (8800212607)李沧区重庆中路420号沃李沧区重庆中路420号沃
+          ({{currentAdd.addressCode}}){{currentAdd.address}}
         </view>
       </view>
     </j-drawer>
     <j-choose-delivery-address
+      :addressList="addressList"
       :show.sync="isShowAddressDrawer"
+      @changeAddress="changeAddress"
     ></j-choose-delivery-address>
   </view>
 </template>
@@ -119,11 +122,15 @@ export default {
         productCode: '',
         productGroup: [],
         productName: '',
-        saletoCode: '8700010462',
-        sendtoCode: '8700010462'
+        saletoCode: '',
+        sendtoCode: ''
       },
+      // 活动列表
       list: [
       ],
+      // 地址列表
+      addressList: [],
+      currentAdd: {},
       // 是否展示筛选侧边抽屉
       isShowFilterDrawer: false,
       // 是否展示地址侧边抽屉
@@ -136,9 +143,10 @@ export default {
           show: false,
           handler: 'showType',
           children: [
-            { name: '全部', checked: false },
-            { name: '套餐', checked: false },
-            { name: '组合', checked: false }
+            { name: '全部', checked: false, key: '' },
+            { name: '套餐', checked: false, key: 'taocan' },
+            { name: '组合', checked: false, key: 'zuhe' },
+            { name: '反向定制', checked: false, key: 'fanxiangdingzhi' }
           ]
         },
         {
@@ -165,31 +173,6 @@ export default {
         }
       ],
       filterList: [
-        {
-          name: '活动类别',
-          key: 'activityType',
-          isExpand: true,
-          type: 'radio',
-          data: [
-            {
-              key: '',
-              value: '全部',
-              isChecked: false
-            }, {
-              key: 'taocan',
-              value: '套餐',
-              isChecked: false
-            }, {
-              key: 'zuhe',
-              value: '组合',
-              isChecked: false
-            }, {
-              key: 'fanxiangdingzhi',
-              value: '反向定制',
-              isChecked: false
-            }
-          ]
-        },
         {
           name: '产品组',
           key: 'productGroup',
@@ -221,12 +204,21 @@ export default {
   created() {
     this.init();
   },
+  computed: {
+    fomrmateDate() {
+      return (val) => {
+        this.bUtil.formatDate(val);
+      };
+    }
+  },
   methods: {
     async init() {
-      await this.getActivityList();
+      await this.getAddressList();
       await this.getIndustryList();
+      await this.getActivityList();
     },
     async getIndustryList() {
+      // 获取产品组
       const { code, data } = await this.marketService.getIndustryList();
       if (code === '1') {
         data.forEach((item) => {
@@ -235,19 +227,44 @@ export default {
           item.value = item.codeName;
           item.isChecked = false;
         });
-        this.filterList[1].data = data;
+        this.filterList[0].data = data;
       }
     },
     async getActivityList() {
+      // 获取活动
       const { code, data } = await this.marketService.activityList(this.form);
       if (code === '1') {
         this.list = data.list;
       }
     },
+    async getAddressList() {
+      // 获取地址
+      const { code, data } = await this.customerServer.activityList('1');
+      if (code === '1') {
+        this.addressList = data;
+      }
+      if (data.length > 0) {
+        this.currentAdd = data[0];
+        this.form.saletoCode = data[0].customerCode;
+        this.form.sendtoCode = data[0].addressCode;
+      }
+    },
+    changeAddress(current) {
+      this.currentAdd = current;
+    },
     tabClick(handler) {
       if (handler) {
         this[handler]();
       }
+    },
+    tabPickerConfirm(tabs) {
+      // 活动类别选择后确认
+      this.tabs[0].children.forEach((item) => {
+        if (item.checked) {
+          this.form.activityType = item.key;
+        }
+      });
+      this.getActivityList();
     },
     showFilter() {
       /* 展示filter */
@@ -266,7 +283,6 @@ export default {
         const keyName = item.key;
         let val = '';
         const valArr = [];
-        debugger
         item.data.forEach((item1) => {
           if (item1.isChecked) {
             if (keyName === 'productGroup') {
@@ -293,7 +309,7 @@ export default {
           this.form[item.key] = item.value;
         }
       });
-      console.log(this.form);
+      this.getActivityList();
     },
     toggleExpand(item) {
       /* 展开或者收起 */

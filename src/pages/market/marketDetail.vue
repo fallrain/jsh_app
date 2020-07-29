@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       // 0 套餐 1 组合
-      groupType: 1,
+      groupType: 0,
       // activityList type 0:主产品 1：配比产品 2：失效产品
       activityList: [
         {

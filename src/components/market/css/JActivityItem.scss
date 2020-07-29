@@ -64,8 +64,10 @@
 }
 .jActivity-content{
   .jActivity-pic{
+    overflow: auto;
     display: flex;
     .pic-item{
+      position: relative;
       border: 1px solid #E6E6E6;
       border-radius: 10px;
       padding: 10px;
@@ -90,6 +92,22 @@
       }
     }
   }
+}
+.jProductItem-tag{
+  position: absolute;
+  left: 0px;
+  top: 0;
+  width:72px;
+  height:30px;
+  border-radius:10px 0px 10px 0px;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  line-height: 30px;
+  z-index: 10;
+}
+.bg-theme{
+  background: $theme-color;
 }
 .w50p{
   width: 50%;
