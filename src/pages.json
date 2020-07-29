@@ -46,7 +46,8 @@
     {
       "path": "pages/productDetail/productDetail",
       "style": {
-        "navigationBarTitleText": "产品详情"
+        "navigationBarTitleText": "产品详情",
+        "navigationBarBackgroundColor": "#ffffff"
       }
     },
     {
@@ -85,6 +86,14 @@
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
         "navigationBarTitleText": "消息列表"
+
+      }
+
+    },
+    {
+      "path": "pages/messageInfoList/messageInfoListDetail",
+      "style": {
+        "navigationBarTitleText": "消息详情列表"
 
       }
 

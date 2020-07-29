@@ -11,7 +11,7 @@
             <text class="pro-act-pop-detail-head-title">{{act.title}}</text>
             <view :class="['pro-act-pop-detail-head-title-arrow iconfont iconxia',!act.isSe && 'active']"></view>
           </view>
-          <view v-if="act.isSe">
+          <view v-if="act.isSe&&act.isMore">
             <div :class="['pro-act-pop-detail-item',version.isCheck && 'active']"
                  v-for="(version,indexB) in act.list" :key="indexB" @click="checkAct(indexA,indexB)">
               <view class="jVersionSpecifications-pop-detail-item-check" v-if="version.isCheck">
@@ -36,6 +36,27 @@
               <view class="pro-act-pop-detail-item-name-wrap3">
                 <view class="pro-act-pop-detail-item-name">数量：</view>
                 <view class="pro-act-pop-detail-item-val-type3">{{version.num}}</view>
+              </view>
+            </div>
+          </view>
+          <view v-if="act.isSe&&!act.isMore">
+            <div class="pro-act-pop-detail-item-one" v-for="(aac,indexC) in act.list" :key="indexC">
+              <view class="jVersionSpecifications-pop-detail-item-check" v-if="aac.isCheck">
+                <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+              </view>
+              <view class="pro-act-pop-detail-thr mb8">
+                <view class="marker"></view>
+                <view class="pro-act-pop-detail-item-oneNam">名称：</view>
+              </view>
+              <view class="pro-act-pop-detail-for mb8">
+                <view class="pro-act-pop-detail-item-oneNam">{{aac.name}}</view>
+              </view>
+              <view class="pro-act-pop-detail-thr mb8">
+                <view class="marker"></view>
+                <view class="pro-act-pop-detail-item-oneNam">有效期：</view>
+              </view>
+              <view class="pro-act-pop-detail-for mb8">
+                <view class="pro-act-pop-detail-item-oneNam">{{aac.time}}</view>
               </view>
             </div>
           </view>
@@ -65,76 +86,16 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    info: {// 是否显示图标以及图标变色问题
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   data() {
     return {
-      info: [
-        {
-          title: '特价版本',
-          isSe: true,
-          list: [
-            {
-              name: 'TJ2020033333',
-              price: '5949.71',
-              time: ' 2021-01-01',
-              kou: '20',
-              num: '96',
-              isCheck: false
-            },
-            {
-              name: 'TJ2020033333',
-              price: '5949.71',
-              time: ' 2021-01-01',
-              kou: '20',
-              num: '96',
-              isCheck: false
-            }
-          ]
-        },
-        {
-          title: '调货版本',
-          isSe: true,
-          list: [
-            {
-              name: 'TJ2020033333',
-              price: '5949.71',
-              time: ' 2021-01-01',
-              kou: '20',
-              num: '96',
-              isCheck: false
-            },
-            {
-              name: 'TJ2020033333',
-              price: '5949.71',
-              time: ' 2021-01-01',
-              kou: '20',
-              num: '96',
-              isCheck: false
-            }
-          ]
-        },
-        {
-          title: '工程版本',
-          isSe: true,
-          list: [
-            {
-              name: 'TJ2020033333',
-              price: '5949.71',
-              time: ' 2021-01-01',
-              num: '96',
-              isCheck: false
-            },
-            {
-              name: 'TJ2020033333',
-              price: '5949.71',
-              time: ' 2021-01-01',
-              num: '96',
-              isCheck: false
-            }
-          ]
-        }
-      ],
       checkedInfo: []
     };
   },

@@ -99,7 +99,6 @@ import JMarketHeadTab from '../../components/market/JMarketHeadTab';
 import JChooseDeliveryAddress from '../../components/market/JChooseDeliveryAddress';
 import './css/marketList.scss';
 
-
 export default {
   name: 'marketList',
   components: {
@@ -110,62 +109,20 @@ export default {
   },
   data() {
     return {
-      // type 0 :套餐  1：组合 2：失效组合
+      form: {
+        activityId: '',
+        activityName: '',
+        activityType: '',
+        isCheckProduct: false,
+        pageNum: 1,
+        pageSize: 5,
+        productCode: '',
+        productGroup: [],
+        productName: '',
+        saletoCode: '8700010462',
+        sendtoCode: '8700010462'
+      },
       list: [
-        {
-          marketName: '10月营销活动-买大送小',
-          type: 1,
-          price: '1234',
-          endTime: '2019-07-20',
-          scale: '5:1',
-          productCount: '1998',
-          productList: [
-            {
-              name: '海尔滚筒洗衣高端ES60H海尔滚筒洗衣高端ES60H',
-              src: require('@/assets/img/market/product1.png')
-            }
-          ]
-        },
-        {
-          marketName: '10月营销活动-买大送小',
-          type: 0,
-          endTime: '2019-07-20',
-          scale: '5:1',
-          productCount: '1998',
-          productList: [
-            {
-              name: '海尔滚筒洗衣高端ES60H海尔滚筒洗衣高端ES60H',
-              src: require('@/assets/img/market/product1.png')
-            }
-          ]
-        },
-        {
-          marketName: '10月营销活动-买大送小',
-          type: 2,
-          endTime: '2019-07-20',
-          scale: '5:1',
-          productCount: '1998',
-          productList: [
-            {
-              name: '海尔滚筒洗衣高端ES60H海尔滚筒洗衣高端ES60H',
-              src: require('@/assets/img/market/product1.png')
-            }
-          ]
-        },
-        {
-          marketName: '10月营销活动-买大送小',
-          type: 1,
-          price: '1234',
-          endTime: '2019-07-20',
-          scale: '5:1',
-          productCount: '1998',
-          productList: [
-            {
-              name: '海尔滚筒洗衣高端ES60H海尔滚筒洗衣高端ES60H',
-              src: require('@/assets/img/market/product1.png')
-            }
-          ]
-        }
       ],
       // 是否展示筛选侧边抽屉
       isShowFilterDrawer: false,
@@ -192,54 +149,58 @@ export default {
       ],
       filterInputs: [
         {
+          key: 'productName',
           name: '产品名称',
-          val: ''
+          value: ''
         },
         {
+          key: 'productCode',
           name: '产品编码',
-          val: ''
+          value: ''
         },
         {
+          key: 'activityName',
           name: '活动名称',
-          val: ''
+          value: ''
         }
       ],
       filterList: [
         {
-          name: '产品组',
+          name: '活动类别',
+          key: 'activityType',
           isExpand: true,
-          type: 'checkbox',
+          type: 'radio',
           data: [
             {
-              key: '1',
-              value: '冰箱',
-              isChecked: false
-            },
-            {
-              key: '2',
-              value: '洗衣机',
+              key: '',
+              value: '全部',
               isChecked: false
             }, {
-              key: '3',
-              value: '热水器',
+              key: 'taocan',
+              value: '套餐',
               isChecked: false
             }, {
-              key: '4',
-              value: '电视机',
+              key: 'zuhe',
+              value: '组合',
               isChecked: false
             }, {
-              key: 'sp',
-              value: '电脑',
-              isChecked: false
-            }, {
-              key: 'CHD',
-              value: '厨房用品',
+              key: 'fanxiangdingzhi',
+              value: '反向定制',
               isChecked: false
             }
           ]
         },
         {
+          name: '产品组',
+          key: 'productGroup',
+          isExpand: true,
+          type: 'checkbox',
+          data: [
+          ]
+        },
+        {
           name: '产品状态',
+          key: 'isCheckProduct',
           isExpand: true,
           type: 'radio',
           data: [
@@ -257,7 +218,32 @@ export default {
       ]
     };
   },
+  created() {
+    this.init();
+  },
   methods: {
+    async init() {
+      await this.getActivityList();
+      await this.getIndustryList();
+    },
+    async getIndustryList() {
+      const { code, data } = await this.marketService.getIndustryList();
+      if (code === '1') {
+        data.forEach((item) => {
+          item.isChecked = false;
+          item.key = item.code;
+          item.value = item.codeName;
+          item.isChecked = false;
+        });
+        this.filterList[1].data = data;
+      }
+    },
+    async getActivityList() {
+      const { code, data } = await this.marketService.activityList(this.form);
+      if (code === '1') {
+        this.list = data.list;
+      }
+    },
     tabClick(handler) {
       if (handler) {
         this[handler]();
@@ -275,7 +261,39 @@ export default {
       console.log('重置');
     },
     filterConfirm() {
-      console.log('确认');
+      /* 确定 */
+      this.filterList.forEach((item) => {
+        const keyName = item.key;
+        let val = '';
+        const valArr = [];
+        debugger
+        item.data.forEach((item1) => {
+          if (item1.isChecked) {
+            if (keyName === 'productGroup') {
+              valArr.push(item1.key);
+            } else if (keyName === 'isCheckProduct') {
+              if (item1.key === '1') {
+                val = false;
+              } else {
+                val = true;
+              }
+            } else {
+              val = item1.key;
+            }
+          }
+        });
+        if (keyName === 'productGroup') {
+          this.form[item.key] = valArr;
+        } else {
+          this.form[item.key] = val;
+        }
+      });
+      this.filterInputs.forEach((item) => {
+        if (item.value) {
+          this.form[item.key] = item.value;
+        }
+      });
+      console.log(this.form);
     },
     toggleExpand(item) {
       /* 展开或者收起 */

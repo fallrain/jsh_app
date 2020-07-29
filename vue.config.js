@@ -13,7 +13,8 @@ module.exports = {
     openPage: 'pages/nav/nav',
     proxy: {
       '/new/api': {
-        target: 'http://mall.jsh.com/',
+        // target: 'http://mall.jsh.com',
+        target: 'https://new.jsh.com',
         changeOrigin: true,
         // pathRewrite: {
         //   '^/api': ''
