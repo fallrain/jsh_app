@@ -81,6 +81,7 @@
             <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
           </view>
         </view>
+        <!-- 资讯 -->
         <view class="homepage-info">
           <view class="homepage-info-name">
             <text class="homepage-info-title">热门资讯</text>
