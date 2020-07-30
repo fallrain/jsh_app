@@ -3,7 +3,7 @@ import marketService from './market/market.service';
 import messageService from './message/message.service';
 import productDetailService from './productDetail/productDetail.service';
 import mineServer from './mine/mine.server';
-import customerServer from './customer/customer.service';
+import customerService from './customer/customer.service';
 import catalogServer from './category/category.service';
 import orderServer from './order/order.server';
 
@@ -15,7 +15,7 @@ export default {
     Vue.prototype.messageService = messageService;
     Vue.prototype.productDetailService = productDetailService;
     Vue.prototype.mineServer = mineServer;
-    Vue.prototype.customerServer = customerServer;
+    Vue.prototype.customerService = customerService;
     Vue.prototype.catalogServer = catalogServer;
     Vue.prototype.orderServer = orderServer;
   }

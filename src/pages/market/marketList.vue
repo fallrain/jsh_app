@@ -239,7 +239,7 @@ export default {
     },
     async getAddressList() {
       // 获取地址
-      const { code, data } = await this.customerServer.activityList('1');
+      const { code, data } = await this.customerService.addressesList('1');
       if (code === '1') {
         this.addressList = data;
       }
