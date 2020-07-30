@@ -41,8 +41,8 @@ export default {
     color: #ED2856;
     font-weight:400;
     font-size:28px;
-    padding-left: 12px;
-    padding-top: 6px;
+    padding-left: 20%;
+    padding-top: 15%;
   }
   .order-detail-text{
     color: #666666;

@@ -40,6 +40,9 @@ import orderDetailInfo from '../../components/orderList/order-detail-info';
 import orderDetailBase from '../../components/orderList/order-detail-base';
 import orderDetailFlow from '../../components/orderList/order-detail-flow';
 import orderDetailFoot from '../../components/orderList/order-detail-foot';
+import {
+  ORDER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'orderDetail',
@@ -50,9 +53,14 @@ export default {
     orderDetailFlow,
     orderDetailFoot
   },
-  onLoad(option) {
-    console.log(option.id); // 打印出上个页面传递的参数。
-    console.log(option.name); // 打印出上个页面传递的参数。
+  data() {
+    return {
+      infoList: {}
+    };
+  },
+  onLoad() {
+  },
+  computed: {
   }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <view class="orList">
-    <view class="padding-8">
+    <view class="padding-15">
       <view><j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick"></j-tab></view>
       <order-list-item v-for="(iten,index) in orderListInfo" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
     </view>
@@ -10,6 +10,8 @@
 <script>
 import orderListItem from '../../components/orderList/order-list-item';
 import JTab from '../../components/common/JTab';
+import { ORDER } from '../../store/mutationsTypes';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'orderList',
@@ -75,6 +77,9 @@ export default {
     this.orderList(7, this.pageNo);
   },
   methods: {
+    ...mapMutations([
+      ORDER.UPDATE_ORDER
+    ]),
     async orderList(e, pgNo) {
       const { code, data } = await this.orderServer.orderList({
         jshi_order_channel: 'ZY',
@@ -87,18 +92,24 @@ export default {
         this.orderListInfo = data.dataList;
       }
       console.log(data);
-      console.log(this.imageUel);
     },
     goDetail(e) {
-      uni.navigateTo({
-        url: '/pages/orderList/orderDetail?id=1&name=uniapp'
-      });
       console.log(e);
+      this[ORDER.UPDATE_ORDER]({
+        orderDetail: this.orderListInfo[e]
+      });
+      uni.navigateTo({
+        url: `/pages/orderList/orderDetail?id=${this.orderListInfo[e]}`
+      });
     },
     tabClick(e) {
       this.tabs = e;
       console.log(e);
-      this.orderList(e, this.pageNo);
+      this.tabs.forEach((each) => {
+        if (each.active) {
+          this.orderList(each.id, this.pageNo);
+        }
+      });
     }
   }
 };
