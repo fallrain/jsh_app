@@ -59,9 +59,7 @@
             </view>
             <i class="iconfont iconyou goodsList-drawer-filter-head-icon-right"></i>
           </view>
-          <view class="goodsList-drawer-filter-head-ads">
-            (8800212607)李沧区重庆中路420号沃李沧区重庆中路420号沃
-          </view>
+          <view class="goodsList-drawer-filter-head-ads">{{curChoseDeliveryAddress.name}} </view>
         </view>
         <view class="goodsList-drawer-filter-head-ads-wrap">
           <view class="goodsList-drawer-filter-head">
@@ -89,6 +87,8 @@
     </j-drawer>
     <j-choose-delivery-address
       :show.sync="isShowAddressDrawer"
+      :list="deliveryAddressList"
+      @change="deliveryAddressListChange"
     ></j-choose-delivery-address>
   </view>
 </template>
@@ -203,7 +203,11 @@ export default {
         lowPrice: '',
         // 最高价
         highPrice: ''
-      }
+      },
+      // 配送地址数据
+      deliveryAddressList: [],
+      // 当前选中的配送地址
+      curChoseDeliveryAddress: {}
     };
   },
   created() {
@@ -217,6 +221,7 @@ export default {
   methods: {
     getPageInf() {
       this.setFilterData();
+      this.getDeliveryAddress();
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -235,13 +240,13 @@ export default {
         customerCode: this[USER.GET_USER].customerCode,
         sendTo: this[USER.GET_USER].sendtoCode,
       };
-      // tab条件
+        // tab条件
       const tab = this.tabs.find(v => v.active);
       // 其他条件
       const filtersMap = {
         name: this.filterForm.name
       };
-      // 右侧筛选栏搜索数据
+        // 右侧筛选栏搜索数据
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
           if (v.isChecked) {
@@ -296,7 +301,7 @@ export default {
           saletoCode: userInf.saletoCode,
           sendtoCode: userInf.sendtoCode,
         };
-        // 获取价格
+          // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取库存
         const getStock = this.commodityService.getStock(priceArgsObj);
@@ -402,6 +407,28 @@ export default {
     showDeliveryAddress() {
       /* 展示配送地址 */
       this.isShowAddressDrawer = true;
+    },
+    getDeliveryAddress() {
+      /* 获取配送地址 */
+      this.customerService.addressesList(1).then(({ code, data }) => {
+        if (code === '1') {
+          // 配送地址列表
+          this.deliveryAddressList = data.map(v => ({
+            id: v.customerCode,
+            name: `(${v.customerCode})${v.address}`
+          }));
+          // 当前配送地址修改
+          if (this.deliveryAddressList[0]) {
+            this.deliveryAddressList[0].checked = true;
+            this.curChoseDeliveryAddress = this.deliveryAddressList[0];
+          }
+        }
+      });
+    },
+    deliveryAddressListChange(list, item) {
+      /* 地址数据改变 */
+      this.deliveryAddressList = list;
+      this.curChoseDeliveryAddress = item;
     }
   }
 };

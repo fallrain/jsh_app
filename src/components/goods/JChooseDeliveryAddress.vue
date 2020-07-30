@@ -47,11 +47,24 @@ export default {
     uniDrawer
   },
   props: {
-    show: Boolean
+    show: {
+      type: Boolean,
+      default: false
+    },
+    // 数据列表
+    list: {
+      type: Array,
+      default: () => []
+    },
+    // 当前选中的item
+    curItem: {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
-      list: [
+      lis1t: [
         {
           id: 1,
           name: '(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室'
@@ -84,10 +97,12 @@ export default {
       this.$emit('update:show', val);
     },
     check(item) {
+      /* 选中一个条目 */
       this.list.forEach((v) => {
         this.$set(v, 'checked', false);
       });
       this.$set(item, 'checked', true);
+      this.$emit('change', this.list, item);
     },
     hide() {
       this.$emit('update:show', false);
