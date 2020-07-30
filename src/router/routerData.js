@@ -12,6 +12,7 @@ const data = [
   'pages/market/marketDetail',
   'pages/orderList/orderList',
   'pages/messageInfoList/messageInfoList',
+  'pages/transferGoods/transferGoods',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo'
 ];

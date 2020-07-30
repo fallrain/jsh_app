@@ -9,6 +9,7 @@
       :password="password"
       :placeholder="placeholder"
       :value="selfValue"
+      :maxlength="maxLength"
       @input="valChange"
     >
     <view class='jInput-right'>
@@ -34,6 +35,10 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    maxLength: {
+      type: Number,
+      default: 140
     }
   },
   data() {

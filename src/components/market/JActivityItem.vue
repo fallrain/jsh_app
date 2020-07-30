@@ -143,7 +143,7 @@ export default {
       };
     },
     fomrmateDate() {
-      return val => this.bUtil.formatDate(val);
+      return val => this.jshUtil.formatDate(val);
     }
   },
   methods: {

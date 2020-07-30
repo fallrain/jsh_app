@@ -7,6 +7,8 @@
       confirm-type="search"
       :placeholder="placeholder"
       :placeholderClass="placeholderClass"
+      v-model="selfValue"
+      @confirm="search"
     >
   </view>
 </template>
@@ -17,6 +19,10 @@ import './css/jSearchInput.scss';
 export default {
   name: 'JSearchInput',
   props: {
+    value: {
+      type: [Number, String],
+      default: ''
+    },
     placeholder: {
       type: String,
       default: ''
@@ -26,9 +32,21 @@ export default {
       default: ''
     },
   },
+  data() {
+    return {
+      selfValue: this.value
+    };
+  },
+  watch: {
+    selfValue(val) {
+      this.$emit('input', val);
+    }
+  },
+  methods: {
+    search({ detail: { value } }) {
+      /* 键盘搜索事件 */
+      this.$emit('search', value);
+    }
+  }
 };
 </script>
-
-<style scoped>
-
-</style>

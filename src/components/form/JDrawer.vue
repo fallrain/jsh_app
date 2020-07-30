@@ -32,7 +32,7 @@ import {
 } from '@dcloudio/uni-ui';
 
 export default {
-  name: 'JHeadTabPicker',
+  name: 'JDrawer',
   components: {
     uniDrawer
   },
@@ -62,6 +62,7 @@ export default {
     filterConfirm() {
       /* 确定 */
       this.$emit('filterConfirm');
+      this.$emit('update:show', false);
     }
   }
 };

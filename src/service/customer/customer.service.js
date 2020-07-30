@@ -6,7 +6,7 @@ import {
 } from '@/lib/request';
 
 export default {
-  activityList(data) {
+  addressesList(data) {
     /* 地址列表 */
     return jGet(urls.addressesList(data));
   },

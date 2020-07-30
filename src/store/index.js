@@ -9,6 +9,7 @@ export default new Vuex.Store({
   plugins: [
     createPersistedState({
       storage: {
+        getItem: uni.getStorageSync,
         setItem: uni.setStorageSync,
         removeItem: uni.removeStorageSync
       }

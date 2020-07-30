@@ -8,13 +8,14 @@ import '@/assets/css/common.scss';
 import requestPlugin from '@/lib/request/requestPlugin';
 import servicePlugin from '@/service';
 import filterPlugin from '@/filter';
-import bUtil from '@/lib/util/index';
+import jshUtil from '@/lib/util';
 
 Vue.use(requestPlugin);
 Vue.use(servicePlugin);
 Vue.use(filterPlugin);
 Vue.config.productionTip = false;
-Vue.prototype.bUtil = bUtil;
+// 工具类
+Vue.prototype.jshUtil = jshUtil;
 
 App.mpType = 'app';
 
