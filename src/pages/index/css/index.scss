@@ -1,0 +1,284 @@
+.homepage{
+    width:750px;
+    // height:2026px;
+    background:rgba(245,245,245,1);
+    .homepage-top{
+        width:750px;
+        height:425px;
+        background:url("../../../assets/img/index/top-bg.png") no-repeat;
+        background-size:100%;
+        background-position: 0px -50px;
+        padding:32px 24px 0px 38px;
+        position: relative;
+        .homepage-top-head{
+          display: flex;
+          align-self: center;;
+      
+          .homepage-top-head-name{       
+              width:90px;
+              height:28px;
+              color:#fff;
+              font-size:28px;
+              margin:8px 16px 8px 0px;
+          }
+          .homepage-top-head-input{
+              width:514px;
+              height:52px;
+              background:rgba(255,255,255,1);
+              box-shadow:0px 0px 12px 0px rgba(102,135,168,0.15);
+              border-radius:32px;
+              opacity:0.4;  
+              margin-right:26px;    
+          }
+          // .placeholder{
+              // font-size:24px;
+              // font-family:PingFangSC-Light,PingFang SC;
+              // font-weight:300;
+              // color:rgba(255,255,255,1);
+              // line-height:34px;
+          // }
+          .homepage-top-head-icon{
+              width:42px;
+              height:45px;
+              font-size: 48px !important;
+              color:#fff;
+            
+          }
+        }
+        .homepage-top-center{
+          display:flex;
+          margin-top: 24px;
+          justify-content: space-between;
+          .homepage-top-center-list{
+              // width:96px;
+              // height:34px;
+              font-size:24px;
+              font-family:PingFangSC-Regular,PingFang SC;
+              font-weight:400;
+              color:rgba(255,255,255,1);
+              line-height:34px;
+          }
+        }  
+      //  轮播图
+    .homepage-swiper{
+        //   width:670px;
+        //   height:280px;
+          position: absolute;
+          top:166px;
+          left:40px;
+        }
+        .swiper-box {
+          width:670px;
+          height:280px;     
+        }
+        .swiper-item {
+          width:670px;
+          height:280px;  
+          /* #ifndef APP-NVUE */
+          display: flex;
+          /* #endif */
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;     
+        }
+        .image {
+          width: 100%;
+          height:100%;
+        }
+         
+    }
+      // 目录列表
+    .homepage-cataloglist{
+        display:flex;
+        column-count:5;
+        flex-wrap:wrap;
+        margin:70px 22px 0px 32px;
+        .homepage-cataloglist-item{
+            margin-right: 46px;
+            margin-bottom:24px;
+            display:flex;
+            flex-direction:column;
+            text-align: center;
+    
+            &:nth-child(5){
+                margin-right:0px;
+            }
+            &:nth-child(10){
+                margin-right:0px;
+            }
+            .cataloglist-item-img{
+                width:100px;
+                height:100px;
+            }
+            .cataloglist-item-title{
+                // width:56px;
+                // height:40px;
+                font-size:28px;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                color:rgba(102,102,102,1);
+                margin-top:12px;
+            }
+        }     
+    }
+      // 头条公告
+    .homepage-headlines{
+        width:702px;
+        height:70px;
+        background:rgba(255,255,255,1);
+        border-radius:10px;
+        margin:0px 22px 24px 26px;
+        display:flex;
+        align-items: center;
+        .homepage-headlines-img{
+            width:118px;
+            height:28px;
+            margin-right:44px;
+            margin-left:20px;
+        }
+        .homepage-headlines-title{
+            width:54px;
+            height:28px;
+            border-radius:4px;
+            border:1px solid rgba(255,148,20,1);
+            font-size:20px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,148,20,1);
+            line-height:28px;
+            letter-spacing:4px;
+            text-align:center;
+            margin-right:24px;
+        }
+        .homepage-headlines-content{
+            width:360px;
+            height:34px;
+            font-size:24px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            line-height:34px;
+            margin-right:32px;
+        }
+        .homepage-headlines-icon{
+            font-size:24px !important;
+            margin-top: 4px;
+        }
+    }
+
+    .homepage-recommend-info{
+        width:700px;
+        height:732px;
+        background:rgba(255,255,255,1);
+        border-radius:10px;
+        margin-left:26px;
+        // 推荐
+        .homepage-recommend{
+            display:flex;
+            flex-wrap:wrap;
+            .homepage-recommend-list{
+                width:350px;
+                height:236px;
+                border-right:2px solid rgba(245,245,245,1);
+                border-bottom:2px solid rgba(245,245,245,1);
+                padding:20px 32px 30px 20px;
+                .homepage-recommend-name{
+                    display:flex;
+                    
+                    .homepage-recommend-title{
+                        font-size:28px;
+                        font-family:PingFangSC-Regular,PingFang SC;
+                        font-weight:400;
+                        color:rgba(51,51,51,1);
+                        margin:0px 10px 30px 0px;
+                    }
+                    .homepage-recommend-describe{
+                        font-size:16px;
+                        font-family:PingFangSC-Regular,PingFang SC;
+                        font-weight:400;
+                        color:rgba(194,163,111,1);
+                        margin-top:8px;
+                        &:nth-child(2){
+                            width:90px;
+                            height:26px;
+                            background:rgba(255,245,230,1);
+                            border-radius:13px;
+                            text-align:center;
+                            line-height:26px;
+                            
+                        }                    
+                    }
+                }
+                
+                image{
+                    width:120px;
+                    height:120px;
+                }
+                .homepage-recommend-image{
+                    margin:0px 40px 0px 16px;
+                }
+            }
+    }
+    // 资讯
+        .homepage-info{
+            .homepage-info-name{
+              margin:32px 20px 26px 24px;
+              .homepage-info-title{
+                font-size:34px;
+                color:rgba(237,40,86,1);
+                font-weight:700;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-style:italic;
+               margin-right:454px;
+
+              }
+              .homepage-info-more{
+                font-size:14px;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                color:rgba(102,102,102,1);
+                line-height:18px;
+                letter-spacing:2px;
+               
+              }
+            }
+            .homepage-info-list{
+                display:flex;
+                margin-left:24px;
+                align-items:center;
+                margin-bottom:18px;
+                .homepage-info-list-hot{
+                    width:54px;
+                    height:28px;
+                    border-radius:4px;
+                    border:1px solid rgba(255,148,20,1);
+                    font-size:20px;
+                    font-family:PingFangSC-Regular,PingFang SC;
+                    font-weight:400;
+                    color:rgba(255,148,20,1);
+                    line-height:28px;
+                    letter-spacing:4px;
+                    margin-right:12px;
+                    text-align:center;
+                }  
+                .homepage-info-list-title{
+                    width:552px;
+                    height:34px;
+                    font-size:24px;
+                    font-family:PingFangSC-Regular,PingFang SC;
+                    font-weight:400;
+                    color:rgba(153,153,153,1);
+                    line-height:34px;
+                    
+                }  
+    
+            }
+            
+        }
+
+
+  }
+      
+}
+
+

@@ -6,6 +6,34 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
+      "icon_id": "16194027",
+      "name": "kinds",
+      "font_class": "kinds",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "16194030",
+      "name": "people",
+      "font_class": "people",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "16194031",
+      "name": "shopping",
+      "font_class": "shopping",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "16194033",
+      "name": "news",
+      "font_class": "news",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
       "icon_id": "681191",
       "name": "排序箭头上",
       "font_class": "paixujiantoushang",
