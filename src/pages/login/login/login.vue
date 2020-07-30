@@ -180,9 +180,9 @@ export default {
         account: 'a0008949',
         name: '程江涛',
         mobile: '190110119120',
-        customerCode: '8800273632',
-        saletoCode: '8800273632',
-        sendtoCode: '8800273632',
+        customerCode: '8700010462',
+        saletoCode: '8700010462',
+        sendtoCode: '8700010462',
       });
     }
   }

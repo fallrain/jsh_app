@@ -32,6 +32,10 @@
           v-for="(item,index) in list"
           :key="index"
           :goods="item"
+          :index="index"
+          :saletoCode="userInf.saletoCode"
+          :sendtoCode="userInf.sendtoCode"
+          @change="goodsChange"
         ></j-goods-item>
       </view>
     </mescroll-body>
@@ -211,12 +215,13 @@ export default {
     };
   },
   created() {
+    debugger;
     this.getPageInf();
   },
   computed: {
-    ...mapGetters([
-      USER.GET_USER
-    ]),
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
   },
   methods: {
     getPageInf() {
@@ -237,8 +242,8 @@ export default {
       let condition = {
         pageNum: pages.num,
         pageSize: pages.size,
-        customerCode: this[USER.GET_USER].customerCode,
-        sendTo: this[USER.GET_USER].sendtoCode,
+        customerCode: this.userInf.customerCode,
+        sendTo: this.userInf.sendtoCode,
       };
         // tab条件
       const tab = this.tabs.find(v => v.active);
@@ -282,7 +287,7 @@ export default {
     async getGoodsList(pages) {
       /* 搜索产品列表 */
       // 公共用户信息
-      const userInf = this[USER.GET_USER];
+      const userInf = this.userInf;
       const condition = this.getSearchCondition(pages);
       const { code, data } = await this.commodityService.goodsList(condition);
       const scrollView = {};
@@ -346,6 +351,10 @@ export default {
         this.mescroll.endErr();
       }
       return scrollView;
+    },
+    goodsChange(goods, index) {
+      /* 商品数据change */
+      this.list[index] = goods;
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
