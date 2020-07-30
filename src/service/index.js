@@ -7,6 +7,9 @@ import customerService from './customer/customer.service';
 import catalogServer from './category/category.service';
 import orderServer from './order/order.server';
 import cartService from './cart/cart.service';
+// import transfergoodsService from './transfergoods/transfergoods.service';
+import transferpriceService from './transfergoods/transferprice.service';
+
 
 export default {
   install(Vue) {
@@ -29,5 +32,9 @@ export default {
     Vue.prototype.orderServer = orderServer;
     // 购物车服务
     Vue.prototype.cartService = cartService;
+    // 调货列表
+    // Vue.prototype.transfergoodsService = transfergoodsService
+    // 调货列表价格
+    Vue.prototype.transferpriceService = transferpriceService
   }
 };
