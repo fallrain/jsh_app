@@ -35,6 +35,6 @@ export default {
     // 调货列表
     // Vue.prototype.transfergoodsService = transfergoodsService
     // 调货列表价格
-    Vue.prototype.transferpriceService = transferpriceService
+    Vue.prototype.transferpriceService = transferpriceService;
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <view :class="isUps === true ? 'prevent' : ''">
+  <view @touchmove="move">
     <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">
       <view @click="checkCut(0)" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
       <view @click="checkCut(1)" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
@@ -84,7 +84,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-ship :isShowShip="ShipType==='OPEN'" @closeShip="showShip('')" @checkedShip="checkedShip"></pro-com-ship>
+      <pro-com-ship :show.sync="isShowShip" :info="deliveryAddressList" @checkedShip="checkedShip"></pro-com-ship>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
         <view class="padding-30 col-40 modeller">热门推荐</view>
@@ -149,16 +149,14 @@ export default {
       },
       ISGUANZHU: false, // 商品关注
       detailInfo: [], // 商品信息
-      isUps: false,
       tabs: [
         { id: 'goods', name: '宝贝' },
         { id: 'specs', name: '规格' },
         { id: 'details', name: '详情' }
       ],
-      goodsCheck: false,
+      goodsCheck: true,
       specsCheck: false,
       detailsCheck: false,
-      yuanH: uni.upx2px(100),
       isF: false, // 顶部导航是否显示
       current: 0, // 轮播图第几张
       mode: 'round', // 轮播图底部按钮样式
@@ -168,27 +166,30 @@ export default {
       CheckActivityInfo: '', // 选择的活动具体内容
       isShowAct: false, // 活动选择popup是否展示
       isShowNum: false, // 数量页面参数，判断是否展示
+      isShowShip: false, // 送达方，是否显示
+      deliveryAddressList: [],
+      ShipInfo: '', // 页面显示选中的送达方
       productNum: 1, // 商品数量数量
-      ShipType: '', // 送达方，是否显示
-      ShipInfo: '(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室至:', //
       scrollTop: 0,
       old: {
         scrollTop: 0
-      }
+      },
+      scrollHight: 0,
+      goodsHight: 0,
+      specsHight: 0,
+      detailsHight: 0
     };
   },
   onPageScroll(e) {
-    if (this.yuanH > e.scrollTop) {
+    if (e.scrollTop > 10) {
       this.isF = false;
-    } else {
-      this.isF = true;
-    }
-    if (e.scrollTop < 10) {
       this.goodsCheck = true;
       this.specsCheck = false;
       this.detailsCheck = false;
+    } else {
+      this.isF = true;
     }
-    // console.log('ssss');
+    this.scrollHight = e.scrollTop;
     // console.log(uni.getSystemInfoSync().screenHeight)
   },
   onLoad() {
@@ -198,8 +199,12 @@ export default {
     this.getHostLost('8700010462', '8700010462');// 获取热门推荐列表
     this.productQueryInter();// 产品是否关注
     this.productStock();// 获取数量页面的库存字段
+    this.getDeliveryAddress();// 获取配送地址列表
   },
   methods: {
+    move() {
+      this.isF = true;
+    },
     async getProductDetail(codePro, codeSale, codeSend) {
       const { code, data } = await this.productDetailService.productDetail(codePro, codeSale, codeSend);
       if (code === '1') {
@@ -279,7 +284,7 @@ export default {
       console.log(data);
     },
     async productQueryInter() {
-      const { code, data } = await this.productDetailService.productQueryInter({
+      const { code, data } = await this.productDetailService.productQueryInter({// 获取关注
         account: '8700010462',
         productCodeList: ['GA0SZB000']
       });
@@ -289,6 +294,12 @@ export default {
         } else {
           this.ISGUANZHU = false;
         }
+      }
+    },
+    async addGuan(code1, code2, code3) {
+      const { code } = await this.productDetailService.productAddInter(code1, code2, code3);
+      if (code === '200') {
+        this.ISGUANZHU = true;
       }
     },
     async productStock() {
@@ -303,7 +314,18 @@ export default {
       }
     },
     guanZhu() {
-      //是否关注
+      if (this.ISGUANZHU) { // 已关注，点击是取消关注
+        this.productDetailService.productRemoveInter({
+          account: '8700010462', // 8700002530_1前台输入的账号名
+          productCodeList: ['GA0SZB000']
+        }).then(({ code }) => {
+          if (code === '1') {
+            this.ISGUANZHU = false;
+          }
+        });
+      } else {
+        this.addGuan('8700010462', '8700010462', 'GA0SZB000');
+      }
     },
     changePic(e) { // 轮播图切换显示
       this.current = e.detail.current;
@@ -317,13 +339,26 @@ export default {
     showAct() { // 活动选择页面
       this.isShowAct = true;
     },
-    showShip(e) { // 地址选择页面
-      if (e === 'OPEN') {
-        this.isUps = true;
-      } else {
-        this.isUps = false;
-      }
-      this.ShipType = e;
+    showShip() { // 地址选择页面
+      this.isShowShip = true;
+    },
+    getDeliveryAddress() {
+      /* 获取配送地址 */
+      this.customerService.addressesList(1).then(({ code, data }) => {
+        if (code === '1') {
+          // 配送地址列表
+          this.deliveryAddressList = data.map(v => ({
+            id: v.customerCode,
+            name: `(${v.customerCode})${v.address}`,
+            checked: false
+          }));
+          // 当前配送地址修改
+          if (this.deliveryAddressList[0]) {
+            this.deliveryAddressList[0].checked = true;
+            this.ShipInfo = this.deliveryAddressList[0].name;
+          }
+        }
+      });
     },
     checkedNum(e) { // 数量选择页面
       this.productNum = e;
@@ -337,49 +372,44 @@ export default {
       console.log(this.CheckActivityInfo);
     },
     checkedShip(e) { // 选择的地址
-      this.ShipType = '';
-      this.isUps = false;
+      this.getProductDetail('GA0SZB000', '8700010462', '8700010462');// 获取产品详情
       this.ShipInfo = e;
+      // this.deliveryAddressList = 'list';
+      // this.curChoseDeliveryAddress = 'item';
     },
     checkCut(e) {
-      this.goodsCheck = false;
-      this.specsCheck = false;
-      this.detailsCheck = false;
-      const query = uni.createSelectorQuery();
+      uni.pageScrollTo({
+        scrollTop: 0
+      });
+      uni.createSelectorQuery().select('#goods').boundingClientRect((res) => {
+        this.goodsHight = res.top;
+      }).exec();
+      uni.createSelectorQuery().select('#specs').boundingClientRect((res) => {
+        this.specsHight = res.top;
+      }).exec();
+      uni.createSelectorQuery().select('#details').boundingClientRect((res) => {
+        this.detailsHight = res.top;
+      }).exec();
       if (e < 1) {
+        console.log('tou');
         this.goodsCheck = true;
-        query.select('#goods').boundingClientRect((data) => {
-          console.log(`得到布局位置信息${JSON.stringify(data)}`);
-          console.log(`节点离页面顶部的距离为${data.top}`);
-          uni.pageScrollTo({
-            scrollTop: data.top,
-          });
-        }).exec();
+        this.detailsCheck = false;
+        this.specsCheck = false;
       } else if (e > 1) {
+        uni.pageScrollTo({
+          scrollTop: this.detailsHight - 60
+        });
+        this.goodsCheck = false;
         this.detailsCheck = true;
-        // query.select('#details').boundingClientRect((data) => {
-        //   console.log(`得到布局位置信息${JSON.stringify(data)}`);
-        //   console.log(`节点离页面顶部的距离为${data.top}`);
-        //   uni.pageScrollTo({
-        //     scrollTop: data.top,
-        //   });
-        // }).exec();
-        uni.createSelectorQuery().select('#details').boundingClientRect((res) => {
-          uni.pageScrollTo({
-            scrollTop: res.top
-          });
-        }).exec();
+        this.specsCheck = false;
       } else {
+        uni.pageScrollTo({
+          scrollTop: this.specsHight - 60
+        });
+        this.goodsCheck = false;
+        this.detailsCheck = false;
         this.specsCheck = true;
-        query.select('#specs').boundingClientRect((data) => {
-          console.log(`得到布局位置信息${JSON.stringify(data)}`);
-          console.log(`节点离页面顶部的距离为${data.top}`);
-          uni.pageScrollTo({
-            scrollTop: data.top,
-          });
-        }).exec();
       }
-      // document.getElementById(this.tabs[e].id).scrollIntoView();
     }
   }
 };

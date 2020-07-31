@@ -22,13 +22,13 @@ export default {
     /* 商品详情-查询是否已关注 */
     return jPostJson(urles.productQueryInter, data);
   },
-  productAddInter(data) {
+  productAddInter(code1, code2, code) {
     /* 商品详情-添加关注 */
-    return jPost(urles.productAddInter, data);
+    return jPost(urles.productAddInter(code1, code2, code));
   },
   productRemoveInter(data) {
     /* 商品详情-取消关注 */
-    return jPost(urles.productRemoveInter, data);
+    return jPostJson(urles.productRemoveInter, data);
   },
   productAllActivity(customerCode, sendtoCode, productCode) {
     /* 产品详情 */
