@@ -17,7 +17,7 @@ export default {
         },
         textNoMore: '-- 加载完毕 --',
         toTop: {
-          src: null
+          src: ''
         }
       },
       jMescrollDownOptions: {

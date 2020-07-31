@@ -51,6 +51,10 @@
       @cancel="specificationsCancel"
     >
     </j-version-specifications>
+    <m-toast
+      ref="toast"
+      :isdistance="true"
+    ></m-toast>
   </view>
 </template>
 
@@ -58,6 +62,7 @@
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
+import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import './css/jGoodsItem.scss';
 import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
 
@@ -65,7 +70,8 @@ export default {
   name: 'JGoodsItem',
   components: {
     JVersionSpecifications,
-    uniNumberBox
+    uniNumberBox,
+    MToast
   },
   props: {
     // 商品对象
@@ -210,13 +216,30 @@ export default {
       const productSpecificationsList = this.genProductSpecificationsList();
       if (productSpecificationsList.length) {
         // 每个产品的版本都调用加购物车接口
-        productSpecificationsList.forEach((product) => {
-          this.addToCart(product);
+        const addToCartPromise = productSpecificationsList.map(product => this.addToCart(product));
+        Promise.all(addToCartPromise).then((res) => {
+          const invalid = res.find(v => v.code !== '1');
+          // 全部加入成功则提示成功
+          if (!invalid) {
+            this.showAddToCartToast();
+          }
         });
       } else {
         // 如果没选版本规格，则加入一个普通版本的商品
-        this.addToCart();
+        this.addToCart().then(({ code }) => {
+          if (code === '1') {
+            this.showAddToCartToast();
+          }
+        });
       }
+    },
+    showAddToCartToast() {
+      /* 展示添加到购物车提示 */
+      this.$refs.toast.open({
+        type: 'success',
+        content: '加入购物车成功',
+        timeout: 2000,
+      });
     },
     addToCart(product) {
       /**
@@ -257,7 +280,7 @@ export default {
           number,
         };
       }
-      this.cartService.addToCart({
+      return this.cartService.addToCart({
         // 商品组合编码
         activityId,
         // 组合类型(1单品2组合3抢购4套餐5成套)
