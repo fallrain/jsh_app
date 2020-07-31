@@ -10,8 +10,12 @@
 <script>
 import orderListItem from '../../components/orderList/order-list-item';
 import JTab from '../../components/common/JTab';
-import { ORDER } from '../../store/mutationsTypes';
-import { mapMutations } from 'vuex';
+import {
+  ORDER
+} from '../../store/mutationsTypes';
+import {
+  mapMutations
+} from 'vuex';
 
 export default {
   name: 'orderList',
@@ -99,7 +103,7 @@ export default {
         orderDetail: this.orderListInfo[e]
       });
       uni.navigateTo({
-        url: `/pages/orderList/orderDetail?id=${this.orderListInfo[e]}`
+        url: '/pages/orderList/orderDetail'
       });
     },
     tabClick(e) {

@@ -9,8 +9,6 @@ export default {
   state: {
     // userInfo为模拟的用户信息
     userInfo: {
-    },
-    orderDetail: { // 订单详情页面信息，由订单列表页传入
     }
   },
   mutations: {

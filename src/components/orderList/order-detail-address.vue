@@ -2,24 +2,30 @@
   <view class="order-address-con">
     <view class="uni-flex uni-row padding-15 order-address-juzhong">
       <view class="col-10"><view class="order-detail-quan">付</view></view>
-      <view class="col order-detail-text">880010101954 青岛鸿程永泰商</view>
+      <view class="col order-detail-text">{{addressInfo.jshi_payto_code}} {{addressInfo.jshi_payto_name}}</view>
     </view>
     <view class="order-address-line"></view>
     <view class="uni-flex uni-row padding-15 order-address-juzhong">
       <view class="col-10"><view class="order-detail-quan">送</view></view>
-      <view class="order-detail-text">880010101954 青岛鸿程永泰商备份</view>
+      <view class="order-detail-text">{{addressInfo.jshi_sendto_code}} {{addressInfo.jshi_sendto_name}}</view>
     </view>
     <view class="order-address-line"></view>
     <view class="uni-flex uni-row padding-15 order-address-juzhong">
       <view class="col-10"><view class="order-detail-quan">收</view></view>
-      <view class="order-detail-text">880010101954 青岛市李沧区重庆南路2038号甲物流配送中心4号楼5单元302户</view>
+      <view class="order-detail-text">{{addressInfo.receivingAddress}}</view>
     </view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'orderDetailAddress'
+  name: 'orderDetailAddress',
+  addressInfo: {
+    type: Object,
+    default() {
+      return {};
+    }
+  }
 };
 </script>
 

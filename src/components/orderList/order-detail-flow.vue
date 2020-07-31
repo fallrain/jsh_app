@@ -3,122 +3,122 @@
     <view class="order-flow-tou">订单信息</view>
     <view class="order-flow-line"></view>
     <view class="order-flow-steps">
-      <view class="position-r" v-if="orderType==='1'||orderType==='2'||orderType==='3'||orderType==='4'">
-        <view v-show="'1'===orderCreation" class="order-detail-judge1"></view><!--已经进行完成的流程-xian-->
-        <view v-show="'0'===orderCreation" class="order-detail-judge2"></view><!--还未进行完成的流程-->
-        <view v-show="'1'===orderCreation" class="order-detail-judge3"></view><!--圆点-->
-        <view v-show="'0'===orderCreation" class="order-detail-judge4"></view>
-        <view v-show="'1'===orderCreation" class="order-detail-judge5"></view><!--圆点对号白底-->
-        <view v-show="'1'===orderCreation" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'||processJudgement.orderType==='4'">
+        <view v-show="'1'===processJudgement.orderCreation" class="order-detail-judge1"></view><!--已经进行完成的流程-xian-->
+        <view v-show="'0'===processJudgement.orderCreation" class="order-detail-judge2"></view><!--还未进行完成的流程-->
+        <view v-show="'1'===processJudgement.orderCreation" class="order-detail-judge3"></view><!--圆点-->
+        <view v-show="'0'===processJudgement.orderCreation" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.orderCreation" class="order-detail-judge5"></view><!--圆点对号白底-->
+        <view v-show="'1'===processJudgement.orderCreation" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">订单创建</view>
-          <view class="order-flow-steps__column-desc">创建时间：{{jshi_created_time}}</view>
+          <view class="order-flow-steps__column-desc">创建时间：{{processJudgement.jshi_created_time}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='1'||orderType==='2'||orderType==='3'">
-        <view v-show="'1'===orderReview" class="order-detail-judge1"></view>
-        <view v-show="'0'===orderReview" class="order-detail-judge2"></view>
-        <view v-show="'1'===orderReview" class="order-detail-judge3"></view>
-        <view v-show="'0'===orderReview" class="order-detail-judge4"></view>
-        <view v-show="'1'===orderReview" class="order-detail-judge5"></view>
-        <view v-show="'1'===orderReview" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'">
+        <view v-show="'1'===processJudgement.orderReview" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.orderReview" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.orderReview" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.orderReview" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.orderReview" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.orderReview" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">订单评审</view>
-          <view class="order-flow-steps__column-desc">评审时间：{{sap_judge_date}}</view>
+          <view class="order-flow-steps__column-desc">评审时间：{{processJudgement.sap_judge_date}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='1'||orderType==='2'||orderType==='3'">
-        <view v-show="'1'===factoryDelivery" class="order-detail-judge1"></view>
-        <view v-show="'0'===factoryDelivery" class="order-detail-judge2"></view>
-        <view v-show="'1'===factoryDelivery" class="order-detail-judge3"></view>
-        <view v-show="'0'===factoryDelivery" class="order-detail-judge4"></view>
-        <view v-show="'1'===factoryDelivery" class="order-detail-judge5"></view>
-        <view v-show="'1'===factoryDelivery" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'">
+        <view v-show="'1'===processJudgement.factoryDelivery" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.factoryDelivery" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.factoryDelivery" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.factoryDelivery" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.factoryDelivery" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.factoryDelivery" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">工厂发货</view>
-          <view class="order-flow-steps__column-desc">预计发货时间：{{sap_dn1date}}</view>
-          <view class="order-flow-steps__column-desc">发货时间：{{sap_ptd_send_date}}</view>
+          <view class="order-flow-steps__column-desc">预计发货时间：{{processJudgement.sap_dn1date}}</view>
+          <view class="order-flow-steps__column-desc">发货时间：{{processJudgement.sap_ptd_send_date}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='4'">
-        <view v-show="'1'===centralShipment" class="order-detail-judge1"></view>
-        <view v-show="'0'===centralShipment" class="order-detail-judge2"></view>
-        <view v-show="'1'===centralShipment" class="order-detail-judge3"></view>
-        <view v-show="'0'===centralShipment" class="order-detail-judge4"></view>
-        <view v-show="'1'===centralShipment" class="order-detail-judge5"></view>
-        <view v-show="'1'===centralShipment" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='4'">
+        <view v-show="'1'===processJudgement.centralShipment" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.centralShipment" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.centralShipment" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.centralShipment" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.centralShipment" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.centralShipment" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">中心发货</view>
-          <view class="order-flow-steps__column-desc">发货时间：{{sap_dn5date}}</view>
+          <view class="order-flow-steps__column-desc">发货时间：{{processJudgement.sap_dn5date}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='2'">
-        <view v-show="'1'===centerEntryTime" class="order-detail-judge1"></view>
-        <view v-show="'0'===centerEntryTime" class="order-detail-judge2"></view>
-        <view v-show="'1'===centerEntryTime" class="order-detail-judge3"></view>
-        <view v-show="'0'===centerEntryTime" class="order-detail-judge4"></view>
-        <view v-show="'1'===centerEntryTime" class="order-detail-judge5"></view>
-        <view v-show="'1'===centerEntryTime" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='2'">
+        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.centerEntryTime" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.centerEntryTime" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">中心入库</view>
-          <view class="order-flow-steps__column-desc">入库时间：{{sap_center_recieve_date}}</view>
+          <view class="order-flow-steps__column-desc">入库时间：{{processJudgement.sap_center_recieve_date}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='2'||orderType==='3'">
-        <view v-show="'1'===deductionTime" class="order-detail-judge1"></view>
-        <view v-show="'0'===deductionTime" class="order-detail-judge2"></view>
-        <view v-show="'1'===deductionTime" class="order-detail-judge3"></view>
-        <view v-show="'0'===deductionTime" class="order-detail-judge4"></view>
-        <view v-show="'1'===deductionTime" class="order-detail-judge5"></view>
-        <view v-show="'1'===deductionTime" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='2'||processJudgement.orderType==='3'">
+        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.deductionTime" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.deductionTime" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">扣款</view>
-          <view class="order-flow-steps__column-desc">扣款时间：{{jshi_pay_time}}</view>
+          <view class="order-flow-steps__column-desc">扣款时间：{{processJudgement.jshi_pay_time}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='1'||orderType==='2'||orderType==='3'||orderType==='4'">
-        <view v-show="'1'===customerSignIn" class="order-detail-judge1"></view>
-        <view v-show="'0'===customerSignIn" class="order-detail-judge2"></view>
-        <view v-show="'1'===customerSignIn" class="order-detail-judge3"></view>
-        <view v-show="'0'===customerSignIn" class="order-detail-judge4"></view>
-        <view v-show="'1'===customerSignIn" class="order-detail-judge5"></view>
-        <view v-show="'1'===customerSignIn" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'||processJudgement.orderType==='4'">
+        <view v-show="'1'===processJudgement.customerSignIn" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.customerSignIn" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.customerSignIn" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.customerSignIn" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.customerSignIn" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.customerSignIn" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">订单签收</view>
-          <view class="order-flow-steps__column-desc">预计到货时间：{{sap_reorder_date}}</view>
-          <view class="order-flow-steps__column-desc">签收时间：{{jshi_plan_in_date}}</view>
+          <view class="order-flow-steps__column-desc">预计到货时间：{{processJudgement.sap_reorder_date}}</view>
+          <view class="order-flow-steps__column-desc">签收时间：{{processJudgement.jshi_plan_in_date}}</view>
         </view>
       </view>
-      <view class="position-r" v-if="orderType==='1'||orderType==='2'||orderType==='3'||orderType==='4'">
-        <view v-show="'1'===invoiceOpening" class="order-detail-judge1"></view>
-        <view v-show="'0'===invoiceOpening" class="order-detail-judge2"></view>
-        <view v-show="'1'===invoiceOpening" class="order-detail-judge3"></view>
-        <view v-show="'0'===invoiceOpening" class="order-detail-judge4"></view>
-        <view v-show="'1'===invoiceOpening" class="order-detail-judge5"></view>
-        <view v-show="'1'===invoiceOpening" class="order-detail-judge6">
+      <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'||processJudgement.orderType==='4'">
+        <view v-show="'1'===processJudgement.invoiceOpening" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.invoiceOpening" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.invoiceOpening" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.invoiceOpening" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.invoiceOpening" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.invoiceOpening" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
           <view class="order-flow-steps__column-title">发票开具</view>
-          <view class="order-flow-steps__column-desc">金税开票时间：{{sap_sys_invoice_time}}</view>
-          <view class="order-flow-steps__column-desc">开票时间：{{sap_tax_invoice_time  }}</view>
+          <view class="order-flow-steps__column-desc">金税开票时间：{{processJudgement.sap_sys_invoice_time}}</view>
+          <view class="order-flow-steps__column-desc">开票时间：{{processJudgement.sap_tax_invoice_time  }}</view>
         </view>
       </view>
-      <view class="position-r" v-if="(orderType==='1'||orderType==='2'||orderType==='3'||orderType==='4')&&toVoid==='1'">
+      <view class="position-r" v-if="(processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'||processJudgement.orderType==='4')&&processJudgement.toVoid==='1'">
         <view class="order-detail-judge1"></view>
         <view class="order-detail-judge5"></view>
         <view class="order-detail-judge6">
@@ -144,21 +144,24 @@ export default {
   },
   props: {
     processJudgement: {
-      type: String
+      type: Object,
+      default() {
+        return {};
+      }
     }
   },
   data() {
     return {
-      orderType: '1', // 1 生产订单  2 信用  3 整车单据  4 库存订单  5 不属于上面的类型
-      orderCreation: '1', // 订单创建1234
-      orderReview: '1', // 订单评审123
-      centralShipment: '0', // 中心发货4
-      factoryDelivery: '0', // 工厂发货123
-      centerEntryTime: '0', // 中心入库时间2
-      deductionTime: '0', // 扣款时间23
-      customerSignIn: '0', // 客户签收1234
-      invoiceOpening: '0', // 发票开具1234
-      toVoid: '1', // 作废1234
+      // orderType: '1', // 1 生产订单  2 信用  3 整车单据  4 库存订单  5 不属于上面的类型
+      // orderCreation: '1', // 订单创建1234
+      // orderReview: '1', // 订单评审123
+      // centralShipment: '0', // 中心发货4
+      // factoryDelivery: '0', // 工厂发货123
+      // centerEntryTime: '0', // 中心入库时间2
+      // deductionTime: '0', // 扣款时间23
+      // customerSignIn: '0', // 客户签收1234
+      // invoiceOpening: '0', // 发票开具1234
+      // toVoid: '1', // 作废1234
       type: 1, // 1:五项；2：4项::::
       activeColor: '#3388FF'
     };
