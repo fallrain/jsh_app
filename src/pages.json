@@ -154,7 +154,7 @@
     },
     {
       "text": "我的",
-      "pagePath": "pages/mine/myBaseInfo",
+      "pagePath": "pages/productDetail/productDetail",
       "iconPath": "assets/img/tabbar/shouye.png",
       "selectedIconPath": "assets/img/tabbar/shouye-actived.png"
     }

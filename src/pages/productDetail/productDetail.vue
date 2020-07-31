@@ -18,8 +18,8 @@
       <view class="uni-flex uni-row padding-15">
         <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥ {{detailInfo.price.invoicePrice}}</view>
         <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice}}</view>
-        <view v-if="!ISGUANZHU" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
-        <view v-else class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"></view>
+        <view @click="guanZhu" v-if="!ISGUANZHU" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
+        <view @click="guanZhu" v-else class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"></view>
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
         <view class="text modeller">
@@ -194,8 +194,8 @@ export default {
   onLoad() {
   },
   created() {
-    this.getProductDetail('GA0SZ0009', '8800012497', '8800012497');// 获取产品详情
-    this.getHostLost('8800012497', '8800012497');// 获取热门推荐列表
+    this.getProductDetail('GA0SZB000', '8700010462', '8700010462');// 获取产品详情
+    this.getHostLost('8700010462', '8700010462');// 获取热门推荐列表
     this.productQueryInter();// 产品是否关注
     this.productStock();// 获取数量页面的库存字段
   },
@@ -280,8 +280,8 @@ export default {
     },
     async productQueryInter() {
       const { code, data } = await this.productDetailService.productQueryInter({
-        account: '8800012497',
-        productCodeList: ['GA0SZ0009']
+        account: '8700010462',
+        productCodeList: ['GA0SZB000']
       });
       if (code === '1') {
         if (data.length > 0) {
@@ -293,14 +293,17 @@ export default {
     },
     async productStock() {
       const { code, data } = await this.productDetailService.productStock({
-        productCodes: ['GA0SZ0009'],
-        saletoCode: '8800012497',
-        sendtoCode: '8800012497'
+        productCodes: ['GA0SZB000'],
+        saletoCode: '8700010462',
+        sendtoCode: '8700010462'
       });
       if (code === '1') {
         this.stock = data;
         console.log(this.stock);
       }
+    },
+    guanZhu() {
+      //是否关注
     },
     changePic(e) { // 轮播图切换显示
       this.current = e.detail.current;
