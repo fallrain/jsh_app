@@ -47,6 +47,7 @@ function getGoodsType() {
     isScf: '融资',
   };
 }
+
 function getGoodsTag() {
   /* 商品标签 */
   return {
@@ -59,7 +60,23 @@ function getGoodsTag() {
   };
 }
 
+function getGoodsPriceType() {
+  /* 商品标签 */
+  return {
+    PT: '普通价格',
+    TJ: '特价',
+    GC: '工程',
+    YJCY: '样机出样(折扣样机)',
+    MFJK: '免费机壳',
+    MFYJ: '免费样机',
+    MFYJJS: '免费样机结算',
+    YPJ: '样品机',
+    CTYJ: '成套样机'
+  };
+}
+
 export {
+  getGoodsPriceType,
   getGoodsTag,
   getGoodsType
 };
