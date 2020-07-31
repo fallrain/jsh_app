@@ -15,11 +15,14 @@ export default {
           num: 0,
           size: 10
         },
-        textNoMore: '-- 加载完毕 --'
+        textNoMore: '-- 加载完毕 --',
+        toTop: {
+          src: null
+        }
       },
       jMescrollDownOptions: {
         auto: true
-      }
+      },
     };
   },
   methods: {

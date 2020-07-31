@@ -58,7 +58,29 @@
     </view>
     <j-version-specifications
       :show.sync="isShowSpecifications"
-    ></j-version-specifications>
+    >
+      <template #head>
+        <view class="jVersionSpecifications-pop-head">
+          <view class="jVersionSpecifications-pop-head-left">
+            <image src="@/assets/img/goods/example-fridge.jpg"></image>
+          </view>
+          <view class="jVersionSpecifications-pop-head-cnt">
+            <view class="jVersionSpecifications-pop-head-cnt-title">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高高品质家用静音全自动10KG洗烘一体高高品质
+            </view>
+            <view class="mt16 jVersionSpecifications-pop-head-cnt-item">
+              <view class="jVersionSpecifications-pop-head-cnt-text">建议零售价：</view>
+              <view class="jVersionSpecifications-pop-head-cnt-price">¥5920.00</view>
+              <view class="jVersionSpecifications-pop-head-cnt-text ml20">供价：￥ 4099.00</view>
+            </view>
+            <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
+              <view class="jVersionSpecifications-pop-head-cnt-text">台返 ：0.00</view>
+              <view class="jVersionSpecifications-pop-head-cnt-text ml20">返利：FHQ</view>
+              <view class="jVersionSpecifications-pop-head-cnt-text ml20">直扣率：0.70%</view>
+            </view>
+          </view>
+        </view>
+      </template>
+    </j-version-specifications>
   </view>
 </template>
 
@@ -78,11 +100,18 @@ export default {
     uniNumberBox
   },
   props: {
+    // 商品数据
     goods: {
       type: Object
     },
+    // 商品索引
     index: {
       type: [String, Number]
+    },
+    // 所有版本的价格
+    allPrice: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {

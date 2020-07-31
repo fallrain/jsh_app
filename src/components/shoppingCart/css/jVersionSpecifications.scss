@@ -1,8 +1,25 @@
 .jVersionSpecifications-pop {
   position: relative;
-  padding-top: 42px;
+  padding-top: 24px;
   padding-bottom: 120px;
   background: #fff;
+}
+
+.jVersionSpecifications-head {
+  justify-content: space-between;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.jVersionSpecifications-head-title {
+  font-size: 30px;
+  line-height:42px;
+  color: #333;
+}
+
+.jVersionSpecifications-head-title-icon {
+  color: $theme-color;
+  font-size: 24px;
 }
 
 .jVersionSpecifications-pop-head {
@@ -57,7 +74,7 @@
 
 .jVersionSpecifications-pop-detail-wrap {
   padding-left: 24px;
-  max-height: 766px;
+  max-height: 666px;
   overflow-y: auto;
 }
 

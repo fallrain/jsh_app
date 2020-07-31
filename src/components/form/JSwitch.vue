@@ -48,7 +48,6 @@ export default {
   },
   watch: {
     active(val) {
-      debugger
       this.forwardEnd = val;
     }
   },
