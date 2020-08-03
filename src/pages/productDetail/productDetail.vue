@@ -1,5 +1,5 @@
 <template>
-  <view @touchmove="move">
+  <view>
     <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">
       <view @click="checkCut(0)" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
       <view @click="checkCut(1)" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
@@ -157,7 +157,7 @@ export default {
       goodsCheck: true,
       specsCheck: false,
       detailsCheck: false,
-      isF: false, // 顶部导航是否显示
+      isF: true, // 顶部导航是否显示
       current: 0, // 轮播图第几张
       mode: 'round', // 轮播图底部按钮样式
       hostList: [], // 热门推荐横向列表
@@ -180,16 +180,16 @@ export default {
       detailsHight: 0
     };
   },
-  onPageScroll(e) {
-    if (e.scrollTop > 10) {
-      this.isF = false;
-      this.goodsCheck = true;
-      this.specsCheck = false;
-      this.detailsCheck = false;
-    } else {
-      this.isF = true;
-    }
-    this.scrollHight = e.scrollTop;
+  onPageScroll() {
+    // if (e.scrollTop > 10) {
+    //   this.isF = false;
+    //   this.goodsCheck = true;
+    //   this.specsCheck = false;
+    //   this.detailsCheck = false;
+    // } else {
+    //   this.isF = true;
+    // }
+    // this.scrollHight = e.scrollTop;
     // console.log(uni.getSystemInfoSync().screenHeight)
   },
   onLoad() {
@@ -208,6 +208,7 @@ export default {
     async getProductDetail(codePro, codeSale, codeSend) {
       const { code, data } = await this.productDetailService.productDetail(codePro, codeSale, codeSend);
       if (code === '1') {
+        this.productNum = 1;
         this.detailInfo = data;
         this.footButtong.isSale = this.detailInfo.product.isSale;
         if (this.detailInfo.activities.length > 0) {
@@ -371,10 +372,10 @@ export default {
       }
       console.log(this.CheckActivityInfo);
     },
-    checkedShip(e) { // 选择的地址
+    checkedShip(list, e) { // 选择的地址
+      this.ShipInfo = this.deliveryAddressList[e].name;
+      this.deliveryAddressList = list;
       this.getProductDetail('GA0SZB000', '8700010462', '8700010462');// 获取产品详情
-      this.ShipInfo = e;
-      // this.deliveryAddressList = 'list';
       // this.curChoseDeliveryAddress = 'item';
     },
     checkCut(e) {

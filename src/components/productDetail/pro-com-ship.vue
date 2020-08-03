@@ -6,38 +6,10 @@
         <view class="top-ship-but">X</view>
       </view>
       <view class="sorrowC-ship">
-        <view @click="checkAct('11')">
+        <view @click="checkAct(index)" v-for="(ship,index) in info" :key="index">
           <view class="uni-flex uni-row textSenRow-ship">
-            <view class="textTick-ship col-15 iconfont icontick"></view>
-            <view class="textRow-ship col-80">(8800212607)李沧区重庆中路420号</view>
-          </view>
-        </view>
-        <view class="line-ship"></view>
-        <view @click="checkAct('11')">
-          <view class="uni-flex uni-row textSenRow-ship ">
-            <view class="textTick-ship col-15 iconfont icontick"></view>
-            <view class="textRow-ship col-80">(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室</view>
-          </view>
-        </view>
-        <view class="line-ship"></view>
-        <view @click="checkAct('11')">
-          <view class="uni-flex uni-row textSenRow-ship">
-            <view class="textTick-ship col-15 iconfont icontick"></view>
-            <view class="textRow-ship col-80">(8800212607)李沧区黑龙江中路342号甲A栋G座2039室</view>
-          </view>
-        </view>
-        <view class="line-ship"></view>
-        <view @click="checkAct('11')">
-          <view class="uni-flex uni-row textSenRow-ship">
-            <view class="textTick-ship col-15 iconfont icontick"></view>
-            <view class="textRow-ship col-80">(8800212607)李沧区重庆中路420号</view>
-          </view>
-        </view>
-        <view class="line-ship"></view>
-        <view @click="checkAct('11')">
-          <view class="uni-flex uni-row textSenRow-ship">
-            <view class="textTick-ship col-15 iconfont icontick" :class="checkShip ? 'cheched' :''"></view>
-            <view class="textRow-ship col-80" :class="checkShip ? 'cheched' :''">(8800212607)李沧区重庆中路420号</view>
+            <view class="textTick-ship col-15 iconfont icontick" :class="ship.checked ? 'cheched' :''"></view>
+            <view class="textRow-ship col-80" :class="ship.checked ? 'cheched' :''">{{ship.name}}</view>
           </view>
         </view>
         <view class="line-ship"></view>
@@ -77,11 +49,6 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      checkShip: false
-    };
-  },
   methods: {
     close() { // 关闭按钮
       console.log(this.info);
@@ -90,10 +57,13 @@ export default {
     change({ show }) {
       this.$emit('update:show', show);
     },
-    checkAct() { // 选择活动
-      this.checkShip = !this.checkShip;
+    checkAct(index) { // 选择活动
+      this.info.forEach((inf) => {
+        inf.checked = false;
+      });
+      this.info[index].checked = true;
       this.$emit('update:show', false);
-      this.$emit('checkedShip', this.checkShip);
+      this.$emit('checkedShip', this.info, index);
     },
   }
 };
