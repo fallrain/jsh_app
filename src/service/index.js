@@ -9,6 +9,7 @@ import orderServer from './order/order.server';
 import cartService from './cart/cart.service';
 // import transfergoodsService from './transfergoods/transfergoods.service';
 import transferpriceService from './transfergoods/transferprice.service';
+import trafficService from './traffic/traffic.service';
 
 
 export default {
@@ -35,6 +36,8 @@ export default {
     // 调货列表
     // Vue.prototype.transfergoodsService = transfergoodsService
     // 调货列表价格
-    Vue.prototype.transferpriceService = transferpriceService
+    Vue.prototype.transferpriceService = transferpriceService;
+    // todo 服务名待定
+    Vue.prototype.trafficService = trafficService;
   }
 };
