@@ -35,6 +35,7 @@
           :index="index"
           :saletoCode="userInf.saletoCode"
           :sendtoCode="userInf.sendtoCode"
+          :allPrice="item.$allPrice"
           @change="goodsChange"
         ></j-goods-item>
       </view>
@@ -215,7 +216,6 @@ export default {
     };
   },
   created() {
-    debugger;
     this.getPageInf();
   },
   computed: {
@@ -326,6 +326,7 @@ export default {
           // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
           curList.forEach((v) => {
             v.$PtPrice = allPriceData[v.productCode].pt;
+            v.$allPrice = allPriceData[v.productCode];
           });
         }
         if (stockRes.code === '1') {

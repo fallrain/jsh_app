@@ -37,6 +37,12 @@
     height: 40px;
     line-height: 40px;
   }
+
+  .uni-popup {
+    .uni-transition {
+      bottom: var(--window-bottom) !important;
+    }
+  }
 }
 
 .jGoodsItem-left {

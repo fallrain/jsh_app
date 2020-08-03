@@ -1,48 +1,118 @@
 <template>
     <view class="transferGoods">
-        <view class="transfer-search">
-            <!-- <uni-search-bar :radius="100" @confirm="search"  cancelButton="none" bgColor="#fff" class="transfer-input"></uni-search-bar> -->
-            <input type="text" class="transfer-input" placeholder="冰箱" placeholder-style="text-align:center">
-            <button class="transfer-btn">搜索</button>
-        </view>
-        <transfer-goods-head
-         class="mb12"
-         :tabs="tabs"
-         @tabClick="tabClick" 
-        ></transfer-goods-head>
-        <view class="goodsList-items-wrap">
-            <transfer-goods-item
-                v-for="(item,index) in list"
-                :key="index"
-                :goods="item"
-            ></transfer-goods-item>
-        </view>
+      <view class="transfer-search">
+          <j-search-input
+            v-model="filterForm.name"
+            @search="silentReSearch"
+          ></j-search-input>
+          <button
+            type="button"
+            class="transfer-btn"
+            @tap="silentReSearch"
+          >搜索
+          </button>
+      </view>
+      <transfer-goods-head
+          class="mb12"
+          :tabs="tabs"
+          @tabClick="tabClick" 
+      ></transfer-goods-head>
 
-    </view>
+      <mescroll-body
+        ref="mescrollRef"
+      >
+        <!-- 产品列表 -->
+        <view class="transferList-items-wrap" v-if="list">
+          <transfer-goods-item
+            v-for="(item,index) in list"
+            :key="index"
+            :goods="item"
+          ></transfer-goods-item>
+        </view>
+        <view v-else>暂无数据</view>
+      </mescroll-body>
+      <!-- 抽屜 -->
+    <t-drawer
+      :show.sync="isShowGoodsFilterDrawer"
+      @filterConfirm="filterConfirm"
+      @filterReset="filterReset"
+    >
+      <template>
+        <t-drawer-filter-item
+          v-for="(item,index) in filterList"
+          :key="index"
+          :filterItem="item"
+          :index="index"
+          @change="filterListChange"
+        ></t-drawer-filter-item>
+        <view class="transferList-drawer-filter-head-ads-wrap">
+          <view
+            class="transferList-drawer-filter-head"
+            @tap="showDeliveryAddress"
+          >
+            <view>
+              <text>配送至</text>
+            </view>
+            <i class="iconfont iconyou transferList-drawer-filter-head-icon-right"></i>
+          </view>
+          <view class="transferList-drawer-filter-head-ads">{{curChoseDeliveryAddress.name}} </view>
+        </view>
+        <view class="transferList-drawer-filter-head-ads-wrap">
+          <view class="transferList-drawer-filter-head">
+            <view>
+              <text>价格区间</text>
+            </view>
+          </view>
+          <view class="transferList-drawer-filter-price-range">
+            <input
+              class="transferList-drawer-filter-price-ipt"
+              type="number"
+              placeholder="最低价格"
+              v-model="filterForm.lowPrice"
+            >
+            <view class="transferList-drawer-filter-price-line"></view>
+            <input
+              class="transferList-drawer-filter-price-ipt"
+              type="number"
+              placeholder="最高价格"
+              v-model="filterForm.highPrice"
+            >
+          </view>
+        </view>
+      </template>
+    </t-drawer>
+      
+        
+  </view>
 
     
 </template>
 <script>
-// import {
-//   uniSearchBar
-// } from '@dcloudio/uni-ui';
+
 import transferGoodsHead from './transferGoodsHead';
 import transferGoodsItem from './transferGoodsItem';
-// import {jGet} from '../../lib/request';
+import JSearchInput from '../../components/form/JSearchInput';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import TDrawer from '../../components/transfer/TDrawer';
+import TDrawerFilterItem from '../../components/transfer/TDrawerFilterItem';
+import './css/transferGoods.scss';
 export default {
     name:'transferGoods',
     components:{
-        transferGoodsHead,
-        transferGoodsItem
-        // uniSearchBar
+      transferGoodsHead,
+      transferGoodsItem,
+      JSearchInput,
+      MescrollBody,
+      TDrawer,
+      TDrawerFilterItem
 
     },
     data() {
      return {
-      list: [],
+      list: null,
       transferList:[],
       transferPriceList:[],
-
+      condList: [],
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
       tabs: [
@@ -62,88 +132,82 @@ export default {
           handler: 'showFilter'
         }
       ],
+      // 筛选抽屉
+      isShowGoodsFilterDrawer: false,
       filterList: [
         {
-          name: '筛选',
-          isExpand: true,
-          type: 'checkbox',
-          data: [
-            {
-              key: '1',
-              value: '抢单',
-              isChecked: false
-            },
-            {
-              key: '2',
-              value: '反向定制',
-              isChecked: false
-            }, {
-              key: '3',
-              value: '套餐',
-              isChecked: false
-            }, {
-              key: '4',
-              value: '组合',
-              isChecked: false
-            }, {
-              key: 'sp',
-              value: '商品',
-              isChecked: false
-            }, {
-              key: 'CHD',
-              value: '特价',
-              isChecked: false
-            },
-            {
-              key: 'gc',
-              value: '工程',
-              isChecked: false
-            },
-            {
-              key: 'yj',
-              value: '样机',
-              isChecked: false
-            },
-            {
-              key: 'rz',
-              value: '融资',
-              isChecked: false
-            }
-          ]
-        },
-        {
-          name: '筛选',
+          name: '',
           isExpand: true,
           type: 'radio',
           data: [
             {
               key: '1',
-              value: '机壳',
+              value: '海尔',
+              isChecked: false
+            },
+            {
+              key: '2',
+              value: '卡萨帝',
               isChecked: false
             }, {
-              key: '2',
-              value: '巨划算',
+              key: '3',
+              value: '施特劳斯',
               isChecked: false
+            }, {
+              key: '4',
+              value: '统帅',
+              isChecked: true
             }
           ]
         },
         {
-          name: '有货商品',
+          name: '',
           isExpand: true,
-          type: 'checkbox',
+          type: 'radio',
           data: [
             {
               key: '1',
-              value: 'RRS库存',
+              value: '洗衣机',
               isChecked: false
             }, {
               key: '2',
-              value: 'TC库存',
+              value: '热水器',
+              isChecked: false
+            },{
+              key: '3',
+              value: '冰箱',
+              isChecked: false
+            }, {
+              key: '4',
+              value: '冷柜',
+              isChecked: true
+            },
+            {
+              key: '5',
+              value: '电视',
+              isChecked: false
+            },
+            {
+              key: '6',
+              value: '空调',
               isChecked: false
             }
           ]
         }
-      ]
+      ],
+       // 筛选栏表单
+      filterForm: {
+        // 搜索栏
+        name: '',
+        // 最低价
+        lowPrice: '',
+        // 最高价
+        highPrice: ''
+      },
+      // 配送地址数据
+      deliveryAddressList: [],
+      // 当前选中的配送地址
+      curChoseDeliveryAddress: {}
       
      }
     },
@@ -153,9 +217,20 @@ export default {
   },
   methods: {
     getPageInf() {
+      this.setFilterData();
       this.gettransferList();
       this.gettransferPriceList();
+      
     },
+      silentReSearch() {
+      /* 静默搜索 */
+      this.mescroll.resetUpScroll(true);
+    },
+    // async upCallback(pages) {
+    //   /* 上推加载 */
+    //   // const scrollView = await this.getGoodsList(pages);
+    //   this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+    // },
     async gettransferList() {
       const { code, data } = await this.transfergoodsService.transferList({
        timestamp: 1595922509073,
@@ -180,12 +255,18 @@ export default {
         stock:'',
       });
       const page = JSON.parse(data.data)
+      
       if (code === '1') {
+        console.log(page)
         const {
-          data
+          data,
+          condition
         } = page;
         this.list = data;
-        console.log(this.list)
+        this.condList = condition
+     
+       
+        // console.log(this.list)
       }
     },
     async gettransferPriceList() {
@@ -216,23 +297,50 @@ export default {
         //   data
         // } = page;
         // this.list = data;
-        console.log(data)
+        // console.log(data)
       }
     },
-
+  
 
     tabClick(handler) {
       if (handler) {
         this[handler]();
       }
     },
+    setFilterData() {
+      /* 设置右侧抽屉筛选的数据 */
+      // 商品删选类型
+      
+      // // 商品标签
+      // const goodsTagData = getGoodsTag();
+      // this.filterList[1].data = Object.keys(goodsTagData).map(key => ({
+      //   key,
+      //   value: goodsTagData[key],
+      //   isChecked: false
+      // }));
+    },
     showFilter() {
       /* 展示filter */
-      this.$refs.goodsFilterDrawer.open();
+       this.isShowGoodsFilterDrawer = true;
     },
-    toggleExpand(item) {
-      /* 展开或者收起 */
-      item.isExpand = !item.isExpand;
+    filterListChange(item, index) {
+      /* 抽屉筛选选中change */
+      this.$set(this.filterList, index, item);
+    },
+    filterConfirm() {
+      /* 抽屉筛选确认 */
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
+    },
+    filterReset() {
+      /* 抽屉筛选重置 */
+      this.filterList.forEach((item) => {
+        item.data.forEach((v) => {
+          v.isChecked = false;
+        });
+      });
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
     },
     choose(filterItem, list, type) {
       /* 选择选项 */
@@ -257,168 +365,14 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-// ::v-deep .uni-searchbar{
-//     height: 80px;
-//   }
-.transfer-input{
-    width:520px;
-    height:56px;
-    background:rgba(255,255,255,1);
-    border-radius:28px;
-    border:1px solid rgba(189,189,189,1);
-    z-index: 100;
-    margin:24px 22px 24px 24px;
+<style  scoped>
+/deep/ .jSearchInput-wrap{
+  margin:24px 22px 24px 24px;
+  z-index:100;
  }
-.transfer-search{
-    background:rgba(255,255,255,1);
-    display:flex;
- 
- .transfer-btn{
-    width:160px;
-    height:56px;
-    background:rgba(237,40,86,1);
-    border-radius:28px;
-    font-size:28px;
-    font-family:PingFangSC-Regular,PingFang SC;
-    font-weight:400;
-    color:rgba(255,255,255,1);
-    line-height:56px;
-    z-index: 100;
-    margin:24px 24px 24px 0px;
+/deep/ .jSearchInput{
+   margin:24px 22px 24px 24px;
+   z-index:100;
  }
-}
-.goodsList {
-  min-height: 100vh;
-  background: #F5F5F5;
-
-  .uni-drawer__content {
-    width: 608px !important;
-  }
-}
-
-.goodsList-drawer {
-  position: relative;
-  height: 100%;
-}
-
-.goodsList-drawer-cnt-list {
-  height: calc(100vh - 160px);
-  overflow-y: auto;
-  padding-left: 32px;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.goodsList-drawer-filter-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 30px;
-  color: #666;
-  height: 42px;
-  margin-bottom: 24px;
-  margin-top: 32px;
-  padding-right: 30px;
-
-  .iconxia {
-    font-size: 20px;
-  }
-
-  .reverse {
-    display: inline-block;
-    transform: rotateX(180deg);
-  }
-}
-
-.goodsList-drawer-filter-head-icon-right {
-  color: #999;
-  font-size: 28px;
-}
-
-.goodsList-drawer-filter-head-tips {
-  font-size: 24px;
-  color: #999;
-}
-
-.goodsList-drawer-filter-list {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-
-.goodsList-drawer-filter-list-item {
-  width: 160px;
-  height: 52px;
-  margin-bottom: 32px;
-  margin-right: 32px;
-  background: #F7F7F8;
-  border-radius: 26px;
-  color: #666;
-  text-align: center;
-  line-height: 60px;
-  font-size: 24px;
-
-
-  &.active {
-    color: #ED2856;
-    background: #FFF5F7;
-  }
-
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
-}
-
-.goodsList-drawer-filter-head-ads-wrap {
-  padding-right: 30px;
-
-  .goodsList-drawer-filter-head {
-    padding-right: 0;
-  }
-}
-
-.goodsList-drawer-filter-head-ads {
-  width: 100%;
-  height: 52px;
-  line-height: 52px;
-  background: #F7F7F8;
-  border-radius: 24px;
-  color: #666;
-  font-size: 24px;
-  padding-left: 32px;
-  padding-right: 32px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.goodsList-drawer-filter-price-range {
-  display: flex;
-  align-items: center;
-}
-
-
-.goodsList-drawer-filter-price-ipt {
-  width: 160px;
-  height: 52px;
-  background: #fff;
-  border-radius: 24px;
-  border: 1px solid #DBDBDB;
-  padding-left: 30px;
-  padding-right: 30px;
-  font-size: 24px;
-}
-
-.goodsList-drawer-filter-price-line {
-  width: 52px;
-  height: 1px;
-  background: #DBDBDB;
-  margin-left: 34px;
-  margin-right: 34px;
-}
-
 
 </style>
