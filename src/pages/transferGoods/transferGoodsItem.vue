@@ -7,6 +7,7 @@
       <view class="jGoodsItem-cnt-goodsName j-goods-title">
         {{goods.name}}
       </view>
+      
       <view class="jGoodsItem-cnt-price-tips">
         <view class="jGoodsItem-cnt-price-tips-item">直扣：92.31%</view>
         <view class="jGoodsItem-cnt-price-tips-item">返利：COM</view>
@@ -18,15 +19,14 @@
         <view class="jGoodsItem-cnt-price-inf-item">库存：3434</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
-        <uni-number-box></uni-number-box>
+        <uni-number-box
+          @change="goodsNumChange"
+        ></uni-number-box>
         <button
           class="jGoodsItem-cnt-opts-primary ml26"
           type="button"
+          @tap="addTransfer"
         >加入调货</button>
-        <!-- <button
-          class="jGoodsItem-cnt-opts-default ml26"
-          type="button"
-        >加入调货</button> -->
       </view>
     </view>
   </view>
@@ -43,13 +43,98 @@ export default {
   components: {
     uniNumberBox
   },
+  data() {
+    return {
+      ischecked: false
+    }
+  },
   props: {
     // 商品对象
     goods: {
       type: Object,
       default: () => {}
     }
+  },
+  methods:{
+    addTransfer(){
+       /* 添加到购物车 */
+       /**
+       ***添加到购物车
+       *  product:Object
+       *  是否有信用模式(0否1是)
+       *  creditModel? : number,
+       *  产品购买的数量
+       *  number,
+       *  价格类型
+       *  priceType: string,
+       *  价格版本号
+       *  priceVersion: string,
+       *  产品编码
+       *  productCode,
+       *  调货版本号
+       *  stockVersion?: string,
+       *  是否有周承诺(0否1是)
+       *  weekPromise?: number
+       *  */
+      // const {
+      //   productCode,
+      //   activityType,
+      //   activityId,
+      //   priceType,
+      //   number
+      // } = this.goods;
+      // debugger;
+      // const {
+      //   saletoCode,
+      //   sendtoCode
+      // } = this;
+      // this.cartService.addToCart({
+      //   // 商品组合编码
+      //   activityId,
+      //   // 组合类型(1单品2组合3抢购4套餐5成套)
+      //   activityType: activityType || 1,
+      //   // 购买的数量(组合就是组合的数量)
+      //   number,
+      //   //  促销活动价格类型
+      //   //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
+      //   priceType,
+      //   // 价格版本号
+      //   priceVersion: '',
+      //   // 产品编码
+      //   productCode,
+      //   productList: [{
+      //     // 是否有信用模式(0否1是)
+      //     creditModel: 1,
+      //     //  产品购买的数量
+      //     number,
+      //     //  价格类型
+      //     priceType: 'PT',
+      //     // 价格版本号
+      //     priceVersion: '',
+      //     // 产品编码
+      //     productCode,
+      //     //  调货版本号
+      //     stockVersion: '',
+      //     //  是否有周承诺(0否1是)
+      //     weekPromise: '0'
+      //   }],
+      //   // 售达方编码
+      //   saletoCode,
+      //   // 送达方编码
+      //   sendtoCode,
+      //   // 版本调货版本号
+      //   transferVersionCode: '',
+      //   // 促销活动版本号
+      //   versionCode: '',
+      // });
+    },
+     goodsNumChange(val) {
+      /* 商品数量change */
+      this.goods.number = val;
+      this.$emit('change', this.goods, this.index);
+    }
   }
+
 };
 </script>
 <style lang="scss" scoped>

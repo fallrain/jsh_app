@@ -13,6 +13,7 @@ const data = [
   'pages/orderList/orderList',
   'pages/messageInfoList/messageInfoList',
   'pages/transferGoods/transferGoods',
+  'pages/transferGoods/transferShoppingCart',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo'
 ];

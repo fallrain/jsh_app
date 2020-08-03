@@ -1,13 +1,12 @@
 .produceDetailItem {
   margin-bottom: 24px;
   padding-top: 16px;
-  padding-left: 24px;
-  padding-right: 24px;
   border-radius: 14px;
   background: #fff;
 }
 
 .produceDetailItem-head {
+  padding: 0 10px 0 10px;
   position: relative;
   display: flex;
   align-items: center;
@@ -33,8 +32,8 @@
 .produceDetailItem-head-text {
   color: #666666;
   font-size: 24px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .produceDetailItem-head-text-status {
   color: $theme-color;
@@ -151,6 +150,15 @@
   align-items: center;
   padding-top: 10px;
   padding-bottom: 20px;
+}
+
+.produceDetailItem-btm-row2 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #D8D8D8;
 }
 
 .produceDetailItem-btm {

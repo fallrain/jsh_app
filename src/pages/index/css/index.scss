@@ -1,7 +1,8 @@
 .homepage{
     width:750px;
-    // height:2026px;
+    height:1900px;
     background:rgba(245,245,245,1);
+    position: relative;
     .homepage-top{
         width:750px;
         height:425px;
@@ -17,9 +18,13 @@
           .homepage-top-head-name{       
               width:90px;
               height:28px;
-              color:#fff;
+            //   color:#fff;
               font-size:28px;
               margin:8px 16px 8px 0px;
+            //   .top-head-name-image{
+            //       width:100px;
+            //       height:100px;
+            //   }
           }
           .homepage-top-head-input{
               width:514px;
@@ -220,28 +225,28 @@
             }
     }
     // 资讯
-        .homepage-info{
-            .homepage-info-name{
-              margin:32px 20px 26px 24px;
-              .homepage-info-title{
-                font-size:34px;
-                color:rgba(237,40,86,1);
-                font-weight:700;
-                font-family:PingFangSC-Regular,PingFang SC;
-                font-style:italic;
-               margin-right:454px;
+    .homepage-info{
+        .homepage-info-name{
+            margin:32px 20px 26px 24px;
+            .homepage-info-title{
+            font-size:34px;
+            color:rgba(237,40,86,1);
+            font-weight:700;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-style:italic;
+            margin-right:454px;
 
-              }
-              .homepage-info-more{
-                font-size:14px;
-                font-family:PingFangSC-Regular,PingFang SC;
-                font-weight:400;
-                color:rgba(102,102,102,1);
-                line-height:18px;
-                letter-spacing:2px;
-               
-              }
             }
+            .homepage-info-more{
+            font-size:14px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(102,102,102,1);
+            line-height:18px;
+            letter-spacing:2px;
+            
+            }
+        }
             .homepage-info-list{
                 display:flex;
                 margin-left:24px;
@@ -268,16 +273,19 @@
                     font-family:PingFangSC-Regular,PingFang SC;
                     font-weight:400;
                     color:rgba(153,153,153,1);
-                    line-height:34px;
-                    
-                }  
-    
-            }
-            
+                    line-height:34px;                   
+                }     
+            }           
         }
-
-
-  }
+    }
+    .homepage-nav{
+        width:130px;
+        height:130px;
+        position:fixed;
+        top:910px;
+        right:0px;
+        z-index:500px;
+    }
       
 }
 
