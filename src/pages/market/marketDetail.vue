@@ -207,7 +207,6 @@ export default {
     isUpToCondition() {
       // 数量配比
       if (this.currentDetail.proportionType === '1') {
-        debugger
         if (this.computeMain === 0 && this.computePB === 0) {
           return true;
         }

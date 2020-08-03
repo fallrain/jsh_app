@@ -128,6 +128,12 @@
         "navigationBarBackgroundColor": "#ffffff"
       }
 
+    },
+    {
+      "path": "pages/sampleMachine/sampleMachineList",
+      "style": {
+        "navigationBarTitleText": "样品机列表"
+      }
     }
 
   ],
