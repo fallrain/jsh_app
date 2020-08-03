@@ -103,7 +103,7 @@ export default {
       }
     },
     stock: {// 商品库存信息
-      type: Array,
+      type: Object,
       default() {
         return {};
       }

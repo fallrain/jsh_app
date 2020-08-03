@@ -2,18 +2,24 @@
   <view class="order-base-con">
     <view class="order-base-tou">订单信息</view>
     <view class="order-base-line"></view>
-    <view class="order-base-inf">订单号：8570384729</view>
-    <view class="order-base-inf">物流单号：B70U21017</view>
-    <view class="order-base-inf">GVS单号：3654534532</view>
-    <view class="order-base-inf">满足方式：周承诺</view>
-    <view class="order-base-inf">版本调货：否</view>
-    <view class="order-base-inf">信用模式：否</view>
+    <view class="order-base-inf">订单号：{{baseInfo.bstnk}}</view>
+    <view class="order-base-inf">物流单号：{{baseInfo.dnLogistics}}</view>
+    <view class="order-base-inf">GVS单号：{{baseInfo.jshi_gvs_so_order_no}}</view>
+    <view class="order-base-inf">满足方式：{{baseInfo.stockTypeShow}}</view>
+    <view class="order-base-inf">版本调货：{{baseInfo.credit_model_all}}</view>
+    <view class="order-base-inf">信用模式：{{baseInfo.credit_model_all==='0' ? '是' : '否'}}</view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'orderDetailBase'
+  name: 'orderDetailBase',
+  baseInfo: {
+    type: Object,
+    default() {
+      return {};
+    }
+  }
 };
 </script>
 
