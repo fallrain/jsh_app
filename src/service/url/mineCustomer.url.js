@@ -9,7 +9,9 @@ const urls = {
     return `/getCustomerSigned/${code}?pageNum=${pageNo}&pageSize=15`;
   },
   productQueryInter: '/customer/queryCustomerInterestProductByAccount', // 商品详情-查询是否已关注
-  productAddInter: '/customer/addInterestProduct', // 商品详情-添加关注
+  productAddInter(code1, coede2, code) { // 商品详情-添加关注
+    return `/customer/addInterestProduct/${code1}/${coede2}/${code}`;
+  },
   productRemoveInter: '/customer/removeInterestProduct', // 商品详情-取消关注
 };
 util.addPrefix(baseURL, urls);

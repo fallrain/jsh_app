@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import createPersistedState from '@/lib/vuexPlugin/persistedstate';
 import user from '@/store/user';
+import order from '@/store/order';
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     })
   ],
   modules: {
-    user
+    user,
+    order
   }
 });
