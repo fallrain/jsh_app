@@ -1,6 +1,6 @@
 <template>
   <view class="jProductBtm">
-    <view class="jProductBtm-left">
+    <view  v-if="groupType === 'zuhe'" class="jProductBtm-left">
       <view class="fs24 text-333">
         合计：<text class="text-theme">￥2893.12</text>
       </view>
@@ -8,8 +8,21 @@
         剩余可购买套数：<text class="text-theme">94</text>
       </view>
     </view>
-    <view class="jProductBtm-right">
+    <view v-if="groupType === 'taocan'" class="jProductBtm-left">
+      <view class="fs24 text-333">
+        合计：<text class="text-theme">￥2893.12</text>
+      </view>
+    </view>
+    <view v-if="groupType === 'zuhe'" class="jProductBtm-right">
       <uni-number-box></uni-number-box>
+      <button
+        type="button"
+        class="jProductBtm-right-btn"
+      >成套下单</button>
+    </view>
+    <view v-if="groupType === 'taocan'" class="jProductBtm-right">
+      <view class="condition-style" v-if="!conditionStatus">未满足</view>
+      <view class="condition-style" v-if="conditionStatus">满足</view>
       <button
         type="button"
         class="jProductBtm-right-btn"
@@ -34,6 +47,12 @@ export default {
     checked: {
       type: Boolean,
       default: false
+    },
+    groupType: {
+      type: [String, Number]
+    },
+    conditionStatus: {
+      type: Boolean
     }
   },
   methods: {

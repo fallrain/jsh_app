@@ -39,6 +39,12 @@
 }
 .jProductBtm-right{
   display: flex;
+  .condition-style {
+    line-height: 40px;
+    margin-right: 10px;
+    font-size: 24px;
+    color: #333;
+  }
 }
 .jProductBtm-right-btn {
   display: inline-block;
