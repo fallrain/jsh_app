@@ -7,9 +7,9 @@ import customerService from './customer/customer.service';
 import catalogServer from './category/category.service';
 import orderServer from './order/order.server';
 import cartService from './cart/cart.service';
-// import transfergoodsService from './transfergoods/transfergoods.service';
+import transfergoodsService from './transfergoods/transfergoods.service';
 import transferpriceService from './transfergoods/transferprice.service';
-
+import indexService from './index/index.service';
 
 export default {
   install(Vue) {
@@ -33,8 +33,10 @@ export default {
     // 购物车服务
     Vue.prototype.cartService = cartService;
     // 调货列表
-    // Vue.prototype.transfergoodsService = transfergoodsService
+    Vue.prototype.transfergoodsService = transfergoodsService;
     // 调货列表价格
-    Vue.prototype.transferpriceService = transferpriceService
+    Vue.prototype.transferpriceService = transferpriceService;
+    // 首页轮播图
+    Vue.prototype.indexService = indexService;
   }
 };
