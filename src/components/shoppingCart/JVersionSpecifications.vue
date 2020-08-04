@@ -46,19 +46,31 @@
               >
                 <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
               </view>
-              <view class="jVersionSpecifications-pop-detail-item-name-wrap mb8">
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
+                v-if="version.name"
+              >
                 <view class="jVersionSpecifications-pop-detail-item-name">名称：</view>
                 <view class="jVersionSpecifications-pop-detail-item-val-type1">{{version.name}}</view>
               </view>
-              <view class="jVersionSpecifications-pop-detail-item-name-wrap mb8">
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
+                v-if="version.price"
+              >
                 <view class="jVersionSpecifications-pop-detail-item-name">价格：</view>
                 <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.price}}</view>
               </view>
-              <view class="jVersionSpecifications-pop-detail-item-name-wrap">
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap"
+                v-if="version.time"
+              >
                 <view class="jVersionSpecifications-pop-detail-item-name">有效期：</view>
                 <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.time}}</view>
               </view>
-              <view class="jVersionSpecifications-pop-detail-item-name-wrap">
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap"
+                v-if="version.num"
+              >
                 <view class="jVersionSpecifications-pop-detail-item-name">数量：</view>
                 <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.num}}</view>
               </view>
