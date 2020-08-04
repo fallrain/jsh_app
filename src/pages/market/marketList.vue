@@ -11,6 +11,7 @@
       v-for="(item,index) in list"
       :key="index+'^-^'"
       :activity="item"
+      @activityDetail ="activityDetail"
     ></j-activity-item>
     <j-drawer
       ref="filterDrawer"
@@ -125,6 +126,12 @@ export default {
         saletoCode: '',
         sendtoCode: ''
       },
+      // 获取库存参数
+      stockForm: {
+        saletoCode: '',
+        sendtoCode: '',
+        productCodes: []
+      },
       // 活动列表
       list: [
       ],
@@ -234,6 +241,9 @@ export default {
       // 获取活动
       const { code, data } = await this.marketService.activityList(this.form);
       if (code === '1') {
+        data.list.forEach((item) => {
+          item.choosedNum = 0;
+        });
         this.list = data.list;
       }
     },
@@ -247,6 +257,8 @@ export default {
         this.currentAdd = data[0];
         this.form.saletoCode = data[0].customerCode;
         this.form.sendtoCode = data[0].addressCode;
+        this.stockForm.saletoCode = data[0].customerCode;
+        this.stockForm.sendtoCode = data[0].addressCode;
       }
     },
     changeAddress(current) {
@@ -334,7 +346,41 @@ export default {
     showDeliveryAddress() {
       /* 展示配送地址 */
       this.isShowAddressDrawer = true;
-    }
+    },
+    async activityDetail(currentInfo) {
+      const detail = await this.getAllStock(currentInfo);
+      console.log(detail)
+      uni.navigateTo({
+        url: `/pages/market/marketDetail?item=${JSON.stringify(detail)}
+        &saletoCode=${this.form.saletoCode}&sendtoCode=${this.form.sendtoCode}`
+      });
+    },
+    // 获取所有产品的库存
+    async getAllStock(currentInfo) {
+      const arr1 = currentInfo.products;
+      const arr2 = currentInfo.pbProducts;
+      const arr = arr1.concat(arr2);
+      const productCodes = [];
+      arr.forEach((item) => {
+        productCodes.push(item.productCode);
+      });
+      this.stockForm.productCodes = productCodes;
+      const { code, data } = await this.commodityService.getStock(this.stockForm);
+      if (code === '1') {
+        this.stockDate = data;
+      }
+      // 所有产品增加库存数量字段
+      currentInfo.products.forEach((item) => {
+        item.stockTotalNum = data[item.productCode].stockTotalNum;
+        item.choosedNum = 0; // 增加选择数量字段
+      });
+      currentInfo.pbProducts.forEach((item) => {
+        item.stockTotalNum = data[item.productCode].stockTotalNum;
+        item.choosedNum = 0; // 增加选择数量字段
+      });
+      console.log(currentInfo)
+      return currentInfo;
+    },
   }
 };
 </script>

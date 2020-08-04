@@ -1,5 +1,5 @@
 <template>
-  <view class="marketDetail">
+  <view :key="updateIndex" class="marketDetail">
     <view class="marketDetail-order-infor mb24">
       <view
         class="marketDetail-ads-detail br-b-grey"
@@ -9,50 +9,73 @@
         <text>配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792</text>
         <view class="iconfont iconyou right-style"></view>
       </view>
-      <view v-if="groupType === 0" class="marketDetail-orders br-b-grey">
+      <view v-if="currentDetail.proportionType === '1'" class="marketDetail-orders br-b-grey">
         <view>
-          <view><span class="text-theme fs36">7</span>件</view>
+          <view><span class="text-theme fs36">{{limit1.choosedMainNum}}</span>件</view>
           <view>已选主产品</view>
         </view>
         <view>
-          <view class=""><span class="text-theme fs36">7</span>件</view>
+          <view class=""><span class="text-theme fs36">{{limit1.choosedPBNum}}</span>件</view>
           <view>已选配比产品</view>
         </view>
         <view>
-          <view class=""><span class="text-theme fs36">7</span>件</view>
+          <view class=""><span class="text-theme fs36">{{computeMain}}</span>件</view>
           <view>还需主产品</view>
         </view>
         <view>
-          <view class=""><span class="text-theme fs36">7</span>件</view>
+          <view class=""><span class="text-theme fs36">{{computePB}}</span>件</view>
           <view>还需配比产品</view>
         </view>
       </view>
-      <view v-if="groupType === 0" class="marketDetail-requirement fs20">
+      <view v-if="currentDetail.proportionType === '0'" class="marketDetail-requirement fs20">
         <view class="dis-flex mb24">
-          <view class="w230 text-999">主产品起订金额限定</view>
-          <view class="w200 text-333">0.00 / ¥1000.00</view>
-          <view class="w230 text-999">主产品起订数量限定</view>
-          <view class="text-333">7件</view>
+          <view class="w210 text-999">主产品起订金额限定</view>
+          <view class="w200 text-333">{{limit2.choosedMainMoney}} / ¥{{currentDetail.spePrice}}</view>
+          <view class="w210 text-999">主产品起订数量限定</view>
+          <view class="text-333">{{limit2.choosedMainNum}} / {{currentDetail.speNum}}件</view>
         </view>
         <view class="dis-flex">
-          <view class="w230 text-999">配比产品起订金额限定</view>
-          <view class="w200 text-333">0.00 / ¥1000.00</view>
-          <view class="w230 text-999">配比产品起订数量限定</view>
-          <view class="text-333">7件</view>
+          <view class="w210 text-999">配比产品起订金额限定</view>
+          <view class="w200 text-333">{{limit2.choosedPBMoney}} / ¥{{currentDetail.bundlePrice}}</view>
+          <view class="w210 text-999">配比产品起订数量限定</view>
+          <view class="text-333">{{limit2.choosedPBNum}} / {{currentDetail.bundleNum}}件</view>
         </view>
       </view>
     </view>
-    <view class="marketDetail-list">
+    <view v-if="currentDetail.activityType === 'taocan'" class="marketDetail-list">
       <j-product-item
-        :groupType="groupType"
-        v-for="(goods,index) in activityList"
+        :groupType="currentDetail.activityType"
+        :goodsType="0"
+        v-for="(goods,index) in currentDetail.products"
+        :key="index+'^-^'"
+        :goods="goods"
+        :index="index"
+        @change="goodsChange"
+      ></j-product-item>
+      <j-product-item
+        :groupType="currentDetail.activityType"
+        :goodsType="1"
+        v-for="(goods,index) in currentDetail.pbProducts"
         :key="index"
         :goods="goods"
         :index="index"
         @change="goodsChange"
       ></j-product-item>
     </view>
+    <view v-if="currentDetail.activityType === 'zuhe'" class="marketDetail-list">
+      <j-product-item
+        :groupType="currentDetail.activityType"
+        v-for="(goods,index) in currentDetail.activityList"
+        :key="index"
+        :goods="goods"
+        :index="index"
+        @changeChoosedNum="changeChoosedNum"
+        @change="goodsChange"
+      ></j-product-item>
+    </view>
     <j-product-btm
+      :groupType="currentDetail.activityType"
+      :conditionStatus="conditionStatus"
     ></j-product-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
@@ -75,40 +98,28 @@ export default {
   },
   data() {
     return {
+      conditionStatus: false,
+      updateIndex: 1,
+      stockForm: {
+        saletoCode: '',
+        sendtoCode: '',
+        productCodes: []
+      },
+      stockDate: {},
+      limit1: {
+        choosedMainNum: 0, // 选择主产品的数量
+        choosedPBNum: 0, // 选择配比的数量
+      },
+      limit2: {
+        choosedMainNum: 0, // 选择主产品的数量
+        choosedPBNum: 0, // 选择配比的数量
+        choosedMainMoney: 0, // 选择主产品的金额
+        choosedPBMoney: 0, // 选择配比的金额
+      },
+      currentDetail: {},
       // 0 套餐 1 组合
       groupType: 0,
-      // activityList type 0:主产品 1：配比产品 2：失效产品
       activityList: [
-        {
-          type: 0,
-          isSend: false
-        },
-        {
-          type: 1,
-          checked: true,
-          isSend: false
-        },
-        {
-          type: 2,
-          checked: false,
-          isSend: true
-        },
-        {
-          type: 1,
-          checked: false,
-          isSend: false
-        }
-      ],
-      failureGoodsList: [
-        {
-          checked: false,
-        },
-        {
-          checked: false,
-        },
-        {
-          checked: false,
-        }
       ],
       // 是否全选
       isCheckAll: false,
@@ -116,10 +127,99 @@ export default {
       isShowAdsPicker: false
     };
   },
+  onLoad(option) {
+    const { item, saletoCode, sendtoCode } = option;
+    this.currentDetail = JSON.parse(item);
+    this.stockForm.saletoCode = saletoCode;
+    this.stockForm.sendtoCode = sendtoCode;
+    /* console.log(this.currentDetail)
+    this.getAllStock(); */
+  },
+  computed: {
+    computeMain() {
+      // 主产品比例
+      const proportionMain = this.currentDetail.proportionMain;
+      if (proportionMain > this.limit1.choosedMainNum) {
+        return (proportionMain - this.limit1.choosedMainNum);
+      }
+      return 0;
+    },
+    computePB() {
+      // 主产品比例
+      const proportionMain = this.currentDetail.proportionMain;
+      // 配比产品比例
+      const proportion = this.currentDetail.proportion;
+      let PBnum = Math.ceil(proportion / proportionMain * this.limit1.choosedMainNum)
+        - this.limit1.choosedPBNum;
+      if (PBnum < 0) {
+        PBnum = 0;
+      }
+      return PBnum;
+    }
+  },
   methods: {
-    goodsChange(goods, index) {
-      this.activityList[index] = goods;
-      this.activityList = JSON.parse(JSON.stringify(this.activityList));
+    // 获取所有产品的库存
+    async getAllStock() {
+      const arr1 = this.currentDetail.products;
+      const arr2 = this.currentDetail.pbProducts;
+      const arr = arr1.concat(arr2);
+      const productCodes = [];
+      arr.forEach((item) => {
+        productCodes.push(item.productCode);
+      });
+      this.stockForm.productCodes = productCodes;
+      const { code, data } = await this.commodityService.getStock(this.stockForm);
+      if (code === '1') {
+        this.stockDate = data;
+      }
+      // 所有产品增加库存数量字段
+      this.currentDetail.products.forEach((item) => {
+        item.stockTotalNum = data[item.productCode].stockTotalNum;
+        item.choosedNum = 0; // 增加选择数量字段
+      });
+      this.currentDetail.pbProducts.forEach((item) => {
+        item.stockTotalNum = data[item.productCode].stockTotalNum;
+        item.choosedNum = 0; // 增加选择数量字段
+      });
+      this.updateIndex++;
+      console.log(this.currentDetail.products);
+      console.log(this.currentDetail.pbProducts);
+    },
+    goodsChange(goods, index, goodsType) {
+      if (goodsType === '0') {
+        this.currentDetail.products[index] = goods;
+      } else if (goodsType === '1') {
+        this.currentDetail.pbProducts[index] = goods;
+      }
+      this.currentDetail = JSON.parse(JSON.stringify(this.currentDetail));
+      // 更新已选产品数量
+      this.limit1.choosedMainNum = 0;
+      this.limit1.choosedPBNum = 0;
+      this.currentDetail.products.forEach((item) => {
+        this.limit1.choosedMainNum += parseInt(item.choosedNum);
+      });
+      this.currentDetail.pbProducts.forEach((item) => {
+        this.limit1.choosedPBNum += parseInt(item.choosedNum);
+      });
+      this.conditionStatus = this.isUpToCondition();
+    },
+    // 判断套餐条件是否已经满足
+    isUpToCondition() {
+      // 数量配比
+      if (this.currentDetail.proportionType === '1') {
+        if (this.computeMain === 0 && this.computePB === 0) {
+          return true;
+        }
+      } else {
+        // 金额配比
+        if (this.limit2.choosedMainMoney > this.currentDetail.spePrice
+          && this.limit2.choosedMainNum > this.currentDetail.sepNum
+          && this.limit2.choosedPBMoney > this.currentDetail.bundlePrice
+          && this.limit2.choosedPBNum > this.currentDetail.bundleNum
+        ) {
+          return true;
+        }
+      }
     },
     showAdsPicker() {
       /* 地址选择展示 */
