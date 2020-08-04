@@ -1,7 +1,7 @@
 {
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-  
+
     {
       "path": "pages/nav/nav",
       "style": {
@@ -128,8 +128,13 @@
         "navigationBarBackgroundColor": "#ffffff"
       }
 
+    },
+    {
+      "path": "pages/vehicleList/vehicleList",
+      "style": {
+        "navigationBarTitleText": "整车列表"
+      }
     }
-
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
