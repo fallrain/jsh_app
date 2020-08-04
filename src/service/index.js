@@ -10,6 +10,8 @@ import cartService from './cart/cart.service';
 import transfergoodsService from './transfergoods/transfergoods.service';
 import transferpriceService from './transfergoods/transferprice.service';
 import indexService from './index/index.service';
+import trafficService from './traffic/traffic.service';
+
 
 export default {
   install(Vue) {
@@ -38,5 +40,8 @@ export default {
     Vue.prototype.transferpriceService = transferpriceService;
     // 首页轮播图
     Vue.prototype.indexService = indexService;
+    Vue.prototype.transferpriceService = transferpriceService;
+    // todo 服务名待定
+    Vue.prototype.trafficService = trafficService;
   }
 };

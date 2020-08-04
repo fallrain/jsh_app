@@ -16,6 +16,7 @@ const data = [
   'pages/transferGoods/transferShoppingCart',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
-  'pages/vehicleList/vehicleList'
+  'pages/vehicleList/vehicleList',
+  'pages/sampleMachine/sampleMachineList'
 ];
 export default { data };

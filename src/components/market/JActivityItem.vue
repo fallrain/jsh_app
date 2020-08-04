@@ -1,6 +1,6 @@
 <template>
   <view
-    @tap="activityDetail"
+    @tap="goDetail($event)"
     class="jActivityItem">
     <view class="dis-flex mb16">
       <view v-if="activity.activityType === 'taocan'" class="tag-primary mr20">套餐</view>
@@ -56,7 +56,10 @@
           ￥{{totalPrice(activity.products)}}
         </view>
         <view class="dis-flex">
-          <uni-number-box></uni-number-box>
+          <uni-number-box
+            data-target="box"
+
+          ></uni-number-box>
           <button
             class="btn-primary ml26"
             type="button"
@@ -147,10 +150,10 @@ export default {
     }
   },
   methods: {
-    activityDetail() {
-      uni.navigateTo({
-        url: `/pages/market/marketDetail?item=${JSON.stringify(this.activity)}`
-      });
+    goDetail(e) {
+      console.log(e);
+      console.log(e.currentTarget.getAttributeNode('class'));
+      // this.$emit('activityDetail', this.activity);
     }
   }
 };
