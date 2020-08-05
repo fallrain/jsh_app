@@ -29,3 +29,13 @@ button {
     display: none;
   }
 }
+
+/*fix uni-app*/
+
+.uni-popup {
+  .uni-transition {
+    bottom: var(--window-bottom) !important;
+  }
+}
+
+/*fix uni-app end*/

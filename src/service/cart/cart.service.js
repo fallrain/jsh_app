@@ -1,5 +1,6 @@
 import urls from '../url/cart.url';
 import {
+  jGet,
   jPostJson
 } from '@/lib/request';
 
@@ -14,6 +15,23 @@ export default {
       code,
       ...params
     } = data;
-    return jPostJson(urls.getShoppingCartListFromCache(code), params);
+    return jGet(urls.getShoppingCartListFromCache(code), params);
+  },
+  getSpecialPrice(data) {
+    /* 获取版本价格 */
+    const {
+      saletoCode,
+      sendtoCode,
+      account
+    } = data;
+    return jGet(urls.getSpecialPrice({
+      saletoCode,
+      sendtoCode,
+      account
+    }),
+    null,
+    {
+      noToast: true
+    });
   }
 };

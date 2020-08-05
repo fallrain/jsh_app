@@ -20,12 +20,14 @@
         >
           <view
             class="jAddressPicker-cnt-item-head"
-            @tap="choose(item,index)"
           >
             <view
               :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icontick']"
             ></view>
-            <text class="jAddressPicker-cnt-item-text">{{item.name}}</text>
+            <text
+              @tap="choose(item,index)"
+              class="jAddressPicker-cnt-item-text"
+            >{{item.name}}</text>
             <view
               v-if="item.children"
               :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
@@ -46,7 +48,7 @@
                 ]"
                 v-for="(detail,dIndex) in item.children"
                 :key="dIndex"
-                @tap="checkDetail(detail,item.children,item)"
+                @tap.stop="checkDetail(detail,item.children,item,index)"
               >
                 <view
                   class="jVersionSpecifications-pop-detail-item-check"
@@ -80,60 +82,49 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    // picker数据
+    // 数据示例：
+    // pickerList: [
+    //   {
+    //     name: '云仓',
+    //     checked: false
+    //   },
+    //   {
+    //     name: '异地云仓',
+    //     childrenType: 'short',
+    //     checked: false,
+    //     isExpand: true,
+    //     children: [
+    //       {
+    //         id: 'ccc',
+    //         name: '北京云仓',
+    //         checked: false,
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     name: '配送至',
+    //     checked: false,
+    //     isExpand: true,
+    //     childrenType: 'long',
+    //     children: [
+    //       {
+    //         id: 'ccc',
+    //         name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
+    //         checked: false,
+    //       }
+    //     ]
+    //   },
+    // ]
+    pickerList: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      pickerList: [
-        {
-          name: '云仓',
-          checked: false
-        },
-        {
-          name: '异地云仓',
-          childrenType: 'short',
-          checked: false,
-          isExpand: true,
-          children: [
-            {
-              name: '北京云仓',
-              checked: false,
-            },
-            {
-              name: '上海云仓',
-              checked: false,
-            },
-            {
-              name: '重庆云仓',
-              checked: false,
-            },
-            {
-              name: '青岛云仓',
-              checked: false,
-            }
-          ]
-        },
-        {
-          name: '配送至',
-          checked: false,
-          isExpand: true,
-          childrenType: 'long',
-          children: [
-            {
-              name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
-              checked: false,
-            },
-            {
-              name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
-              checked: false,
-            },
-            {
-              name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
-              checked: false,
-            }
-          ]
-        },
-      ]
+
     };
   },
   watch: {
@@ -164,8 +155,9 @@ export default {
         }
       });
       item.checked = true;
+      this.$emit('change', this.pickerList, null, item);
     },
-    checkDetail(item, list, parent) {
+    checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
       list.forEach((v) => {
         v.checked = false;
@@ -173,12 +165,14 @@ export default {
       item.checked = true;
       // 选中上级
       if (!parent.checked) {
-        this.choose(parent);
+        this.choose(parent, parIndex);
       }
+      this.$emit('change', this.pickerList, item, parent);
     },
     toggleExpand(item) {
       /* 展开收起 */
       item.isExpand = !item.isExpand;
+      this.$emit('change', this.pickerList);
     }
   }
 };

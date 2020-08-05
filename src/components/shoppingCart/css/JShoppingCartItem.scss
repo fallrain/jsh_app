@@ -101,8 +101,9 @@
 
 .jShoppingCartItem-cnt-img-wrap {
   flex-shrink: 0;
-  width: 152px;
-  height: 152px;
+  width: 142px;
+  height: 142px;
+  padding: 10px;
 
   image {
     width: 100%;
@@ -226,6 +227,7 @@
 }
 
 .jShoppingCartItem-btm-version-picker {
+  margin-left: auto;
   display: flex;
   align-items: center;
   height: 38px;

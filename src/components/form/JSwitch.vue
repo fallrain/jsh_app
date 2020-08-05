@@ -38,6 +38,10 @@ export default {
     },
     inf: {
       type: [Number, String]
+    },
+    // 点击之前事件，return false阻止点击
+    beforeChange: {
+      type: Function
     }
   },
   data() {
@@ -56,6 +60,9 @@ export default {
   },
   methods: {
     handleClick() {
+      if (this.beforeChange && this.beforeChange() === false) {
+        return;
+      }
       this.animationIng = true;
       this.$emit('update:active', !this.active);
       this.$emit('change', !this.active);
