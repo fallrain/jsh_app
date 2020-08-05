@@ -1,51 +1,49 @@
 <template>
-  <view class="jGoodsItem">
-    <view class="jGoodsItem-left">
+  <view class="jSampleMachineItem">
+    <view
+      class="jShoppingCartItem-cnt-check"
+      @tap="choose"
+    >
+      <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
+    </view>
+    <view class="jSampleMachine-left">
       <image :src="goods.image.masterImage"></image>
     </view>
-    <view class="jGoodsItem-cnt">
-      <view class="jGoodsItem-cnt-goodsName j-goods-title">
+    <view class="jSampleMachine-cnt">
+      <view class="jSampleMachine-cnt-goodsName j-goods-title">
         {{goods.productName | rmHtml}}
       </view>
-      <view class="jGoodsItem-cnt-price-tips">
-        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice.rebateRate,100)}}%</view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice.rebateMoney}}</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+      <view class="jSampleMachine-cnt-price-tips">
+        <view class="jSampleMachine-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice.rebateRate,100)}}%</view>
+        <view class="jSampleMachine-cnt-price-tips-item">返利：{{goods.$PtPrice.rebateMoney}}</view>
+        <view class="jSampleMachine-cnt-price-tips-item">台返：{{goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
       </view>
-      <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock.stockTotalNum}}</view>
+      <view class="jSampleMachine-cnt-price-inf">
+        <view class="jSampleMachine-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
+        <view class="jSampleMachine-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice}}</view>
+        <view class="jSampleMachine-cnt-price-inf-item">库存：{{goods.$stock.stockTotalNum}}</view>
       </view>
-      <view class="jGoodsItem-cnt-opts">
+      <view class="jSampleMachine-cnt-opts">
         <uni-number-box
           @change="goodsNumChange"
         ></uni-number-box>
         <button
-          class="jGoodsItem-cnt-opts-primary ml26"
+          class="jSampleMachine-cnt-opts-primary ml26"
           type="button"
           @tap="checkSpecifications"
         >立即购买
         </button>
       </view>
-      <view class="jGoodsItem-tags">
+      <view class="jSampleMachine-tags">
         <view
-          class="jGoodsItem-tag-item"
+          class="jSampleMachine-tag-item"
           v-for="(item,index) in goods.tags"
           :key="index"
         >{{item}}
         </view>
       </view>
     </view>
-    <j-version-specifications
-      title="营销活动"
-      :show.sync="isShowSpecifications"
-      :data="specificationsList"
-      cancelBtnText="重置"
-      @confirm="specificationsConfirm"
-      @cancel="specificationsCancel"
-    >
-    </j-version-specifications>
+    <view :class="['jSampleMachine-cnt-like iconfont',goods.checked ? 'iconicon3':'iconshoucang1']"></view>
     <m-toast
       ref="toast"
       :isdistance="true"
@@ -59,12 +57,10 @@ import {
 } from '@dcloudio/uni-ui';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import './css/JSampleMachineItem.scss';
-import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
 
 export default {
-  name: 'JSampleMachineItem',
+  name: 'jSampleMachine',
   components: {
-    JVersionSpecifications,
     uniNumberBox,
     MToast
   },
@@ -101,7 +97,7 @@ export default {
       // 显示选择商品版本弹层
       isShowSpecifications: false,
       // 版本规格信息
-      specificationsList: [],
+      specificationsList: ['111'],
       // 版本规格选中的信息
       specificationsCheckList: []
     };
@@ -110,6 +106,14 @@ export default {
     this.genSpecificationsList();
   },
   methods: {
+    choose() {
+      /* 选中本商品 */
+      const {
+        checked
+      } = this.goods;
+      this.goods.checked = !checked;
+      this.$emit('change', this.goods, this.index);
+    },
     genSpecificationsList() {
       /* 组合版本规格信息 */
       const specificationsList = [];

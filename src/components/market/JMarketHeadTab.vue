@@ -6,7 +6,7 @@
           class="jHeadTab-item"
           v-for="(item,index) in tabs"
           :key="index"
-          @tap="tabHandle(item.handler)"
+          @tap="tabHandle(item,index)"
         >
           <text>{{item.name}}</text>
           <view
@@ -57,9 +57,13 @@ export default {
     }
   },
   methods: {
-    tabHandle(handler) {
+    tabHandle(item, index) {
       /* tab 点击事件 */
-      this.$emit('tabClick', handler);
+      this.tabs.forEach((v) => {
+        v.active = false;
+      });
+      item.active = true;
+      this.$emit('tabClick', this.tabs, item, index);
     },
     tabTagHandle() {
       /* tag tab 点击事件 */
