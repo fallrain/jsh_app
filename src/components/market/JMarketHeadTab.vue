@@ -1,9 +1,9 @@
 <template>
   <view class="JMarketHeadTab">
     <view class="jMarketTab-warp">
-      <view class="jHeadTab-list">
+      <view class="jMarketTab-list">
         <view
-          class="jHeadTab-item"
+          :class="['jMarketTab-item', item.active && 'active']"
           v-for="(item,index) in tabs"
           :key="index"
           @tap="tabHandle(item,index)"

@@ -208,16 +208,18 @@ export default {
       // 获取地址
       const { code, data } = await this.customerService.addressesList('1');
       if (code === '1') {
-        this.deliveryAddressList = data;
-      }
-      debugger
-      data.forEach((item) => {
-        if (item.defaultFlag === 1) {
-          this.curChoseDeliveryAddress = item;
+        data.forEach((item) => {
+          item.name = item.addressName;
+          if (item.defaultFlag === 1) {
+            item.checked = true;
+            this.curChoseDeliveryAddress = item;
+          }
+        });
+        if (JSON.stringify(this.curChoseDeliveryAddress) === '{}') {
+          this.curChoseDeliveryAddress = data[0];
+          data[0].checked = true;
         }
-      });
-      if (JSON.stringify(this.curChoseDeliveryAddress) === '{}') {
-        this.curChoseDeliveryAddress = data[0];
+        this.deliveryAddressList = data;
       }
       console.log(this.curChoseDeliveryAddress);
       // this.filterForm.saletoCode = this.curChoseDeliveryAddress.customerCode;

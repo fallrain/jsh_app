@@ -10,7 +10,7 @@
   background: #fff;
 }
 
-.jHeadTab-list {
+.jMarketTab-list {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -18,14 +18,14 @@
   padding-right: 16px;
 }
 
-.jHeadTab-item {
+.jMarketTab-item {
   display: flex;
   align-items: center;
   color: #333;
   font-size: 24px;
 
   &.active {
-    color: #2283E2;
+    color: $theme-color;
   }
 
   .iconfont {
