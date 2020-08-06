@@ -6,17 +6,16 @@
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-goodsName j-goods-title">
         {{goods.name}}
-      </view>
-      
+      </view>   
       <view class="jGoodsItem-cnt-price-tips">
-        <view class="jGoodsItem-cnt-price-tips-item">直扣：92.31%</view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：COM</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：0</view>
+        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice.rebateRate,100)}}%</view>
+        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice.rebateMoney}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ 3456.00</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥5892.21</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：3434</view>
+        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">供价：¥ {{goods.$PtPrice.supplyPrice}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockList[0].qty}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
@@ -45,14 +44,37 @@ export default {
   },
   data() {
     return {
-      ischecked: false
+      ischecked: false,
+       // 控制列表数据
+      isShowList:false,
     }
   },
   props: {
     // 商品对象
     goods: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
+    },
+    // 商品下标
+    index: {
+      type: Number,
+    },
+    // 售达方编码
+    saletoCode: {
+      type: String,
+      default: ''
+    },
+    // 送达方编码
+    sendtoCode: {
+      type: String,
+      default: ''
+    },
+    // 所有版本的价格
+    allPrice: {
+      type: Object,
+      default: () => {
+      }
     }
   },
   methods:{
@@ -210,9 +232,8 @@ export default {
 //   width:464px;
 //   height:68px;
   font-size:24px;
-  font-family:PingFangSC-Regular,PingFang SC;
   font-weight:400;
-  color:rgba(51,51,51,1);
+  color: #333;
   line-height:34px;
 
 }

@@ -62,3 +62,10 @@
 .shoppingCart-list {
 
 }
+
+.shoppingCart-tab-wrap{
+  position: sticky;
+  top: var(--window-top);
+  z-index: 99;
+  background: #F5F5F5;
+}

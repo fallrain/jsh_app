@@ -66,29 +66,8 @@
             </view>
             <i class="iconfont iconyou sampleMachineList-drawer-filter-head-icon-right"></i>
           </view>
-          <view class="sampleMachineList-drawer-filter-head-ads">{{curChoseDeliveryAddress.name}} </view>
-        </view>
-        <view class="sampleMachineList-drawer-filter-head-ads-wrap">
-          <view class="sampleMachineList-drawer-filter-head">
-            <view>
-              <text>价格区间</text>
-            </view>
-          </view>
-          <view class="sampleMachineList-drawer-filter-price-range">
-            <input
-              class="sampleMachineList-drawer-filter-price-ipt"
-              type="number"
-              placeholder="最低价格"
-              v-model="filterForm.lowPrice"
-            >
-            <view class="sampleMachineList-drawer-filter-price-line"></view>
-            <input
-              class="sampleMachineList-drawer-filter-price-ipt"
-              type="number"
-              placeholder="最高价格"
-              v-model="filterForm.highPrice"
-            >
-          </view>
+          <view class="sampleMachineList-drawer-filter-head-ads">
+            ({{curChoseDeliveryAddress.addressCode}}){{curChoseDeliveryAddress.addressName}} </view>
         </view>
       </template>
     </j-drawer>
@@ -185,21 +164,15 @@ export default {
       // 筛选抽屉数据
       filterList: [
         {
-          name: '筛选',
+          name: '品牌',
           isExpand: true,
           type: 'radio',
           data: []
         },
         {
-          name: '标签',
+          name: '产品组',
           isExpand: true,
           type: 'radio',
-          data: []
-        },
-        {
-          name: '有货商品',
-          isExpand: true,
-          type: 'checkbox',
           data: []
         }
       ],
@@ -219,7 +192,7 @@ export default {
     };
   },
   created() {
-    this.getPageInf();
+    this.init();
   },
   computed: {
     ...mapGetters({
@@ -227,6 +200,44 @@ export default {
     }),
   },
   methods: {
+    async init() {
+      await this.getAddressList();
+      await this.getIndustryList();
+    },
+    async getAddressList() {
+      // 获取地址
+      const { code, data } = await this.customerService.addressesList('1');
+      if (code === '1') {
+        data.forEach((item) => {
+          item.name = item.addressName;
+          if (item.defaultFlag === 1) {
+            item.checked = true;
+            this.curChoseDeliveryAddress = item;
+          }
+        });
+        if (JSON.stringify(this.curChoseDeliveryAddress) === '{}') {
+          this.curChoseDeliveryAddress = data[0];
+          data[0].checked = true;
+        }
+        this.deliveryAddressList = data;
+      }
+      console.log(this.curChoseDeliveryAddress);
+      // this.filterForm.saletoCode = this.curChoseDeliveryAddress.customerCode;
+      // this.filterForm.sendtoCode = this.curChoseDeliveryAddress.addressCode;
+    },
+    async getIndustryList() {
+      // 获取产品组
+      const { code, data } = await this.marketService.getIndustryList();
+      if (code === '1') {
+        data.forEach((item) => {
+          item.isChecked = false;
+          item.key = item.code;
+          item.value = item.codeName;
+          item.isChecked = false;
+        });
+        this.filterList[1].data = data;
+      }
+    },
     getPageInf() {
       this.setFilterData();
       this.getDeliveryAddress();
@@ -243,6 +254,7 @@ export default {
     getSearchCondition(pages) {
       /* 获取不同条件下搜索的传参 */
       let condition = {
+        mktid: '12A02',
         pageNum: pages.num,
         pageSize: pages.size,
         customerCode: this.userInf.customerCode,
@@ -291,9 +303,9 @@ export default {
       /* 搜索产品列表 */
       // 公共用户信息
       const userInf = this.userInf;
-      console.log(userInf)
       const condition = this.getSearchCondition(pages);
       const { code, data } = await this.commodityService.goodsList(condition);
+      // const { code, data } = await this.specimenService.queryInventory(condition);
       const scrollView = {};
       if (code === '1') {
         const {

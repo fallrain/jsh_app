@@ -2,6 +2,7 @@ export default {
   h5: {
     dev: {
       baseUrl: 'https://new.jsh.com'
+      // baseUrl: 'http://mall.jsh.com'
     },
     sit: {
       baseUrl: ''

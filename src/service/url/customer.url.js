@@ -8,6 +8,10 @@ const urls = {
   },
   // 收藏的商品的数据
   queryCustomerInterestProductByAccount: '/customer/queryCustomerInterestProductByAccount',
+  // 添加收藏
+  addInterestProduct: '/customer/addInterestProduct',
+  // 取消收藏
+  removeInterestProduct: '/customer/removeInterestProduct',
   // 获取售达方信息
   getCustomer: '/customers/auxiliary/customer',
   // 获取送达方信息

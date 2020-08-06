@@ -349,7 +349,7 @@ export default {
     },
     async activityDetail(currentInfo) {
       const detail = await this.getAllStock(currentInfo);
-      console.log(detail)
+      console.log(detail);
       uni.navigateTo({
         url: `/pages/market/marketDetail?item=${JSON.stringify(detail)}
         &saletoCode=${this.form.saletoCode}&sendtoCode=${this.form.sendtoCode}`
@@ -378,7 +378,7 @@ export default {
         item.stockTotalNum = data[item.productCode].stockTotalNum;
         item.choosedNum = 0; // 增加选择数量字段
       });
-      console.log(currentInfo)
+      console.log(currentInfo);
       return currentInfo;
     },
   }

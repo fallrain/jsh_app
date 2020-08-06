@@ -88,64 +88,7 @@ export default {
       }
      
     },
- 
 
-
-    // tabClick(data) {
-    //   this.tabIndex = data; 
-    //   this.unread = 2;
-    //   this.messageList = [
-    //     {
-    //       id:1,
-    //       littleTitle:"建店押金",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: true
-    //     },
-    //      {
-    //       id:2,
-    //       littleTitle:"扣款提醒",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: true
-    //     }, 
-    //     {
-    //       id:3,
-    //       littleTitle:"订单详情",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     }, 
-    //     {
-    //       id:4,
-    //       littleTitle:"其他",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     },
-    //     {
-    //       id:5,
-    //       littleTitle:"订单详情",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     }, 
-    //     {
-    //       id:6,
-    //       littleTitle:"订单详情",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     }
-    //   ];
-
-    // },
     showDetail(id,item) {   
       console.log(id,JSON.stringify(item))
       uni.navigateTo({

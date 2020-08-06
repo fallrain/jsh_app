@@ -8,9 +8,9 @@ import catalogServer from './category/category.service';
 import orderServer from './order/order.server';
 import cartService from './cart/cart.service';
 import transfergoodsService from './transfergoods/transfergoods.service';
-import transferpriceService from './transfergoods/transferprice.service';
 import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
+import specimenService from './specimen/specimen.service';
 
 
 export default {
@@ -36,11 +36,10 @@ export default {
     Vue.prototype.cartService = cartService;
     // 调货列表
     Vue.prototype.transfergoodsService = transfergoodsService;
-    // 调货列表价格
-    Vue.prototype.transferpriceService = transferpriceService;
     // 首页轮播图
     Vue.prototype.indexService = indexService;
-    Vue.prototype.transferpriceService = transferpriceService;
+    // 样品机服务
+    Vue.prototype.specimenService = specimenService;
     // todo 服务名待定
     Vue.prototype.trafficService = trafficService;
   }

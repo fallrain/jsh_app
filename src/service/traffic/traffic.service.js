@@ -1,4 +1,4 @@
-import urls from '../url/cart.url';
+import urls from '../url/traffic.url';
 import {
   jGet
 } from '@/lib/request';
