@@ -11,6 +11,7 @@ import transfergoodsService from './transfergoods/transfergoods.service';
 import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
 import specimenService from './specimen/specimen.service';
+import vehicleService from './vehicleList/vehicleList.service';
 
 
 export default {
@@ -42,5 +43,7 @@ export default {
     Vue.prototype.specimenService = specimenService;
     // todo 服务名待定
     Vue.prototype.trafficService = trafficService;
+    // 整车列表等功能
+    Vue.prototype.vehicleService = vehicleService;
   }
 };

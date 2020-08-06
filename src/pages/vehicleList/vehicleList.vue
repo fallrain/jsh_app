@@ -154,14 +154,92 @@ export default {
         {
           name: '基地拼车',
           show: false,
+          children: [
+            {
+              name: '海尔',
+              checked: false
+            },
+            {
+              name: '卡萨帝',
+              checked: false
+            },
+            {
+              name: '统帅',
+              checked: false
+            },
+            {
+              name: '摩卡',
+              checked: false
+            },
+            {
+              name: 'GE',
+              checked: false
+            },
+            {
+              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
+              checked: false
+            }
+          ]
         },
         {
           name: '配送类型',
           show: false,
+          children: [
+            {
+              name: '海尔',
+              checked: false
+            },
+            {
+              name: '卡萨帝',
+              checked: false
+            },
+            {
+              name: '统帅',
+              checked: false
+            },
+            {
+              name: '摩卡',
+              checked: false
+            },
+            {
+              name: 'GE',
+              checked: false
+            },
+            {
+              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
+              checked: false
+            }
+          ]
         },
         {
           name: '整车类型',
           show: false,
+          children: [
+            {
+              name: '海尔',
+              checked: false
+            },
+            {
+              name: '卡萨帝',
+              checked: false
+            },
+            {
+              name: '统帅',
+              checked: false
+            },
+            {
+              name: '摩卡',
+              checked: false
+            },
+            {
+              name: 'GE',
+              checked: false
+            },
+            {
+              name: '(Z)客户自有仓',
+              checked: false
+            }
+          ]
         }
       ],
       isShowSeach: false, // 筛选抽屉
@@ -189,7 +267,8 @@ export default {
       isShowAddressDrawer: false, // 是否展示地址侧边抽屉
       deliveryAddressList: [], // 配送地址数据
       curChoseDeliveryAddress: {}, // 当前选中的配送地址
-      list: [{ id: 1 }, { id: 1 }, { id: 1 }, { id: 1 }]
+      list: [{ id: 1 }, { id: 1 }, { id: 1 }, { id: 1 }],
+      carType: '' // 车型
     };
   },
   created() {
@@ -199,6 +278,22 @@ export default {
     info() {
       this.setFilterData();
       this.getDeliveryAddress();
+      this.querySendWay(); // 配送类型
+      this.carLoadType(); // 车型
+    },
+    async carLoadType(timestamp, JDCODE, SendWay, MKTID, longfeiMFID) {
+      const { code, data } = await this.vehicleService.carLoadType(timestamp, JDCODE, SendWay, MKTID, longfeiMFID);
+      if (code === '1') {
+        this.carType = data;
+      }
+      console.log(data);
+    },
+    async querySendWay(timestamp, JDCODE, SendWay, MKTID, longfeiMFID) {
+      const { code, data } = await this.vehicleService.carLoadType(timestamp, JDCODE, SendWay, MKTID, longfeiMFID);
+      if (code === '1') {
+        this.carType = data;
+      }
+      console.log(data);
     },
     tabClick(tabs, tab, index) {
       console.log(tabs);
