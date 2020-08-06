@@ -4,24 +4,25 @@
       class="jShoppingCartItem-cnt-check"
       @tap="choose"
     >
-      <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
+      <i :class="['iconfont', goods.$favorite ? 'iconradio active':'iconradio1']"></i>
     </view>
     <view class="jSampleMachine-left">
-      <image :src="goods.image.masterImage"></image>
+      <image :src="goods.SEARCHIMAGE"></image>
     </view>
     <view class="jSampleMachine-cnt">
       <view class="jSampleMachine-cnt-goodsName j-goods-title">
-        {{goods.productName | rmHtml}}
+        {{goods.NAME}}
       </view>
       <view class="jSampleMachine-cnt-price-tips">
-        <view class="jSampleMachine-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice.rebateRate,100)}}%</view>
-        <view class="jSampleMachine-cnt-price-tips-item">返利：{{goods.$PtPrice.rebateMoney}}</view>
-        <view class="jSampleMachine-cnt-price-tips-item">台返：{{goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jSampleMachine-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$allPrice.rebateRate,100)}}%</view>
+        <view class="jSampleMachine-cnt-price-tips-item">返利：{{goods.$allPrice.rebateMoney}}</view>
+        <view class="jSampleMachine-cnt-price-tips-item">台返：{{goods.$allPrice.rebatePolicy | rebatePolicy}}</view>
       </view>
       <view class="jSampleMachine-cnt-price-inf">
-        <view class="jSampleMachine-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
-        <view class="jSampleMachine-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice}}</view>
-        <view class="jSampleMachine-cnt-price-inf-item">库存：{{goods.$stock.stockTotalNum}}</view>
+        <view v-if="goods.$allPrice.UnitPrice" class="jSampleMachine-cnt-price">¥ {{goods.$allPrice.UnitPrice}}</view>
+        <view v-else class="jSampleMachine-cnt-price fs24 fw600">价格即将发布</view>
+        <view class="jSampleMachine-cnt-price-inf-item">供价：¥{{goods.$allPrice.ActPrice }}</view>
+        <view v-if="goods.detailList" class="jSampleMachine-cnt-price-inf-item">库存：{{goods.detailList[0].YGS_KYKCL}}</view>
       </view>
       <view class="jSampleMachine-cnt-opts">
         <uni-number-box
@@ -43,7 +44,7 @@
         </view>
       </view>
     </view>
-    <view :class="['jSampleMachine-cnt-like iconfont',goods.checked ? 'iconicon3':'iconshoucang1']"></view>
+    <view :class="['jSampleMachine-cnt-like iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"></view>
     <m-toast
       ref="toast"
       :isdistance="true"
@@ -103,15 +104,15 @@ export default {
     };
   },
   created() {
-    this.genSpecificationsList();
+    // this.genSpecificationsList();
   },
   methods: {
     choose() {
       /* 选中本商品 */
       const {
-        checked
+        $favorite
       } = this.goods;
-      this.goods.checked = !checked;
+      this.goods.$favorite = !$favorite;
       this.$emit('change', this.goods, this.index);
     },
     genSpecificationsList() {
@@ -307,7 +308,7 @@ export default {
     goodsNumChange(val) {
       /* 商品数量change */
       this.goods.number = val;
-      this.$emit('change', this.goods, this.index);
+      // this.$emit('changeNum', this.goods, this.index);
     }
   }
 };
