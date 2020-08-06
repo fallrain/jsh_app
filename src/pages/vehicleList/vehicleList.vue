@@ -6,7 +6,7 @@
         <button type="button" class="vehicle-btn">搜索</button>
       </view>
       <view>
-        <j-head-tab class="mb12" :tabs="tabs" @tabClick="tabClick"></j-head-tab>
+        <j-head-tab class="mb12" :tabs="tabs" :popTabs="popTabs" @tabClick="tabClick"></j-head-tab>
       </view>
     </view>
     <mescroll-body ref="mescrollRef"><!-- 产品列表 -->
@@ -21,7 +21,7 @@
           <view class="vehicle-drawer-filter-head">
             <view><text>是否限制高端型号</text></view>
             <view :class="['vehicle-drawer-filter-status',switchType&&'active']">{{switchType ? '是' : '否'}}</view>
-            <j-switch :active.sync="switchType" @change="isCreditModeChange"></j-switch>
+            <j-switch :active.sync="switchType"></j-switch>
           </view>
         </view>
         <j-drawer-filter-item v-for="(item,index) in filterList" :key="index" :filterItem="item"
@@ -48,6 +48,7 @@
       </template>
     </j-drawer>
     <j-choose-delivery-address :show.sync="isShowAddressDrawer" :list="deliveryAddressList" @change="deliveryAddressListChange"></j-choose-delivery-address>
+    <view class="vehicle-foot"><vehicle-foot></vehicle-foot></view>
   </view>
 </template>
 
@@ -61,6 +62,7 @@ import JDrawer from '../../components/form/JDrawer';
 import JDrawerFilterItem from '../../components/form/JDrawerFilterItem';
 import JSwitch from '../../components/form/JSwitch';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
+import vehicleFoot from '../../components/vehicleList/vehicleFoot';
 import {
   getGoodsTag,
   getGoodsType
@@ -76,7 +78,8 @@ export default {
     JDrawer,
     JDrawerFilterItem,
     JSwitch,
-    JChooseDeliveryAddress
+    JChooseDeliveryAddress,
+    vehicleFoot
   },
   data() {
     return {
@@ -117,6 +120,50 @@ export default {
           active: false
         }
       ],
+      popTabs: [
+        {
+          name: '发货基地',
+          show: false,
+          children: [
+            {
+              name: '海尔',
+              checked: false
+            },
+            {
+              name: '卡萨帝',
+              checked: false
+            },
+            {
+              name: '统帅',
+              checked: false
+            },
+            {
+              name: '摩卡',
+              checked: false
+            },
+            {
+              name: 'GE',
+              checked: false
+            },
+            {
+              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
+              checked: false
+            }
+          ]
+        },
+        {
+          name: '基地拼车',
+          show: false,
+        },
+        {
+          name: '配送类型',
+          show: false,
+        },
+        {
+          name: '整车类型',
+          show: false,
+        }
+      ],
       isShowSeach: false, // 筛选抽屉
       // 筛选抽屉数据
       filterList: [
@@ -138,7 +185,7 @@ export default {
         lowPrice: '', // 最低价
         highPrice: '' // 最高价
       },
-      switchType: true, // 是否限制高端型号
+      switchType: false, // 是否限制高端型号
       isShowAddressDrawer: false, // 是否展示地址侧边抽屉
       deliveryAddressList: [], // 配送地址数据
       curChoseDeliveryAddress: {}, // 当前选中的配送地址

@@ -17,6 +17,7 @@ const data = [
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
   'pages/vehicleList/vehicleList',
+  'pages/vehicleList/vehicleCarList',
   'pages/sampleMachine/sampleMachineList'
 ];
 export default { data };
