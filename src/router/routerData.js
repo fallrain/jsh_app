@@ -16,6 +16,8 @@ const data = [
   'pages/transferGoods/transferShoppingCart',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
+  'pages/mine/mySDFInfo',
+  'pages/mine/mySet',
   'pages/sampleMachine/sampleMachineList'
 ];
 export default { data };
