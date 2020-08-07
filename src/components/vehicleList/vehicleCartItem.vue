@@ -40,21 +40,21 @@
             </view>
           </view>
         </view>
-     </view>
-     <view class="v-c-i-cnt-foot">
-      <view class="v-c-i-flox4">
-        <text class="v-c-i-cnt-check"> 210</text>
-        <text class="v-c-i-cnt-foot-text">件起售 | 限购</text>
-        <text class="v-c-i-cnt-check"> 2100</text>
       </view>
-      <view class="v-c-i-flox4">
-        <text class="v-c-i-cnt-foot-text">小计： </text>
-        <text class="v-c-i-cnt-foot-value"> ¥ 45996.00</text>
+      <view class="v-c-i-cnt-foot">
+        <view class="v-c-i-flox4">
+          <text class="v-c-i-cnt-check"> 210</text>
+          <text class="v-c-i-cnt-foot-text">件起售 | 限购</text>
+          <text class="v-c-i-cnt-check"> 2100</text>
+        </view>
+        <view class="v-c-i-flox4">
+          <text class="v-c-i-cnt-foot-text">小计： </text>
+          <text class="v-c-i-cnt-foot-value"> ¥ 45996.00</text>
+        </view>
+        <view class="">
+          <uni-number-box></uni-number-box>
+        </view>
       </view>
-       <view class="">
-         <uni-number-box></uni-number-box>
-       </view>
-     </view>
     </view>
     <view class="v-c-i-btm">
       <view class="v-c-i-flox5">
