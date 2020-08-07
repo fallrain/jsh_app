@@ -6,6 +6,20 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
+      "icon_id": "10680309",
+      "name": "订单详情",
+      "font_class": "ziyuan",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "14289824",
+      "name": "详情",
+      "font_class": "xiangqing",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
       "icon_id": "16194027",
       "name": "kinds",
       "font_class": "kinds",

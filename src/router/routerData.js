@@ -14,6 +14,7 @@ const data = [
   'pages/messageInfoList/messageInfoList',
   'pages/transferGoods/transferGoods',
   'pages/transferGoods/transferShoppingCart',
+  'pages/transferGoods/transferDetail',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
   'pages/sampleMachine/sampleMachineList'

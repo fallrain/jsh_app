@@ -97,15 +97,11 @@ export default {
       
   },
   methods: {
-    setPopTabs(data1, data2) {
-      // this.popTabs[0].children = this.cargoWareHome
-      // this.popTabs[1].children = this.cargoSendWay
-      console.log(data1, data2)
-      
-      if (data1) {
+    setPopTabs(wareHome, sendWay) {   
+      if (wareHome) {
         const tempArray = []
-        data1.map(item => {
-          console.log(item.OUTWHNAME)
+        wareHome.map(item => {
+          // console.log(item.OUTWHNAME)
           const temp = {
             name: item.OUTWHNAME,
             checked: false
@@ -114,10 +110,10 @@ export default {
         })
         this.popTabs[0].children = tempArray
       }
-      if (data2) {
+      if (sendWay) {
         const tempArray = []
-        data2.map(item => {
-          console.log(item.sendWay)
+        sendWay.map(item => {
+          // console.log(item.sendWay)
           const temp = {
             name: item.sendWay,
             checked: false
@@ -126,12 +122,10 @@ export default {
         })
         this.popTabs[1].children = tempArray
       }
-      console.log(this.popTabs)
+      // console.log(this.popTabs)
     },
     
     tabHandle(item, index) {
-      
-      console.log(this.popTabs)
       /* tab 点击事件 */
       this.tabs.forEach((v) => {
         v.active = false;
@@ -157,6 +151,14 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+// ::v-deep .jHeadTabPicker-item{
+//   position: relative;
+//   width: 50%;
+//   overflow: hidden;
+//   margin-top:10px;
+  
+// }
+
 .jHeadTab-wrap {
   position: relative;
   background: #fff;
@@ -188,7 +190,7 @@ export default {
   font-size: 24px;
 
   &.active {
-    color: $theme-color;
+    color: #ED2856;
   }
 
   .iconfont {
@@ -206,6 +208,7 @@ $jHeadTab-pop-tab-list: 24px;
   padding-bottom: $jHeadTab-pop-tab-list;
   background: #fff;
   height: 92px;
+
   &.isExpend {
     padding-bottom: 0;
   }
@@ -220,7 +223,7 @@ $jHeadTab-pop-tab-list: 24px;
   font-size: 24px;
   padding-left: 20px;
   padding-right: 20px;
-  margin-right: 40px;
+  margin-right: 24px;
 
   &.active {
     height: 44px + $jHeadTab-pop-tab-list;
