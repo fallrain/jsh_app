@@ -1,0 +1,138 @@
+/*数量输入框*/
+.numberVHI{
+  .uni-numbox {
+    height: 40px;
+    width: 154px;
+    color: #999999;
+    font-size: 28px;
+    .uni-numbox__minus{
+      width: 50px;
+      height: 40px;
+      background-color: #FFFFFF;
+      border-right-width:1px;
+      .uni-numbox--text{
+        color: #999999;
+        font-size: 32px;
+      }
+    }
+    .uni-numbox__value{
+      width: 54px;
+      height: 40px;
+    }
+    .uni-numbox__plus{
+      width: 50px;
+      height: 40px;
+      background-color: #FFFFFF;
+      border-left-width:1px;
+      .uni-numbox--text{
+        color: #999999;
+        font-size: 32px;
+        padding-bottom: 2px;
+      }
+    }
+  }
+}
+
+.VHIItem {
+  display: flex;
+  padding: 24px;
+  border-bottom: 1px solid #F5F5F5;
+  background: #fff;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:first-child {
+    border-bottom: 1px solid #F5F5F5;
+  }
+}
+
+.VHIItem-left {
+  width:238px;
+  height:238px;
+  flex-shrink: 0;
+
+  image {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.VHIItem-cnt {
+  flex-grow:1;
+}
+
+.VHIItem-cnt-goodsName {
+  font-size:24px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(51,51,51,1);
+  line-height:34px;
+}
+
+.VHIItem-cnt-price-tips {
+  margin-top: 12px;
+}
+
+.VHIItem-cnt-price-tips-item {
+  display: inline-block;
+  padding: 2px 8px;
+  line-height: 28px;
+  color: #999;
+  background: #F2F2F7;
+  font-size: 20px;
+  margin-left: 20px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.VHIItem-cnt-price-inf {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.VHIItem-cnt-price {
+  margin-right: 20px;
+  color: #ED2856;
+  font-size: 32px;
+}
+
+.VHIItem-cnt-price-inf-item {
+  margin-right: 20px;
+  color: #666;
+  font-size: 20px;
+}
+
+.VHIItem-cnt-opts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+@mixin VHIItem-cnt-opts-btn {
+  display: inline-block;
+  height: 40px;
+  padding-left: 16px;
+  padding-right: 16px;
+  line-height: 40px;
+  font-size: 24px;
+  border-radius: 8px;
+}
+
+.VHIItem-cnt-opts-primary {
+  @include VHIItem-cnt-opts-btn;
+  background: #ED2856;
+  color: #fff;
+}
+
+.VHIItem-cnt-opts-default {
+  @include VHIItem-cnt-opts-btn;
+  background: #fff;
+  color: #ED2856;
+}

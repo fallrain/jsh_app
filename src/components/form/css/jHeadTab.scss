@@ -47,6 +47,7 @@ $jHeadTab-pop-tab-list: 24px;
   padding-bottom: $jHeadTab-pop-tab-list;
   background: #fff;
   height: 92px;
+  margin-top: -2px;
 
   &.isExpend {
     padding-bottom: 0;

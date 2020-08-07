@@ -155,8 +155,19 @@
       "style": {
         "navigationBarTitleText": "样品机列表"
       }
+    },
+    {
+      "path": "pages/vehicleList/vehicleList",
+      "style": {
+        "navigationBarTitleText": "整车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarList",
+      "style": {
+        "navigationBarTitleText": "整车购物车列表"
+      }
     }
-
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

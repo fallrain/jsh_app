@@ -71,6 +71,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .tShoppingCartItem-cnt-check {
+    color: #CFCFCF;
+  }
   .tFailureGoodsItem {
     position: relative;
     
