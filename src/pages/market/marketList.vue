@@ -7,12 +7,23 @@
       @tabClick="tabClick"
       @tabPickerConfirm="tabPickerConfirm"
     ></j-market-head-tab>
-    <j-activity-item
-      v-for="(item,index) in list"
-      :key="index+'^-^'"
-      :activity="item"
-      @activityDetail ="activityDetail"
-    ></j-activity-item>
+    <mescroll-body
+      ref="mescrollRef"
+      @init="mescrollInit"
+      :up="jMescrollUpOptions"
+      :down="jMescrollDownOptions"
+      @down="jMescrollDownCallback"
+      @up="upCallback"
+    >
+      <view class="marketList-items-wrap">
+        <j-activity-item
+          v-for="(item,index) in list"
+          :key="index+'^-^'"
+          :activity="item"
+          @activityDetail ="activityDetail"
+        ></j-activity-item>
+      </view>
+    </mescroll-body>
     <j-drawer
       ref="filterDrawer"
       :show.sync="isShowFilterDrawer"
@@ -101,15 +112,29 @@ import JDrawer from '../../components/form/JDrawer';
 import JActivityItem from '../../components/market/JActivityItem';
 import JMarketHeadTab from '../../components/market/JMarketHeadTab';
 import JChooseDeliveryAddress from '../../components/market/JChooseDeliveryAddress';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import './css/marketList.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'marketList',
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
     JChooseDeliveryAddress,
     JMarketHeadTab,
     JActivityItem,
-    JDrawer
+    JDrawer,
+    MescrollBody
   },
   data() {
     return {
@@ -197,7 +222,7 @@ export default {
             {
               key: '1',
               value: '全部',
-              isChecked: false
+              isChecked: true
             }, {
               key: '2',
               value: '有效',
@@ -209,9 +234,12 @@ export default {
     };
   },
   created() {
-    this.init();
+    // this.init();
   },
   computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
     fomrmateDate() {
       return (val) => {
         this.jshUtil.formatDate(val);
@@ -237,15 +265,73 @@ export default {
         this.filterList[0].data = data;
       }
     },
-    async getActivityList() {
+    async getActivityList(pages) {
+      const condition = this.getSearchCondition(pages);
       // 获取活动
-      const { code, data } = await this.marketService.activityList(this.form);
+      const { code, data } = await this.marketService.activityList(condition);
       if (code === '1') {
         data.list.forEach((item) => {
           item.choosedNum = 0;
         });
         this.list = data.list;
       }
+      const scrollView = {};
+      scrollView.pageSize = 10;
+      scrollView.total = 0;
+      return scrollView;
+    },
+    getSearchCondition(pages) {
+      /* 获取不同条件下搜索的传参 */
+      const condition = {
+        timestamp: new Date().getTime(),
+        activityId: '',
+        activityName: '',
+        activityType: '',
+        isCheckProduct: false,
+        productCode: '',
+        productGroup: [],
+        pageNo: pages.num,
+        pageSize: pages.size,
+        saletoCode: this.userInf.customerCode,
+        sendtoCode: this.userInf.sendtoCode,
+      };
+      // 活动类别选择后确认
+      this.tabs[0].children.forEach((item) => {
+        if (item.checked) {
+          condition.activityType = item.key;
+        }
+      });
+      this.filterList.forEach((item) => {
+        const keyName = item.key;
+        let val = '';
+        const valArr = [];
+        item.data.forEach((item1) => {
+          if (item1.isChecked) {
+            if (keyName === 'productGroup') {
+              valArr.push(item1.key);
+            } else if (keyName === 'isCheckProduct') {
+              if (item1.key === '1') {
+                val = false;
+              } else {
+                val = true;
+              }
+            } else {
+              val = item1.key;
+            }
+          }
+        });
+        if (keyName === 'productGroup') {
+          condition[item.key] = valArr;
+        } else {
+          condition[item.key] = val;
+        }
+      });
+      this.filterInputs.forEach((item) => {
+        if (item.value) {
+          condition[item.key] = item.value;
+        }
+      });
+      return condition;
     },
     async getAddressList() {
       // 获取地址
@@ -264,12 +350,12 @@ export default {
     changeAddress(current) {
       this.currentAdd = current;
     },
-    tabClick(handler) {
-      if (handler) {
-        this[handler]();
+    tabClick(tabs, tab) {
+      if (tab.handler) {
+        this[tab.handler]();
       }
     },
-    tabPickerConfirm(tabs) {
+    tabPickerConfirm() {
       // 活动类别选择后确认
       this.tabs[0].children.forEach((item) => {
         if (item.checked) {
@@ -277,6 +363,11 @@ export default {
         }
       });
       this.getActivityList();
+    },
+    async upCallback(pages) {
+      /* 上推加载 */
+      const scrollView = await this.getActivityList(pages);
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     showFilter() {
       /* 展示filter */
@@ -287,7 +378,14 @@ export default {
       this.isShowType = !this.isShowType;
     },
     filterReset() {
-      console.log('重置');
+      /* 抽屉筛选重置 */
+      this.filterList.forEach((item) => {
+        item.data.forEach((v) => {
+          v.isChecked = false;
+        });
+      });
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
     },
     filterConfirm() {
       /* 确定 */
