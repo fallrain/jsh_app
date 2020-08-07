@@ -137,6 +137,20 @@
 
     },
     {
+      "path": "pages/mine/mySDFInfo",
+      "style": {
+        "navigationBarTitleText": "售达方信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySet",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/sampleMachine/sampleMachineList",
       "style": {
         "navigationBarTitleText": "样品机列表"

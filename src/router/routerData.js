@@ -17,6 +17,8 @@ const data = [
   'pages/transferGoods/transferDetail',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
+  'pages/mine/mySDFInfo',
+  'pages/mine/mySet',
   'pages/sampleMachine/sampleMachineList'
 ];
 export default { data };
