@@ -56,7 +56,7 @@
       <view class="transferDetailItem-total-text ml48">共计金额:</view>
       <view class="transferDetailItem-total-price ml20">¥ 3456.00</view>
     </view>
-  </view>
+  </view> 
 </template>
 
 <script>
