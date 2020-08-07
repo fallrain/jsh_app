@@ -14,7 +14,6 @@ import samplemachineService from './samplemachine/samplemachine.service';
 import specimenService from './specimen/specimen.service';
 import vehicleService from './vehicleList/vehicleList.service';
 
-
 export default {
   install(Vue) {
     // 全局引用
