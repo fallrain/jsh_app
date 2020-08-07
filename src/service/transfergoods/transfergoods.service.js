@@ -14,5 +14,13 @@ export default {
     cargoSendWay(data) {
         /* 调货配送类型 */
         return jGet(urls.cargoSendWay, data)
-    }
+    },
+    shoppingCartNum(data) {
+        /* 购物车商品数量 */
+        return jGet(urls.shoppingCartNum, data)
+    },
+    allOrderList(data) {
+         /* 购物车订单详情 */
+         return jGet(urls.allOrderList, data)
+  }
 }

@@ -1,38 +1,52 @@
 <template>
   <view class="tFailureGoodsItem">
-    <view
+    <view 
+      class="tFailureGoodsItem-list"
+      v-for="(order,index) in itemList.data.orderList"
+      :key="index"
+    >
+      <view
       class="tShoppingCartItem-cnt-check"
       @tap="choose"
-    >
-      <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
-    </view>
-    <view class="tShoppingCartItem-cnt-img-wrap">
-      <image src="@/assets/img/index/BH02Z00A8.png"></image>
-    </view>
-    <view class="tFailureGoodsItem-cnt">
-      <view class="tFailureGoodsItem-cnt-head">
-        <view class="tFailureGoodsItem-cnt-head-tag mr10">失效</view>
-        <text class="tFailureGoodsItem-cnt-head-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温除高品质家用静音全自动10KG洗烘一体高温除高品质</text>
+      >
+        <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
       </view>
-      <view class="tFailureGoodsItem-cnt-btm">
-        <text class="tFailureGoodsItem-cnt-head-text">¥ 39</text>
-        <text class="tFailureGoodsItem-cnt-head-inf-mrr">付款方</text>
-        <i class="iconfont iconxia"></i>
-        <text class="tFailureGoodsItem-cnt-head-text mll">请选择付款方</text>
+      <view 
+        class="tShoppingCartItem-cnt-img-wrap"
+      
+      >
+        <image :src="order.THUMBNAIL"></image>
       </view>
-      <view class="tFailureGoodsItem-cnt-head-inf-reason">失效原因：产品不可销售，客户提货样表未投放</view>
+      <view class="tFailureGoodsItem-cnt">
+        <view class="tFailureGoodsItem-cnt-head">
+          <view class="tFailureGoodsItem-cnt-head-tag mr1">失效</view>
+          <text class="tFailureGoodsItem-cnt-head-text">{{order.PRODUCTNAME}}</text>
+        </view>
+        <view class="tFailureGoodsItem-cnt-btm">
+          <text class="tFailureGoodsItem-cnt-head-text">¥ {{order.SUMMONEY}}</text>
+          <text class="tFailureGoodsItem-cnt-head-inf-mrr">付款方</text>
+          <i class="iconfont iconxia"></i>
+          <text class="tFailureGoodsItem-cnt-head-text mll">请选择付款方</text>
+        </view>
+        <view class="tFailureGoodsItem-cnt-head-inf-reason">{{order.SXREASON}}</view>
+      </view>
     </view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'TFailureGoodsItem',
+  name: 'TFailureGoodsItem', 
   props: {
     // 选中
     checked: {
       type: Boolean,
       default: false
+    },
+    // 数据
+    itemList: {
+      type: Object,
+      default: () => {}
     },
     // 索引
     index: {
@@ -42,11 +56,14 @@ export default {
   data() {
     return {};
   },
+  created() {
+    
+  },
   methods: {
     choose() {
       /* 选中 */
       const checked = !this.checked;
-      this.$emit('update:checked', checked);
+      this.$emit('update:checked', this.itemList.checked);
       this.$emit('change', checked, this.index);
     }
   }
@@ -56,12 +73,15 @@ export default {
 <style lang="scss">
   .tFailureGoodsItem {
     position: relative;
-    display: flex;
-    align-items: center;
+    
     min-height: 198px;
     padding-top: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #EDE9E9;
+  }
+  .tFailureGoodsItem-list{
+    display: flex;
+    align-items: center;
   }
   .tShoppingCartItem-cnt-img-wrap{
     flex-shrink: 0;

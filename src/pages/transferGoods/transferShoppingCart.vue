@@ -9,9 +9,9 @@
       <view class="cumulative-shoppingCart">共4件宝贝</view>
       <view class="shoppingCart-list">
         <t-shopping-cart-item
-          v-for="(goods,index) in shoppingList"
+          v-for="(list,index) in allOrderList"
           :key="index"
-          :goods="goods"
+          :list="list"
           :index="index"
           @change="goodsChange"
         ></t-shopping-cart-item>
@@ -23,14 +23,14 @@
       </view>
       <!-- 失效宝贝 -->
       <t-failure-goods-list
-        :list="failureGoodsList"
-        @change="failureGoodsListChange"
+        :list="invalidList"
+        @change="invalidListChange"
       ></t-failure-goods-list>
       <!-- 底部 -->
       <t-shopping-cart-btm
-      :checked.sync="isCheckAll"
-      @checkAll="checkAll"
-    ></t-shopping-cart-btm>
+        :checked.sync="isCheckAll"
+        @checkAll="checkAll"
+      ></t-shopping-cart-btm>
 
     </view>
 </template>
@@ -52,11 +52,15 @@ export default {
   },
   data(){
     return {
+      // 订单详情
+      allOrderList: [],
+      // 失效订单
+      invalidList: [],
       tabs: [
         {
           id: 'gwc',
           name: '购物车',
-          active: true
+          active: false
         },
         {
           id: 'zc',
@@ -66,62 +70,105 @@ export default {
         {
           id: 'zx',
           name: '中心调货',
-          active: false
+          active: true
         }
       ],
-       shoppingList: [
-        {
-            checked: false,
-            data:[
-              {
-               show: true, 
-              },
-              {
-               show: true, 
-              }
-            ]
+      //  shoppingList: [
+      //   {
+      //       checked: false,
+      //       data:[
+      //         {
+      //          show: true, 
+      //         },
+      //         {
+      //          show: true, 
+      //         }
+      //       ]
           
-        },
-        {
-          checked: true,
-          data:[
-            {
-               show: true, 
-            }
-          ]
+      //   },
+      //   {
+      //     checked: true,
+      //     data:[
+      //       {
+      //          show: true, 
+      //       }
+      //     ]
         
-        },
-      ],
-      failureGoodsList: [
-        {
-          checked: false,
-        },
-        {
-          checked: false,
-        }
+      //   },
+      // ],
+      // failureGoodsList: [
+      //   {
+      //     checked: false,
+      //   },
+      //   {
+      //     checked: false,
+      //   }
       
-      ],
+      // ],
       // 是否全选
       isCheckAll: false,
     }
   },
+  created() {
+    this.getShopInfo();
+  },
   methods: {
-    goodsChange(goods, index) {
-      this.shoppingList[index] = goods;
-      this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
+    getShopInfo() {
+      this.getOrderList()
+    },
+    async getOrderList() {
+      // 调货购物车数据
+      const { code, data } = await this.transfergoodsService.allOrderList({
+        timestamp: 1596606815956,
+        longfeiUSERID: 8700010462
+      })
+      if(code === "1") {   
+        const temp = data.data.slice(0,2)
+        const invalid = data.data.slice(2)
+        const failure = []
+        const allList = []
+        temp.map(item => {
+          const list = {
+            checked: true,
+            data:item
+          }
+          allList.push(list)
+        })
+        this.allOrderList = allList
+        console.log(this.allOrderList)
+
+        invalid.map(item => {
+           const list = {
+            checked: true,
+            data:item
+          }
+          failure.push(list)
+        })
+        this.invalidList = failure
+        console.log(this.invalidList)
+       
+      }
+    },
+    goodsChange(list, index) {
+      this.allOrderList[index] = list;
+      this.allOrderList = JSON.parse(JSON.stringify(this.allOrderList));
     },
     checkAll(checked) {
       /* 全部选择回调函数 */
-      this.shoppingList.forEach((v) => {
+      this.allOrderList.forEach((v) => {
         v.checked = checked;
       });
     },
-    failureGoodsListChange(list) {
-      this.failureGoodsList = list;
+    invalidListChangeChange(list) {
+      this.invalidListChange = list;
     },
     tabClick(tabs) {
        this.tabs = tabs;
     }
+  
+
+
+
   }
   
     
