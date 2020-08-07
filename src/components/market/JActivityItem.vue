@@ -151,9 +151,9 @@ export default {
   },
   methods: {
     goDetail(e) {
-      console.log(e);
-      console.log(e.currentTarget.getAttributeNode('class'));
-      // this.$emit('activityDetail', this.activity);
+      // console.log(e);
+      // console.log(e.currentTarget.getAttributeNode('class'));
+      this.$emit('activityDetail', this.activity);
     }
   }
 };
