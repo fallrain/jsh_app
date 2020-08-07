@@ -18,6 +18,7 @@ const data = [
   'pages/mine/mySignInfo',
   'pages/mine/mySDFInfo',
   'pages/mine/mySet',
+  'pages/mine/myCenter',
   'pages/sampleMachine/sampleMachineList'
 ];
 export default { data };
