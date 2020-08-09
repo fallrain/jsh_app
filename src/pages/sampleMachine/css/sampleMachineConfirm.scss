@@ -1,0 +1,49 @@
+.sampleMachineConfirm{
+
+}
+.product-info{
+  position: relative;
+  margin-bottom: 24px;
+  padding: 0 28px;
+  border-radius: 14px;
+  background: #fff;
+
+  @mixin uni-num-h {
+    height: 38px;
+    line-height: 38px;
+  }
+
+  .uni-numbox {
+    @include uni-num-h;
+  }
+
+  .uni-numbox--text {
+    color: #999;
+    font-size: 26px;
+  }
+
+  /*.uni-input-input {
+    color: $theme-color;
+    font-size: 22px;
+  }*/
+
+  .uni-numbox__plus {
+    @include uni-num-h;
+
+    /*.uni-numbox--text {
+      color: $theme-color;
+    }*/
+  }
+
+  .uni-numbox__value {
+    @include uni-num-h;
+    min-height: 38px;
+    //color: $theme-color;
+    font-size: 22px;
+  }
+
+  .uni-numbox__minus {
+    height: 38px;
+    line-height: 38px;
+  }
+}

@@ -12,7 +12,6 @@ import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
 import samplemachineService from './samplemachine/samplemachine.service';
 
-
 export default {
   install(Vue) {
     // 全局引用
