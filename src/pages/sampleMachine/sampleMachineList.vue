@@ -202,6 +202,7 @@ export default {
   methods: {
     async init() {
       await this.getAddressList();
+      await this.queryBrandAndInvsort();
     },
     async getAddressList() {
       // 获取地址
@@ -224,9 +225,33 @@ export default {
       // this.filterForm.saletoCode = this.curChoseDeliveryAddress.customerCode;
       // this.filterForm.sendtoCode = this.curChoseDeliveryAddress.addressCode;
     },
-    getPageInf() {
-      this.setFilterData();
-      this.getDeliveryAddress();
+    async queryBrandAndInvsort() {
+      const form = {
+        timestamp: new Date().getTime(),
+        customerCode: this.userInf.customerCode
+      };
+      // 获取产品组和品牌
+      const { data } = await this.samplemachineService.queryBrandAndInvsort(form);
+      if (data.code === '200') {
+        const dataObj = JSON.parse(data.data);
+        // 产品组
+        dataObj.invsort.forEach((item) => {
+          item.isChecked = false;
+          item.key = item.CODE;
+          item.value = item.NAME;
+          item.queryKey = 'group';
+        });
+        // 品牌
+        dataObj.brand.forEach((item) => {
+          item.isChecked = false;
+          item.key = item.CODE;
+          item.value = item.NAME;
+          item.queryKey = 'brand';
+        });
+        this.filterList[0].data = dataObj.brand;
+        this.filterList[1].data = dataObj.invsort;
+        console.log(dataObj);
+      }
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -260,11 +285,11 @@ export default {
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
           if (v.isChecked) {
-            filtersMap[v.key] = 1;
+            condition[v.queryKey] = v.key;
           }
         });
       });
-      // 如果存在条件，则塞入条件
+      // 如果存在条件，则塞入条件mei
       condition = {
         ...condition,
         ...tab.condition,
