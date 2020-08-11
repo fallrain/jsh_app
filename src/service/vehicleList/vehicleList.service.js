@@ -18,5 +18,10 @@ export default {
   },
   queryBaseCode() { // 基地?timestamp=1597133218359
     return jGet(url.queryBaseCode());
+  },
+  queryEs(timestamp, categoryCode, name, attributeName, attributeValue, pageNum, customerCode, dstCode, center,
+    isWholeCar, group, brandName, sortDirection, sortType, tags, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode) {
+    return jGet(url.queryEs(timestamp, categoryCode, name, attributeName, attributeValue, pageNum, customerCode, dstCode, center,
+      isWholeCar, group, brandName, sortDirection, sortType, tags, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode));
   }
 };
