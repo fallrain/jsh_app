@@ -39,6 +39,7 @@
           :sendtoCode="userInf.sendtoCode"
           :allPrice="item.$allPrice"
           @change="goodsChange"
+          @sampleMachineConfirm="sampleMachineConfirm"
         ></j-sample-machine-item>
       </view>
     </mescroll-body>
@@ -482,6 +483,11 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+    },
+    sampleMachineConfirm(confirmInfo) {
+      uni.navigateTo({
+        url: `/pages/sampleMachine/sampleMachineConfirm?confirmInfo=${JSON.stringify(confirmInfo)}`
+      });
     }
   }
 };
