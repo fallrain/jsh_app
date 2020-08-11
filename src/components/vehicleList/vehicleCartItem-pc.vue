@@ -6,7 +6,7 @@
           <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
         </view>
         <view class="v-c-pc-flox2">
-          <button type="button" class="v-c-pc-btn-primary">我的挂单</button>
+          <button type="button" class="v-c-pc-btn-primary">拼车订单</button>
         </view>
         <view class="v-c-pc-flox4">
           <text class="v-c-pc-head-text">基地：</text>
