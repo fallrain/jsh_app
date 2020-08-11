@@ -91,6 +91,7 @@ export default {
       this.value.forEach((v) => {
         v.checked = false;
       });
+      this.value[0].checked = true; // 重置默认第一个？发货基地的待定
     },
     confirm() {
       /* 确定 */

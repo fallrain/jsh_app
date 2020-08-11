@@ -124,32 +124,7 @@ export default {
         {
           name: '发货基地',
           show: false,
-          children: [
-            {
-              name: '海尔',
-              checked: false
-            },
-            {
-              name: '卡萨帝',
-              checked: false
-            },
-            {
-              name: '统帅',
-              checked: false
-            },
-            {
-              name: '摩卡',
-              checked: false
-            },
-            {
-              name: 'GE',
-              checked: false
-            },
-            {
-              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
-              checked: false
-            }
-          ]
+          children: []
         },
         {
           name: '基地拼车',
@@ -232,6 +207,31 @@ export default {
       this.querySendWay('', 'HD10', '8700010462', '12E02', '8700010462'); // 配送类型
       this.carLoadType(); // 整车列表-整车类型+车型
     },
+    async queryBaseCode() { // 基地
+      const { code, data } = await this.vehicleService.queryBaseCode();
+      if (code === '1') {
+        console.log('基地');
+        console.log(data);
+        if (data.data.jd.length > 0) {
+          data.data.jd.forEach((inf) => {
+            inf.checked = false;
+            inf.name = inf.ICC_JDNAME;
+            inf.code = inf.ICC_JDCODE;
+          });
+        }
+        this.popTabs[0].children = data.data.jd;
+        this.popTabs[0].children[4].checked = true;
+        if (data.data.pcb.length > 0) {
+          data.data.pcb.forEach((inf) => {
+            inf.checked = false;
+            inf.name = inf.ICC_JDNAME;
+            inf.code = inf.ICC_JDCODE;
+            inf.type = 'ZC';
+          });
+        }
+        this.popTabs[1].children = data.data.pcb;
+      }
+    },
     async carLoadType() { // 整车列表-整车类型+车型
       const { code, data } = await this.vehicleService.carType({
         brandProductGroup: '',
@@ -247,12 +247,12 @@ export default {
             inf.checked = false;
             inf.name = inf.carTypeName;
             inf.type = 'ZC';
-            inf.carName = inf.carName;
+            inf.carNames = inf.carName;
           });
         }
         this.popTabs[3].children = data;
         this.popTabs[3].children[0].checked = true;
-        this.carType = this.popTabs[3].children[0].carName;
+        this.carType = this.popTabs[3].children[0].carNames;
       }
       console.log(this.popTabs[3]);
     },
