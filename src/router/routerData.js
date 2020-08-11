@@ -21,6 +21,7 @@ const data = [
   'pages/mine/mySet',
   'pages/vehicleList/vehicleList',
   'pages/vehicleList/vehicleCarList',
+  'pages/vehicleList/vehicleCarDetail',
   'pages/sampleMachine/sampleMachineList',
   'pages/mine/myCenter',
   'pages/mine/myAlertTel',

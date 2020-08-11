@@ -2,7 +2,7 @@
   <uni-popup ref="pop" type="bottom" @change="change">
     <view class="mask-ship">
       <view class="top-ship" @click="close">
-        <view class="top-ship-title">配送至</view>
+        <view class="top-ship-title">{{titles}}</view>
         <view class="top-ship-but">X</view>
       </view>
       <view class="sorrowC-ship">
@@ -32,6 +32,9 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    titles: {
+      type: String
     },
     info: {// 图片以及产品数据
       type: Array,

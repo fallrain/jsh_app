@@ -136,6 +136,9 @@ export default {
       /* tag tab 点击事件 */
     },
     showSecondCategory(item) {
+      this.popTabs.forEach((inf) => {
+        inf.show = false;
+      });
       /* 展示二级类目 */
       item.show = !item.show;
       this.isExpend = item.show;
