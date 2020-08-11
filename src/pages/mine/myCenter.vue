@@ -1,0 +1,421 @@
+<template>
+  <view class="mineCenter">
+    <!-- 顶部背景 -->
+    <view class="topView">
+      <!-- 头像栏 -->
+      <view class="headerRow">
+        <!-- 头像 -->
+        <view class="headerImage"></view>
+        <view>
+          <view class="nameAndPosion">
+            <!-- 姓名职位 -->
+            <view class="name">王芬芬</view>
+            <view class="posion">总经理</view>
+          </view>
+          <view class="detail">售达方：(8800101954) 青岛鸿程永泰商贸有限公司</view>
+        </view>
+      </view>
+    </view>
+    <!-- 金额数据栏 -->
+    <view class="moneyArea">
+      <view >  
+        <view class="moneyName">账户余额（元）</view>
+        <view class="moneyCount">¥ 11239.11</view>
+      </view>
+      <view class="blank"></view>
+      <view >  
+        <view class="moneyName">可用返利</view>
+        <view class="moneyCount">¥ 311239.12</view>
+      </view>
+    </view>
+    <!-- 我的订单 -->
+    <view class="myOrderRow">
+      <view class="colorBlock"></view>
+      <view class="orderTitle">我的订单</view>
+      <view class="allOrder">全部订单</view>
+    </view>
+
+    <view class="order-cataloglist">
+      <view 
+        class="order-cataloglist-item"
+        v-for="item in cataloglist"
+        :key="item.id"    
+        @click="goCatalog(item.url)"
+      >
+        <image class="infor-item-img" :src="item.src" mode="aspectFit" />
+        <view class="cataloglist-item-title">{{item.title}}</view>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="line"></view>
+
+    <!-- 商品关注 -->
+    <view class="focusProduct">
+      <view >  
+        <view class="productTitle">商品关注</view>
+        <view class="productSubTitle">快捷便利查看关注商品</view>
+      </view>
+      <view class="product">  
+      </view>
+    </view>
+
+    <view class="lineOne"></view>
+
+     <view class="order-cataloglist">
+      <view 
+        class="infor-cataloglist-item"
+        v-for="item in inforlist"
+        :key="item.id"    
+        @click="goCatalog(item.url)"
+      >
+        <image class="cataloglist-item-img" :src="item.src" mode="aspectFit" />
+        <view class="cataloglist-item-title">{{item.title}}</view>
+      </view>
+    </view>
+
+    <view class="lineOne"></view>
+
+    <!-- 经营看板 -->
+    <view class="focusProduct">
+      <view >  
+        <view class="productTitle">经营看板</view>
+        <view class="productSubTitle">动态数据实时查看，了解，跟踪</view>
+      </view>
+      <view class="board">  
+      </view>
+    </view>
+
+    <view class="bottom"></view>
+
+  </view>
+
+</template>
+
+<script>
+
+export default {
+  name: 'myCenter',
+  components: {
+    
+  },
+  data() {
+    return {
+      cataloglist:[
+        {
+          id: 1,
+          src: require('./image/jiesuan.png'),
+          title: "待结算",
+          url: "#"
+        },
+        {
+          id: 2,
+          src: require('./image/koukuan.png'),
+          title: "待扣款",
+          url: "#"
+        },
+        {
+          id: 3,
+          src: require('./image/daifahuo.png'),
+          title: "待发货",
+          url: "#"
+        },
+        {
+          id: 4,
+          src: require('./image/yifahuo.png'),
+          title:"已发货",
+          url: "#"
+        },
+        {
+          id: 5,
+          src: require('./image/yiqianshou.png'),
+          title: "已签收",
+          url: "#"
+        },
+        {
+          id: 6,
+          src: require('./image/danju.png'),
+          title: "物流单据",
+          url: "#"
+        },
+        {
+          id: 7,
+          src: require('./image/tuihuo.png'),
+          title: "退货订单",
+          url: "#"
+        },
+        {
+          id: 8,
+          src: require('./image/yiquxiao.png'),
+          title: "已取消",
+          url: "#"
+        },
+        {
+          id: 9,
+          src: require('./image/daifahuo.png'),
+          title:"已开票",
+          url: "#"
+        }
+      ],
+      inforlist:[
+        {
+          id: 1,
+          src: require('./image/jibenxinxi.png'),
+          title: "基本信息",
+          url: "#"
+        },
+        {
+          id: 2,
+          src: require('./image/qianyuexinxi.png'),
+          title: "签约信息",
+          url: "#"
+        },
+        {
+          id: 3,
+          src: require('./image/mendianxinxi.png'),
+          title: "门店信息",
+          url: "#"
+        },
+        {
+          id: 4,
+          src: require('./image/fukuanfang.png'),
+          title:"付款方信息",
+          url: "#"
+        },
+        {
+          id: 5,
+          src: require('./image/songfafang.png'),
+          title: "送达方信息",
+          url: "#"
+        }
+      ]
+    };
+  },
+  created() {
+  },
+  methods: {
+    
+  },
+};
+</script>
+
+<style scoped>
+  .mineCenter{
+    background: white;
+    min-height:1400px;
+  }
+  .headerRow {
+    display: flex;
+  }
+  .topView {
+    width: 750px;
+    height: 398px;
+    background: url('./image/top.png') no-repeat;
+    background-size: 100%;
+    background-position: 0px -25px;
+    padding-top: 50px;
+  }
+  .headerImage {
+    width: 160px;
+    height: 160px;
+    margin-left: 50px;
+    background-color: antiquewhite;
+  }
+  .nameAndPosion {
+    display: flex;
+  }
+  .name {
+    margin-left: 24px;
+    height:56px;
+    font-size:40px;
+    font-weight:300;
+    color:rgba(255,255,255,1);
+    line-height:56px;
+  }
+  .posion {
+    height:40px;
+    font-size:28px;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:40px;
+    margin-left: 24px;
+    margin-top: 12px;
+  }
+  .detail {
+    margin-left: 24px;
+    margin-right: 60px;
+    margin-top: 26px;
+    height:34px;
+    font-size:24px;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:34px;
+  }
+
+  .moneyArea {
+    width: 718px;
+    height: 194px;
+    background: url('./image/money-bg.png') no-repeat;
+    background-size: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -150px;
+    display: flex;
+  }
+  .moneyName {
+    margin-left: 48px;
+    padding-top: 44px;
+    height:14px;
+    font-size:10px;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:14px;
+  }
+  .moneyCount {
+    margin-left: 48px;
+    padding-top: 40px;
+    height:66px;
+    font-size:48px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(237,40,86,1);
+    line-height:66px;
+  }
+  .blank {
+    width: 20px;
+  }
+  .myOrderRow {
+    display: flex;
+    margin-top: 40px;
+  }
+  .colorBlock {
+    width:6px;
+    height:26px;
+    margin-left: 40px;
+    background:rgba(237,40,86,1);
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 16px;
+  }
+  .orderTitle {
+    height:40px;
+    font-size:28px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(51,51,51,1);
+    line-height:40px;
+  }
+  .allOrder {
+    height:40px;
+    font-size:12px;
+    font-weight:300;
+    color:rgba(153,153,153,1);
+    line-height:40px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 440px;
+  }
+
+  .order-cataloglist{
+    display:flex;
+    column-count:5;
+    flex-wrap:wrap;
+    margin:40px 22px 0px 32px;
+  }
+  .order-cataloglist-item{
+    margin-right: 46px;
+    margin-bottom:24px;
+    display:flex;
+    flex-direction:column;
+    text-align: center;
+  }  
+  :nth-child(5){
+    margin-right:0px;
+  }
+  :nth-child(10){
+    margin-right:0px;
+  }
+  .cataloglist-item-img{
+    width:100px;
+    height:72px;
+    background-size: 100%;
+  }
+  .cataloglist-item-title{
+    margin-top:12px;
+    height:34px;
+    font-size:12px;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+    line-height:17px;
+    text-align: center;
+  }
+  .line {
+    height:6px;
+    background:rgba(245,245,245,1);
+  }
+
+  .focusProduct {
+    display: flex;
+  }
+  .productTitle {
+    height:42px;
+    font-size:30px;
+    font-weight:400;
+    color:rgba(51,51,51,1);
+    line-height:42px;
+    margin-top: 40px;
+    margin-left: 40px;
+  }
+  .productSubTitle {
+    height:34px;
+    width: 360px;
+    font-size:24px;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:34px;
+    margin-left: 40px;
+  }
+  .product {
+    width:174px;
+    height:156px;
+    background: url('./image/shangpinguanzhu.png') no-repeat;
+    background-size: 100%;
+    margin-top: 10px;
+    margin-left: 120px;
+    margin-bottom: 4px;
+  }
+  .lineOne {
+    height: 2px;
+    background:rgba(245,245,245,1);
+  }
+
+  .infor-cataloglist-item{
+    margin-right: 31px;
+    margin-bottom:24px;
+    display:flex;
+    flex-direction:column;
+    text-align: center;
+  } 
+
+  .infor-item-img{
+    width:100px;
+    height:68px;
+    background-size: 100%;
+  }
+
+  .board {
+    width:174px;
+    height:156px;
+    background: url('./image/jingyingkanban.png') no-repeat;
+    background-size: 100%;
+    margin-top: 10px;
+    margin-left: 120px;
+    margin-bottom: 4px;
+  }
+
+  .bottom {
+    height:84px;
+    background:rgba(245,245,245,1);
+  }
+
+</style>

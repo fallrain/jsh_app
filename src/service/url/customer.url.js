@@ -19,6 +19,10 @@ const urls = {
   // 获取送达方信息
   getWarehouse(code) {
     return `/cloud/${code}/warehouse?warehouseFlag=YD`;
+  },
+  // 获取付款方列表
+  getcustomersList(code) {
+    return `/customers/${code}/payer`;
   }
 };
 util.addPrefix(baseURL, urls);
