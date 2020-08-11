@@ -203,7 +203,7 @@ export default {
     info() {
       this.queryBaseCode(); // 基地
       this.setFilterData();
-      this.getDeliveryAddress();
+      this.getDeliveryAddress(); // 配送至接口也可能是/queryCustomer/queryCustomerSendto?timestamp=1597134576496&customerCode=8700010462
       this.querySendWay('', 'HD10', '8700010462', '12E02', '8700010462'); // 配送类型
       this.carLoadType(); // 整车列表-整车类型+车型
     },
