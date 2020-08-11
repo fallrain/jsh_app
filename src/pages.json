@@ -1,7 +1,7 @@
 {
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-  
+
     {
       "path": "pages/nav/nav",
       "style": {
@@ -151,9 +151,43 @@
       }
     },
     {
+      "path": "pages/mine/myCenter",
+      "style": {
+        "navigationBarTitleText": "个人中心",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myAlertTel",
+      "style": {
+        "navigationBarTitleText": "修改手机号",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myPayAlertPwd",
+      "style": {
+        "navigationBarTitleText": "支付密码修改",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myGuestView",
+      "style": {
+        "navigationBarTitleText": "客户视图",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/sampleMachine/sampleMachineList",
       "style": {
         "navigationBarTitleText": "样品机列表"
+      }
+    },
+    {
+      "path": "pages/sampleMachine/sampleMachineConfirm",
+      "style": {
+        "navigationBarTitleText": "样品机确认订单"
       }
     },
     {

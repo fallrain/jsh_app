@@ -21,6 +21,13 @@ const data = [
   'pages/mine/mySet',
   'pages/vehicleList/vehicleList',
   'pages/vehicleList/vehicleCarList',
-  'pages/sampleMachine/sampleMachineList'
+  'pages/sampleMachine/sampleMachineList',
+  'pages/mine/myCenter',
+  'pages/mine/myAlertTel',
+  'pages/mine/myPayAlertPwd',
+  'pages/mine/myGuestView',
+  'pages/sampleMachine/sampleMachineList',
+  'pages/sampleMachine/sampleMachineList',
+  'pages/sampleMachine/sampleMachineConfirm'
 ];
 export default { data };

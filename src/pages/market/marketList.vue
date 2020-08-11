@@ -234,7 +234,7 @@ export default {
     };
   },
   created() {
-    // this.init();
+    this.init();
   },
   computed: {
     ...mapGetters({
@@ -250,7 +250,7 @@ export default {
     async init() {
       await this.getAddressList();
       await this.getIndustryList();
-      await this.getActivityList();
+      // await this.getActivityList();
     },
     async getIndustryList() {
       // 获取产品组
@@ -357,12 +357,8 @@ export default {
     },
     tabPickerConfirm() {
       // 活动类别选择后确认
-      this.tabs[0].children.forEach((item) => {
-        if (item.checked) {
-          this.form.activityType = item.key;
-        }
-      });
-      this.getActivityList();
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
     },
     async upCallback(pages) {
       /* 上推加载 */
@@ -389,37 +385,8 @@ export default {
     },
     filterConfirm() {
       /* 确定 */
-      this.filterList.forEach((item) => {
-        const keyName = item.key;
-        let val = '';
-        const valArr = [];
-        item.data.forEach((item1) => {
-          if (item1.isChecked) {
-            if (keyName === 'productGroup') {
-              valArr.push(item1.key);
-            } else if (keyName === 'isCheckProduct') {
-              if (item1.key === '1') {
-                val = false;
-              } else {
-                val = true;
-              }
-            } else {
-              val = item1.key;
-            }
-          }
-        });
-        if (keyName === 'productGroup') {
-          this.form[item.key] = valArr;
-        } else {
-          this.form[item.key] = val;
-        }
-      });
-      this.filterInputs.forEach((item) => {
-        if (item.value) {
-          this.form[item.key] = item.value;
-        }
-      });
-      this.getActivityList();
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
     },
     toggleExpand(item) {
       /* 展开或者收起 */
@@ -456,12 +423,11 @@ export default {
     // 获取所有产品的库存
     async getAllStock(currentInfo) {
       const arr1 = currentInfo.products;
-      const arr2 = currentInfo.pbProducts;
+      const arr2 = currentInfo.pbProducts || [];
       const arr = arr1.concat(arr2);
-      const productCodes = [];
-      arr.forEach((item) => {
-        productCodes.push(item.productCode);
-      });
+      let productCodes = [];
+      debugger;
+      productCodes = arr.map(v => v.productCode);
       this.stockForm.productCodes = productCodes;
       const { code, data } = await this.commodityService.getStock(this.stockForm);
       if (code === '1') {
@@ -472,10 +438,12 @@ export default {
         item.stockTotalNum = data[item.productCode].stockTotalNum;
         item.choosedNum = 0; // 增加选择数量字段
       });
-      currentInfo.pbProducts.forEach((item) => {
-        item.stockTotalNum = data[item.productCode].stockTotalNum;
-        item.choosedNum = 0; // 增加选择数量字段
-      });
+      if (currentInfo.pbProducts) {
+        currentInfo.pbProducts.forEach((item) => {
+          item.stockTotalNum = data[item.productCode].stockTotalNum;
+          item.choosedNum = 0; // 增加选择数量字段
+        });
+      }
       console.log(currentInfo);
       return currentInfo;
     },
