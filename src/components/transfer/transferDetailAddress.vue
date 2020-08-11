@@ -9,11 +9,11 @@
         <view class="transferDetailAddress-information">
           <view class="transferDetailAddress-information-text">
             总装车体积：
-            <text class="transferDetailAddress-information-val">146.49m</text>
+            <text class="transferDetailAddress-information-val">{{detailList.IBR_JSTIJI}}m3</text>
           </view>
           <view class="transferDetailAddress-information-text mla">
             库位：
-            <text class="transferDetailAddress-information-val">WFS2日日顺潍坊H2库存</text>
+            <text class="transferDetailAddress-information-val">{{detailList.T5_OUTWHNAME}}</text>
           </view>   
           <view class="transferDetailAddress-information-text mlb">
             车型：
@@ -29,11 +29,11 @@
         <view class="transferDetailAddress-information order">
           <view class="transferDetailAddress-information-text mld">
             申请单号：
-            <text class="transferDetailAddress-information-val">21000086080</text>
+            <text class="transferDetailAddress-information-val">{{detailList.IBR_SEQ}}</text>
           </view>
           <view class="transferDetailAddress-information-text mla">
             下单日期：
-            <text class="transferDetailAddress-information-val">2020/07/19</text>
+            <text class="transferDetailAddress-information-val">{{detailList.IBR_STARTDATE}}</text>
           </view>
         </view>
       </view>
@@ -51,25 +51,18 @@ export default {
   components: {
     // JRadioGroup,
   },
+  props: {
+    detailList: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
-      radioGroups: [
-        {
-          inf: '自提',
-          checked: true
-        },
-        {
-          inf: '配送',
-          checked: false
-        }
-      ]
     };
   },
   methods: {
-    radioGroupChange(radioGroup) {
-      /* radioGroupChange */
-      this.radioGroups = radioGroup;
-    }
+    
   }
 };
 </script>

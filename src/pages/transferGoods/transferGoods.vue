@@ -12,6 +12,7 @@
           >搜索
           </button>
       </view>
+      
       <transfer-goods-head
           class="mb12"
           :tabs="tabs"
@@ -40,6 +41,7 @@
             :sendtoCode="userInf.sendtoCode"
             :allPrice="item.$allPrice"
             @change="goodsChange"
+            @query="getShoppingCartNum"
           ></transfer-goods-item>
         </view>
         <view v-else>暂无数据</view>
@@ -218,7 +220,9 @@ export default {
       // this.setFilterData();
       this.getDeliveryAddress();
       this.getTransferList();
-      this.getCargoQuery()
+      this.getCargoQuery();
+      this.getShoppingCartNum()
+
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -285,7 +289,7 @@ export default {
       const scrollView = {};
       const { code, data } = await this.transfergoodsService.transferList({
         ...condition,
-        timestamp: 1595922509073,
+        timestamp: Date.parse(new Date()),
         categoryCode: '',
         attributeName: '',
         attributeValue: '',
@@ -318,13 +322,12 @@ export default {
         // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取收藏
-        const getProductQueryInter = this.productDetailService.productQueryInter({
-          productCodes,
-          account: userInf.customerCode
+        const getProductQueryInter = this.customerService.queryCustomerInterestProductByAccount({
+          account: "8700010462",
+          productCodeList: productCodes
         });
         const [
           allPriceRes,
-          stockRes,
           productQueryInterRes
         ] = await Promise.all([getAllPrice, getProductQueryInter]);
         if (allPriceRes.code === '1') {
@@ -333,17 +336,18 @@ export default {
           const allPriceData = allPriceRes.data;
           // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
           curList.forEach((v) => {
+            v.amount = 1
             v.$PtPrice = allPriceData[v.code].pt;
             v.$allPrice = allPriceData[v.code];
           });
         }
-        // if (productQueryInterRes.code === '1') {
-        //   // 添加点赞
-        //   const productQueryInterData = productQueryInterRes.data;
-        //   curList.forEach((v) => {
-        //     v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
-        //   });
-        // }
+        if (productQueryInterRes.code === '1') {
+          // 添加点赞
+          const productQueryInterData = productQueryInterRes.data;
+          curList.forEach((v) => {
+            v.$favorite = !!productQueryInterData.find(productCode => v.code === productCode);
+          });
+        }
         if (pages && pages.num === 1) {
           this.list = curList;
         } else {
@@ -373,7 +377,7 @@ export default {
     async getCargoQuery() {
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
-        timestamp: 1596530440135,
+        timestamp: Date.parse(new Date()),
         sendToCode: 8700010462,
         sendToMktid: 12E02
       })
@@ -382,7 +386,7 @@ export default {
       }
       // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
-        timestamp: 1596533915450,
+        timestamp: Date.parse(new Date()),
         longfeiUSERID: 8700010462,
         sendtoCode: 8700010462,
         sendtoMktid: 12E02,
@@ -391,10 +395,12 @@ export default {
         this.cargoSendWay = temp.data.data
       }
       this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay)
-      
+
+    },
+    async getShoppingCartNum() {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
-        timestamp: 1596606815954,
+        timestamp: Date.parse(new Date()),
         longfeiUSERID: 8700010462
       })
       if(shoppingCart.code === "1") {   
@@ -402,11 +408,11 @@ export default {
         console.log(this.shoppingCartNum)
         // console.log(data)
       }
-
     },
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
+      this.list = JSON.parse(JSON.stringify(this.list));
     },
 
     tabClick(tabs, tab, index) {

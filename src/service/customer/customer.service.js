@@ -29,5 +29,18 @@ export default {
   getcustomersList(code, data) {
     /* 获取付款方列表 */
     return jGet(urls.getcustomersList(code), data);
+  },
+  // 收藏的商品的数据
+  queryCustomerInterestProductByAccount(data) {
+    return jPostJson(urls.queryCustomerInterestProductByAccount, data)
+  },
+  // 添加收藏
+  addInterestProduct(data) {
+    return jPostJson(urls.addInterestProduct + '/' + data.customerCode + '/' + data.account + '/' + data.productCode)
+  },
+  // 取消收藏
+  removeInterestProduct(data) {
+    return jPostJson(urls.removeInterestProduct, data)
   }
+
 };

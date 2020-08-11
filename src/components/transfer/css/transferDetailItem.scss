@@ -27,21 +27,21 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
   }
-  .transferDetailItem-detail-odd{
+  .transferDetailItem-detail-odd {
     display: flex;
     align-items: center;
     font-size: 24px;
     color: #333;
     margin-bottom: 26px;
-    .transferDetailItem-detail-close{
+    .transferDetailItem-detail-close {
       color: #2283E2;
       margin-left: 288px;
     }
-    .transferDetailItem-detail-odd-num{
+    .transferDetailItem-detail-odd-num {
       color: #2283E2;
     }
   }
-  .transferDetailItem-detail-cnt{
+  .transferDetailItem-detail-cnt {
     display: flex;
     align-items: center;
     margin-bottom: 32px;
@@ -54,39 +54,55 @@
         height: 100%;
       }
     }
-    .transferDetailItem-detail-cnt-inf{
-      .transferDetailItem-detail-cnt-inf-title{
+    
+    .transferDetailItem-detail-head{
+      display: flex;
+      position: relative;
+    
+      .transferDetailItem-detail-cnt-inf-title {
         width: 498px;
         height: 80px;
         font-size: 28px;
         color: #333;
+        // white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
       }
-      .transferDetailItem-detail-cnt-price{
-        font-size:28px;
-        color: #2283E2;
+      .transferDetailItem-detail-like.iconfont {
+        font-size: 30px;
+        position: absolute;
+        right: 0px;
+        top: 40px;
+        color: #2283E2 !important;
+        
       }
     }
+    .transferDetailItem-detail-cnt-price {
+      font-size:28px;
+      color: #2283E2;
+    }
   }
-  .transferDetailItem-detail-cnt-version{
+  .transferDetailItem-detail-cnt-version {
     display: flex;
     align-items: center;
     font-size: 20px;
     color: #333;
-    .transferDetailItem-detail-cnt-inf-icon{
+    .transferDetailItem-detail-cnt-inf-icon {
       font-size: 20px;
     }
   }
-  .transferDetailItem-price-foottotal{
+  .transferDetailItem-price-foottotal {
     display: flex;
     align-items: center;
     font-size: 20px;
     color: #333;
     margin-bottom: 24px;
-    .transferDetailItem-cnt-stock{
+    .transferDetailItem-cnt-stock {
       color: #2283E2;
       margin-right: 196px;
     }
-    .transferDetailItem-cnt-price-subprice{
+    .transferDetailItem-cnt-price-subprice {
       font-size: 28px;
       color: #ED2856;
       margin-right: 32px;
@@ -114,7 +130,7 @@
       color: #2283E2;
     }
   
-    .uni-numbox__plus{
+    .uni-numbox__plus {
       width: 40px;
       height: 38px;
       line-height: 50px;
@@ -141,10 +157,10 @@
     padding-left:10px;
   }
   .transferDetailItem-detail-mark-item-name-star {
-    margin: 0px 15px;
+    margin: 0px 10px;
   }
   .transferDetailItem-detail-mark-item-name-end {
-    padding: 0px 15px;
+    padding: 0px 10px;
   }
 }
 
