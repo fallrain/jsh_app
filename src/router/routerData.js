@@ -14,6 +14,7 @@ const data = [
   'pages/messageInfoList/messageInfoList',
   'pages/transferGoods/transferGoods',
   'pages/transferGoods/transferShoppingCart',
+  'pages/transferGoods/transferDetail',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
   'pages/mine/mySDFInfo',
@@ -23,5 +24,7 @@ const data = [
   'pages/mine/myPayAlertPwd',
   'pages/mine/myGuestView',
   'pages/sampleMachine/sampleMachineList'
+  'pages/sampleMachine/sampleMachineList',
+  'pages/sampleMachine/sampleMachineConfirm'
 ];
 export default { data };

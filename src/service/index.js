@@ -10,8 +10,7 @@ import cartService from './cart/cart.service';
 import transfergoodsService from './transfergoods/transfergoods.service';
 import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
-import specimenService from './specimen/specimen.service';
-
+import samplemachineService from './samplemachine/samplemachine.service';
 
 export default {
   install(Vue) {
@@ -39,7 +38,7 @@ export default {
     // 首页轮播图
     Vue.prototype.indexService = indexService;
     // 样品机服务
-    Vue.prototype.specimenService = specimenService;
+    Vue.prototype.samplemachineService = samplemachineService;
     // todo 服务名待定
     Vue.prototype.trafficService = trafficService;
   }

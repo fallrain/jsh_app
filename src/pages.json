@@ -1,7 +1,7 @@
 {
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-  
+
     {
       "path": "pages/nav/nav",
       "style": {
@@ -114,6 +114,13 @@
       }
     },
     {
+      "path": "pages/transferGoods/transferDetail",
+      "style": {
+        "navigationBarTitleText": "中心调货详情页面"
+
+      }
+    },
+    {
       "path": "pages/mine/myBaseInfo",
       "style": {
         "navigationBarTitleText": "基本信息",
@@ -175,6 +182,12 @@
       "path": "pages/sampleMachine/sampleMachineList",
       "style": {
         "navigationBarTitleText": "样品机列表"
+      }
+    },
+    {
+      "path": "pages/sampleMachine/sampleMachineConfirm",
+      "style": {
+        "navigationBarTitleText": "样品机确认订单"
       }
     }
 

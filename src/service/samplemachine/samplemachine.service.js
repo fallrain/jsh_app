@@ -1,4 +1,4 @@
-import urls from '../url/specimen.url';
+import urls from '../url/samplemachine.url';
 import {
   jGet,
   jPost,
@@ -10,8 +10,12 @@ export default {
     /* 样品机列表 权限 */
     return jGet(urls.queryInventory, data);
   },
-  queryBrandAndInvsort(data) {
-    /* 产业列表 */
-    return jGet(urls.queryBrandAndInvsort, data);
+  queryGoodsPrice(data) {
+    /* 商品价格 */
+    return jGet(urls.queryGoodsPrice, data);
   },
+  queryBrandAndInvsort(data) {
+    /* 查询产品组和品牌 */
+    return jGet(urls.queryBrandAndInvsort, data);
+  }
 };

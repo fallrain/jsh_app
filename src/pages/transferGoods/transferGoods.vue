@@ -49,7 +49,6 @@
       :show.sync="isShowGoodsFilterDrawer"
       @filterConfirm="filterConfirm"
       @filterReset="filterReset"
-
     >
       <template>
         <t-drawer-filter-item
@@ -95,6 +94,11 @@
         </view>
       </template>
     </t-drawer>
+    <!-- 底部购物车栏 -->
+    <transfer-goods-btm
+      :shoppingCartNum=shoppingCartNum
+    >     
+    </transfer-goods-btm>
   </view>
 </template>
 <script>
@@ -107,6 +111,7 @@ import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
 import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import TDrawer from '../../components/transfer/TDrawer';
 import TDrawerFilterItem from '../../components/transfer/TDrawerFilterItem';
+import transferGoodsBtm from './transferGoodsBtm';
 import './css/transferGoods.scss';
 import {
   mapGetters
@@ -126,8 +131,8 @@ export default {
       JSearchInput,
       MescrollBody,
       TDrawer,
-      TDrawerFilterItem
-
+      TDrawerFilterItem,
+      transferGoodsBtm
     },
     data() {
      return {
@@ -140,6 +145,8 @@ export default {
       cargoWareHome: [],
       // 配送类型
       cargoSendWay: [],
+      // 购物车商品数量
+      shoppingCartNum:[],
       priceList: [],
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
@@ -297,8 +304,7 @@ export default {
         stock: '',
       });
       const page = JSON.parse(data.data)
-      if (code === '1') {
-       
+      if (code === '1') {      
         const curList = page.data;
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
@@ -311,8 +317,6 @@ export default {
         };
         // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
-         // 获取库存
-        // const getStock = this.commodityService.getStock(priceArgsObj);
         // 获取收藏
         const getProductQueryInter = this.productDetailService.productQueryInter({
           productCodes,
@@ -333,13 +337,6 @@ export default {
             v.$allPrice = allPriceData[v.code];
           });
         }
-        // if (stockRes.code === '1') {
-        //   // 添加库存
-        //   const stockData = stockRes.data;
-        //   curList.forEach((v) => {
-        //     v.$stock = stockData[v.productCode];
-        //   });
-        // }
         // if (productQueryInterRes.code === '1') {
         //   // 添加点赞
         //   const productQueryInterData = productQueryInterRes.data;
@@ -372,8 +369,9 @@ export default {
       }
       return scrollView;
     },
-    // 调出库位数据
+    
     async getCargoQuery() {
+      // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
         timestamp: 1596530440135,
         sendToCode: 8700010462,
@@ -382,8 +380,7 @@ export default {
       if(code === "1") {   
         this. cargoWareHome = data.data
       }
-    // 配送类型数据
-  
+      // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: 1596533915450,
         longfeiUSERID: 8700010462,
@@ -394,6 +391,18 @@ export default {
         this.cargoSendWay = temp.data.data
       }
       this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay)
+      
+      // 购物车商品数量 
+      const shoppingCart = await this.transfergoodsService.shoppingCartNum({
+        timestamp: 1596606815954,
+        longfeiUSERID: 8700010462
+      })
+      if(shoppingCart.code === "1") {   
+        this.shoppingCartNum = shoppingCart.data.allNum
+        console.log(this.shoppingCartNum)
+        // console.log(data)
+      }
+
     },
     goodsChange(goods, index) {
       /* 商品数据change */
@@ -418,9 +427,8 @@ export default {
         const sortDirection = tab.condition.sortDirection;
         tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
         tab.iconClass = tab.condition.sortDirection;
-
         this.tabs[index] = tab;
-
+        console.log(this.tabs)
       }
       if (!tab.noSearch) {
         this.mescroll.resetUpScroll(true);

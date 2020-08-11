@@ -39,6 +39,7 @@
           :sendtoCode="userInf.sendtoCode"
           :allPrice="item.$allPrice"
           @change="goodsChange"
+          @sampleMachineConfirm="sampleMachineConfirm"
         ></j-sample-machine-item>
       </view>
     </mescroll-body>
@@ -202,7 +203,7 @@ export default {
   methods: {
     async init() {
       await this.getAddressList();
-      await this.getIndustryList();
+      await this.queryBrandAndInvsort();
     },
     async getAddressList() {
       // 获取地址
@@ -225,22 +226,33 @@ export default {
       // this.filterForm.saletoCode = this.curChoseDeliveryAddress.customerCode;
       // this.filterForm.sendtoCode = this.curChoseDeliveryAddress.addressCode;
     },
-    async getIndustryList() {
-      // 获取产品组
-      const { code, data } = await this.marketService.getIndustryList();
-      if (code === '1') {
-        data.forEach((item) => {
+    async queryBrandAndInvsort() {
+      const form = {
+        timestamp: new Date().getTime(),
+        customerCode: this.userInf.customerCode
+      };
+      // 获取产品组和品牌
+      const { data } = await this.samplemachineService.queryBrandAndInvsort(form);
+      if (data.code === '200') {
+        const dataObj = JSON.parse(data.data);
+        // 产品组
+        dataObj.invsort.forEach((item) => {
           item.isChecked = false;
-          item.key = item.code;
-          item.value = item.codeName;
-          item.isChecked = false;
+          item.key = item.CODE;
+          item.value = item.NAME;
+          item.queryKey = 'group';
         });
-        this.filterList[1].data = data;
+        // 品牌
+        dataObj.brand.forEach((item) => {
+          item.isChecked = false;
+          item.key = item.CODE;
+          item.value = item.NAME;
+          item.queryKey = 'brand';
+        });
+        this.filterList[0].data = dataObj.brand;
+        this.filterList[1].data = dataObj.invsort;
+        console.log(dataObj);
       }
-    },
-    getPageInf() {
-      this.setFilterData();
-      this.getDeliveryAddress();
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -254,11 +266,15 @@ export default {
     getSearchCondition(pages) {
       /* 获取不同条件下搜索的传参 */
       let condition = {
+        timestamp: new Date().getTime(),
+        maktx: '',
+        group: '',
+        brand: '',
         mktid: '12A02',
-        pageNum: pages.num,
+        pageNo: pages.num,
         pageSize: pages.size,
         customerCode: this.userInf.customerCode,
-        sendTo: this.userInf.sendtoCode,
+        sendToCode: this.userInf.sendtoCode,
       };
         // tab条件
       const tab = this.tabs.find(v => v.active);
@@ -270,28 +286,11 @@ export default {
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
           if (v.isChecked) {
-            filtersMap[v.key] = 1;
+            condition[v.queryKey] = v.key;
           }
         });
       });
-      // 最高价格，最低价格
-      const {
-        lowPrice,
-        highPrice
-      } = this.filterForm;
-      if (lowPrice) {
-        filtersMap.lowPrice = lowPrice * 1;
-      }
-      if (highPrice) {
-        filtersMap.highPrice = highPrice * 1;
-      }
-      // 反转大小
-      if (lowPrice !== '' && highPrice !== '' && filtersMap.highPrice < filtersMap.lowPrice) {
-        [filtersMap.lowPrice, filtersMap.highPrice] = [filtersMap.highPrice, filtersMap.lowPrice];
-        this.filterForm.lowPrice = filtersMap.lowPrice;
-        this.filterForm.highPrice = filtersMap.highPrice;
-      }
-      // 如果存在条件，则塞入条件
+      // 如果存在条件，则塞入条件mei
       condition = {
         ...condition,
         ...tab.condition,
@@ -304,74 +303,103 @@ export default {
       // 公共用户信息
       const userInf = this.userInf;
       const condition = this.getSearchCondition(pages);
-      const { code, data } = await this.commodityService.goodsList(condition);
-      // const { code, data } = await this.specimenService.queryInventory(condition);
+      // const { code, data } = await this.commodityService.goodsList(condition);
+      const { data } = await this.samplemachineService.queryInventory(condition);
+      let dataObj = {};
       const scrollView = {};
-      if (code === '1') {
-        const {
-          page
-        } = data;
-          // 当前页码的数据
-        const curList = page.result;
-        scrollView.pageSize = page.pageSize;
-        scrollView.total = page.total;
-        // 组合下面3个接口所需的数据
-        const productCodes = curList.map(v => v.productCode);
-        const priceArgsObj = {
-          productCodes,
-          saletoCode: userInf.saletoCode,
-          sendtoCode: userInf.sendtoCode,
-        };
-          // 获取价格
-        const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
-        // 获取库存
-        const getStock = this.commodityService.getStock(priceArgsObj);
-        // 获取收藏
-        const getProductQueryInter = this.productDetailService.productQueryInter({
-          productCodes,
-          account: userInf.customerCode
+      if (!data.data) {
+        uni.showToast({
+          icon: 'none',
+          title: '未开通样品机权限!',
+          duration: 3000
         });
-        const [
-          allPriceRes,
-          stockRes,
-          productQueryInterRes
-        ] = await Promise.all([getAllPrice, getStock, getProductQueryInter]);
-        if (allPriceRes.code === '1') {
-          // 添加价格
-          const allPriceData = allPriceRes.data;
-          // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
-          curList.forEach((v) => {
-            v.$PtPrice = allPriceData[v.productCode].pt;
-            v.$allPrice = allPriceData[v.productCode];
-          });
-        }
-        if (stockRes.code === '1') {
-          // 添加库存
-          const stockData = stockRes.data;
-          curList.forEach((v) => {
-            v.$stock = stockData[v.productCode];
-          });
-        }
-        if (productQueryInterRes.code === '1') {
-          // 添加点赞
-          const productQueryInterData = productQueryInterRes.data;
-          curList.forEach((v) => {
-            v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
-          });
-        }
-        if (pages.num === 1) {
-          this.list = curList;
-        } else {
-          this.list = this.list.concat(curList);
-        }
+        scrollView.pageSize = 10;
+        scrollView.total = 0;
+        return scrollView;
+      }
+      dataObj = JSON.parse(data.data);
+      // 当前页码的数据
+      const curList = dataObj.item;
+      scrollView.pageSize = dataObj.pageSize;
+      scrollView.total = dataObj.total;
+      console.log(dataObj);
+      // 组合下面3个接口所需的数据
+      const productCodes = curList.map(v => v.CODE);
+      const priceArgsObj = {
+        gbid: productCodes,
+        longfeiUSERID: userInf.saletoCode,
+        longfeiMFID: userInf.sendtoCode
+      };
+      // 获取价格
+      const getAllPrice = this.samplemachineService.queryGoodsPrice(priceArgsObj);
+      // 获取收藏
+      const getProductQueryInter = this.productDetailService.productQueryInter({
+        productCodes,
+        account: userInf.customerCode
+      });
+      const [
+        allPriceRes,
+        productQueryInterRes
+      ] = await Promise.all([getAllPrice, getProductQueryInter]);
+      if (allPriceRes.data.code === '200') {
+        // 添加价格
+        const allPriceData = allPriceRes.data.data;
+        // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
+        curList.forEach((v) => {
+          v.$allPrice = allPriceData[v.CODE];
+        });
+      }
+      if (productQueryInterRes.code === '1') {
+        // 添加点赞
+        const productQueryInterData = productQueryInterRes.data;
+        curList.forEach((v) => {
+          v.$favorite = !!productQueryInterData.find(productCode => v.CODE === productCode);
+        });
+      }
+      if (pages.num === 1) {
+        this.list = curList;
+      } else {
+        this.list = this.list.concat(curList);
+      }
+      console.log(this.list);
+      /* if (code === '1') {
+
       } else {
         this.mescroll.endErr();
-      }
+      } */
       return scrollView;
     },
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
+      // 设置商品的收藏状态
+      console.log(goods);
+    },
+    async followGoods() {
+      /* 添加关注 */
+      const {
+        customerCode
+      } = this.userInf;
+      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, this.goods.productList[0].productCode);
+      if (code === '200') {
+        this.goods.followState = true;
+        this.$emit('change', this.goods, this.index);
+      }
+    },
+    async unfollowGoods() {
+      /* 取消关注 */
+      const {
+        customerCode
+      } = this.userInf;
+      const { code } = await this.productDetailService.productRemoveInter({
+        account: customerCode,
+        customerCode,
+        productCodeList: [this.goods.productList[0].productCode]
+      });
+      if (code === '1') {
+        this.goods.followState = false;
+        this.$emit('change', this.goods, this.index);
+      }
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
@@ -455,6 +483,11 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+    },
+    sampleMachineConfirm(confirmInfo) {
+      uni.navigateTo({
+        url: `/pages/sampleMachine/sampleMachineConfirm?confirmInfo=${JSON.stringify(confirmInfo)}`
+      });
     }
   }
 };

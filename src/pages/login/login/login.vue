@@ -180,6 +180,7 @@ export default {
         account: 'a0008949',
         name: '程江涛',
         mobile: '190110119120',
+        salesGroupCode: '2130', // 销售组织编码
         customerCode: '8800101954',
         saletoCode: '8800101954',
         sendtoCode: '8800101954',
