@@ -48,7 +48,7 @@
       </template>
     </j-drawer>
     <j-choose-delivery-address :show.sync="isShowAddressDrawer" :list="deliveryAddressList" @change="deliveryAddressListChange"></j-choose-delivery-address>
-    <view class="vehicle-foot"><vehicle-foot></vehicle-foot></view>
+    <view class="vehicle-foot"><vehicle-foot :carType="carType"></vehicle-foot></view>
   </view>
 </template>
 
@@ -184,62 +184,12 @@ export default {
         {
           name: '配送类型',
           show: false,
-          children: [
-            {
-              name: '海尔',
-              checked: false
-            },
-            {
-              name: '卡萨帝',
-              checked: false
-            },
-            {
-              name: '统帅',
-              checked: false
-            },
-            {
-              name: '摩卡',
-              checked: false
-            },
-            {
-              name: 'GE',
-              checked: false
-            },
-            {
-              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
-              checked: false
-            }
-          ]
+          children: []
         },
         {
           name: '整车类型',
           show: false,
-          children: [
-            {
-              name: '海尔',
-              checked: false
-            },
-            {
-              name: '卡萨帝',
-              checked: false
-            },
-            {
-              name: '统帅',
-              checked: false
-            },
-            {
-              name: '摩卡',
-              checked: false
-            },
-            {
-              name: 'GE',
-              checked: false
-            },
-            {
-              name: '(Z)客户自有仓',
-              checked: false
-            }
-          ]
+          children: []
         }
       ],
       isShowSeach: false, // 筛选抽屉
@@ -276,24 +226,51 @@ export default {
   },
   methods: {
     info() {
+      this.queryBaseCode(); // 基地
       this.setFilterData();
       this.getDeliveryAddress();
-      this.querySendWay(); // 配送类型
-      this.carLoadType(); // 车型
+      this.querySendWay('', 'HD10', '8700010462', '12E02', '8700010462'); // 配送类型
+      this.carLoadType(); // 整车列表-整车类型+车型
     },
-    async carLoadType(timestamp, JDCODE, SendWay, MKTID, longfeiMFID) {
-      const { code, data } = await this.vehicleService.carLoadType(timestamp, JDCODE, SendWay, MKTID, longfeiMFID);
+    async carLoadType() { // 整车列表-整车类型+车型
+      const { code, data } = await this.vehicleService.carType({
+        brandProductGroup: '',
+        centerCode: '12E02',
+        deliveryType: 'D',
+        jdCodeList: ['HD10'],
+        sendtoCode: '8700010462'
+      });
+      this.popTabs[3].children = [];
       if (code === '1') {
-        this.carType = data;
+        if (data.length > 0) {
+          data.forEach((inf) => {
+            inf.checked = false;
+            inf.name = inf.carTypeName;
+            inf.type = 'ZC';
+            inf.carName = inf.carName;
+          });
+        }
+        this.popTabs[3].children = data;
+        this.popTabs[3].children[0].checked = true;
+        this.carType = this.popTabs[3].children[0].carName;
       }
-      console.log(data);
+      console.log(this.popTabs[3]);
     },
-    async querySendWay(timestamp, JDCODE, SendWay, MKTID, longfeiMFID) {
-      const { code, data } = await this.vehicleService.carLoadType(timestamp, JDCODE, SendWay, MKTID, longfeiMFID);
+    async querySendWay(timestamp, YDPSJIDI, longfeiUSERID, sendtoMktid, sendtoCode) {
+      const { code, data } = await this.vehicleService.querySendWay(timestamp, YDPSJIDI, longfeiUSERID, sendtoMktid, sendtoCode);
+      this.popTabs[2].children = [];
       if (code === '1') {
-        this.carType = data;
+        if (data.data.length > 0) {
+          data.data.forEach((inf) => {
+            inf.checked = false;
+            inf.name = `(${inf.sendWayCode})${inf.sendWay}`;
+            inf.type = 'ZC';
+          });
+        }
+        this.popTabs[2].children = data.data;
+        this.popTabs[2].children[0].checked = true;
       }
-      console.log(data);
+      console.log(this.popTabs[2]);
     },
     tabClick(tabs, tab, index) {
       console.log(tabs);

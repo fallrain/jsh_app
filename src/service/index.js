@@ -11,7 +11,6 @@ import transfergoodsService from './transfergoods/transfergoods.service';
 import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
 import samplemachineService from './samplemachine/samplemachine.service';
-import specimenService from './specimen/specimen.service';
 import vehicleService from './vehicleList/vehicleList.service';
 
 export default {

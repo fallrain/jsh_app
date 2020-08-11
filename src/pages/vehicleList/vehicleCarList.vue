@@ -7,15 +7,16 @@
     </view>
     <view class="vehicleCar-invalid">
       <vehicle-cart-item-g-d v-for="(goods,index) in shoppingList" :key="index"
-                         :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
+             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
     </view>
     <view class="vehicleCar-invalid">
       <vehicle-cart-item-p-c v-for="(goods,index) in shoppingList" :key="index"
-                             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
+             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
     </view>
     <view class="vehicleCar-invalid">
       <t-failure-goods-list :list="failureGoodsList" @change="failureGoodsListChange"></t-failure-goods-list>
     </view>
+    <view class="vehicleCar-high"></view>
     <view class="vehicleCar-foot"><vehicle-car-foot></vehicle-car-foot></view>
   </view>
 </template>
@@ -93,6 +94,11 @@ export default {
   }
   .vehicleCar-invalid {
     padding: 0 24px 0 24px;
+    margin-bottom: 40px;
+  }
+  .vehicleCar-high {
+    background-color: #F5F5F5;
+    height: 40px;
   }
   .vehicleCar-foot {
     position: fixed;

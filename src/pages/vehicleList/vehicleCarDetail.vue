@@ -1,0 +1,111 @@
+<template>
+  <view class="vehicleCarDetail">
+    <view class="vehicleCarDetail-info"><vehicle-detail-info></vehicle-detail-info></view>
+    <view class="vehicleCarDetail-good">
+      <vehicle-detail-good v-for="(goods,index) in goodsList" :key="index" :index="index" @change="goodsChange" :goodsList="goods">
+      </vehicle-detail-good>
+    </view>
+    <view class="vehicleCarDetail-info">
+      <vehicle-detail-send></vehicle-detail-send>
+    </view>
+    <view class="vehicleDetail-high" @click="showPayer"><transfer-detail-btm :index="baifen"></transfer-detail-btm></view>
+  </view>
+</template>
+
+<script>
+import vehicleDetailInfo from '../../components/vehicleList/vehicleDetailInfo';
+import vehicleDetailGood from '../../components/vehicleList/vehicleDetailGood';
+import vehicleDetailSend from '../../components/vehicleList/vehicleDetailSend';
+import transferDetailBtm from '../../components/transfer/transferDetailBtm';
+
+export default {
+  name: 'vehicleCarDetail',
+  components: {
+    vehicleDetailInfo,
+    vehicleDetailGood,
+    vehicleDetailSend,
+    transferDetailBtm
+  },
+  data() {
+    return {
+      baifen: '90',
+      goodsList: [
+        [
+          {
+            isCreditMode: false
+          },
+          {
+            isCreditMode: false
+          }
+        ]
+      ],
+      failureGoodsList: [
+        [
+          {
+            isCreditMode: false
+          },
+          {
+            isCreditMode: false
+          }
+        ]
+      ],
+      // 配送地址显示隐藏
+      payerPickerShow: false,
+      // 配送地址options
+      payerOptions: [
+        {
+          key: 1,
+          value: '(88003222）青岛鸿程永泰商贸有限公司',
+        },
+        {
+          key: 2,
+          value: '(88003222）青岛鸿程永泰商贸有限公司',
+        },
+        {
+          key: 3,
+          value: '(88003222）青岛鸿程永泰商贸有限公司',
+        },
+        {
+          key: 4,
+          value: '(88003222）青岛鸿程永泰商贸有限公司',
+        }
+      ],
+      // 选中的
+      chosePayerOptions: []
+    };
+  },
+  methods: {
+    goodsChange(list, index) {
+      /* 商品 change */
+      this.$set(this.goodsList, index, list);
+    },
+    showPayer() {
+      console.log((new Date()).valueOf());
+      /* 展示付款地址 */
+      this.payerPickerShow = true;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+  .vehicleCarDetail{
+    min-height: 100vh;
+    background: #F5F5F5;
+
+    .uni-drawer__content {
+      width: 608px !important;
+    }
+  }
+  .vehicleCarDetail-info{
+    padding: 24px;
+  }
+  .vehicleCarDetail-good{
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .vehicleDetail-high {
+    background-color: #F5F5F5;
+    height: 100px;
+  }
+</style>

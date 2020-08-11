@@ -4,18 +4,16 @@
       class="transferDetailBtm-check"
     >
       <text class="transferDetailBtm-check-shop">装车体积： </text>
-      <view class="transferDetailBtm-check-order">96%</view> 
+      <view class="transferDetailBtm-check-order">{{calue}}%</view>
       <view class="uni-padding-wrap uni-common-mt">
         <view class="progress-box">
-            <progress 
-              percent="96" 
-              activeColor="#2283E2" 
-              backgroundColor="#DEDEDE" 
+            <progress
+              :percent='calue'
+              activeColor="#2283E2"
+              backgroundColor="#DEDEDE"
               stroke-width="10"
-              border-radius=14
-              class="progress-bar"
               />
-        </view>  
+        </view>
       </view>
       <button class="transferDetailBtm-check-edit">结算</button>
     </view>
@@ -28,6 +26,11 @@
 // } form '@dcloudio/uni-ui';
 export default {
   name: 'transferDetailBtm',
+  data() {
+    return {
+      calue: 30
+    };
+  },
 
   methods: {
     // choose() {
@@ -86,13 +89,12 @@ export default {
 ::v-deep .progress-box{
     width: 238px;
     height: 20px;
-    border-radius:14px;
-  }
-::v-deep .progress-inner-bar {
-    border-radius:14px;
-  }
-::v-deep .progress-bar {
-     border-radius:14px;
+    .uni-progress-bar{
+      border-radius:14px;
+      .uni-progress-inner-bar{
+        border-radius:14px;
+      }
+    }
   }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <view class="v-foot">
     <view class="v-foot-lin">
-      <view class="v-foot-lin-tex1">车型：<span class="v-foot-lin-tex3">X8.7K - 8.7厢式（开顶）</span></view>
+      <view class="v-foot-lin-tex1">车型：<span class="v-foot-lin-tex3">{{carType}}</span></view>
       <view class="v-foot-lin-tex2">已装车体积：<span class="v-foot-lin-tex4">0.81m³ / 2%</span></view>
     </view>
     <view class="v-foot-btn">
@@ -12,7 +12,12 @@
 
 <script>
 export default {
-  name: 'vehicleFoot'
+  name: 'vehicleFoot',
+  props: {
+    carType: {
+      type: String
+    }
+  }
 };
 </script>
 
@@ -22,12 +27,17 @@ export default {
   }
   .v-foot-lin{
     align-items: center;
-    width: 65%;
+    width: 70%;
   }
   .v-foot-lin-tex1{
     padding: 4px 10px 4px 18px;
     font-size: 24px;
     color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
   }
   .v-foot-lin-tex2{
     padding: 4px 10px 4px 18px;
@@ -49,7 +59,7 @@ export default {
     display: flex;
     font-size: 28px;
     align-items: center;
-    width: 35%;
+    width: 30%;
   }
   .v-foot-btn-text {
     background-color: #ED2856;

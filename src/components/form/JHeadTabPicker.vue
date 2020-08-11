@@ -3,7 +3,20 @@
     :class="['jHeadTabPicker',show && 'jHeadTabPicker-in']"
     v-reset-position
   >
-    <view class="jHeadTabPicker-list">
+    <view v-if="value[0]&&value[0].type==='ZC'" class="jHeadTabPicker-list">
+      <view
+        :class="['jHeadTabPicker-item-ZC',item.checked && 'active']"
+        v-for="(item,index) in value"
+        :key="index"
+        @tap="choose(item)"
+      >
+        <view
+          :class="['jHeadTabPicker-item-check iconfont icontick']"
+        ></view>
+        <text class="jHeadTabPicker-item-text">{{item.name}}</text>
+      </view>
+    </view>
+    <view v-else class="jHeadTabPicker-list">
       <view
         :class="['jHeadTabPicker-item',item.checked && 'active']"
         v-for="(item,index) in value"
@@ -44,13 +57,12 @@ export default {
     },
     // 索引
     index: {
-      type: Number
+      type: [String, Number]
     },
     // picker数据
     value: {
       type: Array,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   directives: {
@@ -153,6 +165,29 @@ export default {
   .jHeadTabPicker-item {
     position: relative;
     width: 25%;
+    height: 54px;
+    line-height: 54px;
+    display: flex;
+    align-items: center;
+    padding-left: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.active {
+      .iconfont {
+        display: block;
+        color: $theme-color;
+      }
+
+      .jHeadTabPicker-item-text {
+        color: $theme-color;
+      }
+    }
+  }
+  .jHeadTabPicker-item-ZC {
+    position: relative;
+    width: 50%;
     height: 54px;
     line-height: 54px;
     display: flex;
