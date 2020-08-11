@@ -23,7 +23,7 @@ const data = [
   'pages/mine/myAlertTel',
   'pages/mine/myPayAlertPwd',
   'pages/mine/myGuestView',
-  'pages/sampleMachine/sampleMachineList'
+  'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm'
 ];
