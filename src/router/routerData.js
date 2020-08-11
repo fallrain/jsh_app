@@ -19,6 +19,11 @@ const data = [
   'pages/mine/mySignInfo',
   'pages/mine/mySDFInfo',
   'pages/mine/mySet',
+  'pages/mine/myCenter',
+  'pages/mine/myAlertTel',
+  'pages/mine/myPayAlertPwd',
+  'pages/mine/myGuestView',
+  'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm'
 ];

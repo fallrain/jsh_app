@@ -100,6 +100,23 @@
   line-height: 58px;
   color: #333;
   border-radius:20px;
+  .payer-show{
+    flex-grow: 1;
+    position: relative;
+  }
+  .payer-list{
+    position: absolute;
+    left: 0px;
+    top: 64px;
+    background: #fff;
+    padding: 18px;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    z-index: 99;
+    .payer-item{
+      word-wrap: break-word;
+    }
+  }
 }
 .payfor-info-bottom{
   width: 100%;
@@ -125,4 +142,15 @@
 }
 .text-theme{
   color: $theme-color;
+}
+.pos-r{
+  position: relative;
+}
+.normal {
+  display: inline-block;
+  transform: rotate(-90deg);
+}
+.reverse {
+  display: inline-block;
+  transform: rotate(0deg) !important;
 }
