@@ -19,6 +19,9 @@ const data = [
   'pages/mine/mySDFInfo',
   'pages/mine/mySet',
   'pages/mine/myCenter',
+  'pages/mine/myAlertTel',
+  'pages/mine/myPayAlertPwd',
+  'pages/mine/myGuestView',
   'pages/sampleMachine/sampleMachineList'
 ];
 export default { data };

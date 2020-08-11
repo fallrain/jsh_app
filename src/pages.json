@@ -151,6 +151,27 @@
       }
     },
     {
+      "path": "pages/mine/myAlertTel",
+      "style": {
+        "navigationBarTitleText": "修改手机号",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myPayAlertPwd",
+      "style": {
+        "navigationBarTitleText": "支付密码修改",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myGuestView",
+      "style": {
+        "navigationBarTitleText": "客户视图",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/sampleMachine/sampleMachineList",
       "style": {
         "navigationBarTitleText": "样品机列表"
