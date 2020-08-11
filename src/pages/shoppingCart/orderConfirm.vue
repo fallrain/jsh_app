@@ -1,19 +1,21 @@
 <template>
   <view class="orderConfirm">
     <j-order-confirm-address
+      :sendtoCode="dataInfo.sendtoCode"
+      :sendtoAddress="dataInfo.sendtoAddress"
     ></j-order-confirm-address>
-    <view class="orderConfirm-list">
+    <view v-if="dataInfo.composeProductList" class="orderConfirm-list">
       <j-order-confirm-item
-        v-for="(goods,index) in goodsList"
+        v-for="(goods,index) in composeProductList"
         :key="index"
         :index="index"
         @change="goodsChange"
         :goodsList="goods"
       ></j-order-confirm-item>
     </view>
-    <view class="mt24">
+    <view v-if="dataInfo.disableComposeProductList" class="mt24">
       <j-failure-order-item
-        :goodsList="failureGoodsList"
+        :goodsList="disableComposeProductList"
       ></j-failure-order-item>
     </view>
     <view class="mt24">
