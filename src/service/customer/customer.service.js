@@ -26,4 +26,8 @@ export default {
     } = data;
     return jGet(urls.getWarehouse(data.customerCode), params);
   },
+  getcustomersList(code, data) {
+    /* 获取付款方列表 */
+    return jGet(urls.getcustomersList(code), data);
+  }
 };

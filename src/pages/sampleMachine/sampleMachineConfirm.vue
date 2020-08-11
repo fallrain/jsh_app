@@ -36,9 +36,25 @@
       </view>
     </view>
     <view class="payfor-info">
-      <view class="dis-flex">
+      <view class="dis-flex pos-r">
         <view class="">付款方：</view>
-        <view class="">青岛鸿程永泰商贸有限公司</view>
+        <view class="payer-show"
+              @tap="toggleExpand">
+          ({{currentPayer.payerCode}}){{currentPayer.payerName}}
+          <i
+            class="iconfont iconxia normal"
+            :class="[
+                  isExpand && 'reverse'
+                ]"
+          ></i>
+          <view class="payer-list">
+            <view class="payer-item"
+                  v-for="(item, index) in payerList"
+                  :key="index">
+              ({{item.payerCode}}){{item.payerName}}
+            </view>
+          </view>
+        </view>
       </view>
       <view class="dis-flex">
         <view class="">可用余额：</view>
@@ -74,6 +90,12 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 import './css/sampleMachineConfirm.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'sampleMachineConfirm',
@@ -86,15 +108,22 @@ export default {
       goods: {
         choosedNum: 0
       },
-      confirmInfo: {}
+      confirmInfo: {},
+      currentPayer: {},
+      payerList: [],
+      isExpand: false
     };
   },
   onLoad(option) {
     const { confirmInfo } = option;
     this.confirmInfo = JSON.parse(confirmInfo);
+    this.getpayerList();
     console.log(this.confirmInfo);
   },
   computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
     toPercent() {
       return function (val) {
         return (Math.round(val * 10000) / 100).toFixed(2);
@@ -107,6 +136,21 @@ export default {
     },
     switchChange(val) {
       console.log(val);
+    },
+    async getpayerList() {
+      console.log(this.userInf);
+      const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCode, {
+        salesGroupCode: this.userInf.salesGroupCode,
+        status: 1
+      });
+      if (code === '1') {
+        this.payerList = data;
+        this.currentPayer = data[0];
+        this.payerList[0].choosed = true;
+      }
+    },
+    toggleExpand() {
+      this.isExpand = !this.isExpand;
     }
   }
 };
