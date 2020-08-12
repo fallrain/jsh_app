@@ -6,7 +6,7 @@
         <view class="jOrderConfirmAddress-head-text">配送至</view>
       </view>
       <view class="jOrderConfirmAddress-cnt">
-        (88003222）山东省青岛市市北区重庆路路街道重庆南路1589号甲A栋4座2034室
+        ({{sendtoCode}}){{sendtoAddress}}
       </view>
       <view class="jOrderConfirmAddress-cnt-btm">
         <view class="jOrderConfirmAddress-cnt-btm-type">
@@ -33,6 +33,10 @@ export default {
   name: 'JOrderConfirmAddress',
   components: {
     JRadioGroup,
+  },
+  props: {
+    sendtoCode: String,
+    sendtoAddress: String
   },
   data() {
     return {
