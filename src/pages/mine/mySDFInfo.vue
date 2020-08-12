@@ -122,11 +122,13 @@ export default {
   },
   data() {
     return {
-      baseList: {}
+      baseList: {},
+      shoppingCart:{}
     };
   },
   created() {
-    this.getBaseInfo();
+    // this.getBaseInfo();
+    this.shoppingCartFun('8700010462');
   },
   methods: {
     async getBaseInfo() {
@@ -138,7 +140,7 @@ export default {
     },
     viewDetail() {
       console.log('进入子账号详情');
-    }
+    },
   }
 };
 </script>

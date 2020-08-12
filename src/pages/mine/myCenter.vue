@@ -2,10 +2,12 @@
   <view class="mineCenter">
     <!-- 顶部背景 -->
     <view class="topView">
+      <!-- 设置 -->
+      <view class="set" @click='setClick'>设置</view>
       <!-- 头像栏 -->
       <view class="headerRow">
         <!-- 头像 -->
-        <view class="headerImage"></view>
+        <view @click="sdfClick" class="headerImage"></view>
         <view>
           <view class="nameAndPosion">
             <!-- 姓名职位 -->
@@ -20,12 +22,12 @@
     <view class="moneyArea">
       <view >  
         <view class="moneyName">账户余额（元）</view>
-        <view class="moneyCount">¥ 11239.11</view>
+        <view class="moneyCount">¥ {{accountTotal}}</view>
       </view>
       <view class="blank"></view>
       <view >  
         <view class="moneyName">可用返利</view>
-        <view class="moneyCount">¥ 311239.12</view>
+        <view class="moneyCount">¥ {{outstandingAmount}}</view>
       </view>
     </view>
     <!-- 我的订单 -->
@@ -67,7 +69,7 @@
         class="infor-cataloglist-item"
         v-for="item in inforlist"
         :key="item.id"    
-        @click="goCatalog(item.url)"
+        @click="goCatalog(item.url,item.id)"
       >
         <image class="cataloglist-item-img" :src="item.src" mode="aspectFit" />
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -101,99 +103,169 @@ export default {
   },
   data() {
     return {
+      payerBalanceList:[],
+      auxiliary:[],
+      accountTotal:0,
+      // 返利
+      outstandingAmount:0,
       cataloglist:[
         {
           id: 1,
           src: require('./image/jiesuan.png'),
           title: "待结算",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 2,
           src: require('./image/koukuan.png'),
           title: "待扣款",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 3,
           src: require('./image/daifahuo.png'),
           title: "待发货",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 4,
           src: require('./image/yifahuo.png'),
           title:"已发货",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 5,
           src: require('./image/yiqianshou.png'),
           title: "已签收",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 6,
           src: require('./image/danju.png'),
           title: "物流单据",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 7,
           src: require('./image/tuihuo.png'),
           title: "退货订单",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 8,
           src: require('./image/yiquxiao.png'),
           title: "已取消",
-          url: "#"
+          url: "/pages/orderList/orderList"
         },
         {
           id: 9,
           src: require('./image/daifahuo.png'),
           title:"已开票",
-          url: "#"
+          url: "/pages/orderList/orderList"
         }
       ],
       inforlist:[
         {
-          id: 1,
+          id: 0,
           src: require('./image/jibenxinxi.png'),
           title: "基本信息",
-          url: "#"
+          url: "/pages/mine/myGuestView"
+        },
+        {
+          id: 1,
+          src: require('./image/qianyuexinxi.png'),
+          title: "签约信息",
+          url: "/pages/mine/myGuestView"
         },
         {
           id: 2,
-          src: require('./image/qianyuexinxi.png'),
-          title: "签约信息",
-          url: "#"
+          src: require('./image/mendianxinxi.png'),
+          title: "门店信息",
+          url: "/pages/mine/myGuestView"
         },
         {
           id: 3,
-          src: require('./image/mendianxinxi.png'),
-          title: "门店信息",
-          url: "#"
+          src: require('./image/fukuanfang.png'),
+          title:"付款方信息",
+          url: "/pages/mine/myGuestView"
         },
         {
           id: 4,
-          src: require('./image/fukuanfang.png'),
-          title:"付款方信息",
-          url: "#"
-        },
-        {
-          id: 5,
           src: require('./image/songfafang.png'),
           title: "送达方信息",
-          url: "#"
+          url: "/pages/mine/myGuestView"
         }
       ]
     };
   },
   created() {
   },
+  mounted() {
+    this.auxiliaryFun('2110','1');
+    this.outstandingAmountFun('8700010462');
+  },
   methods: {
+    // 付款方余额
+    async payerBalanceListFun(param) {
+        console.log('payerBalanceList')
+        const { code, data }  = await this.mineServer.payerBalanceList(param);
+        if(code === '1') {
+            this.payerBalanceList = data;
+            this.accountTotal = 0;
+            for (let index = 0; index < data.length; index++) {
+                const element = data[index];
+                if(element == null) return;
+                this.accountTotal = this.accountTotal + parseFloat(element.balance);
+            }
+        }
+        this.accountTotal = this.accountTotal.toFixed(2);
+    },
+    // 付款方列表
+    async auxiliaryFun(salesGroupCode,status) {
+        console.log('auxiliaryFun')
+        const { code, data }  = await this.mineServer.auxiliary(salesGroupCode,status);
+        if(code === '1') {
+            this.auxiliary = data;
+            this.payerBalanceListFun(data);
+        }
+    },
+    // 返利
+    async outstandingAmountFun(uid) {
+        console.log('outstandingAmount')
+        let param = {
+          ccusCode: uid,
+          endDate: "",
+          iqueren: "",
+          productCode: "",
+          startDate: "",
+          status: "",
+        }
+        const { code, data }  = await this.mineServer.outstandingAmount(param);
+        if(code === '1') {
+          this.outstandingAmount = data.toFixed(2);
+        }
+    },
+    goCatalog(url,index){
+      uni.navigateTo({
+        url: url+'?index='+index
+      });
+      console.log(url);
+    },
+    // 设置
+    setClick() {
+      console.log("setClick");
+      uni.navigateTo({
+        url: '/pages/mine/mySet'
+      });
+    },
+    // 售达方信息
+    sdfClick() {
+      console.log("setClick");
+      uni.navigateTo({
+        url: '/pages/mine/mySDFInfo'
+      });
+    },
+    
     
   },
 };
@@ -213,7 +285,12 @@ export default {
     background: url('./image/top.png') no-repeat;
     background-size: 100%;
     background-position: 0px -25px;
-    padding-top: 50px;
+    padding-top: 20px;
+  }
+  .set {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 24px;
   }
   .headerImage {
     width: 160px;

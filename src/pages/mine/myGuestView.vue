@@ -37,8 +37,6 @@
             <!-- 交易权限 -->
             <!--
 popCustomer: "冰箱AA、波轮洗衣机DA、滚筒洗衣机DB"
-specimenMachineProduct: "无"
-specimenMachineQuanXian: "未开通"
 status: "正常" -->
             <view class="block">
                 <view style='display:flex'>
@@ -131,14 +129,14 @@ status: "正常" -->
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">信用订单： </view>
-                    <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrder}}}</view>
+                    <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrder}}</view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">开通日期：  </view>
                      <!-- <view class="firstPageRightHasHttp">未开通
                         <view class="http">去开通</view>
                     </view> -->
-                    <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrderTime}}}</view>
+                    <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrderTime}}</view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">信用订单逾期产品：： </view>
@@ -160,25 +158,29 @@ status: "正常" -->
                 履约查询
             </view>
             <view class="block">
-                <view class="secondPageTitle">2019年度海尔&卡萨帝热水器产品</view>
-                <view class="breakLine"></view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">区协议编码域 </view>
-                    <view class="firstPageRight">QDCPHT2019110182558</view>
-                </view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">产品组编码</view>
-                    <view class="firstPageRight">电热水器,燃气热水器</view>
-                </view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">签约品牌编码 </view>
-                    <view class="tags" >
-                      <view class="tagsss" v-for="tag in tagList" :key="tag" style="float:left;background-color: #ED2856;color: white;border-radius: 10px; height:20px; padding-left:10px;padding-right:10px ;text-align: center;margin:2px">{{tag}}</view>
+                <view v-for="item in customerSigned.contractMessageDtoList">
+                    <view class="secondPageTitle">{{item.contractname}}</view>
+                    <view class="breakLine"></view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">区协议编码域 </view>
+                        <view class="firstPageRight">{{item.contractno}}</view>
                     </view>
-                </view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">有效期</view>
-                    <view class="firstPageRight">2019-01-01 至 2019-12-31</view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">产品组编码</view>
+                        <view class="firstPageRight">{{item.productName}}</view>
+                    </view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">签约品牌编码 </view>
+                        <view class="tags" >
+                        <view style="margin-right:14px;">
+                            <view class="tagsss" v-for="tag in item.tagList" :key="tag" style="float:left;background-color: #ED2856;color: white;border-radius: 10px; height:20px; padding-left:10px;padding-right:10px ;text-align: center;margin:2px">{{tag}}</view>
+                        </view>
+                        </view>
+                    </view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">有效期</view>
+                        <view class="firstPageRight">2019-01-01 至 2019-12-31</view>
+                    </view>
                 </view>
                 <view class="blank"></view>
             </view>
@@ -190,28 +192,32 @@ status: "正常" -->
         <!-- 门店信息 -->
         <view v-if="index == 2">
             <view class="block">
-                <view class="secondPageTitle">青岛鸿程永泰商贸有限公司</view>
+                <view v-for="item in branchInformation.branchInformationDtoList">
+                    <view >
+                    <view class="secondPageTitle">{{item.sbrName}}</view>
                 <view class="breakLine"></view>
 
                 <view class="firstItem">
                     <view class="firstPageLeft">门店编码</view>
-                    <view class="firstPageRight">QDCPHT2019110182558</view>
+                    <view class="firstPageRight">{{item.addressCode}}</view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">建店时间</view>
-                    <view class="firstPageRight">2019-01-21</view>
+                    <view class="firstPageRight">{{item.sbrExpectBuildDate}}</view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">状态 </view>
                     <view class="tag" >
-                        正常
+                        {{item.shopFlag}}
                     </view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">详细地址</view>
                 </view>
-                <view class="firstPageRightMore">青岛市李沧区青山路616号1单元202</view>
+                <view class="firstPageRightMore">{{item.specificAddress}}</view>
+                </view>
                 <view class="blank"></view>
+                </view>
             </view>
 
             <view class="tailView"></view>
@@ -221,31 +227,37 @@ status: "正常" -->
          <!-- 送达方信息 -->
         <view v-if="index == 3">
             <view class="block">
-                <view class="secondPageTitle">青岛鸿程永泰商贸有限公司</view>
+                <view v-for="item in customers">
+                    <view class="secondPageTitle">{{item.customerName}}</view>
                 <view class="breakLine"></view>
 
                 <view class="firstItem">
                     <view class="firstPageLeft">送达方编码</view>
-                    <view class="firstPageRight">QDCPHT2019110182558</view>
+                    <view class="firstPageRight">{{item.customerCode}}</view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">送达方中心</view>
-                    <view class="firstPageRight">青岛</view>
+                    <view class="firstPageRight">{{}}???</view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">状态 </view>
-                    <view class="tag" >
+                    <view v-if="item.deletedFlag == 1" class="tag" >
+                        不正常
+                    </view>
+                    <view v-else class="tag" >
                         正常
                     </view>
                 </view>
                 <view class="firstItem">
                     <view class="firstPageLeft">是否默认</view>
-                    <view class="firstPageRight">取消默认设置</view>
+                    <view v-if="item.defaultFlag" class="firstPageRight">取消默认设置</view>
+                    <view v-else class="firstPageRight">默认设置</view>
                 </view>
-                <view class="firstPageRightMore">青岛市李沧区青山路616号1单元202</view>
+                <view class="firstPageRightMore">{{item.address}}</view>
+                </view>
+                
                 <view class="blank"></view>
             </view>
-
             <view class="tailView"></view>
 
         </view>
@@ -263,26 +275,33 @@ status: "正常" -->
                 <view class="breakLine"></view>
                 <view class="firstItem">
                     <view class="firstPageLeft">账户总额：</view>
-                    <view class="firstPageRightRed">¥98332.12</view>
+                    <view class="firstPageRightRed">¥{{accountTotal}}</view>
                 </view>
             </view>
-            <view class="block">
-                <view class="secondPageTitle">青岛鸿程永泰商贸有限公司</view>
-                <view class="breakLine"></view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">付款方编码</view>
-                    <view class="firstPageRight">QDCPHT2019110182558</view>
-                </view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">帐户余额</view>
-                    <view class="firstPageRightRed">¥ 2323.45</view>
-                </view>
-                <view class="firstItem">
-                    <view class="firstPageLeft">是否默认</view>
-                    <view class="firstPageRight">取消默认设置</view>
-                </view>
+
+            <view v-for="item in auxiliary">
+                <view class="block">
+                    <view class="secondPageTitle">{{item.customerName}}</view>
+                    <view class="breakLine"></view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">付款方编码</view>
+                        <view class="firstPageRight">{{item.customerCode}}</view>
+                    </view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">帐户余额</view>
+                        <view class="firstPageRightRed">¥ 2323.45</view>
+                    </view>
+                    <view class="firstItem">
+                        <view class="firstPageLeft">是否默认</view>
+                        <view v-if="item.defaultFlag" class="firstPageRight">取消默认设置</view>
+                        <view v-if="item.defaultFlag" class="firstPageRight">设置为默认设置</view>
+                    </view>
                 <view class="blank"></view>
             </view>
+        </view>
+
+            
+
             <view class="tailView"></view>
         </view>
 
@@ -292,6 +311,7 @@ status: "正常" -->
 <script>
 
 import JTab from '../../components/common/JTab';
+import userTypes from '../../store/mutationsTypes/userTypes';
 
 export default {
   // import引入的组件需要注入到对象中才能使用
@@ -328,32 +348,89 @@ export default {
             name: '付款方信息',
             active: false
             },
-      ],
-      index:0,
-      tagList:
-      [
-          '卡萨帝',
-           '海尔'
         ],
+        index:0,
         // 基本信息-交易权限、市场秩序、样品机权限
-      customerBasicInformation:{},
+        customerBasicInformation:{},
         //   基本信息-整车权限、金融服务
-      zhengCheAndFinancialDto:{}
+        zhengCheAndFinancialDto:{},
+        //   签约信息
+        customerSigned:{},
+        //   门店信息
+        branchInformation:{},
+        // 送达方列表
+        customers:{},
+        // 付款方列表
+        auxiliary:{},
+        // 付款方账户总额
+        accountTotal:''
     }
   },
   // 监听属性 类似于data概念
   computed: {},
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+      
+      index(newVal,oldVal) {
+          let userId = '8700010462';
+          switch (newVal) {
+                case 1: 
+                    {
+                        this.getCustomerSigned(userId,1,10);
+                    }
+                  
+                  break;
+                case 2: 
+                    {
+                        this.getBranchInformation(userId,1,10);
+                    }
+                  
+                  break;
+                // 送达方信息
+                case 3: 
+                    {
+                        this.customersFun(userId,1,10);
+                    }
+                  
+                  break;
+                // 付款方列表
+                case 4: 
+                    {
+                        this.auxiliaryFun(2110,1);
+                    }
+                  
+                  break;
+          
+              default:
+                  break;
+          }
+      }
+  },
   // 生命周期 - 创建完成（可以访问当前this实例）
   created () {
 
   },
+  onLoad: function (option) {
+    this.index = JSON.parse(decodeURIComponent(option.index));
+    var tmpTabs = [];
+    for (let index = 0; index < this.tabs.length; index++) {
+        const element = this.tabs[index];
+        if(element.id == this.index) {
+            element.active = true;
+        } else {
+            element.active = false;
+        }
+        tmpTabs.push(element);
+    }
+    this.tabs = tmpTabs;
+  },
   // 生命周期 - 挂载完成（可以访问DOM元素）
   mounted () {
       let userId = '8700010462';
-      this.getCustomerBasicInformation(userId);
-      this.getZhengCheAndFinancialDto(userId);
+    //   this.getCustomerBasicInformation(userId);
+    //   this.getZhengCheAndFinancialDto(userId);
+            //   this.getCustomerSigned(userId,1,10)
+    //   this.getBranchInformation(userId,1,10);
   },
   activated () { }, // 如果页面有keep-alive缓存功能，这个函数会触发
   // 方法集合
@@ -368,7 +445,7 @@ export default {
             console.log(data)
         }
     },
-    // 基本信息-交易权限、市场秩序、样品机权限
+    // // 基本信息-交易权限、市场秩序、样品机权限
     async getZhengCheAndFinancialDto(userId) {
         const { code, data }  = await this.mineServer.getZhengCheAndFinancialDto(userId);
         if(code === '1') {
@@ -376,7 +453,62 @@ export default {
             console.log(data)
         }
     },
+    // 基本信息- 签约信息
+    async getCustomerSigned(userId,page,pageSize) {
+        console.log('getCustomerSigned')
+        const { code, data }  = await this.mineServer.getCustomerSigned(userId,page,pageSize);
+        if (code === '1') {
+            let tmp = data;
+            let contractMessageDtoList = [];
+            console.log(tmp)
+            
+            // 签约品牌编码转化为数组
+            for (let index = 0; index < tmp.contractMessageDtoList.length; index++) {
+                const element = tmp.contractMessageDtoList[index];
+                let tagList = element.brandName.split(",");
+                element.tagList = tagList;
+                contractMessageDtoList.push(element);
+            }
 
+            this.customerSigned = {
+                total:data.total,
+                contractMessageDtoList:contractMessageDtoList
+            }
+             console.log(this.customerSigned)
+        }
+    },
+    // // 基本信息- 门店信息
+    async getBranchInformation(userId,pageNum,pageSize) {
+        console.log('getBranchInformation')
+        const { code, data }  = await this.mineServer.getBranchInformation(userId,pageNum,pageSize);
+        if(code === '1') {
+            this.branchInformation = data;
+            console.log(data)
+        }
+    },
+    // 送达方列表
+    async customersFun(userId) {
+        console.log('customers')
+        const { code, data }  = await this.mineServer.customers(userId);
+        if(code === '1') {
+            this.customers = data;
+            console.log(data)
+        }
+    },
+    // 付款方列表
+    async auxiliaryFun(salesGroupCode,status) {
+        console.log('auxiliaryFun')
+        const { code, data }  = await this.mineServer.auxiliary(salesGroupCode,status);
+        if(code === '1') {
+            // this.accountTotal = 0;
+            // for (let index = 0; index < data.length; index++) {
+            //     const element = data[index];
+            //     this.accountTotal = this.accountTotal + element.
+            // }
+            this.auxiliary = data;
+            console.log(data)
+        }
+    },
     //   事件处理
     tabClick(e) {
         this.tabs = e;
@@ -384,6 +516,7 @@ export default {
         this.tabs.forEach((each) => {
         if (each.active) {
           this.index = each.id;
+          console.log("selectedIndex =>"+this.index)
         }
       });
     },
