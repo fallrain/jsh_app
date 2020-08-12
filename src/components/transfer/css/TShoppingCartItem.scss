@@ -186,7 +186,7 @@
     font-size: 30px;
     color: $theme-color;
   }
-  
+
   
   
   .tShoppingCartItem-btm-switch-wrap {
@@ -244,6 +244,15 @@
     }
     .tShoppingCartItem-cnt-price-inf-mrr {
       color: #333;
+    }
+    .reverse {
+      display: inline-block;
+      transform: rotateX(180deg);
+    }
+    .tShoppingCartItem-cnt-price-info-li.active {
+      color: #ED2856;
+      background: #FFF5F7;
+      
     }
     .tShoppingCartItem-cnt-price-info {
       width: 500px;

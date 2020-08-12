@@ -22,6 +22,7 @@
        <!--余额支付信息 -->
       <view class="mt24">
         <j-overage-pay
+          :payerBalance="payerBalance"
         ></j-overage-pay>
       </view>
       <!-- 失效宝贝 -->
@@ -69,10 +70,13 @@ export default {
       // 订单详情
       allOrderList: [],
       // 失效订单
-      invalid:[],
+      invalid: [],
       invalidList: [],
       // 选中的数据
       allChooseNum: 0,
+      payerCodeAll: [],
+      // 付款方余额
+      payerBalance: [],
       tabs: [
         {
           id: 'gwc',
@@ -111,6 +115,7 @@ export default {
     getShopInfo() {
       // this.setlist()
       this.getOrderList()
+      this.getInquire()
       // this.getShoppingCartNum()
     },
     // setlist() {
@@ -215,11 +220,13 @@ export default {
     calSettlement() {
       let sum = 0;
       this.allOrderList.forEach(ele => {
+        console.log(ele)
         if (ele.checked) {
           sum += Number(ele.data.SUMMONEY)
         }
       })
         this.settlement = sum
+
     },
     async getShoppingCartNum() {
       // 购物车商品数量 
@@ -242,18 +249,32 @@ export default {
       });
       if (code === '1') {
         console.log(data)
+        const page = data
+        let code = [] 
+        page.map(item => {
+          // console.log(item)
+          code.push(item.payerCode)
+        })
+        this.payerCodeAll = code
+        console.log(this.payerCodeAll)
         this.allOrderList.forEach(ele => {
           ele.data.orderList.map(item => {
             item.payer = data
+            item.isExpand = false
+            item.isChecked = false
           })
         })
         console.log(this.allOrderList)
         this.invalidList.map(ele => {
           ele.data.orderList.map(item => {
             item.payer = data
+            item.isExpand = false
+            item.isChecked = false
+            item.Checked = false
           })
         })
-        console.log(this.invalid)
+       console.log(this.invalid)
+        this.getInquire()
       }
 
     },
@@ -281,6 +302,35 @@ export default {
       })
       this.allChooseNum = chooseNum
     },
+    // 请求余额支付信息
+    async getInquire() {
+      let code = []
+      let temp = {}
+      let payerCode = ""
+      for(var i = 0; i < this.payerCodeAll.length; i++ ) {
+      //  console.log(this.payerCodeAll[i])
+        code.push({
+          payerCode: this.payerCodeAll[i],
+          salesGroupCode: "2110"
+        })
+      }
+      // console.log(code)
+      const AllInquire = await this.customerService.inquire(code);
+      if(AllInquire.code === "1") {
+      console.log(111)
+        this.payerBalance = AllInquire.data
+         console.log(this.payerBalance)
+      }
+       
+         
+
+      // if(allInquire.code === "1") {   
+        
+      //   console.log(data)
+      // }
+     
+    },
+    
     checkAll(checked) {
       /* 全部选择回调函数 */
       this.allOrderList.forEach((v) => {
@@ -288,8 +338,10 @@ export default {
       });
       this.calSettlement()
     },
-    invalidListChangeChange(list) {
-      this.invalidListChange = list;
+    invalidListChange(list) {
+       
+      this.invalidList = list;
+      this.invalidList = JSON.parse(JSON.stringify(this.invalidList));
     },
     tabClick(tabs) {
        this.tabs = tabs;

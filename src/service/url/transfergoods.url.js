@@ -19,7 +19,12 @@ const urls = {
   // 加入调货购物车
   insertOrder: '/addToCart/insertOrder',
   // 切换付款方
-  upDHPayMoney: '/dhDeleteOrder/upDHPayMoney'
+  upDHPayMoney: '/dhDeleteOrder/upDHPayMoney',
+  // 清空失效宝贝
+  deleteProduct: '/dhDeleteOrder/deleteProduct',
+  // 提交订单
+  submitDhOrder: '/defaultOrder/submitDhOrder'
+
 
 
 };

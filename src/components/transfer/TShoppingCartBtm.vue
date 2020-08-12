@@ -18,7 +18,8 @@
     </view>
     <button
       type="button"
-      class="tShoppingCartBtm-btn"
+      :class="['tShoppingCartBtm-btn',active ? 'background:red' : 'ackground:#ccc']"
+      @tap="tlement"
     >结算
     </button>
   </view>
@@ -44,12 +45,19 @@ export default {
       default: 0
     }
   },
- 
+  data() {
+    return {
+      active:false
+    }
+  },
   methods: {
     choose() {
       const checked = !this.checked;
       this.$emit('update:checked', checked);
       this.$emit('checkAll', checked);
+    },
+    tlement() {
+      
     }
   }
 };

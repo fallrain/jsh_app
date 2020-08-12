@@ -41,6 +41,9 @@ export default {
   // 取消收藏
   removeInterestProduct(data) {
     return jPostJson(urls.removeInterestProduct, data)
+  },
+  inquire(data) {
+    return jPostJson(urls.inquire, data)
   }
 
 };

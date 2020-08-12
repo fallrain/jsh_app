@@ -18,7 +18,7 @@
           <view class="transferDetailAddress-information-text mlb">
             车型：
             <text class="transferDetailAddress-information-val">X8.7K - 8.7厢式（高底盘）</text>
-          </view>       
+          </view>
         </view>
       </view>
       <view class="transferDetailAddress-transfer-order">

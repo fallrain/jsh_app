@@ -40,6 +40,14 @@ export default {
     upDHPayMoney(data) {
         /* 切换付款方 */
         return jGet(urls.upDHPayMoney, data)
+    },
+    deleteProduct(data) {
+        /* 清除失效宝贝 */
+        return jGet(urls.deleteProduct, data)
+    },
+    submitDhOrder(data) {
+        /* 提交订单 */
+        return jGet(urls.submitDhOrder, data)
     }
 
 }

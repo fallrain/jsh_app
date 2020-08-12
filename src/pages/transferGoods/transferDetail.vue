@@ -10,6 +10,7 @@
       <transfer-detail-item
         @change="goodsChange"
         :goods="detailList.orderList"
+        
       >
       </transfer-detail-item>
     </view>

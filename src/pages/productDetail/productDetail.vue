@@ -84,7 +84,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-ship :show.sync="isShowShip" :info="deliveryAddressList" @checkedShip="checkedShip"></pro-com-ship>
+      <pro-com-ship :show.sync="isShowShip" :info="deliveryAddressList" :titles="titles" @checkedShip="checkedShip"></pro-com-ship>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
         <view class="padding-30 col-40 modeller">热门推荐</view>
@@ -141,6 +141,7 @@ export default {
   },
   data() {
     return {
+      titles: '配送至',
       stock: {}, // 库存
       footButtong: { // 底部按钮是否显示问题
         isSale: false,

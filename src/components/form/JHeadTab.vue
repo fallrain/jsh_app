@@ -67,54 +67,58 @@ export default {
     tabs: {
       type: Array,
       default: () => []
-    }
+    },
+    popTabs: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
-      popTabs: [
-        {
-          name: '品牌',
-          show: false,
-          children: [
-            {
-              name: '海尔',
-              checked: false
-            },
-            {
-              name: '卡萨帝',
-              checked: false
-            },
-            {
-              name: '统帅',
-              checked: false
-            },
-            {
-              name: '摩卡',
-              checked: false
-            },
-            {
-              name: 'GE',
-              checked: false
-            },
-            {
-              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
-              checked: false
-            }
-          ]
-        },
-        {
-          name: '类目',
-          show: false,
-        },
-        {
-          name: '一级类目',
-          show: false,
-        },
-        {
-          name: '二级类目',
-          show: false,
-        }
-      ],
+      // popTabs: [
+      //   {
+      //     name: '品牌',
+      //     show: false,
+      //     children: [
+      //       {
+      //         name: '海尔',
+      //         checked: false
+      //       },
+      //       {
+      //         name: '卡萨帝',
+      //         checked: false
+      //       },
+      //       {
+      //         name: '统帅',
+      //         checked: false
+      //       },
+      //       {
+      //         name: '摩卡',
+      //         checked: false
+      //       },
+      //       {
+      //         name: 'GE',
+      //         checked: false
+      //       },
+      //       {
+      //         name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
+      //         checked: false
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     name: '类目',
+      //     show: false,
+      //   },
+      //   {
+      //     name: '一级类目',
+      //     show: false,
+      //   },
+      //   {
+      //     name: '二级类目',
+      //     show: false,
+      //   }
+      // ],
       // 扩展
       isExpend: false
     };
@@ -132,6 +136,9 @@ export default {
       /* tag tab 点击事件 */
     },
     showSecondCategory(item) {
+      this.popTabs.forEach((inf) => {
+        inf.show = false;
+      });
       /* 展示二级类目 */
       item.show = !item.show;
       this.isExpend = item.show;

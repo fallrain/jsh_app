@@ -7,9 +7,9 @@
     >
       <view
       class="tFailureGoodsItem-cnt-check"
-      @tap="choose"
+      @tap="choose(order)"
       >
-        <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
+        <i :class="['iconfont', order.checked ? 'iconradio active':'iconradio1']"></i>
       </view>
       <view 
         class="tFailureGoodsItem-cnt-img-wrap"
@@ -27,18 +27,22 @@
           <text class="tFailureGoodsItem-cnt-head-inf-mrr">付款方</text>
           <i 
             class="iconfont iconxia"
-            @tap="showPayer(order)"
+             :class="[
+                  order.isExpand && 'reverse'
+                ]"
+                @tap="showPayer(order,index)"
           ></i>
-          <view class="tFailureGoodsItem-cnt-price-info" v-show="isShowPayer">
+          <view class="tFailureGoodsItem-cnt-price-info" v-show="order.isExpand">
             <view class="tFailureGoodsItem-cnt-price-info-li"
               v-for="(it,index) in order.payer"
               :key="index"
-              @tap="togglePayer(order)" 
+              :class="[order.isChecked && 'active']"
+              @tap="togglePayer(order, it, index)"  
             >
               ({{it.payerCode}}){{it.payerName}}
             </view>
           </view>
-          <text class="tFailureGoodsItem-cnt-head-text mll">请选择付款方</text>
+          <text class="tFailureGoodsItem-cnt-head-choose">请选择付款方</text>
         </view>
         <view class="tFailureGoodsItem-cnt-head-inf-reason">{{order.SXREASON}}</view>
       </view>
@@ -50,11 +54,7 @@
 export default {
   name: 'TFailureGoodsItem', 
   props: {
-    // 选中
-    checked: {
-      type: Boolean,
-      default: false
-    },
+    
     // 数据
     itemList: {
       type: Object,
@@ -74,17 +74,19 @@ export default {
     
   },
   methods: {
-    choose() {
+    choose(order) {
       /* 选中 */
-      const checked = !this.checked;
+      order.checked = !order.checked;
       this.$emit('update:checked', this.itemList.checked);
-      this.$emit('change', checked, this.index);
+      this.$emit('change', this.itemList, this.index);
     },
-    showPayer(item) {
-      this.isShowPayer = !this.isShowPayer
+    showPayer(item,index) {
+     item.isExpand = !item.isExpand
+      console.log(item.isExpand)
+      this.$emit('change', this.list, item, this.index);
     },
       // 切换付款方
-    async togglePayer(item) {
+    async togglePayer(item, it, index) {
       const upDHPay = await this.transfergoodsService.upDHPayMoney ({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: 8700010462,
@@ -108,6 +110,17 @@ export default {
       });
       if(upDHPay.code === "1" ) {
         // console.log(data)
+        console.log(this.itemList.data.orderList)
+        this.itemList.data.orderList.map(ele => {           
+              ele.isChecked = false
+             console.log(ele.isChecked)   
+          })
+          item.isExpand = !item.isExpand
+          item.isChecked = true
+          console.log(item)
+          document.querySelector(".tFailureGoodsItem-cnt-head-choose").innerHTML =  "(" + it.payerCode + ")" + it.payerName
+          console.log(item.isChecked)
+        this.$emit('change', this.itemList,index);
       }
     }
   }
@@ -115,17 +128,23 @@ export default {
 </script>
 
 <style lang="scss">
-  .tFailureGoodsItem {
-    position: relative;
+  .tFailureGoodsItem-cnt-check {
+    color: #CFCFCF;
     
-    min-height: 198px;
+  }
+  .tFailureGoodsItem {
+    position: relative;  
     padding-top: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #EDE9E9;
+    // padding-bottom: 20px;
+    // border-bottom: 1px solid #EDE9E9;
+    // margin-bottom: 20px;
   }
   .tFailureGoodsItem-list{
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #EDE9E9;
   }
   .tFailureGoodsItem-cnt-img-wrap{
     flex-shrink: 0;
@@ -196,8 +215,21 @@ export default {
       border: 1px solid #c3c3c3;
       .tFailureGoodsItem-cnt-price-info-li {
         margin:10px 0px 10px 20px;
+          &.active {
+            color: #ED2856;
+            background: #FFF5F7;  
+          }
       }
+      .tFailureGoodsItem-cnt-head-choose {
+        color: #999;
+        font-size: 24px;
+      }
+      .reverse {
+      display: inline-block;
+      transform: rotateX(180deg);
     }
+  
+  }
  }
  .tFailureGoodsItem-cnt-head-inf-reason{
      font-size: 20px;

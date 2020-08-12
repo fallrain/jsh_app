@@ -354,7 +354,8 @@ export default {
           if (!this.list) {
             this.list = []
           }
-          this.list = this.list.concat(curList);        
+          this.list = this.list.concat(curList);    
+          console.log(this.list)    
         }
         
         this.filterList = this.conditionList.map(item => ({

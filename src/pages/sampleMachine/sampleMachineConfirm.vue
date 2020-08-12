@@ -42,17 +42,18 @@
               @tap="toggleExpand">
           ({{currentPayer.payerCode}}){{currentPayer.payerName}}
           <i
-            class="iconfont iconxia normal"
+            class="iconfont iconxia normal pull-right"
             :class="[
                   isExpand && 'reverse'
                 ]"
           ></i>
-          <view class="payer-list">
-            <view class="payer-item"
-                  v-for="(item, index) in payerList"
-                  :key="index">
-              ({{item.payerCode}}){{item.payerName}}
-            </view>
+        </view>
+        <view v-if="isExpand" class="payer-list">
+          <view class="payer-item"
+                @tap="choosedPayer(item, index)"
+                v-for="(item, index) in payerList"
+                :key="index">
+            <text :class="[item.choosed&&'active']">({{item.payerCode}}){{item.payerName}}</text>
           </view>
         </view>
       </view>
@@ -138,7 +139,6 @@ export default {
       console.log(val);
     },
     async getpayerList() {
-      console.log(this.userInf);
       const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCode, {
         salesGroupCode: this.userInf.salesGroupCode,
         status: 1
@@ -151,6 +151,14 @@ export default {
     },
     toggleExpand() {
       this.isExpand = !this.isExpand;
+    },
+    choosedPayer(item, index) {
+      this.isExpand = false
+      this.currentPayer = item;
+      this.payerList.forEach((v) => {
+        v.choosed = false;
+      });
+      this.payerList[index].choosed = true;
     }
   }
 };

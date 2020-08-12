@@ -45,17 +45,21 @@
               <view class="tShoppingCartItem-cnt-price-inf-mrr">付款方</view>
               <i 
                 class="iconfont iconxia"
-                @tap="showPayer(item)"
+                :class="[
+                  item.isExpand && 'reverse'
+                ]"
+                @tap="showPayer(item,index)"
               ></i>
-               <view class="tShoppingCartItem-cnt-price-info" v-show="isShowPayer">
-                 <view class="tShoppingCartItem-cnt-price-info-li"
+              <view class="tShoppingCartItem-cnt-price-info" v-show="item.isExpand ">
+                <view class="tShoppingCartItem-cnt-price-info-li"
                   v-for="(it,index) in item.payer"
                   :key="index"
-                  @tap="togglePayer(item)" 
-                 >
-                  ({{it.payerCode}}){{it.payerName}}
-                 </view>
-               </view>
+                  :class="[item.isChecked && 'active']"
+                  @tap="togglePayer(item, it, index)" 
+                >
+                ({{it.payerCode}}){{it.payerName}}
+                </view>
+              </view>
               <view class="tShoppingCartItem-cnt-price-inf-item">{{item.IBL_PAYMONEYNAME}}</view>
             </view>
           </view>
@@ -103,14 +107,15 @@
 
 <script>
 import {
-  uniNumberBox
+  uniNumberBox,uniPopup
 } from '@dcloudio/uni-ui';
 import './css/TShoppingCartItem.scss';
 
 export default {
   name: 'TShoppingCartItem',
   components: {
-    uniNumberBox
+    uniNumberBox,
+    uniPopup
   },
   props: {
     // 商品数据
@@ -149,18 +154,23 @@ export default {
       console.log(data)
       this.$emit('change', this.list, this.index);
     },
-    showPayer() {
+    showPayer(item) {
       // 显示付款方
-      this.isShowPayer = !this.isShowPayer;
+    
+      item.isExpand = !item.isExpand
+      console.log(item.isExpand)
+      this.$emit('change', this.list, item, this.index);
     },
     addFavorite(goods) {
       if(goods.$favorite) {
+        confirm("确定取消收藏吗")
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
           customerCode: "8700010462",
           account: "8700010462",
           productCodeList: [goods.GBID]
         });
+
       } else {
         // 添加收藏
          const addInterest = this.customerService.addInterestProduct({
@@ -214,7 +224,7 @@ export default {
       }
     },
     // 切换付款方
-    async togglePayer(item) {
+    async togglePayer(item, it, index) {
       const upDHPay = await this.transfergoodsService.upDHPayMoney ({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: 8700010462,
@@ -235,10 +245,29 @@ export default {
         VERMONEY: "",
         REBATEMONEY: "0.0000",
         IBL_PAYTO_TYPE: "00",
-      });
+      })
       if(upDHPay.code === "1" ) {
-        // console.log(data)
+          this.list.data.orderList.map(ele => {           
+              ele.isChecked = false
+             console.log(ele.isChecked)   
+          })
+          item.isExpand = !item.isExpand
+          item.isChecked = true
+          console.log(item)
+          document.querySelector(".tShoppingCartItem-cnt-price-inf-item").innerHTML =  "(" + it.payerCode + ")" + it.payerName
+          console.log(item.isChecked)
+        this.$emit('change', this.list, item, this.index);
       }
+     
+
+
+      //  this.tabs.forEach((v) => {
+      //   v.active = false;
+      // });
+      // item.active = true;
+      // this.$emit('tabClick', this.tabs, item, index);
+
+
     }
 
   }
