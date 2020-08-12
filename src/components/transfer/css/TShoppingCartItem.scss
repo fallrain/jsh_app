@@ -1,6 +1,6 @@
 .tShoppingCartItem {
     width: 702px;
-    min-height: 580px;
+    // min-height: 580px;
     background: #fff;
     border-radius: 20px;
     border:1px solid #ED2856;
@@ -186,7 +186,7 @@
     font-size: 30px;
     color: $theme-color;
   }
-  
+
   
   
   .tShoppingCartItem-btm-switch-wrap {
@@ -226,6 +226,7 @@
   }
   
   .tShoppingCartItem-btm-version {
+    position: relative;
     display: flex;
     align-items: center;
     line-height: 32px;
@@ -236,13 +237,34 @@
     color: #333;
     font-family:PingFangSC-Light,PingFang SC;
     font-weight:300;
-    .tShoppingCartItem-cnt-price-inf-picker{
+    .tShoppingCartItem-cnt-price-inf-picker {
       display: flex;
       font-size: 20px;
       align-items: center;
     }
-    .tShoppingCartItem-cnt-price-inf-mrr{
+    .tShoppingCartItem-cnt-price-inf-mrr {
       color: #333;
+    }
+    .reverse {
+      display: inline-block;
+      transform: rotateX(180deg);
+    }
+    .tShoppingCartItem-cnt-price-info-li.active {
+      color: #ED2856;
+      background: #FFF5F7;
+      
+    }
+    .tShoppingCartItem-cnt-price-info {
+      width: 500px;
+      position: absolute;
+      top: 50px;
+      left: -4px;
+      z-index: 500;
+      background: rgba(255, 255, 255, 0.911);
+      border: 1px solid #c3c3c3;
+      .tShoppingCartItem-cnt-price-info-li {
+        margin:10px 0px 10px 20px;
+      }
     }
     .tShoppingCartItem-cnt-price-inf-item{
       color: #999;
@@ -291,10 +313,17 @@
 
   
   .tShoppingCartItem-btm-text {
-   
+    display: flex;
     font-size: 24px;
     margin-bottom: 26px;
     color: #ED2856;
+    align-items: center;
+    margin-top:26px;
+    .tShoppingCartItem-btm-detail{
+      width: 200px;
+      display: flex;
+
+    }
     .tShoppingCartItem-btm-text-icon{
       margin-left: 24px;
       color: #ED2856;

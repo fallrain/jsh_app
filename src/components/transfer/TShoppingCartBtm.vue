@@ -9,16 +9,17 @@
     </view>
     <text class="tShoppingCartBtm-check-edit">编辑</text>
     <view class="tShoppingCartBtm-text">
-      已选中<text class="tShoppingCartBtm-text-highlight">7</text>种
+      已选中<text class="tShoppingCartBtm-text-highlight">{{allChooseNum}}</text>种
     </view>
     <view class="tShoppingCartBtm-text-row">|</view>
     <view class="tShoppingCartBtm-total">
       <text>合计：</text>
-      <view class="tShoppingCartBtm-total-price">¥283945.12</view>
+      <view class="tShoppingCartBtm-total-price">¥{{settlement}}</view>
     </view>
     <button
       type="button"
-      class="tShoppingCartBtm-btn"
+      :class="['tShoppingCartBtm-btn',active ? 'background:red' : 'ackground:#ccc']"
+      @tap="tlement"
     >结算
     </button>
   </view>
@@ -32,6 +33,21 @@ export default {
     checked: {
       type: Boolean,
       default: false
+    },
+    // 结算
+    settlement: {
+      type: Number,
+      default: 0
+    },
+    // 选中的数据
+    allChooseNum: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      active:false
     }
   },
   methods: {
@@ -39,6 +55,9 @@ export default {
       const checked = !this.checked;
       this.$emit('update:checked', checked);
       this.$emit('checkAll', checked);
+    },
+    tlement() {
+      
     }
   }
 };
