@@ -4,8 +4,8 @@
       <view class="v-foot-lin-tex1">车型：<span class="v-foot-lin-tex3">{{carType}}</span></view>
       <view class="v-foot-lin-tex2">已装车体积：<span class="v-foot-lin-tex4">0.81m³ / 2%</span></view>
     </view>
-    <view class="v-foot-btn">
-      <view class="v-foot-btn-text"><i class="iconfont icongouwuchezhengpin v-foot-lin-tex5"></i>购物车&nbsp;(10)</view>
+    <view class="v-foot-btn" @click="goVehicleCar">
+      <view class="v-foot-btn-text"><i class="iconfont icongouwuchezhengpin v-foot-lin-tex5"></i>购物车&nbsp;({{carNum}})</view>
     </view>
   </view>
 </template>
@@ -16,6 +16,16 @@ export default {
   props: {
     carType: {
       type: String
+    },
+    carNum: {
+      type: [Number, String]
+    }
+  },
+  methods: {
+    goVehicleCar() {
+      uni.navigateTo({
+        url: '/pages/vehicleList/vehicleCarList'
+      });
     }
   }
 };

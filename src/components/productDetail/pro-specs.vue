@@ -23,10 +23,8 @@ export default {
   name: 'proSpecs',
   props: {// 父级传来的数据
     attributesMap: {// 数据
-      type: Array,
-      default() {
-        return [];
-      }
+      type: Object,
+      default: () => {}
     }
   },
   data() {

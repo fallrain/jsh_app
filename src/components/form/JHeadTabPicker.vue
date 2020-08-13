@@ -3,7 +3,7 @@
     :class="['jHeadTabPicker',show && 'jHeadTabPicker-in']"
     v-reset-position
   >
-    <view v-if="value[0]&&value[0].type==='ZC'" class="jHeadTabPicker-list">
+    <view v-if="value[0]&&(value[0].type==='ZCPC'||value[0].type==='ZCPSLX'||value[0].type==='ZCLX')" class="jHeadTabPicker-list">
       <view
         :class="['jHeadTabPicker-item-ZC',item.checked && 'active']"
         v-for="(item,index) in value"
@@ -91,12 +91,18 @@ export default {
       this.value.forEach((v) => {
         v.checked = false;
       });
-      this.value[0].checked = true; // 重置默认第一个？发货基地的待定
+      if (this.value[0].type === 'ZCJD') {
+        this.value[4].checked = true; // 发货基地重置为黄岛
+      } else if (this.value[0].type === 'ZCPC') {
+        // 整车拼车的重置,重置为空，然后上层查询是默认为选发货基地
+      } else {
+        this.value[0].checked = true; // 重置默认第一个
+      }
     },
     confirm() {
       /* 确定 */
       this.close();
-      this.$emit('confirm');
+      this.$emit('confirm', this.index);
     },
     choose(item) {
       /* 选中 */

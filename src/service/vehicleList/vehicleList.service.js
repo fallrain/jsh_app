@@ -18,5 +18,16 @@ export default {
   },
   queryBaseCode() { // 基地?timestamp=1597133218359
     return jGet(url.queryBaseCode());
+  },
+  queryEs(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center, brandName, sortDirection, sortType,
+    brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode) {
+    return jGet(url.queryES(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center, brandName,
+      sortDirection, sortType, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode));
+  },
+  queryCustomerSendto(timestamp, customerCode) { // 整车--配送至
+    return jGet(url.queryCustomerSendto(timestamp, customerCode));
+  },
+  queryCarNum(timestamp, longfeiUSERID) { // 整车购物车数量查询
+    return jGet(url.queryCarNum(timestamp, longfeiUSERID));
   }
 };
