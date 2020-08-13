@@ -19,9 +19,12 @@ export default {
   queryBaseCode() { // 基地?timestamp=1597133218359
     return jGet(url.queryBaseCode());
   },
-  queryEs(timestamp, categoryCode, name, attributeName, attributeValue, pageNum, customerCode, dstCode, center,
-    isWholeCar, group, brandName, sortDirection, sortType, tags, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode) {
-    return jGet(url.queryEs(timestamp, categoryCode, name, attributeName, attributeValue, pageNum, customerCode, dstCode, center,
-      isWholeCar, group, brandName, sortDirection, sortType, tags, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode));
+  queryEs(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center, brandName, sortDirection, sortType,
+    brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode) {
+    return jGet(url.queryES(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center, brandName,
+      sortDirection, sortType, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode));
+  },
+  queryCustomerSendto(timestamp, customerCode) { // 整车--配送至
+    return jGet(url.queryCustomerSendto(timestamp, customerCode));
   }
 };

@@ -15,14 +15,20 @@ const urls = {
     return '/baseQuery/queryBaseCode';
   },
   querySendWay(timestamp, YDPSJIDI, longfeiUSERID, sendtoMktid, sendtoCode) { // 整车列表-配送类型
-    return `/baseQuery/querySendWay?timestamp=${timestamp}&YDPS_JIDI=${YDPSJIDI}&longfeiUSERID=${longfeiUSERID}&sendtoMktid=${sendtoMktid}&sendtoCode=${sendtoCode}`;
+    return `/baseQuery/querySendWay?timestamp=${timestamp}&YDPS_JIDI=${YDPSJIDI}&longfeiUSERID=${longfeiUSERID
+    }&sendtoMktid=${sendtoMktid}&sendtoCode=${sendtoCode}`;
   },
-  queryEs(timestamp, categoryCode, name, attributeName, attributeValue, pageNum, customerCode, dstCode, center,
-    isWholeCar, group, brandName, sortDirection, sortType, tags, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode) {
-    return `/querySample/queryEs?timestamp=${timestamp}&categoryCode=${categoryCode}&name=${name}&attributeName=${attributeName
-    }&attributeValue=${attributeValue}&pageNum=${pageNum}&pageSize=15&customerCode=${customerCode}&dstCode=${dstCode}&center=${center
-    }&isWholeCar=${isWholeCar}&group=${group}&brandName=${brandName}&sortDirection=${sortDirection}&sortType=${sortType}&tags=${tags
-    }&brandGroup=${brandGroup}&productCode=${productCode}&highPrice=${highPrice}&lowPrice=${lowPrice}&farWeekGroup=${farWeekGroup}&baseCode=${baseCode}`;
+  queryCustomerSendto(timestamp, customerCode) { // 整车--配送至
+    return `/queryCustomer/queryCustomerSendto?timestamp=${timestamp}&customerCode=${customerCode}`;
+  },
+  queryES(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center,
+    brandName, sortDirection, sortType, brandGroup, productCode, highPrice, lowPrice,
+    farWeekGroup, baseCode) {
+    return `/querySample/queryEs?timestamp=${timestamp}&categoryCode=${categoryCode}&name=${name
+    }&attributeName=&attributeValue=&pageNum=${pageNum}&pageSize=${pageSize}&customerCode=${customerCode
+    }&dstCode=${dstCode}&center=${center}&isWholeCar=1&group=&brandName=${brandName}&sortDirection=${sortDirection
+    }&sortType=${sortType}&tags=&brandGroup=${brandGroup}&productCode=${productCode}&highPrice=${highPrice
+    }&lowPrice=${lowPrice}&farWeekGroup=${farWeekGroup}&baseCode=${baseCode}`;
   }
 };
 util.addPrefix(baseURL, urls);
