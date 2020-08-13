@@ -90,6 +90,9 @@ export default {
       } else {
         this.$refs.pop.close();
       }
+    },
+    choseOptions(val) {
+      console.log(val)
     }
   },
   methods: {

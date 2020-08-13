@@ -15,7 +15,10 @@
     </view>
     <view v-if="dataInfo.disableComposeProductList" class="mt24">
       <j-failure-order-item
-        :goodsList="dataInfo.disableComposeProductList"
+        v-for="(orderItem,index) in dataInfo.composeProductList"
+        :key="index"
+        :index="index"
+        :orderItem="orderItem"
       ></j-failure-order-item>
     </view>
     <view class="mt24">
@@ -31,12 +34,6 @@
         @tap="showPayer"
       >下一步</button>
     </view>
-    <j-pop-picker
-      title="付款方"
-      :show.sync="payerPickerShow"
-      :options="payerOptions"
-      :choseOptions.sync="chosePayerOptions"
-    ></j-pop-picker>
   </view>
 </template>
 
@@ -45,14 +42,12 @@ import JOrderConfirmAddress from '../../components/shoppingCart/JOrderConfirmAdd
 import JOrderConfirmItem from '../../components/shoppingCart/JOrderConfirmItem';
 import JFailureOrderItem from '../../components/shoppingCart/JFailureOrderItem';
 import JOveragePay from '../../components/shoppingCart/JOveragePay';
-import JPopPicker from '../../components/form/JPopPicker';
 import './css/orderConfirm.scss';
 
 
 export default {
   name: 'orderConfirm',
   components: {
-    JPopPicker,
     JOveragePay,
     JFailureOrderItem,
     JOrderConfirmItem,

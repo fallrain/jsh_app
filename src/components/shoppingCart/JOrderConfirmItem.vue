@@ -1,5 +1,5 @@
 <template>
-  <view class="JOrderConfirmItem-par">
+  <view :key="updateIndex" class="JOrderConfirmItem-par">
     <view
       class="jOrderConfirmItem-wrap"
     >
@@ -53,14 +53,19 @@
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>付款方
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
             </view>
-            <view class="jOrderConfirmItem-detail-mark-item-val">请选择付款方</view>
+            <view @tap="showPayer(index)" class="jOrderConfirmItem-detail-mark-item-val">
+              <text v-if="currentPayer[index]">{{currentPayer[index].value}}</text>
+              <text v-else>请选择付款方</text>
+            </view>
           </view>
           <view class="jOrderConfirmItem-detail-mark-item">
             <view class="jOrderConfirmItem-detail-mark-item-name">
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>备注信息
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
             </view>
-            <view class="jOrderConfirmItem-detail-mark-item-val">请选择付款方</view>
+            <view
+              @tap="goRemarks(index)"
+              class="jOrderConfirmItem-detail-mark-item-val">请选择备注信息</view>
           </view>
         </view>
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
@@ -76,17 +81,25 @@
       <view class="jOrderConfirmItem-total-text ml48">共计金额：</view>
       <view class="jOrderConfirmItem-total-price ml20">¥ {{orderItem.totalMoney}}</view>
     </view>
+    <j-pop-picker
+      title="付款方"
+      :show.sync="payerPickerShow"
+      :options="payerOptions"
+      :choseOptions.sync="chosePayerOptions"
+    ></j-pop-picker>
   </view>
 </template>
 
 <script>
 import JSwitch from '../form/JSwitch';
+import JPopPicker from '../form/JPopPicker';
 import './css/jOrderConfirmItem.scss';
 
 export default {
   name: 'JOrderConfirmItem',
   components: {
-    JSwitch
+    JSwitch,
+    JPopPicker
   },
   props: {
     // 单个订单
@@ -101,13 +114,67 @@ export default {
   },
   data() {
     return {
-      baseUrl: process.env.BASE_URL
+      updateIndex: 1,
+      baseUrl: process.env.BASE_URL,
+      // 配送地址显示隐藏
+      payerPickerShow: false,
+      // 配送地址options
+      payerOptions: [
+        {
+          key: 1,
+          value: '(88003222）青岛鸿程永泰商贸有限公司1',
+        },
+        {
+          key: 2,
+          value: '(88003222）青岛鸿程永泰商贸有限公司2',
+        },
+        {
+          key: 3,
+          value: '(88003222）青岛鸿程永泰商贸有限公司3',
+        },
+        {
+          key: 4,
+          value: '(88003222）青岛鸿程永泰商贸有限公司4',
+        }
+      ],
+      // 选中的
+      chosePayerOptions: [],
+      currentPayer: [],
+      currentIndex: 0,
     };
   },
+  onLoad() {
+    uni.$on('confirmremarks', (data) => {
+      debugger;
+      console.log(`监听到事件来自 confirmRemarks ，携带参数 msg 为：${data}`);
+    });
+  },
+  watch: {
+    chosePayerOptions(val) {
+      this.currentPayer[this.currentIndex] = this.payerOptions.find(v => v.key === val[0]);
+      // this.updateIndex++;
+      console.log(this.currentPayer);
+    }
+  },
   methods: {
+    showPayer(index) {
+      this.currentIndex = index;
+      if (this.currentPayer[this.currentIndex]) {
+        this.$set(this.chosePayerOptions, 0, this.currentPayer[this.currentIndex].key);
+      } else {
+        this.chosePayerOptions = [];
+      }
+      /* 展示付款地址 */
+      this.payerPickerShow = true;
+    },
+    goRemarks(index) {
+      uni.navigateTo({
+        url: `/pages/shoppingCart/orderConfirmRemarks?index=${index}`
+      });
+    },
     isCreditModeChange() {
       /* switch change */
-      this.$emit('change', this.goodsList, this.index);
+      this.$emit('change', this.orderItem, this.index);
     },
   }
 };
