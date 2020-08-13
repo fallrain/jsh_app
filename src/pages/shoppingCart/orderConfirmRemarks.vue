@@ -102,7 +102,8 @@ export default {
   data() {
     return {
       form: {
-        dataOffset: '',
+        orderIndex: '',
+        productIndex: '',
         name: '',
         mobile: '',
         idCard: '',
@@ -113,7 +114,8 @@ export default {
     };
   },
   onLoad(option) {
-    this.form.dataOffset = option.index;
+    this.form.orderIndex = option.orderIndex;
+    this.form.productIndex = option.productIndex;
   },
   methods: {
     getLocation() {
@@ -126,11 +128,8 @@ export default {
       });
     },
     sureRemark() {
-      console.log(this.form);
-      setTimeout(function () {
-        uni.$emit('confirmremarks', this.form);
-        uni.navigateBack();
-      }, 1000);
+      uni.$emit('confirmremarks', JSON.stringify(this.form));
+      uni.navigateBack();
     }
   }
 };

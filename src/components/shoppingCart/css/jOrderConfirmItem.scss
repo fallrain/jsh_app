@@ -134,10 +134,16 @@
 }
 
 .jOrderConfirmItem-detail-mark-item-val {
+  flex-grow: 1;
   font-size: 24px;
   color: #999;
   margin-left: 10px;
-
+  text{
+    width: 100%;
+  }
+  .detailAddress{
+    color: $theme-color;
+  }
   &:hover {
     color: #333;
   }

@@ -65,7 +65,17 @@
             </view>
             <view
               @tap="goRemarks(index)"
-              class="jOrderConfirmItem-detail-mark-item-val">请选择备注信息</view>
+              class="jOrderConfirmItem-detail-mark-item-val">
+              <view v-if="JSON.stringify(goods.splitOrderProductList[0].spareAddress)!=='{}'">
+                <text>
+                  {{goods.splitOrderProductList[0].spareAddress.address}} {{goods.splitOrderProductList[0].spareAddress.addressDetail}} {{goods.splitOrderProductList[0].spareAddress.name}} {{goods.splitOrderProductList[0].spareAddress.mobile}}
+                </text>
+                <text class="detailAddress">
+                  查看详情
+                </text>
+              </view>
+              <view v-else>请选择备注信息</view>
+            </view>
           </view>
         </view>
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
@@ -144,10 +154,6 @@ export default {
     };
   },
   onLoad() {
-    uni.$on('confirmremarks', (data) => {
-      debugger;
-      console.log(`监听到事件来自 confirmRemarks ，携带参数 msg 为：${data}`);
-    });
   },
   watch: {
     chosePayerOptions(val) {
@@ -155,6 +161,8 @@ export default {
       // this.updateIndex++;
       console.log(this.currentPayer);
     }
+  },
+  computed: {
   },
   methods: {
     showPayer(index) {
@@ -169,7 +177,7 @@ export default {
     },
     goRemarks(index) {
       uni.navigateTo({
-        url: `/pages/shoppingCart/orderConfirmRemarks?index=${index}`
+        url: `/pages/shoppingCart/orderConfirmRemarks?orderIndex=${this.index}&productIndex=${index}`
       });
     },
     isCreditModeChange() {

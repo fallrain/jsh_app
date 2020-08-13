@@ -103,6 +103,7 @@ export default {
                 enableMsg: null,
                 splitOrderProductList: [
                   {
+                    spareAddress: {},
                     composeId: null,
                     productCode: 'CEAAJU017',
                     productName: '卡萨帝滚筒洗衣机C1 D12G3LU1新欧卡',
@@ -190,6 +191,7 @@ export default {
                 enable: null,
                 enableMsg: null,
                 splitOrderProductList: [{
+                  spareAddress: {},
                   composeId: null,
                   productCode: 'CEAAJU017',
                   productName: '卡萨帝滚筒洗衣机C1 D12G3LU1新欧卡',
@@ -297,6 +299,7 @@ export default {
                 enable: null,
                 enableMsg: null,
                 splitOrderProductList: [{
+                  spareAddress: {},
                   composeId: null,
                   productCode: 'FA08F000M',
                   productName: '卡萨帝中式洗碗机CW9-B88U1',
@@ -413,6 +416,15 @@ export default {
       // 选中的
       chosePayerOptions: []
     };
+  },
+  onLoad() {
+    uni.$on('confirmremarks', (data) => {
+      const remarksData = JSON.parse(data);
+      const orderIndex = remarksData.orderIndex;
+      const productIndex = remarksData.productIndex;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
+      console.log(this.dataInfo);
+    });
   },
   methods: {
     goodsChange(list, index) {
