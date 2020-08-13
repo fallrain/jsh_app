@@ -26,5 +26,8 @@ export default {
   },
   queryCustomerSendto(timestamp, customerCode) { // 整车--配送至
     return jGet(url.queryCustomerSendto(timestamp, customerCode));
+  },
+  queryCarNum(timestamp, longfeiUSERID) { // 整车购物车数量查询
+    return jGet(url.queryCarNum(timestamp, longfeiUSERID));
   }
 };

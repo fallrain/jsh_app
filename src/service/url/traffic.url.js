@@ -29,6 +29,9 @@ const urls = {
     }&dstCode=${dstCode}&center=${center}&isWholeCar=1&group=&brandName=${brandName}&sortDirection=${sortDirection
     }&sortType=${sortType}&tags=&brandGroup=${brandGroup}&productCode=${productCode}&highPrice=${highPrice
     }&lowPrice=${lowPrice}&farWeekGroup=${farWeekGroup}&baseCode=${baseCode}`;
+  },
+  queryCarNum(timestamp, longfeiUSERID) { // 整车购物车数量查询
+    return `/queryOrder/shoppingCartNum?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}`;
   }
 };
 util.addPrefix(baseURL, urls);

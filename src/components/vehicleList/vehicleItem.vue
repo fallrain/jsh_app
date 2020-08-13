@@ -62,7 +62,9 @@ export default {
       this.$emit('addCar', this.index);
     },
     goNext() {
-      this.$emit('goProductDetail', this.goods);
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${this.goods.code}`
+      });
     }
   }
 };

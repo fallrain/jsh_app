@@ -12,7 +12,7 @@
     <view>
       <view class="vehicle-listItem" v-if="vehicleList&&vehicleList.length>0">
         <view v-for="(item,index) in vehicleList" :key="index" >
-          <vehicle-item @goProductDetail="goProductDetail" :goods="item" :index="index" @change="vehicleNum" @addCar="addVehicleCar"></vehicle-item>
+          <vehicle-item :goods="item" :index="index" @change="vehicleNum" @addCar="addVehicleCar"></vehicle-item>
         </view>
       </view>
       <view class="vehicle-listItemEl" v-else>暂无数据~</view>
@@ -52,7 +52,7 @@
     <j-choose-delivery-address :show.sync="isShowAddressDrawer" :list="deliveryAddressList" @change="deliveryAddressListChange">
     </j-choose-delivery-address>
     <view class="vehicle-high"></view>
-    <view class="vehicle-foot"><vehicle-foot :carType="ZCLX.carNames"></vehicle-foot></view>
+    <view class="vehicle-foot"><vehicle-foot :carType="ZCLX.carNames" :carNum="carNum"></vehicle-foot></view>
   </view>
 </template>
 
@@ -172,6 +172,7 @@ export default {
       sortDirection: '', // 最新上架跟价格排序
       brandCheck: '', // 选中的品牌
       leiMu: '', // 选中的类目
+      carNum: 0, // 整车购物车数量查询
     };
   },
   computed: {
@@ -181,8 +182,18 @@ export default {
   },
   created() {
     this.queryBaseCode(); // 基地
+    this.queryCarNum(); // 整车购物车数量查询
   },
   methods: {
+    async queryCarNum() {
+      const timetamp = new Date().valueOf();
+      const longfeiUSERID = this.userInf.customerCode;
+      const { code, data } = await this.vehicleService.queryCarNum(timetamp, longfeiUSERID);
+      if (code === '1') {
+        console.log('整车购物车数量查询');
+        this.carNum = data.allNum;
+      }
+    },
     async queryBaseCode() { // 基地
       const { code, data } = await this.vehicleService.queryBaseCode();
       if (code === '1') {
@@ -511,11 +522,6 @@ export default {
     silentReSearch() {
       /* sousuo */
       this.queryEs(1);
-    },
-    goProductDetail(item) { // 去产品详情页面
-      uni.navigateTo({
-        url: `/pages/productDetail/productDetail?productCode=${item.code}`
-      });
     }
   }
 };
