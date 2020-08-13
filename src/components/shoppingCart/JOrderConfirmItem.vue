@@ -5,39 +5,46 @@
     >
       <view
         class="jOrderConfirmItem"
-        v-for="(goods,index) in goodsList"
+        v-for="(goods,index) in orderItem.splitOrderDetailList"
         :key="index"
       >
-        <view class="jOrderConfirmItem-detail">
+        <view v-if="goods.splitOrderProductList"
+              class="jOrderConfirmItem-detail">
           <view class="jOrderConfirmItem-detail-portrait">
             <image
-              :src="`${baseUrl}public/assets/img/goods/example-fridge.jpg`"
+              :src="goods.splitOrderProductList[0].productImageUrl"
             >
             </image>
           </view>
           <view class="jOrderConfirmItem-detail-cnt">
-            <view class="jOrderConfirmItem-detail-cnt-title">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀品家用静音全自动10KG洗烘一体高温杀品</view>
+            <view class="jOrderConfirmItem-detail-cnt-title">
+              {{goods.splitOrderProductList[0].productName}}
+            </view>
             <view class="jOrderConfirmItem-detail-cnt-price-wrap">
               <view class="jOrderConfirmItem-detail-cnt-price">
-                ¥ 3456.00<view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">*2</view>
+                ¥{{goods.splitOrderProductList[0].price}}
+                <view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">
+                  *{{goods.splitOrderProductList[0].storeNum}}</view>
               </view>
-              <view class="jOrderConfirmItem-detail-cnt-text">预计到货时间：2020-08-04</view>
+              <view class="jOrderConfirmItem-detail-cnt-text">预计到货时间：{{goods.planInDate}}</view>
             </view>
           </view>
         </view>
         <view class="jOrderConfirmItem-detail-match-type">
           <j-switch
-            :active.sync="goods.isCreditMode"
+            v-if="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
+            :active.sync="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             inf="信用模式"
             @change="isCreditModeChange"
           ></j-switch>
           <j-switch
-            :active.sync="goods.isCreditMode"
+            v-if="goods.isTCTP"
+            :active.sync="goods.isTCTP"
             inf="统仓统配"
             @change="isCreditModeChange"
           ></j-switch>
           <view class="jOrderConfirmItem-detail-match-type-text">
-            满足方式：日日顺库存JOS2
+            满足方式：{{goods.stockTypeName}}
           </view>
         </view>
         <view class="jOrderConfirmItem-detail-mark-wrap mt24">
@@ -65,9 +72,9 @@
       </view>
     </view>
     <view class="jOrderConfirmItem-total">
-      <view class="jOrderConfirmItem-total-text">20200702152819167002</view>
+      <view class="jOrderConfirmItem-total-text">{{orderItem.composeOrderNo}}</view>
       <view class="jOrderConfirmItem-total-text ml48">共计金额：</view>
-      <view class="jOrderConfirmItem-total-price ml20">¥ 3456.00</view>
+      <view class="jOrderConfirmItem-total-price ml20">¥ {{orderItem.totalMoney}}</view>
     </view>
   </view>
 </template>
@@ -82,10 +89,10 @@ export default {
     JSwitch
   },
   props: {
-    // 商品列表
-    goodsList: {
-      type: Array,
-      default: () => []
+    // 单个订单
+    orderItem: {
+      type: Object,
+      default: () => {}
     },
     // 索引
     index: {

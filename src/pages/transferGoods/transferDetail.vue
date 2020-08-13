@@ -1,16 +1,16 @@
 <template>
   <view class="transferDetail">
     <!-- 调货信息 -->
-    <transfer-detail-address>         
+    <transfer-detail-address
+      :detailList="detailList"
+    >         
     </transfer-detail-address>
     <view>
       <!-- 调货商品列表 -->
       <transfer-detail-item
-        v-for="(goods,index) in goodsList"
-        :key="index"
-        :index="index"
         @change="goodsChange"
-        :goodsList="goods"
+        :goods="detailList.orderList"
+        
       >
       </transfer-detail-item>
     </view>
@@ -45,61 +45,52 @@ export default {
   },
   data() {
     return {
-      goodsList: [
-        [
-          {
-            isCreditMode: false
-          },
-          {
-            isCreditMode: false
-          }
-        ]
-      ],
-      failureGoodsList: [
-        [
-          {
-            isCreditMode: false
-          },
-          {
-            isCreditMode: false
-          }
-        ]
-      ],
-      // 配送地址显示隐藏
-      payerPickerShow: false,
-      // 配送地址options
-      payerOptions: [
-        {
-          key: 1,
-          value: '(88003222）青岛鸿程永泰商贸有限公司',
-        },
-        {
-          key: 2,
-          value: '(88003222）青岛鸿程永泰商贸有限公司',
-        },
-        {
-          key: 3,
-          value: '(88003222）青岛鸿程永泰商贸有限公司',
-        },
-        {
-          key: 4,
-          value: '(88003222）青岛鸿程永泰商贸有限公司',
-        }
-      ],
+      // 调货订单信息
+      detailList: [],
+      // 订单产品列表
+      goodsList: [],
+       // 结算
+      settlement: 0,
+      //   [
+      //     {
+      //       isCreditMode: false
+      //     },
+      //     {
+      //       isCreditMode: false
+      //     }
+      //   ]
+      // ],  
       // 选中的
       chosePayerOptions: []
     };
   },
   methods: {
-    goodsChange(list, index) {
+    goodsChange(goods, index) {
+      console.log(goods)
       /* 商品 change */
-      this.$set(this.goodsList, index, list);
+      this.goodsList[index] = goods;
+      this.goodsList = JSON.parse(JSON.stringify(this.goodsList));
     },
     showPayer() {
       /* 展示付款地址 */
       this.payerPickerShow = true;
-    }
-  }
+    },
+    findDetailList(seq,list) {
+       console.log(seq)
+      this.detailList = list.data
+      console.log(this.detailList)
+     
+      // this.goodsList = list.data.orderList
+      // console.log(this.goodsList)
+    },
+  },
+  onLoad(option){
+    console.log(option)
+    let { IBR_SEQ, list } = option
+    
+    this.findDetailList(IBR_SEQ,JSON.parse(list))
+    // console.log(JSON.parse(list))
+}
     
 }
 </script>
