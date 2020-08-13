@@ -1,11 +1,11 @@
 <template>
   <view class="VHIItem">
-    <view class="VHIItem-left">
+    <view class="VHIItem-left" @click="goNext">
       <image :src="goods.searchImage"></image>
     </view>
     <view class="VHIItem-cnt">
-      <view v-html="goods.name" class="VHIItem-cnt-goodsName j-goods-title"></view>
-      <view class="VHIItem-cnt-price-tips">
+      <view @click="goNext" v-html="goods.name" class="VHIItem-cnt-goodsName j-goods-title"></view>
+      <view @click="goNext" class="VHIItem-cnt-price-tips">
         <view class="VHIItem-cnt-price-tips-item">直扣：{{goods.$PtPrice.rebateRate*100}}%</view>
         <view class="VHIItem-cnt-price-tips-item">返利：
           <span v-if="goods.$PtPrice.rebatePolicy===0">COM</span>
@@ -60,6 +60,9 @@ export default {
     },
     addTransfer() {
       this.$emit('addCar', this.index);
+    },
+    goNext() {
+      this.$emit('goProductDetail', this.goods);
     }
   }
 };

@@ -12,7 +12,7 @@
     <view>
       <view class="vehicle-listItem" v-if="vehicleList&&vehicleList.length>0">
         <view v-for="(item,index) in vehicleList" :key="index" >
-          <vehicle-item :goods="item" :index="index" @change="vehicleNum" @addCar="addVehicleCar"></vehicle-item>
+          <vehicle-item @goProductDetail="goProductDetail" :goods="item" :index="index" @change="vehicleNum" @addCar="addVehicleCar"></vehicle-item>
         </view>
       </view>
       <view class="vehicle-listItemEl" v-else>暂无数据~</view>
@@ -511,6 +511,11 @@ export default {
     silentReSearch() {
       /* sousuo */
       this.queryEs(1);
+    },
+    goProductDetail(item) { // 去产品详情页面
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${item.code}`
+      });
     }
   }
 };
