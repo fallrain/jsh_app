@@ -59,7 +59,7 @@ export default {
       this.$emit('change', this.goods, this.index);
     },
     addTransfer() {
-      this.$emit('addCar', this.index);
+      this.$emit('addCar', this.goods, this.index);
     },
     goNext() {
       uni.navigateTo({

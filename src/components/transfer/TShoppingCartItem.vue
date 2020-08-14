@@ -52,9 +52,9 @@
               ></i>
               <view class="tShoppingCartItem-cnt-price-info" v-show="item.isExpand ">
                 <view class="tShoppingCartItem-cnt-price-info-li"
-                  v-for="(it,index) in item.payer"
+                  v-for="(it,index) in list.data.payer"
                   :key="index"
-                  :class="[item.isChecked && 'active']"
+                  :class="[it.isChecked && 'active']"
                   @tap="togglePayer(item, it, index)" 
                 >
                 ({{it.payerCode}}){{it.payerName}}
@@ -68,10 +68,10 @@
           class="tShoppingCartItem-head-close iconfont iconcross"
           @tap="deleteShoppingCart(item)"
         ></view>
-        <i 
+        <!-- <i 
           :class="['tShoppingCartItem-cnt-like', 'iconfont', item.$favorite ? 'iconicon3':'iconshoucang']"
           @tap="addFavorite(item)"
-        />
+        /> -->
        
      </view>
      <view class="tShoppingCartItem-cnt-price-foottotal">
@@ -110,6 +110,12 @@ import {
   uniNumberBox,uniPopup
 } from '@dcloudio/uni-ui';
 import './css/TShoppingCartItem.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'TShoppingCartItem',
@@ -131,6 +137,9 @@ export default {
     allPrice: {
       type: Object,
       default: () => {}
+    },
+    isShowpayer: {
+      type: Boolean
     }
   },
   data() {
@@ -143,6 +152,11 @@ export default {
   },
   created(){
   },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   methods: {
     choose() {
       /* 选中本商品 */
@@ -151,44 +165,45 @@ export default {
       } = this.list;
       console.log(this.list)
       this.list.checked = !checked;
+      this.isShowpayer = true
       console.log(data)
-      this.$emit('change', this.list, this.index);
+      this.$emit('change', this.list, this.index,this.isShowpayer);
     },
     showPayer(item) {
       // 显示付款方
-    
+      console.log(this.list.data)
       item.isExpand = !item.isExpand
       console.log(item.isExpand)
       this.$emit('change', this.list, item, this.index);
     },
-    addFavorite(goods) {
-      if(goods.$favorite) {
-        confirm("确定取消收藏吗")
-        // 取消收藏
-         const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: "8700010462",
-          account: "8700010462",
-          productCodeList: [goods.GBID]
-        });
+    // addFavorite(goods) {
+    //   if(goods.$favorite) {
+    //     confirm("确定取消收藏吗")
+    //     // 取消收藏
+    //      const removeInterest = this.customerService.removeInterestProduct({
+    //       customerCode: "8700010462",
+    //       account: "8700010462",
+    //       productCodeList: [goods.GBID]
+    //     });
 
-      } else {
-        // 添加收藏
-         const addInterest = this.customerService.addInterestProduct({
-          customerCode: "8700010462",
-          account: "8700010462",
-          productCode: goods.GBID
-        });
-      }
-      goods.$favorite = !goods.$favorite
-      console.log(goods)
-    },
+    //   } else {
+    //     // 添加收藏
+    //      const addInterest = this.customerService.addInterestProduct({
+    //       customerCode: "8700010462",
+    //       account: "8700010462",
+    //       productCode: goods.GBID
+    //     });
+    //   }
+    //   goods.$favorite = !goods.$favorite
+    //   console.log(goods)
+    // },
     async changeNum(value, item) {
       if (value !== item.IBL_NUM) {
         const result = await this.transfergoodsService.updateOrderQty({
           timestamp: Date.parse(new Date()),
           dhSeq: this.list.data.IBR_SEQ,
           korderNo: item.IBL_KORDERNO,
-          longfeiUSERID: '8700010462',
+          longfeiUSERID: this.userInf.saletoCode,
           qty: value
         });
         if(result.code === "1") {
@@ -212,11 +227,12 @@ export default {
       })    
     },
     async deleteShoppingCart(item) {
-      // 删除购物车数据
+
+      // 删除购物车订单
       const deleteOrder = await this.transfergoodsService.deleteOrderForm ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: 8800101954,
-        KORDERNO: item.IBL_KORDERNO,
+        longfeiUSERID: this.userInf.saletoCode,
+        KORDERNO: this.list.data.IBR_SEQ,
       });
       if(deleteOrder.code === "1") {
         this.$emit("query")
@@ -227,45 +243,38 @@ export default {
     async togglePayer(item, it, index) {
       const upDHPay = await this.transfergoodsService.upDHPayMoney ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: 8700010462,
-        ACTPRICE: item.ADVICEPRICE,
-        BATERATE: 0.0000,
-        ISFL: 1,
-        ISKPO: 0,
-        KORDERNO: item.IBL_KORDERNO,
-        QTY: item.IBL_NUM,
-        PAYTO: 8700010462,
-        PAYTONAME: item.IBL_PAYMONEYNAME,
-        PROCODE: "",
-        PROLOSSMONEY: "",
-        RETAILPRICE: 2449.0000,
-        UNITPRICE: "2449.0000",
-        RELOSERATE: "0.0000",
-        VERCODE: "",
-        VERMONEY: "",
-        REBATEMONEY: "0.0000",
-        IBL_PAYTO_TYPE: "00",
+        longfeiUSERID: this.userInf.saletoCode,
+        ACTPRICE: item.ADVICEPRICE,  //执行价格
+        BATERATE: item.BATERATE,     //扣率
+        ISFL: item.IBL_ISFL,   //返利类型
+        ISKPO: item.IBL_ISKPO,   //商空标志
+        KORDERNO: item.IBL_KORDERNO,   //运单号
+        QTY: item.IBL_NUM,   //  
+        PAYTO: it.payerCode,   //付款方编码
+        PAYTONAME: it.payerName,   //付款方名称
+        PROCODE: "",   //工程单号
+        PROLOSSMONEY: "",   //工程单台损失
+        RETAILPRICE: item.ADVICEPRICE,   //零售价
+        UNITPRICE: item.ADVICEPRICE,   //单价
+        RELOSERATE: "0.0000",   //折扣
+        VERCODE: "",   //  特价版本号
+        VERMONEY: "",   //特价单台差额
+        REBATEMONEY: item.BATEMONEY,   //台返
+        IBL_PAYTO_TYPE: it.payerType,   //付款方类型
       })
       if(upDHPay.code === "1" ) {
-          this.list.data.orderList.map(ele => {           
-              ele.isChecked = false
-             console.log(ele.isChecked)   
-          })
+          
+          this.list.data.payer.map(v => {
+              v.isChecked = false
+            })  
           item.isExpand = !item.isExpand
-          item.isChecked = true
+          it.isChecked = true
           console.log(item)
-          document.querySelector(".tShoppingCartItem-cnt-price-inf-item").innerHTML =  "(" + it.payerCode + ")" + it.payerName
+          item.IBL_PAYMONEYNAME = "(" + it.payerCode + ")" + it.payerName
           console.log(item.isChecked)
         this.$emit('change', this.list, item, this.index);
+        this.$emit('calBalance')
       }
-     
-
-
-      //  this.tabs.forEach((v) => {
-      //   v.active = false;
-      // });
-      // item.active = true;
-      // this.$emit('tabClick', this.tabs, item, index);
 
 
     }

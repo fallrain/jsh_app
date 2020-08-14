@@ -19,7 +19,7 @@ export default {
   },
   getters: {
     [ORDER.GET_ORDER](state) {
-      /* 用户信息 */
+      /* 订单详情信息 */
       return state.orderDetail;
     },
   }

@@ -5,8 +5,7 @@
     </view>
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-head">
-        <view class="jGoodsItem-cnt-goodsName j-goods-title">
-          {{goods.name}}
+        <view v-html="goods.name" class="jGoodsItem-cnt-goodsName j-goods-title">
         </view>   
         <i 
           :class="['transferDetailItem-detail-like','iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"
@@ -45,7 +44,12 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 // import './css/jGoodsItem.scss';
-
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 export default {
   name: 'transferGoodsItem',
   components: {
@@ -57,8 +61,10 @@ export default {
        // 控制列表数据
       isShowList:false,
       value: 1,
+      isDisposal:false
     }
   },
+
   props: {
     // 商品对象
     goods: {
@@ -87,18 +93,24 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   methods:{
      goodsNumChange(value,goods) {
       /* 商品数量change */
+      if (goods.stockList[0].qty === 0) {
+        value = 0
+      }
      
       goods.amount = value
-      console.log(goods.amount, goods)
+      // console.log(goods.amount, goods)
       // this.value = value
       // 改变价格
-  
-
-
       this.goods.number = value;
+      console.log(goods.amount)
       this.$emit('change', this.goods, this.index);
     },
     addFavorite(goods) {  
@@ -106,15 +118,15 @@ export default {
       if(goods.$favorite) {
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: "8700010462",
-          account: "8700010462",
+          customerCode: this.userInf.customerCode,
+          account: this.userInf.customerCode,
           productCodeList: [goods.code]
         });
       } else {
         // 添加收藏
          const addInterest = this.customerService.addInterestProduct({
-          customerCode: "8700010462",
-          account: "8700010462",
+          customerCode: this.userInf.customerCode,
+          account: this.userInf.customerCode,
           productCode: goods.code
         });
       }
@@ -122,15 +134,10 @@ export default {
     },
     // 加入调货
     addTransfer(goods) {
-      if(goods.stockList[0].qty !== "0") {
-        const {brand,code,name} = goods
-          const insertTransfer = this.transfergoodsService.insertOrder({
-            timestamp: 1597053771686,
-          });
-
-      }
+      console.log(goods)
+   
        
-      this.$emit("this.query")
+      this.$emit("inserOrder",goods)
     }
 
   }

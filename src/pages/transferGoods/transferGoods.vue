@@ -42,9 +42,10 @@
             :allPrice="item.$allPrice"
             @change="goodsChange"
             @query="getShoppingCartNum"
+            @inserOrder="inserOrder(item)"
           ></transfer-goods-item>
         </view>
-        <view v-else>暂无数据</view>
+        <view class="transferList-items-else" v-else>暂无数据</view>
       </mescroll-body>
       <!-- 抽屜 -->
     <t-drawer
@@ -63,7 +64,7 @@
         <view class="transferList-drawer-filter-head-ads-wrap">
           <view
             class="transferList-drawer-filter-head"
-            @tap="showDeliveryAddress"
+            @tap="showDeliveryAddress" 
           >
             <view>
               <text>配送至</text>
@@ -96,6 +97,11 @@
         </view>
       </template>
     </t-drawer>
+    <j-choose-delivery-address
+      :show.sync="isShowAddressDrawer"
+      :list="deliveryAddressList"
+      @change="deliveryAddressListChange"
+    ></j-choose-delivery-address>
     <!-- 底部购物车栏 -->
     <transfer-goods-btm
       :shoppingCartNum=shoppingCartNum
@@ -108,6 +114,7 @@
 import transferGoodsHead from './transferGoodsHead';
 import transferGoodsItem from './transferGoodsItem';
 import JSearchInput from '../../components/form/JSearchInput';
+import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
 import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
 import selfMescrollMixin from '@/mixins/mescroll.mixin';
@@ -134,7 +141,8 @@ export default {
       MescrollBody,
       TDrawer,
       TDrawerFilterItem,
-      transferGoodsBtm
+      transferGoodsBtm,
+      JChooseDeliveryAddress
     },
     data() {
      return {
@@ -293,7 +301,7 @@ export default {
         categoryCode: '',
         attributeName: '',
         attributeValue: '',
-        customerCode: 8700010462,
+        customerCode: this.userInf.customerCode,
         dstCode: 8700010462,
         center: 12E02,
         group: '',
@@ -323,7 +331,7 @@ export default {
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取收藏
         const getProductQueryInter = this.customerService.queryCustomerInterestProductByAccount({
-          account: "8700010462",
+          account: this.userInf.customerCode,
           productCodeList: productCodes
         });
         const [
@@ -379,7 +387,7 @@ export default {
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
         timestamp: Date.parse(new Date()),
-        sendToCode: 8700010462,
+        sendToCode: this.userInf.customerCode,
         sendToMktid: 12E02
       })
       if(code === "1") {   
@@ -388,8 +396,8 @@ export default {
       // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: 8700010462,
-        sendtoCode: 8700010462,
+        longfeiUSERID: this.userInf.saletoCode,
+        sendtoCode: this.userInf.customerCode,
         sendtoMktid: 12E02,
       })
       if(temp.code === "1") {   
@@ -402,12 +410,69 @@ export default {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: 8700010462
+        longfeiUSERID: this.userInf.saletoCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
         console.log(this.shoppingCartNum)
         // console.log(data)
+      }
+    },
+    // 加入调货
+    inserOrder(item) {
+      if(item.stockList[0].qty !== "0") {
+        console.log(item)
+        // const {brand,code,name} = goods
+      //     const insertTransfer = this.transfergoodsService.insertOrder({
+      //       ycFlag: "JSHSW",    //是否统仓统配
+      //       SEQ: "",//调货单号
+      //       MKTID: "12A02", //工贸编码
+      //       sendCode: "",//配送中心编码
+      //       brand: "000",//品牌编码
+      //       INVSORT: item.group,//产品组编码
+      //       PRODUCT_MODEL: "LS50Z51Z",//物料型号
+      //       DH_INVCODE: item.code,//物料编码
+      //       DH_INVSTD:item.name,    //描述 
+      //       DH_QTY: item.number,     //下单数量
+      //       UnitPrice: "1799.00",  //开票价
+      //       ActPrice: item.recommendSalePrice, //供价
+      //       BateRate: 0,  //扣点
+      //       BateMoney: 0,
+      //       IsFL: 1 ,  //返利标识
+      //       IsKPO: 0 ,   //商空标识  0：非商空  1：商空
+      //       DH_VERCODE: "" , //特价版本
+      //       DH_VERMONEY: "",	  //版本价格
+      //       USERID: "8800101954", //售达方编码
+      //       longfeiMFID: "8800212607",    //送达方编码
+      //       DH_PAYTO: "8800101954",   //付款方编码
+      //       DH_PAYTONAME: "(8800101954)青岛鸿程永泰商贸有限公司",    //付款方名称
+      //       YJMFID: "B1001312",    //业绩管理客户编码
+      //       DH_PROCODE: "",   //工程版本
+      //       DH_PROLOSSMONEY: "" ,  
+      //       DH_LOSSRATE: 0,
+      //       DH_OUTWHCODE: "",  //调出库位
+      //       DH_IMG: item.searchImage,    
+      //       DH_SENDTONAME: "测试账号17",    //送达方名称
+      //       SENDTO_ADDRESS: "测试账号17" ,  //送达方地址
+      //       stockList:[
+      //         {OUTWHCODE: "YTR2", OUTWHNAME: "YTR2烟台H1库", isSelected: false},
+      //         {OUTWHCODE: "SDR2", OUTWHNAME: "SDR2济南H1库", isSelected: false},
+      //         {OUTWHCODE: "SDS2", OUTWHNAME: "SDS2济南H2库", isSelected: false},
+      //         {OUTWHCODE: "YTS2", OUTWHNAME: "YTS2烟台H股和中心2库", isSelected: false},
+      //         {OUTWHCODE: "YTT2", OUTWHNAME: "YTT2烟台H3库", isSelected: false},
+      //         {OUTWHCODE: "JNR2", OUTWHNAME: "JNR2济宁H1库", isSelected: false},
+      //         {OUTWHCODE: "JNS2", OUTWHNAME: "JNS2济宁H2库", isSelected: false},
+      //         {OUTWHCODE: "WFR2", OUTWHNAME: "WFR2潍坊H1库", isSelected: false},
+      //         {OUTWHCODE: "WFS2", OUTWHNAME: "WFS2潍坊H2库", isSelected: false},
+      //       ] ,    //调出库位列表
+
+      //       DH_PAYTO_TYPE: "00",   //付款方类型
+      //       DH_SALETO_NAME: "青岛鸿程永泰商贸有限公司",     //售达方编码 
+      //       DH_MAIN_CHANNEL_CODE: "M" ,   // 大渠道
+      //       DH_SUB_CHANNEL_CODE: "HA001",  //小渠道
+        
+      // });
+
       }
     },
     goodsChange(goods, index) {

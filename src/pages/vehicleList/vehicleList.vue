@@ -515,9 +515,60 @@ export default {
       /* 商品数据change */
       this.vehicleList[index] = vehicle;
     },
-    addVehicleCar(index) {
+    async addVehicleCar(item, index) {
       /* 商品加购物车change */
+      console.log(item);
       console.log(index);
+      const { code, data } = await this.vehicleService.addToCart({// 加入整车购物车
+        ACTPRICE: 3299,
+        ADVICEPRICE: 3299,
+        BATERATE: 0,
+        CARCODE: this.ZCLX.carCode,
+        CUSTUMER_TYPE: 'ZY',
+        HeightLimit: this.curChoseDeliveryAddress.info.ISXG,
+        IBL_LOSSRATE: 0,
+        IBL_PAYTO_TYPE: '00',
+        IBL_TFSUMPRICE: 0,
+        IBR_JDPC_JDCODENAME: '黄岛(HD10)',
+        IBR_ORDERCHANNEL: 'M',
+        IBR_SOLDTO_NAME: '青岛鸿程永泰商贸有限公司',
+        IBR_SUBCHANNEL: 'HA001',
+        IBR_YCFLAG: this.PSLX.sendWayCode === 'T' ? 'JSHSW' : '',
+        ICC_JDCODE: 'HD10',
+        IMG: item.searchImage,
+        INVCODE: item.code,
+        INVSORT: item.group,
+        INVSTD: item.module,
+        ISFL: 1,
+        ISHeightFLAG: this.switchType ? 'Y' : 'N',
+        ISKPO: 0,
+        JDPC_JDCODE: 'HD10',
+        JIDICAI: 'dicai',
+        MKTID: '12A02',
+        NUM: 50,
+        PRODUCT_MODEL: item.module,
+        PRO_BAND: item.brand,
+        SENDTO: this.curChoseDeliveryAddress.info.addressCode,
+        SENDTONAME: this.curChoseDeliveryAddress.info.addressName,
+        SENDTO_ADDRESS: this.curChoseDeliveryAddress.info.address,
+        SEQ: this.SEQ,
+        UNITPRICE: '3299.00',
+        USERID: this.userInf.customerCode,
+        YJMFID: 'B1001312',
+        ZCDeliveryType: this.PSLX.sendWayCode,
+        ZCDeliveryTypeName: this.PSLX.sendWay,
+        ZCTYPECODE: 'PTZC',
+        ZCTYPENAME: '普通整车',
+        farWeekCode: '',
+        timestamp: 1597313810774
+      });
+      if (code === '1') {
+        if (data.length > 0) {
+          this.ISGUANZHU = true;
+        } else {
+          this.ISGUANZHU = false;
+        }
+      }
     },
     silentReSearch() {
       /* sousuo */
