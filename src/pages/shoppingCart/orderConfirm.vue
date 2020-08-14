@@ -11,6 +11,7 @@
         :index="index"
         @change="goodsChange"
         :orderItem="orderItem"
+        :payInfoData.sync="payInfoData"
       ></j-order-confirm-item>
     </view>
     <view v-if="dataInfo.disableComposeProductList" class="mt24">
@@ -348,7 +349,7 @@ export default {
                   saleModelList: null,
                   productEnable: 1,
                   productEnableMsg: null,
-                  isBbOrProject: false,
+                  isBbOrProject: true,
                   priceSource: null,
                   ylhCode: null,
                   storeNum: 1,
@@ -392,6 +393,8 @@ export default {
           }
         ]
       ],
+      // 付款信息
+      payInfoData: {},
       // 配送地址显示隐藏
       payerPickerShow: false,
       // 配送地址options
@@ -425,6 +428,7 @@ export default {
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
       console.log(this.dataInfo);
     });
+    this.getPayInfo();
   },
   methods: {
     goodsChange(list, index) {
@@ -434,6 +438,38 @@ export default {
     showPayer() {
       /* 展示付款地址 */
       this.payerPickerShow = true;
+    },
+    getPayForm() {
+      const payFormArr = [];
+      this.dataInfo.composeProductList.forEach((item, index) => {
+        item.splitOrderDetailList.forEach((v) => {
+          const conditionItem = {
+            isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
+            orderNo: v.orderNo,
+            priceType: v.splitOrderProductList[0].priceType,
+            priceVersion: v.splitOrderProductList[0].priceVersion,
+            productCode: v.productCode,
+            productGroup: v.productCode,
+            saletoCode: this.dataInfo.saletoCode,
+            sendtoCode: this.dataInfo.sendtoCode,
+            yunCangFlag: '',
+          };
+          if (v.isTCTP) {
+            conditionItem.yunCangFlag = 'TCTP';
+          }
+          payFormArr.push(conditionItem);
+        });
+      });
+      console.log(payFormArr);
+      return payFormArr;
+    },
+    async getPayInfo() {
+      /* 获取支付信息 */
+      const condition = this.getPayForm();
+      const { code, data } = await this.orderServer.paytoInfo(condition);
+      if (code === '1') {
+        this.payInfoData = data;
+      }
     }
   }
 };

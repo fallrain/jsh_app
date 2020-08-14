@@ -58,7 +58,7 @@
               <text v-else>请选择付款方</text>
             </view>
           </view>
-          <view class="jOrderConfirmItem-detail-mark-item">
+          <view v-if="goods.splitOrderProductList[0].isBbOrProject" class="jOrderConfirmItem-detail-mark-item">
             <view class="jOrderConfirmItem-detail-mark-item-name">
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>备注信息
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
@@ -120,7 +120,12 @@ export default {
     // 索引
     index: {
       type: Number
-    }
+    },
+    // 付款方信息
+    payInfoData: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {
@@ -130,22 +135,6 @@ export default {
       payerPickerShow: false,
       // 配送地址options
       payerOptions: [
-        {
-          key: 1,
-          value: '(88003222）青岛鸿程永泰商贸有限公司1',
-        },
-        {
-          key: 2,
-          value: '(88003222）青岛鸿程永泰商贸有限公司2',
-        },
-        {
-          key: 3,
-          value: '(88003222）青岛鸿程永泰商贸有限公司3',
-        },
-        {
-          key: 4,
-          value: '(88003222）青岛鸿程永泰商贸有限公司4',
-        }
       ],
       // 选中的
       chosePayerOptions: [],
@@ -160,6 +149,19 @@ export default {
       this.currentPayer[this.currentIndex] = this.payerOptions.find(v => v.key === val[0]);
       // this.updateIndex++;
       console.log(this.currentPayer);
+    },
+    payInfoData(val) {
+      // 初始化地址信息
+      this.payInfoData[this.orderItem.orderNo].forEach((item) => {
+        item.key = this.goods.orderNo;
+        item.value = `(${item.payerCode}) ${item.payerName}`;
+      });
+      // 设置付款列表
+      this.payerOptions = this.payInfoData[this.goods.orderNo];
+      if (this.payerOptions.length > 0) {
+        this.chosePayerOptions[0] = this.payerOptions[0].key;
+      }
+      console.log(this.payerOptions);
     }
   },
   computed: {
