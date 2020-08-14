@@ -15,7 +15,10 @@
     </view>
     <view v-if="dataInfo.disableComposeProductList" class="mt24">
       <j-failure-order-item
-        :goodsList="dataInfo.disableComposeProductList"
+        v-for="(orderItem,index) in dataInfo.composeProductList"
+        :key="index"
+        :index="index"
+        :orderItem="orderItem"
       ></j-failure-order-item>
     </view>
     <view class="mt24">
@@ -31,12 +34,6 @@
         @tap="showPayer"
       >下一步</button>
     </view>
-    <j-pop-picker
-      title="付款方"
-      :show.sync="payerPickerShow"
-      :options="payerOptions"
-      :choseOptions.sync="chosePayerOptions"
-    ></j-pop-picker>
   </view>
 </template>
 
@@ -45,14 +42,12 @@ import JOrderConfirmAddress from '../../components/shoppingCart/JOrderConfirmAdd
 import JOrderConfirmItem from '../../components/shoppingCart/JOrderConfirmItem';
 import JFailureOrderItem from '../../components/shoppingCart/JFailureOrderItem';
 import JOveragePay from '../../components/shoppingCart/JOveragePay';
-import JPopPicker from '../../components/form/JPopPicker';
 import './css/orderConfirm.scss';
 
 
 export default {
   name: 'orderConfirm',
   components: {
-    JPopPicker,
     JOveragePay,
     JFailureOrderItem,
     JOrderConfirmItem,
@@ -108,6 +103,7 @@ export default {
                 enableMsg: null,
                 splitOrderProductList: [
                   {
+                    spareAddress: {},
                     composeId: null,
                     productCode: 'CEAAJU017',
                     productName: '卡萨帝滚筒洗衣机C1 D12G3LU1新欧卡',
@@ -195,6 +191,7 @@ export default {
                 enable: null,
                 enableMsg: null,
                 splitOrderProductList: [{
+                  spareAddress: {},
                   composeId: null,
                   productCode: 'CEAAJU017',
                   productName: '卡萨帝滚筒洗衣机C1 D12G3LU1新欧卡',
@@ -302,6 +299,7 @@ export default {
                 enable: null,
                 enableMsg: null,
                 splitOrderProductList: [{
+                  spareAddress: {},
                   composeId: null,
                   productCode: 'FA08F000M',
                   productName: '卡萨帝中式洗碗机CW9-B88U1',
@@ -418,6 +416,15 @@ export default {
       // 选中的
       chosePayerOptions: []
     };
+  },
+  onLoad() {
+    uni.$on('confirmremarks', (data) => {
+      const remarksData = JSON.parse(data);
+      const orderIndex = remarksData.orderIndex;
+      const productIndex = remarksData.productIndex;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
+      console.log(this.dataInfo);
+    });
   },
   methods: {
     goodsChange(list, index) {

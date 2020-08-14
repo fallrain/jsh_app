@@ -24,7 +24,7 @@
         >
       </j-cell>
       <j-cell
-        title="姓名"
+        title="身份证号"
       >
         <input
           class="orderConfirmRemarks-ipt"
@@ -40,11 +40,12 @@
         title="所在地区"
       >
         <input
+          @tap="getLocation()"
           class="orderConfirmRemarks-ipt"
           placeholderClass="orderConfirmRemarks-placeholder"
           type="text"
           placeholder="请选择所在地区"
-          v-model="form.name"
+          v-model="form.address"
         >
         <template #right>
           <view
@@ -54,7 +55,7 @@
       </j-cell>
       <view class="orderConfirmRemarks-ta-wrap">
         <j-cell
-          title="所在地区"
+          title="详细地址"
         >
           <view>
             <j-textarea
@@ -78,6 +79,9 @@
         </template>
       </j-cell>
     </view>
+    <view
+      @tap="sureRemark"
+      class="sure-btn">确定</view>
   </view>
 </template>
 
@@ -98,6 +102,8 @@ export default {
   data() {
     return {
       form: {
+        orderIndex: '',
+        productIndex: '',
         name: '',
         mobile: '',
         idCard: '',
@@ -107,5 +113,24 @@ export default {
       }
     };
   },
+  onLoad(option) {
+    this.form.orderIndex = option.orderIndex;
+    this.form.productIndex = option.productIndex;
+  },
+  methods: {
+    getLocation() {
+      uni.getLocation({
+        type: 'wgs84',
+        success(res) {
+          debugger;
+          console.log(res);
+        }
+      });
+    },
+    sureRemark() {
+      uni.$emit('confirmremarks', JSON.stringify(this.form));
+      uni.navigateBack();
+    }
+  }
 };
 </script>
