@@ -4,13 +4,8 @@
       <view class="tFailureGoodsList-head-left">失效宝贝1件</view>
       <view class="tFailureGoodsList-head-opt" @tap="emptyProduct">清空失效宝贝</view>
     </view>
-    <t-failure-goods-item
-      v-for="(itemList,index) in list"
-      :key="index"
-      :index="index"
-      :itemList="itemList"
-      @change="goodsChange"
-    ></t-failure-goods-item>
+    <t-failure-goods-item v-for="(itemList,index) in list" :key="index"
+      :index="index" :itemList="itemList" @change="goodsChange"></t-failure-goods-item>
   </view>
 </template>
 
@@ -31,44 +26,44 @@ export default {
   data() {
     return {
       temp: {},
-      orderNum:""
-    }
+      orderNum: ''
+    };
   },
   created() {
     // const num = 0
-    this.list.map(item => {
-      //  num = 
-       console.log(item)
-       this.temp = item
-    })
+    this.list.map((item) => {
+      //  num =
+      console.log(item);
+      this.temp = item;
+    });
     // this.orderNum = num
     // console.log(this.orderNum)
   },
   methods: {
     goodsChange(itemList, index) {
-      console.log(itemList)
+      console.log(itemList);
       this.list[index] = itemList;
-      let setList = JSON.parse(JSON.stringify(this.list))
+      const setList = JSON.parse(JSON.stringify(this.list));
       this.list = setList;
       this.$emit('change', this.list);
     },
     async emptyProduct() {
-      const oddNum = []
-      this.list.map(item => {
-        item.data.orderList.map(v => {
-          oddNum.push(v.IBL_KORDERNO)
-        })
-      })
-      if(oddNum){
-        const result = await this.transfergoodsService.deleteProduct({
-        timestamp: Date.parse(new Date()),  
-        longfeiUSERID: '8700010462',
-        KORDERNO: oddNum
+      const oddNum = [];
+      this.list.map((item) => {
+        item.data.orderList.map((v) => {
+          oddNum.push(v.IBL_KORDERNO);
+        });
       });
-      }else {
-        confirm("暂时没有失效产品")
+      if (oddNum) {
+        const result = await this.transfergoodsService.deleteProduct({
+          timestamp: Date.parse(new Date()),
+          longfeiUSERID: '8700010462',
+          KORDERNO: oddNum
+        });
+        console.log(result);
+      } else {
+        confirm('暂时没有失效产品');
       }
-      
     }
   }
 };

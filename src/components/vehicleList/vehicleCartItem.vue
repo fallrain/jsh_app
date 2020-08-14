@@ -6,11 +6,11 @@
           <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
         </view>
         <view class="v-c-i-flox2">
-          <button type="button" class="v-c-i-btn-primary">普通整车</button>
+          <button type="button" class="v-c-i-btn-primary">{{goods.IBR_ISFLAG}}</button>
         </view>
         <view class="v-c-i-flox4">
           <text class="v-c-i-head-text">基地：</text>
-          <text class="v-c-i-head-volume">顺德（DS10）</text>
+          <text class="v-c-i-head-volume">{{goods.IBR_JDPC_JDCODENAME}}</text>
         </view>
         <view class="v-c-i-flox7">
           <text class="v-c-i-head-text">装车体积：</text>
@@ -20,17 +20,17 @@
       </view>
       <view class="v-c-i-head-data">
         <text class="v-c-i-head-text">车型：</text>
-        <text class="v-c-i-head-volume">B17.5B-17.5栏板变型A(变型车)</text>
+        <text class="v-c-i-head-volume">{{goods.IBR_MODELSCARNAME}}</text>
       </view>
     </view>
     <!-- 产品列表 -->
-    <view class="v-c-i-list" v-for="(item,index) in goods.data" :key="index">
+    <view class="v-c-i-list" v-for="(item,index) in goods.orderList" :key="index">
       <view class="v-c-i-cnt">
         <view class="v-c-i-cnt-img-wrap">
-          <image src="@/assets/img/goods/example-fridge.jpg"></image>
+          <image :src="item.THUMBNAIL"></image>
         </view>
         <view class="">
-          <view class="v-c-i-cnt-inf-title">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高......</view>
+          <view class="v-c-i-cnt-inf-title">{{item.PRODUCTNAME}}</view>
           <view class="v-c-i-btm-version">
             <view class="v-c-i-cnt-price v-c-i-flox3">¥ 45996.00</view>
             <view class="v-c-i-cnt-inf-picker v-c-i-flox6" @tap="showPayer">
@@ -58,7 +58,7 @@
     </view>
     <view class="v-c-i-btm">
       <view class="v-c-i-flox5">
-        <view class="v-c-i-cnt-check">点击查看详情</view>
+        <view class="v-c-i-cnt-check iconfont iconxiangqing">点击查看详情</view>
       </view>
       <view class="v-c-i-flox5">
         <text class="v-c-i-cnt-foot-text">总计总额： </text>

@@ -1,19 +1,19 @@
 <template>
   <view class="vehicleCarList">
     <view class="vehicleCar-rouHead">共4件宝贝</view>
-    <view class="vehicleCar-invalid">
-      <vehicle-cart-item v-for="(goods,index) in shoppingList" :key="index"
+    <view class="vehicleCar-invalid" v-if="puTongList.length>0">
+      <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index"
       :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item>
     </view>
-    <view class="vehicleCar-invalid">
-      <vehicle-cart-item-g-d v-for="(goods,index) in shoppingList" :key="index"
+    <view class="vehicleCar-invalid" v-if="guaDanList.length>0">
+      <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index"
              :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
     </view>
-    <view class="vehicleCar-invalid">
-      <vehicle-cart-item-p-c v-for="(goods,index) in shoppingList" :key="index"
+    <view class="vehicleCar-invalid" v-if="pingCheList.length>0">
+      <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index"
              :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
     </view>
-    <view class="vehicleCar-invalid">
+    <view class="vehicleCar-invalid" v-if="failureGoodsList.length>0">
       <t-failure-goods-list :list="failureGoodsList" @change="failureGoodsListChange"></t-failure-goods-list>
     </view>
     <view class="vehicleCar-high"></view>
@@ -27,6 +27,12 @@ import TFailureGoodsList from '../../components/transfer/TFailureGoodsList';
 import vehicleCartItem from '../../components/vehicleList/vehicleCartItem';
 import vehicleCartItemGD from '../../components/vehicleList/vehicleCartItem-gd';
 import vehicleCartItemPC from '../../components/vehicleList/vehicleCartItem-pc';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'vehicleCarList',
@@ -37,8 +43,17 @@ export default {
     vehicleCartItemGD,
     vehicleCartItemPC
   },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   data() {
     return {
+      SEQ: '', // 整车购物车进入传单号
+      puTongList: [],
+      pingCheList: [],
+      guaDanList: [],
       shoppingList: [
         {
           checked: false,
@@ -60,16 +75,45 @@ export default {
           ]
         },
       ],
-      failureGoodsList: [
-        {
-          checked: false,
-        },
-        {
-          checked: false,
-        }
-
-      ]
+      failureGoodsList: []
     };
+  },
+  onLoad(options) {
+    this.SEQ = options.SEQ;
+    console.log(options.SEQ);
+  },
+  created() {
+    this.queryCarList(); // 整车购物车列表查询
+  },
+  methods: {
+    async queryCarList() {
+      const timetamp = new Date().valueOf();
+      const longfeiUSERID = this.userInf.customerCode;
+      const { code, data } = await this.vehicleService.queryCarList(timetamp, longfeiUSERID);
+      if (code === '1') {
+        console.log('整车购物车数量查询');
+        console.log(data);
+        data.data.forEach((inf) => {
+          if (inf.IBR_ISFLAG === '失效产品' && inf.orderList.length > 0) {
+            inf.checked = false;
+            inf.typpe = 'ZC';
+            this.failureGoodsList.push(inf);
+          }
+          if (inf.IBR_ISFLAG === '普通整车' && inf.orderList.length > 0) {
+            inf.checked = false;
+            this.puTongList.push(inf);
+          }
+          if (inf.IBR_ISFLAG === '拼车订单' && inf.orderList.length > 0) {
+            inf.checked = false;
+            this.pingCheList.push(inf);
+          }
+          if (inf.IBR_ISFLAG === '我的挂单' && inf.orderList.length > 0) {
+            inf.checked = false;
+            this.guaDanList.push(inf);
+          }
+        });
+      }
+    },
   }
 };
 </script>
