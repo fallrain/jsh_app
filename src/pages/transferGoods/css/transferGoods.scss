@@ -80,26 +80,32 @@
     }
 
     .transferList-drawer-filter-list-item {
-    width: 160px;
-    height: 52px;
-    margin-bottom: 32px;
-    margin-right: 32px;
-    background: #F7F7F8;
-    border-radius: 26px;
-    color: #666;
-    text-align: center;
-    line-height: 60px;
-    font-size: 24px;
+        width: 160px;
+        height: 52px;
+        margin-bottom: 32px;
+        margin-right: 32px;
+        background: #F7F7F8;
+        border-radius: 26px;
+        color: #666;
+        text-align: center;
+        line-height: 60px;
+        font-size: 24px;
 
 
-    &.active {
-        color: #ED2856;
-        background: #FFF5F7;
+        &.active {
+            color: #ED2856;
+            background: #FFF5F7;
+        }
+
+        &:nth-child(3n) {
+            margin-right: 0;
+        }
     }
-
-    &:nth-child(3n) {
-        margin-right: 0;
-    }
+    .transferList-items-else {
+        padding-top: 50%;
+        padding-left: 42%;
+        font-size: 24px;
+        color: #999999;
     }
 
     .transferList-drawer-filter-head-ads-wrap {

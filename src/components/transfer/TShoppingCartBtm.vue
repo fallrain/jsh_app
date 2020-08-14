@@ -57,7 +57,7 @@ export default {
       this.$emit('checkAll', checked);
     },
     tlement() {
-      
+      this.$emit("query")
     }
   }
 };

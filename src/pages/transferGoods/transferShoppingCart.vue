@@ -15,15 +15,17 @@
           :index="index"
           @change="goodsChange"
           @query="getOrderList"
-
+          :isShowpayer="isShowpayer"
           ref="TShoppingCartItem"
+          @calBalance="calBalance"
         ></t-shopping-cart-item>
       </view>
        <!--余额支付信息 -->
       <view class="mt24">
-        <j-overage-pay
+        <t-overage-pay
           :payerBalance="payerBalance"
-        ></j-overage-pay>
+          :isShowpayer="isShowpayer"
+        ></t-overage-pay>
       </view>
       <!-- 失效宝贝 -->
       <t-failure-goods-list
@@ -36,6 +38,7 @@
         @checkAll="checkAll"
         :settlement="settlement"
         :allChooseNum="allChooseNum"
+        @query="Settlement"
       ></t-shopping-cart-btm>
 
     </view>
@@ -44,7 +47,7 @@
 import TShoppingCartItem from '../../components/transfer/TShoppingCartItem';
 import TShoppingCartBtm from '../../components/transfer/TShoppingCartBtm';
 import JTab from '../../components/common/JTab';
-import JOveragePay from '../../components/shoppingCart/JOveragePay';
+import TOveragePay from '../../components/transfer/TOveragePay';
 import TFailureGoodsList from '../../components/transfer/TFailureGoodsList';
 // import { mapState, mapActions, mapMutations } from "vuex"
 import {
@@ -54,12 +57,13 @@ import {
   USER
 } from '../../store/mutationsTypes';
 import './css/transferShoppingCart.scss';
+import sampleMachineListVue from '../sampleMachine/sampleMachineList.vue';
 export default {
   name: "transferShoppingCart",
   components: {
     JTab,
     TShoppingCartItem,
-    JOveragePay,
+    TOveragePay,
     TFailureGoodsList,
     TShoppingCartBtm
   },
@@ -74,9 +78,15 @@ export default {
       invalidList: [],
       // 选中的数据
       allChooseNum: 0,
+      // 付款方编码
       payerCodeAll: [],
+      // 付款方余额缓冲
+      payeAll: [],
       // 付款方余额
       payerBalance: [],
+      payer: [],
+      // 余额支付信息显示隐藏
+      isShowpayer: false,
       tabs: [
         {
           id: 'gwc',
@@ -101,37 +111,26 @@ export default {
   created() {
     this.getShopInfo();
   },
-   computed: {
+  computed: {
     ...mapGetters({
       userInf: USER.GET_USER
     })
   },
-  // computed: {
-  //   // ...mapState("transfer",["allOrderList","settlement","invalidList"])
-  // },
+
   methods: {
-    // ...mapActions("transfer",["getOrderList"]),
-    // ...mapMutations("transfer",["setinvalid", "calSettlement"]),
+  
     getShopInfo() {
       // this.setlist()
       this.getOrderList()
       this.getInquire()
+      this.calBalance()
       // this.getShoppingCartNum()
     },
-    // setlist() {
-    //   this.getOrderList()
-    //   // this.setAllOrderLis()
-    //   // this.setinvalid()
-    //   // this.calSettlement()
-    // },
-    // set() {
-
-    // }
     async getOrderList() {
       // 调货购物车数据
       const { code, data } = await this.transfergoodsService.allOrderList({
-        timestamp: 1596606815956,
-        longfeiUSERID: 8700010462
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode
       })
       if(code === "1") {   
         const temp = data.data.slice(0,2)
@@ -141,7 +140,7 @@ export default {
         const allList = []
         temp.map(item => {
           const list = {
-            checked: true,
+            checked: false,
             data:item
           }
           allList.push(list)
@@ -218,7 +217,7 @@ export default {
     },
     // 结算方法
     calSettlement() {
-      let sum = 0;
+      let sum = 0
       this.allOrderList.forEach(ele => {
         console.log(ele)
         if (ele.checked) {
@@ -228,11 +227,37 @@ export default {
         this.settlement = sum
 
     },
+    // 结算跳转
+    Settlement() {
+      let flag = true
+      let sum = 0
+      let volume = 0
+      this.allOrderList.forEach(ele => {
+        if (ele.checked) {
+          sum += Number(ele.data.SUMMONEY)
+          volume = Math.round(ele.data.IBR_JSTIJI/15*100)
+          if (volume < 15) {
+            flag = false
+          }      
+        }
+      })
+      if (!flag) {
+        confirm('体积小于15%无法结算')
+      }     
+      // const volume = this.allOrderList.map(ele => ele.checked && Math.round(ele.data.IBR_JSTIJI/15*100) < 15)
+      // if(volume && volume.length > 0) confirm('体积小于15%无法结算')
+      // 提交订单
+      // const { code, data } = await this.transfergoodsService.submitDhOrder({
+      //   timestamp: 1596606815956,
+      //   longfeiUSERID: 8700010462
+      // })
+     
+    },
     async getShoppingCartNum() {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
-        timestamp: 1596606815954,
-        longfeiUSERID: 8700010462
+        timestamp: this.userInf.saletoCode,
+        longfeiUSERID: this.userInf.saletoCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
@@ -244,32 +269,33 @@ export default {
     async getpayerList() {
       console.log(this.userInf);
       const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCodeTwo, {
-        salesGroupCode: this.userInf.salesGroupCodeTwo,
+        salesGroupCode: this.userInf.salesGroupCode,
         status: 1
       });
       if (code === '1') {
         console.log(data)
+        this.payer = data
         const page = data
-        let code = [] 
+
+        // let code = [] 
         page.map(item => {
           // console.log(item)
-          code.push(item.payerCode)
+          // code.push(item.payerCode)
+          item.isChecked = false
         })
-        this.payerCodeAll = code
+        this.payerCodeAll = page
         console.log(this.payerCodeAll)
         this.allOrderList.forEach(ele => {
+          ele.data.payer = data
           ele.data.orderList.map(item => {
-            item.payer = data
-            item.isExpand = false
-            item.isChecked = false
+            item.isExpand = false      
           })
         })
         console.log(this.allOrderList)
         this.invalidList.map(ele => {
+          ele.data.payer = data
           ele.data.orderList.map(item => {
-            item.payer = data
             item.isExpand = false
-            item.isChecked = false
             item.Checked = false
           })
         })
@@ -278,12 +304,15 @@ export default {
       }
 
     },
-    goodsChange(list, index) {
+    goodsChange(list, index,isShowpayer) {
       this.allOrderList[index] = list;
       this.allOrderList = JSON.parse(JSON.stringify(this.allOrderList));
       this.calSettlement()
       this.isCheck()
+      this.isShowpayer = isShowpayer
+
     },
+    // 全选
     isCheck() {
       this.isCheckAll = true
       let chooseNum = 0
@@ -298,9 +327,12 @@ export default {
           console.log(chooseNum)
         }else{
           chooseNum = 0
+       
         }        
       })
       this.allChooseNum = chooseNum
+      this.calBalance()
+      this.isShowpayer = true
     },
     // 请求余额支付信息
     async getInquire() {
@@ -310,25 +342,108 @@ export default {
       for(var i = 0; i < this.payerCodeAll.length; i++ ) {
       //  console.log(this.payerCodeAll[i])
         code.push({
-          payerCode: this.payerCodeAll[i],
+          payerCode: this.payerCodeAll[i].payerCode,
           salesGroupCode: "2110"
         })
       }
       // console.log(code)
       const AllInquire = await this.customerService.inquire(code);
       if(AllInquire.code === "1") {
-      console.log(111)
-        this.payerBalance = AllInquire.data
-         console.log(this.payerBalance)
+        // 付款方余额信息
+        const payerBal = AllInquire.data
+        console.log(payerBal)
+        const all = []
+        this.payer.forEach(item => {
+          console.log(item)
+          item.CodeName = "(" + item.payerCode + ")" + item.payerName
+          const same = payerBal.find(ele => item.payerCode === ele.payerCode)
+          console.log(same)
+          if (same) {
+            item.balance = same.balance
+          }  
+          console.log(item.CodeName)
+          let a = {...item}
+          this.allOrderList.forEach(e => {
+            if (e.checked) {            
+              e.data.orderList.map(v => {
+                if(v.IBL_PAYMONEYNAME == item.CodeName){
+                  a.CodeName = item.CodeName
+                }              
+              })                 
+            }
+          }) 
+          all.push(a)
+        })
+   
+          // console.log(a)
+          this.payer = all
+          console.log(this.payer) 
       }
-       
-         
-
-      // if(allInquire.code === "1") {   
-        
-      //   console.log(data)
-      // }
+   
      
+    },
+    // 付款方  余额支付信息
+    calBalance() {
+      const temp = []
+      let aaa = []
+      this.allOrderList.forEach(item => {
+        if (item.checked) {
+          this.isShowpayer = true
+          const PAYMONEYNAME = []
+          item.data.orderList.forEach(ele => {
+            PAYMONEYNAME.push(ele.IBL_PAYMONEYNAME) 
+          })
+          const setPAYMONEYNAME = Array.from(new Set(PAYMONEYNAME))
+          console.log(setPAYMONEYNAME) 
+          this.payer.forEach(ele => {
+            setPAYMONEYNAME.forEach(v => {
+              if (ele.CodeName === v) {
+                aaa.push(ele)
+              }
+            })
+            console.log(aaa)
+            let toBePaid = 0
+            console.log('----------------------')
+                       
+              //  console.log(v.SUMMONEY) 
+            aaa.forEach(e => {  
+              e.checked = false    
+              e.toBePaid = 0
+              item.data.orderList.forEach(v => {      
+                if(v.IBL_PAYMONEYNAME === e.CodeName){
+                  // console.log(v.IBL_PAYMONEYNAME)
+                  // console.log(Number(v.SUMMONEY))
+                  e.checked = true 
+                  e.toBePaid += Number(v.SUMMONEY)   
+
+                }
+              })
+              console.log(e.toBePaid)
+              if(e.balance > e.toBePaid){
+                e.pay = "去支付"
+              } else {
+                e.pay = "余额不足，去充值"
+              }
+            })
+          })
+        }
+      })
+      console.log(aaa)
+      this.payerBalance = aaa
+       console.log(this.payerBalance)
+      // // const payers = Array.from(new Set(temp))
+      // const temp = []
+      // this.payerCodeAll.forEach(ele => {
+      //   ele.checked = false
+      //   ele.needPay = 0
+      //   temp1.forEach(item => {
+      //     if (ele.payerCode === item.payerCode) {
+      //       ele.checked = true
+      //       ele.needPay += item.SUMMONEY
+      //     }
+      //   })
+      //   console.log(ele.needPay)
+      // })
     },
     
     checkAll(checked) {

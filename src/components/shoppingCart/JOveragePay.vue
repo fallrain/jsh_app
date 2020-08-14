@@ -4,14 +4,33 @@
       <view class="iconfont iconmoney jOveragePay-wrap-head-icon"></view>
       <view class="jOveragePay-wrap-head-text ml24">余额支付信息</view>
     </div>
-    <view class="jOveragePay-cnt"
-      v-for="(payer,index) in payerBalance"
-      :key="index"
-    >
+    <view class="jOveragePay-cnt">
       <view class="jOveragePay-cnt-item">
         <view class="jOveragePay-cnt-item-head j-flex-aic">
           <view class="jOveragePay-cnt-item-head-dot"></view>
-          ({{payer.payerCode}})青岛鸿程永泰商贸有限公司
+          (88003222）青岛鸿程永泰商贸有限公司
+        </view>
+        <view class="jOveragePay-cnt-item-total j-flex-aic">
+          <view class="jOveragePay-cnt-item-total-item">
+            <view class="jOveragePay-cnt-item-total-text">可用余额：</view>
+            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
+          </view>
+          <view class="jOveragePay-cnt-item-total-item-line">
+          </view>
+          <view class="jOveragePay-cnt-item-total-item">
+            <view class="jOveragePay-cnt-item-total-text">待支付余额：</view>
+            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
+          </view>
+          <button
+            type="button"
+            class="jOveragePay-cnt-item-total-btn"
+          >余额不足，去支付</button>
+        </view>
+      </view>
+      <view class="jOveragePay-cnt-item">
+        <view class="jOveragePay-cnt-item-head j-flex-aic">
+          <view class="jOveragePay-cnt-item-head-dot"></view>
+          (88003222）青岛鸿程永泰商贸有限公司
         </view>
         <view class="jOveragePay-cnt-item-total j-flex-aic">
           <view class="jOveragePay-cnt-item-total-item">
@@ -36,16 +55,7 @@
 
 <script>
 export default {
-  name: 'JOveragePay',
-  props: {
-    payerBalance: {
-      type: Array,
-      default: () => []
-    }
-  },
-  created() {
-    console.log(this.payerBalance)
-  }
+  name: 'JOveragePay'
 };
 </script>
 
