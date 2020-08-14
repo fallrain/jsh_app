@@ -152,11 +152,18 @@ export default {
     },
     payInfoData(val) {
       // 初始化地址信息
-      this.payInfoData[this.orderItem.orderNo].forEach((item) => {
-        item.key = this.goods.orderNo;
-        item.value = `(${item.payerCode}) ${item.payerName}`;
-      });
-      // 设置付款列表
+      for (const key in this.payInfoData) {
+        this.payInfoData[key].forEach((item) => {
+          item.key = key;
+          item.value = `(${item.payerCode}) ${item.payerName}`;
+        });
+        // 设置付款列表
+        this.payerOptions[key] = this.payInfoData[key];
+        // 设置初始化选中地址
+        this.chosePayerOptions[key] = [];
+        this.chosePayerOptions[key][0] = key;
+      }
+
       this.payerOptions = this.payInfoData[this.goods.orderNo];
       if (this.payerOptions.length > 0) {
         this.chosePayerOptions[0] = this.payerOptions[0].key;
