@@ -255,7 +255,7 @@ export default {
     setClick() {
       console.log("setClick");
       uni.navigateTo({
-        url: '/pages/mine/mySet'
+        url: '/pages/mine/mySetDetail'
       });
     },
     // 售达方信息

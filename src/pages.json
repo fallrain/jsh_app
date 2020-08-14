@@ -172,9 +172,23 @@
       }
     },
     {
+      "path": "pages/mine/myAlertLoginPwd",
+      "style": {
+        "navigationBarTitleText": "修改登录密码",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/mine/myGuestView",
       "style": {
         "navigationBarTitleText": "客户视图",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySetDetail",
+      "style": {
+        "navigationBarTitleText": "设置",
         "navigationBarBackgroundColor": "#ffffff"
       }
     },

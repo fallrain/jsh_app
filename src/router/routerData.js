@@ -22,7 +22,9 @@ const data = [
   'pages/mine/myCenter',
   'pages/mine/myAlertTel',
   'pages/mine/myPayAlertPwd',
+  'pages/mine/myAlertLoginPwd',
   'pages/mine/myGuestView',
+  'pages/mine/mySetDetail',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm'
