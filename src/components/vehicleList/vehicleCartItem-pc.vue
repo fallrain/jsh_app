@@ -58,7 +58,7 @@
     </view>
     <view class="v-c-pc-btm">
       <view class="v-c-pc-flox5">
-        <view class="v-c-pc-cnt-check">点击查看详情</view>
+        <view class="v-c-pc-cnt-check iconfont iconxiangqing">点击查看详情</view>
       </view>
       <view class="v-c-pc-flox5">
         <text class="v-c-pc-cnt-foot-text">总计总额： </text>

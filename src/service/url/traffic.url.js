@@ -32,6 +32,13 @@ const urls = {
   },
   queryCarNum(timestamp, longfeiUSERID) { // 整车购物车数量查询
     return `/queryOrder/shoppingCartNum?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}`;
+  },
+  queryCarList(timestamp, longfeiUSERID) { // 整车购物车列表查询
+    return `/queryOrder/shoppingCartAll?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}`;
+  },
+  addToCart: '/AddToCart/insertOrder', // 加入整车购物车
+  queryNewSeq(timestamp, CUSTUMER_TYPE) { // 获取整车加购物车时的单号
+    return `/base/getNewSeq?timestamp=${timestamp}&CUSTUMER_TYPE=${CUSTUMER_TYPE}`;
   }
 };
 util.addPrefix(baseURL, urls);
