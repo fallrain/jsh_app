@@ -85,6 +85,8 @@ export default {
   },
   watch: {
     show(val) {
+      console.log(this.choseOptions)
+      console.log(this.options)
       if (val) {
         this.$refs.pop.open();
       } else {

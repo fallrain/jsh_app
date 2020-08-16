@@ -10,6 +10,7 @@
         :key="index"
         :index="index"
         @change="goodsChange"
+        @payerMoneyInfo="dealPayerMoneyInfo"
         :orderItem="orderItem"
         :payInfoData.sync="payInfoData"
       ></j-order-confirm-item>
@@ -24,6 +25,7 @@
     </view>
     <view class="mt24">
       <j-overage-pay
+        :payerMoneyList="payerMoneyList"
       ></j-overage-pay>
     </view>
     <view class="orderConfirm-btm j-flex-aic">
@@ -417,7 +419,11 @@ export default {
         }
       ],
       // 选中的
-      chosePayerOptions: []
+      chosePayerOptions: [],
+      // 所有订单的账户支付信息
+      totalPayerMoneyInfo: {},
+      // 余额支付信息
+      payerMoneyList: []
     };
   },
   onLoad() {
@@ -431,6 +437,30 @@ export default {
     this.getPayInfo();
   },
   methods: {
+    dealPayerMoneyInfo(payerMoneyInfoItem) {
+      this.totalPayerMoneyInfo = {
+        ...this.totalPayerMoneyInfo,
+        ...payerMoneyInfoItem
+      };
+      console.log(this.totalPayerMoneyInfo);
+      const payerList = [];
+      const payerObj = {};
+      for (const k in this.totalPayerMoneyInfo) {
+        console.log(this.totalPayerMoneyInfo[k]);
+        if (payerObj[this.totalPayerMoneyInfo[k].customerCode]) {
+          const totalmoney = parseFloat(payerObj[this.totalPayerMoneyInfo[k].customerCode].totalMoney)
+            + parseFloat(this.totalPayerMoneyInfo[k].totalMoney);
+          payerObj[this.totalPayerMoneyInfo[k].customerCode].totalMoney = this.jshUtil.formatFloat(totalmoney, 2);
+        } else {
+          payerObj[this.totalPayerMoneyInfo[k].customerCode] = this.totalPayerMoneyInfo[k];
+        }
+      }
+      for (const k in payerObj) {
+        payerList.push(payerObj[k]);
+      }
+      this.payerMoneyList = payerList;
+      console.log(payerList);
+    },
     goodsChange(list, index) {
       /* 商品 change */
       this.$set(this.dataInfo.composeProductList, index, list);
