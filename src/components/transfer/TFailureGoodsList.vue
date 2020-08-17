@@ -1,16 +1,11 @@
 <template>
   <view class="tFailureGoodsList">
     <view class="tFailureGoodsList-head">
-      <view class="tFailureGoodsList-head-left">失效宝贝3件</view>
-      <view class="tFailureGoodsList-head-opt">清空失效宝贝</view>
+      <view class="tFailureGoodsList-head-left">失效宝贝1件</view>
+      <view class="tFailureGoodsList-head-opt" @tap="emptyProduct">清空失效宝贝</view>
     </view>
-    <t-failure-goods-item
-      v-for="(item,index) in list"
-      :key="index"
-      :index="index"
-      :checked.sync="item.checked"
-      @change="goodsChange"
-    ></t-failure-goods-item>
+    <t-failure-goods-item v-for="(itemList,index) in list" :key="index"
+      :index="index" :itemList="itemList" @change="goodsChange"></t-failure-goods-item>
   </view>
 </template>
 
@@ -28,10 +23,47 @@ export default {
       default: () => []
     },
   },
+  data() {
+    return {
+      temp: {},
+      orderNum: ''
+    };
+  },
+  created() {
+    // const num = 0
+    this.list.map((item) => {
+      //  num =
+      console.log(item);
+      this.temp = item;
+    });
+    // this.orderNum = num
+    // console.log(this.orderNum)
+  },
   methods: {
-    goodsChange(checked, index) {
-      this.list[index].checked = checked;
+    goodsChange(itemList, index) {
+      console.log(itemList);
+      this.list[index] = itemList;
+      const setList = JSON.parse(JSON.stringify(this.list));
+      this.list = setList;
       this.$emit('change', this.list);
+    },
+    async emptyProduct() {
+      const oddNum = [];
+      this.list.map((item) => {
+        item.data.orderList.map((v) => {
+          oddNum.push(v.IBL_KORDERNO);
+        });
+      });
+      if (oddNum) {
+        const result = await this.transfergoodsService.deleteProduct({
+          timestamp: Date.parse(new Date()),
+          longfeiUSERID: '8700010462',
+          KORDERNO: oddNum
+        });
+        console.log(result);
+      } else {
+        confirm('暂时没有失效产品');
+      }
     }
   }
 };

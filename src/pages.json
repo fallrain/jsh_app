@@ -1,7 +1,7 @@
 {
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-  
+
     {
       "path": "pages/nav/nav",
       "style": {
@@ -114,6 +114,13 @@
       }
     },
     {
+      "path": "pages/transferGoods/transferDetail",
+      "style": {
+        "navigationBarTitleText": "中心调货详情页面"
+
+      }
+    },
+    {
       "path": "pages/mine/myBaseInfo",
       "style": {
         "navigationBarTitleText": "基本信息",
@@ -130,12 +137,77 @@
 
     },
     {
+      "path": "pages/mine/mySDFInfo",
+      "style": {
+        "navigationBarTitleText": "售达方信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySet",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myCenter",
+      "style": {
+        "navigationBarTitleText": "个人中心",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myAlertTel",
+      "style": {
+        "navigationBarTitleText": "修改手机号",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myPayAlertPwd",
+      "style": {
+        "navigationBarTitleText": "支付密码修改",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myGuestView",
+      "style": {
+        "navigationBarTitleText": "客户视图",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/sampleMachine/sampleMachineList",
       "style": {
         "navigationBarTitleText": "样品机列表"
       }
+    },
+    {
+      "path": "pages/sampleMachine/sampleMachineConfirm",
+      "style": {
+        "navigationBarTitleText": "样品机确认订单"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleList",
+      "style": {
+        "navigationBarTitleText": "整车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarList",
+      "style": {
+        "navigationBarTitleText": "整车购物车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarDetail",
+      "style": {
+        "navigationBarTitleText": "整车购物车详情"
+      }
     }
-
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

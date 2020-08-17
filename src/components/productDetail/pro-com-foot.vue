@@ -24,17 +24,15 @@ export default {
   props: {// 父级传来的数据
     info: {// 是否显示图标以及图标变色问题
       type: Object,
-      default() {
-        return {};
-      }
+      default: () => {}
     }
   },
   methods: {
     goCarList() {
       console.log(this.info);
-      // uni.navigateTo({
-      //   url: '/pages/shoppingCart/shoppingCart'
-      // });
+      uni.navigateTo({
+        url: '/pages/shoppingCart/shoppingCart'
+      });
     },
     putcar() {
       console.log(2);

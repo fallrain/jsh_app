@@ -14,8 +14,21 @@ const data = [
   'pages/messageInfoList/messageInfoList',
   'pages/transferGoods/transferGoods',
   'pages/transferGoods/transferShoppingCart',
+  'pages/transferGoods/transferDetail',
   'pages/mine/myBaseInfo',
   'pages/mine/mySignInfo',
-  'pages/sampleMachine/sampleMachineList'
+  'pages/mine/mySDFInfo',
+  'pages/mine/mySet',
+  'pages/vehicleList/vehicleList',
+  'pages/vehicleList/vehicleCarList',
+  'pages/vehicleList/vehicleCarDetail',
+  'pages/sampleMachine/sampleMachineList',
+  'pages/mine/myCenter',
+  'pages/mine/myAlertTel',
+  'pages/mine/myPayAlertPwd',
+  'pages/mine/myGuestView',
+  'pages/sampleMachine/sampleMachineList',
+  'pages/sampleMachine/sampleMachineList',
+  'pages/sampleMachine/sampleMachineConfirm'
 ];
 export default { data };

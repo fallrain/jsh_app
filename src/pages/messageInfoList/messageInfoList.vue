@@ -1,7 +1,6 @@
 <template>
     <view class="message">
         <messageInfoListTab 
-            :tabs="tabs" 
             @tabClick="tabClick"
             @tabmsg="tabmsg"
         >
@@ -17,14 +16,14 @@
             </view>
             <i class="iconfont iconxia message-icon"> </i>
           </view>
-          <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.id,item)">
+          <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.pk,item)">
             <view class="uni-flex uni-row" >
                 <view class="message-littleTitle">{{item.typeNameShow}}</view>
-                <view class="message-title">整车扣款信息提醒</view>
+                <view class="message-title">{{item.typeName}}</view>
                 <view class="message-time">{{item.createTime}}</view>
             </view>
             <view class="uni-flex uni-row">
-                <view class="message-info">尊敬的客户您提报的整车订单，订单200021623445...</view>
+                <view class="message-info">{{item.title}}</view>
                 <view class="message-spot isNew" v-show="item.isNew"></view>
             </view>
           </view>
@@ -84,68 +83,11 @@ export default {
         } = data;
         // console.log(page.result);
         this.messageList = list;
-         console.log(this.tabIndex);
+         console.log(this.messageList);
       }
      
     },
- 
 
-
-    // tabClick(data) {
-    //   this.tabIndex = data; 
-    //   this.unread = 2;
-    //   this.messageList = [
-    //     {
-    //       id:1,
-    //       littleTitle:"建店押金",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: true
-    //     },
-    //      {
-    //       id:2,
-    //       littleTitle:"扣款提醒",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: true
-    //     }, 
-    //     {
-    //       id:3,
-    //       littleTitle:"订单详情",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     }, 
-    //     {
-    //       id:4,
-    //       littleTitle:"其他",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     },
-    //     {
-    //       id:5,
-    //       littleTitle:"订单详情",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     }, 
-    //     {
-    //       id:6,
-    //       littleTitle:"订单详情",
-    //       title: '整车扣款信息提醒',
-    //       time: '2020-07-13 12:31:00',
-    //       info: '尊敬的客户您提报的整车订单，订单200021623445...',
-    //       isNew: false
-    //     }
-    //   ];
-
-    // },
     showDetail(id,item) {   
       console.log(id,JSON.stringify(item))
       uni.navigateTo({

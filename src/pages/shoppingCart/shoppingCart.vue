@@ -256,6 +256,7 @@ export default {
       this.specialPriceMap = (data && data) || {};
     },
     goodsChange(goods, index) {
+      console.log(goods)
       this.shoppingList[index] = goods;
       this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
     },

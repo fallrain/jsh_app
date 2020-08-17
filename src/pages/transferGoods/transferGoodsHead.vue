@@ -1,18 +1,24 @@
 <template>
   <view class="jHeadTab-wrap">
     <view class="jHeadTab-list-wrap">
-      <view class="jHeadTab-list">
+      <view class="jHeadTab-list"> 
         <view
-          class="jHeadTab-item"
+          :class="['jHeadTab-item', item.active && 'active']"
           v-for="(item,index) in tabs"
           :key="index"
-          @tap="tabHandle(item.handler)"
+          @tap="tabHandle(item,index)"
         >
           <text>{{item.name}}</text>
           <view
             v-if="item.icon"
-            :class="['iconfont',item.icon]"
-          ></view>
+            :class="['jHeadTab-icon-wrap',item.iconClass]"
+          >
+            <view
+              v-for="(iconItem,iconIndex) in item.icon"
+              :key="iconIndex"
+              :class="['iconfont',iconItem]"
+            ></view>
+          </view>
         </view>
       </view>
       <view :class="['jHeadTab-pop-tab-list',isExpend && 'isExpend']">
@@ -48,9 +54,7 @@
 </template>
 
 <script>
-// import transferGoodsHeadPicker from './transferGoodsHeadPicker';
 import JHeadTabPicker from '../../components/form/JHeadTabPicker';
-// import '../../components/form/css/jHeadTab.scss';
 export default {
   name: 'transferGoodsHead',
   components: {
@@ -61,6 +65,14 @@ export default {
     tabs: {
       type: Array,
       default: () => []
+    },
+    cargoWareHome: {
+      type: Array,
+      default: () => []
+    },
+    cargoSendWay: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -69,50 +81,57 @@ export default {
         {
           name: '调出库位',
           show: false,
+          children:[]
         },
-        // {
-        //   name: '品牌',
-        //   show: false,
-        //   children: [
-        //     {
-        //       name: '海尔',
-        //       checked: false
-        //     },
-        //     {
-        //       name: '卡萨帝',
-        //       checked: false
-        //     },
-        //     {
-        //       name: '统帅',
-        //       checked: false
-        //     },
-        //     {
-        //       name: '摩卡',
-        //       checked: false
-        //     },
-        //     {
-        //       name: 'GE',
-        //       checked: false
-        //     },
-        //     {
-        //       name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
-        //       checked: false
-        //     }
-        //   ]
-        // },
         {
           name: '配送类型',
           show: false,
+          children:[]
         },
       ],
       // 扩展
       isExpend: false
     };
   },
+  created() {
+      
+  },
   methods: {
-    tabHandle(handler) {
+    setPopTabs(wareHome, sendWay) {   
+      if (wareHome) {
+        const tempArray = []
+        wareHome.map(item => {
+          // console.log(item.OUTWHNAME)
+          const temp = {
+            name: item.OUTWHNAME,
+            checked: false
+          }
+          tempArray.push(temp)  
+        })
+        this.popTabs[0].children = tempArray
+      }
+      if (sendWay) {
+        const tempArray = []
+        sendWay.map(item => {
+          // console.log(item.sendWay)
+          const temp = {
+            name: item.sendWay,
+            checked: false
+          }
+          tempArray.push(temp)  
+        })
+        this.popTabs[1].children = tempArray
+      }
+      // console.log(this.popTabs)
+    },
+    
+    tabHandle(item, index) {
       /* tab 点击事件 */
-      this.$emit('tabClick', handler);
+      this.tabs.forEach((v) => {
+        v.active = false;
+      });
+      item.active = true;
+      this.$emit('tabClick', this.tabs, item, index);
     },
     tabTagHandle() {
       /* tag tab 点击事件 */
@@ -132,6 +151,14 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+// ::v-deep .jHeadTabPicker-item{
+//   position: relative;
+//   width: 50%;
+//   overflow: hidden;
+//   margin-top:10px;
+  
+// }
+
 .jHeadTab-wrap {
   position: relative;
   background: #fff;
@@ -149,11 +176,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 24px;
   padding-left: 28px;
   padding-right: 28px;
   background: #fff;
-  height: 38px;
+  height: 58px;
 }
 
 .jHeadTab-item {
@@ -163,7 +190,7 @@ export default {
   font-size: 24px;
 
   &.active {
-    color: #2283E2;
+    color: #ED2856;
   }
 
   .iconfont {
@@ -174,7 +201,7 @@ export default {
 $jHeadTab-pop-tab-list: 24px;
 .jHeadTab-pop-tab-list {
   display: flex;
-//   justify-content: space-between;
+  justify-content: start;
   padding-top: 24px;
   padding-left: 12px;
   padding-right: 12px;
@@ -192,14 +219,11 @@ $jHeadTab-pop-tab-list: 24px;
   height: 44px;
   background: #F2F2F7;
   border-radius: 22px;
+  color: #666;
   font-size: 24px;
   padding-left: 20px;
   padding-right: 20px;
-  margin-right:40px;
-  font-family:PingFangSC-Light,PingFang SC;
-  font-weight:300;
-  color:rgba(102,102,102,1);
-  line-height:34px;
+  margin-right: 24px;
 
   &.active {
     height: 44px + $jHeadTab-pop-tab-list;

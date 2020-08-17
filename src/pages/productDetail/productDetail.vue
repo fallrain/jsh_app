@@ -9,7 +9,7 @@
       <swiper class="swiper-box" @change="changePic">
         <swiper-item v-for="(item, index) in detailInfo.images" :key="index">
           <view class="swiper-item">
-            <image class="image" :src="item.masterImage" mode="aspectFill" />
+            <image class="image" :src="item.masterImage" mode="aspectFill"></image>
           </view>
         </swiper-item>
       </swiper>
@@ -48,7 +48,7 @@
       <view v-show="ActListInfo.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
         <view class="col-70 text" >
-          <view class="smaller" @click="showAct" v-for="ack in ActListInfo" :key="ack" style="width:23%;float:left;background-color: #F2F2F7;color: #999999;border-radius: 30px;text-align: center;margin-right: 2%;">{{ack}}</view>
+          <view class="smaller product-detail-lei2" @click="showAct" v-for="ack in ActListInfo" :key="ack">{{ack}}</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
@@ -57,7 +57,7 @@
       <view v-show="ActListInfo.length>0" v-else class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
         <view class="col-70 text" @click="showAct">
-          <view class="smaller" style="border: 1px #ED2856 solid;background-color: #FFEDF1;color: #ED2856;border-radius: 30px;text-align: center;">{{CheckActivityInfo.title}}</view>
+          <view class="smaller product-detail-lei3">{{CheckActivityInfo.title}}</view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
@@ -84,7 +84,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-ship :show.sync="isShowShip" :info="deliveryAddressList" @checkedShip="checkedShip"></pro-com-ship>
+      <pro-com-ship :show.sync="isShowShip" :info="deliveryAddressList" :titles="titles" @checkedShip="checkedShip"></pro-com-ship>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
         <view class="padding-30 col-40 modeller">热门推荐</view>
@@ -92,9 +92,9 @@
       <view class="uni-flex uni-row">
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
           <view v-for="ieen in hostList" :key="ieen.productCode" class="scroll-view-item_H">
-            <image :src="ieen.imageUrl" style="height: 76px;width: 76px;"/>
+            <image :src="ieen.imageUrl" style="height: 76px;width: 76px;"></image>
             <view>
-              <span style="color: #666666;font-size: 8px;display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width: 95%;">{{ieen.title}}</span>
+              <span class="product-detail-lei1">{{ieen.title}}</span>
               <br><span style="color: #ED2856;font-size: 8px;">￥{{ieen.price}}</span>
             </view>
           </view>
@@ -109,8 +109,8 @@
       <view class="uni-flex uni-row" id="details">
         <view class=" col-40 modeller padding-30">图文详情</view>
       </view>
-      <view class="uni-flex uni-row">
-        <image style="width: 100%;" mode="widthFix" :src="detailInfo.longImages[0]"></image>
+      <view class="uni-flex uni-row" v-for="(img,index) in detailInfo.longImages" :key="index">
+        <image style="width: 100%;" mode="widthFix" :src="img" ></image>
       </view>
     </view>
     <view class="product-detail-fot-high"></view>
@@ -128,6 +128,12 @@ import proComShip from '../../components/productDetail/pro-com-ship';
 import proSpecs from '../../components/productDetail/pro-specs';
 import proComFoot from '../../components/productDetail/pro-com-foot';
 import './css/productDetail.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'ProductDetail',
@@ -139,8 +145,15 @@ export default {
     proSpecs,
     proComFoot
   },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   data() {
     return {
+      productCode: '', // 前页面传入产品编码
+      titles: '配送至',
       stock: {}, // 库存
       footButtong: { // 底部按钮是否显示问题
         isSale: false,
@@ -192,11 +205,13 @@ export default {
     // this.scrollHight = e.scrollTop;
     // console.log(uni.getSystemInfoSync().screenHeight)
   },
-  onLoad() {
+  onLoad(options) {
+    this.productCode = options.productCode;
+    console.log(options.productCode);
   },
   created() {
-    this.getProductDetail('GA0SZB000', '8700010462', '8700010462');// 获取产品详情
-    this.getHostLost('8700010462', '8700010462');// 获取热门推荐列表
+    this.getProductDetail();// 获取产品详情
+    this.getHostLost();// 获取热门推荐列表
     this.productQueryInter();// 产品是否关注
     this.productStock();// 获取数量页面的库存字段
     this.getDeliveryAddress();// 获取配送地址列表
@@ -205,8 +220,8 @@ export default {
     move() {
       this.isF = true;
     },
-    async getProductDetail(codePro, codeSale, codeSend) {
-      const { code, data } = await this.productDetailService.productDetail(codePro, codeSale, codeSend);
+    async getProductDetail() {
+      const { code, data } = await this.productDetailService.productDetail(this.productCode, this.userInf.saletoCode, this.userInf.sendtoCode);
       if (code === '1') {
         this.productNum = 1;
         this.detailInfo = data;
@@ -224,7 +239,13 @@ export default {
           this.ActListInfo.push('特价');
           const tj = { title: '特价版本', isMore: true, isSe: true, list: [] };
           this.detailInfo.tjPrice.tj.forEach((lis) => {
-            const a = { titleLe: '特价版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+            const a = { titleLe: '特价版本',
+              name: lis.versionCode,
+              price: lis.invoicePrice,
+              time: lis.endDate,
+              kou: lis.rebateRateShow * 100,
+              num: lis.usableQty,
+              isCheck: false };
             tj.list.push(a);
           });
           this.ActInfo.push(tj);
@@ -233,7 +254,13 @@ export default {
           this.ActListInfo.push('工程');
           const gc = { title: '工程版本', isMore: true, isSe: true, list: [] };
           this.detailInfo.tjPrice.gc.forEach((lis) => {
-            const a = { titleLe: '工程版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+            const a = { titleLe: '工程版本',
+              name: lis.versionCode,
+              price: lis.invoicePrice,
+              time: lis.endDate,
+              kou: lis.rebateRateShow * 100,
+              num: lis.usableQty,
+              isCheck: false };
             gc.list.push(a);
           });
           this.ActInfo.push(gc);
@@ -242,7 +269,13 @@ export default {
           this.ActListInfo.push('样机');
           const yj = { title: '样机版本', isMore: true, isSe: true, list: [] };
           this.detailInfo.tjPrice.yj.forEach((lis) => {
-            const a = { titleLe: '样机版本', name: lis.versionCode, price: lis.invoicePrice, time: lis.endDate, kou: lis.rebateRateShow * 100, num: lis.usableQty, isCheck: false };
+            const a = { titleLe: '样机版本',
+              name: lis.versionCode,
+              price: lis.invoicePrice,
+              time: lis.endDate,
+              kou: lis.rebateRateShow * 100,
+              num: lis.usableQty,
+              isCheck: false };
             yj.list.push(a);
           });
           this.ActInfo.push(yj);
@@ -277,8 +310,8 @@ export default {
       }
       console.log(data);
     },
-    async getHostLost(codeSale, codeSend) {
-      const { code, data } = await this.productDetailService.productHostList(codeSale, codeSend);
+    async getHostLost() {
+      const { code, data } = await this.productDetailService.productHostList(this.userInf.saletoCode, this.userInf.sendtoCode);
       if (code === '1') {
         this.hostList = data;
       }
@@ -286,8 +319,8 @@ export default {
     },
     async productQueryInter() {
       const { code, data } = await this.productDetailService.productQueryInter({// 获取关注
-        account: '8700010462',
-        productCodeList: ['GA0SZB000']
+        account: this.userInf.customerCode,
+        productCodeList: [this.productCode]
       });
       if (code === '1') {
         if (data.length > 0) {
@@ -297,17 +330,17 @@ export default {
         }
       }
     },
-    async addGuan(code1, code2, code3) {
-      const { code } = await this.productDetailService.productAddInter(code1, code2, code3);
+    async addGuan() {
+      const { code } = await this.productDetailService.productAddInter(this.userInf.saletoCode, this.userInf.sendtoCode, this.productCode);
       if (code === '200') {
         this.ISGUANZHU = true;
       }
     },
     async productStock() {
       const { code, data } = await this.productDetailService.productStock({
-        productCodes: ['GA0SZB000'],
-        saletoCode: '8700010462',
-        sendtoCode: '8700010462'
+        productCodes: [this.productCode],
+        saletoCode: this.userInf.saletoCode,
+        sendtoCode: this.userInf.sendtoCode
       });
       if (code === '1') {
         this.stock = data;
@@ -317,15 +350,15 @@ export default {
     guanZhu() {
       if (this.ISGUANZHU) { // 已关注，点击是取消关注
         this.productDetailService.productRemoveInter({
-          account: '8700010462', // 8700002530_1前台输入的账号名
-          productCodeList: ['GA0SZB000']
+          account: this.userInf.customerCode, // 8700002530_1前台输入的账号名
+          productCodeList: [this.productCode]
         }).then(({ code }) => {
           if (code === '1') {
             this.ISGUANZHU = false;
           }
         });
       } else {
-        this.addGuan('8700010462', '8700010462', 'GA0SZB000');
+        this.addGuan();
       }
     },
     changePic(e) { // 轮播图切换显示
@@ -375,8 +408,7 @@ export default {
     checkedShip(list, e) { // 选择的地址
       this.ShipInfo = this.deliveryAddressList[e].name;
       this.deliveryAddressList = list;
-      this.getProductDetail('GA0SZB000', '8700010462', '8700010462');// 获取产品详情
-      // this.curChoseDeliveryAddress = 'item';
+      this.getProductDetail();// 获取产品详情
     },
     checkCut(e) {
       uni.pageScrollTo({

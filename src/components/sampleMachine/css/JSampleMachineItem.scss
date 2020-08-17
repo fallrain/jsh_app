@@ -1,9 +1,10 @@
-.jGoodsItem {
+.jSampleMachineItem {
+  position: relative;
   display: flex;
   padding: 24px;
   border-bottom: 1px solid #F5F5F5;
   background: #fff;
-
+  align-items: center;
   &:last-child {
     border-bottom: 0;
   }
@@ -45,7 +46,7 @@
   }
 }
 
-.jGoodsItem-left {
+.jSampleMachine-left {
   width: 220px;
   height: 228px;
   padding: 10px;
@@ -57,21 +58,21 @@
   }
 }
 
-.jGoodsItem-cnt {
+.jSampleMachine-cnt {
   flex-grow: 1;
 }
 
-.jGoodsItem-cnt-goodsName {
+.jSampleMachine-cnt-goodsName {
   color: #333;
   font-size: 24px;
   line-height: 34px;
 }
 
-.jGoodsItem-cnt-price-tips {
+.jSampleMachine-cnt-price-tips {
   margin-top: 12px;
 }
 
-.jGoodsItem-cnt-price-tips-item {
+.jSampleMachine-cnt-price-tips-item {
   display: inline-block;
   padding: 2px 8px;
   line-height: 28px;
@@ -85,33 +86,39 @@
   }
 }
 
-.jGoodsItem-cnt-price-inf {
+.jSampleMachine-cnt-price-inf {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   margin-top: 12px;
 }
 
-.jGoodsItem-cnt-price {
+.jSampleMachine-cnt-price {
   margin-right: 20px;
   color: #ED2856;
   font-size: 32px;
 }
 
-.jGoodsItem-cnt-price-inf-item {
+.jSampleMachine-cnt-price-inf-item {
   margin-right: 20px;
   color: #666;
   font-size: 20px;
 }
 
-.jGoodsItem-cnt-opts {
+.jSampleMachine-cnt-opts {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   margin-top: 10px;
 }
-
-@mixin jGoodsItem-cnt-opts-btn {
+.jSampleMachine-cnt-like {
+  position: absolute;
+  top: 124px;
+  right: 14px;
+  font-size: 30px;
+  color: $theme-color;
+}
+@mixin jSampleMachine-cnt-opts-btn {
   display: inline-block;
   height: 40px;
   padding-left: 16px;
@@ -121,25 +128,25 @@
   border-radius: 8px;
 }
 
-.jGoodsItem-cnt-opts-primary {
-  @include jGoodsItem-cnt-opts-btn;
+.jSampleMachine-cnt-opts-primary {
+  @include jSampleMachine-cnt-opts-btn;
   background: #ED2856;
   color: #fff;
 }
 
-.jGoodsItem-cnt-opts-default {
-  @include jGoodsItem-cnt-opts-btn;
+.jSampleMachine-cnt-opts-default {
+  @include jSampleMachine-cnt-opts-btn;
   background: #fff;
   color: #ED2856;
 }
 
-.jGoodsItem-tags {
+.jSampleMachine-tags {
   display: flex;
   align-items: center;
   margin-top: 14px;
 }
 
-.jGoodsItem-tag-item {
+.jSampleMachine-tag-item {
   display: inline-block;
   height: 28px;
   line-height: 28px;

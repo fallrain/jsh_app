@@ -1,9 +1,8 @@
 import util from '../util/index';
 
-const baseURL = 'commodity/api/productPrice';
+const baseURL = 'order';
 const urls = {
-  // 商品列表
-  transferPriceList: '/allprice',
+  paytoInfo: '/order/paytoInfo' // 付款方列表
 };
 util.addPrefix(baseURL, urls);
 export default urls;

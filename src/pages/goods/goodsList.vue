@@ -356,6 +356,7 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
+      console.log(goods)
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */

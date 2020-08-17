@@ -97,16 +97,12 @@ export default {
       default: false
     },
     infos: {// 商品信息
-      type: Array,
-      default() {
-        return {};
-      }
+      type: Object,
+      default: () => {}
     },
     stock: {// 商品库存信息
       type: Object,
-      default() {
-        return {};
-      }
+      default: () => {}
     }
   },
   data() {

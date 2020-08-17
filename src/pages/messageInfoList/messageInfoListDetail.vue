@@ -5,8 +5,8 @@
             <text class="massageDetail-title">{{detail.title}}</text>
         </view>
         <view class="massageDetail-info">
-            <view class="massageDetail-infoTips">{{detail.description}}</view>
-            <view class="massageDetail-border"></view>
+            <view class="massageDetail-infoTips">{{detail.info}}</view>
+            <view class="massageDetail-border">{{detail.description}}</view>
             <view>
                 <text class="massageDetail-time">{{detail.createTime}}</text>
                 <text class="massageDetail-time massageDetail-delete">X 删除此消息</text>
@@ -27,9 +27,9 @@ export default {
             this.detail= {
                 id:id,
                 typeNameShow:item.typeNameShow,
-                title:'整车扣款信息提醒',
+                title:item.typeName,
                 createTime:item.createTime,
-                info: '尊敬的客户您提报的整车订单，订单200021623445...',
+                info: item.title,
                 description:item.description,
                 isNew: false
             }
@@ -50,7 +50,7 @@ export default {
         .massageDetail-littleTitle{
             display: inline-block;
             width:88px;
-            height:32px;
+            // height:32px;
             background:rgba(237,40,86,1);
             border-radius:17px;
             font-size:16px;

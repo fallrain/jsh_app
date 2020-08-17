@@ -92,7 +92,7 @@ export default {
       transform: rotateX(180deg);
     }
   }
-  
+
   .tdrawerfilteritem-head-icon-right {
     color: #999;
     font-size: 28px;

@@ -85,11 +85,16 @@ export default {
   },
   watch: {
     show(val) {
+      console.log(this.choseOptions)
+      console.log(this.options)
       if (val) {
         this.$refs.pop.open();
       } else {
         this.$refs.pop.close();
       }
+    },
+    choseOptions(val) {
+      console.log(val)
     }
   },
   methods: {

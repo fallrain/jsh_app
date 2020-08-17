@@ -96,3 +96,28 @@
   height: 88px;
   background-color: #FFFFFF;
 }
+.product-detail-lei1 {
+  color: #666666;
+  font-size: 8px;
+  display:block;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+  width: 95%;
+}
+.product-detail-lei2 {
+  width:23%;
+  float:left;
+  background-color: #F2F2F7;
+  color: #999999;
+  border-radius: 30px;
+  text-align: center;
+  margin-right: 2%;
+}
+.product-detail-lei3 {
+  border: 1px #ED2856 solid;
+  background-color: #FFEDF1;
+  color: #ED2856;
+  border-radius: 30px;
+  text-align: center;
+}
