@@ -4,9 +4,14 @@
       <image :src="goods.listImage"></image>
     </view>
     <view class="jGoodsItem-cnt">
-      <view class="jGoodsItem-cnt-goodsName j-goods-title">
-        {{goods.name}}
-      </view>   
+      <view class="jGoodsItem-cnt-head">
+        <view v-html="goods.name" class="jGoodsItem-cnt-goodsName j-goods-title">
+        </view>   
+        <i 
+          :class="['transferDetailItem-detail-like','iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"
+          @tap="addFavorite(goods)"
+        ></i>
+      </view>
       <view class="jGoodsItem-cnt-price-tips">
         <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice.rebateRate,100)}}%</view>
         <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice.rebateMoney}}</view>
@@ -19,12 +24,15 @@
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
-          @change="goodsNumChange"
+          :value="goods.amount"
+          :max="Number(goods.stockList[0].qty)" 
+          :disabled="Number(goods.stockList[0].qty) === 0"
+          @change="goodsNumChange($event, goods)"
         ></uni-number-box>
         <button
           class="jGoodsItem-cnt-opts-primary ml26"
           type="button"
-          @tap="addTransfer"
+          @tap="addTransfer(goods)"
         >加入调货</button>
       </view>
     </view>
@@ -36,7 +44,12 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 // import './css/jGoodsItem.scss';
-
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 export default {
   name: 'transferGoodsItem',
   components: {
@@ -47,8 +60,11 @@ export default {
       ischecked: false,
        // 控制列表数据
       isShowList:false,
+      value: 1,
+      isDisposal:false
     }
   },
+
   props: {
     // 商品对象
     goods: {
@@ -77,84 +93,53 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   methods:{
-    addTransfer(){
-       /* 添加到购物车 */
-       /**
-       ***添加到购物车
-       *  product:Object
-       *  是否有信用模式(0否1是)
-       *  creditModel? : number,
-       *  产品购买的数量
-       *  number,
-       *  价格类型
-       *  priceType: string,
-       *  价格版本号
-       *  priceVersion: string,
-       *  产品编码
-       *  productCode,
-       *  调货版本号
-       *  stockVersion?: string,
-       *  是否有周承诺(0否1是)
-       *  weekPromise?: number
-       *  */
-      // const {
-      //   productCode,
-      //   activityType,
-      //   activityId,
-      //   priceType,
-      //   number
-      // } = this.goods;
-      // debugger;
-      // const {
-      //   saletoCode,
-      //   sendtoCode
-      // } = this;
-      // this.cartService.addToCart({
-      //   // 商品组合编码
-      //   activityId,
-      //   // 组合类型(1单品2组合3抢购4套餐5成套)
-      //   activityType: activityType || 1,
-      //   // 购买的数量(组合就是组合的数量)
-      //   number,
-      //   //  促销活动价格类型
-      //   //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
-      //   priceType,
-      //   // 价格版本号
-      //   priceVersion: '',
-      //   // 产品编码
-      //   productCode,
-      //   productList: [{
-      //     // 是否有信用模式(0否1是)
-      //     creditModel: 1,
-      //     //  产品购买的数量
-      //     number,
-      //     //  价格类型
-      //     priceType: 'PT',
-      //     // 价格版本号
-      //     priceVersion: '',
-      //     // 产品编码
-      //     productCode,
-      //     //  调货版本号
-      //     stockVersion: '',
-      //     //  是否有周承诺(0否1是)
-      //     weekPromise: '0'
-      //   }],
-      //   // 售达方编码
-      //   saletoCode,
-      //   // 送达方编码
-      //   sendtoCode,
-      //   // 版本调货版本号
-      //   transferVersionCode: '',
-      //   // 促销活动版本号
-      //   versionCode: '',
-      // });
-    },
-     goodsNumChange(val) {
+     goodsNumChange(value,goods) {
       /* 商品数量change */
-      this.goods.number = val;
+      if (goods.stockList[0].qty === 0) {
+        value = 0
+      }
+     
+      goods.amount = value
+      // console.log(goods.amount, goods)
+      // this.value = value
+      // 改变价格
+      this.goods.number = value;
+      console.log(goods.amount)
       this.$emit('change', this.goods, this.index);
+    },
+    addFavorite(goods) {  
+      console.log(goods)
+      if(goods.$favorite) {
+        // 取消收藏
+         const removeInterest = this.customerService.removeInterestProduct({
+          customerCode: this.userInf.customerCode,
+          account: this.userInf.customerCode,
+          productCodeList: [goods.code]
+        });
+      } else {
+        // 添加收藏
+         const addInterest = this.customerService.addInterestProduct({
+          customerCode: this.userInf.customerCode,
+          account: this.userInf.customerCode,
+          productCode: goods.code
+        });
+      }
+      goods.$favorite = !goods.$favorite
+    },
+    // 加入调货
+    addTransfer(goods) {
+      console.log(goods)
+   
+       
+      this.$emit("inserOrder",goods)
     }
+
   }
 
 };
@@ -214,8 +199,8 @@ export default {
 }
 
 .jGoodsItem-left {
-  width:238px;
-  height:238px;
+  width: 238px;
+  height: 238px;
   flex-shrink: 0;
 
   image {
@@ -227,15 +212,26 @@ export default {
 .jGoodsItem-cnt {
   flex-grow:1;
 }
+.jGoodsItem-cnt-head{
+  position: relative;
+}
 
 .jGoodsItem-cnt-goodsName {
 //   width:464px;
 //   height:68px;
-  font-size:24px;
-  font-weight:400;
+  font-size: 24px;
+  font-weight: 400;
   color: #333;
-  line-height:34px;
-
+  line-height: 34px;
+  
+}
+.transferDetailItem-detail-like{
+  width: 40px;
+  font-size: 30px;
+  position: absolute;
+  right: 0px;
+  top: 36px;
+  color: #ED2856;
 }
 
 .jGoodsItem-cnt-price-tips {

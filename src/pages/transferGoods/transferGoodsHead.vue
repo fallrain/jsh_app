@@ -1,7 +1,7 @@
 <template>
   <view class="jHeadTab-wrap">
     <view class="jHeadTab-list-wrap">
-      <view class="jHeadTab-list">
+      <view class="jHeadTab-list"> 
         <view
           :class="['jHeadTab-item', item.active && 'active']"
           v-for="(item,index) in tabs"

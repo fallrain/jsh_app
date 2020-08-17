@@ -203,8 +203,25 @@
       "style": {
         "navigationBarTitleText": "样品机确认订单"
       }
+    },
+    {
+      "path": "pages/vehicleList/vehicleList",
+      "style": {
+        "navigationBarTitleText": "整车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarList",
+      "style": {
+        "navigationBarTitleText": "整车购物车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarDetail",
+      "style": {
+        "navigationBarTitleText": "整车购物车详情"
+      }
     }
-
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

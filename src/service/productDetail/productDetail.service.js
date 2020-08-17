@@ -1,5 +1,5 @@
 import {
-  jGet, jPost,jPostJson
+  jGet, jPost, jPostJson
 } from '@/lib/request';
 import url from '../url/productDetail.url';
 import urls from '../url/productActivity.url';

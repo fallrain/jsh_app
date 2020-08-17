@@ -12,6 +12,7 @@
           >搜索
           </button>
       </view>
+      
       <transfer-goods-head
           class="mb12"
           :tabs="tabs"
@@ -40,9 +41,11 @@
             :sendtoCode="userInf.sendtoCode"
             :allPrice="item.$allPrice"
             @change="goodsChange"
+            @query="getShoppingCartNum"
+            @inserOrder="inserOrder(item)"
           ></transfer-goods-item>
         </view>
-        <view v-else>暂无数据</view>
+        <view class="transferList-items-else" v-else>暂无数据</view>
       </mescroll-body>
       <!-- 抽屜 -->
     <t-drawer
@@ -61,7 +64,7 @@
         <view class="transferList-drawer-filter-head-ads-wrap">
           <view
             class="transferList-drawer-filter-head"
-            @tap="showDeliveryAddress"
+            @tap="showDeliveryAddress" 
           >
             <view>
               <text>配送至</text>
@@ -94,6 +97,11 @@
         </view>
       </template>
     </t-drawer>
+    <j-choose-delivery-address
+      :show.sync="isShowAddressDrawer"
+      :list="deliveryAddressList"
+      @change="deliveryAddressListChange"
+    ></j-choose-delivery-address>
     <!-- 底部购物车栏 -->
     <transfer-goods-btm
       :shoppingCartNum=shoppingCartNum
@@ -106,6 +114,7 @@
 import transferGoodsHead from './transferGoodsHead';
 import transferGoodsItem from './transferGoodsItem';
 import JSearchInput from '../../components/form/JSearchInput';
+import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
 import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
 import selfMescrollMixin from '@/mixins/mescroll.mixin';
@@ -132,7 +141,8 @@ export default {
       MescrollBody,
       TDrawer,
       TDrawerFilterItem,
-      transferGoodsBtm
+      transferGoodsBtm,
+      JChooseDeliveryAddress
     },
     data() {
      return {
@@ -218,7 +228,9 @@ export default {
       // this.setFilterData();
       this.getDeliveryAddress();
       this.getTransferList();
-      this.getCargoQuery()
+      this.getCargoQuery();
+      this.getShoppingCartNum()
+
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -285,11 +297,11 @@ export default {
       const scrollView = {};
       const { code, data } = await this.transfergoodsService.transferList({
         ...condition,
-        timestamp: 1595922509073,
+        timestamp: Date.parse(new Date()),
         categoryCode: '',
         attributeName: '',
         attributeValue: '',
-        customerCode: 8700010462,
+        customerCode: this.userInf.customerCode,
         dstCode: 8700010462,
         center: 12E02,
         group: '',
@@ -318,13 +330,12 @@ export default {
         // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取收藏
-        const getProductQueryInter = this.productDetailService.productQueryInter({
-          productCodes,
-          account: userInf.customerCode
+        const getProductQueryInter = this.customerService.queryCustomerInterestProductByAccount({
+          account: this.userInf.customerCode,
+          productCodeList: productCodes
         });
         const [
           allPriceRes,
-          stockRes,
           productQueryInterRes
         ] = await Promise.all([getAllPrice, getProductQueryInter]);
         if (allPriceRes.code === '1') {
@@ -333,24 +344,26 @@ export default {
           const allPriceData = allPriceRes.data;
           // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
           curList.forEach((v) => {
+            v.amount = 1
             v.$PtPrice = allPriceData[v.code].pt;
             v.$allPrice = allPriceData[v.code];
           });
         }
-        // if (productQueryInterRes.code === '1') {
-        //   // 添加点赞
-        //   const productQueryInterData = productQueryInterRes.data;
-        //   curList.forEach((v) => {
-        //     v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
-        //   });
-        // }
+        if (productQueryInterRes.code === '1') {
+          // 添加点赞
+          const productQueryInterData = productQueryInterRes.data;
+          curList.forEach((v) => {
+            v.$favorite = !!productQueryInterData.find(productCode => v.code === productCode);
+          });
+        }
         if (pages && pages.num === 1) {
           this.list = curList;
         } else {
           if (!this.list) {
             this.list = []
           }
-          this.list = this.list.concat(curList);        
+          this.list = this.list.concat(curList);    
+          console.log(this.list)    
         }
         
         this.filterList = this.conditionList.map(item => ({
@@ -373,8 +386,8 @@ export default {
     async getCargoQuery() {
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
-        timestamp: 1596530440135,
-        sendToCode: 8700010462,
+        timestamp: Date.parse(new Date()),
+        sendToCode: this.userInf.customerCode,
         sendToMktid: 12E02
       })
       if(code === "1") {   
@@ -382,31 +395,90 @@ export default {
       }
       // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
-        timestamp: 1596533915450,
-        longfeiUSERID: 8700010462,
-        sendtoCode: 8700010462,
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode,
+        sendtoCode: this.userInf.customerCode,
         sendtoMktid: 12E02,
       })
       if(temp.code === "1") {   
         this.cargoSendWay = temp.data.data
       }
       this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay)
-      
+
+    },
+    async getShoppingCartNum() {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
-        timestamp: 1596606815954,
-        longfeiUSERID: 8700010462
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
         console.log(this.shoppingCartNum)
         // console.log(data)
       }
+    },
+    // 加入调货
+    inserOrder(item) {
+      if(item.stockList[0].qty !== "0") {
+        console.log(item)
+        // const {brand,code,name} = goods
+      //     const insertTransfer = this.transfergoodsService.insertOrder({
+      //       ycFlag: "JSHSW",    //是否统仓统配
+      //       SEQ: "",//调货单号
+      //       MKTID: "12A02", //工贸编码
+      //       sendCode: "",//配送中心编码
+      //       brand: "000",//品牌编码
+      //       INVSORT: item.group,//产品组编码
+      //       PRODUCT_MODEL: "LS50Z51Z",//物料型号
+      //       DH_INVCODE: item.code,//物料编码
+      //       DH_INVSTD:item.name,    //描述 
+      //       DH_QTY: item.number,     //下单数量
+      //       UnitPrice: "1799.00",  //开票价
+      //       ActPrice: item.recommendSalePrice, //供价
+      //       BateRate: 0,  //扣点
+      //       BateMoney: 0,
+      //       IsFL: 1 ,  //返利标识
+      //       IsKPO: 0 ,   //商空标识  0：非商空  1：商空
+      //       DH_VERCODE: "" , //特价版本
+      //       DH_VERMONEY: "",	  //版本价格
+      //       USERID: "8800101954", //售达方编码
+      //       longfeiMFID: "8800212607",    //送达方编码
+      //       DH_PAYTO: "8800101954",   //付款方编码
+      //       DH_PAYTONAME: "(8800101954)青岛鸿程永泰商贸有限公司",    //付款方名称
+      //       YJMFID: "B1001312",    //业绩管理客户编码
+      //       DH_PROCODE: "",   //工程版本
+      //       DH_PROLOSSMONEY: "" ,  
+      //       DH_LOSSRATE: 0,
+      //       DH_OUTWHCODE: "",  //调出库位
+      //       DH_IMG: item.searchImage,    
+      //       DH_SENDTONAME: "测试账号17",    //送达方名称
+      //       SENDTO_ADDRESS: "测试账号17" ,  //送达方地址
+      //       stockList:[
+      //         {OUTWHCODE: "YTR2", OUTWHNAME: "YTR2烟台H1库", isSelected: false},
+      //         {OUTWHCODE: "SDR2", OUTWHNAME: "SDR2济南H1库", isSelected: false},
+      //         {OUTWHCODE: "SDS2", OUTWHNAME: "SDS2济南H2库", isSelected: false},
+      //         {OUTWHCODE: "YTS2", OUTWHNAME: "YTS2烟台H股和中心2库", isSelected: false},
+      //         {OUTWHCODE: "YTT2", OUTWHNAME: "YTT2烟台H3库", isSelected: false},
+      //         {OUTWHCODE: "JNR2", OUTWHNAME: "JNR2济宁H1库", isSelected: false},
+      //         {OUTWHCODE: "JNS2", OUTWHNAME: "JNS2济宁H2库", isSelected: false},
+      //         {OUTWHCODE: "WFR2", OUTWHNAME: "WFR2潍坊H1库", isSelected: false},
+      //         {OUTWHCODE: "WFS2", OUTWHNAME: "WFS2潍坊H2库", isSelected: false},
+      //       ] ,    //调出库位列表
 
+      //       DH_PAYTO_TYPE: "00",   //付款方类型
+      //       DH_SALETO_NAME: "青岛鸿程永泰商贸有限公司",     //售达方编码 
+      //       DH_MAIN_CHANNEL_CODE: "M" ,   // 大渠道
+      //       DH_SUB_CHANNEL_CODE: "HA001",  //小渠道
+        
+      // });
+
+      }
     },
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
+      this.list = JSON.parse(JSON.stringify(this.list));
     },
 
     tabClick(tabs, tab, index) {

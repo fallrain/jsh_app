@@ -1,32 +1,58 @@
 <template>
   <view class="jFailureOrderItem">
     <view class="jFailureOrderItem-head">失败订单</view>
-    <view class="jFailureOrderItem-cnt j-flex-aic mt16">
-      <view class="jFailureOrderItem-cnt-portrait">
-        <image src="@/assets/img/goods/example-fridge.jpg"></image>
-      </view>
-      <view class="jFailureOrderItem-cnt-right">
-        <view class="j-goods-title">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀品质家用静音全自动10KG洗烘一体高温杀品质</view>
-        <view class="jFailureOrderItem-cnt-price-wrap j-flex-aic">
-          <view class="jFailureOrderItem-cnt-price">¥ 3456.00</view>
-          <view class="jFailureOrderItem-cnt-text ml14">*2</view>
+    <view
+      v-for="(goods,index) in orderItem.splitOrderDetailList"
+      :key="index"
+      class="jFailureProductItem">
+      <view
+        v-if="goods.splitOrderProductList"
+        class="jFailureOrderItem-cnt j-flex-aic mt16">
+        <view class="jFailureOrderItem-cnt-portrait">
+          <image
+            :src="goods.splitOrderProductList[0].productImageUrl">
+          </image>
+        </view>
+        <view class="jFailureOrderItem-cnt-right">
+          <view class="j-goods-title">
+            {{goods.splitOrderProductList[0].productName}}
+          </view>
+          <view class="jFailureOrderItem-cnt-price-wrap j-flex-aic">
+            <view class="jOrderConfirmItem-detail-cnt-price">
+              ¥{{goods.splitOrderProductList[0].price}}
+              <view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">
+                *{{goods.splitOrderProductList[0].storeNum}}</view>
+            </view>
+          </view>
         </view>
       </view>
     </view>
     <view class="jFailureOrderItem-btm mt24">
-      失败原因：此版本已经没有可用数量，无法保存，请查看开单记录。
+      失败原因：{{orderItem.composeEnableMsg}}
     </view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'JFailureOrderItem'
+  name: 'JFailureOrderItem',
+  props: {
+    // 单个失败订单
+    orderItem: {
+      type: Object,
+      default: () => {}
+    },
+    // 索引
+    index: {
+      type: Number
+    }
+  },
 };
 </script>
 
 <style lang="scss">
   .jFailureOrderItem {
+    margin-bottom: 16px;
     padding: 24px;
     background: #fff;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);

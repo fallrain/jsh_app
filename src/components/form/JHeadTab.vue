@@ -48,6 +48,7 @@
       @showChange="tabPickerShowChange"
       v-model="pickerItem.children"
       @change="tabPickerChange"
+      @confirm="confirmPup"
     >
     </j-head-tab-picker>
   </view>
@@ -67,54 +68,14 @@ export default {
     tabs: {
       type: Array,
       default: () => []
-    }
+    },
+    popTabs: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
-      popTabs: [
-        {
-          name: '品牌',
-          show: false,
-          children: [
-            {
-              name: '海尔',
-              checked: false
-            },
-            {
-              name: '卡萨帝',
-              checked: false
-            },
-            {
-              name: '统帅',
-              checked: false
-            },
-            {
-              name: '摩卡',
-              checked: false
-            },
-            {
-              name: 'GE',
-              checked: false
-            },
-            {
-              name: '超长品牌测试尼古拉斯海尔兄弟铁柱',
-              checked: false
-            }
-          ]
-        },
-        {
-          name: '类目',
-          show: false,
-        },
-        {
-          name: '一级类目',
-          show: false,
-        },
-        {
-          name: '二级类目',
-          show: false,
-        }
-      ],
       // 扩展
       isExpend: false
     };
@@ -132,6 +93,9 @@ export default {
       /* tag tab 点击事件 */
     },
     showSecondCategory(item) {
+      this.popTabs.forEach((inf) => {
+        inf.show = false;
+      });
       /* 展示二级类目 */
       item.show = !item.show;
       this.isExpend = item.show;
@@ -140,7 +104,22 @@ export default {
       this.isExpend = show;
     },
     tabPickerChange(children, index) {
+      /* 整车专用：拼车跟基地只能选一 */
+      if (index === 0) {
+        this.popTabs[1].children.forEach((v) => {
+          v.checked = false;
+        });
+      }
+      if (index === 1) {
+        this.popTabs[0].children.forEach((v) => {
+          v.checked = false;
+        });
+      }
+      /* 整车专用：拼车跟基地只能选一 */
       this.popTabs[index].children = children;
+    },
+    confirmPup(index) {
+      this.$emit('tabconfirmPup', this.popTabs, index);
     }
   }
 };

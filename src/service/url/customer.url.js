@@ -12,6 +12,8 @@ const urls = {
   addInterestProduct: '/customer/addInterestProduct',
   // 取消收藏
   removeInterestProduct: '/customer/removeInterestProduct',
+  // 余额支付信息
+  inquire: '/customers/payerBalanceList/inquire',
   // 获取售达方信息
   getCustomer: '/customers/auxiliary/customer',
   // 获取送达方信息
@@ -19,7 +21,13 @@ const urls = {
   // 获取送达方信息
   getWarehouse(code) {
     return `/cloud/${code}/warehouse?warehouseFlag=YD`;
-  }
+  },
+  // 获取付款方列表
+  getcustomersList(code) {
+    return `/customers/${code}/payer`;
+  },
+  
+
 };
 util.addPrefix(baseURL, urls);
 export default urls;

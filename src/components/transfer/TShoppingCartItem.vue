@@ -2,7 +2,7 @@
   <view class="tShoppingCartItem">
       <!-- 头部 -->
     <view class="tShoppingCartItem-head">
-      <view
+      <view 
         class="tShoppingCartItem-cnt-check"
         @tap="choose"
       >
@@ -19,7 +19,7 @@
       </view>     
       <view>
           <text class="tShoppingCartItem-head-text">装车体积:</text>
-          <text class="tShoppingCartItem-head-volume">({{Math.round(list.data.IBR_JSTIJI/15*100)}})%</text>
+          <text class="tShoppingCartItem-head-volume">{{Math.round(list.data.IBR_JSTIJI/15*100)}}%</text>
       </view>     
     </view>
     <!-- 产品列表 -->
@@ -40,17 +40,39 @@
           </view>
            <view class="tShoppingCartItem-btm-version">
             <view  
-              class="tShoppingCartItem-cnt-price-inf-picker" 
-              @tap="showPayer"
+              class="tShoppingCartItem-cnt-price-inf-picker"
             >
               <view class="tShoppingCartItem-cnt-price-inf-mrr">付款方</view>
-              <i class="iconfont iconxia"></i>
+              <i 
+                class="iconfont iconxia"
+                :class="[
+                  item.isExpand && 'reverse'
+                ]"
+                @tap="showPayer(item,index)"
+              ></i>
+              <view class="tShoppingCartItem-cnt-price-info" v-show="item.isExpand ">
+                <view class="tShoppingCartItem-cnt-price-info-li"
+                  v-for="(it,index) in list.data.payer"
+                  :key="index"
+                  :class="[it.isChecked && 'active']"
+                  @tap="togglePayer(item, it, index)" 
+                >
+                ({{it.payerCode}}){{it.payerName}}
+                </view>
+              </view>
               <view class="tShoppingCartItem-cnt-price-inf-item">{{item.IBL_PAYMONEYNAME}}</view>
             </view>
           </view>
         </view>  
-        <view class="tShoppingCartItem-head-close iconfont iconcross"></view>
-        <view :class="['tShoppingCartItem-cnt-like iconfont',list.checked ? 'iconicon3':'iconshoucang1']"></view>
+        <view 
+          class="tShoppingCartItem-head-close iconfont iconcross"
+          @tap="deleteShoppingCart(item)"
+        ></view>
+        <!-- <i 
+          :class="['tShoppingCartItem-cnt-like', 'iconfont', item.$favorite ? 'iconicon3':'iconshoucang']"
+          @tap="addFavorite(item)"
+        /> -->
+       
      </view>
      <view class="tShoppingCartItem-cnt-price-foottotal">
       <view class="tShoppingCartItem-cnt-price-total">
@@ -61,12 +83,20 @@
         <text class="tShoppingCartItem-cnt-price-subtotal mla">小计： </text>
         <text class="tShoppingCartItem-cnt-price-subprice mlb"> ¥ {{item.SUMMONEY}}</text>   
       </view>
-      <uni-number-box></uni-number-box>     
+      <uni-number-box 
+        :value="item.IBL_NUM" 
+        :max="Number(item.IBL_MAXNUM)" 
+        :disabled="Number(item.IBL_MAXNUM) === 0"
+        @change="changeNum($event, item)"
+        ></uni-number-box>     
      </view>
     </view>
     <view class="tShoppingCartItem-btm">
       <view class="tShoppingCartItem-btm-text">        
-        <text><i class="iconfont iconxiangqing tShoppingCartItem-btm-text-icon "></i>点击查看详情</text>
+        <view class="tShoppingCartItem-btm-detail" @tap="goTransferDetail(list.data.IBR_SEQ,list)">
+          <i class="iconfont iconxiangqing tShoppingCartItem-btm-text-icon "></i>
+          点击查看详情
+        </view>
         <text class="tShoppingCartItem-btm-text-cata">总计总额： </text>
         <text class="tShoppingCartItem-btm-text-price"> ¥{{list.data.SUMMONEY}}</text>  
       </view>
@@ -77,14 +107,21 @@
 
 <script>
 import {
-  uniNumberBox
+  uniNumberBox,uniPopup
 } from '@dcloudio/uni-ui';
 import './css/TShoppingCartItem.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'TShoppingCartItem',
   components: {
-    uniNumberBox
+    uniNumberBox,
+    uniPopup
   },
   props: {
     // 商品数据
@@ -100,38 +137,148 @@ export default {
     allPrice: {
       type: Object,
       default: () => {}
+    },
+    isShowpayer: {
+      type: Boolean
     }
   },
   data() {
     return {
-      // 是否显示版本规格
-      isShowSpecifications: false,
       isShowPayer: false,
+      // 显示收藏
+      queryCustomer:[]
 
     };
+  },
+  created(){
+  },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
   },
   methods: {
     choose() {
       /* 选中本商品 */
       const {
         checked,data
-      } = this.goods;
-      this.goods.checked = !checked;
+      } = this.list;
+      console.log(this.list)
+      this.list.checked = !checked;
+      this.isShowpayer = true
       console.log(data)
-      this.$emit('change', this.goods, this.index);
+      this.$emit('change', this.list, this.index,this.isShowpayer);
     },
-    isCreditModeChange() {
-      /* switch change */
-      this.$emit('change', this.goods, this.index);
-    },
-    showSpecifications() {
-      /* 显示版本规格 */
-      this.isShowSpecifications = true;
-    },
-    showPayer() {
+    showPayer(item) {
       // 显示付款方
-      this.isShowPayer = true;
+      console.log(this.list.data)
+      item.isExpand = !item.isExpand
+      console.log(item.isExpand)
+      this.$emit('change', this.list, item, this.index);
+    },
+    // addFavorite(goods) {
+    //   if(goods.$favorite) {
+    //     confirm("确定取消收藏吗")
+    //     // 取消收藏
+    //      const removeInterest = this.customerService.removeInterestProduct({
+    //       customerCode: "8700010462",
+    //       account: "8700010462",
+    //       productCodeList: [goods.GBID]
+    //     });
+
+    //   } else {
+    //     // 添加收藏
+    //      const addInterest = this.customerService.addInterestProduct({
+    //       customerCode: "8700010462",
+    //       account: "8700010462",
+    //       productCode: goods.GBID
+    //     });
+    //   }
+    //   goods.$favorite = !goods.$favorite
+    //   console.log(goods)
+    // },
+    async changeNum(value, item) {
+      if (value !== item.IBL_NUM) {
+        const result = await this.transfergoodsService.updateOrderQty({
+          timestamp: Date.parse(new Date()),
+          dhSeq: this.list.data.IBR_SEQ,
+          korderNo: item.IBL_KORDERNO,
+          longfeiUSERID: this.userInf.saletoCode,
+          qty: value
+        });
+        if(result.code === "1") {
+            // 价格修改
+            item.IBL_NUM = value
+            item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE)
+            let sum = 0
+            this.list.data.orderList.forEach(ele => {
+              sum += Number(ele.SUMMONEY)
+            })
+            console.log(sum)
+           this.list.data.SUMMONEY = sum.toFixed(2)
+           this.$emit("query")
+        }
+      }   
+    },
+    goTransferDetail(seq,list) {
+      console.log(list)
+       uni.navigateTo({
+         url: '/pages/transferGoods/transferDetail?IBR_SEQ='+ seq + '&list='+ JSON.stringify(list)
+      })    
+    },
+    async deleteShoppingCart(item) {
+
+      // 删除购物车订单
+      const deleteOrder = await this.transfergoodsService.deleteOrderForm ({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode,
+        KORDERNO: this.list.data.IBR_SEQ,
+      });
+      if(deleteOrder.code === "1") {
+        this.$emit("query")
+        this.$emit("getNum")
+      }
+    },
+    // 切换付款方
+    async togglePayer(item, it, index) {
+      const upDHPay = await this.transfergoodsService.upDHPayMoney ({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode,
+        ACTPRICE: item.ADVICEPRICE,  //执行价格
+        BATERATE: item.BATERATE,     //扣率
+        ISFL: item.IBL_ISFL,   //返利类型
+        ISKPO: item.IBL_ISKPO,   //商空标志
+        KORDERNO: item.IBL_KORDERNO,   //运单号
+        QTY: item.IBL_NUM,   //  
+        PAYTO: it.payerCode,   //付款方编码
+        PAYTONAME: it.payerName,   //付款方名称
+        PROCODE: "",   //工程单号
+        PROLOSSMONEY: "",   //工程单台损失
+        RETAILPRICE: item.ADVICEPRICE,   //零售价
+        UNITPRICE: item.ADVICEPRICE,   //单价
+        RELOSERATE: "0.0000",   //折扣
+        VERCODE: "",   //  特价版本号
+        VERMONEY: "",   //特价单台差额
+        REBATEMONEY: item.BATEMONEY,   //台返
+        IBL_PAYTO_TYPE: it.payerType,   //付款方类型
+      })
+      if(upDHPay.code === "1" ) {
+          
+          this.list.data.payer.map(v => {
+              v.isChecked = false
+            })  
+          item.isExpand = !item.isExpand
+          it.isChecked = true
+          console.log(item)
+          item.IBL_PAYMONEYNAME = "(" + it.payerCode + ")" + it.payerName
+          console.log(item.isChecked)
+        this.$emit('change', this.list, item, this.index);
+        this.$emit('calBalance')
+      }
+
+
     }
+
   }
 };
 </script>

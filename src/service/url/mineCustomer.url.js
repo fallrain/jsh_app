@@ -15,7 +15,7 @@ const urls = {
   productRemoveInter: '/customer/removeInterestProduct', // 商品详情-取消关注
   // 基本信息-交易权限、市场秩序、样品机权限
   getCustomerBasicInformation(code) {
-    return `/getCustomerBasicInformation/${code}`; 
+    return `/getCustomerBasicInformation/${code}`;
   },
   // 基本信息-整车权限、金融服务
   getZhengCheAndFinancialDto(code) {

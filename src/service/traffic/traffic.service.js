@@ -2,6 +2,7 @@ import urls from '../url/traffic.url';
 import {
   jGet
 } from '@/lib/request';
+import url from '../url/productDetail.url';
 
 export default {
   getXYQuota(data) {
