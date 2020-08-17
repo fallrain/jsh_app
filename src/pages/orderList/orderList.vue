@@ -93,7 +93,7 @@ export default {
   methods: {
     async orderList(e, pgNo) {
       const code2 = this.userInf.customerCode;
-      const { code, data } = await this.orderServer.orderList({
+      const { code, data } = await this.orderService.orderList({
         jshi_order_channel: 'ZY',
         jshi_saleto_code: code2,
         orderStatusSelf: e,
