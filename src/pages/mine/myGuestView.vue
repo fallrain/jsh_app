@@ -407,6 +407,10 @@ export default {
   // 监控data中的数据变化
   watch: {
     index(newVal) {
+      uni.pageScrollTo({
+        scrollTop: 0,
+        duration: 10
+      });
       switch (newVal) {
         case '1':
           this.getCustomerSigned();

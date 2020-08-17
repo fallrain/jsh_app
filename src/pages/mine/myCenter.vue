@@ -3,11 +3,18 @@
     <!-- 顶部背景 -->
     <view class="topView">
       <!-- 设置 -->
-      <view class="set" @click='setClick'>设置</view>
+      <view
+        @click='setClick'
+        class="iconfont iconshezhi mineCenter-set"
+      >
+      </view>
       <!-- 头像栏 -->
       <view class="headerRow">
         <!-- 头像 -->
-        <view @click="sdfClick" class="headerImage"></view>
+        <view
+          @click="sdfClick"
+          class="headerImage"
+        ></view>
         <view>
           <view class="nameAndPosion">
             <!-- 姓名职位 -->
@@ -304,12 +311,13 @@ export default {
   }
 
   .topView {
+    position: relative;
     width: 750px;
     height: 398px;
     background: url('./image/top.png') no-repeat;
     background-size: 100%;
-    background-position: 0px -25px;
-    padding-top: 20px;
+    background-position: 0 -25px;
+    padding-top: 54px;
   }
 
   .set {
@@ -360,6 +368,7 @@ export default {
   }
 
   .moneyArea {
+    position: relative;
     width: 718px;
     height: 194px;
     background: url('./image/money-bg.png') no-repeat;
@@ -540,6 +549,15 @@ export default {
   .bottom {
     height: 84px;
     background: rgba(245, 245, 245, 1);
+  }
+
+  .mineCenter-set {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 34px;
+    color: #fff;
+    font-weight: 600;
   }
 
 </style>
