@@ -164,6 +164,9 @@ export default {
       vehicleList: [], // 整车列表信息
       total: 0, // 整车列表总数
       pageNo: 1, // 整车列表当前页数
+      jdCode: '', // 加购参数
+      jdName: '', // 加购参数
+      jdICCCode: '', // 加购参数
       FHJD: [], // 选中的发货基地
       JDPC: [], // 选中的基地拼车
       PSLX: [], // 选中的配送类型
@@ -180,11 +183,30 @@ export default {
       userInf: USER.GET_USER
     }),
   },
+  onLoad(options) {
+    console.log('SSSSSEEEEE');
+    console.log(options.SEQ);
+    if (options.SEQ && options.SEQ !== undefined) {
+      this.SEQ = options.SEQ;
+    } else {
+      this.queSeq();
+    }
+  },
   created() {
     this.queryBaseCode(); // 基地
     this.queryCarNum(); // 整车购物车数量查询
   },
   methods: {
+    async queSeq() {
+      const timetamp = new Date().valueOf();
+      const typee = 'ZY';
+      const { code, data } = await this.vehicleService.queryNewSeq(timetamp, typee);
+      if (code === '1') {
+        console.log('整车加购物车获取的SEQ');
+        console.log(data.data);
+        this.SEQ = data.data;
+      }
+    },
     async queryCarNum() {
       const timetamp = new Date().valueOf();
       const longfeiUSERID = this.userInf.customerCode;
@@ -519,48 +541,61 @@ export default {
       /* 商品加购物车change */
       console.log(item);
       console.log(index);
+      console.log(this.FHJD);
+      console.log(this.JDPC);
+      console.log(this.FHJD.length);
+      if (this.FHJD.length !== 0) {
+        this.jdCode = this.FHJD.ICC_JDCODE;
+        this.jdName = this.FHJD.ICC_JDNAME;
+        this.jdICCCode = this.FHJD.ICC_JDCODE;
+      } else {
+        this.jdCode = this.JDPC.ICC_JDCODE;
+        this.jdName = this.JDPC.ICC_JDNAME;
+        this.jdICCCode = this.JDPC.jdInvsort[0].ISBP_BASEID;
+      }
+      const timetamp = new Date().valueOf();
       const { code, data } = await this.vehicleService.addToCart({// 加入整车购物车
-        ACTPRICE: 3299,
-        ADVICEPRICE: 3299,
-        BATERATE: 0,
+        ACTPRICE: item.$PtPrice.supplyPrice,
+        ADVICEPRICE: item.$PtPrice.supplyPrice,
+        BATERATE: item.$PtPrice.rebateRate,
         CARCODE: this.ZCLX.carCode,
         CUSTUMER_TYPE: 'ZY',
         HeightLimit: this.curChoseDeliveryAddress.info.ISXG,
         IBL_LOSSRATE: 0,
         IBL_PAYTO_TYPE: '00',
         IBL_TFSUMPRICE: 0,
-        IBR_JDPC_JDCODENAME: '黄岛(HD10)',
+        IBR_JDPC_JDCODENAME: this.jdName,
         IBR_ORDERCHANNEL: 'M',
         IBR_SOLDTO_NAME: '青岛鸿程永泰商贸有限公司',
         IBR_SUBCHANNEL: 'HA001',
         IBR_YCFLAG: this.PSLX.sendWayCode === 'T' ? 'JSHSW' : '',
-        ICC_JDCODE: 'HD10',
+        ICC_JDCODE: this.jdICCCode,
         IMG: item.searchImage,
         INVCODE: item.code,
         INVSORT: item.group,
-        INVSTD: item.module,
-        ISFL: 1,
+        INVSTD: item.name,
+        ISFL: 0,
         ISHeightFLAG: this.switchType ? 'Y' : 'N',
         ISKPO: 0,
-        JDPC_JDCODE: 'HD10',
+        JDPC_JDCODE: this.jdCode,
         JIDICAI: 'dicai',
         MKTID: '12A02',
-        NUM: 50,
+        NUM: 1,
         PRODUCT_MODEL: item.module,
         PRO_BAND: item.brand,
         SENDTO: this.curChoseDeliveryAddress.info.addressCode,
         SENDTONAME: this.curChoseDeliveryAddress.info.addressName,
         SENDTO_ADDRESS: this.curChoseDeliveryAddress.info.address,
         SEQ: this.SEQ,
-        UNITPRICE: '3299.00',
+        UNITPRICE: item.$PtPrice.invoicePrice.toString(),
         USERID: this.userInf.customerCode,
         YJMFID: 'B1001312',
         ZCDeliveryType: this.PSLX.sendWayCode,
         ZCDeliveryTypeName: this.PSLX.sendWay,
-        ZCTYPECODE: 'PTZC',
-        ZCTYPENAME: '普通整车',
+        ZCTYPECODE: this.ZCLX.carType,
+        ZCTYPENAME: this.ZCLX.carTypeName,
         farWeekCode: '',
-        timestamp: 1597313810774
+        timestamp: timetamp
       });
       if (code === '1') {
         if (data.length > 0) {

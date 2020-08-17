@@ -14,7 +14,7 @@
         </view>
         <view class="v-c-i-flox7">
           <text class="v-c-i-head-text">装车体积：</text>
-          <text class="v-c-i-head-volume">97%</text>
+          <text class="v-c-i-head-volume">{{tiji()}}</text>
         </view>
         <view class="v-c-i-flox1 iconfont iconxia v-c-i-iconxia"></view>
       </view>
@@ -43,9 +43,9 @@
       </view>
       <view class="v-c-i-cnt-foot">
         <view class="v-c-i-flox4">
-          <text class="v-c-i-cnt-check"> 210</text>
+          <text class="v-c-i-cnt-check"> {{item.IBL_MINNUM==='0' ? '1' : item.IBL_MINNUM}}</text>
           <text class="v-c-i-cnt-foot-text">件起售 | 限购</text>
-          <text class="v-c-i-cnt-check"> 2100</text>
+          <text class="v-c-i-cnt-check"> {{item.IBL_MAXNUM}}</text>
         </view>
         <view class="v-c-i-flox4">
           <text class="v-c-i-cnt-foot-text">小计： </text>
@@ -62,7 +62,7 @@
       </view>
       <view class="v-c-i-flox5">
         <text class="v-c-i-cnt-foot-text">总计总额： </text>
-        <text class="v-c-i-cnt-foot-value"> ¥22383945.12</text>
+        <text class="v-c-i-cnt-foot-value"> ¥{{goods.SUMMONEY}}</text>
       </view>
     </view>
   </view>
@@ -98,6 +98,11 @@ export default {
     };
   },
   methods: {
+    tiji() {
+      const zhuangChe = (this.goods.IBR_JSTIJI * 1).toFixed(2);
+      const baifenbi = (zhuangChe / (this.goods.IBR_MAXTJ * 1)).toFixed(2) * 100;
+      return `${baifenbi}%`;
+    },
     choose() {
       /* 选中本商品 */
       const { checked, data } = this.goods;

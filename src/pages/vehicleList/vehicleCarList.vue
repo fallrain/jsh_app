@@ -78,10 +78,6 @@ export default {
       failureGoodsList: []
     };
   },
-  onLoad(options) {
-    this.SEQ = options.SEQ;
-    console.log(options.SEQ);
-  },
   created() {
     this.queryCarList(); // 整车购物车列表查询
   },
