@@ -103,6 +103,14 @@
 
 <script>
 
+import {
+  USER
+} from '../../store/mutationsTypes';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
+
 export default {
   name: 'myCenter',
   components: {},
@@ -210,14 +218,21 @@ export default {
   created() {
     this.setPageInfo();
   },
-  mounted() {
-    this.auxiliaryFun('2110', '1');
-    this.outstandingAmountFun('8700010462');
+  computed: {
+    ...mapGetters({
+      [USER.GET_SALE]: USER.GET_SALE,
+      userInf: USER.GET_USER,
+    })
   },
   methods: {
+    ...mapActions([
+      USER.UPDATE_SALE_ASYNC
+    ]),
     setPageInfo() {
       this.getUserInfoByToken();
       this.getSaleInfo();
+      this.auxiliaryFun('2110', '1');
+      this.outstandingAmountFun();
     },
     async getUserInfoByToken() {
       /* 获取用户信息 */
@@ -231,10 +246,10 @@ export default {
     },
     async getSaleInfo() {
       /* 获取售达方信息 */
-      const { code, data } = await this.customerService.getCustomer();
-      if (code === '1') {
-        this.saleInfo = data || {};
+      if (!this[USER.GET_SALE] || JSON.stringify(this[USER.GET_SALE]) === '{}') {
+        await this[USER.UPDATE_SALE_ASYNC]();
       }
+      this.saleInfo = this[USER.GET_SALE] || {};
     },
     // 付款方余额
     async payerBalanceListFun(param) {
@@ -251,20 +266,18 @@ export default {
       }
       this.accountTotal = this.accountTotal.toFixed(2);
     },
-    // 付款方列表
     async auxiliaryFun(salesGroupCode, status) {
-      console.log('auxiliaryFun');
+      /* 付款方列表 */
       const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status);
       if (code === '1') {
         this.auxiliary = data;
         this.payerBalanceListFun(data);
       }
     },
-    // 返利
-    async outstandingAmountFun(uid) {
-      console.log('outstandingAmount');
+    async outstandingAmountFun() {
+      /* 返利 */
       const param = {
-        ccusCode: uid,
+        ccusCode: this.userInf.customerCode,
         endDate: '',
         iqueren: '',
         productCode: '',

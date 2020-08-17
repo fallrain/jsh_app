@@ -279,8 +279,8 @@ status: "正常" -->
         <view class="dis-flex">
           <view class="companyImage"></view>
           <view>
-            <view class="fifthPageRight">（8800342633）</view>
-            <view class="fithPageTitle">青岛鸿程永泰商贸有限公司</view>
+            <view class="fifthPageRight">（{{saleInf.customerCode}}）</view>
+            <view class="fithPageTitle">{{saleInf.customerName}}</view>
           </view>
         </view>
         <view class="breakLine"></view>
@@ -336,6 +336,7 @@ status: "正常" -->
 
 import JTab from '../../components/common/JTab';
 import {
+  mapActions,
   mapGetters
 } from 'vuex';
 import {
@@ -399,12 +400,9 @@ export default {
       accountTotal: '',
     };
   },
-  computed: {
-    ...mapGetters({
-      userInf: USER.GET_USER
-    }),
+  created() {
+    this.setPageInfo();
   },
-  // 监控data中的数据变化
   watch: {
     index(newVal) {
       uni.pageScrollTo({
@@ -418,11 +416,11 @@ export default {
         case '2':
           this.getBranchInformation();
           break;
-          // 送达方信息
+        // 送达方信息
         case '3':
           this.customersFun();
           break;
-          // 付款方列表
+        // 付款方列表
         case '4':
           this.auxiliaryFun(2110, 1);
           break;
@@ -431,8 +429,11 @@ export default {
       }
     }
   },
-  created() {
-    this.setPageInfo();
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER,
+      saleInf: USER.GET_SALE
+    }),
   },
   onLoad(option) {
     this.index = option.index;
@@ -450,12 +451,22 @@ export default {
     this.tabs = tmpTabs;
   },
   methods: {
+    ...mapActions([
+      USER.UPDATE_SALE_ASYNC
+    ]),
     setPageInfo() {
+      this.getSaleInfo();
       this.getOrderMonthSummery();
       this.getCustomerBasicInformation();
       this.getZhengCheAndFinancialDto();
       this.getCustomerSigned();
       this.getBranchInformation();
+    },
+    async getSaleInfo() {
+      /* 获取售达方信息 */
+      if (!this[USER.GET_SALE] || JSON.stringify(this[USER.GET_SALE]) === '{}') {
+        await this[USER.UPDATE_SALE_ASYNC]();
+      }
     },
     async getOrderMonthSummery() {
       /* 获取基本信息-订单交易状态 */
