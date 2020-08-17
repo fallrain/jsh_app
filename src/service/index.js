@@ -12,6 +12,7 @@ import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
 import samplemachineService from './samplemachine/samplemachine.service';
 import vehicleService from './vehicleList/vehicleList.service';
+import authService from './auth/auth.service';
 
 export default {
   install(Vue) {
@@ -44,5 +45,7 @@ export default {
     Vue.prototype.trafficService = trafficService;
     // 整车列表等功能
     Vue.prototype.vehicleService = vehicleService;
+    // 权限相关服务
+    Vue.prototype.authService = authService;
   }
 };
