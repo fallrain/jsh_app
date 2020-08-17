@@ -89,11 +89,15 @@ function jSend(option) {
           showError(data.msg, statusCode);
         }
       },
-      fail() {
+      fail(e) {
         if (!cfg.noLoading) {
           uni.hideLoading();
         }
-        showError('请求失败');
+        let msg = '请求失败';
+        if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
+          msg = '请求超时';
+        }
+        showError(msg);
         return resolve({
           code: '-1'
         });

@@ -41,8 +41,12 @@
     <view
         class="addWx"
         @click="addWX"
-      >+ 添加绑定微信
-      </view>
+      >
+      + 添加绑定微信
+    </view>
+    <view>
+      小王的微信号
+    </view>
 
   </view>
 </template>
@@ -109,7 +113,6 @@ export default {
   }
   .leftTitle {
     font-size:34px;
-    font-family:PingFangSC-Regular,PingFang SC;
     font-weight:400;
     color:rgba(51,51,51,1);
     line-height:48px;
@@ -124,7 +127,6 @@ export default {
   }
   .addWx {
     font-size:36px;
-    font-family:PingFangSC-Regular,PingFang SC;
     font-weight:400;
     color:rgba(34,131,226,1);
     line-height:50px;

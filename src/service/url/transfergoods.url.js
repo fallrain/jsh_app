@@ -28,7 +28,6 @@ const urls = {
   submitDhOrder: '/defaultOrder/submitDhOrder'
 
 
-
 };
 util.addPrefix(baseURL, urls);
 export default urls;

@@ -11,10 +11,12 @@
 import orderListItem from '../../components/orderList/order-list-item';
 import JTab from '../../components/common/JTab';
 import {
-  ORDER
+  ORDER,
+  USER
 } from '../../store/mutationsTypes';
 import {
-  mapMutations
+  mapMutations,
+  mapGetters
 } from 'vuex';
 
 export default {
@@ -77,17 +79,23 @@ export default {
       pageNo: 1
     };
   },
+  computed: {
+    ...mapMutations([
+      ORDER.UPDATE_ORDER
+    ]),
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   created() {
     this.orderList(7, this.pageNo);
   },
   methods: {
-    ...mapMutations([
-      ORDER.UPDATE_ORDER
-    ]),
     async orderList(e, pgNo) {
-      const { code, data } = await this.orderServer.orderList({
+      const code2 = this.userInf.customerCode;
+      const { code, data } = await this.orderService.orderList({
         jshi_order_channel: 'ZY',
-        jshi_saleto_code: '8800012497',
+        jshi_saleto_code: code2,
         orderStatusSelf: e,
         pageNo: pgNo,
         pageSize: 10

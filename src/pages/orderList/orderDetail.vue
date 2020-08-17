@@ -40,8 +40,12 @@ import orderDetailInfo from '../../components/orderList/order-detail-info';
 import orderDetailBase from '../../components/orderList/order-detail-base';
 import orderDetailFlow from '../../components/orderList/order-detail-flow';
 import orderDetailFoot from '../../components/orderList/order-detail-foot';
-import { ORDER } from '../../store/mutationsTypes';
-import { mapGetters } from 'vuex';
+import {
+  ORDER
+} from '../../store/mutationsTypes';
+import {
+  mapGetters
+} from 'vuex';
 
 export default {
   name: 'orderDetail',
