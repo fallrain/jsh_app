@@ -33,5 +33,10 @@ export default {
     {
       noToast: true
     });
+  },
+  shoppingCart(uid) {
+    console.log('shoppingCart service');
+
+    return jGet(urls.shoppingCart(uid));
   }
 };

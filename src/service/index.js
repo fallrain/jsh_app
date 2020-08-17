@@ -12,6 +12,8 @@ import indexService from './index/index.service';
 import trafficService from './traffic/traffic.service';
 import samplemachineService from './samplemachine/samplemachine.service';
 import vehicleService from './vehicleList/vehicleList.service';
+import authService from './auth/auth.service';
+import cocService from './coc/coc.service';
 
 export default {
   install(Vue) {
@@ -31,7 +33,7 @@ export default {
     // 分类服务
     Vue.prototype.catalogServer = catalogServer;
     // 订单服务
-    Vue.prototype.orderServer = orderServer;
+    Vue.prototype.orderService = orderServer;
     // 购物车服务
     Vue.prototype.cartService = cartService;
     // 调货列表
@@ -44,5 +46,9 @@ export default {
     Vue.prototype.trafficService = trafficService;
     // 整车列表等功能
     Vue.prototype.vehicleService = vehicleService;
+    // 权限相关服务
+    Vue.prototype.authService = authService;
+    // todo 服务名待定
+    Vue.prototype.cocService = cocService;
   }
 };

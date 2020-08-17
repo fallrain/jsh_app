@@ -53,12 +53,12 @@
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>付款方
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
             </view>
-            <view @tap="showPayer(index)" class="jOrderConfirmItem-detail-mark-item-val">
-              <text v-if="currentPayer[index]">{{currentPayer[index].value}}</text>
+            <view @tap="showPayer(goods.orderNo)" class="jOrderConfirmItem-detail-mark-item-val">
+              <text v-if="currentPayer[goods.orderNo]">{{currentPayer[goods.orderNo].value}}</text>
               <text v-else>请选择付款方</text>
             </view>
           </view>
-          <view class="jOrderConfirmItem-detail-mark-item">
+          <view v-if="goods.splitOrderProductList[0].isBbOrProject" class="jOrderConfirmItem-detail-mark-item">
             <view class="jOrderConfirmItem-detail-mark-item-name">
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>备注信息
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
@@ -94,8 +94,8 @@
     <j-pop-picker
       title="付款方"
       :show.sync="payerPickerShow"
-      :options="payerOptions"
-      :choseOptions.sync="chosePayerOptions"
+      :options="payerOptions[currentOrderNo]"
+      :choseOptions.sync="currentchosePayerOption"
     ></j-pop-picker>
   </view>
 </template>
@@ -120,7 +120,12 @@ export default {
     // 索引
     index: {
       type: Number
-    }
+    },
+    // 付款方信息
+    payInfoData: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {
@@ -129,49 +134,66 @@ export default {
       // 配送地址显示隐藏
       payerPickerShow: false,
       // 配送地址options
-      payerOptions: [
-        {
-          key: 1,
-          value: '(88003222）青岛鸿程永泰商贸有限公司1',
-        },
-        {
-          key: 2,
-          value: '(88003222）青岛鸿程永泰商贸有限公司2',
-        },
-        {
-          key: 3,
-          value: '(88003222）青岛鸿程永泰商贸有限公司3',
-        },
-        {
-          key: 4,
-          value: '(88003222）青岛鸿程永泰商贸有限公司4',
-        }
-      ],
+      payerOptions: {},
       // 选中的
-      chosePayerOptions: [],
-      currentPayer: [],
-      currentIndex: 0,
+      chosePayerOptions: {},
+      currentchosePayerOption: [],
+      currentPayer: {},
+      currentOrderNo: ''
     };
   },
   onLoad() {
   },
   watch: {
-    chosePayerOptions(val) {
-      this.currentPayer[this.currentIndex] = this.payerOptions.find(v => v.key === val[0]);
-      // this.updateIndex++;
+    payInfoData(val) {
+      // 初始化地址信息
+      for (const key in this.payInfoData) {
+        let initcustomerCode = '';
+        this.payInfoData[key].forEach((item, index) => {
+          if (index === 0) {
+            initcustomerCode = item.customerCode;
+          }
+          item.key = item.customerCode;
+          item.value = `(${item.payerCode}) ${item.payerName}`;
+        });
+        // 设置付款列表
+        this.$set(this.payerOptions, key, this.payInfoData[key]);
+        // 设置初始化选中地址
+        this.currentchosePayerOption[0] = initcustomerCode;
+        this.$set(this.currentPayer, key, this.payInfoData[key][0]);
+      }
+      this.getPayerMoneyInfo();
+      console.log(this.payerOptions);
       console.log(this.currentPayer);
+      console.log(this.orderItem);
+    },
+    currentchosePayerOption(val) {
+      console.log(val);
+      console.log(this.currentOrderNo);
+      const currentPayer = this.payerOptions[this.currentOrderNo].find(v => v.customerCode === val[0]);
+      this.$set(this.currentPayer, this.currentOrderNo, currentPayer);
+      this.getPayerMoneyInfo();
     }
   },
   computed: {
   },
   methods: {
-    showPayer(index) {
-      this.currentIndex = index;
-      if (this.currentPayer[this.currentIndex]) {
-        this.$set(this.chosePayerOptions, 0, this.currentPayer[this.currentIndex].key);
-      } else {
-        this.chosePayerOptions = [];
-      }
+    getPayerMoneyInfo() {
+      const currentPayerMoneyInfo = {
+      };
+      this.orderItem.splitOrderDetailList.forEach((item) => {
+        const itemObj = {
+          totalMoney: item.totalMoney,
+          customerCode: this.currentPayer[item.orderNo].customerCode,
+          customerName: `(${this.currentPayer[item.orderNo].customerCode})${this.currentPayer[item.orderNo].customerName}`
+        };
+        currentPayerMoneyInfo[item.orderNo] = itemObj;
+      });
+      this.$emit('payerMoneyInfo', currentPayerMoneyInfo);
+    },
+    showPayer(currentOrderNo) {
+      this.currentOrderNo = currentOrderNo;
+      this.currentchosePayerOption[0] = this.currentPayer[currentOrderNo].key;
       /* 展示付款地址 */
       this.payerPickerShow = true;
     },

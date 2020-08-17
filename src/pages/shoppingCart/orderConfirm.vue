@@ -10,7 +10,9 @@
         :key="index"
         :index="index"
         @change="goodsChange"
+        @payerMoneyInfo="dealPayerMoneyInfo"
         :orderItem="orderItem"
+        :payInfoData.sync="payInfoData"
       ></j-order-confirm-item>
     </view>
     <view v-if="dataInfo.disableComposeProductList" class="mt24">
@@ -23,6 +25,7 @@
     </view>
     <view class="mt24">
       <j-overage-pay
+        :payerMoneyList="payerMoneyList"
       ></j-overage-pay>
     </view>
     <view class="orderConfirm-btm j-flex-aic">
@@ -348,7 +351,7 @@ export default {
                   saleModelList: null,
                   productEnable: 1,
                   productEnableMsg: null,
-                  isBbOrProject: false,
+                  isBbOrProject: true,
                   priceSource: null,
                   ylhCode: null,
                   storeNum: 1,
@@ -392,6 +395,8 @@ export default {
           }
         ]
       ],
+      // 付款信息
+      payInfoData: {},
       // 配送地址显示隐藏
       payerPickerShow: false,
       // 配送地址options
@@ -414,7 +419,11 @@ export default {
         }
       ],
       // 选中的
-      chosePayerOptions: []
+      chosePayerOptions: [],
+      // 所有订单的账户支付信息
+      totalPayerMoneyInfo: {},
+      // 余额支付信息
+      payerMoneyList: []
     };
   },
   onLoad() {
@@ -425,8 +434,33 @@ export default {
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
       console.log(this.dataInfo);
     });
+    this.getPayInfo();
   },
   methods: {
+    dealPayerMoneyInfo(payerMoneyInfoItem) {
+      this.totalPayerMoneyInfo = {
+        ...this.totalPayerMoneyInfo,
+        ...payerMoneyInfoItem
+      };
+      console.log(this.totalPayerMoneyInfo);
+      const payerList = [];
+      const payerObj = {};
+      for (const k in this.totalPayerMoneyInfo) {
+        console.log(this.totalPayerMoneyInfo[k]);
+        if (payerObj[this.totalPayerMoneyInfo[k].customerCode]) {
+          const totalmoney = parseFloat(payerObj[this.totalPayerMoneyInfo[k].customerCode].totalMoney)
+            + parseFloat(this.totalPayerMoneyInfo[k].totalMoney);
+          payerObj[this.totalPayerMoneyInfo[k].customerCode].totalMoney = this.jshUtil.formatFloat(totalmoney, 2);
+        } else {
+          payerObj[this.totalPayerMoneyInfo[k].customerCode] = this.totalPayerMoneyInfo[k];
+        }
+      }
+      for (const k in payerObj) {
+        payerList.push(payerObj[k]);
+      }
+      this.payerMoneyList = payerList;
+      console.log(payerList);
+    },
     goodsChange(list, index) {
       /* 商品 change */
       this.$set(this.dataInfo.composeProductList, index, list);
@@ -434,6 +468,38 @@ export default {
     showPayer() {
       /* 展示付款地址 */
       this.payerPickerShow = true;
+    },
+    getPayForm() {
+      const payFormArr = [];
+      this.dataInfo.composeProductList.forEach((item, index) => {
+        item.splitOrderDetailList.forEach((v) => {
+          const conditionItem = {
+            isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
+            orderNo: v.orderNo,
+            priceType: v.splitOrderProductList[0].priceType,
+            priceVersion: v.splitOrderProductList[0].priceVersion,
+            productCode: v.productCode,
+            productGroup: v.productCode,
+            saletoCode: this.dataInfo.saletoCode,
+            sendtoCode: this.dataInfo.sendtoCode,
+            yunCangFlag: '',
+          };
+          if (v.isTCTP) {
+            conditionItem.yunCangFlag = 'TCTP';
+          }
+          payFormArr.push(conditionItem);
+        });
+      });
+      console.log(payFormArr);
+      return payFormArr;
+    },
+    async getPayInfo() {
+      /* 获取支付信息 */
+      const condition = this.getPayForm();
+      const { code, data } = await this.orderServer.paytoInfo(condition);
+      if (code === '1') {
+        this.payInfoData = data;
+      }
     }
   }
 };

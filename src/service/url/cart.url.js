@@ -15,7 +15,14 @@ const urls = {
     account
   }) {
     return `/price/get/specialPrice/${saletoCode}/${sendtoCode}/${account}`;
-  }
+  },
+
+  // 售达方详细信息
+  shoppingCart(uid) {
+    console.log('shoppingCart url');
+    return `/shoppingCart/getNumberByValid/${uid}`;
+  },
+
 };
 util.addPrefix(baseURL, urls);
 export default urls;

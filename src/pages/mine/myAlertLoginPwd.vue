@@ -3,16 +3,22 @@
 
       <view class="topLine"></view>
       <view class="row">
-        <view class="title">手机号</view>
-        <input class="inputView" placeholder="请输入新手机号"></input>
+        <view class="title">登录密码</view>
+        <input class="inputView" placeholder="请输入登录密码"></input>
       </view>
 
       <view class="lineView"></view>
 
       <view class="row">
-        <view class="title">验证码</view>
-        <input class="inputView" placeholder="请输入验证码"></input>
-        <view class="authCode">发送验证码</view>
+        <view class="title">新密码</view>
+        <input class="inputView" placeholder="请输入支付密码"></input>
+      </view>
+
+      <view class="lineView"></view>
+
+      <view class="row">
+        <view class="title">确认密码</view>
+        <input class="inputView" placeholder="请输入支付密码"></input>
       </view>
 
       <button class="btnStyle">修改</button>

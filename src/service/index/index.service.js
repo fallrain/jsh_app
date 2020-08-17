@@ -4,7 +4,7 @@ import {
 } from '@/lib/request';
 
 export default {
- bannerList(data) {
+  bannerList(data) {
     /* 首页banner图 */
     return jGet(urls.bannerList, data);
   },

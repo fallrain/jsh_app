@@ -43,12 +43,25 @@ export default {
       type: Array,
       default: () => []
     },
+    // 选中的tab
+    activeItemName: {
+      type: String,
+      default: 'item0'
+    }
   },
   data() {
     return {
       scrollLeft: 0,
-      activeItemName: ''
+      selfActiveItemName: this.activeItemName
     };
+  },
+  watch: {
+    selfActiveItemName(val) {
+      this.$emit('update:activeItemName', val);
+    },
+    activeItemName(val) {
+      this.selfActiveItemName = val;
+    }
   },
   methods: {
     tabClick(item, index) {
@@ -84,7 +97,7 @@ export default {
       //     }
       //   }).exec();
       // });
-      this.activeItemName = `item${index}`;
+      this.selfActiveItemName = `item${index}`;
     }
   }
 };

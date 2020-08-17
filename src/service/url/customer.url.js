@@ -26,7 +26,7 @@ const urls = {
   getcustomersList(code) {
     return `/customers/${code}/payer`;
   },
-  
+
 
 };
 util.addPrefix(baseURL, urls);

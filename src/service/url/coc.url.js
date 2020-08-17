@@ -1,8 +1,9 @@
 import util from '../util/index';
 
-const baseURL = 'order';
+const baseURL = 'coc/api';
 const urls = {
-  paytoInfo: '/order/paytoInfo' // 付款方列表
+  // 区域代码?
+  getValueSync: '/v1/customers/valuesync/alter'
 };
 util.addPrefix(baseURL, urls);
 export default urls;
