@@ -4,7 +4,7 @@ import {
 } from '@/lib/request';
 
 export default {
-  addToCart(data) {
+  getUserInfoByToken(data) {
     /* 根据token获取用户信息 */
     return jGet(urls.getUserInfoByToken, data);
   },
