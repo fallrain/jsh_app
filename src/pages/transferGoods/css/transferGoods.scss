@@ -27,6 +27,15 @@
             margin:24px 24px 24px 0px;
         }
     }
+    .transfer-m {
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        min-height: 234px;
+        background: #F5F5F5;
+        z-index: 99;
+        
+    }
     .transferList-drawer {
     position: relative;
     height: 100%;

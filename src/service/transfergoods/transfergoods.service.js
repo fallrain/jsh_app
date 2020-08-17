@@ -30,8 +30,12 @@ export default {
     },
     
     deleteOrderForm(data) {
-        /* 商品删除列表 */
+        /* 购物车订单删除 */
         return jGet(urls.deleteOrderForm, data)
+    },
+    deleteProduct(data) {
+         /* 购物车订单删除 */
+         return jGet(urls.eleteProduct, data)
     },
     insertOrder(data) {
         /* 加入调货 */
@@ -47,7 +51,7 @@ export default {
     },
     submitDhOrder(data) {
         /* 提交订单 */
-        return jGet(urls.submitDhOrder, data)
+        return jPostJson(urls.submitDhOrder, data)
     }
 
 }

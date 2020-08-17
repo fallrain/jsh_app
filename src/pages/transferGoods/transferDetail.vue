@@ -9,18 +9,22 @@
       <!-- 调货商品列表 -->
       <transfer-detail-item
         @change="goodsChange"
-        :goods="detailList.orderList"
-        
+        :goods="detailList"
+        @delete="deleteProductMe"
+    
       >
       </transfer-detail-item>
     </view>
      <!--余额支付信息 -->
       <view class="mt24">
         <t-overage-pay
+        :payerbalance="balance"
         ></t-overage-pay>
       </view>
       <!-- 结算 -->
-      <transfer-detail-btm>
+      <transfer-detail-btm
+        :detailList="detailList"
+      >     
       </transfer-detail-btm>
     
 
@@ -33,6 +37,12 @@ import transferDetailAddress from '../../components/transfer/transferDetailAddre
 import transferDetailItem from '../../components/transfer/transferDetailItem';
 import transferDetailBtm from '../../components/transfer/transferDetailBtm';
 import TOveragePay from '../../components/transfer/TOveragePay';
+import {
+  mapGetters,mapMutations
+} from 'vuex';
+import {
+  USER,TRANSFER
+} from '../../store/mutationsTypes';
 import './css/transferDetail.scss'
 export default {
   name:'transferDetail',
@@ -45,52 +55,95 @@ export default {
   },
   data() {
     return {
+      // 调货传过来的数据
+      allList: [],
       // 调货订单信息
       detailList: [],
       // 订单产品列表
       goodsList: [],
        // 结算
       settlement: 0,
-      //   [
-      //     {
-      //       isCreditMode: false
-      //     },
-      //     {
-      //       isCreditMode: false
-      //     }
-      //   ]
-      // ],  
+      // 余额支付信息
+      balance:[],  
       // 选中的
       chosePayerOptions: []
     };
   },
-  methods: {
-    goodsChange(goods, index) {
+  computed: {
+    ...mapGetters({
+      TSHOPCART:TRANSFER.GET_TSHOPCART,
+      userInf: USER.GET_USER     
+    }),
+    goodsChange(goods, good, index) {
       console.log(goods)
       /* 商品 change */
       this.goodsList[index] = goods;
       this.goodsList = JSON.parse(JSON.stringify(this.goodsList));
     },
+  },
+  created() {
+    this.allList = this.TSHOPCART.allOrderList
+    this.detailList =  this.allList.data;
+    this.balance =  this.allList.data.payerBalance;
+    console.log(this.detailList)
+    // this.goodsList = this[TRANSFER.GET_TSHOPCART].allOrderList.data
+  },
+  methods: {
+    ...mapMutations([
+      TRANSFER.UPDATE_TSHOPCART
+    ]),
     showPayer() {
       /* 展示付款地址 */
       this.payerPickerShow = true;
     },
-    findDetailList(seq,list) {
-       console.log(seq)
-      this.detailList = list.data
-      console.log(this.detailList)
-     
-      // this.goodsList = list.data.orderList
-      // console.log(this.goodsList)
+    async deleteProductMe(item) {
+      console.log(item)
+       // 删除购物车产品
+      const deleteOrder = await this.transfergoodsService.deleteProduct ({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode,
+        KORDERNO: item.IBL_KORDERNO,
+      });
+      if(deleteOrder.code === "1") {
+        console.log(deleteOrder.data)  
+
+        this.detailList.orderList.forEach((v,i) => {
+          if(v.IBL_KORDERNO === item.IBL_KORDERNO) {
+            this.detailList.orderList.splice(i,1)
+            this.detailList.SUMMONEY -=  v.SUMMONEY
+          }
+          // if(this.detailList.SUMMONEY === 0 )
+        })
+        console.log(this.detailList)
+        console.log(this.allList)
+
+      this[TRANSFER.UPDATE_TSHOPCART]({
+        allOrderList: this.allList,
+      });
+
+      // this.detailList = this.TSHOPCART.allOrderList.data;
+      // this.balance = this.TSHOPCART.allOrderList.data.payerBalance;
+      }
+
     },
-  },
-  onLoad(option){
-    console.log(option)
-    let { IBR_SEQ, list } = option
     
-    this.findDetailList(IBR_SEQ,JSON.parse(list))
+
+    // findDetailList(seq,list) {
+    //    console.log(seq)
+    //   this.detailList = list.data
+    //   console.log(this.detailList)
+     
+    //   // this.goodsList = list.data.orderList
+    //   // console.log(this.goodsList)
+    // },
+  },
+  // onLoad(option){
+    // console.log(option)
+    // let { IBR_SEQ, list } = option
+    
+    // this.findDetailList(IBR_SEQ,JSON.parse(list))
     // console.log(JSON.parse(list))
-}
+  // orderList}
     
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
   <view class="jOveragePay-wrap" v-show="isShowpayer">
-    <div class="jOveragePay-wrap-head j-flex-aic">
+    <view class="jOveragePay-wrap-head j-flex-aic">
       <view class="iconfont iconmoney jOveragePay-wrap-head-icon"></view>
       <view class="jOveragePay-wrap-head-text ml24">余额支付信息</view>
-    </div>
+    </view>
     <view class="jOveragePay-cnt"
       v-for="(payer,index) in payerBalance"
       :key="index"

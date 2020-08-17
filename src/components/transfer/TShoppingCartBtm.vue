@@ -7,7 +7,10 @@
       <view :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></view>
       <text :class="['tShoppingCartBtm-check-text',checked && 'active']">全选</text>
     </view>
-    <text class="tShoppingCartBtm-check-edit">编辑</text>
+    <text class="tShoppingCartBtm-check-edit" @tap="edit" v-show="!isShowClear">编辑</text>
+    <button class="tShoppingCartBtm-check-delete" type="button" @tap="editDelete" v-show="isShowClear">删除选中产品</button>
+    <button class="tShoppingCartBtm-check-cancel" @tap="cancel" v-show="isShowClear">取消</button>
+
     <view class="tShoppingCartBtm-text">
       已选中<text class="tShoppingCartBtm-text-highlight">{{allChooseNum}}</text>种
     </view>
@@ -20,6 +23,7 @@
       type="button"
       :class="['tShoppingCartBtm-btn',active ? 'background:red' : 'ackground:#ccc']"
       @tap="tlement"
+      v-show="!isShowClear"
     >结算
     </button>
   </view>
@@ -43,6 +47,11 @@ export default {
     allChooseNum: {
       type: Number,
       default: 0
+    },
+    // 显示隐藏编辑
+    isShowClear: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -56,9 +65,22 @@ export default {
       this.$emit('update:checked', checked);
       this.$emit('checkAll', checked);
     },
+    // 结算
     tlement() {
       this.$emit("query")
+    },
+    // 编辑
+    edit() {
+      this.$emit("edit")
+    },
+    // 删除选中的产品
+    editDelete() {
+      this.$emit("editDelete")
+    },
+    cancel() {
+      this.$emit("cancel")
     }
+
   }
 };
 </script>
@@ -108,6 +130,23 @@ export default {
     font-size: 24px;
     margin-left: 26px;
     margin-right: 30px;
+  }
+  
+  .tShoppingCartBtm-check-delete {
+    color: #fff;
+    font-size: 24px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: $theme-color;
+    border-radius: 40px;
+  }
+  .tShoppingCartBtm-check-cancel {
+    color: #fff;
+    font-size: 24px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: $theme-color;
+    border-radius: 40px;
   }
 
   .tShoppingCartBtm-text {

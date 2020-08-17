@@ -2,7 +2,7 @@
   <view class="transferDetailItem">
     <view
       class="transferDetailItem-wrap"
-      v-for="(good,index) in goods"
+      v-for="(good,index) in goods.orderList"
       :key="index"
     >
       <view
@@ -11,7 +11,7 @@
       >
         <view class="transferDetailItem-detail-odd">
           调货单号：<text class="transferDetailItem-detail-odd-num">{{good.IBL_KORDERNO}}</text>
-          <view class="transferDetailItem-detail-close iconfont iconcross"></view>
+          <view class="transferDetailItem-detail-close iconfont iconcross" @tap="deleteProduct(good)"></view>
         </view>
         <view class="transferDetailItem-detail-cnt">
           <view class="transferDetailItem-detail-cnt-img-wrap">
@@ -34,7 +34,23 @@
             </view>
             <view class="transferDetailItem-detail-cnt-version">
               <view class="transferDetailItem-detail-cnt-inf-mrr">付款方</view>
-              <i class="iconfont iconxia transferDetailItem-detail-cnt-inf-icon"></i>
+              <i 
+                class="iconfont iconxia"
+                :class="[
+                  good.isExpand && 'reverse'
+                ]"
+                @tap="showPayer(good,index)"
+              ></i>
+              <view class="transferDetailItem-cnt-price-info" v-show="good.isExpand ">
+                <view class="transferDetailItem-cnt-price-info-li"
+                  v-for="(it,index) in good.payer"
+                  :key="index"
+                  :class="[it.isChecked && 'active']"
+                  @tap="togglePayer(good, it, index)" 
+                >
+                ({{it.payerCode}}){{it.payerName}}
+                </view>
+              </view>
               <view class="transferDetailItem-detail-cnt-inf-item">{{good.IBL_PAYMONEYNAME}}</view>
             </view>
           </view>  
@@ -67,7 +83,7 @@
     </view>
     <view class="transferDetailItem-total">
       <view class="transferDetailItem-total-text ml48">共计金额:</view>
-      <view class="transferDetailItem-total-price ml20">¥ 3456.00</view>
+      <view class="transferDetailItem-total-price ml20">¥ {{goods.SUMMONEY}}</view>
     </view>
   </view> 
 </template>
@@ -76,6 +92,12 @@
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 import './css/transferDetailItem.scss';
 
 export default {
@@ -86,8 +108,8 @@ export default {
   props: {
     // 商品列表
     goods: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     },
     // 
     // 索引
@@ -104,6 +126,11 @@ export default {
     console.log(this.goods)
     // this.isCreditModeChange()
   },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
+  },
   methods: {
     // isCreditModeChange() {
     //   /* switch change */
@@ -114,15 +141,15 @@ export default {
       if(good.$favorite) {
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: "8700010462",
-          account: "8700010462",
+          customerCode: this.userInf.customerCode,
+          account: this.userInf.customerCode,
           productCodeList: [good.GBID]
         });
       } else {
         // 添加收藏
          const addInterest = this.customerService.addInterestProduct({
-          customerCode: "8700010462",
-          account: "8700010462",
+          customerCode: this.userInf.customerCode,
+          account: this.userInf.customerCode,
           productCode: good.GBID
         });
       }
@@ -139,19 +166,70 @@ export default {
       //   });
       //   if(result.code === "1") {
       //       // 价格修改
-      //       item.IBL_NUM = value
-      //       item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE)
-      //       let sum = 0
-      //       this.list.data.orderList.forEach(ele => {
-      //         sum += Number(ele.SUMMONEY)
-      //       })
-      //       console.log(sum)
-           
-      //      this.$emit("query")
+            item.IBL_NUM = value
+            item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE)
+            let sum = 0
+            this.goods.orderList.forEach(ele => {
+              sum += Number(ele.SUMMONEY)
+            })
+            console.log(sum)
+            this.goods.SUMMONEY = sum
+           this.$emit("change",value, item,this.goods.SUMMONEY)
       //   }
       // }
       
     },
+    // 删除单个产品
+    deleteProduct(item) {
+      this.$emit("delete",item)
+    },
+    showPayer(item) {
+      // 显示付款方
+      console.log(item)
+      item.isExpand = !item.isExpand
+      console.log(item.isExpand)
+      this.$emit('change', item, this.index);
+    },
+     // 切换付款方
+    async togglePayer(item, it, index) {
+      console.log(item)
+      const upDHPay = await this.transfergoodsService.upDHPayMoney ({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.userInf.saletoCode,
+        ACTPRICE: it.ADVICEPRICE,  //执行价格
+        BATERATE: item.BATERATE,     //扣率
+        ISFL: item.IBL_ISFL,   //返利类型
+        ISKPO: item.IBL_ISKPO,   //商空标志
+        KORDERNO: item.IBL_KORDERNO,   //运单号
+        QTY: item.IBL_NUM,   //  
+        PAYTO: it.payerCode,   //付款方编码
+        PAYTONAME: it.payerName,   //付款方名称
+        PROCODE: "",   //工程单号
+        PROLOSSMONEY: "",   //工程单台损失
+        RETAILPRICE: item.ADVICEPRICE,   //零售价
+        UNITPRICE: item.ADVICEPRICE,   //单价
+        RELOSERATE: "0.0000",   //折扣
+        VERCODE: "",   //  特价版本号
+        VERMONEY: "",   //特价单台差额
+        REBATEMONEY: item.BATEMONEY,   //台返
+        IBL_PAYTO_TYPE: it.payerType,   //付款方类型
+      })
+      if(upDHPay.code === "1" ) {
+         
+          item.payer.map(v => {
+              v.isChecked = false
+            })  
+          item.isExpand = !item.isExpand
+          it.isChecked = true
+          console.log(item)
+          item.IBL_PAYMONEYNAME = "(" + it.payerCode + ")" + it.payerName
+          console.log(item.isChecked)
+        this.$emit('change', item, it, this.index);
+        // this.$emit('calBalance')
+      }
+
+
+    }
 
   }
 };

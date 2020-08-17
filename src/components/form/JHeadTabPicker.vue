@@ -129,8 +129,8 @@ export default {
     border-bottom-right-radius: 10px;
     transform: translateY(-100%);
     transition: transform .3s;
+    margin-top: -1px
   }
-
   .jHeadTabPicker-btn-wrap {
     position: absolute;
     bottom: 0;
@@ -147,6 +147,8 @@ export default {
     font-size: 24px;
     text-align: center;
     border: 1px solid $theme-color;
+    border-top: none;
+    
   }
 
   .jHeadTabPicker-btn-default {

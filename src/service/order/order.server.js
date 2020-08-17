@@ -13,4 +13,7 @@ export default {
   paytoInfo(data) { // 付款方列表
     return jPostJson(urlNoApi.paytoInfo, data);
   },
+  send(data) { //调货验证码
+    return jPostJson(urlNoApi.send, data);
+  }
 };
