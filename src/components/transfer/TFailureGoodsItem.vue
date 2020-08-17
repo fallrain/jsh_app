@@ -14,16 +14,18 @@
             <text class="tFailureGoodsItem-cnt-head-text">{{order.PRODUCTNAME}}</text>
           </view>
           <view class="tFailureGoodsItem-cnt-btm">
-            <text class="tFailureGoodsItem-cnt-head-text">¥ {{order.SUMMONEY}}</text>
-            <text class="tFailureGoodsItem-cnt-head-inf-mrr">付款方</text>
-            <i class="iconfont iconxia" :class="[order.isExpand && 'reverse']" @tap="showPayer(order,index)"></i>
-            <view class="tFailureGoodsItem-cnt-price-info" v-show="order.isExpand">
-              <view class="tFailureGoodsItem-cnt-price-info-li" v-for="(it,index) in order.payer" :key="index"
-                    :class="[order.isChecked && 'active']" @tap="togglePayer(order, it, index)">
-                ({{it.payerCode}}){{it.payerName}}
+            <view class="tFailureGoodsItem-cnt-head-text">¥ {{order.SUMMONEY}}</view>
+            <view class="tFailureGoodsItem-cnt-head-inf-mrr">
+              付款方
+              <i class="iconfont iconxia" :class="[order.isExpand && 'reverse']" @tap="showPayer(order,index)"></i>
+              <view class="tFailureGoodsItem-cnt-price-info" v-show="order.isExpand">
+                <view class="tFailureGoodsItem-cnt-price-info-li" v-for="(it,index) in order.payer" :key="index"
+                      :class="[order.isChecked && 'active']" @tap="togglePayer(order, it, index)">
+                  ({{it.payerCode}}){{it.payerName}}
+                </view>
               </view>
+              <text class="tFailureGoodsItem-cnt-head-choose">请选择付款方</text>
             </view>
-            <text class="tFailureGoodsItem-cnt-head-choose">请选择付款方</text>
           </view>
           <view class="tFailureGoodsItem-cnt-head-inf-reason">{{order.SXREASON}}</view>
         </view>
@@ -43,16 +45,18 @@
             <text class="tFailureGoodsItem-cnt-head-text">{{order.PRODUCTNAME}}</text>
           </view>
           <view class="tFailureGoodsItem-cnt-btm">
-            <text class="tFailureGoodsItem-cnt-head-text">¥ {{order.SUMMONEY}}</text>
-            <text class="tFailureGoodsItem-cnt-head-inf-mrr">付款方</text>
-            <i class="iconfont iconxia" :class="[order.isExpand && 'reverse']" @tap="showPayer(order,index)"></i>
-            <view class="tFailureGoodsItem-cnt-price-info" v-show="order.isExpand">
-              <view class="tFailureGoodsItem-cnt-price-info-li" v-for="(it,index) in order.payer" :key="index"
-                    :class="[order.isChecked && 'active']" @tap="togglePayer(order, it, index)">
-                ({{it.payerCode}}){{it.payerName}}
+            <view class="tFailureGoodsItem-cnt-head-text">¥ {{order.SUMMONEY}}</view>
+            <view class="tFailureGoodsItem-cnt-head-inf-mrr">
+              付款方
+              <i class="iconfont iconxia" :class="[order.isExpand && 'reverse']" @tap="showPayer(order,index)"></i>
+              <view class="tFailureGoodsItem-cnt-price-info" v-show="order.isExpand">
+                <view class="tFailureGoodsItem-cnt-price-info-li" v-for="(it,index) in order.payer" :key="index"
+                      :class="[order.isChecked && 'active']" @tap="togglePayer(order, it, index)">
+                  ({{it.payerCode}}){{it.payerName}}
+                </view>
               </view>
+              <text class="tFailureGoodsItem-cnt-head-choose">请选择付款方</text>
             </view>
-            <text class="tFailureGoodsItem-cnt-head-choose">请选择付款方</text>
           </view>
           <view class="tFailureGoodsItem-cnt-head-inf-reason">{{order.SXREASON}}</view>
         </view>
@@ -183,6 +187,7 @@ export default {
   }
 
   .tFailureGoodsItem-cnt-head-text {
+    width: 40%;
     color: #999;
     font-size: 24px;
   }
@@ -205,15 +210,16 @@ export default {
     font-size: 24px;
   }
   .tFailureGoodsItem-cnt-btm{
+    display: flex;
     position: relative;
     font-size:20px;
     .tFailureGoodsItem-cnt-head-inf-mrr{
-        color: #333;
-        margin-left: 162px;
+      width: 60%;
+      color: #999;
     }
     .iconfont {
-        font-size: 12px;
-        margin: 0px 8px;
+      font-size: 12px;
+      margin: 0 8px;
     }
     .tFailureGoodsItem-cnt-price-info {
       width: 500px;
