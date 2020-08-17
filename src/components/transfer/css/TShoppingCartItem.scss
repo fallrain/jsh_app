@@ -89,34 +89,56 @@
         color: #333;
         line-height: 22px;
       }
-      .tShoppingCartItem-head-local{
+      .tShoppingCartItem-head-local {
         color:#ED2856;
         line-height: 22px;
       }
     }
-    .tShoppingCartItem-head-text{
+    .tShoppingCartItem-head-text {
       display: inline-block;
       font-size: 24px;
       margin-left: 15px;
     }
-    .tShoppingCartItem-head-volume{
+    .tShoppingCartItem-head-volume {
       width: 120px;
       height: 34px;
       color: #ED2856;
       font-size: 24px;
       margin-left: 10px;
     }
+    .tShoppingCartItem-btm-btn {
+      font-size: 26px;
+      position: absolute;
+      top:20px;
+      right:20px;
+    }
+    .transfer_more_text {
+      display: flex;
+      background-color: #FFFFFF;
+      border:1px solid #ccc;
+      position: absolute;
+      top: 45px;
+      right: 10px;
+      padding: 10px;
+      
+    }
+  //  .order_more{
+   
+  //   position: absolute;
+  //   z-index: 100;
+  // }
+
   }
 // 产品列表
   .tShoppingCartItem-head-close {
     position: absolute;
-    top: 28px;
-    right: 22px;
+    top: 90px;
+    left: -28px;
     color: $theme-color;
   }
   .tShoppingCartItem-list{
     border-bottom: 1px solid #EDE9E9;
-    margin-left:24px;
+    margin-left:32px;
   }
   
   .tShoppingCartItem-cnt {
@@ -295,17 +317,18 @@
         width: 136px;
         height: 28px; 
         color: #ED2856;
-        margin-right: 44px;
+        margin-right: 10px;
       }
       .tShoppingCartItem-cnt-price-subtotal.mla{
         width:60px;
         height:28px;
+        margin-left:32px;
       }
       .tShoppingCartItem-cnt-price-subprice.mlb{
         width: 160px;
         height: 40px;    
         font-size: 28px;
-        margin-right: 32px;
+        margin-right: 6px;
       }
     }
     

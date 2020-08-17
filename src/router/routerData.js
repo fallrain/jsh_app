@@ -1,6 +1,7 @@
 
 const data = [
   'pages/index/index',
+  "pages/applicationsIndex/applicationsIndex",
   'pages/login/login/login',
   'pages/goods/goodsList',
   'pages/shoppingCart/shoppingCart',

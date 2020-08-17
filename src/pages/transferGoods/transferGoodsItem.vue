@@ -135,9 +135,10 @@ export default {
     // 加入调货
     addTransfer(goods) {
       console.log(goods)
-   
-       
+
+      
       this.$emit("inserOrder",goods)
+      this.$emit("query")
     }
 
   }

@@ -3,6 +3,7 @@ import Vue from 'vue';
 import createPersistedState from '@/lib/vuexPlugin/persistedstate';
 import user from '@/store/user';
 import order from '@/store/order';
+import transfer from '@/store/transfer';
 import vehicle from '@/store/vehicle';
 
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
   modules: {
     user,
     order,
+    transfer,
     vehicle,
   }
 });

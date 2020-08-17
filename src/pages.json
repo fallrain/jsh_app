@@ -15,6 +15,12 @@
       }
     },
     {
+      "path": "pages/applicationsIndex/applicationsIndex",
+      "style": {
+        "navigationBarTitleText": "应用首页"
+      }
+    },
+    {
       "path": "pages/login/login/login",
       "style": {
         "navigationBarTitleText": "登录"

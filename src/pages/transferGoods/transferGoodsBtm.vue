@@ -2,6 +2,7 @@
   <view class="transferGoodsBtm">
     <view
       class="transferGoodsBtm-check"
+      @tap="goShoppingCart"
     >
       <view class="iconfont icongouwuchezhengpin shoppingcart"></view>
       <text class="transferGoodsBtm-check-shop">购物车 </text>
@@ -27,6 +28,11 @@ export default {
     //   this.$emit('update:checked', checked);
     //   this.$emit('checkAll', checked);
     // }
+    goShoppingCart() {
+       uni.navigateTo({
+         url: '/pages/transferGoods/transferShoppingCart'
+      })  
+    }
   }
 };
 </script>

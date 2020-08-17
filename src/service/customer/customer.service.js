@@ -42,6 +42,7 @@ export default {
   removeInterestProduct(data) {
     return jPostJson(urls.removeInterestProduct, data);
   },
+  // 余额支付信息
   inquire(data) {
     return jPostJson(urls.inquire, data);
   }
