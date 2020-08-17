@@ -35,8 +35,8 @@ export default {
     });
   },
   shoppingCart(uid) {
-    console.log('shoppingCart service')
+    console.log('shoppingCart service');
 
-    return jGet(urls.shoppingCart(uid)); 
+    return jGet(urls.shoppingCart(uid));
   }
 };

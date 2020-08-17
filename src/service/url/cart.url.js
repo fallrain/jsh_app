@@ -19,7 +19,7 @@ const urls = {
 
   // 售达方详细信息
   shoppingCart(uid) {
-    console.log('shoppingCart url')
+    console.log('shoppingCart url');
     return `/shoppingCart/getNumberByValid/${uid}`;
   },
 

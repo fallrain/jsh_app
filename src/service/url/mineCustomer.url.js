@@ -19,14 +19,14 @@ const urls = {
   },
   // 基本信息-整车权限、金融服务
   getZhengCheAndFinancialDto(code) {
-    return `/getZhengCheAndFinancialDto/${code}`; 
+    return `/getZhengCheAndFinancialDto/${code}`;
   },
   // 签约信息
-  getCustomerSigned(uid,page,pageCount) {
+  getCustomerSigned(uid, page, pageCount) {
     return `/getCustomerSigned/${uid}?pageNum=${page}&pageSize=${pageCount}`;
   },
   // 门店信息
-  getBranchInformation(uid,page,pageCount) {
+  getBranchInformation(uid, page, pageCount) {
     return `/getBranchInformation/${uid}?pageNum=${page}&pageSize=${pageCount}`;
   },
   // 送达方列表
@@ -34,12 +34,12 @@ const urls = {
     return `/customers/${uid}/addresses/all`;
   },
   // 付款方列表
-  auxiliary(salesGroupCode,status) {
+  auxiliary(salesGroupCode, status) {
     return `/customers/auxiliary/payer/all?salesGroupCode=${salesGroupCode}&status=${status}`;
   },
   // 付款方余额
   payerBalanceList() {
-    return `/customers/payerBalanceList/inquire`;
+    return '/customers/payerBalanceList/inquire';
   }
 };
 util.addPrefix(baseURL, urls);

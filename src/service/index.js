@@ -32,7 +32,7 @@ export default {
     // 分类服务
     Vue.prototype.catalogServer = catalogServer;
     // 订单服务
-    Vue.prototype.orderServer = orderServer;
+    Vue.prototype.orderService = orderServer;
     // 购物车服务
     Vue.prototype.cartService = cartService;
     // 调货列表

@@ -85,7 +85,7 @@ export default {
       ORDER.UPDATE_ORDER
     ]),
     async orderList(e, pgNo) {
-      const { code, data } = await this.orderServer.orderList({
+      const { code, data } = await this.orderService.orderList({
         jshi_order_channel: 'ZY',
         jshi_saleto_code: '8800012497',
         orderStatusSelf: e,

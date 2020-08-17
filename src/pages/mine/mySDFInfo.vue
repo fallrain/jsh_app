@@ -123,7 +123,7 @@ export default {
   data() {
     return {
       baseList: {},
-      shoppingCart:{}
+      shoppingCart: {}
     };
   },
   created() {

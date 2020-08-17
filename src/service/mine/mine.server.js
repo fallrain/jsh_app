@@ -1,9 +1,10 @@
 import url from '../url/mineCustomer.url';
 import url2 from '../url/account.url';
 import {
-  jGet
+  jGet,
+  jPost, jPostJson
 } from '@/lib/request';
-import { jPost, jPostJson } from '../../lib/request';
+
 
 export default {
   mineBaseInfo(code) {
@@ -16,35 +17,35 @@ export default {
   },
   // 基本信息-交易权限、市场秩序、样品机权限
   getCustomerBasicInformation(uid) {
-    return jGet(url.getCustomerBasicInformation(uid))
+    return jGet(url.getCustomerBasicInformation(uid));
   },
   // 基本信息-整车权限、金融服务
   getZhengCheAndFinancialDto(uid) {
-    return jGet(url.getZhengCheAndFinancialDto(uid))
+    return jGet(url.getZhengCheAndFinancialDto(uid));
   },
   // 签约信息
-  getCustomerSigned(uid,page,pageCount) {
-    return jGet(url.getCustomerSigned(uid,page,pageCount))
+  getCustomerSigned(uid, page, pageCount) {
+    return jGet(url.getCustomerSigned(uid, page, pageCount));
   },
   // 门店信息
-  getBranchInformation(uid,page,pageCount) {
-    return jGet(url.getBranchInformation(uid,page,pageCount))
+  getBranchInformation(uid, page, pageCount) {
+    return jGet(url.getBranchInformation(uid, page, pageCount));
   },
   // 送达方列表
   customers(uid) {
-    return jGet(url.customers(uid,))
+    return jGet(url.customers(uid,));
   },
   // 付款方列表
-  auxiliary(salesGroupCode,status) {
-    return jGet(url.auxiliary(salesGroupCode,status));
+  auxiliary(salesGroupCode, status) {
+    return jGet(url.auxiliary(salesGroupCode, status));
   },
   // 付款方余额
   payerBalanceList(param) {
-    return jPostJson(url.payerBalanceList(),param);
+    return jPostJson(url.payerBalanceList(), param);
   },
   // 返利
   outstandingAmount(param) {
-    console.log('outstandingAmount post')
-    return jPostJson(url2.outstandingAmount(),param)
+    console.log('outstandingAmount post');
+    return jPostJson(url2.outstandingAmount(), param);
   }
 };

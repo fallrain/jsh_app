@@ -29,13 +29,13 @@
             <view class="title">清除缓存</view>
         </view>
         <view class="middleLine"></view>
-        
+
         <view class="row">
             <view class="title">检查更新</view>
         </view>
-		
+
 		<button class="btnStyle">退出登录</button>
-		
+
     </view>
 </template>
 
@@ -46,54 +46,54 @@
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
-  data () {
+  data() {
     // 这里存放数据
     return {
 
-    }
+    };
   },
   // 监听属性 类似于data概念
   computed: {},
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成（可以访问当前this实例）
-  created () {
+  created() {
 
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
-  mounted () {
+  mounted() {
 
   },
-  activated () { }, // 如果页面有keep-alive缓存功能，这个函数会触发
+  activated() { }, // 如果页面有keep-alive缓存功能，这个函数会触发
   // 方法集合
   methods: {
     //   个人资料
     personInforClick() {
-        uni.navigateTo({
-            url: '/pages/mine/myBaseInfo'
-        });
+      uni.navigateTo({
+        url: '/pages/mine/myBaseInfo'
+      });
     },
     //   修改手机号
     alertTelClick() {
-        uni.navigateTo({
-            url: '/pages/mine/myAlertTel'
-        });
+      uni.navigateTo({
+        url: '/pages/mine/myAlertTel'
+      });
     },
-	//   修改登录密码
-	alertLoginPwdClick() {
-		uni.navigateTo({
-			url:'/pages/mine/myAlertLoginPwd'
-		})
-	},
-	// 修改支付密码
-	alertPayPwdClick() {
-		uni.navigateTo({
-			url:'/pages/mine/myPayAlertPwd'
-		})
-	}
+    //   修改登录密码
+    alertLoginPwdClick() {
+      uni.navigateTo({
+        url: '/pages/mine/myAlertLoginPwd'
+      });
+    },
+    // 修改支付密码
+    alertPayPwdClick() {
+      uni.navigateTo({
+        url: '/pages/mine/myPayAlertPwd'
+      });
+    }
 
   }
-}
+};
 </script>
 
 <style scoped>
