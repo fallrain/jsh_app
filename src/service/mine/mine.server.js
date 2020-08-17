@@ -24,12 +24,12 @@ export default {
     return jGet(url.getZhengCheAndFinancialDto(uid));
   },
   // 签约信息
-  getCustomerSigned(uid, page, pageCount) {
-    return jGet(url.getCustomerSigned(uid, page, pageCount));
+  getCustomerSigned(uid) {
+    return jGet(url.getCustomerSigned(uid, 1, 10));
   },
   // 门店信息
-  getBranchInformation(uid, page, pageCount) {
-    return jGet(url.getBranchInformation(uid, page, pageCount));
+  getBranchInformation(uid) {
+    return jGet(url.getBranchInformation(uid, 1, 10));
   },
   // 送达方列表
   customers(uid) {

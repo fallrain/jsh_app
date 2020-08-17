@@ -13,6 +13,7 @@ import trafficService from './traffic/traffic.service';
 import samplemachineService from './samplemachine/samplemachine.service';
 import vehicleService from './vehicleList/vehicleList.service';
 import authService from './auth/auth.service';
+import cocService from './coc/coc.service';
 
 export default {
   install(Vue) {
@@ -47,5 +48,7 @@ export default {
     Vue.prototype.vehicleService = vehicleService;
     // 权限相关服务
     Vue.prototype.authService = authService;
+    // todo 服务名待定
+    Vue.prototype.cocService = cocService;
   }
 };

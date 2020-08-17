@@ -94,10 +94,6 @@ status: "正常" -->
           <view class="firstPageLeft">整车到付未付款：</view>
           <view class="firstPageRightRed">{{zhengCheAndFinancialDto.zhengCheUnpaid}}</view>
         </view>
-        <view class="firstItem">
-          <view class="firstPageLeft">最近交易日期：</view>
-          <view class="firstPageRight">2020-06-29</view>
-        </view>
         <view class="blank"></view>
       </view>
 
@@ -161,8 +157,8 @@ status: "正常" -->
       </view>
       <view class="block">
         <view
-          :key="index"
           v-for="(item,index) in customerSigned.contractMessageDtoList"
+          :key="index"
         >
           <view class="secondPageTitle">{{item.contractname}}</view>
           <view class="breakLine"></view>
@@ -180,8 +176,7 @@ status: "正常" -->
               <view style="margin-right:14px;">
                 <view
                   :key="tag"
-                  class="tagsss"
-                  style="float:left;background-color: #ED2856;color: white;border-radius: 10px; height:20px; padding-left:10px;padding-right:10px ;text-align: center;margin:2px"
+                  class="myGuestView-sign-inf-tag"
                   v-for="tag in item.tagList">
                   {{tag}}
                 </view>
@@ -190,20 +185,21 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">有效期</view>
-            <view class="firstPageRight">2019-01-01 至 2019-12-31</view>
+            <view class="firstPageRight">{{item.inDate}}</view>
           </view>
         </view>
         <view class="blank"></view>
       </view>
-
       <view class="tailView"></view>
-
     </view>
 
     <!-- 门店信息 -->
     <view v-if="index === 2">
       <view class="block">
-        <view v-for="item in branchInformation.branchInformationDtoList">
+        <view
+          :key="storeIndex"
+          v-for="(item,storeIndex) in branchInformation.branchInformationDtoList"
+        >
           <view>
             <view class="secondPageTitle">{{item.sbrName}}</view>
             <view class="breakLine"></view>
@@ -236,9 +232,12 @@ status: "正常" -->
     </view>
 
     <!-- 送达方信息 -->
-    <view v-if="index == 3">
+    <view v-if="index === 3">
       <view class="block">
-        <view v-for="item in customers">
+        <view
+          :key="customerIndex"
+          v-for="(item,customerIndex) in customers"
+        >
           <view class="secondPageTitle">{{item.customerName}}</view>
           <view class="breakLine"></view>
 
@@ -248,11 +247,11 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">送达方中心</view>
-            <view class="firstPageRight">{{}}???</view>
+            <view class="firstPageRight">{{item.centerName}}</view>
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">状态</view>
-            <view class="tag" v-if="item.deletedFlag == 1">
+            <view class="tag" v-if="item.deletedFlag === 1">
               不正常
             </view>
             <view class="tag" v-else>
@@ -274,9 +273,9 @@ status: "正常" -->
     </view>
 
     <!-- 付款方信息 -->
-    <view v-if="index == 4">
+    <view v-if="index === 4">
       <view class="block">
-        <view style="display:flex">
+        <view class="dis-flex">
           <view class="companyImage"></view>
           <view>
             <view class="fifthPageRight">（8800342633）</view>
@@ -290,9 +289,18 @@ status: "正常" -->
         </view>
       </view>
 
-      <view v-for="item in auxiliary">
+      <view
+        :key="auxiliaryIndex"
+        v-for="(item,auxiliaryIndex) in auxiliary"
+      >
         <view class="block">
-          <view class="secondPageTitle">{{item.customerName}}</view>
+          <view class="secondPageTitle">
+            <view
+              class="myGuestView-sign-inf-tag mr12"
+              v-if="item.defaultFlag==='1'"
+            >默认</view>
+            {{item.customerName}}
+          </view>
           <view class="breakLine"></view>
           <view class="firstItem">
             <view class="firstPageLeft">付款方编码</view>
@@ -304,13 +312,18 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">是否默认</view>
-            <view class="firstPageRight" v-if="item.defaultFlag">取消默认设置</view>
-            <view class="firstPageRight" v-if="item.defaultFlag">设置为默认设置</view>
+            <view
+              class="firstPageRight"
+              v-if="item.defaultFlag==='1'"
+            >取消默认设置</view>
+            <view
+              class="firstPageRight"
+              v-else
+            >设置为默认设置</view>
           </view>
           <view class="blank"></view>
         </view>
       </view>
-
 
       <view class="tailView"></view>
     </view>
@@ -329,6 +342,7 @@ import {
 } from '../../store/mutationsTypes';
 
 export default {
+  name: 'myGuestView',
   // import引入的组件需要注入到对象中才能使用
   components: {
     JTab
@@ -368,7 +382,7 @@ export default {
       index: 0,
       // 基本信息-交易权限、市场秩序、样品机权限
       customerBasicInformation: {},
-      //   基本信息-整车权限、金融服务
+      // 基本信息-整车权限、金融服务
       zhengCheAndFinancialDto: {},
       //   签约信息
       customerSigned: {},
@@ -389,38 +403,27 @@ export default {
   },
   // 监控data中的数据变化
   watch: {
-    index(newVal, oldVal) {
-      const userId = '8700010462';
+    index(newVal) {
       switch (newVal) {
-        case 1: {
-          this.getCustomerSigned(userId, 1, 10);
-        }
-
+        case 1:
+          this.getCustomerSigned();
           break;
-        case 2: {
-          this.getBranchInformation(userId, 1, 10);
-        }
-
+        case 2:
+          this.getBranchInformation();
           break;
           // 送达方信息
-        case 3: {
-          this.customersFun(userId, 1, 10);
-        }
-
+        case 3:
+          this.customersFun();
           break;
           // 付款方列表
-        case 4: {
+        case 4:
           this.auxiliaryFun(2110, 1);
-        }
-
           break;
-
         default:
           break;
       }
     }
   },
-  // 生命周期 - 创建完成（可以访问当前this实例）
   created() {
     this.setPageInfo();
   },
@@ -438,17 +441,13 @@ export default {
     }
     this.tabs = tmpTabs;
   },
-  // 生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    const userId = '8700010462';
-    //   this.getCustomerBasicInformation(userId);
-    //   this.getZhengCheAndFinancialDto(userId);
-    //   this.getCustomerSigned(userId,1,10)
-    //   this.getBranchInformation(userId,1,10);
-  },
   methods: {
     setPageInfo() {
       this.getOrderMonthSummery();
+      this.getCustomerBasicInformation();
+      this.getZhengCheAndFinancialDto();
+      this.getCustomerSigned();
+      this.getBranchInformation();
     },
     async getOrderMonthSummery() {
       /* 获取基本信息-订单交易状态 */
@@ -460,27 +459,24 @@ export default {
         this.baseTransactionInfo = data || {};
       }
     },
-    // 基本信息-交易权限、市场秩序、样品机权限
-    async getCustomerBasicInformation(userId) {
-      const { code, data } = await this.mineServer.getCustomerBasicInformation(userId);
+    async getCustomerBasicInformation() {
+      /* 基本信息-交易权限、市场秩序、样品机权限 */
+      const { code, data } = await this.mineServer.getCustomerBasicInformation(this.userInf.customerCode);
 
       if (code === '1') {
         this.customerBasicInformation = data;
-        console.log(data);
       }
     },
-    // // 基本信息-交易权限、市场秩序、样品机权限
-    async getZhengCheAndFinancialDto(userId) {
-      const { code, data } = await this.mineServer.getZhengCheAndFinancialDto(userId);
+    async getZhengCheAndFinancialDto() {
+      /* 整车权限、金融服务 */
+      const { code, data } = await this.mineServer.getZhengCheAndFinancialDto(this.userInf.customerCode);
       if (code === '1') {
         this.zhengCheAndFinancialDto = data;
-        console.log(data);
       }
     },
-    // 基本信息- 签约信息
-    async getCustomerSigned(userId, page, pageSize) {
-      console.log('getCustomerSigned');
-      const { code, data } = await this.mineServer.getCustomerSigned(userId, page, pageSize);
+    async getCustomerSigned() {
+      /* 基本信息-签约信息 */
+      const { code, data } = await this.mineServer.getCustomerSigned(this.userInf.customerCode);
       if (code === '1') {
         const tmp = data;
         const contractMessageDtoList = [];
@@ -501,26 +497,42 @@ export default {
         console.log(this.customerSigned);
       }
     },
-    // // 基本信息- 门店信息
-    async getBranchInformation(userId, pageNum, pageSize) {
+    async getBranchInformation() {
+      /* 基本信息- 门店信息 */
       console.log('getBranchInformation');
-      const { code, data } = await this.mineServer.getBranchInformation(userId, pageNum, pageSize);
+      const { code, data } = await this.mineServer.getBranchInformation(this.userInf.customerCode);
       if (code === '1') {
         this.branchInformation = data;
         console.log(data);
       }
     },
-    // 送达方列表
-    async customersFun(userId) {
+    getValueSync(value) {
+      /* 区域代码 */
+      return this.cocService.getValueSync({
+        parentValueLow: '',
+        value,
+        valueSetId: 'BranchCode'
+      });
+    },
+    async customersFun() {
+      /* 送达方列表 */
       console.log('customers');
-      const { code, data } = await this.mineServer.customers(userId);
+      const { code, data } = await this.mineServer.customers(this.userInf.customerCode);
       if (code === '1') {
+        // 优先展示
         this.customers = data;
-        console.log(data);
+        const tradeCodes = data.map(v => v.tradeCode);
+        // 二次渲染中心
+        const { code: centerCode, data: centerData } = await this.getValueSync(tradeCodes);
+        if (centerCode === '1') {
+          this.customers.forEach((v, index) => {
+            this.$set(v, 'centerName', centerData[index].valueMeaning);
+          });
+        }
       }
     },
-    // 付款方列表
     async auxiliaryFun(salesGroupCode, status) {
+      /* 付款方列表 */
       console.log('auxiliaryFun');
       const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status);
       if (code === '1') {
@@ -533,8 +545,8 @@ export default {
         console.log(data);
       }
     },
-    //   事件处理
     tabClick(e) {
+      /* 事件处理 */
       this.tabs = e;
       console.log(e);
       this.tabs.forEach((each) => {
@@ -549,7 +561,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
   .bg {
     background: rgba(245, 245, 245, 1);
     min-height: 1400px;
@@ -617,7 +629,7 @@ export default {
     height: 60px;
     font-size: 28px;
     font-weight: 400;
-    color: rgba(102, 102, 102, 1);
+    color: #999;
     line-height: 50px;
     margin-right: 30px;
   }
@@ -685,6 +697,8 @@ export default {
   }
 
   .secondPageTitle {
+    display: flex;
+    align-items: center;
     height: 96px;
     font-size: 32px;
     font-weight: 400;
@@ -701,9 +715,10 @@ export default {
   .tag {
     float: left;
     background-color: #ED2856;
-    color: white;
-    border-radius: 10px;
-    height: 40px;
+    color: #fff;
+    border-radius: 19px;
+    height: 38px;
+    line-height: 38px;
     padding-left: 10px;
     padding-right: 10px;
     text-align: center;
@@ -735,4 +750,18 @@ export default {
     margin-top: 20px;
   }
 
+
+  .myGuestView-sign-inf-tag {
+    display: inline-block;
+    float: left;
+    background-color: #ED2856;
+    color: #fff;
+    border-radius: 19px;
+    height: 38px;
+    line-height: 38px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    font-size: 28px;
+  }
 </style>
