@@ -7,15 +7,15 @@
       <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
     </view>
     <view class="jShoppingCartItem-cnt-img-wrap">
-      <image src="@/assets/img/goods/example-fridge.jpg"></image>
+      <image :src="goods.productList[0].productImageUrl"></image>
     </view>
     <view class="jFailureGoodsItem-cnt">
       <view class="jFailureGoodsItem-cnt-head">
         <view class="jFailureGoodsItem-cnt-head-tag mr10">失效</view>
-        <text class="jFailureGoodsItem-cnt-head-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温除高品质家用静音全自动10KG洗烘一体高温除高品质</text>
+        <text class="jFailureGoodsItem-cnt-head-text">{{goods.productList[0].productName}}</text>
       </view>
       <view class="jFailureGoodsItem-cnt-btm">
-        <div class="jFailureGoodsItem-cnt-btm-tag">客户未签约</div>
+        <div class="jFailureGoodsItem-cnt-btm-tag">{{goods.productList[0].productEnableMsg}}</div>
       </view>
     </view>
   </view>
@@ -25,6 +25,12 @@
 export default {
   name: 'JFailureGoodsItem',
   props: {
+    // 商品数据
+    goods: {
+      type: Object,
+      default: () => {
+      }
+    },
     // 选中
     checked: {
       type: Boolean,
@@ -33,7 +39,7 @@ export default {
     // 索引
     index: {
       type: Number,
-    }
+    },
   },
   data() {
     return {};

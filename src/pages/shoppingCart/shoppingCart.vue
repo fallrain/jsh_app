@@ -205,12 +205,26 @@ export default {
         code: this.userInf.customerCode
       });
       if (code === '1') {
-        this.shoppingList = data.map(v => ({
-          checked: false,
-          isCreditMode: false,
-          $PriceInfo: v.productList[0].priceInfo,
-          ...v
-        }));
+        // 正常商品
+        const shoppingList = [];
+        // 失效商品
+        const failureGoodsList = [];
+        data.forEach((v) => {
+          if (v.productList[0].productEnable === 1) {
+            shoppingList.push({
+              checked: false,
+              isCreditMode: false,
+              $PriceInfo: v.productList[0].priceInfo,
+              ...v
+            });
+          } else {
+            failureGoodsList.push({
+              ...v
+            });
+          }
+        });
+        this.shoppingList = shoppingList;
+        this.failureGoodsList = failureGoodsList;
       }
     },
     async getCreditQuota() {
