@@ -22,7 +22,7 @@
         ></t-shopping-cart-item>
       </view>
        <!--余额支付信息 -->
-      <view class="mt24">
+      <view class="mt24" v-show="isShowpayer">
         <t-overage-pay
           :payerBalance="payerBalance"
           :isShowpayer="isShowpayer"
@@ -243,7 +243,7 @@ export default {
       
       uni.navigateTo({
          url: '/pages/transferGoods/transferDetail?IBR_SEQ='+ seq
-      })   
+      });
     },
     // 设置失效产品
     setAllinvalid() {

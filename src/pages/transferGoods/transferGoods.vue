@@ -569,7 +569,7 @@ export default {
             timestamp:Date.parse(new Date()),
             ycFlag: this.SendWay,    //是否统仓统配    配送类型？
             SEQ: "",//调货单号     
-            MKTID: address.tradeCode, //工贸编码    配送至
+            MKTID: "12A02", //工贸编码    配送至  address.tradeCode
             sendCode: "",//配送中心编码   配送至
             brand: item.brand,//品牌编码     产品列表
             INVSORT: item.group,//产品组编码
@@ -595,14 +595,14 @@ export default {
             DH_LOSSRATE: 0,  //不用改
             DH_OUTWHCODE: this.stock,  //调出库位     //当前选的调出库位
             DH_IMG: item.searchImage,    
-            DH_SENDTONAME: address.addressName,    //送达方名称   配送至 接口
+            DH_SENDTONAME: "青岛鸿程永泰商贸有限公司",    //送达方名称   配送至 接口address.addressName
             SENDTO_ADDRESS: address.address,  //送达方地址   配送至 接口
             stockList: this.cargoSend,    //调出库位列表
 
-            DH_PAYTO_TYPE: this.payer[0].payerType,   //付款方类型       //付款方
-            DH_SALETO_NAME: this.payer[0].customerName,     //售达方编码    用户信息
-            DH_MAIN_CHANNEL_CODE: address.channel ,   // 大渠道    customer接口
-            DH_SUB_CHANNEL_CODE: address.subChannel,  //小渠道     customer接口
+            // DH_PAYTO_TYPE: this.payer[0].payerType,   //付款方类型       //付款方
+            DH_SALETO_NAME: "青岛鸿程永泰商贸有限公司",     //售达方编码    用户信息   //this.payer[0].customerName
+            DH_MAIN_CHANNEL_CODE: "M" ,   // 大渠道    customer接口   配送接口address.channel
+            DH_SUB_CHANNEL_CODE: "HA001",  //小渠道     customer接口  配送接口address.subChannel
         
         
       });
