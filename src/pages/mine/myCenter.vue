@@ -168,31 +168,31 @@ export default {
       ],
       inforlist: [
         {
-          id: 0,
+          id: '0',
           src: require('./image/jibenxinxi.png'),
           title: '基本信息',
           url: '/pages/mine/myGuestView'
         },
         {
-          id: 1,
+          id: '1',
           src: require('./image/qianyuexinxi.png'),
           title: '签约信息',
           url: '/pages/mine/myGuestView'
         },
         {
-          id: 2,
+          id: '2',
           src: require('./image/mendianxinxi.png'),
           title: '门店信息',
           url: '/pages/mine/myGuestView'
         },
         {
-          id: 3,
+          id: '4',
           src: require('./image/fukuanfang.png'),
           title: '付款方信息',
           url: '/pages/mine/myGuestView'
         },
         {
-          id: 4,
+          id: '3',
           src: require('./image/songfafang.png'),
           title: '送达方信息',
           url: '/pages/mine/myGuestView'

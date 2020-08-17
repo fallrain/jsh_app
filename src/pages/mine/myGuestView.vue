@@ -4,11 +4,12 @@
       <j-tab
         :hasRightSlot="true"
         :tabs="tabs"
+        :activeItemName="activeTabName"
         @tabClick="tabClick"
       ></j-tab>
     </view>
     <!-- 基本信息 -->
-    <view v-if="index === 0">
+    <view v-if="index === '0'">
       <!-- 基本信息 -->
       <view class="block">
         <view class="dis-flex">
@@ -151,7 +152,7 @@ status: "正常" -->
     </view>
 
     <!-- 签约信息 -->
-    <view v-if="index === 1">
+    <view v-if="index === '1'">
       <view class="secondTopBtn">
         履约查询
       </view>
@@ -194,7 +195,7 @@ status: "正常" -->
     </view>
 
     <!-- 门店信息 -->
-    <view v-if="index === 2">
+    <view v-if="index === '2'">
       <view class="block">
         <view
           :key="storeIndex"
@@ -232,7 +233,7 @@ status: "正常" -->
     </view>
 
     <!-- 送达方信息 -->
-    <view v-if="index === 3">
+    <view v-if="index === '3'">
       <view class="block">
         <view
           :key="customerIndex"
@@ -273,7 +274,7 @@ status: "正常" -->
     </view>
 
     <!-- 付款方信息 -->
-    <view v-if="index === 4">
+    <view v-if="index === '4'">
       <view class="block">
         <view class="dis-flex">
           <view class="companyImage"></view>
@@ -354,31 +355,33 @@ export default {
       baseTransactionInfo: {},
       tabs: [
         {
-          id: 0,
+          id: '0',
           name: '基本信息',
           active: true
         },
         {
-          id: 1,
+          id: '1',
           name: '签约信息',
           active: false
         },
         {
-          id: 2,
+          id: '2',
           name: '门店信息',
           active: false
         },
         {
-          id: 3,
+          id: '3',
           name: '送达方信息',
           active: false
         },
         {
-          id: 4,
+          id: '4',
           name: '付款方信息',
           active: false
         },
       ],
+      // 激活的tab item
+      activeTabName: 'item0',
       index: 0,
       // 基本信息-交易权限、市场秩序、样品机权限
       customerBasicInformation: {},
@@ -393,7 +396,7 @@ export default {
       // 付款方列表
       auxiliary: {},
       // 付款方账户总额
-      accountTotal: ''
+      accountTotal: '',
     };
   },
   computed: {
@@ -405,18 +408,18 @@ export default {
   watch: {
     index(newVal) {
       switch (newVal) {
-        case 1:
+        case '1':
           this.getCustomerSigned();
           break;
-        case 2:
+        case '2':
           this.getBranchInformation();
           break;
           // 送达方信息
-        case 3:
+        case '3':
           this.customersFun();
           break;
           // 付款方列表
-        case 4:
+        case '4':
           this.auxiliaryFun(2110, 1);
           break;
         default:
@@ -428,11 +431,12 @@ export default {
     this.setPageInfo();
   },
   onLoad(option) {
-    this.index = JSON.parse(decodeURIComponent(option.index));
+    this.index = option.index;
     const tmpTabs = [];
     for (let index = 0; index < this.tabs.length; index++) {
       const element = this.tabs[index];
       if (element.id == this.index) {
+        this.activeTabName = `item${index}`;
         element.active = true;
       } else {
         element.active = false;
