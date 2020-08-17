@@ -341,9 +341,9 @@ export default {
       }
       if (data.length > 0) {
         this.currentAdd = data[0];
-        this.form.saletoCode = data[0].customerCode;
+        this.form.saletoCode = this.userInf.customerCode;
         this.form.sendtoCode = data[0].addressCode;
-        this.stockForm.saletoCode = data[0].customerCode;
+        this.stockForm.saletoCode = this.userInf.customerCode;
         this.stockForm.sendtoCode = data[0].addressCode;
       }
     },
@@ -426,7 +426,6 @@ export default {
       const arr2 = currentInfo.pbProducts || [];
       const arr = arr1.concat(arr2);
       let productCodes = [];
-      debugger;
       productCodes = arr.map(v => v.productCode);
       this.stockForm.productCodes = productCodes;
       const { code, data } = await this.commodityService.getStock(this.stockForm);

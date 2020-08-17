@@ -6,7 +6,7 @@
         @tap="showAdsPicker"
       >
         <view class="iconfont iconlocal"></view>
-        <text>配送至：青岛市李沧区重庆中路792青岛市李沧区重庆中路792青岛市李沧区重庆中路792</text>
+        <text>配送至：({{currentAdd.customerCode}}){{currentAdd.customerName}}</text>
         <view class="iconfont iconyou right-style"></view>
       </view>
       <view v-if="currentDetail.proportionType === '1'" class="marketDetail-orders br-b-grey">
@@ -42,10 +42,9 @@
         </view>
       </view>
     </view>
-    <view v-if="currentDetail.activityType === 'taocan'" class="marketDetail-list">
+    <view class="marketDetail-list">
       <j-product-item
         :groupType="currentDetail.activityType"
-        :goodsType="0"
         v-for="(goods,index) in currentDetail.products"
         :key="index+'^-^'"
         :goods="goods"
@@ -54,7 +53,6 @@
       ></j-product-item>
       <j-product-item
         :groupType="currentDetail.activityType"
-        :goodsType="1"
         v-for="(goods,index) in currentDetail.pbProducts"
         :key="index"
         :goods="goods"
@@ -62,20 +60,11 @@
         @change="goodsChange"
       ></j-product-item>
     </view>
-    <view v-if="currentDetail.activityType === 'zuhe'" class="marketDetail-list">
-      <j-product-item
-        :groupType="currentDetail.activityType"
-        v-for="(goods,index) in currentDetail.activityList"
-        :key="index"
-        :goods="goods"
-        :index="index"
-        @changeChoosedNum="changeChoosedNum"
-        @change="goodsChange"
-      ></j-product-item>
-    </view>
     <j-product-btm
       :groupType="currentDetail.activityType"
       :conditionStatus="conditionStatus"
+      :upperLimit="currentDetail.upperLimit"
+      :totalMoney="totalMoney"
     ></j-product-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
@@ -98,6 +87,9 @@ export default {
   },
   data() {
     return {
+      currentAdd: {}, // 当前选中地址
+      addressList: [], // 地址列表
+      totalMoney: 0, // 订单所有金额总和
       conditionStatus: false,
       updateIndex: 1,
       stockForm: {
@@ -132,6 +124,11 @@ export default {
     this.currentDetail = JSON.parse(item);
     this.stockForm.saletoCode = saletoCode;
     this.stockForm.sendtoCode = sendtoCode;
+    console.log(this.currentDetail);
+    this.getAddressList();
+    if (this.currentDetail.activityType === 'zuhe') {
+      this.getTotalMoney();
+    }
     /* console.log(this.currentDetail)
     this.getAllStock(); */
   },
@@ -185,10 +182,11 @@ export default {
       console.log(this.currentDetail.products);
       console.log(this.currentDetail.pbProducts);
     },
-    goodsChange(goods, index, goodsType) {
-      if (goodsType === '0') {
+    goodsChange(goods, index) {
+      let totalMoney = 0;
+      if (goods.productFlag === 'f') {
         this.currentDetail.products[index] = goods;
-      } else if (goodsType === '1') {
+      } else if (goods.productFlag === 's') {
         this.currentDetail.pbProducts[index] = goods;
       }
       this.currentDetail = JSON.parse(JSON.stringify(this.currentDetail));
@@ -197,11 +195,14 @@ export default {
       this.limit1.choosedPBNum = 0;
       this.currentDetail.products.forEach((item) => {
         this.limit1.choosedMainNum += parseInt(item.choosedNum);
+        totalMoney += (parseInt(item.choosedNum) * item.priceDto.profitPrice);
       });
       this.currentDetail.pbProducts.forEach((item) => {
         this.limit1.choosedPBNum += parseInt(item.choosedNum);
+        totalMoney += (parseInt(item.choosedNum) * item.priceDto.profitPrice);
       });
       this.conditionStatus = this.isUpToCondition();
+      this.totalMoney = totalMoney;
     },
     // 判断套餐条件是否已经满足
     isUpToCondition() {
@@ -220,6 +221,24 @@ export default {
           return true;
         }
       }
+    },
+    // 获取所有地址
+    async getAddressList() {
+      // 获取地址
+      const { code, data } = await this.customerService.addressesList('1');
+      if (code === '1') {
+        this.addressList = data;
+      }
+      if (data.length > 0) {
+        this.currentAdd = data[0];
+      }
+    },
+    getTotalMoney() {
+      let total = 0;
+      this.currentDetail.products.forEach((item) => {
+        total += parseFloat(item.profitPrice);
+      });
+      this.totalMoney = this.jshUtil.formatFloat(total, 2);
     },
     showAdsPicker() {
       /* 地址选择展示 */
