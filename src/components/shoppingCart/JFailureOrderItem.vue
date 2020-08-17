@@ -21,7 +21,13 @@
 
 <script>
 export default {
-  name: 'JFailureOrderItem'
+  name: 'JFailureOrderItem',
+  props: {
+    propName: {
+      type: Number,
+      default: 0
+    },
+  },
 };
 </script>
 
