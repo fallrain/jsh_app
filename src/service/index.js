@@ -14,6 +14,7 @@ import samplemachineService from './samplemachine/samplemachine.service';
 import vehicleService from './vehicleList/vehicleList.service';
 import authService from './auth/auth.service';
 import cocService from './coc/coc.service';
+import openAccountService from './openAccount/openAccount.service';
 
 export default {
   install(Vue) {
@@ -50,5 +51,7 @@ export default {
     Vue.prototype.authService = authService;
     // todo 服务名待定
     Vue.prototype.cocService = cocService;
+    // c.jsh账户服务
+    Vue.prototype.openAccountService = openAccountService;
   }
 };

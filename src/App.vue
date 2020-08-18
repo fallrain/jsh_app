@@ -6,12 +6,19 @@ export default {
     } = options;
     if (query) {
       const {
-        token
+        token,
+        jwtToken
       } = query;
       if (token) {
         uni.setStorage({
           key: 'token',
           data: token
+        });
+      }
+      if (jwtToken) {
+        uni.setStorage({
+          key: 'jwtToken',
+          data: jwtToken
         });
       }
     }
