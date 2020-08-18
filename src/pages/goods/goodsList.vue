@@ -16,7 +16,10 @@
       <j-head-tab
         class="mb12"
         :tabs="tabs"
+        :popTabs="popTabs"
         @tabClick="tabClick"
+        @tabPickerChange="popTabsChange"
+        @tabconfirmPup="tabConditionConfirm"
       ></j-head-tab>
     </view>
     <mescroll-body
@@ -178,6 +181,9 @@ export default {
           active: false
         }
       ],
+      popTabs: [],
+      // 选中的tab筛选数据
+      tabConditions: {},
       // 筛选抽屉
       isShowGoodsFilterDrawer: false,
       // 筛选抽屉数据
@@ -292,9 +298,27 @@ export default {
       condition = {
         ...condition,
         ...tab.condition,
-        ...filtersMap
+        ...filtersMap,
+        ...this.tabConditions
       };
       return condition;
+    },
+    genTabCondition(conditions) {
+      /* 组合【搜索tab】的数据 */
+      const popTabs = [];
+      conditions.forEach((v) => {
+        const tab = {
+          name: v.name,
+          show: false
+        };
+        tab.children = v.show.map(item => ({
+          ...item,
+          name: item.show,
+          checked: false
+        }));
+        popTabs.push(tab);
+      });
+      this.popTabs = popTabs;
     },
     async getGoodsList(pages) {
       /* 搜索产品列表 */
@@ -306,9 +330,14 @@ export default {
       const scrollView = {};
       if (code === '1') {
         const {
-          page
+          // 商品数据
+          page,
+          // tab类型搜索条件
+          condition: dataCondition
         } = data;
-          // 当前页码的数据
+        // 组合tab的搜索条件数据（popTabs）
+        this.genTabCondition(dataCondition);
+        // 当前页码的数据
         const curList = page.result;
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
@@ -387,6 +416,28 @@ export default {
       if (tab.handler) {
         this[tab.handler]();
       }
+    },
+    popTabsChange(tabs) {
+      /* popTabs change */
+      this.popTabs = tabs;
+    },
+    tabConditionConfirm(tabs, index, choseItem) {
+      /* 顶部双层tab栏目，第二层点了条件点确认按钮事件 */
+      // 组合tabConditions
+      const choseTab = tabs[index];
+      const conditions = {};
+      // todo 显然，通过名字来判断不合理，但是pc端也是如此，待提bug
+      if (choseTab.name === '类目') {
+        conditions.categoryCode = choseItem.code;
+      } else {
+        conditions.attributeName = choseItem.code;
+        conditions.attributeValue = choseItem.show;
+      }
+      this.tabConditions = {
+        ...this.tabConditions,
+        ...conditions
+      };
+      this.silentReSearch();
     },
     showFilter() {
       /* 展示filter */

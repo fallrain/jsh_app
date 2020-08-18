@@ -99,6 +99,7 @@ export default {
       /* 展示二级类目 */
       item.show = !item.show;
       this.isExpend = item.show;
+      this.$emit('tabPickerChange', this.popTabs);
     },
     tabPickerShowChange(show) {
       this.isExpend = show;
@@ -117,9 +118,10 @@ export default {
       }
       /* 整车专用：拼车跟基地只能选一 */
       this.popTabs[index].children = children;
+      this.$emit('tabPickerChange', this.popTabs);
     },
-    confirmPup(index) {
-      this.$emit('tabconfirmPup', this.popTabs, index);
+    confirmPup(index, choseChildItem) {
+      this.$emit('tabconfirmPup', this.popTabs, index, choseChildItem);
     }
   }
 };
