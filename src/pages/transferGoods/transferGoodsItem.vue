@@ -1,6 +1,6 @@
 <template>
   <view class="jGoodsItem">
-    <view class="jGoodsItem-left">
+    <view class="jGoodsItem-left" @tap="goNext">
       <image :src="goods.listImage"></image>
     </view>
     <view class="jGoodsItem-cnt">
@@ -112,6 +112,11 @@ export default {
       this.goods.number = value;
       console.log(goods.amount)
       this.$emit('change', this.goods, this.index);
+    },
+    goNext() {
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${this.goods.code}`
+      });
     },
     addFavorite(goods) {  
       console.log(goods)

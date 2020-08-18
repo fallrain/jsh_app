@@ -106,9 +106,6 @@ export default {
     },
     groupType: {
       type: [String, Number]
-    },
-    goodsType: {
-      type: [String, Number]
     }
   },
   data() {

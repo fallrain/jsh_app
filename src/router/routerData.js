@@ -1,7 +1,8 @@
 
 const data = [
   'pages/index/index',
-  "pages/applicationsIndex/applicationsIndex",
+  'pages/applicationsIndex/applicationsIndex',
+  'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',
   'pages/goods/goodsList',
   'pages/shoppingCart/shoppingCart',
@@ -25,12 +26,11 @@ const data = [
   'pages/vehicleList/vehicleCarDetail',
   'pages/sampleMachine/sampleMachineList',
   'pages/mine/myCenter',
-  'pages/mine/myAlertTel',
+  'pages/mine/myAlterTel',
   'pages/mine/myPayAlertPwd',
   'pages/mine/myAlertLoginPwd',
   'pages/mine/myGuestView',
   'pages/mine/mySetDetail',
-  'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm'
 ];

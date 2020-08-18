@@ -606,8 +606,12 @@ export default {
             DH_MAIN_CHANNEL_CODE: "M" ,   // 大渠道    customer接口   配送接口address.channel
             DH_SUB_CHANNEL_CODE: "HA001",  //小渠道     customer接口  配送接口address.subChannel
           }]);
-
+          if(insertTransfer.code === "1") {
+            confirm("加入调货成功")
+            this.getShoppingCartNum()
+          }
       }
+
     },
     goodsChange(goods, index) {
       /* 商品数据change */
