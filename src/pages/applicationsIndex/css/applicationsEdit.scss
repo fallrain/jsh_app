@@ -1,0 +1,89 @@
+.applicationsEdit {
+    min-height: 100vh;
+    background: #F5F5F5;
+    
+}
+.applicationsEdit-head{
+    padding-left:24px;
+    background: #fff;
+    margin-bottom: 12px;
+    padding-bottom: 40px;
+}
+.applicationsEdit-head-top{
+    margin-left: 40%;
+}
+.applicationsEdit-head-title {
+    font-size: 34px;
+    color: #333;
+    padding-top: 62px;
+    margin-bottom: 40px;
+}
+.applicationsEdit-head-img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 40px;
+    margin-right: 10px;
+
+}
+.applicationsEdit-head-foot {
+    width: 702px;
+    height: 178px;
+    border: 2px dashed #D3D3D3;
+    padding-left: 40%;
+
+}
+.applicationsEdit-head-foot-plus {
+    font-size: 40px;
+    margin-left: 37px;
+    margin-top: 35px;
+    color: #666;
+    margin-bottom: 18px;
+}
+.applicationsEdit-head-foot-add {
+    color: #666;
+    font-size:29px;
+}
+.applicationsEdit-content {
+    padding-left:24px;
+    padding-top: 40px;
+    background: #fff;
+}
+.applicationsEdit-content-all {
+    font-size: 34px;
+    color: #333;
+    margin-left: 40%;
+    margin-bottom: 40px;
+}
+.applicationsEdit-content-all-cen {
+    font-size: 32px; 
+    color: #333;
+    margin-bottom: 24px;
+}
+.applicationsEdit-content-all-tit {
+    font-size:32px;
+    color: #333;
+    margin-bottom: 24px;
+}
+.applicationsEdit-content-all-con {
+    display: flex;
+    flex-wrap: nowrap;
+    column-count: 5;
+    margin-bottom: 60px;
+    
+
+}
+.applicationsEdit-content-all-con-every {
+    width: 20%;
+   
+}
+.applicationsEdit-content-all-con-img {
+    width: 59px;
+    height: 59px;
+    margin-left: 33px;
+    margin-bottom: 27px;
+}
+.applicationsEdit-content-all-con-tit {
+    font-size: 24px;
+    color: #333;
+    margin-left: 16px;  
+}

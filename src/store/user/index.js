@@ -11,7 +11,9 @@ export default {
     userInfo: {
     },
     // 售达方信息
-    saleInfo: {}
+    saleInfo: {},
+    // token里的用户信息
+    tokenUserInf: {}
   },
   mutations: {
     /* eslint注释请不要删除 */
@@ -23,6 +25,10 @@ export default {
     [USER.UPDATE_SALE](state, data) {
       /* 修改送达方信息 */
       state.userInfo = data;
+    },
+    [USER.UPDATE_TOKEN_USER](state, data) {
+      /* 修改token用户信息 */
+      state.tokenUserInf = data;
     }
   },
   actions: {
@@ -31,6 +37,13 @@ export default {
       const { code, data } = await Vue.prototype.customerService.getCustomer();
       if (code === '1') {
         return commit(USER.UPDATE_SALE, data);
+      }
+    },
+    async [USER.UPDATE_TOKEN_USER_ASYNC]({ commit }) {
+      /* 修改token用户信息 */
+      const { code, data } = await Vue.prototype.authService.getUserInfoByToken();
+      if (code === '1') {
+        return commit(USER.UPDATE_TOKEN_USER, data);
       }
     }
   },
@@ -42,6 +55,10 @@ export default {
     [USER.GET_SALE](state) {
       /* 售达方信息 */
       return state.userInfo;
+    },
+    [USER.GET_TOKEN_USER](state) {
+      /* token用户信息 */
+      return state.tokenUserInf;
     },
   }
 };

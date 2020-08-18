@@ -26,8 +26,8 @@ const urls = {
   getcustomersList(code) {
     return `/customers/${code}/payer`;
   },
-
-
+  // 获取秘钥
+  getSecretkey: '/customer/user/secretkey',
 };
 util.addPrefix(baseURL, urls);
 export default urls;

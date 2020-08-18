@@ -21,6 +21,12 @@
       }
     },
     {
+      "path": "pages/applicationsIndex/applicationsEdit",
+      "style": {
+        "navigationBarTitleText": "应用首页编辑"
+      }
+    },
+    {
       "path": "pages/login/login/login",
       "style": {
         "navigationBarTitleText": "登录"

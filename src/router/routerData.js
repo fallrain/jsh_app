@@ -2,6 +2,7 @@
 const data = [
   'pages/index/index',
   'pages/applicationsIndex/applicationsIndex',
+  'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',
   'pages/goods/goodsList',
   'pages/shoppingCart/shoppingCart',
