@@ -13,7 +13,9 @@ export default {
     // 售达方信息
     saleInfo: {},
     // token里的用户信息
-    tokenUserInf: {}
+    tokenUserInf: {},
+    // 默认送达方信息
+    defaultSendToInf: {}
   },
   mutations: {
     /* eslint注释请不要删除 */
@@ -29,6 +31,10 @@ export default {
     [USER.UPDATE_TOKEN_USER](state, data) {
       /* 修改token用户信息 */
       state.tokenUserInf = data;
+    },
+    [USER.UPDATE_DEFAULT_SEND_TO](state, data) {
+      /* 修改默认送达方 */
+      state.defaultSendToInf = data;
     }
   },
   actions: {
@@ -45,6 +51,19 @@ export default {
       if (code === '1') {
         return commit(USER.UPDATE_TOKEN_USER, data);
       }
+    },
+    async [USER.UPDATE_DEFAULT_SEND_TO_ASYNC]({ commit }) {
+      /* 修改默认送达方信息 */
+      return Vue.prototype.customerService.addressesList(1).then(({ code, data }) => {
+        if (code === '1') {
+          // 当前配送地址修改(选出默认地址)
+          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          if (defaultIndex > -1) {
+            // 更新默认送达方store
+            commit([USER.UPDATE_DEFAULT_SEND_TO], data[defaultIndex]);
+          }
+        }
+      });
     }
   },
   getters: {
@@ -59,6 +78,10 @@ export default {
     [USER.GET_TOKEN_USER](state) {
       /* token用户信息 */
       return state.tokenUserInf;
+    },
+    [USER.GET_DEFAULT_SEND_TO](state) {
+      /* 默认送达方信息 */
+      return state.defaultSendToInf;
     },
   }
 };
