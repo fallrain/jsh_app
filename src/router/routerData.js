@@ -1,7 +1,7 @@
 
 const data = [
   'pages/index/index',
-  "pages/applicationsIndex/applicationsIndex",
+  'pages/applicationsIndex/applicationsIndex',
   'pages/login/login/login',
   'pages/goods/goodsList',
   'pages/shoppingCart/shoppingCart',
@@ -30,7 +30,6 @@ const data = [
   'pages/mine/myAlertLoginPwd',
   'pages/mine/myGuestView',
   'pages/mine/mySetDetail',
-  'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm'
 ];

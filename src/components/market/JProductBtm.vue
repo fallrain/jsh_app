@@ -2,19 +2,21 @@
   <view class="jProductBtm">
     <view  v-if="groupType === 'zuhe'" class="jProductBtm-left">
       <view class="fs24 text-333">
-        合计：<text class="text-theme">￥2893.12</text>
+        合计：<text class="text-theme">￥{{totalMoney*nums}}</text>
       </view>
       <view class="fs20 text-999">
-        剩余可购买套数：<text class="text-theme">94</text>
+        剩余可购买套数：<text class="text-theme">{{upperLimit}}</text>
       </view>
     </view>
     <view v-if="groupType === 'taocan'" class="jProductBtm-left">
       <view class="fs24 text-333">
-        合计：<text class="text-theme">￥2893.12</text>
+        合计：<text class="text-theme">￥{{totalMoney}}</text>
       </view>
     </view>
     <view v-if="groupType === 'zuhe'" class="jProductBtm-right">
-      <uni-number-box></uni-number-box>
+      <uni-number-box
+        @change="goodsNumChange"
+      ></uni-number-box>
       <button
         type="button"
         class="jProductBtm-right-btn"
@@ -51,15 +53,33 @@ export default {
     groupType: {
       type: [String, Number]
     },
+    totalMoney: {
+      type: [String, Number]
+    },
+    upperLimit: {
+      type: [String, Number]
+    },
     conditionStatus: {
       type: Boolean
     }
+  },
+  data() {
+    return {
+      nums: 1
+    };
+  },
+  created() {
+    console.log(this.groupType);
+    console.log(this.totalMoney);
   },
   methods: {
     choose() {
       const checked = !this.checked;
       this.$emit('update:checked', checked);
       this.$emit('checkAll', checked);
+    },
+    goodsNumChange(val) {
+      this.nums = val;
     }
   }
 };
