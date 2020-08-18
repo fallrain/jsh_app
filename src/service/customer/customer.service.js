@@ -45,6 +45,8 @@ export default {
   // 余额支付信息
   inquire(data) {
     return jPostJson(urls.inquire, data);
+  },
+  getSecretkey(data) {
+    return jPostJson(urls.getSecretkey, data);
   }
-
 };

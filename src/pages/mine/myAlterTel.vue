@@ -6,14 +6,20 @@
     <view class="topLine"></view>
     <view class="myAlterTel-row">
       <view class="title">原手机号</view>
-      <view class="value">18953205108</view>
+      <view class="value">{{form.oldPhone}}</view>
     </view>
     <view class="myAlterTel-row">
       <view class="title">验证码</view>
-      <input class="inputView" placeholder="请输入验证码">
+      <input
+        class="inputView"
+        placeholder="请输入验证码"
+        v-model="form.oldVerificationCode"
+      >
       <view class="myAlterTel-row-right-wrap">
         <view class="myAlterTel-row-right-gap"></view>
-        <view class="authCode">发送验证码</view>
+        <j-verification-code
+          :get-method="getVerificationCodeByOldPhone"
+        ></j-verification-code>
       </view>
     </view>
     <view class="myAlterTel-row">
@@ -21,46 +27,190 @@
       <input
         class="inputView"
         placeholder="请输入新手机号"
+        v-model="form.newPhone"
       >
     </view>
     <view class="myAlterTel-row">
       <view class="title">验证码</view>
-      <input class="inputView" placeholder="请输入验证码">
+      <input
+        class="inputView"
+        placeholder="请输入验证码"
+        v-model="form.newVerificationCode"
+      >
       <view class="myAlterTel-row-right-wrap">
         <view class="myAlterTel-row-right-gap"></view>
-        <view class="authCode">发送验证码</view>
+        <j-verification-code
+          :get-method="getVerificationCodeByNewPhone"
+        ></j-verification-code>
       </view>
     </view>
     <view class="myAlterTel-row">
       <view class="title">图形验证码</view>
       <input class="inputView" placeholder="请输入图形验证码">
+      <image
+        :src="form.captchaImage"
+        @tap="changeAuthCode"
+        class="myAlterTel-authcode-img-wrap ml24"
+      ></image>
     </view>
-
-    <button class="btnStyle">修改</button>
+    <button
+      @tap="updatePhone"
+      class="btnStyle"
+    >修改
+    </button>
   </view>
 </template>
 <script>
 
 import JTopWarning from '../../components/common/JTopWarning';
-
+import JVerificationCode from '../../components/common/WVerificationcode';
+import JValidate from '@/lib/jValidate/JValidate';
+import jValidateRules from '@/lib/jValidate/JValidateRules';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'myAlterTel',
   components: {
+    JVerificationCode,
     JTopWarning
   },
   data() {
-    return {};
+    return {
+      form: {
+        // 图形码
+        captchaImage: '',
+        // 图形验证码token
+        captchaToken: '',
+        // 原来的手机号
+        oldPhone: '',
+        // 老的验证码
+        oldVerificationCode: '',
+        // 新手机号
+        newPhone: '',
+        // 新手机号验证码
+        newVerificationCode: '',
+      }
+    };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER,
+    })
+  },
   created() {
-
+    this.setPageInfo();
   },
-  methods: {}
+  methods: {
+    setPageInfo() {
+      this.getUserInfById();
+      this.getCaptcha();
+      this.genVdt();
+    },
+    genVdt() {
+      this.vdt = new JValidate({
+        _this: this,
+        formData: this.form,
+        rules: {
+          oldPhone: {
+            required: true,
+            mobile: true
+          },
+          oldVerificationCode: {
+            required: true
+          },
+          newPhone: {
+            required: true,
+            mobile: true
+          },
+          newVerificationCode: {
+            required: true
+          },
+        },
+        messages: {
+          oldPhone: {
+            required: '原手机号不能为空',
+            mobile: '原手机号格式不正确'
+          },
+          oldVerificationCode: {
+            required: '必须输入原手机验证码'
+          },
+          newPhone: {
+            required: '新手机号不能为空',
+            mobile: '新手机号格式不正确'
+          },
+          newVerificationCode: {
+            required: '必须输入新手机验证码'
+          },
+        }
+      });
+    },
+    async getUserInfById() {
+      /* 获取原来的手机号 */
+      const data = await this.openAccountService.getUserInfById(this[USER.GET_TOKEN_USER].id);
+      if (data) {
+        this.form.oldPhone = data.phoneNumber;
+      }
+    },
+    async getCaptcha() {
+      /* 获取图形验证码 */
+      const {
+        captchaImage,
+        captchaToken
+      } = await this.openAccountService.getCaptcha();
+      this.form.captchaImage = captchaImage;
+      this.form.captchaToken = captchaToken;
+    },
+    async getVerificationCode(phoneNumber) {
+      /* 发送手机验证码 */
+      return this.openAccountService.getVerificationCode({
+        phoneNumber,
+        verificationCodeType: 'UNBINDING'
+      });
+    },
+    getVerificationCodeByOldPhone() {
+      if (this.oldPhone) {
+        this.getVerificationCode(this.oldPhone);
+      } else {
+        uni.showToast({
+          title: '原手机号未获取',
+          icon: 'none'
+        });
+      }
+    },
+    getVerificationCodeByNewPhone() {
+      if (jValidateRules.rules.mobile(this.newPhone)) {
+        this.getVerificationCode(this.newPhone);
+      } else {
+        uni.showToast({
+          title: '请填正确格式的手机号',
+          icon: 'none'
+        });
+      }
+    },
+    changeAuthCode() {
+      /* 改变图形码 */
+      this.getCaptcha();
+    },
+    async updatePhone() {
+      /* 修改绑定手机号 */
+      if (this.vdt.valid()) {
+        const { code } = await this.openAccountService.checkVerificationCode({
+          phoneNumber: this.form.oldPhone,
+          verificationCode: this.form.oldVerificationCode,
+          verificationCodeType: 'UNBINDING'
+        });
+      }
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss">
   .bg {
     width: 750px;
     min-height: 1400px;
@@ -82,10 +232,15 @@ export default {
     &:last-child {
       border-bottom: 0;
     }
+
+    .value {
+      color: #333;
+      font-size: 30px;
+    }
   }
 
   .title {
-    width: 180px;
+    width: 172px;
     height: 48px;
     margin-left: 24px;
     margin-right: 24px;
@@ -145,6 +300,16 @@ export default {
     background: #eee;
     margin-left: 24px;
     margin-right: 24px;
+  }
+
+  .myAlterTel-authcode-img-wrap {
+    width: 164px;
+    height: 64px;
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
   }
 
 </style>

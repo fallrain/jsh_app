@@ -18,7 +18,7 @@
         <view>
           <view class="nameAndPosion">
             <!-- 姓名职位 -->
-            <view class="name">{{userInfo.nickname}}</view>
+            <view class="name">{{tokenUserInfo.nickname}}</view>
             <view class="posion">总经理</view>
           </view>
           <view class="detail">售达方：({{saleInfo.customerCode}}) {{saleInfo.customerName}}</view>
@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       // 用户信息
-      userInfo: {},
+      tokenUserInfo: {},
       // 售达方信息
       saleInfo: {},
       payerBalanceList: [],
@@ -221,12 +221,14 @@ export default {
   computed: {
     ...mapGetters({
       [USER.GET_SALE]: USER.GET_SALE,
+      [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER,
       userInf: USER.GET_USER,
     })
   },
   methods: {
     ...mapActions([
-      USER.UPDATE_SALE_ASYNC
+      USER.UPDATE_SALE_ASYNC,
+      USER.UPDATE_TOKEN_USER_ASYNC,
     ]),
     setPageInfo() {
       this.getUserInfoByToken();
@@ -235,14 +237,11 @@ export default {
       this.outstandingAmountFun();
     },
     async getUserInfoByToken() {
-      /* 获取用户信息 */
-      const token = uni.getStorageSync('token');
-      const { code, data } = await this.authService.getUserInfoByToken({
-        token
-      });
-      if (code === '1') {
-        this.userInfo = data || {};
+      /* 获取token用户信息 */
+      if (!this[USER.GET_TOKEN_USER] || JSON.stringify(this[USER.GET_TOKEN_USER]) === '{}') {
+        await this[USER.UPDATE_TOKEN_USER_ASYNC]();
       }
+      this.tokenUserInfo = this[USER.GET_TOKEN_USER] || {};
     },
     async getSaleInfo() {
       /* 获取售达方信息 */
