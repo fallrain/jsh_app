@@ -234,7 +234,7 @@ export default {
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER
-    }),
+    })
   },
   methods: {
     getPageInfo() {
@@ -307,10 +307,11 @@ export default {
       /* 获取不同条件下搜索的传参 */
       let condition = {
         pageNum: pages ? pages.num : 1,
-        pageSize: pages ? pages.size : 15,
+        pageSize: 15,
         customerCode: this.userInf.customerCode,
         sendTo: this.userInf.sendtoCode,
       };
+      console.log( this.userInf.customerCode)
         // tab条件
       const tab = this.tabs.find(v => v.active);
       // 其他条件
@@ -379,8 +380,8 @@ export default {
       const condition = this.getSearchCondition(pages);
       console.log(condition)
       const scrollView = {};
+      
       const { code, data } = await this.transfergoodsService.transferList({
-        ...condition,
         timestamp: Date.parse(new Date()),
         // categoryCode: this.filterName,
         attributeName: '',
@@ -395,9 +396,10 @@ export default {
         tags: '',
         brandGroup: this.brand,
         productCode: '',
-        // highPrice: '',
-        // lowPrice: '',
+        highPrice: '',
+        lowPrice: '',
         stock: this.stock,
+        ...condition,
       });  
       if (code === '1' && data.code === "200") {
         console.log("11111")     
@@ -558,14 +560,14 @@ export default {
       this.addressesList.forEach(item => {
         console.log(item)
         console.log(this.curChoseDeliveryAddress.name)
-        if(this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.address}`) {
+        if(this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.addressName}`) {
           address = item
         }
       }) 
       console.log(address)
       if(item.stockList[0].qty !== "0") {
         console.log(item)
-          const insertTransfer = this.transfergoodsService.insertOrder({
+          const insertTransfer = this.transfergoodsService.insertOrder([{
             timestamp:Date.parse(new Date()),
             ycFlag: this.SendWay,    //是否统仓统配    配送类型？
             SEQ: "",//调货单号     
@@ -576,36 +578,34 @@ export default {
             PRODUCT_MODEL: item.module,//物料型号  ？
             DH_INVCODE: item.code,//物料编码
             DH_INVSTD:item.name,    //描述 
-            DH_QTY: item.number,     //下单数量
-            UnitPrice: item.$PtPrice.invoicePrice,  //开票价   价格接口
-            ActPrice: item.$PtPrice.supplyPrice, //供价     价格接口
-            BateRate: item.$PtPrice.rebateRate,  //扣点    价格接口
-            BateMoney: item.$PtPrice.rebateMoney,         //价格接口
-            IsFL: item.$PtPrice.rebatePolicy ,  //返利标识    //价格接口
-            IsKPO: item.$PtPrice.isBB ,   //商空标识  0：非商空  1：商空     //价格接口
+            DH_QTY: Number(item.number),     //下单数量
+            UnitPrice: String(item.$PtPrice.invoicePrice),  //开票价   价格接口
+            ActPrice: Number(item.$PtPrice.supplyPrice), //供价     价格接口
+            BateRate: Number(item.$PtPrice.rebateRate),  //扣点    价格接口
+            BateMoney: Number(item.$PtPrice.rebateMoney),         //价格接口
+            IsFL: Number(item.$PtPrice.rebatePolicy) ,  //返利标识    //价格接口
+            IsKPO: Number(item.$PtPrice.isBB) ,   //商空标识  0：非商空  1：商空     //价格接口
             DH_VERCODE: "" , //特价版本
             DH_VERMONEY: "",	  //版本价格
             USERID: this.userInf.saletoCode, //售达方编码
             longfeiMFID: address.addressCode,    //送达方编码
-            DH_PAYTO: this.payer[0].payerCode,   //付款方编码       //付款方接口传递一份
-            DH_PAYTONAME: `(${this.payer[0].payerCode})${this.payer[0].payerName}`,    //付款方名称   //付款方接口传递一份
+            DH_PAYTO: "8800101954",   //付款方编码       //付款方接口传递一份this.payer[0].payerCode
+            DH_PAYTONAME: "(8800101954)青岛鸿程永泰商贸有限公司",    //付款方名称   //付款方接口传递一份`(${this.payer[0].payerCode})${this.payer[0].payerName}`
             YJMFID: address.manageCustomerCode,    //业绩管理客户编码   p配送至 接口
             DH_PROCODE: "",   //工程版本
             DH_PROLOSSMONEY: "" ,  
             DH_LOSSRATE: 0,  //不用改
             DH_OUTWHCODE: this.stock,  //调出库位     //当前选的调出库位
             DH_IMG: item.searchImage,    
-            DH_SENDTONAME: "青岛鸿程永泰商贸有限公司",    //送达方名称   配送至 接口address.addressName
+            DH_SENDTONAME: address.addressName,    //送达方名称   配送至 接口
             SENDTO_ADDRESS: address.address,  //送达方地址   配送至 接口
             stockList: this.cargoSend,    //调出库位列表
 
-            // DH_PAYTO_TYPE: this.payer[0].payerType,   //付款方类型       //付款方
+            DH_PAYTO_TYPE: "00",   //付款方类型       //付款方
             DH_SALETO_NAME: "青岛鸿程永泰商贸有限公司",     //售达方编码    用户信息   //this.payer[0].customerName
             DH_MAIN_CHANNEL_CODE: "M" ,   // 大渠道    customer接口   配送接口address.channel
             DH_SUB_CHANNEL_CODE: "HA001",  //小渠道     customer接口  配送接口address.subChannel
-        
-        
-      });
+          }]);
 
       }
     },
@@ -688,12 +688,13 @@ export default {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
-            name: `(${v.customerCode})${v.address}`
+            name: `(${v.customerCode})${v.addressName}`
           }));
+          console.log(this.deliveryAddressList)
           // 当前配送地址修改
-          if (this.deliveryAddressList[0]) {
-            this.deliveryAddressList[0].checked = true;
-            this.curChoseDeliveryAddress = this.deliveryAddressList[0];
+          if (this.deliveryAddressList[1]) {
+            this.deliveryAddressList[1].checked = true;
+            this.curChoseDeliveryAddress = this.deliveryAddressList[1];
           }
           
         }
