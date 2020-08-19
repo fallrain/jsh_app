@@ -114,6 +114,7 @@ import {
   getGoodsType
 } from '@/lib/dataDictionary';
 import {
+  mapMutations,
   mapGetters
 } from 'vuex';
 import {
@@ -220,13 +221,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
     }),
   },
   methods: {
+    ...mapMutations([
+      USER.UPDATE_DEFAULT_SEND_TO
+    ]),
     getPageInf() {
+      this.getSaleInfo();
       this.setFilterData();
       this.getDeliveryAddress();
+    },
+    async getSaleInfo() {
+      /* 获取售达方信息 */
+      if (!this.userInf || JSON.stringify(this.userInf) === '{}') {
+        await this[USER.UPDATE_SALE_ASYNC]();
+      }
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -243,7 +255,7 @@ export default {
         pageNum: pages.num,
         pageSize: pages.size,
         customerCode: this.userInf.customerCode,
-        sendTo: this.userInf.sendtoCode,
+        sendTo: this.defaultSendToInf.customerCode,
       };
         // tab条件
       const tab = this.tabs.find(v => v.active);
@@ -288,6 +300,7 @@ export default {
       /* 搜索产品列表 */
       // 公共用户信息
       const userInf = this.userInf;
+      const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
       const { code, data } = await this.commodityService.goodsList(condition);
       const scrollView = {};
@@ -303,8 +316,8 @@ export default {
         const productCodes = curList.map(v => v.productCode);
         const priceArgsObj = {
           productCodes,
-          saletoCode: userInf.saletoCode,
-          sendtoCode: userInf.sendtoCode,
+          saletoCode: userInf.customerCode,
+          sendtoCode: defaultSendToInf.customerCode,
         };
           // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
@@ -356,7 +369,7 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
-      console.log(goods)
+      console.log(goods);
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
@@ -421,17 +434,21 @@ export default {
     },
     getDeliveryAddress() {
       /* 获取配送地址 */
-      this.customerService.addressesList(1).then(({ code, data }) => {
+      return this.customerService.addressesList(1).then(({ code, data }) => {
         if (code === '1') {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
             name: `(${v.customerCode})${v.address}`
           }));
-          // 当前配送地址修改
-          if (this.deliveryAddressList[0]) {
-            this.deliveryAddressList[0].checked = true;
-            this.curChoseDeliveryAddress = this.deliveryAddressList[0];
+          // 当前配送地址修改(选出默认地址)
+          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          if (defaultIndex > -1) {
+            const curChoseDeliveryAddress = data[defaultIndex];
+            // 更新默认送达方store
+            this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
+            this.deliveryAddressList[defaultIndex].checked = true;
+            this.curChoseDeliveryAddress = curChoseDeliveryAddress;
           }
         }
       });

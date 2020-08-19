@@ -16,4 +16,10 @@ export default {
   UPDATE_TOKEN_USER: `${prefix}.UpdateTokenUser`,
   // 异步更新token用户信息
   UPDATE_TOKEN_USER_ASYNC: `${prefix}.UpdateTokenUserAsync`,
+  // 默认送达方信息
+  GET_DEFAULT_SEND_TO: `${prefix}.getDefaultSendTo`,
+  // 更新默认送达方信息
+  UPDATE_DEFAULT_SEND_TO: `${prefix}.updateDefaultSendTo`,
+  // 接口取默认送达方信息
+  UPDATE_DEFAULT_SEND_TO_ASYNC: `${prefix}.updateDefaultSendToAsync`,
 };

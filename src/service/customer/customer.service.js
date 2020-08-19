@@ -48,5 +48,12 @@ export default {
   },
   getSecretkey(data) {
     return jPostJson(urls.getSecretkey, data);
+  },
+  queryCustomerInterestProduct(data) {
+    /* 获取关注商品 */
+    // account: 8700010462
+    // sendtoCode: 8700010462
+    // customerCode: 8700010462
+    return jGet(urls.queryCustomerInterestProduct, data);
   }
 };
