@@ -36,8 +36,8 @@
           :key="index"
           :goods="item"
           :index="index"
-          :saletoCode="userInf.saletoCode"
-          :sendtoCode="userInf.sendtoCode"
+          :saletoCode="userInf.customerCode"
+          :sendtoCode="defaultSendToInf.customerCode"
           :allPrice="item.$allPrice"
           @change="goodsChange"
         ></j-goods-item>
