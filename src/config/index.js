@@ -1,9 +1,9 @@
 export default {
   h5: {
     dev: {
-      baseUrl: 'https://new.jsh.com',
-      // baseUrl: 'http://mall.jsh.com',
-      cBaseUrl: 'https://c.jsh.com',
+      // baseUrl: 'https://new.jsh.com',
+      baseUrl: 'http://mall.jsh.com',
+      // cBaseUrl: 'https://c.jsh.com',
     },
     sit: {
       baseUrl: '',

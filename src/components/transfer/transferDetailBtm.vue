@@ -48,7 +48,12 @@ export default {
     // }
     tlement() {
       if(Number(this.calue) < 15) {
-        confirm("体积小于15，无法结算，请继续添加商品")
+        // confirm("体积小于15，无法结算，请继续添加商品")
+        uni.showToast({
+          title: '体积小于15，无法结算，请继续添加商品',
+          duration: 3000
+        });
+        
       }
     }
   }
