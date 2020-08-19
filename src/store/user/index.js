@@ -60,7 +60,7 @@ export default {
           const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
           if (defaultIndex > -1) {
             // 更新默认送达方store
-            commit([USER.UPDATE_DEFAULT_SEND_TO], data[defaultIndex]);
+            commit(USER.UPDATE_DEFAULT_SEND_TO, data[defaultIndex]);
           }
         }
       });
