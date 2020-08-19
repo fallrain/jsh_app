@@ -52,7 +52,7 @@
           <text class="v-c-i-cnt-foot-value"> ¥ 45996.00</text>
         </view>
         <view class="">
-          <uni-number-box></uni-number-box>
+          <uni-number-box :value="item.IBL_NUM"></uni-number-box>
         </view>
       </view>
     </view>
@@ -100,8 +100,8 @@ export default {
   methods: {
     tiji() {
       const zhuangChe = (this.goods.IBR_JSTIJI * 1).toFixed(2);
-      const baifenbi = (zhuangChe / (this.goods.IBR_MAXTJ * 1)).toFixed(2) * 100;
-      return `${baifenbi}%`;
+      const baifenbi = (zhuangChe / (this.goods.IBR_MAXTJ * 1)) * 100;
+      return `${baifenbi.toFixed(0)}%`;
     },
     choose() {
       /* 选中本商品 */

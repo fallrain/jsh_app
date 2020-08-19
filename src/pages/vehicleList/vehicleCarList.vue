@@ -1,6 +1,6 @@
 <template>
   <view class="vehicleCarList">
-    <view class="vehicleCar-rouHead">共4件宝贝</view>
+    <view class="vehicleCar-rouHead">共{{NUM}}件宝贝</view>
     <view class="vehicleCar-invalid" v-if="puTongList.length>0">
       <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index"
       :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item>
@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-      SEQ: '', // 整车购物车进入传单号
+      NUM: 0, // 有效产品数量
       puTongList: [],
       pingCheList: [],
       guaDanList: [],
@@ -80,6 +80,7 @@ export default {
   },
   created() {
     this.queryCarList(); // 整车购物车列表查询
+    this.getPayerList(); // 获取付款方接口
   },
   methods: {
     async queryCarList() {
@@ -87,27 +88,43 @@ export default {
       const longfeiUSERID = this.userInf.customerCode;
       const { code, data } = await this.vehicleService.queryCarList(timetamp, longfeiUSERID);
       if (code === '1') {
-        console.log('整车购物车数量查询');
+        console.log('整车购物车查询');
         console.log(data);
+        this.NUM = 0;
         data.data.forEach((inf) => {
           if (inf.IBR_ISFLAG === '失效产品' && inf.orderList.length > 0) {
             inf.checked = false;
             inf.typpe = 'ZC';
             this.failureGoodsList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
           if (inf.IBR_ISFLAG === '普通整车' && inf.orderList.length > 0) {
             inf.checked = false;
             this.puTongList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
           if (inf.IBR_ISFLAG === '拼车订单' && inf.orderList.length > 0) {
             inf.checked = false;
             this.pingCheList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
           if (inf.IBR_ISFLAG === '我的挂单' && inf.orderList.length > 0) {
             inf.checked = false;
             this.guaDanList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
         });
+      }
+    },
+    async getPayerList() {
+      const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCode, {
+        salesGroupCode: this.userInf.salesGroupCode,
+        status: 1
+      });
+      if (code === '1') {
+        this.payerList = data;
+        this.currentPayer = data[0];
+        this.payerList[0].choosed = true;
       }
     },
   }
@@ -138,7 +155,7 @@ export default {
   }
   .vehicleCar-high {
     background-color: #F5F5F5;
-    height: 40px;
+    height: 80px;
   }
   .vehicleCar-foot {
     position: fixed;

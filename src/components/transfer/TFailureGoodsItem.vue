@@ -16,8 +16,8 @@
           <view class="tFailureGoodsItem-cnt-btm">
             <view class="tFailureGoodsItem-cnt-head-text">¥ {{order.SUMMONEY}}</view>
             <view class="tFailureGoodsItem-cnt-head-inf-mrr">
-              付款方
-              <i class="iconfont iconxia" :class="[order.isExpand && 'reverse']" @tap="showPayer(order,index)"></i>
+              付款方:
+<!--              <i class="iconfont iconxia" :class="[order.isExpand && 'reverse']" @tap="showPayer(order,index)"></i>-->
               <view class="tFailureGoodsItem-cnt-price-info" v-show="order.isExpand">
                 <view class="tFailureGoodsItem-cnt-price-info-li" v-for="(it,index) in order.payer" :key="index"
                       :class="[order.isChecked && 'active']" @tap="togglePayer(order, it, index)">
@@ -174,7 +174,7 @@ export default {
     min-height: 150px;
     flex-direction: column;
     justify-content: space-between;
-    padding-right: 40px;
+    padding-right: 10px;
   }
 
   .tFailureGoodsItem-cnt-head {
@@ -238,7 +238,7 @@ export default {
       }
       .tFailureGoodsItem-cnt-head-choose {
         color: #999;
-        font-size: 24px;
+        font-size: 20px;
       }
       .reverse {
       display: inline-block;
