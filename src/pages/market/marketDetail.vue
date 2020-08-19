@@ -65,6 +65,7 @@
       :conditionStatus="conditionStatus"
       :upperLimit="currentDetail.upperLimit"
       :totalMoney="totalMoney"
+      @goOrder="goOrder"
     ></j-product-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
@@ -125,11 +126,11 @@ export default {
     this.stockForm.saletoCode = saletoCode;
     this.stockForm.sendtoCode = sendtoCode;
     console.log(this.currentDetail);
-    this.getAddressList();
+    // this.getAddressList();
     if (this.currentDetail.activityType === 'zuhe') {
       this.getTotalMoney();
     }
-    /* console.log(this.currentDetail)
+    /*
     this.getAllStock(); */
   },
   computed: {
@@ -243,7 +244,60 @@ export default {
     showAdsPicker() {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
+    },
+    // 成套下单
+    goOrder() {
+      console.log(this.currentDetail);
+    },
+    // 产品校验
+    async validateProduct() {
+      const form = {
+        saletoCode: '8800101954',
+        sendtoCode: '8800101954',
+        yunCangCode: '',
+        yunCangFlag: '',
+        splitComposeList: [
+          {
+            activityType: 4,
+            activityId: 24318374136,
+            productList: [
+              {
+                productCode: 'CBAGD4000',
+                number: 1,
+                isStock: '1',
+                farWeek: '0',
+                creditModel: '0',
+                isCheckFarWeek: '0',
+                isCheckCreditModel: '0',
+                farWeekDate: '',
+                transferVersion: '',
+                priceType: 'PT',
+                priceVersion: '',
+                productSeries: '',
+                kuanXian: '0',
+                isCheckKuanXian: '0'
+              }, {
+                productCode: 'FA08F000M',
+                number: 2,
+                isStock: '1',
+                farWeek: '0',
+                creditModel: '0',
+                isCheckFarWeek: '0',
+                isCheckCreditModel: '0',
+                farWeekDate: '',
+                transferVersion: '',
+                priceType: 'PT',
+                priceVersion: '',
+                productSeries: '',
+                kuanXian: '0',
+                isCheckKuanXian: '0'
+              }],
+            number: 1
+          }]
+      };
+      // const { code, data } = await this.orderService.validateProduct(this.stockForm);
     }
+    // 拆单
   }
 };
 </script>

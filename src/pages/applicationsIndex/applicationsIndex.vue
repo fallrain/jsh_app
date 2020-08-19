@@ -172,7 +172,8 @@
 </template>
 <script>
 import {
-  uniDrawer
+  uniDrawer,
+  uniSwiperDot
 } from '@dcloudio/uni-ui';
 import JCell from '../../components/form/JCell';
 import './css/applicationsIndex.scss';
@@ -181,6 +182,7 @@ export default {
   name: 'applicationsIndex',
   components: {
     uniDrawer,
+    uniSwiperDot,
     JCell
   },
   data() {
@@ -422,7 +424,19 @@ export default {
       ]
     };
   },
+  created() {
+    this.getbannerList();
+  },
   methods: {
+    changePic(e) {
+      this.current = e.detail.current;
+    },
+    async getbannerList() {
+      const { code, data } = await this.indexService.bannerList({});
+      if (code === '1') {
+        this.imageList = data;
+      }
+    },
     openMenu() {
       /* 打开抽屉 */
       const infoDrawer = this.$refs.infoDrawer;
