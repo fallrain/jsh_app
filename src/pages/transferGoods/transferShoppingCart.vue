@@ -272,13 +272,6 @@ export default {
     },
     // 结算跳转
     async Settlement() {
-      // 调货验证码
-       const { code, data } = await this.orderService.send(this.userInf.customerCode)
-       if (code === "1") {
-          console.log(data)
-          this.YZM = data.data.verifyKey
-       }
-
       let flag = true
       let sum = 0
       let volume = 0
@@ -287,23 +280,63 @@ export default {
         if (ele.checked) {
           sum += Number(ele.data.SUMMONEY)
           volume = Math.round(ele.data.IBR_JSTIJI/15*100)
-          if (volume < 15) {
+          if (volume < 100) {
             flag = false
           }      
+        } else {
+          uni.showToast({
+            title: "请先选择订单",
+            duration: 3000
+          });    
         }
       })
       if (!flag) {
-        confirm('体积小于15%无法结算')
-      }     
-      // const volume = this.allOrderList.map(ele => ele.checked && Math.round(ele.data.IBR_JSTIJI/15*100) < 15)
-      // if(volume && volume.length > 0) confirm('体积小于15%无法结算')
-      // 提交订单
-      const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
-        longfeiUSERID:this.userInf.customerCode,
-        orderNo:'',
-        verifyCode:'',
-        erifyKey:this.YZM
-      })
+        // confirm('体积小于15，无法结算，请继续添加商品')
+        this.allOrderList.forEach(ele => {
+          if (ele.checked) {
+            uni.showToast({
+              title:`单号${ele.IBR_SEQ};体积不满足，无法提交`,
+              duration: 3000
+            });
+          }
+        })     
+      } else {
+        this.payerBalance.forEach(ele => {
+          if(ele.balance > toBePaid) {
+            
+            // const volume = this.allOrderList.map(ele => ele.checked && Math.round(ele.data.IBR_JSTIJI/15*100) < 15)
+            // if(volume && volume.length > 0) confirm('体积小于15%无法结算')
+            // // 调货验证码
+            //  const { code, data } = await this.orderService.send(this.userInf.customerCode)
+            //  if (code === "1") {
+            //     console.log(data)
+            //     this.YZM = data.data.verifyKey
+            //  }
+            // // 提交订单
+            // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
+            //   longfeiUSERID:this.userInf.customerCode,
+            //   orderNo:'',
+            //   verifyCode:'',
+            //   erifyKey:this.YZM
+            // })
+          } else {
+              this.payerBalance.forEach(ele => {
+                uni.showModal({
+                  title: '提示',
+                  content: `付款方${ele.CodeName}余额不足，无法提交！`,
+                });
+              })     
+
+
+
+     
+          }
+
+        })
+        
+      }    
+      
+
       
     },
     // 编辑
@@ -318,8 +351,20 @@ export default {
     },
     // 清除选中产品
     editDelete() {
-      confirm("确认要删除选中订单") 
-        this.deleteOrderForm()
+      // confirm("确认要删除选中订单") 
+       uni.showModal({
+        title: '',
+        content: '确认要删除选中订单吗',
+        success: function(res) {
+          if (res.confirm) {
+            this.deleteOrderForm()
+            console.log(res);
+          } else if (res.cancel) {
+              console.log('用户点击取消');
+          }
+        }
+      });
+      
       
       
     },

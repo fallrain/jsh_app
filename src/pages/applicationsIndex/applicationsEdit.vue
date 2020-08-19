@@ -23,6 +23,7 @@
             <view class="applicationsEdit-content-all-con-every" 
               v-for="it in item.children"
               :key="it.id"
+              @tap="goDetail"
             >
               <image class="applicationsEdit-content-all-con-img" :src="it.src"> 
               <view class="applicationsEdit-content-all-con-tit">{{it.Subhead}}</view>
@@ -156,6 +157,11 @@ export default {
           }
 
         ]
+      }
+    },
+    methods: {
+      goDetail() {
+        
       }
     }
 }

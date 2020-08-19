@@ -92,6 +92,7 @@ export default {
     left: 0;
     right: 0;
     display: flex;
+    justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
     height: 100px;
@@ -133,6 +134,8 @@ export default {
   }
   
   .tShoppingCartBtm-check-delete {
+    height: 42px;
+    line-height: 42px;
     color: #fff;
     font-size: 24px;
     margin-left: 10px;
@@ -141,6 +144,8 @@ export default {
     border-radius: 40px;
   }
   .tShoppingCartBtm-check-cancel {
+    height: 42px;
+    line-height: 42px;
     color: #fff;
     font-size: 24px;
     margin-left: 10px;

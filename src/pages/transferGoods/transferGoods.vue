@@ -607,9 +607,14 @@ export default {
             DH_SUB_CHANNEL_CODE: "HA001",  //小渠道     customer接口  配送接口address.subChannel
           }]);
           if(insertTransfer.code === "1") {
-            confirm("加入调货成功")
+            // confirm("加入调货成功")
+            uni.showToast({
+              title: '加入调货成功',
+              duration: 3000,
+            });
             this.getShoppingCartNum()
           }
+         
       }
 
     },
