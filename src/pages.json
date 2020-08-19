@@ -15,6 +15,18 @@
       }
     },
     {
+      "path": "pages/applicationsIndex/applicationsIndex",
+      "style": {
+        "navigationBarTitleText": "应用首页"
+      }
+    },
+    {
+      "path": "pages/applicationsIndex/applicationsEdit",
+      "style": {
+        "navigationBarTitleText": "应用首页编辑"
+      }
+    },
+    {
       "path": "pages/login/login/login",
       "style": {
         "navigationBarTitleText": "登录"
@@ -158,7 +170,7 @@
       }
     },
     {
-      "path": "pages/mine/myAlertTel",
+      "path": "pages/mine/myAlterTel",
       "style": {
         "navigationBarTitleText": "修改手机号",
         "navigationBarBackgroundColor": "#ffffff"

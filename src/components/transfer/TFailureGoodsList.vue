@@ -1,7 +1,7 @@
 <template>
   <view class="tFailureGoodsList">
     <view class="tFailureGoodsList-head">
-      <view class="tFailureGoodsList-head-left">失效宝贝1件</view>
+      <view class="tFailureGoodsList-head-left">失效宝贝{{list.data ? list.data[0].orderList.length : 0}}件</view>
       <view class="tFailureGoodsList-head-opt" @tap="emptyProduct">清空失效宝贝</view>
     </view>
     <t-failure-goods-item v-for="(itemList,index) in list" :key="index"
@@ -62,7 +62,11 @@ export default {
         });
         console.log(result);
       } else {
-        confirm('暂时没有失效产品');
+        // confirm('暂时没有失效产品');
+        uni.showToast({
+          title: '暂时没有失效产品',
+          duration: 3000
+        });
       }
     }
   }

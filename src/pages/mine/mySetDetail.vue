@@ -76,7 +76,7 @@ export default {
     //   修改手机号
     alertTelClick() {
       uni.navigateTo({
-        url: '/pages/mine/myAlertTel'
+        url: '/pages/mine/myAlterTel'
       });
     },
     //   修改登录密码

@@ -48,6 +48,7 @@
       @showChange="tabPickerShowChange"
       v-model="pickerItem.children"
       @change="tabPickerChange"
+      @confirm="confirm"
     >
     </j-head-tab-picker>
   </view>
@@ -104,7 +105,8 @@ export default {
           // console.log(item.OUTWHNAME)
           const temp = {
             name: item.OUTWHNAME,
-            checked: false
+            checked: false,
+            type: item.OUTWHCODE
           }
           tempArray.push(temp)  
         })
@@ -116,13 +118,18 @@ export default {
           // console.log(item.sendWay)
           const temp = {
             name: item.sendWay,
-            checked: false
+            checked: false,
+            type: item.brandGroup
           }
           tempArray.push(temp)  
         })
         this.popTabs[1].children = tempArray
       }
-      // console.log(this.popTabs)
+      console.log(this.popTabs)
+       this.popTabs[0].children[0].checked = true;
+       this.popTabs[1].children[1].checked = true;
+       this.popTabs[1].children[0].ycFlag = "JSHSW"
+       this.popTabs[1].children[1].ycFlag = ""
     },
     
     tabHandle(item, index) {
@@ -146,6 +153,10 @@ export default {
     },
     tabPickerChange(children, index) {
       this.popTabs[index].children = children;
+    },
+    confirm(index) {
+      console.log(this.popTabs)
+      this.$emit("confirm", this.popTabs)
     }
   }
 };
@@ -165,6 +176,7 @@ export default {
   height: 130px;
 }
 
+
 .jHeadTab-list-wrap{
   position: absolute;
   left: 0;
@@ -180,7 +192,7 @@ export default {
   padding-left: 28px;
   padding-right: 28px;
   background: #fff;
-  height: 58px;
+  height: 66px;
 }
 
 .jHeadTab-item {

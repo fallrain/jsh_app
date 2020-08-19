@@ -16,7 +16,10 @@
       <j-head-tab
         class="mb12"
         :tabs="tabs"
+        :popTabs="popTabs"
         @tabClick="tabClick"
+        @tabPickerChange="popTabsChange"
+        @tabconfirmPup="tabConditionConfirm"
       ></j-head-tab>
     </view>
     <mescroll-body
@@ -33,8 +36,8 @@
           :key="index"
           :goods="item"
           :index="index"
-          :saletoCode="userInf.saletoCode"
-          :sendtoCode="userInf.sendtoCode"
+          :saletoCode="userInf.customerCode"
+          :sendtoCode="defaultSendToInf.customerCode"
           :allPrice="item.$allPrice"
           @change="goodsChange"
         ></j-goods-item>
@@ -114,6 +117,7 @@ import {
   getGoodsType
 } from '@/lib/dataDictionary';
 import {
+  mapMutations,
   mapGetters
 } from 'vuex';
 import {
@@ -177,6 +181,9 @@ export default {
           active: false
         }
       ],
+      popTabs: [],
+      // 选中的tab筛选数据
+      tabConditions: {},
       // 筛选抽屉
       isShowGoodsFilterDrawer: false,
       // 筛选抽屉数据
@@ -220,13 +227,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
     }),
   },
   methods: {
+    ...mapMutations([
+      USER.UPDATE_DEFAULT_SEND_TO
+    ]),
     getPageInf() {
+      this.getSaleInfo();
       this.setFilterData();
       this.getDeliveryAddress();
+    },
+    async getSaleInfo() {
+      /* 获取售达方信息 */
+      if (!this.userInf || JSON.stringify(this.userInf) === '{}') {
+        await this[USER.UPDATE_SALE_ASYNC]();
+      }
     },
     silentReSearch() {
       /* 静默搜索 */
@@ -243,7 +261,7 @@ export default {
         pageNum: pages.num,
         pageSize: pages.size,
         customerCode: this.userInf.customerCode,
-        sendTo: this.userInf.sendtoCode,
+        sendTo: this.defaultSendToInf.customerCode,
       };
         // tab条件
       const tab = this.tabs.find(v => v.active);
@@ -280,22 +298,46 @@ export default {
       condition = {
         ...condition,
         ...tab.condition,
-        ...filtersMap
+        ...filtersMap,
+        ...this.tabConditions
       };
       return condition;
+    },
+    genTabCondition(conditions) {
+      /* 组合【搜索tab】的数据 */
+      const popTabs = [];
+      conditions.forEach((v) => {
+        const tab = {
+          name: v.name,
+          show: false
+        };
+        tab.children = v.show.map(item => ({
+          ...item,
+          name: item.show,
+          checked: false
+        }));
+        popTabs.push(tab);
+      });
+      this.popTabs = popTabs;
     },
     async getGoodsList(pages) {
       /* 搜索产品列表 */
       // 公共用户信息
       const userInf = this.userInf;
+      const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
       const { code, data } = await this.commodityService.goodsList(condition);
       const scrollView = {};
       if (code === '1') {
         const {
-          page
+          // 商品数据
+          page,
+          // tab类型搜索条件
+          condition: dataCondition
         } = data;
-          // 当前页码的数据
+        // 组合tab的搜索条件数据（popTabs）
+        this.genTabCondition(dataCondition);
+        // 当前页码的数据
         const curList = page.result;
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
@@ -303,8 +345,8 @@ export default {
         const productCodes = curList.map(v => v.productCode);
         const priceArgsObj = {
           productCodes,
-          saletoCode: userInf.saletoCode,
-          sendtoCode: userInf.sendtoCode,
+          saletoCode: userInf.customerCode,
+          sendtoCode: defaultSendToInf.customerCode,
         };
           // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
@@ -356,7 +398,7 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
-      console.log(goods)
+      console.log(goods);
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
@@ -374,6 +416,28 @@ export default {
       if (tab.handler) {
         this[tab.handler]();
       }
+    },
+    popTabsChange(tabs) {
+      /* popTabs change */
+      this.popTabs = tabs;
+    },
+    tabConditionConfirm(tabs, index, choseItem) {
+      /* 顶部双层tab栏目，第二层点了条件点确认按钮事件 */
+      // 组合tabConditions
+      const choseTab = tabs[index];
+      const conditions = {};
+      // todo 显然，通过名字来判断不合理，但是pc端也是如此，待提bug
+      if (choseTab.name === '类目') {
+        conditions.categoryCode = choseItem.code;
+      } else {
+        conditions.attributeName = choseItem.code;
+        conditions.attributeValue = choseItem.show;
+      }
+      this.tabConditions = {
+        ...this.tabConditions,
+        ...conditions
+      };
+      this.silentReSearch();
     },
     showFilter() {
       /* 展示filter */
@@ -421,17 +485,21 @@ export default {
     },
     getDeliveryAddress() {
       /* 获取配送地址 */
-      this.customerService.addressesList(1).then(({ code, data }) => {
+      return this.customerService.addressesList(1).then(({ code, data }) => {
         if (code === '1') {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
             name: `(${v.customerCode})${v.address}`
           }));
-          // 当前配送地址修改
-          if (this.deliveryAddressList[0]) {
-            this.deliveryAddressList[0].checked = true;
-            this.curChoseDeliveryAddress = this.deliveryAddressList[0];
+          // 当前配送地址修改(选出默认地址)
+          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          if (defaultIndex > -1) {
+            const curChoseDeliveryAddress = data[defaultIndex];
+            // 更新默认送达方store
+            this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
+            this.deliveryAddressList[defaultIndex].checked = true;
+            this.curChoseDeliveryAddress = curChoseDeliveryAddress;
           }
         }
       });

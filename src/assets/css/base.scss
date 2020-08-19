@@ -38,4 +38,16 @@ button {
   }
 }
 
+.uni-toast {
+  .uni-icon_toast {
+    &:before {
+      font-size: 60px !important;
+    }
+  }
+
+  .uni-toast__content {
+    font-size: 26px;
+  }
+}
+
 /*fix uni-app end*/

@@ -59,13 +59,24 @@ function jSend(option) {
   const selfOptions = JSON.parse(JSON.stringify(option));
   const cfg = selfOptions.cfg || {};
   delete selfOptions.cfg;
-  const token = uni.getStorageSync('token') || '';
+  let token;
+  // url前缀
+  if (cfg.cJsh) {
+    // c.jsh.com的接口前缀
+    selfOptions.url = `${curConfig.cBaseUrl}/${selfOptions.url}`;
+    token = uni.getStorageSync('jwtToken') || '';
+  } else {
+    selfOptions.url = `${curConfig.baseUrl}/new/api/${selfOptions.url}`;
+    token = uni.getStorageSync('token') || '';
+  }
+  // 自定义方法
+  if (cfg.method) {
+    selfOptions.method = cfg.methodl;
+  }
   const header = {
     Authorization: `Bearer ${token}`,
     ...cfg.headers
   };
-  // url前缀
-  selfOptions.url = `${curConfig.baseUrl}/new/api/${selfOptions.url}`;
   return new Promise((resolve) => {
     if (!cfg.noLoading) {
       uni.showLoading();

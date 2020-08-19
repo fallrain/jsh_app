@@ -4,7 +4,7 @@
       class="transferDetailBtm-check"
     >
       <text class="transferDetailBtm-check-shop">装车体积： </text>
-      <view class="transferDetailBtm-check-order">{{calue}}%</view>
+      <view class="transferDetailBtm-check-order">{{Number(calue)}}%</view>
       <view class="uni-padding-wrap uni-common-mt">
         <view class="progress-box">
             <progress
@@ -15,7 +15,7 @@
               />
         </view>
       </view>
-      <button class="transferDetailBtm-check-edit">结算</button>
+      <button class="transferDetailBtm-check-edit" @tap="tlement">结算</button>
     </view>
   </view>
 </template>
@@ -28,16 +28,34 @@ export default {
   name: 'transferDetailBtm',
   data() {
     return {
-      calue: 30
+      calue:""
     };
   },
-
+  props: {
+    detailList: {
+      type: Object,
+      default:() => {}
+    }
+  },
+  created() {
+    this.calue = Math.round(this.detailList.IBR_JSTIJI/15*100)
+  },
   methods: {
     // choose() {
     //   const checked = !this.checked;
     //   this.$emit('update:checked', checked);
     //   this.$emit('checkAll', checked);
     // }
+    tlement() {
+      if(Number(this.calue) < 15) {
+        // confirm("体积小于15，无法结算，请继续添加商品")
+        uni.showToast({
+          title: '体积小于15，无法结算，请继续添加商品',
+          duration: 3000
+        });
+        
+      }
+    }
   }
 };
 </script>

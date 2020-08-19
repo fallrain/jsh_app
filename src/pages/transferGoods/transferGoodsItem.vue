@@ -1,6 +1,6 @@
 <template>
   <view class="jGoodsItem">
-    <view class="jGoodsItem-left">
+    <view class="jGoodsItem-left" @tap="goNext">
       <image :src="goods.listImage"></image>
     </view>
     <view class="jGoodsItem-cnt">
@@ -20,7 +20,7 @@
       <view class="jGoodsItem-cnt-price-inf">
         <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
         <view class="jGoodsItem-cnt-price-inf-item">供价：¥ {{goods.$PtPrice.supplyPrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockList[0].qty}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockList[0].subCodeList[0].QTY }}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
@@ -113,6 +113,11 @@ export default {
       console.log(goods.amount)
       this.$emit('change', this.goods, this.index);
     },
+    goNext() {
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${this.goods.code}`
+      });
+    },
     addFavorite(goods) {  
       console.log(goods)
       if(goods.$favorite) {
@@ -135,9 +140,10 @@ export default {
     // 加入调货
     addTransfer(goods) {
       console.log(goods)
-   
-       
+
+      
       this.$emit("inserOrder",goods)
+      this.$emit("query")
     }
 
   }

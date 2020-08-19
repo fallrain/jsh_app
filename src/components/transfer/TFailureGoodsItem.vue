@@ -1,6 +1,6 @@
 <template>
   <view class="tFailureGoodsItem">
-    <view v-if="itemList&&itemList.typpe==='ZC'">
+    <view v-if="itemList&&itemList.type==='ZC'">
       <view class="tFailureGoodsItem-list" v-for="(order,index) in itemList.orderList" :key="index">
         <view class="tFailureGoodsItem-cnt-check" @tap="choose(order)">
           <i :class="['iconfont', order.checked ? 'iconradio active':'iconradio1']"></i>

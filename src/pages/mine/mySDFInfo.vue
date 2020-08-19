@@ -114,6 +114,12 @@
 <script>
 import JCell from '../../components/form/JCell';
 import './css/mineBaseInfo.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'myBaseInfo',
@@ -127,12 +133,16 @@ export default {
     };
   },
   created() {
-    // this.getBaseInfo();
-    this.shoppingCartFun('8700010462');
+    this.getBaseInfo();
+  },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER
+    }),
   },
   methods: {
     async getBaseInfo() {
-      const { code, data } = await this.mineServer.mineBaseInfo('8800012497');
+      const { code, data } = await this.mineServer.mineBaseInfo(this.userInf.customerCode);
       if (code === '1') {
         this.baseList = data;
       }

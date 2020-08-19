@@ -1,5 +1,5 @@
 <template>
-  <view class="tShoppingCartItem">
+  <view class="tShoppingCartItem" v-if="list.data.orderList.length !==0">
       <!-- 头部 -->
     <view class="tShoppingCartItem-head">
       <view 
@@ -20,7 +20,13 @@
       <view>
           <text class="tShoppingCartItem-head-text">装车体积:</text>
           <text class="tShoppingCartItem-head-volume">{{Math.round(list.data.IBR_JSTIJI/15*100)}}%</text>
-      </view>     
+      </view>  
+      <view class="tShoppingCartItem-btm-btn iconfont iconxia" @click="getMore"></view>  
+        <view v-show="isOrderMore" class="transfer_more">
+          <view class="background">
+            <view class="transfer_more_text" @tap="backShoppingCart(list.data.IBR_SEQ)"><view class="iconfont iconcancel transfer_more_iconStyle"></view>选购其他</view>
+          </view>
+        </view>
     </view>
     <!-- 产品列表 -->
     <view 
@@ -52,7 +58,7 @@
               ></i>
               <view class="tShoppingCartItem-cnt-price-info" v-show="item.isExpand ">
                 <view class="tShoppingCartItem-cnt-price-info-li"
-                  v-for="(it,index) in list.data.payer"
+                  v-for="(it,index) in item.payer"
                   :key="index"
                   :class="[it.isChecked && 'active']"
                   @tap="togglePayer(item, it, index)" 
@@ -64,10 +70,20 @@
             </view>
           </view>
         </view>  
-        <view 
+        <!-- <view 
           class="tShoppingCartItem-head-close iconfont iconcross"
           @tap="deleteShoppingCart(item)"
-        ></view>
+        ></view> -->
+        <!-- <view 
+          class="tShoppingCartItem-head-close"
+          v-if="isShowClear"
+          @tap="chooseClose(item)"
+        >
+          <i 
+            :class="['iconfont', item.checkedTwo ? 'iconradio active':'iconradio1']"
+
+          ></i>
+        </view> -->
         <!-- <i 
           :class="['tShoppingCartItem-cnt-like', 'iconfont', item.$favorite ? 'iconicon3':'iconshoucang']"
           @tap="addFavorite(item)"
@@ -109,6 +125,7 @@
 import {
   uniNumberBox,uniPopup
 } from '@dcloudio/uni-ui';
+import TShoppingCartMore from './TShoppingCartMore';
 import './css/TShoppingCartItem.scss';
 import {
   mapGetters
@@ -121,7 +138,8 @@ export default {
   name: 'TShoppingCartItem',
   components: {
     uniNumberBox,
-    uniPopup
+    uniPopup,
+    TShoppingCartMore
   },
   props: {
     // 商品数据
@@ -138,15 +156,20 @@ export default {
       type: Object,
       default: () => {}
     },
-    isShowpayer: {
-      type: Boolean
-    }
+    isShowClear: {
+      type: Boolean,
+    },
+    
   },
   data() {
     return {
       isShowPayer: false,
       // 显示收藏
-      queryCustomer:[]
+      queryCustomer:[],
+      // 选购其他显示
+      isOrderMore: false,
+      // // 单个订单是否全选
+      // isCheckSingle:false
 
     };
   },
@@ -158,6 +181,19 @@ export default {
     }),
   },
   methods: {
+    // 选购其他
+    getMore() {
+      this.isOrderMore = !this.isOrderMore;
+      console.log(this.index);
+      console.log(this.isOrderMore);
+    },
+    //返回调货列表页面
+    backShoppingCart(seq) {
+        uni.navigateTo({
+         url: '/pages/transferGoods/transferGoods?IBR_SEQ='+ seq
+      })  
+
+    },
     choose() {
       /* 选中本商品 */
       const {
@@ -165,10 +201,32 @@ export default {
       } = this.list;
       console.log(this.list)
       this.list.checked = !checked;
-      this.isShowpayer = true
+      // this.isCheckSingle = true
+      // this.list.data.orderList.forEach(item => {
+      //   item.checkedTwo = !item.checkedTwo  
+      //   if(!item.checkedTwo) {
+      //     this.isCheckSingle = !this.isCheckSingle;
+      //     this.list.checked = !checked;
+      //   }
+      // })    
       console.log(data)
-      this.$emit('change', this.list, this.index,this.isShowpayer);
+      this.$emit('change', this.list, this.index);
     },
+    // chooseClose(item) {
+    //   item.checkedTwo = !item.checkedTwo
+    //    this.list.data.orderList.forEach(item => {
+    //     if (!item.checkedTwo) {
+    //       this.isCheckSingle = false
+    //       this.list.checked = false
+    //       return 
+    //     } else {
+    //       this.isCheckSingle = true
+    //       this.list.checked = true
+    //     }
+       
+    //   }) 
+    //   this.$emit('change', this.list, this.index);
+    // },
     showPayer(item) {
       // 显示付款方
       console.log(this.list.data)
@@ -176,27 +234,6 @@ export default {
       console.log(item.isExpand)
       this.$emit('change', this.list, item, this.index);
     },
-    // addFavorite(goods) {
-    //   if(goods.$favorite) {
-    //     confirm("确定取消收藏吗")
-    //     // 取消收藏
-    //      const removeInterest = this.customerService.removeInterestProduct({
-    //       customerCode: "8700010462",
-    //       account: "8700010462",
-    //       productCodeList: [goods.GBID]
-    //     });
-
-    //   } else {
-    //     // 添加收藏
-    //      const addInterest = this.customerService.addInterestProduct({
-    //       customerCode: "8700010462",
-    //       account: "8700010462",
-    //       productCode: goods.GBID
-    //     });
-    //   }
-    //   goods.$favorite = !goods.$favorite
-    //   console.log(goods)
-    // },
     async changeNum(value, item) {
       if (value !== item.IBL_NUM) {
         const result = await this.transfergoodsService.updateOrderQty({
@@ -222,9 +259,11 @@ export default {
     },
     goTransferDetail(seq,list) {
       console.log(list)
-       uni.navigateTo({
-         url: '/pages/transferGoods/transferDetail?IBR_SEQ='+ seq + '&list='+ JSON.stringify(list)
-      })    
+      //  uni.navigateTo({
+      //    url: '/pages/transferGoods/transferDetail?IBR_SEQ='+ seq + '&list='+ JSON.stringify(list)
+      // })    
+      this.$emit("goTransferDetail",seq,list)
+
     },
     async deleteShoppingCart(item) {
 
@@ -263,13 +302,13 @@ export default {
         IBL_PAYTO_TYPE: it.payerType,   //付款方类型
       })
       if(upDHPay.code === "1" ) {
-          
-          this.list.data.payer.map(v => {
+          item.payer.map(v => {
               v.isChecked = false
             })  
           item.isExpand = !item.isExpand
           it.isChecked = true
           console.log(item)
+          item.IBL_PAYMONEY = it.payerCode
           item.IBL_PAYMONEYNAME = "(" + it.payerCode + ")" + it.payerName
           console.log(item.isChecked)
         this.$emit('change', this.list, item, this.index);

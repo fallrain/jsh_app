@@ -84,10 +84,32 @@
     }
   }
   .transferDetailItem-detail-cnt-version {
+    position: relative;
     display: flex;
     align-items: center;
     font-size: 20px;
     color: #333;
+    .reverse {
+      display: inline-block;
+      transform: rotateX(180deg);
+    }
+    .transferDetailItem-cnt-price-info {
+      width: 500px;
+      position: absolute;
+      top: 50px;
+      left: -4px;
+      z-index: 500;
+      background: rgba(255, 255, 255, 0.911);
+      border: 1px solid #c3c3c3;
+      .tShoppingCartItem-cnt-price-info-li {
+        margin:10px 0px 10px 20px;
+      }      
+    }
+    .tShoppingCartItem-cnt-price-info-li.active {
+      color: #ED2856;
+      background: #FFF5F7;
+      
+    }
     .transferDetailItem-detail-cnt-inf-icon {
       font-size: 20px;
     }
@@ -173,6 +195,7 @@
   height: 96px;
   color: #fff;
   background:-webkit-linear-gradient(#509DE8,#2283E2);
+  border-radius: 0px 0px 20px 20px;
 }
 
 .transferDetailItem-total-text {

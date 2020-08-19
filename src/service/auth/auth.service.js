@@ -4,8 +4,11 @@ import {
 } from '@/lib/request';
 
 export default {
-  getUserInfoByToken(data) {
+  getUserInfoByToken() {
     /* 根据token获取用户信息 */
-    return jGet(urls.getUserInfoByToken, data);
+    const token = uni.getStorageSync('token');
+    return jGet(urls.getUserInfoByToken, {
+      token
+    });
   },
 };

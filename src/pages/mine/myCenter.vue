@@ -3,15 +3,22 @@
     <!-- 顶部背景 -->
     <view class="topView">
       <!-- 设置 -->
-      <view class="set" @click='setClick'>设置</view>
+      <view
+        @click='setClick'
+        class="iconfont iconshezhi mineCenter-set"
+      >
+      </view>
       <!-- 头像栏 -->
       <view class="headerRow">
         <!-- 头像 -->
-        <view @click="sdfClick" class="headerImage"></view>
+        <view
+          @click="sdfClick"
+          class="headerImage"
+        ></view>
         <view>
           <view class="nameAndPosion">
             <!-- 姓名职位 -->
-            <view class="name">{{userInfo.nickname}}</view>
+            <view class="name">{{tokenUserInfo.nickname}}</view>
             <view class="posion">总经理</view>
           </view>
           <view class="detail">售达方：({{saleInfo.customerCode}}) {{saleInfo.customerName}}</view>
@@ -96,13 +103,21 @@
 
 <script>
 
+import {
+  USER
+} from '../../store/mutationsTypes';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
+
 export default {
   name: 'myCenter',
   components: {},
   data() {
     return {
       // 用户信息
-      userInfo: {},
+      tokenUserInfo: {},
       // 售达方信息
       saleInfo: {},
       payerBalanceList: [],
@@ -203,31 +218,37 @@ export default {
   created() {
     this.setPageInfo();
   },
-  mounted() {
-    this.auxiliaryFun('2110', '1');
-    this.outstandingAmountFun('8700010462');
+  computed: {
+    ...mapGetters({
+      [USER.GET_SALE]: USER.GET_SALE,
+      [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER,
+      userInf: USER.GET_USER,
+    })
   },
   methods: {
+    ...mapActions([
+      USER.UPDATE_SALE_ASYNC,
+      USER.UPDATE_TOKEN_USER_ASYNC,
+    ]),
     setPageInfo() {
       this.getUserInfoByToken();
       this.getSaleInfo();
+      this.auxiliaryFun('2110', '1');
+      this.outstandingAmountFun();
     },
     async getUserInfoByToken() {
-      /* 获取用户信息 */
-      const token = uni.getStorageSync('token');
-      const { code, data } = await this.authService.getUserInfoByToken({
-        token
-      });
-      if (code === '1') {
-        this.userInfo = data || {};
+      /* 获取token用户信息 */
+      if (!this[USER.GET_TOKEN_USER] || JSON.stringify(this[USER.GET_TOKEN_USER]) === '{}') {
+        await this[USER.UPDATE_TOKEN_USER_ASYNC]();
       }
+      this.tokenUserInfo = this[USER.GET_TOKEN_USER] || {};
     },
     async getSaleInfo() {
       /* 获取售达方信息 */
-      const { code, data } = await this.customerService.getCustomer();
-      if (code === '1') {
-        this.saleInfo = data || {};
+      if (!this[USER.GET_SALE] || JSON.stringify(this[USER.GET_SALE]) === '{}') {
+        await this[USER.UPDATE_SALE_ASYNC]();
       }
+      this.saleInfo = this[USER.GET_SALE] || {};
     },
     // 付款方余额
     async payerBalanceListFun(param) {
@@ -244,20 +265,18 @@ export default {
       }
       this.accountTotal = this.accountTotal.toFixed(2);
     },
-    // 付款方列表
     async auxiliaryFun(salesGroupCode, status) {
-      console.log('auxiliaryFun');
+      /* 付款方列表 */
       const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status);
       if (code === '1') {
         this.auxiliary = data;
         this.payerBalanceListFun(data);
       }
     },
-    // 返利
-    async outstandingAmountFun(uid) {
-      console.log('outstandingAmount');
+    async outstandingAmountFun() {
+      /* 返利 */
       const param = {
-        ccusCode: uid,
+        ccusCode: this.userInf.customerCode,
         endDate: '',
         iqueren: '',
         productCode: '',
@@ -304,12 +323,13 @@ export default {
   }
 
   .topView {
+    position: relative;
     width: 750px;
     height: 398px;
     background: url('./image/top.png') no-repeat;
     background-size: 100%;
-    background-position: 0px -25px;
-    padding-top: 20px;
+    background-position: 0 -25px;
+    padding-top: 54px;
   }
 
   .set {
@@ -360,6 +380,7 @@ export default {
   }
 
   .moneyArea {
+    position: relative;
     width: 718px;
     height: 194px;
     background: url('./image/money-bg.png') no-repeat;
@@ -540,6 +561,15 @@ export default {
   .bottom {
     height: 84px;
     background: rgba(245, 245, 245, 1);
+  }
+
+  .mineCenter-set {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 34px;
+    color: #fff;
+    font-weight: 600;
   }
 
 </style>

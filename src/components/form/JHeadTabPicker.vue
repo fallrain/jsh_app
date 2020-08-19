@@ -3,7 +3,10 @@
     :class="['jHeadTabPicker',show && 'jHeadTabPicker-in']"
     v-reset-position
   >
-    <view v-if="value[0]&&(value[0].type==='ZCPC'||value[0].type==='ZCPSLX'||value[0].type==='ZCLX')" class="jHeadTabPicker-list">
+    <view
+      class="jHeadTabPicker-list"
+      v-if="value[0]&&(value[0].type==='ZCPC'||value[0].type==='ZCPSLX'||value[0].type==='ZCLX')"
+    >
       <view
         :class="['jHeadTabPicker-item-ZC',item.checked && 'active']"
         v-for="(item,index) in value"
@@ -62,7 +65,8 @@ export default {
     // picker数据
     value: {
       type: Array,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   directives: {
@@ -102,7 +106,7 @@ export default {
     confirm() {
       /* 确定 */
       this.close();
-      this.$emit('confirm', this.index);
+      this.$emit('confirm', this.index, this.value.find(v => v.checked));
     },
     choose(item) {
       /* 选中 */
@@ -129,6 +133,7 @@ export default {
     border-bottom-right-radius: 10px;
     transform: translateY(-100%);
     transition: transform .3s;
+    margin-top: -1px
   }
 
   .jHeadTabPicker-btn-wrap {
@@ -147,6 +152,8 @@ export default {
     font-size: 24px;
     text-align: center;
     border: 1px solid $theme-color;
+    border-top: none;
+
   }
 
   .jHeadTabPicker-btn-default {
@@ -192,6 +199,7 @@ export default {
       }
     }
   }
+
   .jHeadTabPicker-item-ZC {
     position: relative;
     width: 50%;

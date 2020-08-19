@@ -42,8 +42,18 @@ export default {
   removeInterestProduct(data) {
     return jPostJson(urls.removeInterestProduct, data);
   },
+  // 余额支付信息
   inquire(data) {
     return jPostJson(urls.inquire, data);
+  },
+  getSecretkey(data) {
+    return jPostJson(urls.getSecretkey, data);
+  },
+  queryCustomerInterestProduct(data) {
+    /* 获取关注商品 */
+    // account: 8700010462
+    // sendtoCode: 8700010462
+    // customerCode: 8700010462
+    return jGet(urls.queryCustomerInterestProduct, data);
   }
-
 };
