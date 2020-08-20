@@ -20,7 +20,7 @@
         <view class="VHIItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice}}</view>
       </view>
       <view class="VHIItem-cnt-opts">
-        <view class="numberVHI"><uni-number-box @change="goodsNumChange"></uni-number-box></view>
+        <view class="numberVHI"><uni-number-box :value="goods.$num" @change="goodsNumChange"></uni-number-box></view>
         <button class="VHIItem-cnt-opts-primary ml26" type="button" @tap="addTransfer">加入整车</button>
       </view>
     </view>
@@ -55,7 +55,7 @@ export default {
   methods: {
     goodsNumChange(val) {
       /* 商品数量change */
-      this.goods.number = val;
+      this.goods.$num = val;
       this.$emit('change', this.goods, this.index);
     },
     addTransfer() {
