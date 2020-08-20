@@ -83,7 +83,7 @@ export default {
   data(){
     return {
       // 验证码弹窗
-      isShowVf: true, // 验证码弹窗，判断是否展示
+      isShowVf: false, // 验证码弹窗，判断是否展示
       // 产品数量
       transferNum: 0,
       // 结算
@@ -106,8 +106,15 @@ export default {
       isShowpayer: false,
       // 验证码
       YZM:"",
+      form: {
+          // 手机号
+          phone: '',
+          // 手机号验证码
+          verificationCode: '',
+      },
       // 编辑选中显示
       isShowClear: false,
+
       tabs: [
         {
           id: 'gwc',
@@ -316,8 +323,9 @@ export default {
         // confirm('体积小于15，无法结算，请继续添加商品')
         this.allOrderList.forEach(ele => {
           if (ele.checked) {
+            console.log(ele)
             uni.showToast({
-              title:`单号${ele.IBR_SEQ};体积不满足，无法提交`,
+              title:`单号${ele.data.IBR_SEQ};体积不满足，无法提交`,
               duration: 3000
             });
           }
@@ -326,11 +334,20 @@ export default {
         flag = true
         this.payerBalance.forEach(ele => {
           if(ele.balance > ele.toBePaid) {
-            this.changeVf()
+            this.getUserInfById()
+            const mianMi = this.getUserInfMianMi()
+            if(mianMi.data) {
+              // 提交订单
+              // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
+              //   longfeiUSERID:this.defaultSendToInf.customerCode,
+              //   orderNo:'',
+              //   verifyCode:'',
+              //   erifyKey:""
+              // })
+            }
+            // this.changeVf()
             
-            // const volume = this.allOrderList.map(ele => ele.checked && Math.round(ele.data.IBR_JSTIJI/15*100) < 15)
-            // if(volume && volume.length > 0) confirm('体积小于15%无法结算')
-            // // 调货验证码
+       // // 调货验证码
             //  const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
             //  if (code === "1") {
             //     console.log(data)
@@ -349,18 +366,28 @@ export default {
                   title: '提示',
                   content: `付款方${ele.CodeName}余额不足，无法提交！`,
                 });
-              })     
-
-
-
-     
+              })         
           }
-
-        })
-        
+        })     
       }    
-      
-
+    
+    },
+    async getUserInfById() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const {code, data} =  await this.orderService.sendVerify(this.defaultSendToInf.customerCode);
+        if (code === "1") {
+        this.form.phone = data.data.account
+      }
+    },
+    async getUserInfMianMi() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const data =  await this.orderService.mianMi();
+      return data 
+      console.log(data)
+      // if(data.code === "1") {
+      //   console.log(data.data)
+        // return data1
+      // }
       
     },
     // 编辑

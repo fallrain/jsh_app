@@ -303,10 +303,17 @@ export default {
   // },
   created(){
       this.getPageInf();
-      this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      this[USER.UPDATE_SALE_ASYNC]();
-      this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      this.get()
+      (async() => {
+        await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+        await this[USER.UPDATE_SALE_ASYNC]();
+        await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
+      })().then(res =>{
+          this.get()
+      })
+      // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+      // this[USER.UPDATE_SALE_ASYNC]();
+      // this[USER.UPDATE_TOKEN_USER_ASYNC]();
+     
 
   },
   computed: {
@@ -324,9 +331,14 @@ export default {
       // 修改token用户信息
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
-    get() {
-      const a = JSON.stringify(this.defaultSendToInf);
-      alert(a)
+    get() {  
+     
+        // this.$nextTick(() => {
+        const a = JSON.stringify(this.defaultSendToInf);
+        alert(a)
+      
+     
+      
     },
     changePic(e) {
       this.current = e.detail.current;
