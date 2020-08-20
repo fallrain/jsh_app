@@ -12,7 +12,7 @@ export default {
   paytoInfo(data) { // 付款方列表
     return jPostJson(urlNoApi.paytoInfo, data);
   },
-  send(data) { //调货验证码
+  send(data) { // 调货验证码
     return jPostJson(urlNoApi.send, data);
   },
   getOrderMonthSummery(data) {
@@ -23,5 +23,8 @@ export default {
       pageNo: 1,
       pageSize: 10
     });
+  },
+  validateProduct(data) { // 拆单校验
+    return jPostJson(urlNoApi.validateProduct, data);
   },
 };

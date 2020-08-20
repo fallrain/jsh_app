@@ -3,7 +3,7 @@ export default {
     dev: {
       // baseUrl: 'https://new.jsh.com',
       baseUrl: 'http://mall.jsh.com',
-      // cBaseUrl: 'https://c.jsh.com',
+      cBaseUrl: 'https://c.jsh.com',
     },
     sit: {
       baseUrl: '',

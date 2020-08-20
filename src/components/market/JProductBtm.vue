@@ -26,6 +26,7 @@
       <view class="condition-style" v-if="!conditionStatus">未满足</view>
       <view class="condition-style" v-if="conditionStatus">满足</view>
       <button
+        @tap="goOrder"
         type="button"
         class="jProductBtm-right-btn"
       >成套下单</button>
@@ -80,6 +81,9 @@ export default {
     },
     goodsNumChange(val) {
       this.nums = val;
+    },
+    goOrder() {
+      this.$emit('goOrder');
     }
   }
 };

@@ -233,6 +233,12 @@
       "style": {
         "navigationBarTitleText": "整车购物车详情"
       }
+    },
+    {
+      "path": "pages/concernedProducts/concernedProductsList",
+      "style": {
+        "navigationBarTitleText": "我的关注"
+      }
     }
   ],
   "globalStyle": {

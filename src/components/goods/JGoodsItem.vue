@@ -1,5 +1,11 @@
 <template>
-  <view class="jGoodsItem">
+  <view :class="['jGoodsItem',isEditMode && 'checked']">
+    <view
+      :class="['jGoodsItem-check iconfont', goods.isChecked ? 'iconradio active':'iconradio1']"
+      @tap="handleCheck"
+      v-if="isEditMode"
+    >
+    </view>
     <view class="jGoodsItem-left">
       <image :src="goods.image.masterImage"></image>
     </view>
@@ -99,7 +105,12 @@ export default {
       type: Object,
       default: () => {
       }
-    }
+    },
+    // 是否编辑模式
+    isEditMode: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
@@ -108,7 +119,7 @@ export default {
       // 版本规格信息
       specificationsList: [],
       // 版本规格选中的信息
-      specificationsCheckList: []
+      specificationsCheckList: [],
     };
   },
   created() {
@@ -243,23 +254,23 @@ export default {
     },
     addToCart(product) {
       /**
-       ***添加到购物车
-       *  product:Object
-       *  是否有信用模式(0否1是)
-       *  creditModel? : number,
-       *  产品购买的数量
-       *  number,
-       *  价格类型
-       *  priceType: string,
-       *  价格版本号
-       *  priceVersion: string,
-       *  产品编码
-       *  productCode,
-       *  调货版本号
-       *  stockVersion?: string,
-       *  是否有周承诺(0否1是)
-       *  weekPromise?: number
-       *  */
+         ***添加到购物车
+         *  product:Object
+         *  是否有信用模式(0否1是)
+         *  creditModel? : number,
+         *  产品购买的数量
+         *  number,
+         *  价格类型
+         *  priceType: string,
+         *  价格版本号
+         *  priceVersion: string,
+         *  产品编码
+         *  productCode,
+         *  调货版本号
+         *  stockVersion?: string,
+         *  是否有周承诺(0否1是)
+         *  weekPromise?: number
+         *  */
       const {
         productCode,
         activityType,
@@ -271,7 +282,7 @@ export default {
         saletoCode,
         sendtoCode
       } = this;
-      // product不传则默认普通类型
+        // product不传则默认普通类型
       if (!product) {
         product = {
           priceType: 'PT',
@@ -309,6 +320,13 @@ export default {
       /* 商品数量change */
       this.goods.number = val;
       this.$emit('change', this.goods, this.index);
+    },
+    handleCheck() {
+      /* 选中一个商品 */
+      const isChecked = !this.goods.isChecked;
+      this.$set(this.goods, 'isChecked', isChecked);
+      this.$emit('change', this.goods, this.index);
+      this.$emit('check', isChecked, this.goods.productCode, this.goods);
     }
   }
 };

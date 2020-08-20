@@ -1,41 +1,41 @@
 <template>
-    <view class="applicationsEdit">
-      <view class="applicationsEdit-head">
-        <view class="applicationsEdit-head-top">
-          <view class="applicationsEdit-head-title"> 我的应用</view>
-          <image class="applicationsEdit-head-img" src="../../assets/img/appIndex/video.png" />
-          <image class="applicationsEdit-head-img" src="../../assets/img/appIndex/function.png" />
-        </view>
-        <view class="applicationsEdit-head-foot">
-          <view class="applicationsEdit-head-foot-plus">+</view>
-          <view class="applicationsEdit-head-foot-add">添加应用</view>
-        </view>
+  <view class="applicationsEdit">
+    <view class="applicationsEdit-head">
+      <view class="applicationsEdit-head-top">
+        <view class="applicationsEdit-head-title"> 我的应用</view>
+        <image class="applicationsEdit-head-img" src="../../assets/img/appIndex/video.png" />
+        <image class="applicationsEdit-head-img" src="../../assets/img/appIndex/function.png" />
       </view>
-      <view class="applicationsEdit-content">
-        <view class="applicationsEdit-content-all">全部应用</view>
-        <view 
-          class="applicationsEdit-content-all-cen" 
-          v-for="item in list"
-          :key="item.id"
-        >
-          <view class="applicationsEdit-content-all-tit">{{item.title}}</view>
-          <view class="applicationsEdit-content-all-con">
-            <view class="applicationsEdit-content-all-con-every" 
-              v-for="it in item.children"
-              :key="it.id"
-              @tap="goDetail"
-            >
-              <image class="applicationsEdit-content-all-con-img" :src="it.src"> 
+      <view class="applicationsEdit-head-foot">
+        <view class="applicationsEdit-head-foot-plus">+</view>
+        <view class="applicationsEdit-head-foot-add">添加应用</view>
+      </view>
+    </view>
+    <view class="applicationsEdit-content">
+      <view class="applicationsEdit-content-all">全部应用</view>
+      <view
+        class="applicationsEdit-content-all-cen"
+        v-for="item in list"
+        :key="item.id"
+      >
+        <view class="applicationsEdit-content-all-tit">{{item.title}}</view>
+        <view class="applicationsEdit-content-all-con">
+          <view class="applicationsEdit-content-all-con-every"
+                v-for="it in item.children"
+                :key="it.id"
+                @tap="goDetail"
+          >
+            <image class="applicationsEdit-content-all-con-img" :src="it.src">
               <view class="applicationsEdit-content-all-con-tit">{{it.Subhead}}</view>
-            </view>
           </view>
         </view>
       </view>
-    </view>    
+    </view>
+  </view>
 </template>
 <script>
-import './css/applicationsEdit.scss'
-export default {
+  import './css/applicationsEdit.scss'
+  export default {
     name: "applicationsEdit",
     data() {
       return {
@@ -161,8 +161,8 @@ export default {
     },
     methods: {
       goDetail() {
-        
+
       }
     }
-}
+  }
 </script>
