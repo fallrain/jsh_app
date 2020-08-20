@@ -1,0 +1,21 @@
+$head-wrap-h:188px;
+.concernedProductsList-wrap {
+  padding-top: $head-wrap-h + 10px;
+
+  .uni-drawer__content {
+    width: 608px !important;
+  }
+}
+
+.concernedProductsList-head-wrap{
+  position: fixed;
+  top: var(--window-top);
+  left: 0;
+  right: 0;
+  z-index: 99;
+  height: $head-wrap-h;
+}
+
+.concernedProductsList-head {
+  height: 104px;
+}
