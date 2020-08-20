@@ -1,11 +1,10 @@
 <template>
-  <view v-show="isOrderMore" class="v_More">
+  <view v-show="isVehicleMore" class="v_More">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="v_More_text"><view class="iconfont iconcancel v_More_iconStyle"></view>自助作废</view>
-      <view class="v_More_text"><view class="iconfont iconcancel v_More_iconStyle"></view>更改付款方</view>
-      <view class="v_More_text"><view class="iconfont iconcancel v_More_iconStyle"></view>统舱统配确认</view>
-      <view class="v_More_text"><view class="iconfont iconcancel v_More_iconStyle"></view>前往结算</view>
+      <view class="v_More_text" @click="goVehicle('1')"><view class="iconfont iconcancel v_More_iconStyle"></view>选购其他</view>
+      <view class="v_More_text" @click="goVehicle('2')"><view class="iconfont iconcancel v_More_iconStyle"></view>设置挂单</view>
+      <view class="v_More_text" @click="goVehicle('3')"><view class="iconfont iconcancel v_More_iconStyle"></view>拼整车</view>
     </view>
   </view>
 </template>
@@ -14,44 +13,56 @@
 export default {
   name: 'vehicleMore',
   props: {
-    isOrderMore: {
+    isVehicleMore: {
       type: Boolean,
       default: false
+    },
+    anNiuINfo: {
+      type: Object,
+      default: () => {
+      }
+    }
+  },
+  methods: {
+    goVehicle(zind) {
+      this.$emit('anNiuVehicle', !this.isVehicleMore, zind);
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .background{
     background-color: #FFFFFF;
   }
   .sanjiao {
-    border: 10px solid transparent;
-    border-bottom-color: #F5F5F5;
+    border: 14px solid transparent;
+    border-bottom-color: #FFFFFF;
     width: 0;
     height: 0;
-    margin-left: 40px;
+    margin-left: 76%;
     position: absolute;
   }
   .v_More{
-    margin-left: -20px;
+    margin-left: 63.5%;
     position: absolute;
     z-index: 100;
-    margin-top: -18px;
+    margin-top: -13%;
+    width: 29%;
   }
   .v_More_text {
     display: flex;
     color: #999999;
-    font-size: 24px;
-    padding-left: 20px;
-    padding-top: 10px;
-    padding-right: 20px;
-    padding-bottom: 20px;
+    font-size: 28px;
+    padding: 10px 20px 20px 20px;
+    .iconfont{
+      font-size: 32px;
+    }
   }
   .v_More_iconStyle {
     /*transform: rotateY(180deg);*/
     margin-top: auto;
     margin-right: 6px;
+    font-size: 24px;
   }
 </style>

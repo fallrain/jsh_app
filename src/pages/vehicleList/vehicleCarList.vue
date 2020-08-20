@@ -1,16 +1,16 @@
 <template>
   <view class="vehicleCarList">
-    <view class="vehicleCar-rouHead">共4件宝贝</view>
+    <view class="vehicleCar-rouHead">共{{NUM}}件宝贝</view>
     <view class="vehicleCar-invalid" v-if="puTongList.length>0">
-      <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index"
+      <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index" @pullDetail="pullDetail"
       :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item>
     </view>
     <view class="vehicleCar-invalid" v-if="guaDanList.length>0">
-      <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index"
+      <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index" @pullDetail="pullDetail"
              :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
     </view>
     <view class="vehicleCar-invalid" v-if="pingCheList.length>0">
-      <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index"
+      <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index" @pullDetail="pullDetail"
              :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
     </view>
     <view class="vehicleCar-invalid" v-if="failureGoodsList.length>0">
@@ -28,10 +28,10 @@ import vehicleCartItem from '../../components/vehicleList/vehicleCartItem';
 import vehicleCartItemGD from '../../components/vehicleList/vehicleCartItem-gd';
 import vehicleCartItemPC from '../../components/vehicleList/vehicleCartItem-pc';
 import {
-  mapGetters
+  mapGetters, mapMutations
 } from 'vuex';
 import {
-  USER
+  USER, ORDER
 } from '../../store/mutationsTypes';
 
 export default {
@@ -47,10 +47,13 @@ export default {
     ...mapGetters({
       userInf: USER.GET_USER
     }),
+    ...mapMutations([
+      ORDER.UPDATE_ORDER
+    ]),
   },
   data() {
     return {
-      SEQ: '', // 整车购物车进入传单号
+      NUM: 0, // 有效产品数量
       puTongList: [],
       pingCheList: [],
       guaDanList: [],
@@ -80,6 +83,7 @@ export default {
   },
   created() {
     this.queryCarList(); // 整车购物车列表查询
+    this.getPayerList(); // 获取付款方接口
   },
   methods: {
     async queryCarList() {
@@ -87,29 +91,63 @@ export default {
       const longfeiUSERID = this.userInf.customerCode;
       const { code, data } = await this.vehicleService.queryCarList(timetamp, longfeiUSERID);
       if (code === '1') {
-        console.log('整车购物车数量查询');
+        console.log('整车购物车查询');
         console.log(data);
+        this.NUM = 0;
         data.data.forEach((inf) => {
           if (inf.IBR_ISFLAG === '失效产品' && inf.orderList.length > 0) {
             inf.checked = false;
             inf.typpe = 'ZC';
             this.failureGoodsList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
           if (inf.IBR_ISFLAG === '普通整车' && inf.orderList.length > 0) {
             inf.checked = false;
             this.puTongList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
           if (inf.IBR_ISFLAG === '拼车订单' && inf.orderList.length > 0) {
             inf.checked = false;
             this.pingCheList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
           if (inf.IBR_ISFLAG === '我的挂单' && inf.orderList.length > 0) {
             inf.checked = false;
             this.guaDanList.push(inf);
+            this.NUM = this.NUM + inf.orderList.length;
           }
         });
       }
     },
+    async getPayerList() {
+      const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCode, {
+        salesGroupCode: this.userInf.salesGroupCode,
+        status: 1
+      });
+      if (code === '1') {
+        this.payerList = data;
+        this.currentPayer = data[0];
+        this.payerList[0].choosed = true;
+      }
+    },
+    goodsChange(item, index) {
+      console.log('222222');
+      console.log(item);
+      console.log(index);
+    },
+    pullDetail(item, index) {
+      console.log(item);
+      console.log(index);
+      this[ORDER.UPDATE_ORDER]({
+        orderDetail: this.orderListInfo[item]
+      });
+      // this[VEHICLE.UPDATE_VEHICLE]({
+      //   vehicleDetail: item
+      // });
+      // uni.navigateTo({
+      //   url: '/pages/vehicleList/vehicleCarDetail'
+      // });
+    }
   }
 };
 </script>
@@ -138,7 +176,7 @@ export default {
   }
   .vehicleCar-high {
     background-color: #F5F5F5;
-    height: 40px;
+    height: 80px;
   }
   .vehicleCar-foot {
     position: fixed;

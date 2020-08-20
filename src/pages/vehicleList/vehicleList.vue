@@ -52,7 +52,7 @@
     <j-choose-delivery-address :show.sync="isShowAddressDrawer" :list="deliveryAddressList" @change="deliveryAddressListChange">
     </j-choose-delivery-address>
     <view class="vehicle-high"></view>
-    <view class="vehicle-foot"><vehicle-foot :carType="ZCLX.carNames" :carNum="carNum"></vehicle-foot></view>
+    <view class="vehicle-foot"><vehicle-foot :carType="ZCLX.carNames" :carNum="carNum" :tiJiINfo="tiJiINfo"></vehicle-foot></view>
   </view>
 </template>
 
@@ -176,6 +176,11 @@ export default {
       brandCheck: '', // 选中的品牌
       leiMu: '', // 选中的类目
       carNum: 0, // 整车购物车数量查询
+      xiadanInfo: [], // 下单成功后的数据返回
+      tiJiINfo: { // 下单成功之后的体积以及占比
+        tiji: 0,
+        zhanbi: 0
+      }
     };
   },
   computed: {
@@ -376,26 +381,31 @@ export default {
             }));
           }
           console.log(this.filterList);
-          /** **列表数据*** */
-          const productCodes = aaa.data.map(v => v.code);
-          const priceArgsObj = {
-            productCodes,
-            saletoCode: userInf.saletoCode,
-            sendtoCode: userInf.sendtoCode,
-          };
-          const getAllPrice = this.commodityService.getAllPrice(priceArgsObj); // 获取价格
-          const getProductQueryInter = this.productDetailService.productQueryInter({ // 获取收藏
-            productCodes,
-            account: userInf.customerCode
-          });
-          const [allPriceRes] = await Promise.all([getAllPrice, getProductQueryInter]);
-          if (allPriceRes.code === '1') { // 添加价格
-            const allPriceData = allPriceRes.data;
-            // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
-            aaa.data.forEach((v) => {
-              v.$PtPrice = allPriceData[v.code].pt;
-              v.$allPrice = allPriceData[v.code];
+          try {
+            /** **列表数据*** */
+            const productCodes = aaa.data.map(v => v.code);
+            const priceArgsObj = {
+              productCodes,
+              saletoCode: userInf.saletoCode,
+              sendtoCode: userInf.sendtoCode,
+            };
+            const getAllPrice = this.commodityService.getAllPrice(priceArgsObj); // 获取价格
+            const getProductQueryInter = this.productDetailService.productQueryInter({ // 获取收藏
+              productCodes,
+              account: userInf.customerCode
             });
+            const [allPriceRes] = await Promise.all([getAllPrice, getProductQueryInter]);
+            if (allPriceRes.code === '1') { // 添加价格
+              const allPriceData = allPriceRes.data;
+              // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
+              aaa.data.forEach((v) => {
+                v.$PtPrice = allPriceData[v.code].pt;
+                v.$allPrice = allPriceData[v.code];
+                v.$num = 1;
+              });
+            }
+          } catch (e) {
+            console.log(e);
           }
           if (pageNo === 1) {
             this.vehicleList = [];
@@ -574,13 +584,13 @@ export default {
         INVCODE: item.code,
         INVSORT: item.group,
         INVSTD: item.name,
-        ISFL: 0,
+        ISFL: item.$PtPrice.rebatePolicy,
         ISHeightFLAG: this.switchType ? 'Y' : 'N',
-        ISKPO: 0,
+        ISKPO: item.$PtPrice.isBB,
         JDPC_JDCODE: this.jdCode,
         JIDICAI: 'dicai',
         MKTID: '12A02',
-        NUM: 1,
+        NUM: item.$num,
         PRODUCT_MODEL: item.module,
         PRO_BAND: item.brand,
         SENDTO: this.curChoseDeliveryAddress.info.addressCode,
@@ -598,10 +608,19 @@ export default {
         timestamp: timetamp
       });
       if (code === '1') {
-        if (data.length > 0) {
-          this.ISGUANZHU = true;
+        if (data.code === '200') {
+          this.xiadanInfo = data.data;
+          this.SEQ = data.data.SEQ;
+          this.tiJiINfo.tiji = ((this.tiJiINfo.tiji * 1) + (this.xiadanInfo.TIJI * 1)).toFixed(2);
+          this.tiJiINfo.zhanbi = (this.tiJiINfo.tiji / (this.xiadanInfo.maxTJ * 1) * 100).toFixed(0);
+          this.queryCarNum();
         } else {
-          this.ISGUANZHU = false;
+          this.xiadanInfo = [];
+          uni.showToast({
+            title: data.message,
+            icon: 'none',
+            duration: 3000
+          });
         }
       }
     },
