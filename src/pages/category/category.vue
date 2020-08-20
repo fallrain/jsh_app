@@ -1,7 +1,10 @@
 <template>
   <view class="">
     <view class="isFixed">
-      <uni-search-bar @confirm="search" @input="input" @cancel="cancel" />
+      <view class="vehicle-search j-flex-aic">
+        <j-search-input v-model="searchVal" @search="silentReSearch"></j-search-input>
+        <button type="button" class="vehicle-btn" @search="silentReSearch">搜索</button>
+      </view>
     </view>
     <view class="nav">
       <view class="nav-left">
@@ -13,7 +16,7 @@
       </view>
       <view class="nav-right">
         <view class="nav-right-titlePic">
-          <image :src="subCategoryList.images[0].pictureUrl"/>
+<!--          <image :src="subCategoryList.images[0].pictureUrl"/>-->
         </view>
         <view v-for="(child,indexC) in subCategoryList.subCats" :key="indexC">
           <view class="uni-flex uni-row" style="padding-left: 34%;">
@@ -23,8 +26,8 @@
           </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="childed in child.subCats" :key="childed.title" class="nav-right-item">
-              <image :src="categoryList[0].images[0].pictureUrl"/>
-              <view class="">{{childed.title}}</view>
+<!--              <image :src="categoryList[0].images[0].pictureUrl"/>-->
+              <view @click="checkCat(childed)">{{childed.title}}</view>
             </view>
           </view>
         </view>
@@ -33,14 +36,12 @@
   </view>
 </template>
 <script>
-import {
-  uniSearchBar
-} from '@dcloudio/uni-ui';
+import JSearchInput from '../../components/form/JSearchInput';
 
 export default {
   name: 'Category',
   components: {
-    uniSearchBar
+    JSearchInput
   },
   data() {
     return {
@@ -62,24 +63,10 @@ export default {
         this.categoryActive = 0;
       }
       console.log(data);
-      console.log(this.imageUel);
     },
-    search(res) {
-      uni.showToast({
-        title: `搜索：${res.value}`,
-        icon: 'none'
-      });
-    },
-    input(res) {
-      this.searchVal = res.value;
-    },
-    cancel(res) {
-      uni.showToast({
-        title: `点击取消，输入值为：${res.value}`,
-        icon: 'none'
-      });
-    },
-    onBackPress() {
+    silentReSearch() {
+      /* sousuo */
+      console.log(this.searchVal);
     },
     // 滑动
     upper(e) {
@@ -94,6 +81,9 @@ export default {
       this.subCategoryList = this.categoryList[index];
       console.log(this.categoryActive);
     },
+    checkCat(item) {
+      console.log(item);
+    }
   },
   onLoad() {
     uni.getSystemInfo({
@@ -105,12 +95,26 @@ export default {
 };
 </script>
 
-<style scoped>
-  /deep/ .uni-searchbar{
-    height: 80px;
+<style lang="scss" scoped>
+  .vehicle-btn{
+    display: inline-block;
+    width: 160px;
+    height: 56px;
+    line-height: 56px;
+    text-align: center;
+    background: $theme-color;
+    border-radius: 28px;
+    color: #fff;
+    font-size: 28px;
   }
-  /deep/ .uni-searchbar__box{
-    height: 60px;
+  .vehicle-search{
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    width: 100%;
+    height: 104px;
+    background: #fff;
+    border-bottom: 1px solid #F5F5F5;
   }
   .isFixed{
     background-color:#Fff;

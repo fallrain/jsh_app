@@ -17,6 +17,12 @@ import vehicleDetailInfo from '../../components/vehicleList/vehicleDetailInfo';
 import vehicleDetailGood from '../../components/vehicleList/vehicleDetailGood';
 import vehicleDetailSend from '../../components/vehicleList/vehicleDetailSend';
 import transferDetailBtm from '../../components/transfer/transferDetailBtm';
+import {
+  VEHICLE
+} from '../../store/mutationsTypes';
+import {
+  mapGetters
+} from 'vuex';
 
 export default {
   name: 'vehicleCarDetail',
@@ -25,6 +31,16 @@ export default {
     vehicleDetailGood,
     vehicleDetailSend,
     transferDetailBtm
+  },
+  computed: {
+    ...mapGetters([
+      VEHICLE.GET_VEHICLE
+    ]),
+  },
+  created() {
+    console.log('11111111');
+    this.vehicleDetail = this[VEHICLE.GET_VEHICLE].vehicleDetail;
+    console.log(this.vehicleDetail);
   },
   data() {
     return {

@@ -2,15 +2,15 @@
   <view class="vehicleCarList">
     <view class="vehicleCar-rouHead">共{{NUM}}件宝贝</view>
     <view class="vehicleCar-invalid" v-if="puTongList.length>0">
-      <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index"
+      <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index" @pullDetail="pullDetail"
       :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item>
     </view>
     <view class="vehicleCar-invalid" v-if="guaDanList.length>0">
-      <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index"
+      <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index" @pullDetail="pullDetail"
              :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
     </view>
     <view class="vehicleCar-invalid" v-if="pingCheList.length>0">
-      <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index"
+      <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index" @pullDetail="pullDetail"
              :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
     </view>
     <view class="vehicleCar-invalid" v-if="failureGoodsList.length>0">
@@ -28,10 +28,10 @@ import vehicleCartItem from '../../components/vehicleList/vehicleCartItem';
 import vehicleCartItemGD from '../../components/vehicleList/vehicleCartItem-gd';
 import vehicleCartItemPC from '../../components/vehicleList/vehicleCartItem-pc';
 import {
-  mapGetters
+  mapGetters, mapMutations
 } from 'vuex';
 import {
-  USER
+  USER, VEHICLE
 } from '../../store/mutationsTypes';
 
 export default {
@@ -47,6 +47,9 @@ export default {
     ...mapGetters({
       userInf: USER.GET_USER
     }),
+    ...mapMutations([
+      VEHICLE.UPDATE_VEHICLE
+    ]),
   },
   data() {
     return {
@@ -127,6 +130,19 @@ export default {
         this.payerList[0].choosed = true;
       }
     },
+    goodsChange(item, index) {
+      console.log('222222');
+      console.log(item);
+      console.log(index);
+    },
+    pullDetail(item, index) {
+      // this[VEHICLE.UPDATE_VEHICLE]({
+      //   vehicleDetail: item
+      // });
+      // uni.navigateTo({
+      //   url: '/pages/vehicleList/vehicleCarDetail'
+      // });
+    }
   }
 };
 </script>

@@ -381,27 +381,31 @@ export default {
             }));
           }
           console.log(this.filterList);
-          /** **列表数据*** */
-          const productCodes = aaa.data.map(v => v.code);
-          const priceArgsObj = {
-            productCodes,
-            saletoCode: userInf.saletoCode,
-            sendtoCode: userInf.sendtoCode,
-          };
-          const getAllPrice = this.commodityService.getAllPrice(priceArgsObj); // 获取价格
-          const getProductQueryInter = this.productDetailService.productQueryInter({ // 获取收藏
-            productCodes,
-            account: userInf.customerCode
-          });
-          const [allPriceRes] = await Promise.all([getAllPrice, getProductQueryInter]);
-          if (allPriceRes.code === '1') { // 添加价格
-            const allPriceData = allPriceRes.data;
-            // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
-            aaa.data.forEach((v) => {
-              v.$PtPrice = allPriceData[v.code].pt;
-              v.$allPrice = allPriceData[v.code];
-              v.$num = 1;
+          try {
+            /** **列表数据*** */
+            const productCodes = aaa.data.map(v => v.code);
+            const priceArgsObj = {
+              productCodes,
+              saletoCode: userInf.saletoCode,
+              sendtoCode: userInf.sendtoCode,
+            };
+            const getAllPrice = this.commodityService.getAllPrice(priceArgsObj); // 获取价格
+            const getProductQueryInter = this.productDetailService.productQueryInter({ // 获取收藏
+              productCodes,
+              account: userInf.customerCode
             });
+            const [allPriceRes] = await Promise.all([getAllPrice, getProductQueryInter]);
+            if (allPriceRes.code === '1') { // 添加价格
+              const allPriceData = allPriceRes.data;
+              // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
+              aaa.data.forEach((v) => {
+                v.$PtPrice = allPriceData[v.code].pt;
+                v.$allPrice = allPriceData[v.code];
+                v.$num = 1;
+              });
+            }
+          } catch (e) {
+            console.log(e);
           }
           if (pageNo === 1) {
             this.vehicleList = [];
