@@ -18,7 +18,7 @@
       <view class="myAlterTel-row-right-wrap">
         <view class="myAlterTel-row-right-gap"></view>
         <j-verification-code
-          :get-method="getVerificationCodeByOldPhone"
+          :getMethod="getVerificationCodeByOldPhone"
         ></j-verification-code>
       </view>
     </view>
@@ -40,7 +40,7 @@
       <view class="myAlterTel-row-right-wrap">
         <view class="myAlterTel-row-right-gap"></view>
         <j-verification-code
-          :get-method="getVerificationCodeByNewPhone"
+          :getMethod="getVerificationCodeByNewPhone"
         ></j-verification-code>
       </view>
     </view>
@@ -63,7 +63,7 @@
 <script>
 
 import JTopWarning from '../../components/common/JTopWarning';
-import JVerificationCode from '../../components/common/WVerificationcode';
+import JVerificationCode from '../../components/common/JVerificationcode';
 import JValidate from '@/lib/jValidate/JValidate';
 import jValidateRules from '@/lib/jValidate/JValidateRules';
 import {
@@ -173,24 +173,22 @@ export default {
       });
     },
     getVerificationCodeByOldPhone() {
-      if (this.oldPhone) {
-        this.getVerificationCode(this.oldPhone);
-      } else {
-        uni.showToast({
-          title: '原手机号未获取',
-          icon: 'none'
-        });
+      if (this.form.oldPhone) {
+        return this.getVerificationCode(this.form.oldPhone);
       }
+      uni.showToast({
+        title: '原手机号未获取',
+        icon: 'none'
+      });
     },
     getVerificationCodeByNewPhone() {
-      if (jValidateRules.rules.mobile(this.newPhone)) {
-        this.getVerificationCode(this.newPhone);
-      } else {
-        uni.showToast({
-          title: '请填正确格式的手机号',
-          icon: 'none'
-        });
+      if (jValidateRules.rules.mobile(this.form.newPhone)) {
+        return this.getVerificationCode(this.form.newPhone);
       }
+      uni.showToast({
+        title: '请填正确格式的手机号',
+        icon: 'none'
+      });
     },
     changeAuthCode() {
       /* 改变图形码 */
@@ -198,6 +196,8 @@ export default {
     },
     async updatePhone() {
       /* 修改绑定手机号 */
+      this.getVerificationCodeByNewPhone();
+      return;
       if (this.vdt.valid()) {
         const { code } = await this.openAccountService.checkVerificationCode({
           phoneNumber: this.form.oldPhone,

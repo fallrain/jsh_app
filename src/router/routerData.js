@@ -32,6 +32,7 @@ const data = [
   'pages/mine/myGuestView',
   'pages/mine/mySetDetail',
   'pages/sampleMachine/sampleMachineList',
-  'pages/sampleMachine/sampleMachineConfirm'
+  'pages/sampleMachine/sampleMachineConfirm',
+  'pages/concernedProducts/concernedProductsList'
 ];
 export default { data };

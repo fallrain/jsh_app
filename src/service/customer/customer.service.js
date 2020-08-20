@@ -1,7 +1,6 @@
 import urls from '../url/customer.url';
 import {
   jGet,
-  jPost,
   jPostJson
 } from '@/lib/request';
 
@@ -48,5 +47,30 @@ export default {
   },
   getSecretkey(data) {
     return jPostJson(urls.getSecretkey, data);
+  },
+  queryCustomerInterestProduct(data) {
+    /* 获取关注商品 */
+    const {
+      // 账户
+      account,
+      // 默认售达id
+      sendtoCode,
+      // 客户id
+      customerCode,
+      // 产品名
+      productName
+    } = data;
+    return jGet(
+      urls.queryCustomerInterestProduct,
+      {
+        account,
+        sendtoCode,
+        customerCode,
+        productName
+      },
+      {
+        noToast: true
+      }
+    );
   }
 };

@@ -62,7 +62,11 @@ export default {
         });
         console.log(result);
       } else {
-        confirm('暂时没有失效产品');
+        // confirm('暂时没有失效产品');
+        uni.showToast({
+          title: '暂时没有失效产品',
+          duration: 3000
+        });
       }
     }
   }
