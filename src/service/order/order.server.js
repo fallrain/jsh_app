@@ -1,7 +1,8 @@
 import url from '../url/order.url';
 import urlNoApi from '../url/orderNoApi.url';
 import {
-  jPostJson
+  jPostJson,
+  jGet
 } from '@/lib/request';
 import OrderInfoModelForm from '../../model/OrderInfoModelForm';
 
@@ -12,8 +13,11 @@ export default {
   paytoInfo(data) { // 付款方列表
     return jPostJson(urlNoApi.paytoInfo, data);
   },
-  send(data) { // 调货验证码
-    return jPostJson(urlNoApi.send, data);
+  sendVerify(data) { // 获取上上签验证联系方式接口
+    return jPostJson(urlNoApi.sendVerify(data));
+  },
+  mianMi(data) {
+    return jGet(urlNoApi.mianMi, data);
   },
   getOrderMonthSummery(data) {
     /* 基本信息-订单交易状态 */

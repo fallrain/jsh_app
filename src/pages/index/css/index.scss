@@ -53,11 +53,12 @@
         .homepage-top-center{
           display:flex;
           margin-top: 24px;
+          margin-bottom: 24px;
           justify-content: space-between;
           .homepage-top-center-list{
               // width:96px;
               // height:34px;
-              font-size:24px;
+              font-size:28px;
               font-family:PingFangSC-Regular,PingFang SC;
               font-weight:400;
               color:rgba(255,255,255,1);
@@ -65,26 +66,32 @@
           }
         }  
       //  轮播图
+    .uni-swiper-wrapper {
+        border-radius: 20px;
+    }
     .homepage-swiper{
         //   width:670px;
         //   height:280px;
           position: absolute;
-          top:166px;
-          left:40px;
+          top:170px;
+          left:24px;
+          border-radius: 20px;
         }
         .swiper-box {
-          width:670px;
-          height:280px;     
+          width:702px;
+          height:223px; 
+          border-radius: 20px;    
         }
         .swiper-item {
-          width:670px;
-          height:280px;  
+          width:702px;
+          height:223px;     
           /* #ifndef APP-NVUE */
           display: flex;
           /* #endif */
           flex-direction: column;
           justify-content: center;
-          align-items: center;     
+          align-items: center;
+          border-radius: 10px;     
         }
         .image {
           width: 100%;
@@ -97,7 +104,7 @@
         display:flex;
         column-count:5;
         flex-wrap:wrap;
-        margin:70px 22px 0px 32px;
+        margin:0px 22px 0px 32px;
         .homepage-cataloglist-item{
             margin-right: 46px;
             margin-bottom:24px;

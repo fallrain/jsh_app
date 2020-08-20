@@ -120,6 +120,12 @@ import {
   uniSwiperDot 
 } from '@dcloudio/uni-ui';
 import JSearchInput from '../../components/form/JSearchInput';
+import {
+  mapActions,mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 import './css/index.scss';
 export default {
   name:"index",
@@ -292,24 +298,36 @@ export default {
  
    };
   },
-  onLoad() {
-  //  uni.setTabBarStyle({
-  //    color: '#FF0000',
-  //    selectedColor: '#00FF00',
-  //    backgroundColor: '#0000FF',
-  //    borderStyle: 'white',
-  //  });
-  //  uni.setTabBarItem({
-  //    index: 0,
-  //    text: '首页',
-  //    iconPath: '../../../public/public/tabbar/shopping.png',
-  //    selectedIconPath: '../../../public/public/tabbar/shopping.png'
-  //  });
-  },
+  // onLoad() {
+
+  // },
   created(){
       this.getPageInf();
+      this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+      this[USER.UPDATE_SALE_ASYNC]();
+      this[USER.UPDATE_TOKEN_USER_ASYNC]();
+      this.get()
+
+  },
+  computed: {
+    ...mapGetters({  
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+
+    })
   },
   methods: {
+    ...mapActions([
+      // 默认送达方信息
+      USER.UPDATE_DEFAULT_SEND_TO_ASYNC,
+      // 获取售达方信息
+      USER.UPDATE_SALE_ASYNC,
+      // 修改token用户信息
+      USER.UPDATE_TOKEN_USER_ASYNC
+    ]),
+    get() {
+      const a = JSON.stringify(this.defaultSendToInf);
+      alert(a)
+    },
     changePic(e) {
       this.current = e.detail.current;
     },
