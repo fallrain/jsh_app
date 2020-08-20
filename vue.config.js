@@ -10,7 +10,7 @@ module.exports = {
     port: 8098,
     compress: true,
     open: true,
-    openPage: '#/pages/nav/nav',
+    openPage: '#/pages/applicationsIndex/applicationsIndex',
     proxy: {
       '/new/api': {
         // target: 'http://mall.jsh.com',
