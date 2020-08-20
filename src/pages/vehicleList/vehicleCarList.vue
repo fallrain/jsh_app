@@ -31,7 +31,7 @@ import {
   mapGetters, mapMutations
 } from 'vuex';
 import {
-  USER, VEHICLE
+  USER, ORDER
 } from '../../store/mutationsTypes';
 
 export default {
@@ -48,7 +48,7 @@ export default {
       userInf: USER.GET_USER
     }),
     ...mapMutations([
-      VEHICLE.UPDATE_VEHICLE
+      ORDER.UPDATE_ORDER
     ]),
   },
   data() {
@@ -136,6 +136,11 @@ export default {
       console.log(index);
     },
     pullDetail(item, index) {
+      console.log(item);
+      console.log(index);
+      this[ORDER.UPDATE_ORDER]({
+        orderDetail: this.orderListInfo[item]
+      });
       // this[VEHICLE.UPDATE_VEHICLE]({
       //   vehicleDetail: item
       // });

@@ -611,8 +611,8 @@ export default {
         if (data.code === '200') {
           this.xiadanInfo = data.data;
           this.SEQ = data.data.SEQ;
-          this.tiJiINfo.tiji = (this.tiJiINfo.tiji + (this.xiadanInfo.TIJI * 1)).toFixed(2);
-          this.tiJiINfo.zhanbi = (this.tiJiINfo.tiji / (this.tiJiINfo.maxTJ * 1) * 100).toFixed(0);
+          this.tiJiINfo.tiji = ((this.tiJiINfo.tiji * 1) + (this.xiadanInfo.TIJI * 1)).toFixed(2);
+          this.tiJiINfo.zhanbi = (this.tiJiINfo.tiji / (this.xiadanInfo.maxTJ * 1) * 100).toFixed(0);
           this.queryCarNum();
         } else {
           this.xiadanInfo = [];
