@@ -428,8 +428,8 @@ export default {
     // this.getbannerList();
   },
   onLoad() {
-    // this.code = ALIPAYH5STARTUPPARAMS.webview_options;
-    this.code = 'oiDi8SemSIm2-kiAiOBTnw';
+    this.code = ALIPAYH5STARTUPPARAMS.webview_options;
+    // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
     this.getToken();
   },
   methods: {
