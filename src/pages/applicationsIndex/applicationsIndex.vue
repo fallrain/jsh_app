@@ -268,7 +268,7 @@ export default {
             {
               id: 1,
               src: require('@/assets/img/appIndex/shopping.png'),
-              url: 'www.baidu.com',
+              url: '/pages/index/index',
               Subhead: '采购下单'
             },
             {
