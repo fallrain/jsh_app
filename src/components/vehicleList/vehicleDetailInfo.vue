@@ -4,20 +4,20 @@
       <view class="vehiclerDetailInfo-transfer">
         <view class="vehiclerDetailInfo-transfer-info">
           <view class="iconfont iconcar vehiclerDetailInfo-transfer-info-icon"></view>
-          <text class="vehiclerDetailInfo-transfer-info-text">调货信息</text>
+          <text class="vehiclerDetailInfo-transfer-info-text">整车信息</text>
         </view>
         <view class="vehiclerDetailInfo-information">
           <view class="vehiclerDetailInfo-information-text">
             总装车体积：
-            <text class="vehiclerDetailInfo-information-val">146.49m</text>
+            <text class="vehiclerDetailInfo-information-val">{{goods.IBR_JSTIJI}}m3</text>
           </view>
           <view class="vehiclerDetailInfo-information-text mla">
             库位：
-            <text class="vehiclerDetailInfo-information-val">WFS2日日顺潍坊H2库存</text>
+            <text class="vehiclerDetailInfo-information-val">{{goods.IBR_JDPC_JDCODENAME}}</text>
           </view>
           <view class="vehiclerDetailInfo-information-text mlb">
             车型：
-            <text class="vehiclerDetailInfo-information-val">X8.7K - 8.7厢式（高底盘）</text>
+            <text class="vehiclerDetailInfo-information-val">{{goods.IBR_MODELSCARNAME}}</text>
           </view>
         </view>
       </view>
@@ -29,15 +29,15 @@
         <view class="vehiclerDetailInfo-information order">
           <view class="vehiclerDetailInfo-information-text mld">
             申请单号：
-            <text class="vehiclerDetailInfo-information-val">21000086080</text>
+            <text class="vehiclerDetailInfo-information-val">{{goods.IBR_SEQ}}</text>
           </view>
           <view class="vehiclerDetailInfo-information-text mla">
             下单日期：
-            <text class="vehiclerDetailInfo-information-val">2020/07/19</text>
+            <text class="vehiclerDetailInfo-information-val">{{goods.IBR_STARTDATE}}</text>
           </view>
           <view class="vehiclerDetailInfo-information-text mlb">
             预计到货时间：
-            <text class="vehiclerDetailInfo-information-val">2020-07-31</text>
+            <text class="vehiclerDetailInfo-information-val">{{goods.IBR_ENDDATE}}</text>
           </view>
         </view>
       </view>
@@ -49,6 +49,11 @@
 import './css/vehicleDetailInfo.scss';
 
 export default {
-  name: 'vehicleDetailInfo'
+  name: 'vehicleDetailInfo',
+  props: {
+    goods: { // 商品数据
+      type: Object
+    }
+  },
 };
 </script>
