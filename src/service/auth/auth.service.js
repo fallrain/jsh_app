@@ -11,4 +11,8 @@ export default {
       token
     });
   },
+  getTokenByCode(data) {
+    /* 根据code获取token */
+    return jGet(urls.getTokenByCode, data);
+  },
 };
