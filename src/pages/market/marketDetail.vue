@@ -126,7 +126,7 @@ export default {
     this.stockForm.saletoCode = saletoCode;
     this.stockForm.sendtoCode = sendtoCode;
     console.log(this.currentDetail);
-    // this.getAddressList();
+    this.getAddressList();
     if (this.currentDetail.activityType === 'zuhe') {
       this.getTotalMoney();
     }

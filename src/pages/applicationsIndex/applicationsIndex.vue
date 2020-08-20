@@ -244,7 +244,7 @@ export default {
       latestApp: [
         {
           src: require('@/assets/img/appIndex/video.png'),
-          url: 'www.baidu.com',
+          url: '/pages/nav/nav',
           title: '直播'
         }
       ],
@@ -425,9 +425,24 @@ export default {
     };
   },
   created() {
-    this.getbannerList();
+    // this.getbannerList();
+  },
+  onLoad() {
+    // this.code = ALIPAYH5STARTUPPARAMS.webview_options;
+    this.code = 'oiDi8SemSIm2-kiAiOBTnw';
+    this.getToken();
   },
   methods: {
+    // 获取token
+    async getToken() {
+      const { code, data } = await this.authService.getTokenByCode({
+        code: this.code
+      });
+      if (code === '1') {
+        const token = data.token;
+        uni.setStorageSync('token', token);
+      }
+    },
     changePic(e) {
       this.current = e.detail.current;
     },
