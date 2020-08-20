@@ -428,19 +428,20 @@ export default {
     // this.getbannerList();
   },
   onLoad() {
-    this.code = ALIPAYH5STARTUPPARAMS.webview_options;
-    // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
+    // this.code = ALIPAYH5STARTUPPARAMS.webview_options;
+    this.code = 'oiDi8SemSIm2-kiAiOBTnw';
     this.getToken();
   },
   methods: {
     // 获取token
     async getToken() {
+      alert(this.code);
       const { code, data } = await this.authService.getTokenByCode({
         code: this.code
       });
+      alert(data);
       if (code === '1') {
         const token = data.token;
-        alert(token);
         uni.setStorageSync('token', token);
       }
     },

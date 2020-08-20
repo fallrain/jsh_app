@@ -69,6 +69,8 @@
     ></j-product-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
+      :pickerList="addressList"
+      @change="sendCustomerListChange"
     ></j-address-picker>
   </view>
 </template>
@@ -230,9 +232,20 @@ export default {
       if (code === '1') {
         this.addressList = data;
       }
-      if (data.length > 0) {
-        this.currentAdd = data[0];
+      let getdefaultFlag = false;
+      this.addressList.forEach((item) => {
+        if (item.defaultFlag === 1) {
+          this.currentAdd = item;
+          getdefaultFlag = true;
+        }
+      });
+      if (!getdefaultFlag) {
+        this.currentAdd = this.addressList[0];
       }
+    },
+    sendCustomerListChange(list, detail, parent) {
+      /* 地址列表change */
+      this.addressList = list;
     },
     getTotalMoney() {
       let total = 0;
