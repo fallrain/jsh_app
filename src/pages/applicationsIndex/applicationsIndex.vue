@@ -440,6 +440,7 @@ export default {
       });
       if (code === '1') {
         const token = data.token;
+        alert(token);
         uni.setStorageSync('token', token);
       }
     },

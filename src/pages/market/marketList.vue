@@ -94,7 +94,7 @@
           <i class="iconfont iconyou marketList-drawer-filter-head-icon-right"></i>
         </view>
         <view class="marketList-drawer-filter-head-ads">
-          ({{currentAdd.addressCode}}){{currentAdd.address}}
+          ({{currentAdd.addressCode}}){{currentAdd.addressName}}
         </view>
       </view>
     </j-drawer>
@@ -162,7 +162,23 @@ export default {
       ],
       // 地址列表
       addressList: [],
-      currentAdd: {},
+      currentAdd: {
+        address: '',
+        addressCode: '',
+        addressName: '',
+        channel: '',
+        channelGroup: '',
+        customerCode: '',
+        customerName: '',
+        defaultFlag: 0,
+        deletedFlag: '',
+        hubFlag: '',
+        manageCustomerCode: '',
+        salesGroupCode: '',
+        sbrShopType: '',
+        subChannel: '',
+        tradeCode: ''
+      },
       // 是否展示筛选侧边抽屉
       isShowFilterDrawer: false,
       // 是否展示地址侧边抽屉
@@ -233,12 +249,19 @@ export default {
       ]
     };
   },
+  beforeMount() {
+    this.getAddressList();
+  },
   created() {
+    console.log(this.defaultSendToInf);
+    this.form.saletoCode = this.defaultSendToInf.addressCode;
+    this.stockForm.saletoCode = this.defaultSendToInf.addressCode;
     this.init();
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
     fomrmateDate() {
       return (val) => {
@@ -248,9 +271,8 @@ export default {
   },
   methods: {
     async init() {
-      await this.getAddressList();
+      // await this.getAddressList();
       await this.getIndustryList();
-      // await this.getActivityList();
     },
     async getIndustryList() {
       // 获取产品组
@@ -273,14 +295,21 @@ export default {
         data.list.forEach((item) => {
           item.choosedNum = 0;
         });
-        this.list = data.list;
+        if (data.pageNum === 1) {
+          this.list = data.list;
+        } else {
+          this.list = this.list.concat(data.list);
+        }
       }
+      // 当前页码的数据
       const scrollView = {};
       scrollView.pageSize = 10;
-      scrollView.total = 0;
+      scrollView.total = data.total;
       return scrollView;
     },
     getSearchCondition(pages) {
+      console.log(pages)
+      console.log(this.addressList);
       /* 获取不同条件下搜索的传参 */
       const condition = {
         timestamp: new Date().getTime(),
@@ -290,11 +319,14 @@ export default {
         isCheckProduct: false,
         productCode: '',
         productGroup: [],
-        pageNo: pages.num,
+        pageNum: pages.num,
         pageSize: pages.size,
-        saletoCode: this.userInf.customerCode,
-        sendtoCode: this.userInf.sendtoCode,
+        saletoCode: this.defaultSendToInf.addressCode,
+        sendtoCode: this.currentAdd.addressCode,
       };
+      if (!this.currentAdd.addressCode) {
+        condition.sendtoCode = this.defaultSendToInf.addressCode
+      }
       // 活动类别选择后确认
       this.tabs[0].children.forEach((item) => {
         if (item.checked) {
@@ -339,15 +371,22 @@ export default {
       if (code === '1') {
         this.addressList = data;
       }
-      if (data.length > 0) {
-        this.currentAdd = data[0];
-        this.form.saletoCode = this.userInf.customerCode;
-        this.form.sendtoCode = data[0].addressCode;
-        this.stockForm.saletoCode = this.userInf.customerCode;
-        this.stockForm.sendtoCode = data[0].addressCode;
+      console.log(this.defaultSendToInf);
+      let getdefaultFlag = false;
+      this.addressList.forEach((item) => {
+        if (item.defaultFlag === 1) {
+          this.currentAdd = item;
+          getdefaultFlag = true;
+        }
+      });
+      if (!getdefaultFlag) {
+        this.currentAdd = this.addressList[0];
       }
+      this.form.sendtoCode = this.currentAdd.addressCode;
+      this.stockForm.sendtoCode = this.currentAdd.addressCode;
     },
-    changeAddress(current) {
+    changeAddress(addList, current) {
+      this.addressList = addList;
       this.currentAdd = current;
     },
     tabClick(tabs, tab) {
@@ -380,6 +419,8 @@ export default {
           v.isChecked = false;
         });
       });
+      // 设置产品状态初始化
+      this.filterList[1].data[0].isChecked = true;
       // 重新搜索
       this.mescroll.resetUpScroll(true);
     },
