@@ -28,7 +28,7 @@
                 class="iconfont icondui"
               ></i>
             </view>
-            <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.address}}</view>
+            <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.addressName}}</view>
           </view>
         </view>
       </view>
@@ -91,11 +91,11 @@ export default {
       this.$emit('update:show', val);
     },
     check(item) {
-      this.list.forEach((v) => {
+      this.addressList.forEach((v) => {
         this.$set(v, 'checked', false);
       });
       this.$set(item, 'checked', true);
-      this.$emit('changeAddress', item);
+      this.$emit('changeAddress', this.addressList, item);
     },
     hide() {
       this.$emit('update:show', false);

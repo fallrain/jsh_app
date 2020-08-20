@@ -7,8 +7,7 @@ import {
 Vue.use(Vuex);
 export default {
   state: {
-    vehicleDetail: { // 整车购物车详情页面信息，由列表页传入
-    }
+    vehicleDetail: {} // 整车购物车详情页面信息，由列表页传入
   },
   mutations: {
     /* eslint注释请不要删除 */

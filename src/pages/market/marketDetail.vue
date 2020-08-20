@@ -247,12 +247,12 @@ export default {
     },
     // 成套下单
     goOrder() {
-      console.log(this.currentDetail);
+      console.log(this.currentAdd);
     },
     // 产品校验
     async validateProduct() {
       const form = {
-        saletoCode: '8800101954',
+        saletoCode: this.stockForm.saletoCode,
         sendtoCode: '8800101954',
         yunCangCode: '',
         yunCangFlag: '',
