@@ -105,7 +105,7 @@
     ></j-choose-delivery-address>
     <!-- 底部购物车栏 -->
     <transfer-goods-btm
-      :shoppingCartNum=shoppingCartNum
+      :shoppingCartNum="shoppingCartNum"
     >     
     </transfer-goods-btm>
   </view>

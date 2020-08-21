@@ -1,11 +1,16 @@
 <template>
     <view class="transferShoppingCart">
+      <!-- 验证码弹窗 -->
+      <t-alert-verification 
+      :show.sync="isShowVf"
+      ></t-alert-verification>
       <j-tab
         :tabs="tabs"
         :hasRightSlot="true"
         @tabClick="tabClick"
       >  
       </j-tab>
+      
       <view class="cumulative-shoppingCart">共{{transferNum}}件宝贝</view>
       <view class="shoppingCart-list">
         <t-shopping-cart-item
@@ -45,7 +50,7 @@
         @cancel="cancel"
         :isShowClear="isShowClear"
       ></t-shopping-cart-btm>
-
+     
     </view>
 </template>
 <script>
@@ -54,6 +59,7 @@ import TShoppingCartBtm from '../../components/transfer/TShoppingCartBtm';
 import JTab from '../../components/common/JTab';
 import TOveragePay from '../../components/transfer/TOveragePay';
 import TFailureGoodsList from '../../components/transfer/TFailureGoodsList';
+import TAlertVerification from "../../components/form/TAlertVerification";
 // import { mapState, mapActions, mapMutations } from "vuex"
 import {
   mapGetters,mapMutations
@@ -71,10 +77,13 @@ export default {
     TShoppingCartItem,
     TOveragePay,
     TFailureGoodsList,
-    TShoppingCartBtm
+    TShoppingCartBtm,
+    TAlertVerification
   },
   data(){
     return {
+      // 验证码弹窗
+      isShowVf: false, // 验证码弹窗，判断是否展示
       // 产品数量
       transferNum: 0,
       // 结算
@@ -97,8 +106,15 @@ export default {
       isShowpayer: false,
       // 验证码
       YZM:"",
+      form: {
+          // 手机号
+          phone: '',
+          // 手机号验证码
+          verificationCode: '',
+      },
       // 编辑选中显示
       isShowClear: false,
+
       tabs: [
         {
           id: 'gwc',
@@ -123,29 +139,41 @@ export default {
   },
   created() {
     this.getShopInfo();
+    console.log(this.defaultSendToInf)
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     })
+    
   },
 
   methods: {
     ...mapMutations([
       TRANSFER.UPDATE_TSHOPCART
     ]),
+    // 显示验证码弹窗
+    changeVf () { 
+      this.isShowVf = true;
+    },
     getShopInfo() {
-      // this.setlist()
-      this.getOrderList()
-      this.getInquire()
-      this.calBalance()
+      (async() => {
+        await this.getOrderList();  
+        await this.getpayerList()
+      })()
+      // this.getOrderList();
+      // this.getpayerList();
+      this.calBalance();   
+      
       // this.getShoppingCartNum()
     },
     async getOrderList() {
       // 调货购物车数据
+      // console.log(this.defaultSendToInf.customerCode)
       const { code, data } = await this.transfergoodsService.allOrderList({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode
+        longfeiUSERID: this.defaultSendToInf.customerCode
       })
       if(code === "1") { 
         console.log(data.data) 
@@ -204,7 +232,7 @@ export default {
         console.log(productCodes)
         // 获取收藏列表
         const getProductQueryInter = await this.customerService.queryCustomerInterestProductByAccount({
-          account: this.userInf.customerCode,
+          account: this.defaultSendToInf.customerCode,
           productCodeList: productCodes
         });
         console.log(getProductQueryInter)
@@ -231,6 +259,7 @@ export default {
         this.setAllinvalid()
         this.getShoppingCartNum()
         this.getpayerList()
+
       }
      
     },
@@ -294,27 +323,39 @@ export default {
         // confirm('体积小于15，无法结算，请继续添加商品')
         this.allOrderList.forEach(ele => {
           if (ele.checked) {
+            console.log(ele)
             uni.showToast({
-              title:`单号${ele.IBR_SEQ};体积不满足，无法提交`,
+              title:`单号${ele.data.IBR_SEQ};体积不满足，无法提交`,
               duration: 3000
             });
           }
         })     
       } else {
+        flag = true
         this.payerBalance.forEach(ele => {
-          if(ele.balance > toBePaid) {
+          if(ele.balance > ele.toBePaid) {
+            this.getUserInfById()
+            const mianMi = this.getUserInfMianMi()
+            if(mianMi.data) {
+              // 提交订单
+              // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
+              //   longfeiUSERID:this.defaultSendToInf.customerCode,
+              //   orderNo:'',
+              //   verifyCode:'',
+              //   erifyKey:""
+              // })
+            }
+            // this.changeVf()
             
-            // const volume = this.allOrderList.map(ele => ele.checked && Math.round(ele.data.IBR_JSTIJI/15*100) < 15)
-            // if(volume && volume.length > 0) confirm('体积小于15%无法结算')
-            // // 调货验证码
-            //  const { code, data } = await this.orderService.send(this.userInf.customerCode)
+       // // 调货验证码
+            //  const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
             //  if (code === "1") {
             //     console.log(data)
             //     this.YZM = data.data.verifyKey
             //  }
             // // 提交订单
             // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
-            //   longfeiUSERID:this.userInf.customerCode,
+            //   longfeiUSERID:this.defaultSendToInf.customerCode,
             //   orderNo:'',
             //   verifyCode:'',
             //   erifyKey:this.YZM
@@ -325,18 +366,28 @@ export default {
                   title: '提示',
                   content: `付款方${ele.CodeName}余额不足，无法提交！`,
                 });
-              })     
-
-
-
-     
+              })         
           }
-
-        })
-        
+        })     
       }    
-      
-
+    
+    },
+    async getUserInfById() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const {code, data} =  await this.orderService.sendVerify(this.defaultSendToInf.customerCode);
+        if (code === "1") {
+        this.form.phone = data.data.account
+      }
+    },
+    async getUserInfMianMi() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const data =  await this.orderService.mianMi();
+      return data 
+      console.log(data)
+      // if(data.code === "1") {
+      //   console.log(data.data)
+        // return data1
+      // }
       
     },
     // 编辑
@@ -378,9 +429,10 @@ export default {
            console.log(item)         
         }
       })
+      console.log(this.defaultSendToInf.customerCode)
       const deleteForm = await this.transfergoodsService.deleteOrderForm ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode,
+        longfeiUSERID: this.defaultSendToInf.customerCode,
         SEQ: temp.join(',')
       });
       if(deleteForm.code === "1") {
@@ -392,8 +444,8 @@ export default {
     async getShoppingCartNum() {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
-        timestamp: this.userInf.saletoCode,
-        longfeiUSERID: this.userInf.saletoCode
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.defaultSendToInf.customerCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
@@ -401,11 +453,37 @@ export default {
         // console.log(data)
       }
     },
+    goodsChange(list, item, index) {
+      this.allOrderList[index] = list;
+      this.allOrderList = JSON.parse(JSON.stringify(this.allOrderList));
+      this.calSettlement()
+      this.isCheck()
+    },
+    // 全选
+    isCheck() {
+      this.isCheckAll = true
+      let chooseNum = 0
+      this.allOrderList.forEach(ele => {
+        if (!ele.checked) {
+          this.isCheckAll = false
+          return
+        }
+        if(ele.checked) {
+          chooseNum += ele.data.orderList.length
+          console.log(ele)
+          console.log(chooseNum)
+        } else {
+          chooseNum = 0
+        }        
+      })
+      this.allChooseNum = chooseNum
+      this.calBalance()
+    },
     // 付款方数据
     async getpayerList() {
-      console.log(this.userInf);
-      const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCodeTwo, {
-        salesGroupCode: this.userInf.salesGroupCode,
+      // console.log(this.userInf);
+      const { code, data } = await this.customerService.getcustomersList(this.defaultSendToInf.customerCode, {
+        salesGroupCode: this.defaultSendToInf.salesGroupCode,
         status: 1
       });
       if (code === '1') {
@@ -447,48 +525,25 @@ export default {
       }
 
     },
-    goodsChange(list, item, index) {
-      this.allOrderList[index] = list;
-      this.allOrderList = JSON.parse(JSON.stringify(this.allOrderList));
-      this.calSettlement()
-      this.isCheck()
-    },
-    // 全选
-    isCheck() {
-      this.isCheckAll = true
-      let chooseNum = 0
-      this.allOrderList.forEach(ele => {
-        if (!ele.checked) {
-          this.isCheckAll = false
-          return
-        }
-        if(ele.checked) {
-          chooseNum += ele.data.orderList.length
-          console.log(ele)
-          console.log(chooseNum)
-        } else {
-          chooseNum = 0
-        }        
-      })
-      this.allChooseNum = chooseNum
-      this.calBalance()
-    },
+    
     // 请求余额支付信息
     async getInquire() {
       let code = []
       let temp = {}
       let payerCode = ""
-      for(var i = 0; i < this.payerCodeAll.length; i++ ) {
-      //  console.log(this.payerCodeAll[i])
-        code.push({
-          payerCode: this.payerCodeAll[i].payerCode,
-          salesGroupCode: "2110"
+      console.log(this.payerCodeAll) 
+      if(this.payerCodeAll && this.payerCodeAll.length > 0) {
+           this.payerCodeAll.forEach(item => {
+            code.push({
+            payerCode: item.payerCode,
+            salesGroupCode: this.defaultSendToInf.salesGroupCode
+          })
         })
-      }
-      // console.log(code)
-      const allInquire = await this.customerService.inquire(code);
+      console.log(code)
+      const allInquire =  await this.customerService.inquire(code);
       if(allInquire.code === "1") {
         // 付款方余额信息
+       console.log(allInquire.data)
         const payerBal = allInquire.data
         console.log(payerBal)
         this.payer.forEach(item => {
@@ -504,6 +559,8 @@ export default {
         console.log(this.payer) 
       }
    
+      }
+     
      
     },
     // 付款方  余额支付信息
