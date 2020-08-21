@@ -5,7 +5,7 @@
     {
       "path": "pages/applicationsIndex/applicationsIndex",
       "style": {
-        // "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "应用首页"
       }
     },
     {
