@@ -1,19 +1,19 @@
 <template>
   <view class="vehicleDetailGood">
     <view class="v-d-g-wrap">
-      <view class="v-d-g-detail" v-for="(goods,index) in goodsList" :key="index">
+      <view class="v-d-g-detail" v-for="(goods,index) in goodsList.orderList" :key="index">
         <view class="v-d-g-detail-odd">
-          调货单号：<text class="v-d-g-detail-odd-num">ZK2100008608001</text>
+          调货单号：<text class="v-d-g-detail-odd-num">{{goods.IBL_KORDERNO}}</text>
           <view class="v-d-g-detail-close iconfont iconcross"></view>
         </view>
         <view class="v-c-i-cnt">
           <view class="v-c-i-cnt-img-wrap">
-            <image src="@/assets/img/goods/example-fridge.jpg"></image>
+            <image :src="goods.THUMBNAIL"></image>
           </view>
           <view class="">
-            <view class="v-c-i-cnt-inf-title">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高......</view>
+            <view class="v-c-i-cnt-inf-title">{{goods.PRODUCTNAME}}</view>
             <view class="v-c-i-btm-version">
-              <view class="v-c-i-cnt-price v-c-i-flox3">¥ 45996.00</view>
+              <view class="v-c-i-cnt-price v-c-i-flox3">¥ {{goods.UNITPRICE}}</view>
             </view>
             <view class="v-c-i-cnt-inf-picker v-c-i-flox10" @tap="showPayer">
               <view class="v-c-i-flox3">付款方<i class="iconfont iconxia"></i></view>
@@ -23,27 +23,32 @@
         </view>
         <view class="v-c-i-cnt-foot">
           <view class="v-c-i-flox4">
-            <text class="v-c-i-cnt-check"> 210</text>
+            <text class="v-c-i-cnt-check"> {{goods.IBL_MINNUM==='0' ? '1' : goods.IBL_MINNUM}}</text>
             <text class="v-c-i-cnt-foot-text">件起售 | 限购</text>
-            <text class="v-c-i-cnt-check"> 2100</text>
+            <text class="v-c-i-cnt-check"> {{goods.IBL_MAXNUM}}</text>
           </view>
           <view class="v-c-i-flox4">
             <text class="v-c-i-cnt-foot-text">小计： </text>
-            <text class="v-c-i-cnt-foot-value"> ¥ 45996.00</text>
+            <text class="v-c-i-cnt-foot-value"> ¥ {{goods.SUMMONEY}}</text>
           </view>
           <view class="">
-            <uni-number-box></uni-number-box>
+            <uni-number-box :value="goods.IBL_NUM"></uni-number-box>
           </view>
         </view>
         <view class="v-d-g-detail-mark-item-name">
-            <text class="v-d-g-detail-mark-item-name-star">直扣:92.31% </text>|
-            <view class="v-d-g-detail-mark-item-name-end">返利：COM </view>|
-            <text class="v-d-g-detail-mark-item-name-star">台返:0</text>|
-            <view class="v-d-g-detail-mark-item-name-end">供价:￥5892.21</view>
-          <view v-if="index < goodsList.length-1" class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
+            <text class="v-d-g-detail-mark-item-name-star">直扣:{{(goods.$MYprice.BateRate*1*100).toFixed(2)}}% </text>|
+            <view class="v-d-g-detail-mark-item-name-end">返利:
+              <span v-if="goods.$MYprice.ReLossRate==='0'">COM</span>
+              <span v-else-if="goods.$MYprice.ReLossRate==='1'">BF</span>
+              <span v-else-if="goods.$MYprice.ReLossRate==='2'">FHQ</span>
+              <span v-else-if="goods.$MYprice.ReLossRate==='5'">BZK</span>
+            </view>|
+            <text class="v-d-g-detail-mark-item-name-star">台返:{{goods.$MYprice.ReBateMoney}}</text>|
+            <view class="v-d-g-detail-mark-item-name-end">供价:￥{{goods.$MYprice.RetailPrice}}</view>
+          <view v-if="index < goodsList.orderList.length-1" class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
             <view class="jOrderConfirmItem-semicircle"></view>
           </view>
-          <view v-if="index < goodsList.length-1" class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-right">
+          <view v-if="index < goodsList.orderList.length-1" class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-right">
             <view class="jOrderConfirmItem-semicircle"></view>
           </view>
         </view>
@@ -51,7 +56,7 @@
     </view>
     <view class="v-d-g-total">
       <view class="v-d-g-total-text ml48">共计金额:</view>
-      <view class="v-d-g-total-price ml20">¥ 3456.00</view>
+      <view class="v-d-g-total-price ml20">¥ {{goodsList.SUMMONEY}}</view>
     </view>
   </view>
 </template>
@@ -71,11 +76,8 @@ export default {
   },
   props: {
     goodsList: {// 商品列表
-      type: Array,
-      default: () => []
-    },
-    index: {
-      type: Number
+      type: Object,
+      default: () => {}
     }
   },
   data() {
