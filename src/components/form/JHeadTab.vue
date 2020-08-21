@@ -121,6 +121,22 @@ export default {
       this.$emit('tabPickerChange', this.popTabs);
     },
     confirmPup(index, choseChildItem) {
+      if (this.popTabs[0].children[0].type === 'ZCJD') {
+        let num = 0;
+        this.popTabs[0].children.forEach((v) => {
+          if (v.checked) {
+            num = 1;
+          }
+        });
+        this.popTabs[1].children.forEach((v) => {
+          if (v.checked) {
+            num = 2;
+          }
+        });
+        if (num === 0) {
+          this.popTabs[0].children[4].checked = true;
+        }
+      }
       this.$emit('tabconfirmPup', this.popTabs, index, choseChildItem);
     }
   }
