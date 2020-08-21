@@ -154,19 +154,19 @@ export default {
           id: 1,
           src: require('@/assets/img/index/function-car.png'),
           title: '整车',
-          url: '#'
+          url: '/pages/vehicleList/vehicleList'
         },
         {
           id: 2,
           src: require('@/assets/img/index/function-box.png'),
           title: '调货',
-          url: '#'
+          url: '/pages/transferGoods/transferGoods'
         },
         {
           id: 3,
           src: require('@/assets/img/index/function-qiang.png'),
           title: '抢单',
-          url: '#'
+          url: 'null'
         },
         {
           id: 4,
@@ -184,19 +184,19 @@ export default {
           id: 6,
           src: require('@/assets/img/index/function-sale.png'),
           title: '特价',
-          url: '#'
+          url: 'null'
         },
         {
           id: 7,
           src: require('@/assets/img/index/function-project.png'),
           title: '工程',
-          url: '#'
+          url: 'null'
         },
         {
           id: 8,
           src: require('@/assets/img/index/function-tv.png'),
           title: '样机',
-          url: '#'
+          url: 'null'
         },
         {
           id: 9,
@@ -265,44 +265,42 @@ export default {
           url: '#'
         }
       ],
-      tabBarList: [
-        {
-          id: 1,
-          image: require('@/assets/img/tabbar/shouye.png'),
-          img: require('@/assets/img/tabbar/shouye-actived.png'),
-          tloimg: require('@/assets/img/index/logo-white.png')
-        },
-        {
-          id: 2,
-          image: require('@/assets/img/tabbar/fenlei.png'),
-          img: require('@/assets/img/tabbar/fenlei-actived.png'),
-          tloimg: require('@/assets/img/index/manypeople.png')
-        },
-        {
-          id: 3,
-          image: require('@/assets/img/tabbar/xiaoxi.png'),
-          img: require('@/assets/img/tabbar/xiaoxi-actived.png'),
-          tloimg: require('@/assets/img/index/topnew.png')
+      // tabBarList: [
+      //   {
+      //     id: 1,
+      //     image: require('@/assets/img/tabbar/shouye.png'),
+      //     img: require('@/assets/img/tabbar/shouye-actived.png'),
+      //     tloimg: require('@/assets/img/index/logo-white.png')
+      //   },
+      //   {
+      //     id: 2,
+      //     image: require('@/assets/img/tabbar/fenlei.png'),
+      //     img: require('@/assets/img/tabbar/fenlei-actived.png'),
+      //     tloimg: require('@/assets/img/index/manypeople.png')
+      //   },
+      //   {
+      //     id: 3,
+      //     image: require('@/assets/img/tabbar/xiaoxi.png'),
+      //     img: require('@/assets/img/tabbar/xiaoxi-actived.png'),
+      //     tloimg: require('@/assets/img/index/topnew.png')
 
-        },
-        {
-          id: 4,
-          image: require('@/assets/img/tabbar/shopping.png'),
-          img: require('@/assets/img/tabbar/shopping-actived.png')
-        },
-        {
-          id: 5,
-          image: require('@/assets/img/tabbar/mine.png'),
-          img: require('@/assets/img/tabbar/mine-actived.png')
-        },
+      //   },
+      //   {
+      //     id: 4,
+      //     image: require('@/assets/img/tabbar/shopping.png'),
+      //     img: require('@/assets/img/tabbar/shopping-actived.png')
+      //   },
+      //   {
+      //     id: 5,
+      //     image: require('@/assets/img/tabbar/mine.png'),
+      //     img: require('@/assets/img/tabbar/mine-actived.png')
+      //   },
 
-      ]
+      // ]
 
    };
   },
-  // onLoad() {
 
-  // },
   created(){
       this.getPageInf();
       (async() => {
