@@ -61,6 +61,10 @@ export default {
         form: {
             type: Object,
             default: () => {}
+        },
+        allOrderList: {
+          type: Array,
+          default: () => []
         }  
         // verificationCode: {
         //   type: String
@@ -77,6 +81,7 @@ export default {
         //   // 手机号验证码
         //   verificationCode: '',
         // }
+        erifyKey: 0
            
       }
     }, 
@@ -125,12 +130,16 @@ export default {
 
       async getVerificationCode() {
          // 发送验证码
-         return await this.orderService.send(this.defaultSendToInf.customerCode)
-        //  const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
-        // if (code === "1") {
-        //     console.log(data)
-        //     this.form.verificationCode = data.data.verifyKey
-        // }
+        //  return await this.orderService.send(this.defaultSendToInf.customerCode)
+         const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
+        if (code === "1") {
+            console.log(data.data.verifyKey)
+            this.erifyKey = data.data.verifyKey
+            uni.showToast({
+                    title: '短信发送成功',
+            });
+            
+        }
       },
       getVerificationCodeByPhone() {
         if (this.form.phone) {
@@ -142,10 +151,34 @@ export default {
         });
       },
       // 点击确定
-      determine() {
-          if(this.form.verificationCode) {
-              th
-          }
+      async determine() {         
+        if(this.form.verificationCode) { 
+            let SEQ = ""
+            this.allOrderList.forEach(ele => {
+              if(ele.checked) {
+                SEQ = ele.IBR_SEQ
+              }        
+            })         
+            // 提交订单
+
+            const { code, data } = await this.transfergoodsService.submitDhOrder({
+                timestamp: Date.parse(new Date()),
+                longfeiUSERID: Number(this.defaultSendToInf.customerCode),
+                orderNo: 300000081,
+                verifyCode: Number(this.form.verificationCode),
+                verifyKey: this.erifyKey,
+            })
+            if(code === "1" && data.code === "200") {
+                uni.showToast({
+                    title: '调货订单提交成功',
+                });
+                this.show = false
+            } else {
+                uni.showToast({
+                    title: '提交失败请重试',
+                });
+            }
+        }
           
 
 
@@ -171,7 +204,7 @@ export default {
     left: 0;
     background: #ccc;
     opacity: 0.8;
-    z-index: 10000;
+    z-index: 2000;
 }
 .TAlertVerification-model {
     position: fixed;
@@ -182,7 +215,7 @@ export default {
     left: 10%;
     background: #fff;
     opacity: 1;
-    z-index: 10001;
+    z-index: 2001;
 }
 .TAlertVerification-row {
     display: flex;

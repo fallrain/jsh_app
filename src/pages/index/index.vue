@@ -308,7 +308,7 @@ export default {
         await this[USER.UPDATE_SALE_ASYNC]();
         await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
       })().then(res =>{
-          this.get()
+          // this.get()
       })
       // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       // this[USER.UPDATE_SALE_ASYNC]();

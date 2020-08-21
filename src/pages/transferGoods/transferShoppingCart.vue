@@ -4,6 +4,7 @@
       <t-alert-verification 
         :show.sync="isShowVf"
         :form="form"
+        :allOrderList="allOrderList"
       ></t-alert-verification>
       <j-tab
         :tabs="tabs"
@@ -83,7 +84,7 @@ export default {
   data(){
     return {
       // 验证码弹窗
-      isShowVf: true, // 验证码弹窗，判断是否展示
+      isShowVf: false, // 验证码弹窗，判断是否展示
       // 产品数量
       transferNum: 0,
       // 结算
@@ -342,25 +343,12 @@ export default {
             if(this.userInfMianMi) {
               console.log("true,提交")
               // 提交订单
-              // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
-              //   longfeiUSERID:this.defaultSendToInf.customerCode,
-              //   orderNo:'',
-              //   verifyCode:'',
-              //   erifyKey:""
-              // })
+              this. getsubmitDhOrderTwo()
             } else {
               console.log("谈验证码")
               this.changeVf()     
    
             }
-            //    
-            // // 提交订单
-            // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
-            //   longfeiUSERID:this.defaultSendToInf.customerCode,
-            //   orderNo:'',
-            //   verifyCode:'',
-            //   erifyKey:this.YZM
-            // })
           } else {
               this.payerBalance.forEach(ele => {
                 uni.showModal({
@@ -378,9 +366,9 @@ export default {
       const {code, data} =  await this.orderService.sendVerify(this.defaultSendToInf.customerCode);
         if (code === "1") {
           const abc = data.data.account
-          abc.replace(getRegExp(/(\d{3})\d{4}(\d{4})/), '$1****$2')
+          
           console.log(abc)
-        this.form.phone = abc
+        this.form.phone = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$3')
       }
       console.log(this.form.phone)
     },
@@ -394,31 +382,30 @@ export default {
         this.userInfMianMi = data.data
       }  
     },
-    //获取验证码提交订单
-    async getsubmitDhOrder() {
-      // this.form.verificationCode
-      // // 获取验证码
-      // const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
-      //  if (code === "1") {
-      //     console.log(data)
-      //     this.form.verificationCode = data.data.verifyKey
-      //  }
-      // const submitDhOrder  = await this.transfergoodsService.submitDhOrder({
-      //   longfeiUSERID:this.defaultSendToInf.customerCode,
-      //   orderNo:'',
-      //   verifyCode:'',
-      //   erifyKey:this.form.verificationCode
-      // })
-    },
     //提交订单
     async getsubmitDhOrderTwo() {
-      // this.form.verificationCode
-      const submitDhOrder  = await this.transfergoodsService.submitDhOrder({
-        longfeiUSERID:this.defaultSendToInf.customerCode,
-        orderNo:'',
-        verifyCode:'',
-        erifyKey:""
+      let SEQ = ""
+      this.allOrderList.forEach(ele => {
+        if(ele.checked) {
+          SEQ = ele.IBR_SEQ
+        }        
       })
+      const submitDhOrder  = await this.transfergoodsService.submitDhOrder({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.defaultSendToInf.customerCode,
+        orderNo: SEQ,
+        verifyCode: this.form.verificationCode,
+        verifyKey: '',
+      })
+      if(submitDhOrder.code === "1") {
+        uni.showToast({
+            title: '调货订单提交成功',
+        });
+      } else {
+          uni.showToast({
+              title: '提交失败请重试',
+          });
+      }
     },
 
 
