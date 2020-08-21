@@ -28,10 +28,10 @@ import vehicleCartItem from '../../components/vehicleList/vehicleCartItem';
 import vehicleCartItemGD from '../../components/vehicleList/vehicleCartItem-gd';
 import vehicleCartItemPC from '../../components/vehicleList/vehicleCartItem-pc';
 import {
-  mapGetters, mapMutations
+  mapGetters
 } from 'vuex';
 import {
-  USER, ORDER
+  USER
 } from '../../store/mutationsTypes';
 
 export default {
@@ -47,9 +47,6 @@ export default {
     ...mapGetters({
       userInf: USER.GET_USER
     }),
-    ...mapMutations([
-      ORDER.UPDATE_ORDER
-    ]),
   },
   data() {
     return {
@@ -135,18 +132,55 @@ export default {
       console.log(item);
       console.log(index);
     },
-    pullDetail(item, index) {
-      console.log(item);
-      console.log(index);
-      this[ORDER.UPDATE_ORDER]({
-        orderDetail: this.orderListInfo[item]
+    pullDetail(item) {
+      // console.log(item);
+      // console.log(index);
+      item.orderList.forEach(async (inf) => {
+        const gbid = inf.GBID;
+        const longfeiUSERID = this.userInf.saletoCode;
+        const longfeiMFID = this.userInf.sendtoCode;
+        const timetamp = new Date().valueOf();
+        try {
+          // 获取价格
+          const getAllPrice = this.vehicleService.queryCarPrice(timetamp, longfeiUSERID, longfeiMFID, gbid);
+          const [allPriceRes] = await Promise.all([getAllPrice]);
+          if (allPriceRes.code === '1' && allPriceRes.data.code === '200') {
+            inf.$MYprice = allPriceRes.data.data[0];
+          } else {
+            inf.$MYprice = [];
+          }
+          uni.setStorage({
+            key: 'vehicleCarInfo',
+            data: item,
+            success() {
+              console.log(11111122);
+              console.log(item);
+              uni.navigateTo({
+                url: '/pages/vehicleList/vehicleCarDetail'
+              });
+            },
+            fail() {
+              console.log('huancunshibai');
+            }
+          });
+        } catch (e) {
+          inf.$MYprice = [];
+          uni.setStorage({
+            key: 'vehicleCarInfo',
+            data: item,
+            success() {
+              console.log(11111122);
+              console.log(item);
+              uni.navigateTo({
+                url: '/pages/vehicleList/vehicleCarDetail'
+              });
+            },
+            fail() {
+              console.log('huancunshibai');
+            }
+          });
+        }
       });
-      // this[VEHICLE.UPDATE_VEHICLE]({
-      //   vehicleDetail: item
-      // });
-      // uni.navigateTo({
-      //   url: '/pages/vehicleList/vehicleCarDetail'
-      // });
     }
   }
 };

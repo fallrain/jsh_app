@@ -39,6 +39,9 @@ const urls = {
   addToCart: '/AddToCart/insertOrder', // 加入整车购物车
   queryNewSeq(timestamp, CUSTUMER_TYPE) { // 获取整车加购物车时的单号
     return `/base/getNewSeq?timestamp=${timestamp}&CUSTUMER_TYPE=${CUSTUMER_TYPE}`;
+  },
+  queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid) { // 整车购物车详情页面查询价格
+    return `/base/queryGoodsPrice?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&longfeiMFID=${longfeiMFID}&gbid=${gbid}`;
   }
 };
 util.addPrefix(baseURL, urls);

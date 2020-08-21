@@ -2,7 +2,8 @@
   <view class="homepage">
     <view class="homepage-top">
       <view class="homepage-top-head">
-        <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"  mode="aspectFill" />
+        <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
+               mode="aspectFill"></image>
           <j-search-input
           v-model="filterForm"
           @search="silentReSearch"
@@ -121,50 +122,51 @@ import {
 } from '@dcloudio/uni-ui';
 import JSearchInput from '../../components/form/JSearchInput';
 import {
-  mapActions,mapGetters
+  mapActions, mapGetters
 } from 'vuex';
 import {
   USER
 } from '../../store/mutationsTypes';
 import './css/index.scss';
+
 export default {
-  name:"index",
-  components:{
+  name: 'index',
+  components: {
     uniSwiperDot,
     JSearchInput
   },
   data() {
     return {
       // 搜索栏
-      filterForm:'',
-      bannerList:[],
-      list:["全部","水洗空冷","电视电脑","厨房卫浴","手机数码","生活"],
+      filterForm: '',
+      bannerList: [],
+      list: ['全部', '水洗空冷', '电视电脑', '厨房卫浴', '手机数码', '生活'],
       current: 0, // 轮播图第几张
-      mode: 'round',// 轮播图底部按钮样式
-      dotsStyles:{
-        backgroundColor:'rgba(255,255,255,.4)', // 未选择指示点背景色
-        border:'1px rgba(255,255,255,.3) solid',
-        selectedBackgroundColor:'rgba(255,255,255,1)',// 已选择指示点背景色
-        selectedBorder:'1px rgba(255,255,255,.3) solid'
+      mode: 'round', // 轮播图底部按钮样式
+      dotsStyles: {
+        backgroundColor: 'rgba(255,255,255,.4)', // 未选择指示点背景色
+        border: '1px rgba(255,255,255,.3) solid',
+        selectedBackgroundColor: 'rgba(255,255,255,1)', // 已选择指示点背景色
+        selectedBorder: '1px rgba(255,255,255,.3) solid'
       },
-      cataloglist:[
+      cataloglist: [
         {
           id: 1,
           src: require('@/assets/img/index/function-car.png'),
-          title: "整车",
-          url: "#"
+          title: '整车',
+          url: '#'
         },
         {
           id: 2,
           src: require('@/assets/img/index/function-box.png'),
-          title: "调货",
-          url: "#"
+          title: '调货',
+          url: '#'
         },
         {
           id: 3,
           src: require('@/assets/img/index/function-qiang.png'),
-          title: "抢单",
-          url: "#"
+          title: '抢单',
+          url: '#'
         },
         {
           id: 4,
@@ -181,20 +183,20 @@ export default {
         {
           id: 6,
           src: require('@/assets/img/index/function-sale.png'),
-          title: "特价",
-          url: "#"
+          title: '特价',
+          url: '#'
         },
         {
           id: 7,
           src: require('@/assets/img/index/function-project.png'),
-          title: "工程",
-          url: "#"
+          title: '工程',
+          url: '#'
         },
         {
           id: 8,
           src: require('@/assets/img/index/function-tv.png'),
-          title: "样机",
-          url: "#"
+          title: '样机',
+          url: '#'
         },
         {
           id: 9,
@@ -209,89 +211,89 @@ export default {
           url: "/pages/market/marketList"
         }
       ],
-      recommendList:[
-              {
-                  id:1,
-                  title:"新品推荐",
-                  describe:"人气榜",
-                  image:require('@/assets/img/index/FC511Z00L.png'),
-                  img:require('@/assets/img/index/GD0R7N000.png'),
-                  url: "#"
-              },
-              {
-                  id:2,
-                  title:"爆款推荐",
-                  describe:"HOT",
-                  image:require('@/assets/img/index/CEAAJ300F.png'),
-                  img:require('@/assets/img/index/BH02Z00A8.png'),
-                  url: "#"
-              },
-              {
-                  id:3,
-                  title:"我的专供",
-                  describe:"热卖好物",
-                  image:require('@/assets/img/index/FC511Z00L.png'),
-                  img:require('@/assets/img/index/GE0QA000W.png'),
-                  url: "#"
-              },
-              {
-                  id:4,
-                  title:"聚划算",
-                  describe:"精选榜单",
-                  image:require('@/assets/img/index/FC511Z00L.png'),
-                  img:require('@/assets/img/index/GD0R7N000.png'),
-                  url: "#"
-              },
+      recommendList: [
+        {
+          id: 1,
+          title: '新品推荐',
+          describe: '人气榜',
+          image: require('@/assets/img/index/FC511Z00L.png'),
+          img: require('@/assets/img/index/GD0R7N000.png'),
+          url: '#'
+        },
+        {
+          id: 2,
+          title: '爆款推荐',
+          describe: 'HOT',
+          image: require('@/assets/img/index/CEAAJ300F.png'),
+          img: require('@/assets/img/index/BH02Z00A8.png'),
+          url: '#'
+        },
+        {
+          id: 3,
+          title: '我的专供',
+          describe: '热卖好物',
+          image: require('@/assets/img/index/FC511Z00L.png'),
+          img: require('@/assets/img/index/GE0QA000W.png'),
+          url: '#'
+        },
+        {
+          id: 4,
+          title: '聚划算',
+          describe: '精选榜单',
+          image: require('@/assets/img/index/FC511Z00L.png'),
+          img: require('@/assets/img/index/GD0R7N000.png'),
+          url: '#'
+        },
       ],
-      infoList:[
+      infoList: [
         {
-          id:1,
-          hot:"热门",
-          info:"这是一条热门资讯的内容,具体内容请查看详情......",
-          url: "#"
+          id: 1,
+          hot: '热门',
+          info: '这是一条热门资讯的内容,具体内容请查看详情......',
+          url: '#'
         },
         {
-          id:2,
-          hot:"热门",
-          info:"这是一条热门资讯的内容,具体内容请查看详情......",
-          url: "#"
+          id: 2,
+          hot: '热门',
+          info: '这是一条热门资讯的内容,具体内容请查看详情......',
+          url: '#'
         },
         {
-          id:3,
-          hot:"热门",
-          info:"这是一条热门资讯的内容,具体内容请查看详情......",
-          url: "#"
+          id: 3,
+          hot: '热门',
+          info: '这是一条热门资讯的内容,具体内容请查看详情......',
+          url: '#'
         }
       ],
-      tabBarList:[
+      tabBarList: [
         {
-          id:1,
-          image:require('@/assets/img/tabbar/shouye.png'),
-          img:require('@/assets/img/tabbar/shouye-actived.png'),
-          tloimg:require('@/assets/img/index/logo-white.png')
+          id: 1,
+          image: require('@/assets/img/tabbar/shouye.png'),
+          img: require('@/assets/img/tabbar/shouye-actived.png'),
+          tloimg: require('@/assets/img/index/logo-white.png')
         },
         {
-          id:2,
-          image:require('@/assets/img/tabbar/fenlei.png'),
-          img:require('@/assets/img/tabbar/fenlei-actived.png'),
-          tloimg:require('@/assets/img/index/manypeople.png')
+          id: 2,
+          image: require('@/assets/img/tabbar/fenlei.png'),
+          img: require('@/assets/img/tabbar/fenlei-actived.png'),
+          tloimg: require('@/assets/img/index/manypeople.png')
         },
         {
-          id:3,
-          image:require('@/assets/img/tabbar/xiaoxi.png'),
-          img:require('@/assets/img/tabbar/xiaoxi-actived.png'),
-          tloimg:require('@/assets/img/index/topnew.png')
+          id: 3,
+          image: require('@/assets/img/tabbar/xiaoxi.png'),
+          img: require('@/assets/img/tabbar/xiaoxi-actived.png'),
+          tloimg: require('@/assets/img/index/topnew.png')
 
         },
         {
-          id:4,
-          image:require('@/assets/img/tabbar/shopping.png'),
-          img:require('@/assets/img/tabbar/shopping-actived.png')
+          id: 4,
+          image: require('@/assets/img/tabbar/shopping.png'),
+          img: require('@/assets/img/tabbar/shopping-actived.png')
         },
         {
-          id:5,
-          image:require('@/assets/img/tabbar/mine.png'),
-          img:require('@/assets/img/tabbar/mine-actived.png')
+          id: 5,
+          image: require('@/assets/img/tabbar/mine.png'),
+          img: require('@/assets/img/tabbar/mine-actived.png')
         },
 
       ]
@@ -332,13 +334,8 @@ export default {
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
     get() {
-
-        // this.$nextTick(() => {
-        const a = JSON.stringify(this.defaultSendToInf);
-        alert(a)
-
-
-
+      // this.$nextTick(() => {
+      const a = JSON.stringify(this.defaultSendToInf);
     },
     changePic(e) {
       this.current = e.detail.current;
@@ -354,13 +351,13 @@ export default {
       const { code, data } = await this.indexService.bannerList({});
       if (code === '1') {
         this.bannerList = data;
-        console.log(this.bannerList)
-        console.log(data)
+        console.log(this.bannerList);
+        console.log(data);
       }
     },
-    goCatalog(url){
-       uni.navigateTo({
-        url: url
+    goCatalog(url) {
+      uni.navigateTo({
+        url
       });
       console.log(url);
     }
