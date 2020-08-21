@@ -1,16 +1,11 @@
 {
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+
     {
       "path": "pages/applicationsIndex/applicationsIndex",
       "style": {
         "navigationBarTitleText": "应用首页"
-      }
-    },
-    {
-      "path": "pages/nav/nav",
-      "style": {
-        "navigationBarTitleText": "导航"
       }
     },
     {
@@ -19,6 +14,13 @@
         "navigationBarTitleText": "首页"
       }
     },
+    {
+      "path": "pages/nav/nav",
+      "style": {
+        "navigationBarTitleText": "导航"
+      }
+    },
+
     {
       "path": "pages/applicationsIndex/applicationsEdit",
       "style": {
@@ -249,6 +251,44 @@
     "navigationBarTitleText": "",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "rgba(153,153,153,1)",
+    "selectedColor": "rgba(153,153,153,1)",
+    "borderStyle": "white",
+    "backgroundColor": "rgba(255,255,255,1)",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "@/assets/img/tabbar/shouye.png",
+        "selectedIconPath": "assets/img/tabbar/shouye-actived.png"
+      },
+      {
+        "text": "分类",
+        "pagePath": "pages/category/category",
+        "iconPath": "assets/img/tabbar/fenlei.png",
+        "selectedIconPath": "assets/img/tabbar/fenlei-actived.png"
+      },
+      {
+        "text": "消息",
+        "pagePath": "pages/messageInfoList/messageInfoList",
+        "iconPath": "assets/img/tabbar/xiaoxi.png",
+          "selectedIconPath": "assets/img/tabbar/xiaoxi-actived.png"
+      },
+      {
+        "text": "购物车",
+        "pagePath": "pages/shoppingCart/shoppingCart",
+        "iconPath": "assets/img/tabbar/shopping.png",
+          "selectedIconPath": "assets/img/tabbar/shopping-actived.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/mine/myCenter",
+        "iconPath": "assets/img/tabbar/mine.png",
+        "selectedIconPath": "assets/img/tabbar/mine-actived.png"
+      }
+    ]
   },
   "mp-alipay": {
     "gestureBack": "YES"

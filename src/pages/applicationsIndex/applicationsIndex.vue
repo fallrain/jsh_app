@@ -251,7 +251,7 @@ export default {
       myApp: [
         {
           src: require('@/assets/img/appIndex/video.png'),
-          url: 'www.baidu.com',
+          url: '#',
           title: '直播'
         },
         {
@@ -274,13 +274,13 @@ export default {
             {
               id: 2,
               src: require('@/assets/img/appIndex/finance.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '财务自助'
             },
             {
               id: 3,
               src: require('@/assets/img/appIndex/work.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '业务办理'
             }
           ]
@@ -292,31 +292,31 @@ export default {
             {
               id: 1,
               src: require('@/assets/img/appIndex/shopping.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '采购下单'
             },
             {
               id: 2,
               src: require('@/assets/img/appIndex/finance.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '财务自助'
             },
             {
               id: 3,
               src: require('@/assets/img/appIndex/work.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '业务办理'
             },
             {
               id: 4,
               src: require('@/assets/img/appIndex/report.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '报表查询'
             },
             {
               id: 5,
               src: require('@/assets/img/appIndex/recharge.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '在线充值'
             }
 
@@ -329,31 +329,31 @@ export default {
             {
               id: 1,
               src: require('@/assets/img/appIndex/gooods.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '其他进货'
             },
             {
               id: 2,
               src: require('@/assets/img/appIndex/accept.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '收货办理'
             },
             {
               id: 3,
               src: require('@/assets/img/appIndex/stock.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '库存查询'
             },
             {
               id: 4,
               src: require('@/assets/img/appIndex/list.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '差单据'
             },
             {
               id: 5,
               src: require('@/assets/img/appIndex/member.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '会员清单'
             }
           ]
@@ -365,31 +365,31 @@ export default {
             {
               id: 1,
               src: require('@/assets/img/appIndex/shopping.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '采购下单'
             },
             {
               id: 2,
               src: require('@/assets/img/appIndex/finance.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '财务自助'
             },
             {
               id: 3,
               src: require('@/assets/img/appIndex/work.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '业务办理'
             },
             {
               id: 4,
               src: require('@/assets/img/appIndex/report.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '报表查询'
             },
             {
               id: 5,
               src: require('@/assets/img/appIndex/recharge.png'),
-              url: 'www.baidu.com',
+              url: '#',
               Subhead: '在线充值'
             }
           ]
@@ -399,27 +399,27 @@ export default {
       functionList: [
         {
           src: require('@/assets/img/appIndex/shouhou-pic.png'),
-          url: 'www.baidu.com'
+          url: '#'
         },
         {
           src: require('@/assets/img/appIndex/qianzhang-pic.png'),
-          url: 'www.baidu.com'
+          url: '#'
         },
         {
           src: require('@/assets/img/appIndex/yingxiao-pic.png'),
-          url: 'www.baidu.com'
+          url: '#'
         },
         {
           src: require('@/assets/img/appIndex/egongcheng-pic.png'),
-          url: 'www.baidu.com'
+          url: '#'
         },
         {
           src: require('@/assets/img/appIndex/video-pic.png'),
-          url: 'www.baidu.com'
+          url: '#'
         },
         {
           src: require('@/assets/img/appIndex/yuncang-pic.png'),
-          url: 'www.baidu.com'
+          url: '#'
         }
       ]
     };
@@ -428,18 +428,16 @@ export default {
     // this.getbannerList();
   },
   onLoad() {
-    // this.code = ALIPAYH5STARTUPPARAMS.webview_options;
-    this.code = 'oiDi8SemSIm2-kiAiOBTnw';
+    this.code = ALIPAYH5STARTUPPARAMS.webview_options;
+    // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
     this.getToken();
   },
   methods: {
     // 获取token
     async getToken() {
-      alert(this.code);
       const { code, data } = await this.authService.getTokenByCode({
         code: this.code
       });
-      alert(data);
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
@@ -469,7 +467,7 @@ export default {
       });
     },
     goOthers(url) {
-      uni.navigateTo({
+      uni.switchTab({
         url
       });
     },

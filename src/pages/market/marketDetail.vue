@@ -6,7 +6,7 @@
         @tap="showAdsPicker"
       >
         <view class="iconfont iconlocal"></view>
-        <text>配送至：({{currentAdd.customerCode}}){{currentAdd.customerName}}</text>
+        <text>配送至：{{currentAdd.name}}</text>
         <view class="iconfont iconyou right-style"></view>
       </view>
       <view v-if="currentDetail.proportionType === '1'" class="marketDetail-orders br-b-grey">
@@ -69,7 +69,7 @@
     ></j-product-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
-      :pickerList="addressList"
+      :pickerList="sendCustomerList"
       @change="sendCustomerListChange"
     ></j-address-picker>
   </view>
@@ -78,6 +78,13 @@
 import JProductItem from '../../components/market/JProductItem';
 import JProductBtm from '../../components/market/JProductBtm';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
+
 import './css/marketDetail.scss';
 
 
@@ -92,6 +99,29 @@ export default {
     return {
       currentAdd: {}, // 当前选中地址
       addressList: [], // 地址列表
+      // 送达方数据
+      sendCustomerList: [
+        {
+          flag: 'yc',
+          name: '云仓',
+          checked: false
+        },
+        {
+          flag: 'ydyc',
+          name: '异地云仓',
+          childrenType: 'short',
+          checked: false,
+          isExpand: true,
+          children: []
+        },
+        {
+          name: '配送至',
+          checked: false,
+          isExpand: true,
+          childrenType: 'long',
+          children: []
+        },
+      ],
       totalMoney: 0, // 订单所有金额总和
       conditionStatus: false,
       updateIndex: 1,
@@ -127,8 +157,7 @@ export default {
     this.currentDetail = JSON.parse(item);
     this.stockForm.saletoCode = saletoCode;
     this.stockForm.sendtoCode = sendtoCode;
-    console.log(this.currentDetail);
-    this.getAddressList();
+    this.initpage();
     if (this.currentDetail.activityType === 'zuhe') {
       this.getTotalMoney();
     }
@@ -136,6 +165,10 @@ export default {
     this.getAllStock(); */
   },
   computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+    }),
     computeMain() {
       // 主产品比例
       const proportionMain = this.currentDetail.proportionMain;
@@ -158,6 +191,10 @@ export default {
     }
   },
   methods: {
+    async initpage() {
+      await this.getAddressList();
+      await this.getWarehouse();
+    },
     // 获取所有产品的库存
     async getAllStock() {
       const arr1 = this.currentDetail.products;
@@ -225,27 +262,85 @@ export default {
         }
       }
     },
+    async getWarehouse() {
+      console.log(this.defaultSendToInf);
+      /* 获取异地云仓信息 */
+      const { code, data } = await this.customerService.getWarehouse({
+        customerCode: this.defaultSendToInf.customerCode,
+        warehouseFlag: 'YD'
+      });
+      if (code === '1') {
+        this.sendCustomerList[1].children = data.map(v => ({
+          id: v.code,
+          name: v.codeName,
+          checked: false
+        }));
+      }
+    },
     // 获取所有地址
     async getAddressList() {
       // 获取地址
       const { code, data } = await this.customerService.addressesList('1');
       if (code === '1') {
-        this.addressList = data;
-      }
-      let getdefaultFlag = false;
-      this.addressList.forEach((item) => {
-        if (item.defaultFlag === 1) {
-          this.currentAdd = item;
-          getdefaultFlag = true;
+        const detail = data.map(v => ({
+          sendtoCode: v.addressCode,
+          addressName: v.addressName,
+          id: v.addressCode,
+          name: `（${v.customerCode}）${v.addressName}`,
+          checked: false,
+          defaultFlag: v.defaultFlag
+        }));
+        this.sendCustomerList[2].children = detail;
+        // 默认的送达地址
+        let getdefaultFlag = false;
+        detail.forEach((item) => {
+          if (item.defaultFlag === 1) {
+            this.currentAdd = item;
+            item.checked = true;
+            getdefaultFlag = true;
+          }
+        });
+        if (!getdefaultFlag) {
+          this.currentAdd = detail[0];
         }
-      });
-      if (!getdefaultFlag) {
-        this.currentAdd = this.addressList[0];
+        console.log(this.sendCustomerList);
       }
     },
     sendCustomerListChange(list, detail, parent) {
       /* 地址列表change */
-      this.addressList = list;
+      this.sendCustomerList = list;
+      // 选中的送达仓库地址
+      this.currentAdd = detail || {};
+      if (parent) {
+        if (detail) {
+          // 异地云仓
+          if (parent.flag) {
+            this.currentAdd = {
+              yunCangCode: detail.id,
+              yunCangFlag: parent.flag,
+              name: detail.name,
+            };
+          } else {
+            // 送达方
+            this.currentAdd = {
+              sendtoCode: detail.id,
+              yunCangCode: detail.id,
+              name: detail.name
+            };
+          }
+        } else {
+          if (parent.flag === 'yc') {
+            // 普通云仓（只有一个）
+            this.currentAdd = {
+              yunCangCode: '',
+              yunCangFlag: 'yc',
+              name: '云仓',
+            };
+          } else {
+            this.currentAdd = {};
+          }
+        }
+      }
     },
     getTotalMoney() {
       let total = 0;
@@ -259,20 +354,21 @@ export default {
       this.isShowAdsPicker = true;
     },
     // 成套下单
-    goOrder() {
-      console.log(this.currentAdd);
+    async goOrder() {
+      console.log(this.currentDetail);
+      await this.validateProduct();
     },
     // 产品校验
     async validateProduct() {
       const form = {
-        saletoCode: this.stockForm.saletoCode,
-        sendtoCode: '8800101954',
+        saletoCode: this.defaultSendToInf.customerCode,
+        sendtoCode: this.currentAdd.sendtoCode,
         yunCangCode: '',
         yunCangFlag: '',
         splitComposeList: [
           {
-            activityType: 4,
-            activityId: 24318374136,
+            activityType: this.getActivityTypeCode(this.currentDetail.activityType),
+            activityId: this.currentDetail.id,
             productList: [
               {
                 productCode: 'CBAGD4000',
@@ -308,7 +404,77 @@ export default {
             number: 1
           }]
       };
-      // const { code, data } = await this.orderService.validateProduct(this.stockForm);
+      if (this.currentAdd.yunCangFlag) {
+        if (this.currentAdd.yunCangFlag === 'yc') {
+          // 云仓
+          form.yunCangFlag = 'yc';
+        } else {
+          // 异地云仓
+          form.yunCangFlag = 'ydyc';
+          form.yunCangCode = this.currentAdd.yunCangCode;
+        }
+      } else {
+        // 送达方地址
+        form.sendtoCode = this.currentAdd.sendtoCode;
+      }
+      // 订单产品遍历组合
+      const productArr = [];
+      this.currentDetail.products.forEach((item) => {
+        if (item.choosedNum !== 0) {
+          const productItem = {
+            productCode: item.productCode,
+            number: parseInt(item.choosedNum),
+            isStock: '1',
+            farWeek: '0',
+            creditModel: '0',
+            isCheckFarWeek: '0',
+            isCheckCreditModel: '0',
+            farWeekDate: '',
+            transferVersion: '',
+            priceType: 'PT',
+            priceVersion: '',
+            productSeries: '',
+            kuanXian: '0',
+            isCheckKuanXian: '0'
+          };
+          productArr.push(productItem);
+        }
+      });
+      this.currentDetail.pbProducts.forEach((item) => {
+        if (item.choosedNum !== 0) {
+          const productItem = {
+            productCode: item.productCode,
+            number: parseInt(item.choosedNum),
+            isStock: '1',
+            farWeek: '0',
+            creditModel: '0',
+            isCheckFarWeek: '0',
+            isCheckCreditModel: '0',
+            farWeekDate: '',
+            transferVersion: '',
+            priceType: 'PT',
+            priceVersion: '',
+            productSeries: '',
+            kuanXian: '0',
+            isCheckKuanXian: '0'
+          };
+          productArr.push(productItem);
+        }
+      });
+      form.splitComposeList[0].productList = productArr;
+      const { code, data } = await this.orderService.validateProduct(form);
+      if (code === '1') {
+        console.log(data);
+      }
+    },
+    // 获取活动类型编码
+    getActivityTypeCode(activityType) {
+      if (activityType === 'taocan') {
+        return 4;
+      }
+      if (activityType === 'zuhe') {
+        return 2;
+      }
     }
     // 拆单
   }

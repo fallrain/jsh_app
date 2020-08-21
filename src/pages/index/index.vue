@@ -160,55 +160,55 @@ export default {
           id: 2,
           src: require('@/assets/img/index/function-box.png'),
           title: '调货',
-          url: '#'
+          url: '/pages/transferGoods/transferGoods'
         },
         {
           id: 3,
           src: require('@/assets/img/index/function-qiang.png'),
           title: '抢单',
-          url: '#'
+          url: 'null'
         },
         {
           id: 4,
           src: require('@/assets/img/index/function-washingmachine.png'),
-          title: '套餐',
-          url: '#'
+          title:"套餐",
+          url: "/pages/market/marketList"
         },
         {
           id: 5,
           src: require('@/assets/img/index/function-compose.png'),
-          title: '组合',
-          url: '#'
+          title: "组合",
+          url: "/pages/market/marketList"
         },
         {
           id: 6,
           src: require('@/assets/img/index/function-sale.png'),
           title: '特价',
-          url: '#'
+          url: 'null'
         },
         {
           id: 7,
           src: require('@/assets/img/index/function-project.png'),
           title: '工程',
-          url: '#'
+          url: 'null'
         },
         {
           id: 8,
           src: require('@/assets/img/index/function-tv.png'),
           title: '样机',
-          url: '#'
+          url: 'null'
         },
         {
           id: 9,
           src: require('@/assets/img/index/function-yang.png'),
-          title: '样品机',
-          url: '#'
+          title:"样品机",
+          url: "/pages/sampleMachine/sampleMachineList"
         },
         {
           id: 10,
           src: require('@/assets/img/index/function-money.png'),
-          title: '反向定制',
-          url: '#'
+          title:"反向定制",
+          url: "/pages/market/marketList"
         }
       ],
       recommendList: [
@@ -265,53 +265,56 @@ export default {
           url: '#'
         }
       ],
-      tabBarList: [
-        {
-          id: 1,
-          image: require('@/assets/img/tabbar/shouye.png'),
-          img: require('@/assets/img/tabbar/shouye-actived.png'),
-          tloimg: require('@/assets/img/index/logo-white.png')
-        },
-        {
-          id: 2,
-          image: require('@/assets/img/tabbar/fenlei.png'),
-          img: require('@/assets/img/tabbar/fenlei-actived.png'),
-          tloimg: require('@/assets/img/index/manypeople.png')
-        },
-        {
-          id: 3,
-          image: require('@/assets/img/tabbar/xiaoxi.png'),
-          img: require('@/assets/img/tabbar/xiaoxi-actived.png'),
-          tloimg: require('@/assets/img/index/topnew.png')
+      // tabBarList: [
+      //   {
+      //     id: 1,
+      //     image: require('@/assets/img/tabbar/shouye.png'),
+      //     img: require('@/assets/img/tabbar/shouye-actived.png'),
+      //     tloimg: require('@/assets/img/index/logo-white.png')
+      //   },
+      //   {
+      //     id: 2,
+      //     image: require('@/assets/img/tabbar/fenlei.png'),
+      //     img: require('@/assets/img/tabbar/fenlei-actived.png'),
+      //     tloimg: require('@/assets/img/index/manypeople.png')
+      //   },
+      //   {
+      //     id: 3,
+      //     image: require('@/assets/img/tabbar/xiaoxi.png'),
+      //     img: require('@/assets/img/tabbar/xiaoxi-actived.png'),
+      //     tloimg: require('@/assets/img/index/topnew.png')
 
-        },
-        {
-          id: 4,
-          image: require('@/assets/img/tabbar/shopping.png'),
-          img: require('@/assets/img/tabbar/shopping-actived.png')
-        },
-        {
-          id: 5,
-          image: require('@/assets/img/tabbar/mine.png'),
-          img: require('@/assets/img/tabbar/mine-actived.png')
-        },
+      //   },
+      //   {
+      //     id: 4,
+      //     image: require('@/assets/img/tabbar/shopping.png'),
+      //     img: require('@/assets/img/tabbar/shopping-actived.png')
+      //   },
+      //   {
+      //     id: 5,
+      //     image: require('@/assets/img/tabbar/mine.png'),
+      //     img: require('@/assets/img/tabbar/mine-actived.png')
+      //   },
 
-      ]
+      // ]
 
-    };
+   };
   },
-  // onLoad() {
 
-  // },
-  created() {
-    this.getPageInf();
-    (async () => {
-      await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      await this[USER.UPDATE_SALE_ASYNC]();
-      await this[USER.UPDATE_TOKEN_USER_ASYNC]();
-    })().then(() => {
-      this.get();
-    });
+  created(){
+      this.getPageInf();
+      (async() => {
+        await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+        await this[USER.UPDATE_SALE_ASYNC]();
+        await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
+      })().then(res =>{
+          // this.get()
+      })
+      // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+      // this[USER.UPDATE_SALE_ASYNC]();
+      // this[USER.UPDATE_TOKEN_USER_ASYNC]();
+
+
   },
   computed: {
     ...mapGetters({
@@ -331,7 +334,6 @@ export default {
     get() {
       // this.$nextTick(() => {
       const a = JSON.stringify(this.defaultSendToInf);
-      alert(a);
     },
     changePic(e) {
       this.current = e.detail.current;
@@ -375,8 +377,8 @@ export default {
   margin-right:26px;
 }
 /deep/ .col_c{
-  color: #fff;
-}
+		 color: #fff;
+	}
 
 /deep/ .jSearchInput-icon{
   color: #fff;

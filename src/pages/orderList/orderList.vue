@@ -89,9 +89,6 @@ export default {
     };
   },
   computed: {
-    ...mapMutations([
-      ORDER.UPDATE_ORDER
-    ]),
     ...mapGetters({
       userInf: USER.GET_USER
     }),
@@ -100,6 +97,9 @@ export default {
     this.orderList(this.tabs[0].id2, this.pageNo);
   },
   methods: {
+    ...mapMutations([
+      ORDER.UPDATE_ORDER
+    ]),
     async orderList(e, pgNo) {
       const { code, data } = await this.orderService.orderList({
         jshi_order_channel: this.userInf.channelGroup,
