@@ -10,43 +10,43 @@
           placeholder-class="col_c"
         ></j-search-input>
         <view class='iconfont iconpeople homepage-top-head-icon'></view>
-      </view>  
+      </view>
       <!-- 全部 -->
       <view class="homepage-top-center">
-        <view 
+        <view
           class="homepage-top-center-list"
           v-for="(item,index) in list"
           :key="index"
         >
         {{item}}
         </view>
-      </view>    
+      </view>
           <!-- 轮播图 -->
       <view class="homepage-swiper">
-        
-        <uni-swiper-dot 
-        :info="bannerList" 
-        :current="current" 
-        :mode="mode" 
-        field="content" 
+
+        <uni-swiper-dot
+        :info="bannerList"
+        :current="current"
+        :mode="mode"
+        field="content"
         :dotsStyles="dotsStyles"
         >
           <swiper class="swiper-box" @change="changePic">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
-              <view class="swiper-item">             
+              <view class="swiper-item">
                 <image class="image" :src="item.imageUrl" mode="aspectFill"/>
               </view>
             </swiper-item>
           </swiper>
         </uni-swiper-dot>
-      </view> 
+      </view>
     </view>
     <!-- 目录列表 -->
     <view class="homepage-cataloglist">
-      <view 
+      <view
         class="homepage-cataloglist-item"
         v-for="item in cataloglist"
-        :key="item.id"    
+        :key="item.id"
         @click="goCatalog(item.url)"
       >
         <image class="cataloglist-item-img" :src="item.src" mode="aspectFill" />
@@ -66,7 +66,7 @@
       <view class="homepage-recommend-info">
         <!-- 推荐 -->
         <view class="homepage-recommend">
-          <view 
+          <view
             class="homepage-recommend-list"
             v-for="item in recommendList"
             :key="item.id"
@@ -87,7 +87,7 @@
             <text class="homepage-info-more">MORE</text>
           </view>
           <view>
-            <view 
+            <view
             class="homepage-info-list"
             v-for="item in infoList"
             :key="item.id"
@@ -101,10 +101,10 @@
         </view>
       </view>
       <!-- tabber -->
-        <!-- <view 
+        <!-- <view
           v-for="item in tabBarList"
           :key="item.id"
-        >    
+        >
           <image :src="item.image" mode="aspectFill" />
           <image :src="item.img" mode="aspectFill" />
         </view> -->
@@ -117,7 +117,7 @@
 
 <script>
 import {
-  uniSwiperDot 
+  uniSwiperDot
 } from '@dcloudio/uni-ui';
 import JSearchInput from '../../components/form/JSearchInput';
 import {
@@ -170,13 +170,13 @@ export default {
           id: 4,
           src: require('@/assets/img/index/function-washingmachine.png'),
           title:"套餐",
-          url: "#"
+          url: "/pages/market/marketList"
         },
         {
           id: 5,
           src: require('@/assets/img/index/function-compose.png'),
           title: "组合",
-          url: "#"
+          url: "/pages/market/marketList"
         },
         {
           id: 6,
@@ -200,13 +200,13 @@ export default {
           id: 9,
           src: require('@/assets/img/index/function-yang.png'),
           title:"样品机",
-          url: "#"
+          url: "/pages/sampleMachine/sampleMachineList"
         },
         {
           id: 10,
           src: require('@/assets/img/index/function-money.png'),
           title:"反向定制",
-          url: "#"
+          url: "/pages/market/marketList"
         }
       ],
       recommendList:[
@@ -295,7 +295,7 @@ export default {
         },
 
       ]
- 
+
    };
   },
   // onLoad() {
@@ -313,11 +313,11 @@ export default {
       // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       // this[USER.UPDATE_SALE_ASYNC]();
       // this[USER.UPDATE_TOKEN_USER_ASYNC]();
-     
+
 
   },
   computed: {
-    ...mapGetters({  
+    ...mapGetters({
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
 
     })
@@ -331,14 +331,14 @@ export default {
       // 修改token用户信息
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
-    get() {  
-     
+    get() {
+
         // this.$nextTick(() => {
         const a = JSON.stringify(this.defaultSendToInf);
         alert(a)
-      
-     
-      
+
+
+
     },
     changePic(e) {
       this.current = e.detail.current;
@@ -382,8 +382,8 @@ export default {
   margin-right:26px;
 }
 /deep/ .col_c{
-		 color: #fff; 
-	} 
+		 color: #fff;
+	}
 
 /deep/ .jSearchInput-icon{
   color: #fff;
