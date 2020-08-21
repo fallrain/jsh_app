@@ -14,10 +14,12 @@
 <script>
 export default {
   name: 'orderDetailBase',
-  baseInfo: {
-    type: Object,
-    default() {
-      return {};
+  props: {
+    baseInfo: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
   }
 };

@@ -25,6 +25,10 @@ export default {
     orderListItem,
     JTab
   },
+  onLoad(options) {
+    this.sexID = options.sexID;
+    console.log(options.sexID);
+  },
   data() {
     return {
       orderListInfo: [],
@@ -94,7 +98,8 @@ export default {
     }),
   },
   created() {
-    this.orderList(this.tabs[0].id2, this.pageNo);
+    const ind = (this.sexID !== undefined && this.sexID !== null) ? this.sexID : 0;
+    this.orderList(this.tabs[ind].id2, this.pageNo);
   },
   methods: {
     ...mapMutations([
