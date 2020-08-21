@@ -1,7 +1,7 @@
 <template>
   <view class="produceDetailItem" @click="goDetail">
     <view class="produceDetailItem-head">
-      <button type="button" class="produceDetailItem-head-btn">{{info.details[0].combinationTag}}</button>
+      <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
       <text class="produceDetailItem-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
       <text class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
