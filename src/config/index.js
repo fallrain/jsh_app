@@ -2,16 +2,16 @@ export default {
   h5: {
     dev: {
       // baseUrl: 'https://new.jsh.com',
-      baseUrl: 'http://mall.jsh.com',
-      cBaseUrl: 'https://c.jsh.com',
+      baseUrl: 'https://mall.jsh.com',
+      cBaseUrl: 'https://mall.jsh.com',
     },
     sit: {
-      baseUrl: '',
-      cBaseUrl: '',
+      baseUrl: 'https://mall.jsh.com',
+      cBaseUrl: 'https://mall.jsh.com',
     },
     prod: {
-      baseUrl: '',
-      cBaseUrl: '',
+      baseUrl: 'https://mall.jsh.com',
+      cBaseUrl: 'https://mall.jsh.com',
     }
   },
   'mp-alipay': {
