@@ -80,9 +80,6 @@ export default {
     };
   },
   computed: {
-    ...mapMutations([
-      ORDER.UPDATE_ORDER
-    ]),
     ...mapGetters({
       userInf: USER.GET_USER
     }),
@@ -91,6 +88,9 @@ export default {
     this.orderList(7, this.pageNo);
   },
   methods: {
+    ...mapMutations([
+      ORDER.UPDATE_ORDER
+    ]),
     async orderList(e, pgNo) {
       const code2 = this.userInf.customerCode;
       const { code, data } = await this.orderService.orderList({
