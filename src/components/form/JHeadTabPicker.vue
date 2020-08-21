@@ -99,8 +99,8 @@ export default {
         this.value[4].checked = true; // 发货基地重置为黄岛
       } else if (this.value[0].type === 'ZCPC') {
         // 整车拼车的重置,重置为空，然后上层查询是默认为选发货基地
-      } else {
-        this.value[0].checked = true; // 重置默认第一个
+      } else if (this.value[0].type === 'ZCLX' || this.value[0].type === 'ZCPSLX') {
+        this.value[0].checked = true;
       }
     },
     confirm() {
