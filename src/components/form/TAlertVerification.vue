@@ -27,10 +27,13 @@
         <view class="TAlertVerification-row-right-wrap">
           <view class="TAlertVerification-row-right-gap"></view>
           <j-verification-code
-            :getMethod="getVerificationCodeByNewPhone"
+            :getMethod="getVerificationCodeByPhone"
           ></j-verification-code>
+          <button class="TAlertVerification-row-right-btn"
+            @tap="determine"
+          >确定</button>    
         </view>
-      
+        
      </view>
     </view>             
 </template>
@@ -54,22 +57,32 @@ export default {
     props: {
         show: {
             type: Boolean,
-        }
+        },
+        form: {
+            type: Object,
+            default: () => {}
+        }  
+        // verificationCode: {
+        //   type: String
+        // },
+        // phone: {
+        //   type: String
+        // } 
     },
     data() {
       return {
-        form: {
-          // 手机号
-          phone: '',
-          // 手机号验证码
-          verificationCode: '',
-        }
+        // form: {
+        //   // 手机号
+        //   phone: '',
+        //   // 手机号验证码
+        //   verificationCode: '',
+        // }
            
       }
     }, 
     created() {
+      console.log(this.form)
       this.setPageInfo();
-      this.getUserInfById();
     },
     computed: {
       ...mapGetters({
@@ -81,12 +94,11 @@ export default {
     methods: {
       setPageInfo() {
         this.genVdt();
-        this.getUserInfMianMi()
       },
       genVdt() {
         this.vdt = new JValidate({
           _this: this,
-          formData: this.form,
+        //   formData: this.form,
           rules: {  
             phone: {
               required: true,
@@ -98,8 +110,8 @@ export default {
           },
           messages: {
             phone: {
-                required: '新手机号不能为空',
-                mobile: '新手机号格式不正确'
+                required: '手机号不能为空',
+                mobile: '手机号格式不正确'
             },
             verificationCode: {
                 required: '必须输入新手机验证码'
@@ -110,36 +122,34 @@ export default {
       cancel() {
         this.$emit('update:show', false);
       },
-      async getUserInfById() {
-        /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
-        const {code, data} =  await this.orderService.sendVerify(this.defaultSendToInf.customerCode);
-         if (code === "1") {
-          this.form.phone = data.data.account
-        }
-      },
-      async getUserInfMianMi() {
-        /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
-        const data =  await this.orderService.mianMi();
-        console.log(data)
-      },
-      async getVerificationCode(phoneNumber) {
-       
-        return
+
+      async getVerificationCode() {
+         // 发送验证码
+         return await this.orderService.send(this.defaultSendToInf.customerCode)
+        //  const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
         // if (code === "1") {
-        //   console.log(data)
-        //   this.YZM = data.data.verifyKey
+        //     console.log(data)
+        //     this.form.verificationCode = data.data.verifyKey
         // }
       },
-     
-      getVerificationCodeByNewPhone() {
-        if (jValidateRules.rules.mobile(this.form.phone)) {
-            return this.getVerificationCode(this.form.phone);
+      getVerificationCodeByPhone() {
+        if (this.form.phone) {
+            return this.getVerificationCode();
         }
         uni.showToast({
-            title: '请填正确格式的手机号',
+            title: '原手机号未获取',
             icon: 'none'
         });
       },
+      // 点击确定
+      determine() {
+          if(this.form.verificationCode) {
+              th
+          }
+          
+
+
+      }
 
     }  
 }
@@ -149,6 +159,9 @@ export default {
     font-size: 25px;
     margin-left: -400px;
     margin-top: -15px;
+}
+.TAlertVerification-row-right-gap {
+    display: flex;
 }
 .TAlertVerification-cen {
     width:100%;
@@ -161,7 +174,7 @@ export default {
     z-index: 10000;
 }
 .TAlertVerification-model {
-    position: absolute;
+    position: fixed;
     width: 80%;
     height: 35%;
     top: 15%;
@@ -202,5 +215,19 @@ export default {
 }
 .col_c {
     color:#ccc;
+}
+.TAlertVerification-row-right-btn {
+    width: 105px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    color: #333;
+    font-size: 26px;
+    background: #f9f9f9;
+    border:1px solid #ccc;
+    border-radius: 10px;
+    position: fixed;
+    top: 42%;
+    left: 70%;
 }
 </style>

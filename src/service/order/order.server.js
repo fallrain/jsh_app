@@ -16,8 +16,11 @@ export default {
   sendVerify(data) { // 获取上上签验证联系方式接口
     return jPostJson(urlNoApi.sendVerify(data));
   },
-  mianMi(data) {
+  mianMi(data) { //是否免密
     return jGet(urlNoApi.mianMi, data);
+  },
+  send(data) { // 获取验证码
+    return jPostJson(urlNoApi.send(data));
   },
   getOrderMonthSummery(data) {
     /* 基本信息-订单交易状态 */
