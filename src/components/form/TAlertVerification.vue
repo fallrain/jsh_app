@@ -178,10 +178,11 @@ export default {
                     title: '提交失败请重试',
                 });
             }
+        } else {
+            uni.showToast({
+              title: '请输入验证码',
+            });
         }
-          
-
-
       }
 
     }  
@@ -204,7 +205,7 @@ export default {
     left: 0;
     background: #ccc;
     opacity: 0.8;
-    z-index: 2000;
+    z-index: 888;
 }
 .TAlertVerification-model {
     position: fixed;
@@ -215,7 +216,7 @@ export default {
     left: 10%;
     background: #fff;
     opacity: 1;
-    z-index: 2001;
+    z-index: 889;
 }
 .TAlertVerification-row {
     display: flex;
