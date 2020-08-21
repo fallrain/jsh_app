@@ -1,7 +1,7 @@
 {
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-	{
+    {
       "path": "pages/applicationsIndex/applicationsIndex",
       "style": {
         "navigationBarTitleText": "应用首页"
@@ -19,7 +19,6 @@
         "navigationBarTitleText": "首页"
       }
     },
-    
     {
       "path": "pages/applicationsIndex/applicationsEdit",
       "style": {
@@ -99,37 +98,30 @@
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
         "navigationBarTitleText": "消息列表"
-
       }
-
     },
     {
       "path": "pages/messageInfoList/messageInfoListDetail",
       "style": {
         "navigationBarTitleText": "消息详情列表"
-
       }
-
     },
     {
       "path": "pages/transferGoods/transferGoods",
       "style": {
         "navigationBarTitleText": "调货列表页面"
-
       }
     },
     {
       "path": "pages/transferGoods/transferShoppingCart",
       "style": {
         "navigationBarTitleText": "调货购物车页面"
-
       }
     },
     {
       "path": "pages/transferGoods/transferDetail",
       "style": {
         "navigationBarTitleText": "中心调货详情页面"
-
       }
     },
     {
@@ -138,7 +130,6 @@
         "navigationBarTitleText": "基本信息",
         "navigationBarBackgroundColor": "#ffffff"
       }
-
     },
     {
       "path": "pages/mine/mySignInfo",
@@ -146,7 +137,6 @@
         "navigationBarTitleText": "签约信息",
         "navigationBarBackgroundColor": "#ffffff"
       }
-
     },
     {
       "path": "pages/mine/mySDFInfo",
@@ -241,13 +231,25 @@
       }
     }
   ],
+  "subPackages": [
+    {
+      "root": "subPackages/finance",
+      "pages": [
+        {
+          "path": "pages/recharge/rechargeOnline",
+          "style": {
+            "navigationBarTitleText": "在线充值"
+          }
+        }
+      ]
+    }
+  ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
-
   "mp-alipay": {
     "gestureBack": "YES"
   }
