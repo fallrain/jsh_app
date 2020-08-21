@@ -128,7 +128,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
   },
   methods: {
@@ -141,15 +142,15 @@ export default {
       if(good.$favorite) {
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: this.userInf.customerCode,
-          account: this.userInf.customerCode,
+          customerCode: this.defaultSendToInf.customerCode,
+          account: this.defaultSendToInf.customerCode,
           productCodeList: [good.GBID]
         });
       } else {
         // 添加收藏
          const addInterest = this.customerService.addInterestProduct({
-          customerCode: this.userInf.customerCode,
-          account: this.userInf.customerCode,
+          customerCode: this.defaultSendToInf.customerCode,
+          account: this.defaultSendToInf.customerCode,
           productCode: good.GBID
         });
       }
@@ -195,7 +196,7 @@ export default {
       console.log(item)
       const upDHPay = await this.transfergoodsService.upDHPayMoney ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode,
+        longfeiUSERID:  this.defaultSendToInf.customerCode,
         ACTPRICE: it.ADVICEPRICE,  //执行价格
         BATERATE: item.BATERATE,     //扣率
         ISFL: item.IBL_ISFL,   //返利类型

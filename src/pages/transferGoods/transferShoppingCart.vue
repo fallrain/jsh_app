@@ -309,21 +309,36 @@ export default {
       let flag = true
       let sum = 0
       let volume = 0
-      let no = []
+      let no = false
+
       this.allOrderList.forEach(ele => {
         if (ele.checked) {
+          console.log(1)
+          no = true
           sum += Number(ele.data.SUMMONEY)
           volume = Math.round(ele.data.IBR_JSTIJI/15*100)
           if (volume < 100) {
             flag = false
           }      
-        } else {
-          uni.showToast({
-            title: "请先选择订单",
-            duration: 3000
-          });    
-        }
+        } 
+        // else {
+        //   console.log(2)
+        //   uni.showToast({
+        //     title: "请先选择订单",
+        //     duration: 3000
+        //   });    
+        // }
       })
+      if(!no) {
+        this.allOrderList.forEach(ele => {
+          if (!ele.checked) {
+            uni.showToast({
+              title: "请先选择订单",
+              duration: 3000
+            }); 
+          }
+        }) 
+      }
       if (!flag) {
         // confirm('体积小于15，无法结算，请继续添加商品')
         this.allOrderList.forEach(ele => {
@@ -336,10 +351,11 @@ export default {
           }
         })     
       } else {
+
         flag = true
         this.payerBalance.forEach(ele => {
           if(ele.balance > ele.toBePaid) {
-            this.getUserInfMianMi()          
+            // this.getUserInfMianMi()          
             if(this.userInfMianMi) {
               console.log("true,提交")
               // 提交订单
@@ -368,7 +384,7 @@ export default {
           const abc = data.data.account
           
           console.log(abc)
-        this.form.phone = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$3')
+        this.form.phone = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
       }
       console.log(this.form.phone)
     },

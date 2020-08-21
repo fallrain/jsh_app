@@ -95,7 +95,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO  
     }),
   },
   methods:{
@@ -123,15 +124,15 @@ export default {
       if(goods.$favorite) {
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: this.userInf.customerCode,
-          account: this.userInf.customerCode,
+          customerCode: this.defaultSendToInf.customerCode,
+          account: this.defaultSendToInf.customerCode,
           productCodeList: [goods.code]
         });
       } else {
         // 添加收藏
          const addInterest = this.customerService.addInterestProduct({
-          customerCode: this.userInf.customerCode,
-          account: this.userInf.customerCode,
+          customerCode: this.defaultSendToInf.customerCode,
+          account: this.defaultSendToInf.customerCode,
           productCode: goods.code
         });
       }

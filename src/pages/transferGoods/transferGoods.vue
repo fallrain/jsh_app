@@ -38,8 +38,8 @@
             :key="index"
             :code="item.code"
             :goods="item"
-            :saletoCode="userInf.saletoCode"
-            :sendtoCode="userInf.sendtoCode"
+            :saletoCode="defaultSendToInf.customerCode"
+            :sendtoCode="defaultSendToInf.customerCode"
             :allPrice="item.$allPrice"
             @change="goodsChange"
             @query="getShoppingCartNum"
@@ -230,10 +230,12 @@ export default {
   },
   created() {
     this.getPageInfo();
+
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     })
   },
   methods: {
@@ -303,15 +305,15 @@ export default {
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     getSearchCondition(pages) {
-      // console.log(pages.num)
+      console.log(this.defaultSendToInf)
       /* 获取不同条件下搜索的传参 */
       let condition = {
         pageNum: pages ? pages.num : 1,
         pageSize: 15,
-        customerCode: this.userInf.customerCode,
-        sendTo: this.userInf.sendtoCode,
+        customerCode: this.defaultSendToInf.customerCode,
+        sendTo: this.defaultSendToInf.customerCode,
       };
-      console.log( this.userInf.customerCode)
+      console.log( this.defaultSendToInf.customerCode)
         // tab条件
       const tab = this.tabs.find(v => v.active);
       // 其他条件
@@ -376,7 +378,7 @@ export default {
     },
     async getTransferList(pages) {
       console.log(pages)
-      const userInf = this.userInf;
+      const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
       console.log(condition)
       const scrollView = {};
@@ -386,7 +388,7 @@ export default {
         // categoryCode: this.filterName,
         attributeName: '',
         attributeValue: '',
-        customerCode: this.userInf.customerCode,
+        customerCode: this.defaultSendToInf.customerCode,
         // dstCode: '8800212607',
         center: '12A02',
         group: '',
@@ -411,14 +413,14 @@ export default {
         const productCodes = curList.map(v => v.code);
         const priceArgsObj = {
           productCodes,
-          saletoCode: userInf.saletoCode,
-          sendtoCode: userInf.sendtoCode,
+          saletoCode: defaultSendToInf.saletoCode,
+          sendtoCode: defaultSendToInf.sendtoCode,
         };
         // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取收藏
         const getProductQueryInter = this.customerService.queryCustomerInterestProductByAccount({
-          account: this.userInf.customerCode,
+          account: this.defaultSendToInf.customerCode,
           productCodeList: productCodes
         });
         const [
@@ -468,6 +470,10 @@ export default {
       } else {
         this.list = []
         this.mescroll.endErr();
+        // 暂无数据
+        uni.showToast({
+            title: '暂无数据',
+        });
       }
       return scrollView;
     },
@@ -488,8 +494,8 @@ export default {
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
         timestamp: Date.parse(new Date()),
-        sendToCode: this.userInf.customerCode,
-        sendToMktid: 12E02
+        sendToCode: this.defaultSendToInf.customerCode,
+        sendToMktid: this.defaultSendToInf.tradeCode
       })
       if(code === "1") { 
         let home = data.data  
@@ -510,9 +516,9 @@ export default {
       // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode,
-        sendtoCode: this.userInf.customerCode,
-        sendtoMktid: 12E02,
+        longfeiUSERID: this.defaultSendToInf.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+        sendtoMktid: this.defaultSendToInf.tradeCode,
       })
       if(temp.code === "1") { 
         console.log(temp.data)
@@ -532,7 +538,7 @@ export default {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode
+        longfeiUSERID: this.defaultSendToInf.customerCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
@@ -542,9 +548,9 @@ export default {
     },
     // 获取付款方数据
      async getpayerList() {
-      console.log(this.userInf);
-      const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCodeTwo, {
-        salesGroupCode: this.userInf.salesGroupCode,
+      console.log(this.defaultSendToInf.customerCode);
+      const { code, data } = await this.customerService.getcustomersList(this.defaultSendToInf.customerCode, {
+        salesGroupCode: this.defaultSendToInf.salesGroupCode,
         status: 1
       });
       if (code === '1') {
@@ -587,8 +593,8 @@ export default {
             IsKPO: Number(item.$PtPrice.isBB) ,   //商空标识  0：非商空  1：商空     //价格接口
             DH_VERCODE: "" , //特价版本
             DH_VERMONEY: "",	  //版本价格
-            USERID: this.userInf.saletoCode, //售达方编码
-            longfeiMFID: address.addressCode,    //送达方编码
+            USERID: this.defaultSendToInf.customerCode, //售达方编码
+            longfeiMFID: this.defaultSendToInf.customerCode,    //送达方编码
             DH_PAYTO: "8800101954",   //付款方编码       //付款方接口传递一份this.payer[0].payerCode
             DH_PAYTONAME: "(8800101954)青岛鸿程永泰商贸有限公司",    //付款方名称   //付款方接口传递一份`(${this.payer[0].payerCode})${this.payer[0].payerName}`
             YJMFID: address.manageCustomerCode,    //业绩管理客户编码   p配送至 接口
