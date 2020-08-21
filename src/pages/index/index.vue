@@ -154,7 +154,7 @@ export default {
           id: 1,
           src: require('@/assets/img/index/function-car.png'),
           title: '整车',
-          url: '#'
+          url: '/pages/vehicleList/vehicleList'
         },
         {
           id: 2,

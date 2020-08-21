@@ -92,10 +92,9 @@ export default {
   },
   methods: {
     async orderList(e, pgNo) {
-      const code2 = this.userInf.customerCode;
       const { code, data } = await this.orderService.orderList({
-        jshi_order_channel: 'ZY',
-        jshi_saleto_code: code2,
+        jshi_order_channel: this.userInf.channelGroup,
+        jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
         pageNo: pgNo,
         pageSize: 10

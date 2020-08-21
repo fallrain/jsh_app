@@ -185,7 +185,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      sendToInf: USER.GET_DEFAULT_SEND_TO,
+      saleInf: USER.GET_SALE,
     }),
   },
   onLoad(options) {
@@ -198,13 +200,17 @@ export default {
     }
   },
   created() {
+    console.log('jinyemianshuju');
+    console.log(this.userInf);
+    console.log(this.sendToInf);
+    console.log(this.saleInf);
     this.queryBaseCode(); // 基地
     this.queryCarNum(); // 整车购物车数量查询
   },
   methods: {
     async queSeq() {
       const timetamp = new Date().valueOf();
-      const typee = 'ZY';
+      const typee = this.userInf.channelGroup;
       const { code, data } = await this.vehicleService.queryNewSeq(timetamp, typee);
       if (code === '1') {
         console.log('整车加购物车获取的SEQ');
@@ -314,7 +320,7 @@ export default {
         centerCode: this.curChoseDeliveryAddress.info.tradeCode,
         deliveryType: this.PSLX.sendWayCode,
         jdCodeList: [this.FHJD.ICC_JDCODE],
-        sendtoCode: this.userInf.sendtoCode
+        sendtoCode: this.sendToInf.customerCode
       });
       if (code === '1') {
         if (data.length > 0) {
@@ -386,8 +392,8 @@ export default {
             const productCodes = aaa.data.map(v => v.code);
             const priceArgsObj = {
               productCodes,
-              saletoCode: userInf.saletoCode,
-              sendtoCode: userInf.sendtoCode,
+              saletoCode: this.saleInf.customerCode,
+              sendtoCode: this.sendToInf.customerCode,
             };
             const getAllPrice = this.commodityService.getAllPrice(priceArgsObj); // 获取价格
             const getProductQueryInter = this.productDetailService.productQueryInter({ // 获取收藏
@@ -570,15 +576,15 @@ export default {
         ADVICEPRICE: item.$PtPrice.supplyPrice,
         BATERATE: item.$PtPrice.rebateRate,
         CARCODE: this.ZCLX.carCode,
-        CUSTUMER_TYPE: 'ZY',
+        CUSTUMER_TYPE: this.userInf.channelGroup,
         HeightLimit: this.curChoseDeliveryAddress.info.ISXG,
         IBL_LOSSRATE: 0,
         IBL_PAYTO_TYPE: '00',
         IBL_TFSUMPRICE: 0,
         IBR_JDPC_JDCODENAME: this.jdName,
-        IBR_ORDERCHANNEL: 'M',
-        IBR_SOLDTO_NAME: '青岛鸿程永泰商贸有限公司',
-        IBR_SUBCHANNEL: 'HA001',
+        IBR_ORDERCHANNEL: this.userInf.channel,
+        IBR_SOLDTO_NAME: this.userInf.customerName,
+        IBR_SUBCHANNEL: this.userInf.subChannel,
         IBR_YCFLAG: this.PSLX.sendWayCode === 'T' ? 'JSHSW' : '',
         ICC_JDCODE: this.jdICCCode,
         IMG: item.searchImage,
@@ -589,8 +595,8 @@ export default {
         ISHeightFLAG: this.switchType ? 'Y' : 'N',
         ISKPO: item.$PtPrice.isBB,
         JDPC_JDCODE: this.jdCode,
-        JIDICAI: 'dicai',
-        MKTID: '12A02',
+        JIDICAI: this.userInf.tagCode,
+        MKTID: this.userInf.tradeCode,
         NUM: item.$num,
         PRODUCT_MODEL: item.module,
         PRO_BAND: item.brand,
@@ -600,7 +606,7 @@ export default {
         SEQ: this.SEQ,
         UNITPRICE: item.$PtPrice.invoicePrice.toString(),
         USERID: this.userInf.customerCode,
-        YJMFID: 'B1001312',
+        YJMFID: this.userInf.manageCustomerCode,
         ZCDeliveryType: this.PSLX.sendWayCode,
         ZCDeliveryTypeName: this.PSLX.sendWay,
         ZCTYPECODE: this.ZCLX.carType,
