@@ -2,15 +2,16 @@
     <view class="transferShoppingCart">
       <!-- 验证码弹窗 -->
       <t-alert-verification 
-      :show.sync="isShowVf"
+        :show.sync="isShowVf"
+        :form="form"
+        :allOrderList="allOrderList"
       ></t-alert-verification>
       <j-tab
         :tabs="tabs"
         :hasRightSlot="true"
         @tabClick="tabClick"
       >  
-      </j-tab>
-      
+      </j-tab> 
       <view class="cumulative-shoppingCart">共{{transferNum}}件宝贝</view>
       <view class="shoppingCart-list">
         <t-shopping-cart-item
@@ -104,14 +105,16 @@ export default {
       payer: [],
       // 余额支付信息显示隐藏
       isShowpayer: false,
-      // 验证码
-      YZM:"",
+      // // 验证码
+      // YZM:"",
       form: {
-          // 手机号
-          phone: '',
-          // 手机号验证码
-          verificationCode: '',
+        // 手机号
+        phone: '',
+        // 手机号验证码
+        verificationCode: '',
       },
+      // 是否免密
+      userInfMianMi:false,
       // 编辑选中显示
       isShowClear: false,
 
@@ -159,6 +162,7 @@ export default {
     },
     getShopInfo() {
       (async() => {
+        await this.getUserInfById()
         await this.getOrderList();  
         await this.getpayerList()
       })()
@@ -179,9 +183,10 @@ export default {
         console.log(data.data) 
         const page = data.data 
         let setinvalid =[]
-        page.forEach((item,i) => {
-          if(item.IBR_ISFLAG) {
-            setinvalid = page.slice(i,1)
+        page.forEach((item,i) =>  {
+          console.log(item)
+          if(item.IBR_ISFLAG === "失效产品") {
+            setinvalid = page.splice(i,1)
           }
         })
         console.log(setinvalid)
@@ -334,32 +339,16 @@ export default {
         flag = true
         this.payerBalance.forEach(ele => {
           if(ele.balance > ele.toBePaid) {
-            this.getUserInfById()
-            const mianMi = this.getUserInfMianMi()
-            if(mianMi.data) {
+            this.getUserInfMianMi()          
+            if(this.userInfMianMi) {
+              console.log("true,提交")
               // 提交订单
-              // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
-              //   longfeiUSERID:this.defaultSendToInf.customerCode,
-              //   orderNo:'',
-              //   verifyCode:'',
-              //   erifyKey:""
-              // })
+              this. getsubmitDhOrderTwo()
+            } else {
+              console.log("谈验证码")
+              this.changeVf()     
+   
             }
-            // this.changeVf()
-            
-       // // 调货验证码
-            //  const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
-            //  if (code === "1") {
-            //     console.log(data)
-            //     this.YZM = data.data.verifyKey
-            //  }
-            // // 提交订单
-            // const { code1, data1 } = await this.transfergoodsService.submitDhOrder({
-            //   longfeiUSERID:this.defaultSendToInf.customerCode,
-            //   orderNo:'',
-            //   verifyCode:'',
-            //   erifyKey:this.YZM
-            // })
           } else {
               this.payerBalance.forEach(ele => {
                 uni.showModal({
@@ -376,20 +365,50 @@ export default {
       /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
       const {code, data} =  await this.orderService.sendVerify(this.defaultSendToInf.customerCode);
         if (code === "1") {
-        this.form.phone = data.data.account
+          const abc = data.data.account
+          
+          console.log(abc)
+        this.form.phone = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$3')
       }
+      console.log(this.form.phone)
     },
     async getUserInfMianMi() {
-      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      /* 获取免密 */
       const data =  await this.orderService.mianMi();
-      return data 
-      console.log(data)
-      // if(data.code === "1") {
-      //   console.log(data.data)
-        // return data1
-      // }
       
+      // console.log(data)
+      if(data.code === "1") {
+        console.log(data.data)
+        this.userInfMianMi = data.data
+      }  
     },
+    //提交订单
+    async getsubmitDhOrderTwo() {
+      let SEQ = ""
+      this.allOrderList.forEach(ele => {
+        if(ele.checked) {
+          SEQ = ele.IBR_SEQ
+        }        
+      })
+      const submitDhOrder  = await this.transfergoodsService.submitDhOrder({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.defaultSendToInf.customerCode,
+        orderNo: SEQ,
+        verifyCode: this.form.verificationCode,
+        verifyKey: '',
+      })
+      if(submitDhOrder.code === "1") {
+        uni.showToast({
+            title: '调货订单提交成功',
+        });
+      } else {
+          uni.showToast({
+              title: '提交失败请重试',
+          });
+      }
+    },
+
+
     // 编辑
     edit() {
       this.isShowClear = !this.isShowClear
