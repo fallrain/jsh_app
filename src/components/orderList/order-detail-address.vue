@@ -20,10 +20,12 @@
 <script>
 export default {
   name: 'orderDetailAddress',
-  addressInfo: {
-    type: Object,
-    default() {
-      return {};
+  props: {
+    addressInfo: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
   }
 };

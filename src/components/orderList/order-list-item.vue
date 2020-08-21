@@ -1,12 +1,12 @@
 <template>
-  <view class="produceDetailItem" @click="goDetail">
+  <view class="produceDetailItem">
     <view class="produceDetailItem-head">
-      <button type="button" class="produceDetailItem-head-btn">{{info.details[0].combinationTag}}</button>
+      <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
       <text class="produceDetailItem-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
       <text class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
-    <view v-if="info.details.length>2">
-      <view class="produceDetailItem-cnt">
+    <view v-if="info.details.length<2">
+      <view class="produceDetailItem-cnt" @click="goDetail">
         <view class="produceDetailItem-cnt-img">
           <image :src="info.details[0].jshd_product_img"></image>
         </view>
@@ -31,14 +31,14 @@
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{info.details[0].jshd_amount}}</span></view>
-            <view class="produceDetailItem-cnt-price">预定金金额:¥{{info.details[0].jshd_invoice_price}}</view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{info.details[0].jshd_pre_amount}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{info.details[0].jshd_invoice_price}}</span></view>
-            <view class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">45%</span></view>
-            <view class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">45%</span></view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">{{(info.details[0].jshd_pre_rate*1).toFixed(2)}}%</span></view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">{{(100-(info.details[0].jshd_pre_rate*1)).toFixed(2)}}%</span></view>
           </view>
         </view>
         <view class=" col-25 padding-4">
@@ -54,7 +54,7 @@
       <order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>
     </view>
     <view v-else-if="info.details.length>0" v-for="(item,index) in info.details" :key="index">
-      <view class="produceDetailItem-cnt">
+      <view class="produceDetailItem-cnt" @click="goDetail">
         <view class="produceDetailItem-cnt-img">
           <image :src="item.jshd_product_img"></image>
         </view>
@@ -73,14 +73,14 @@
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{item.jshd_amount}}</span></view>
-            <view class="produceDetailItem-cnt-price">预定金金额:¥{{item.jshd_invoice_price}}</view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{item.jshd_pre_amount}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{item.jshd_invoice_price}}</span></view>
-            <view class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">45%</span></view>
-            <view class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">45%</span></view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">{{(100-(item.jshd_pre_rate*1)).toFixed(2)}}%</span></view>
           </view>
         </view>
         <view class=" col-25 padding-4">

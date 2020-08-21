@@ -17,7 +17,7 @@
 .produceDetailItem-head-btn {
   display: inline-block;
   flex-shrink: 0;
-  max-width: 86px;
+  width: 86px;
   background: $theme-color;
   border-radius: 16px;
   color: #FFFFFF;
@@ -32,13 +32,13 @@
 .produceDetailItem-head-text {
   color: #666666;
   font-size: 24px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  min-width: 62%;
 }
 .produceDetailItem-head-text-status {
   color: $theme-color;
   font-size: 24px;
-  padding-left: 90px;
+  padding-left: 80px;
 }
 
 .produceDetailItem-cnt {
@@ -140,8 +140,8 @@
   width: 2px;
   height: 18px;
   background: #999999;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .produceDetailItem-btm-row {

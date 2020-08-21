@@ -5,12 +5,12 @@ export default {
       cBaseUrl: 'https://c.jsh.com',
     },
     sit: {
-      baseUrl: '',
-      cBaseUrl: '',
+      baseUrl: 'https://mall.jsh.com',
+      cBaseUrl: 'https://c.jsh.com',
     },
     prod: {
-      baseUrl: '',
-      cBaseUrl: '',
+      baseUrl: 'https://new.jsh.com',
+      cBaseUrl: 'https://c.jsh.com',
     }
   },
   'mp-alipay': {

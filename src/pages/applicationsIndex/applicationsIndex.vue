@@ -467,7 +467,7 @@ export default {
       });
     },
     goOthers(url) {
-      uni.navigateTo({
+      uni.switchTab({
         url
       });
     },

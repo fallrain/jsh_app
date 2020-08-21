@@ -25,52 +25,65 @@ export default {
     orderListItem,
     JTab
   },
+  onLoad(options) {
+    this.sexID = options.sexID;
+    console.log(options.sexID);
+  },
   data() {
     return {
-      orderListInfo: [{ name: '111' }, { name: '121' }, { name: '131' }],
+      orderListInfo: [],
       tabs: [
         {
-          id: 7,
+          id: 0,
+          id2: 7,
           name: '全部订单',
           active: true
         },
         {
-          id: 0,
+          id: 1,
+          id2: 0,
           name: '待扣款',
           active: false
         },
         {
-          id: 1,
+          id: 2,
+          id2: 1,
           name: '待发货',
           active: false
         },
         {
-          id: 2,
+          id: 3,
+          id2: 2,
           name: '已发货',
           active: false
         },
         {
-          id: 3,
+          id: 4,
+          id2: 3,
           name: '已签收',
           active: false
         },
         {
           id: 5,
+          id2: 5,
           name: '已开票',
           active: false
         },
         {
           id: 6,
+          id2: 6,
           name: '已取消',
           active: false
         },
         {
-          id: 8,
+          id: 7,
+          id2: 8,
           name: '物流拒单',
           active: false
         },
         {
-          id: '7',
+          id: 8,
+          id2: '7',
           name: '退货订单',
           active: false
         }
@@ -80,22 +93,22 @@ export default {
     };
   },
   computed: {
-    ...mapMutations([
-      ORDER.UPDATE_ORDER
-    ]),
     ...mapGetters({
       userInf: USER.GET_USER
     }),
   },
   created() {
-    this.orderList(7, this.pageNo);
+    const ind = (this.sexID !== undefined && this.sexID !== null) ? this.sexID : 0;
+    this.orderList(this.tabs[ind].id2, this.pageNo);
   },
   methods: {
+    ...mapMutations([
+      ORDER.UPDATE_ORDER
+    ]),
     async orderList(e, pgNo) {
-      const code2 = this.userInf.customerCode;
       const { code, data } = await this.orderService.orderList({
-        jshi_order_channel: 'ZY',
-        jshi_saleto_code: code2,
+        jshi_order_channel: this.userInf.channelGroup,
+        jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
         pageNo: pgNo,
         pageSize: 10
@@ -119,7 +132,7 @@ export default {
       console.log(e);
       this.tabs.forEach((each) => {
         if (each.active) {
-          this.orderList(each.id, this.pageNo);
+          this.orderList(each.id2, this.pageNo);
         }
       });
     }
