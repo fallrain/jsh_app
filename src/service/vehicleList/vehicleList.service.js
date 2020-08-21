@@ -38,5 +38,8 @@ export default {
   },
   queryNewSeq(timestamp, CUSTUMER_TYPE) { // 获取整车加购物车时的单号
     return jGet(url.queryNewSeq(timestamp, CUSTUMER_TYPE));
+  },
+  queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid) { // 整车购物车详情页面查询价格
+    return jGet(url.queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid));
   }
 };

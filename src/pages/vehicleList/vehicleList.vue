@@ -428,6 +428,7 @@ export default {
     tabconfirmPup(item, index) {
       console.log('777777');
       console.log(item);
+      this.queSeq(); // 切换条件之后重新查询单号
       this.FHJD = []; this.JDPC = []; this.PSLX = []; this.ZCLX = [];
       this.popTabs[0].children.forEach((v) => {
         if (v.checked) { // 选中的发货基地

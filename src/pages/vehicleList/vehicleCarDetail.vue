@@ -1,8 +1,8 @@
 <template>
   <view class="vehicleCarDetail">
-    <view class="vehicleCarDetail-info"><vehicle-detail-info></vehicle-detail-info></view>
+    <view class="vehicleCarDetail-info"><vehicle-detail-info :goods="vehicleDetail"></vehicle-detail-info></view>
     <view class="vehicleCarDetail-good">
-      <vehicle-detail-good v-for="(goods,index) in goodsList" :key="index" :index="index" @change="goodsChange" :goodsList="goods">
+      <vehicle-detail-good @change="goodsChange" :goodsList="vehicleDetail">
       </vehicle-detail-good>
     </view>
     <view class="vehicleCarDetail-info">
@@ -17,12 +17,6 @@ import vehicleDetailInfo from '../../components/vehicleList/vehicleDetailInfo';
 import vehicleDetailGood from '../../components/vehicleList/vehicleDetailGood';
 import vehicleDetailSend from '../../components/vehicleList/vehicleDetailSend';
 import transferDetailBtm from '../../components/transfer/transferDetailBtm';
-import {
-  VEHICLE
-} from '../../store/mutationsTypes';
-import {
-  mapGetters
-} from 'vuex';
 
 export default {
   name: 'vehicleCarDetail',
@@ -32,14 +26,16 @@ export default {
     vehicleDetailSend,
     transferDetailBtm
   },
-  computed: {
-    ...mapGetters([
-      VEHICLE.GET_VEHICLE
-    ]),
-  },
   created() {
-    console.log('11111111');
-    this.vehicleDetail = this[VEHICLE.GET_VEHICLE].vehicleDetail;
+    const that = this;
+    uni.getStorage({
+      key: 'vehicleCarInfo',
+      success(res) {
+        that.seal = res.data;
+      }
+    });
+    this.vehicleDetail = that.seal;
+    console.log('1111www1111');
     console.log(this.vehicleDetail);
   },
   data() {
