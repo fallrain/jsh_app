@@ -61,12 +61,12 @@
         </view>
       </view>
       <view class="position-r" v-if="processJudgement.orderType==='2'">
-        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge1"></view>
-        <view v-show="'0'===processJudgement.centerEntryTime" class="order-detail-judge2"></view>
-        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge3"></view>
-        <view v-show="'0'===processJudgement.centerEntryTime" class="order-detail-judge4"></view>
-        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge5"></view>
-        <view v-show="'1'===processJudgement.centerEntryTime" class="order-detail-judge6">
+        <view v-show="'1'===processJudgement.centerEntry" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.centerEntry" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.centerEntry" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.centerEntry" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.centerEntry" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.centerEntry" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
@@ -75,12 +75,12 @@
         </view>
       </view>
       <view class="position-r" v-if="processJudgement.orderType==='2'||processJudgement.orderType==='3'">
-        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge1"></view>
-        <view v-show="'0'===processJudgement.deductionTime" class="order-detail-judge2"></view>
-        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge3"></view>
-        <view v-show="'0'===processJudgement.deductionTime" class="order-detail-judge4"></view>
-        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge5"></view>
-        <view v-show="'1'===processJudgement.deductionTime" class="order-detail-judge6">
+        <view v-show="'1'===processJudgement.deduction" class="order-detail-judge1"></view>
+        <view v-show="'0'===processJudgement.deduction" class="order-detail-judge2"></view>
+        <view v-show="'1'===processJudgement.deduction" class="order-detail-judge3"></view>
+        <view v-show="'0'===processJudgement.deduction" class="order-detail-judge4"></view>
+        <view v-show="'1'===processJudgement.deduction" class="order-detail-judge5"></view>
+        <view v-show="'1'===processJudgement.deduction" class="order-detail-judge6">
           <uni-icons :color="activeColor" type="checkbox-filled" size="14"></uni-icons>
         </view>
         <view style="margin-left: 30px">
@@ -163,7 +163,7 @@ export default {
       // invoiceOpening: '0', // 发票开具1234
       // toVoid: '1', // 作废1234
       type: 1, // 1:五项；2：4项::::
-      activeColor: '#3388FF'
+      activeColor: '#ED2856'
     };
   }
 };
@@ -199,7 +199,7 @@ export default {
   .order-detail-judge1{
     height: 90%;
     width: 2px;
-    background: #3388FF;
+    background: #ED2856;
     position: absolute;
     left: 21px;
   }
@@ -213,7 +213,7 @@ export default {
   .order-detail-judge3{
     height: 16px;
     width: 16px;
-    background: #3388FF;
+    background: #ED2856;
     position: absolute;
     left: 14px;
     border-radius: 7px;
