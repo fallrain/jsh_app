@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "devh5": "cross-env NODE_ENV=development UNI_PLATFORM=h5 vue-cli-service uni-serve --mode dev",
-    "sith5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build --mode prod",
+    "sith5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build --mode dev",
     "prodh5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build --mode prod",
     "devali": "cross-env NODE_ENV=development UNI_PLATFORM=mp-alipay vue-cli-service uni-build --watch --mode dev",
     "sitali": "cross-env NODE_ENV=production UNI_PLATFORM=mp-alipay vue-cli-service uni-build --mode sit",
