@@ -76,7 +76,7 @@
   margin-bottom: 16px;
 }
 
-.mb24{
+.mb24 {
   margin-bottom: 24px;
 }
 
@@ -343,15 +343,18 @@
 /*flex end*/
 
 /*font-size start*/
-.fs20{
+.fs20 {
   font-size: 20px;
 }
-.fs24{
+
+.fs24 {
   font-size: 24px;
 }
-.fs36{
+
+.fs36 {
   font-size: 36px;
 }
+
 /*font-size end*/
 
 /*公共*/
@@ -371,6 +374,18 @@
   font-size: 28px;
   line-height: 40px;
   color: #333;
+}
+
+.j-common-btn-default {
+  display: inline-block;
+  width: 100%;
+  height: 88px;
+  text-align: center;
+  line-height: 88px;
+  background: #2283E2;
+  border-radius: 44px;
+  color: #fff;
+  font-size: 30px;
 }
 
 /*公共 end*/
@@ -482,9 +497,6 @@
   font-size: 24px;
   color: #999;
 }
-
-
-
 
 .goodsList-drawer-filter-head-ads-wrap {
   padding-right: 30px;
