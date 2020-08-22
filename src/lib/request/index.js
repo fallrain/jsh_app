@@ -39,7 +39,7 @@ function showModal(params, showCancel = false, confirmText = '关闭', cb) {
   });
 }
 
-function showError(msg, status) {
+function showError(msg, status,url,params) {
   /* 统一提示错误 */
   let message;
   if (msg) {
@@ -52,7 +52,8 @@ function showError(msg, status) {
     };
     message = errorMap[status] || '请求失败';
   }
-  showModal(message);
+  let str = JSON.stringify(params)
+  showModal(message + url + str);
 }
 
 function jSend(option) {
@@ -97,7 +98,7 @@ function jSend(option) {
           return;
         }
         if (data.code !== '1' && data.code !== '200') {
-          showError(data.msg, statusCode);
+          showError(data.msg, statusCode,selfOptions.url,header);
         }
       },
       fail(e) {
@@ -108,7 +109,7 @@ function jSend(option) {
         if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
           msg = '请求超时';
         }
-        showError(msg);
+        showError(msg,'',selfOptions.url,header);
         return resolve({
           code: '-1'
         });
