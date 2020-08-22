@@ -16,7 +16,7 @@
         <view
           :class="['jHeadTabPicker-item-check iconfont icontick']"
         ></view>
-        <text class="jHeadTabPicker-item-text">{{item.name}}</text>
+        <text class="jHeadTabPicker-item-text j-text-ellipsis">{{item.name}}</text>
       </view>
     </view>
     <view v-else class="jHeadTabPicker-list">
@@ -29,7 +29,7 @@
         <view
           :class="['jHeadTabPicker-item-check iconfont icontick']"
         ></view>
-        <text class="jHeadTabPicker-item-text">{{item.name}}</text>
+        <text class="jHeadTabPicker-item-text j-text-ellipsis">{{item.name}}</text>
       </view>
     </view>
     <view class="jHeadTabPicker-btn-wrap">
@@ -174,6 +174,8 @@ export default {
     display: flex;
     flex-wrap: wrap;
     padding-top: 18px;
+    padding-left: 26px;
+    padding-right: 26px;
   }
 
   .jHeadTabPicker-item {
@@ -183,7 +185,7 @@ export default {
     line-height: 54px;
     display: flex;
     align-items: center;
-    padding-left: 70px;
+    padding-left: 32px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -227,7 +229,7 @@ export default {
   .jHeadTabPicker-item-check {
     position: absolute;
     top: 50%;
-    left: 30px;
+    left: 0;
     display: none;
     transform: translateY(-50%);
     color: $theme-color;
