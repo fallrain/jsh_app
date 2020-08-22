@@ -510,7 +510,6 @@ export default {
             name: `(${v.customerCode})${v.customerName}`,
             ...v
           }));
-          debugger
           // 当前配送地址修改(选出默认地址)
           const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
           if (defaultIndex > -1) {
