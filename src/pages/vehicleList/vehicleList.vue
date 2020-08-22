@@ -288,7 +288,7 @@ export default {
             ...v
           }));
           // 当前配送地址修改(选出默认地址)
-          const defaultIndex = dataList.findIndex(v => v.defaultFlag === '1');
+          const defaultIndex = dataList.findIndex(v => v.defaultFlag * 1 === 1);
           if (defaultIndex > -1) {
             const curChoseDeliveryAddress = dataList[defaultIndex];
             this.deliveryAddressList[defaultIndex].checked = true;
