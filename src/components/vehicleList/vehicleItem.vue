@@ -21,7 +21,11 @@
       </view>
       <view class="VHIItem-cnt-opts">
         <view class="numberVHI"><uni-number-box :value="goods.$num" @change="goodsNumChange"></uni-number-box></view>
-        <button class="VHIItem-cnt-opts-primary ml26" type="button" @tap="addTransfer">加入整车</button>
+        <button
+          @tap="addTransfer"
+          class="VHIItem-cnt-opts-primary ml26"
+          type="button"
+        >加入整车</button>
       </view>
     </view>
   </view>

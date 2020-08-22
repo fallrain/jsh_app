@@ -53,6 +53,10 @@
     </j-choose-delivery-address>
     <view class="vehicle-high"></view>
     <view class="vehicle-foot"><vehicle-foot :carType="ZCLX.carNames" :carNum="carNum" :tiJiINfo="tiJiINfo"></vehicle-foot></view>
+    <m-toast
+      :isdistance="true"
+      ref="toast"
+    ></m-toast>
   </view>
 </template>
 
@@ -66,6 +70,7 @@ import JDrawerFilterItem from '../../components/form/JDrawerFilterItem';
 import JSwitch from '../../components/form/JSwitch';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import vehicleFoot from '../../components/vehicleList/vehicleFoot';
+import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import {
   mapGetters
 } from 'vuex';
@@ -83,6 +88,7 @@ export default {
     JDrawerFilterItem,
     JSwitch,
     JChooseDeliveryAddress,
+    MToast,
     vehicleFoot
   },
   data() {
@@ -616,6 +622,7 @@ export default {
       });
       if (code === '1') {
         if (data.code === '200') {
+          this.showAddToCartToast();
           this.xiadanInfo = data.data;
           this.SEQ = data.data.SEQ;
           this.tiJiINfo.tiji = ((this.tiJiINfo.tiji * 1) + (this.xiadanInfo.TIJI * 1)).toFixed(2);
@@ -634,7 +641,15 @@ export default {
     silentReSearch() {
       /* sousuo */
       this.queryEs(1);
-    }
+    },
+    showAddToCartToast() {
+      /* 展示添加到购物车提示 */
+      this.$refs.toast.open({
+        type: 'success',
+        content: '加入整车成功',
+        timeout: 2000,
+      });
+    },
   }
 };
 </script>
