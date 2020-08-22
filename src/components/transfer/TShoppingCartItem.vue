@@ -177,7 +177,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
   },
   methods: {
@@ -240,7 +241,7 @@ export default {
           timestamp: Date.parse(new Date()),
           dhSeq: this.list.data.IBR_SEQ,
           korderNo: item.IBL_KORDERNO,
-          longfeiUSERID: this.userInf.saletoCode,
+          longfeiUSERID: this.defaultSendToInf.customerCode,
           qty: value
         });
         if(result.code === "1") {
@@ -270,7 +271,7 @@ export default {
       // 删除购物车订单
       const deleteOrder = await this.transfergoodsService.deleteOrderForm ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode,
+        longfeiUSERID: this.defaultSendToInf.customerCode,
         KORDERNO: this.list.data.IBR_SEQ,
       });
       if(deleteOrder.code === "1") {
@@ -282,7 +283,7 @@ export default {
     async togglePayer(item, it, index) {
       const upDHPay = await this.transfergoodsService.upDHPayMoney ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.userInf.saletoCode,
+        longfeiUSERID: this.defaultSendToInf.customerCode,
         ACTPRICE: item.ADVICEPRICE,  //执行价格
         BATERATE: item.BATERATE,     //扣率
         ISFL: item.IBL_ISFL,   //返利类型

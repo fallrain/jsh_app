@@ -28,6 +28,8 @@ export default {
   data() {
     return {
       orderListInfo: [],
+      total: 0,
+      pageNo: 1,
       tabs: [
         {
           id: 0,
@@ -83,9 +85,7 @@ export default {
           name: '退货订单',
           active: false
         }
-      ],
-      total: 0,
-      pageNo: 1
+      ]
     };
   },
   computed: {
@@ -93,8 +93,18 @@ export default {
       userInf: USER.GET_USER
     }),
   },
+  onLoad(options) {
+    console.log('SSSSSEEEEE');
+    console.log(options);
+    this.sexID = options.index * 1;
+    console.log(this.tabs[this.sexID]);
+  },
   created() {
-    this.orderList(this.tabs[0].id2, this.pageNo);
+    this.orderList(this.tabs[this.sexID].id2, this.pageNo);
+    this.tabs.forEach((each) => {
+      each.active = false;
+    });
+    this.tabs[this.sexID].active = true;
   },
   methods: {
     ...mapMutations([
