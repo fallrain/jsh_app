@@ -124,7 +124,7 @@ import TDrawerFilterItem from '../../components/transfer/TDrawerFilterItem';
 import transferGoodsBtm from './transferGoodsBtm';
 import './css/transferGoods.scss';
 import {
-  mapGetters
+  mapGetters,mapMutations
 } from 'vuex';
 import {
   USER
@@ -156,6 +156,8 @@ export default {
       cargoWareHome: [],
       // 配送类型
       cargoSendWay: [],
+      // 当前配送地址
+      address: {},
       cargoSend: [],
       // 统仓统配
       SendWay: "",
@@ -239,18 +241,23 @@ export default {
     })
   },
   methods: {
+     ...mapMutations([
+      USER.UPDATE_DEFAULT_SEND_TO
+    ]),
     getPageInfo() {
-      // this.setFilterData();
-      
+      // this.setFilterData();   
       (async() => {
         await this.getDeliveryAddress();
         await this.getTransferList();
-        await this.setFilterList();
+        // await this.setFilterList();
         await this.getpayerList()
+        await this.getAddress()
+        await this.getCargoQuery()
       })()
-      this.getCargoQuery();
+      
       this.getShoppingCartNum();
       this.confirm()
+      
 
     },
     //调出库位和配送类型点击确定时
@@ -311,7 +318,7 @@ export default {
         pageNum: pages ? pages.num : 1,
         pageSize: 15,
         customerCode: this.defaultSendToInf.customerCode,
-        sendTo: this.defaultSendToInf.customerCode,
+        // sendTo: this.defaultSendToInf.customerCode,
       };
       console.log( this.defaultSendToInf.customerCode)
         // tab条件
@@ -339,6 +346,7 @@ export default {
         this.deliveryAddressList.forEach((item) => {
           if (item.checked) {
             filtersMap.dstCode = item.id
+            filtersMap.center = item.tradeCode
           }
         });
       }
@@ -385,12 +393,12 @@ export default {
       
       const { code, data } = await this.transfergoodsService.transferList({
         timestamp: Date.parse(new Date()),
-        // categoryCode: this.filterName,
+        // categoryCode: "",
         attributeName: '',
         attributeValue: '',
         customerCode: this.defaultSendToInf.customerCode,
         // dstCode: '8800212607',
-        center: '12A02',
+        // center: '12A02',
         group: '',
         // brandName: this.filterBrandName,
         sortDirection: this.sortDirection,
@@ -413,14 +421,14 @@ export default {
         const productCodes = curList.map(v => v.code);
         const priceArgsObj = {
           productCodes,
-          saletoCode: defaultSendToInf.saletoCode,
-          sendtoCode: defaultSendToInf.sendtoCode,
+          saletoCode: this.defaultSendToInf.customerCode,
+          sendtoCode: condition.dstCode,
         };
         // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取收藏
         const getProductQueryInter = this.customerService.queryCustomerInterestProductByAccount({
-          account: this.defaultSendToInf.customerCode,
+          account: String(this.defaultSendToInf.customerCode),
           productCodeList: productCodes
         });
         const [
@@ -454,7 +462,9 @@ export default {
           this.list = this.list.concat(curList);    
           console.log(this.list)    
         }
-        
+        // 获取当前送达方地址
+         this.getAddress()
+        this.setFilterList();
         // this.filterList = this.conditionList.map(item => ({
         //   name: item.title,
         //   isExpand: true,
@@ -474,10 +484,13 @@ export default {
         uni.showToast({
             title: '暂无数据',
         });
+        scrollView.total = 0
       }
+      // debugger
       return scrollView;
     },
     setFilterList() {
+      console.log(this.conditionList)
       this.filterList = this.conditionList.map(item => ({
           name: item.title,
           isExpand: true,
@@ -490,12 +503,14 @@ export default {
         }))
         console.log(this.filterList);
     },
-    async getCargoQuery() {
+    async getCargoQuery(pages) {
+      const condition = this.getSearchCondition(pages);
+      console.log(condition)
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
         timestamp: Date.parse(new Date()),
-        sendToCode: this.defaultSendToInf.customerCode,
-        sendToMktid: this.defaultSendToInf.tradeCode
+        sendToCode: condition.dstCode ,
+        sendToMktid: condition.center
       })
       if(code === "1") { 
         let home = data.data  
@@ -517,8 +532,8 @@ export default {
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.defaultSendToInf.customerCode,
-        sendtoCode: this.defaultSendToInf.customerCode,
-        sendtoMktid: this.defaultSendToInf.tradeCode,
+        sendtoCode: condition.dstCode ,
+        sendtoMktid: condition.center
       })
       if(temp.code === "1") { 
         console.log(temp.data)
@@ -558,26 +573,30 @@ export default {
         this.payer = data
       }
     },
-
-    // 加入调货
-    inserOrder(item) {
-      // 获取当前配送地址
-      let address = {}
+    // 获取当前配送地址
+    getAddress() {
+      console.log(111)
       this.addressesList.forEach(item => {
         console.log(item)
         console.log(this.curChoseDeliveryAddress.name)
         if(this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.addressName}`) {
-          address = item
+          this.address = item
         }
       }) 
-      console.log(address)
+      console.log(this.address)
+    },
+    // 加入调货
+    inserOrder(item) {
+      // 获取当前配送地址
+      
+      this.getAddress()
       if(item.stockList[0].qty !== "0") {
         console.log(item)
           const insertTransfer = this.transfergoodsService.insertOrder([{
             timestamp:Date.parse(new Date()),
             ycFlag: this.SendWay,    //是否统仓统配    配送类型？
             SEQ: "",//调货单号     
-            MKTID: "12A02", //工贸编码    配送至  address.tradeCode
+            MKTID: this.address.tradeCode, //工贸编码    配送至  address.tradeCode
             sendCode: "",//配送中心编码   配送至
             brand: item.brand,//品牌编码     产品列表
             INVSORT: item.group,//产品组编码
@@ -594,23 +613,23 @@ export default {
             DH_VERCODE: "" , //特价版本
             DH_VERMONEY: "",	  //版本价格
             USERID: this.defaultSendToInf.customerCode, //售达方编码
-            longfeiMFID: this.defaultSendToInf.customerCode,    //送达方编码
+            longfeiMFID: this.address.customerCode,    //送达方编码
             DH_PAYTO: "8800101954",   //付款方编码       //付款方接口传递一份this.payer[0].payerCode
             DH_PAYTONAME: "(8800101954)青岛鸿程永泰商贸有限公司",    //付款方名称   //付款方接口传递一份`(${this.payer[0].payerCode})${this.payer[0].payerName}`
-            YJMFID: address.manageCustomerCode,    //业绩管理客户编码   p配送至 接口
+            YJMFID: this.address.manageCustomerCode,    //业绩管理客户编码   p配送至 接口
             DH_PROCODE: "",   //工程版本
             DH_PROLOSSMONEY: "" ,  
             DH_LOSSRATE: 0,  //不用改
             DH_OUTWHCODE: this.stock,  //调出库位     //当前选的调出库位
             DH_IMG: item.searchImage,    
-            DH_SENDTONAME: address.addressName,    //送达方名称   配送至 接口
-            SENDTO_ADDRESS: address.address,  //送达方地址   配送至 接口
+            DH_SENDTONAME: this.address.addressName,    //送达方名称   配送至 接口
+            SENDTO_ADDRESS: this.address.address,  //送达方地址   配送至 接口
             stockList: this.cargoSend,    //调出库位列表
 
             DH_PAYTO_TYPE: "00",   //付款方类型       //付款方
             DH_SALETO_NAME: "青岛鸿程永泰商贸有限公司",     //售达方编码    用户信息   //this.payer[0].customerName
-            DH_MAIN_CHANNEL_CODE: "M" ,   // 大渠道    customer接口   配送接口address.channel
-            DH_SUB_CHANNEL_CODE: "HA001",  //小渠道     customer接口  配送接口address.subChannel
+            DH_MAIN_CHANNEL_CODE: this.address.channel ,   // 大渠道    customer接口   配送接口address.channel
+            DH_SUB_CHANNEL_CODE: this.address.subChannel,  //小渠道     customer接口  配送接口address.subChannel
           }]);
           if(insertTransfer.code === "1") {
             // confirm("加入调货成功")
@@ -703,13 +722,28 @@ export default {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
-            name: `(${v.customerCode})${v.addressName}`
+            name: `(${v.customerCode})${v.addressName}`,
+            tradeCode:v.tradeCode
+
           }));
           console.log(this.deliveryAddressList)
           // 当前配送地址修改
-          if (this.deliveryAddressList[1]) {
-            this.deliveryAddressList[1].checked = true;
-            this.curChoseDeliveryAddress = this.deliveryAddressList[1];
+          // if (this.deliveryAddressList[1]) {
+          //   this.deliveryAddressList[1].checked = true;
+          //   this.curChoseDeliveryAddress = this.deliveryAddressList[1];
+          //   console.log(this.curChoseDeliveryAddress)
+          // }
+          // 当前配送地址修改(选出默认地址)
+          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          console.log(defaultIndex)
+          if (defaultIndex > -1) {
+            console.log(data[defaultIndex])
+            const curChoseDeliveryAddress = data[defaultIndex];
+            curChoseDeliveryAddress.name =`${curChoseDeliveryAddress.customerCode}${curChoseDeliveryAddress.addressName}`
+            // 更新默认送达方store
+            this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
+            this.deliveryAddressList[defaultIndex].checked = true;
+            this.curChoseDeliveryAddress = curChoseDeliveryAddress;
           }
           
         }
@@ -719,6 +753,7 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+      this.getCargoQuery()
     }
   }
 }

@@ -140,6 +140,9 @@ export default {
       
     }
   },
+  onLoad(option) {
+    console.log(option)
+  },
   created() {
     this.getShopInfo();
     console.log(this.defaultSendToInf)

@@ -7,10 +7,8 @@
     </transfer-detail-address>
     <view>
       <!-- 调货商品列表 -->
-      <transfer-detail-item
-        @change="goodsChange"
+      <transfer-detail-item   
         :goods="detailList"
-        @delete="deleteProductMe"
     
       >
       </transfer-detail-item>
@@ -77,8 +75,8 @@ export default {
     goodsChange(goods, good, index) {
       console.log(goods)
       /* 商品 change */
-      this.goodsList[index] = goods;
-      this.goodsList = JSON.parse(JSON.stringify(this.goodsList));
+      this.detailList.orderList[index] = good;
+      this.detailList = JSON.parse(JSON.stringify(this.detailList));
     },
   },
   created() {
@@ -120,30 +118,9 @@ export default {
       this[TRANSFER.UPDATE_TSHOPCART]({
         allOrderList: this.allList,
       });
-
-      // this.detailList = this.TSHOPCART.allOrderList.data;
-      // this.balance = this.TSHOPCART.allOrderList.data.payerBalance;
       }
-
-    },
-    
-
-    // findDetailList(seq,list) {
-    //    console.log(seq)
-    //   this.detailList = list.data
-    //   console.log(this.detailList)
-     
-    //   // this.goodsList = list.data.orderList
-    //   // console.log(this.goodsList)
-    // },
+    }, 
   },
-  // onLoad(option){
-    // console.log(option)
-    // let { IBR_SEQ, list } = option
-    
-    // this.findDetailList(IBR_SEQ,JSON.parse(list))
-    // console.log(JSON.parse(list))
-  // orderList}
     
 }
 </script>

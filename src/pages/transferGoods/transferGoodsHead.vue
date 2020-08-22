@@ -95,10 +95,10 @@ export default {
     };
   },
   created() {
-      
   },
   methods: {
-    setPopTabs(wareHome, sendWay) {   
+    setPopTabs(wareHome, sendWay) { 
+      console.log(wareHome)  
       if (wareHome) {
         const tempArray = []
         wareHome.map(item => {

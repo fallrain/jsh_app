@@ -1,7 +1,8 @@
 import urls from '../url/commodity.url';
 import {
   jPost,
-  jPostJson
+  jPostJson,
+  jGet
 } from '@/lib/request';
 
 export default {
@@ -17,4 +18,8 @@ export default {
     /* 商品库存 */
     return jPostJson(urls.getStock, data);
   },
+  list(data) {
+     /* 首页商品 */
+     return jGet(urls.list, data);
+  }
 };

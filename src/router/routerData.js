@@ -1,6 +1,7 @@
 
 const data = [
   'pages/index/index',
+  "pages/index/information",
   'pages/applicationsIndex/applicationsIndex',
   'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',
