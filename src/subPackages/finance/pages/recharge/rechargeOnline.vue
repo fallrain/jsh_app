@@ -42,6 +42,7 @@
         <j-recharge-address-card-cell
           :has-arrow="true"
           title="选择银行"
+          @rightClick="showBankPicker"
         >
           <template>
             <view class="rechargeOnline-bank-img">
@@ -64,9 +65,15 @@
         <button
           class="j-common-btn-default"
           type="button"
-        >完成</button>
+        >完成
+        </button>
       </view>
     </view>
+    <j-recharge-bank-picker
+      :is-show="isShowBankPicker"
+      :list="bankList"
+      title="选择银行"
+    ></j-recharge-bank-picker>
   </view>
 </template>
 
@@ -75,11 +82,13 @@ import JRechargeAddressCard from '../../../../components/recharge/JRechargeAddre
 import JRechargeAddressCardCell from '../../../../components/recharge/JRechargeAddressCardCell';
 import JRechargePayCard from '../../../../components/recharge/JRechargePayCard';
 import JTextarea from '../../../../components/form/JTextarea';
+import JRechargeBankPicker from '../../../../components/recharge/JRechargeBankPicker';
 import './css/rechargeOnline.scss';
 
 export default {
   name: 'rechargeOnline',
   components: {
+    JRechargeBankPicker,
     JTextarea,
     JRechargePayCard,
     JRechargeAddressCard,
@@ -107,7 +116,53 @@ export default {
           type: 1,
           isChecked: false
         }
-      ]
+      ],
+      // 是否显示银行选择picker
+      isShowBankPicker: true,
+      bankList: [
+        {
+          key: 'cxk',
+          value: '储蓄卡',
+          children: [
+            {
+              key: '1',
+              value: '中国农业银行',
+              isChecked: false
+            },
+            {
+              key: '2',
+              value: '中国银行',
+              isChecked: false
+            },
+            {
+              key: '3',
+              value: '中国工商银行',
+              isChecked: false
+            }
+          ]
+        },
+        {
+          key: 'xyk',
+          value: '信用卡',
+          children: [
+            {
+              key: '1',
+              value: '中国光大银行',
+              isChecked: false
+            },
+            {
+              key: '2',
+              value: '中国广发银行',
+              isChecked: false
+            },
+            {
+              key: '3',
+              value: '中国浦发银行',
+              isChecked: false
+            }
+          ]
+        }
+      ],
     };
   },
   methods: {
@@ -116,6 +171,10 @@ export default {
         v.isChecked = false;
       });
       this.payCardTypes[index].isChecked = true;
+    },
+    showBankPicker() {
+      /* 显示银行picker */
+      this.isShowBankPicker = true;
     }
   },
 };

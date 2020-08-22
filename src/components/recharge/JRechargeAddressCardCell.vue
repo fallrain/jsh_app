@@ -5,6 +5,7 @@
       <view
         class="right iconfont iconyou"
         v-if="hasArrow"
+        @click="rightClick"
       ></view>
     </view>
     <view class="jRechargeAddressCardCell-default">
@@ -27,6 +28,11 @@ export default {
     hasArrow: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    rightClick() {
+      this.$emit('rightClick');
     }
   },
 };
