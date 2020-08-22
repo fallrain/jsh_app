@@ -83,7 +83,6 @@ export default {
 <style lang="scss">
   .jTextarea {
     border-radius: 5px;
-    padding: 5px 11px;
   }
 
   .jTextarea-ta {

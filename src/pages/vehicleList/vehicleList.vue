@@ -3,7 +3,7 @@
     <view class="vehicleList-tab">
       <view class="vehicle-search j-flex-aic">
         <j-search-input v-model="filterForm.name" @search="silentReSearch"></j-search-input>
-        <button type="button" class="vehicle-btn" @search="silentReSearch">搜索</button>
+        <button @tap="silentReSearch" class="vehicle-btn" type="button">搜索</button>
       </view>
       <view>
         <j-head-tab class="mb12" :tabs="tabs" :popTabs="popTabs" @tabClick="tabClick" @tabconfirmPup="tabconfirmPup"></j-head-tab>

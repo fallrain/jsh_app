@@ -67,7 +67,9 @@
             </view>
             <i class="iconfont iconyou goodsList-drawer-filter-head-icon-right"></i>
           </view>
-          <view class="goodsList-drawer-filter-head-ads">{{curChoseDeliveryAddress.name}} </view>
+          <view class="goodsList-drawer-filter-head-ads">
+            ({{curChoseDeliveryAddress.customerCode}}){{curChoseDeliveryAddress.customerName}}
+          </view>
         </view>
         <view class="goodsList-drawer-filter-head-ads-wrap">
           <view class="goodsList-drawer-filter-head">
@@ -221,6 +223,21 @@ export default {
       // 当前选中的配送地址
       curChoseDeliveryAddress: {}
     };
+  },
+  onLoad(options) {
+    // 其他页面传递过来的参数
+    const {
+      categoryCode,
+      attributeName,
+      attributeValue,
+      name
+    } = options;
+    this.tabConditions = {
+      categoryCode,
+      attributeName,
+      attributeValue
+    };
+    this.filterForm.name = name;
   },
   created() {
     this.getPageInf();
@@ -490,7 +507,8 @@ export default {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
-            name: `(${v.customerCode})${v.address}`
+            name: `(${v.customerCode})${v.customerName}`,
+            ...v
           }));
           // 当前配送地址修改(选出默认地址)
           const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
