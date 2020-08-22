@@ -1,5 +1,6 @@
 import {
-  jGet, jPostJson
+  jGet,
+  jPostJson
 } from '@/lib/request';
 import url from '../url/traffic.url';
 
@@ -19,10 +20,50 @@ export default {
   queryBaseCode() { // 基地?timestamp=1597133218359
     return jGet(url.queryBaseCode());
   },
-  queryEs(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center, brandName, sortDirection, sortType,
-    brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode) {
-    return jGet(url.queryES(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center, brandName,
-      sortDirection, sortType, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode));
+  queryEs(params) {
+    const {
+      timestamp,
+      categoryCode,
+      name,
+      pageNum,
+      pageSize,
+      customerCode,
+      dstCode,
+      center,
+      brandName,
+      sortDirection,
+      sortType,
+      brandGroup,
+      productCode,
+      highPrice,
+      lowPrice,
+      farWeekGroup,
+      baseCode,
+      attributeName,
+      attributeValue
+    } = params;
+    return jGet(url.queryES, {
+      timestamp,
+      isWholeCar: 1,
+      categoryCode,
+      name,
+      pageNum,
+      pageSize,
+      customerCode,
+      dstCode,
+      center,
+      brandName,
+      sortDirection,
+      sortType,
+      brandGroup,
+      productCode,
+      highPrice,
+      lowPrice,
+      farWeekGroup,
+      baseCode,
+      attributeName,
+      attributeValue
+    });
   },
   queryCustomerSendto(timestamp, customerCode) { // 整车--配送至
     return jGet(url.queryCustomerSendto(timestamp, customerCode));

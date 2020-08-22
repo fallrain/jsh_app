@@ -384,8 +384,25 @@ export default {
       const lowPrice = this.filterForm.lowPrice;
       const farWeekGroup = '';
       const baseCode = this.FHJD.ICC_JDCODE; // 发货基地/基地拼车为空的时候
-      const { code, data } = await this.vehicleService.queryEs(timetamp, categoryCode, name, pageNo, pageSize,
-        customerCode, dstCode, center, brandName, sortDirection, sortType, brandGroup, productCode, highPrice, lowPrice, farWeekGroup, baseCode);
+      const { code, data } = await this.vehicleService.queryEs({
+        timetamp,
+        categoryCode,
+        name,
+        pageNum: pageNo,
+        pageSize,
+        customerCode,
+        dstCode,
+        center,
+        brandName,
+        sortDirection,
+        sortType,
+        brandGroup,
+        productCode,
+        highPrice,
+        lowPrice,
+        farWeekGroup,
+        baseCode
+      });
       if (code === '1') {
         console.log('整车列表');
         if (data.code === '200') {
@@ -437,6 +454,13 @@ export default {
           this.pageNo = this.pageNo + 1;
           this.total = aaa.total;
           console.log(aaa);
+        } else {
+          this.vehicleList = [];
+          uni.showToast({
+            title: data.message,
+            icon: 'none',
+            duration: 3000
+          });
         }
       }
     },
