@@ -3,15 +3,16 @@
     <view class="vehicleList-tab">
       <view class="vehicle-search j-flex-aic">
         <j-search-input v-model="filterForm.name" @search="silentReSearch"></j-search-input>
-        <button type="button" class="vehicle-btn" @search="silentReSearch">搜索</button>
+        <button @tap="silentReSearch" class="vehicle-btn" type="button">搜索</button>
       </view>
       <view>
-        <j-head-tab class="mb12" :tabs="tabs" :popTabs="popTabs" @tabClick="tabClick" @tabconfirmPup="tabconfirmPup"></j-head-tab>
+        <j-head-tab :popTabs="popTabs" :tabs="tabs" @tabClick="tabClick" @tabconfirmPup="tabconfirmPup"
+                    class="mb12"></j-head-tab>
       </view>
     </view>
     <view>
       <view class="vehicle-listItem" v-if="vehicleList&&vehicleList.length>0">
-        <view v-for="(item,index) in vehicleList" :key="index" >
+        <view :key="index" v-for="(item,index) in vehicleList">
           <vehicle-item :goods="item" :index="index" @change="vehicleNum" @addCar="addVehicleCar"></vehicle-item>
         </view>
       </view>
@@ -27,7 +28,7 @@
           </view>
         </view>
         <j-drawer-filter-item v-for="(item,index) in filterList" :key="index" :filterItem="item"
-           :index="index" @change="filterListChange"></j-drawer-filter-item>
+                              :index="index" @change="filterListChange"></j-drawer-filter-item>
         <view class="vehicle-drawer-filter-head-ads-wrap">
           <view class="vehicle-drawer-filter-head" @tap="showDeliveryAddress">
             <view><text>配送至</text></view>
@@ -41,18 +42,25 @@
           </view>
           <view class="vehicle-drawer-filter-price-range">
             <input class="vehicle-drawer-filter-price-ipt"
-              type="number" placeholder="最低价格" v-model="filterForm.lowPrice">
+                   placeholder="最低价格" type="number" v-model="filterForm.lowPrice">
             <view class="vehicle-drawer-filter-price-line"></view>
             <input class="vehicle-drawer-filter-price-ipt"
-              type="number" placeholder="最高价格" v-model="filterForm.highPrice">
+                   placeholder="最高价格" type="number" v-model="filterForm.highPrice">
           </view>
         </view>
       </template>
     </j-drawer>
-    <j-choose-delivery-address :show.sync="isShowAddressDrawer" :list="deliveryAddressList" @change="deliveryAddressListChange">
+    <j-choose-delivery-address :list="deliveryAddressList" :show.sync="isShowAddressDrawer"
+                               @change="deliveryAddressListChange">
     </j-choose-delivery-address>
     <view class="vehicle-high"></view>
-    <view class="vehicle-foot"><vehicle-foot :carType="ZCLX.carNames" :carNum="carNum" :tiJiINfo="tiJiINfo"></vehicle-foot></view>
+    <view class="vehicle-foot">
+      <vehicle-foot :carNum="carNum" :carType="ZCLX.carNames" :tiJiINfo="tiJiINfo"></vehicle-foot>
+    </view>
+    <m-toast
+      :isdistance="true"
+      ref="toast"
+    ></m-toast>
   </view>
 </template>
 
@@ -66,8 +74,10 @@ import JDrawerFilterItem from '../../components/form/JDrawerFilterItem';
 import JSwitch from '../../components/form/JSwitch';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import vehicleFoot from '../../components/vehicleList/vehicleFoot';
+import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import {
-  mapGetters
+  mapGetters,
+  mapMutations
 } from 'vuex';
 import {
   USER
@@ -83,6 +93,7 @@ export default {
     JDrawerFilterItem,
     JSwitch,
     JChooseDeliveryAddress,
+    MToast,
     vehicleFoot
   },
   data() {
@@ -185,7 +196,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER,
+      userInf: USER.GET_SALE,
       sendToInf: USER.GET_DEFAULT_SEND_TO,
       saleInf: USER.GET_SALE,
     }),
@@ -208,6 +219,9 @@ export default {
     this.queryCarNum(); // 整车购物车数量查询
   },
   methods: {
+    ...mapMutations([
+      USER.UPDATE_DEFAULT_SEND_TO
+    ]),
     async queSeq() {
       const timetamp = new Date().valueOf();
       const typee = this.userInf.channelGroup;
@@ -266,17 +280,20 @@ export default {
       if (code === '1') {
         console.log('获取配送地址');
         if (data.code === '200') {
-          this.deliveryAddressList = JSON.parse(data.data).map(v => ({ // 配送地址列表
+          const dataList = JSON.parse(data.data);
+          this.deliveryAddressList = dataList.map(v => ({ // 配送地址列表
             id: v.customerCode,
             name: `(${v.customerCode})${v.customerName}`,
             checked: false,
-            info: v
+            ...v
           }));
-          if (this.deliveryAddressList[0]) { // 当前配送地址修改
-            this.deliveryAddressList[0].checked = true;
-            this.curChoseDeliveryAddress = this.deliveryAddressList[0];
+          // 当前配送地址修改(选出默认地址)
+          const defaultIndex = dataList.findIndex(v => v.defaultFlag === '1');
+          if (defaultIndex > -1) {
+            const curChoseDeliveryAddress = dataList[defaultIndex];
+            this.deliveryAddressList[defaultIndex].checked = true;
+            this.curChoseDeliveryAddress = curChoseDeliveryAddress;
           }
-          console.log(this.curChoseDeliveryAddress);
           this.querySendWay(); // 基地之后+配送至之后==配送类型
         }
       }
@@ -284,8 +301,8 @@ export default {
     async querySendWay() { // 配送类型
       const timetamp = new Date().valueOf();
       const YDPSJIDI = this.FHJD.ICC_JDCODE;
-      const sendtoMktid = this.curChoseDeliveryAddress.info.tradeCode;
-      const sendtoCode = this.curChoseDeliveryAddress.info.customerCode;
+      const sendtoMktid = this.curChoseDeliveryAddress.tradeCode;
+      const sendtoCode = this.curChoseDeliveryAddress.customerCode;
       const longfeiUSERID = this.userInf.customerCode;
       const { code, data } = await this.vehicleService.querySendWay(timetamp, YDPSJIDI, longfeiUSERID, sendtoMktid, sendtoCode);
       if (code === '1') {
@@ -317,7 +334,7 @@ export default {
       console.log(brandGroup);
       const { code, data } = await this.vehicleService.carType({
         brandProductGroup: brandGroup,
-        centerCode: this.curChoseDeliveryAddress.info.tradeCode,
+        centerCode: this.curChoseDeliveryAddress.tradeCode,
         deliveryType: this.PSLX.sendWayCode,
         jdCodeList: [this.FHJD.ICC_JDCODE],
         sendtoCode: this.sendToInf.customerCode
@@ -355,8 +372,8 @@ export default {
       const categoryCode = this.leiMu;
       const name = this.filterForm.name;
       const customerCode = userInf.customerCode;
-      const dstCode = this.curChoseDeliveryAddress.info.customerCode; // 配送至获取
-      const center = this.curChoseDeliveryAddress.info.tradeCode; // 配送至获取
+      const dstCode = this.curChoseDeliveryAddress.customerCode; // 配送至获取
+      const center = this.curChoseDeliveryAddress.tradeCode; // 配送至获取
       const pageSize = '15';
       const brandName = this.brandCheck;
       const sortDirection = this.sortDirection;
@@ -435,7 +452,10 @@ export default {
       console.log('777777');
       console.log(item);
       this.queSeq(); // 切换条件之后重新查询单号
-      this.FHJD = []; this.JDPC = []; this.PSLX = []; this.ZCLX = [];
+      this.FHJD = [];
+      this.JDPC = [];
+      this.PSLX = [];
+      this.ZCLX = [];
       this.popTabs[0].children.forEach((v) => {
         if (v.checked) { // 选中的发货基地
           this.FHJD = v;
@@ -577,7 +597,7 @@ export default {
         BATERATE: item.$PtPrice.rebateRate,
         CARCODE: this.ZCLX.carCode,
         CUSTUMER_TYPE: this.userInf.channelGroup,
-        HeightLimit: this.curChoseDeliveryAddress.info.ISXG,
+        HeightLimit: this.curChoseDeliveryAddress.ISXG,
         IBL_LOSSRATE: 0,
         IBL_PAYTO_TYPE: '00',
         IBL_TFSUMPRICE: 0,
@@ -600,9 +620,9 @@ export default {
         NUM: item.$num,
         PRODUCT_MODEL: item.module,
         PRO_BAND: item.brand,
-        SENDTO: this.curChoseDeliveryAddress.info.addressCode,
-        SENDTONAME: this.curChoseDeliveryAddress.info.addressName,
-        SENDTO_ADDRESS: this.curChoseDeliveryAddress.info.address,
+        SENDTO: this.curChoseDeliveryAddress.addressCode,
+        SENDTONAME: this.curChoseDeliveryAddress.addressName,
+        SENDTO_ADDRESS: this.curChoseDeliveryAddress.address,
         SEQ: this.SEQ,
         UNITPRICE: item.$PtPrice.invoicePrice.toString(),
         USERID: this.userInf.customerCode,
@@ -616,6 +636,7 @@ export default {
       });
       if (code === '1') {
         if (data.code === '200') {
+          this.showAddToCartToast();
           this.xiadanInfo = data.data;
           this.SEQ = data.data.SEQ;
           this.tiJiINfo.tiji = ((this.tiJiINfo.tiji * 1) + (this.xiadanInfo.TIJI * 1)).toFixed(2);
@@ -634,7 +655,15 @@ export default {
     silentReSearch() {
       /* sousuo */
       this.queryEs(1);
-    }
+    },
+    showAddToCartToast() {
+      /* 展示添加到购物车提示 */
+      this.$refs.toast.open({
+        type: 'success',
+        content: '加入整车成功',
+        timeout: 2000,
+      });
+    },
   }
 };
 </script>

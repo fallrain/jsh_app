@@ -41,7 +41,7 @@
     <view class="myOrderRow">
       <view class="colorBlock"></view>
       <view class="orderTitle">我的订单</view>
-      <view class="allOrder">全部订单</view>
+      <view class="allOrder" @click="goAllOrder">全部订单</view>
     </view>
 
     <view class="order-cataloglist">
@@ -49,7 +49,7 @@
         class="order-cataloglist-item"
         v-for="item in cataloglist"
         :key="item.id"
-        @click="goCatalog(item.url)"
+        @click="goCatalog(item.url,item.sex)"
       >
         <image :src="item.src" class="infor-item-img" mode="aspectFit"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -130,55 +130,64 @@ export default {
           id: 1,
           src: require('./image/jiesuan.png'),
           title: '待结算',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 0
         },
         {
           id: 2,
           src: require('./image/koukuan.png'),
           title: '待扣款',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 1
         },
         {
           id: 3,
           src: require('./image/daifahuo.png'),
           title: '待发货',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 2
         },
         {
           id: 4,
           src: require('./image/yifahuo.png'),
           title: '已发货',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 3
         },
         {
           id: 5,
           src: require('./image/yiqianshou.png'),
           title: '已签收',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 4
         },
         {
           id: 6,
           src: require('./image/danju.png'),
-          title: '物流单据',
-          url: '/pages/orderList/orderList'
+          title: '物流拒单',
+          url: '/pages/orderList/orderList',
+          sex: 7
         },
         {
           id: 7,
           src: require('./image/tuihuo.png'),
           title: '退货订单',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 8
         },
         {
           id: 8,
           src: require('./image/yiquxiao.png'),
           title: '已取消',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 6
         },
         {
           id: 9,
           src: require('./image/daifahuo.png'),
           title: '已开票',
-          url: '/pages/orderList/orderList'
+          url: '/pages/orderList/orderList',
+          sex: 5
         }
       ],
       inforlist: [
@@ -308,6 +317,11 @@ export default {
         url: '/pages/mine/mySDFInfo'
       });
     },
+    goAllOrder() { // 前往订单列表，全部
+      uni.navigateTo({
+        url: `/pages/orderList/orderList?index=${0}`
+      });
+    }
   },
 };
 </script>
@@ -395,7 +409,7 @@ export default {
     margin-left: 48px;
     padding-top: 44px;
     height: 14px;
-    font-size: 10px;
+    font-size: 20px;
     font-weight: 400;
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
@@ -524,7 +538,7 @@ export default {
     height: 156px;
     background: url('./image/shangpinguanzhu.png') no-repeat;
     background-size: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-left: 120px;
     margin-bottom: 4px;
   }
@@ -553,7 +567,7 @@ export default {
     height: 156px;
     background: url('./image/jingyingkanban.png') no-repeat;
     background-size: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-left: 120px;
     margin-bottom: 4px;
   }
