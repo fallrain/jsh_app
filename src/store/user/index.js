@@ -26,7 +26,7 @@ export default {
     },
     [USER.UPDATE_SALE](state, data) {
       /* 修改送达方信息 */
-      state.userInfo = data;
+      state.saleInfo = data;
     },
     [USER.UPDATE_TOKEN_USER](state, data) {
       /* 修改token用户信息 */
@@ -73,7 +73,7 @@ export default {
     },
     [USER.GET_SALE](state) {
       /* 售达方信息 */
-      return state.userInfo;
+      return state.saleInfo;
     },
     [USER.GET_TOKEN_USER](state) {
       /* token用户信息 */
