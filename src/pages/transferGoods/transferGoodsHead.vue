@@ -95,10 +95,10 @@ export default {
     };
   },
   created() {
+      
   },
   methods: {
-    setPopTabs(wareHome, sendWay) { 
-      console.log(wareHome)  
+    setPopTabs(wareHome, sendWay) {   
       if (wareHome) {
         const tempArray = []
         wareHome.map(item => {
@@ -162,39 +162,29 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-// ::v-deep .jHeadTabPicker{
-//     position: fixed;
-//     z-index: 98;
-//     background: #F7F7F8;
-//     top: 24%;
-//     width: 100vw;
-//     min-height: 129px;
-//     padding-bottom: 44px;
-//     border-bottom-left-radius: 5px;
-//     border-bottom-right-radius: 5px;
-//     -webkit-transform: translateY(-100%);
-//     transform: translateY(-100%);
-//     -webkit-transition: -webkit-transform 0.3s;
-//     transition: -webkit-transform 0.3s;
-//     transition: transform 0.3s;
-//     margin-top: -0.5px;
+// ::v-deep .jHeadTabPicker-item{
+//   position: relative;
+//   width: 50%;
+//   overflow: hidden;
+//   margin-top:10px;
   
 // }
 
 .jHeadTab-wrap {
-  position: relative;
+  position: fixed;
   background: #fff;
   height: 130px;
+  width: 100%;
+  top: 180px;
+  z-index: 100;
 }
 
 
 .jHeadTab-list-wrap{
-    position: fixed;
-    background: #fff;
-    width: 100%;
-    height: 71px;
-    top: 170px;
-    z-index: 100;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 99;
 }
 
 .jHeadTab-list {
@@ -233,7 +223,7 @@ $jHeadTab-pop-tab-list: 24px;
   padding-bottom: $jHeadTab-pop-tab-list;
   background: #fff;
   height: 92px;
-
+  margin-top: -2px;
   &.isExpend {
     padding-bottom: 0;
   }

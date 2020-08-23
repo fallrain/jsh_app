@@ -1,6 +1,7 @@
 <template>
     <view class="transferGoods">
-      <view class="transfer-search">
+      <view class= "transferGoods-head">
+        <view class="transfer-search">
           <j-search-input
             v-model="filterForm.name"
             @search="silentReSearch"
@@ -11,17 +12,18 @@
             @tap="silentReSearch"
           >搜索
           </button>
+        </view>
+        <view class="transfer-m"></view>
+        <transfer-goods-head
+            class="mb12"
+            :tabs="tabs"
+            @confirm="confirm"
+            @tabClick="tabClick"
+            :cargoWareHome="cargoWareHome"
+            :cargoSendWay="cargoSendWay" 
+            ref="transferGoodsHead"
+        ></transfer-goods-head>
       </view>
-      <view class="transfer-m"></view>
-      <transfer-goods-head
-          class="mb12"
-          :tabs="tabs"
-          @confirm="confirm"
-          @tabClick="tabClick"
-          :cargoWareHome="cargoWareHome"
-          :cargoSendWay="cargoSendWay" 
-          ref="transferGoodsHead"
-      ></transfer-goods-head>
 
       <mescroll-body
         ref="mescrollRef"

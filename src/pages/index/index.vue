@@ -14,7 +14,6 @@
             v-model="name"
           >
         </view>
-
         <view class='iconfont iconpeople homepage-top-head-icon'></view>
       </view>
       <!-- 全部 -->
@@ -85,16 +84,29 @@
             :key="item.id"
         
           >
-            <view class="homepage-recommend-name">
+            <!-- <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
             </view>
             <image class="homepage-recommend-image" :src="item.image" mode="aspectFill" />
             <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
-          </view>
+           -->
+           <view class="homepage-recommend-name">
+              <view class="homepage-recommend-title">{{item.title}}</view>
+              <view class="homepage-recommend-describe">{{item.describe}}</view>
+            </view>
+            <uni-grid :column="1"  class="homepage-recommend-imgs" v-for="(v,index) in item.data" :key="v.index">
+              <uni-grid-item>                
+                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />   
+              </uni-grid-item>
+              <uni-grid-item>                
+                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />   
+              </uni-grid-item>
+          </uni-grid>
+        </view>
         </view>
         <!-- 资讯 -->
-        <view class="homepage-info">
+        <!-- <view class="homepage-info">
           <view class="homepage-info-name">
             <text class="homepage-info-title">热门资讯</text>
             <text class="homepage-info-more">MORE</text>
@@ -106,11 +118,10 @@
             :key="item.id"
           >
             <view class="homepage-info-list-hot" @tap="goDetail">{{item.title}}</view>
-            <!-- <view class="homepage-info-list-title">{{item.info}}</view> -->
+            <view class="homepage-info-list-title">{{item.info}}</view>
           </view>
           </view>
-
-        </view>
+        </view> -->
       </view>
       <!-- tabber -->
         <!-- <view
@@ -133,7 +144,7 @@
 
 <script>
 import {
-  uniSwiperDot
+  uniSwiperDot,uniGrid,uniGridItem
 } from '@dcloudio/uni-ui';
 import JSearchInput from '../../components/form/JSearchInput';
 import {
@@ -148,7 +159,9 @@ export default {
   name: 'index',
   components: {
     uniSwiperDot,
-    JSearchInput
+    JSearchInput,
+    uniGrid,
+    uniGridItem
   },
   data() {
     return {
@@ -184,7 +197,7 @@ export default {
           id: 3,
           src: require('@/assets/img/index/function-qiang.png'),
           title: '抢单',
-          url: 'null'
+          url: '/pages/goods/goodsList?isFlashSale=1'
         },
         {
           id: 4,
@@ -202,19 +215,19 @@ export default {
           id: 6,
           src: require('@/assets/img/index/function-sale.png'),
           title: '特价',
-          url: 'null'
+          url: '/pages/goods/goodsList?isSpecialOffer=1'
         },
         {
           id: 7,
           src: require('@/assets/img/index/function-project.png'),
           title: '工程',
-          url: 'null'
+          url: '/pages/goods/goodsList?isProject=1'
         },
         {
           id: 8,
           src: require('@/assets/img/index/function-tv.png'),
           title: '样机',
-          url: 'null'
+          url: '/pages/goods/goodsList?isSample=1'
         },
         {
           id: 9,
@@ -229,40 +242,67 @@ export default {
           url: "/pages/market/marketList"
         }
       ],
-      recommendList: [
+      recommendList:[
         {
           id: 1,
           title: '新品推荐',
           describe: '人气榜',
-          image: require('@/assets/img/index/FC511Z00L.png'),
-          img: require('@/assets/img/index/GD0R7N000.png'),
-          url: '#'
+          data:[]
         },
         {
           id: 2,
           title: '爆款推荐',
           describe: 'HOT',
-          image: require('@/assets/img/index/CEAAJ300F.png'),
-          img: require('@/assets/img/index/BH02Z00A8.png'),
-          url: '#'
+          data:[]
         },
         {
           id: 3,
           title: '我的专供',
           describe: '热卖好物',
-          image: require('@/assets/img/index/FC511Z00L.png'),
-          img: require('@/assets/img/index/GE0QA000W.png'),
-          url: '#'
+          data:[]
         },
         {
           id: 4,
           title: '聚划算',
           describe: '精选榜单',
-          image: require('@/assets/img/index/FC511Z00L.png'),
-          img: require('@/assets/img/index/GD0R7N000.png'),
-          url: '#'
+          data:[]
         },
+
       ],
+      // recommendList: [
+      //   {
+      //     id: 1,
+      //     title: '新品推荐',
+      //     describe: '人气榜',
+      //     image: require('@/assets/img/index/FC511Z00L.png'),
+      //     img: require('@/assets/img/index/GD0R7N000.png'),
+      //     url: '#'
+      //   },
+      //   {
+      //     id: 2,
+      //     title: '爆款推荐',
+      //     describe: 'HOT',
+      //     image: require('@/assets/img/index/CEAAJ300F.png'),
+      //     img: require('@/assets/img/index/BH02Z00A8.png'),
+      //     url: '#'
+      //   },
+      //   {
+      //     id: 3,
+      //     title: '我的专供',
+      //     describe: '热卖好物',
+      //     image: require('@/assets/img/index/FC511Z00L.png'),
+      //     img: require('@/assets/img/index/GE0QA000W.png'),
+      //     url: '#'
+      //   },
+      //   {
+      //     id: 4,
+      //     title: '聚划算',
+      //     describe: '精选榜单',
+      //     image: require('@/assets/img/index/FC511Z00L.png'),
+      //     img: require('@/assets/img/index/GD0R7N000.png'),
+      //     url: '#'
+      //   },
+      // ],
       infoList: []
       // infoList: [
       //   {
@@ -329,8 +369,12 @@ export default {
       // })().then(res =>{
       //     // this.get()
       // })
-      this.getIndexList()
-      this.getList()
+      // this.getIndexList()
+      this.getList();
+      this.getXinPin();
+      this.getBaoKuan();
+      this.getZhuanGong();
+      this.getBaoKuan();
       this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       this[USER.UPDATE_SALE_ASYNC]();
       this[USER.UPDATE_TOKEN_USER_ASYNC]();
@@ -341,7 +385,8 @@ export default {
   computed: {
     ...mapGetters({
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-      tokenUserInf:USER.GET_TOKEN_USER
+      tokenUserInf:USER.GET_TOKEN_USER,
+      saleInfo: USER.GET_SALE
     })
   },
   methods: {
@@ -406,12 +451,60 @@ export default {
     // 新闻资讯
     async getIndexList() {
       const list = await this.messageService.indexList ({
-        customerCode: this.defaultSendToInf.customerCode,
+        customerCode: this.saleInfo.customerCode,
         unitId: this.tokenUserInf.name
       })
       if(list.code === "1") {
         console.log(list.data)
         this.infoList = list.data.slice(0,4)
+      }
+    },
+    // 新品推荐列表
+    async getXinPin() {
+      const {code, data} = await this.activityService.xinPin ({
+       saletoCode: this.saleInfo.customerCode,
+       sendtoCode: this.defaultSendToInf.customerCode,
+      })
+      if(code === "1") {
+        console.log(this.recommendList[0])
+        this.recommendList[0].data = data
+        
+      }
+    },
+    // 爆款推荐
+    async getBaoKuan() {
+      const {code, data} = await this.activityService.baoKuan ({
+       saletoCode: this.saleInfo.customerCode,
+       sendtoCode: this.defaultSendToInf.customerCode,
+      })
+      if(code === "1") {
+        console.log(this.recommendList[1])
+        this.recommendList[1].data = data
+        
+      }
+    },
+    // 我的专供
+    async getZhuanGong() {
+      const {code, data} = await this.activityService.zhuanGong ({
+       saletoCode: this.saleInfo.customerCode,
+       sendtoCode: this.defaultSendToInf.customerCode,
+      })
+      if(code === "1") {
+        this.recommendList[2].data = data
+        console.log(this.recommendList[2])
+        
+      }
+    },
+    // 聚划算
+    async getZiYuanJi() {
+      const {code, data} = await this.activityService.ziYuanJi ({
+       saletoCode: this.saleInfo.customerCode,
+       sendtoCode: this.defaultSendToInf.customerCode,
+      })
+      if(code === "1") {
+        this.recommendList[3].data = data
+        console.log(data)
+        console.log(this.recommendList)
       }
     },
     // 应用列表
@@ -471,6 +564,10 @@ export default {
   padding-left: 22px;
   padding-right: 26px;
   margin-right:26px;
+  position: absolute;
+  left: 150px;
+  top:30px;
+  margin: 0px;
 }
 /deep/ .col_c{
 		 color: #fff;

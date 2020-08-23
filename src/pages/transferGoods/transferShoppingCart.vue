@@ -503,14 +503,17 @@ export default {
       let chooseNum = 0
       this.allOrderList.forEach(ele => {
         if (!ele.checked) {
+          console.log(123)
           this.isCheckAll = false
           return
         }
-        if(ele.checked) {
+        if(this.isCheckAll) {
+          console.log(1)
           chooseNum += ele.data.orderList.length
           console.log(ele)
           console.log(chooseNum)
         } else {
+          console.log(2)
           chooseNum = 0
         }        
       })
