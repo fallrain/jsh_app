@@ -119,8 +119,8 @@ import {
   getGoodsType
 } from '@/lib/dataDictionary';
 import {
-  mapMutations,
-  mapGetters
+  mapGetters,
+  mapMutations
 } from 'vuex';
 import {
   USER
@@ -218,6 +218,8 @@ export default {
         // 最高价
         highPrice: ''
       },
+      // 传递来的filer数据
+      filterArgsFromOther: {},
       // 配送地址数据
       deliveryAddressList: [],
       // 当前选中的配送地址
@@ -230,7 +232,17 @@ export default {
       categoryCode,
       attributeName,
       attributeValue,
-      name
+      name,
+      // 筛选项
+      isFlashSale,
+      isBigorder,
+      isArbitrage,
+      isCompose,
+      isNewProduct,
+      isSpecialOffer,
+      isProject,
+      isSample,
+      isScf,
     } = options;
     this.tabConditions = {
       categoryCode,
@@ -238,6 +250,18 @@ export default {
       attributeValue
     };
     this.filterForm.name = name;
+    // 传递来的filter数据
+    this.filterArgsFromOther = {
+      isFlashSale,
+      isBigorder,
+      isArbitrage,
+      isCompose,
+      isNewProduct,
+      isSpecialOffer,
+      isProject,
+      isSample,
+      isScf,
+    };
   },
   created() {
     this.getPageInf();
@@ -469,6 +493,12 @@ export default {
         value: goodsTypeData[key],
         isChecked: false
       }));
+      // 从其他页面传递来的数据如果有"筛选"选项，则选中
+      this.filterList[0].data.forEach((v) => {
+        if (this.filterArgsFromOther[v.key]) {
+          v.isChecked = true;
+        }
+      });
       // 商品标签
       const goodsTagData = getGoodsTag();
       this.filterList[1].data = Object.keys(goodsTagData).map(key => ({
