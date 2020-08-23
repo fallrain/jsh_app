@@ -82,5 +82,14 @@ export default {
   },
   queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid) { // 整车购物车详情页面查询价格
     return jGet(url.queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid));
+  },
+  cartSubmitPreCheck(a, b, c) { // 整车购物车提交结算校验
+    return jGet(url.cartSubmitPreCheck(a, b, c));
+  },
+  cartSubmit(timestamp, longfeiUSERID, IBR_SEQ, verifyCode, verifyKey) { // 整车购物车提交
+    return jGet(url.cartSubmit(timestamp, longfeiUSERID, IBR_SEQ, verifyCode, verifyKey));
+  },
+  deleteVehicleOrder(timestamp, longfeiUSERID, IBR_SEQ) { // 删除订单
+    return jGet(url.deleteVehicleOrder(timestamp, longfeiUSERID, IBR_SEQ));
   }
 };

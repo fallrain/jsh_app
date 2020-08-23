@@ -16,11 +16,11 @@ export default {
   },
   'mp-alipay': {
     dev: {
-      baseUrl: 'https://new.jsh.com',
+      baseUrl: 'https://mall.jsh.com',
       cBaseUrl: 'https://c.jsh.com',
     },
     sit: {
-      baseUrl: 'https://new.jsh.com',
+      baseUrl: 'https://mall.jsh.com',
       cBaseUrl: 'https://c.jsh.com',
     },
     prod: {

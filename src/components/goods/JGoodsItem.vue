@@ -6,7 +6,10 @@
       v-if="isEditMode"
     >
     </view>
-    <view class="jGoodsItem-left">
+    <view
+      @tap="goDetail"
+      class="jGoodsItem-left"
+    >
       <image :src="goods.image.masterImage"></image>
     </view>
     <view class="jGoodsItem-cnt">
@@ -14,14 +17,14 @@
         {{goods.productName | rmHtml}}
       </view>
       <view class="jGoodsItem-cnt-price-tips">
-        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice.rebateRate,100)}}%</view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice.rebateMoney}}</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100)}}%</view>
+        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock.stockTotalNum}}</view>
+        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice && goods.$PtPrice.invoicePrice}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice && goods.$PtPrice.supplyPrice}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
@@ -327,6 +330,15 @@ export default {
       this.$set(this.goods, 'isChecked', isChecked);
       this.$emit('change', this.goods, this.index);
       this.$emit('check', isChecked, this.goods.productCode, this.goods);
+    },
+    goDetail() {
+      /* 跳转产品详情 */
+      const queryStr = this.jshUtil.genQueryStringByObj({
+        productCode: this.goods.productCode
+      });
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail${queryStr}`
+      });
     }
   }
 };

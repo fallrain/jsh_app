@@ -41,6 +41,7 @@
       :list="failureGoodsList"
       @change="failureGoodsListChange"
     ></j-failure-goods-list>
+    <!-- --window-bottom -->
     <j-shopping-cart-btm
       :checked.sync="isCheckAll"
       @checkAll="checkAll"
@@ -48,7 +49,7 @@
     <j-address-picker
       :show.sync="isShowAdsPicker"
       :pickerList="sendCustomerList"
-      @change="sendCustomerListChange"
+      @change="sendCustomerListChange" s
     ></j-address-picker>
   </view>
 </template>
@@ -68,7 +69,7 @@ import {
 
 
 export default {
-  name: 'shoppingCart',
+  name: 's',
   components: {
     JTab,
     JAddressPicker,
@@ -256,7 +257,7 @@ export default {
       this.specialPriceMap = (data && data) || {};
     },
     goodsChange(goods, index) {
-      console.log(goods)
+      console.log(goods);
       this.shoppingList[index] = goods;
       this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
     },

@@ -1,5 +1,5 @@
 // const env = process.env.NODE_ENV_MODE;
-// const path = require('path');
+const path = require('path');
 
 // const webpack = require('webpack');
 
@@ -24,5 +24,28 @@ module.exports = {
     }
   },
   chainWebpack: (config) => {
-  },
+    config.module.rule('images')
+      .exclude.add(path.resolve(__dirname, 'src/assets/img/tabbar/'))
+      .end();
+    config.module.rule('images-tab-bar')
+      .test(/\.(png|jpe?g|gif|webp)(\?.*)?$/)
+      .pre()
+      .include.add(path.resolve(__dirname, 'src/assets/img/tabbar/'))
+      .end()
+      .use('url-loader')
+      .loader('url-loader')
+      .tap(options => ({
+        ...options,
+        limit: 1,
+        fallback: {
+          loader: 'file-loader',
+          options: {
+            name: 'static/img/[name].[ext]'
+          }
+        }
+
+      }))
+      .end();
+    return config;
+  }
 };

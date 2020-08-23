@@ -4,16 +4,16 @@
       <view :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></view>
       <text :class="['v-c-foot-lin-tex1',checked && 'active']">全选</text>
     </view>
-    <text class="v-c-foot-lin-edit">编辑</text>
+    <text class="v-c-foot-lin-edit" @click="changTex">{{exit ? '编辑' : '完成'}}</text>
     <view class="v-c-foot-lin-tex2">
-      已选中<text class="v-c-foot-lin-tex2-highlight">7</text>种
+      已选中<text class="v-c-foot-lin-tex2-highlight">{{num}}</text>车
     </view>
     <view class="v-c-foot-lin-tex3">|</view>
     <view class="v-c-foot-lin-tex4">
       <text>合计：</text>
-      <view class="v-c-foot-lin-tex4-price">¥283945.12</view>
+      <view class="v-c-foot-lin-tex4-price">¥{{numAll.toFixed(2)}}</view>
     </view>
-    <button type="button" class="v-c-foot-btn">结算
+    <button type="button" class="v-c-foot-btn" @click="comfim">{{exit ? '结算' : '删除'}}
     </button>
   </view>
 </template>
@@ -26,13 +26,33 @@ export default {
     checked: {
       type: Boolean,
       default: false
+    },
+    seq: {
+      type: [Number, String]
+    },
+    num: {
+      type: [Number, String]
+    },
+    numAll: {
+      type: [Number, String]
     }
   },
+  data() {
+    return {
+      exit: true,
+    };
+  },
   methods: {
+    changTex() {
+      this.exit = !this.exit;
+    },
     choose() {
       const checked = !this.checked;
       this.$emit('update:checked', checked);
       this.$emit('checkAll', checked);
+    },
+    comfim() {
+      this.$emit('comfimVehi', this.exit);
     }
   }
 };
@@ -61,7 +81,7 @@ export default {
       color: #CFCFCF;
 
     &.active {
-       color: $theme-color;
+       color: #2283E2;
      }
     }
   }
@@ -71,7 +91,7 @@ export default {
     margin-left: 8px;
 
     &.active {
-      color: $theme-color;
+      color: #2283E2;
     }
   }
   .v-c-foot-lin-edit{

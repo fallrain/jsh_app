@@ -46,7 +46,7 @@ export default {
 <style lang="scss">
   .jShoppingCartBtm {
     position: fixed;
-    bottom: 0;
+    bottom: var(--window-bottom);
     left: 0;
     right: 0;
     display: flex;
