@@ -21,15 +21,8 @@ const urls = {
   queryCustomerSendto(timestamp, customerCode) { // 整车--配送至
     return `/queryCustomer/queryCustomerSendto?timestamp=${timestamp}&customerCode=${customerCode}`;
   },
-  queryES(timestamp, categoryCode, name, pageNum, pageSize, customerCode, dstCode, center,
-    brandName, sortDirection, sortType, brandGroup, productCode, highPrice, lowPrice,
-    farWeekGroup, baseCode) {
-    return `/querySample/queryEs?timestamp=${timestamp}&categoryCode=${categoryCode}&name=${name
-    }&attributeName=&attributeValue=&pageNum=${pageNum}&pageSize=${pageSize}&customerCode=${customerCode
-    }&dstCode=${dstCode}&center=${center}&isWholeCar=1&group=&brandName=${brandName}&sortDirection=${sortDirection
-    }&sortType=${sortType}&tags=&brandGroup=${brandGroup}&productCode=${productCode}&highPrice=${highPrice
-    }&lowPrice=${lowPrice}&farWeekGroup=${farWeekGroup}&baseCode=${baseCode}`;
-  },
+  // 查询整车列表
+  queryES: '/querySample/queryEs',
   queryCarNum(timestamp, longfeiUSERID) { // 整车购物车数量查询
     return `/queryOrder/shoppingCartNum?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}`;
   },
