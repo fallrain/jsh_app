@@ -1,14 +1,24 @@
 import {
-  jGet, jPost, jPostJson
+  jGet,
+  jPost,
+  jPostJson
 } from '@/lib/request';
 import url from '../url/productDetail.url';
 import urls from '../url/productActivity.url';
 import urles from '../url/mineCustomer.url';
 
 export default {
-  productDetail(code, codeSale, codeSend) {
+  productDetail({
+    code,
+    codeSale,
+    codeSend
+  }) {
     /* 产品详情 */
-    return jGet(url.productDetail(code, codeSale, codeSend));
+    return jGet(url.productDetail(
+      code,
+      codeSale,
+      codeSend
+    ));
   },
   productStock(data) {
     /* 产品-库存 */
