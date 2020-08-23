@@ -17,7 +17,10 @@
       <t-failure-goods-list :list="failureGoodsList" @change="failureGoodsListChange"></t-failure-goods-list>
     </view>
     <view class="vehicleCar-high"></view>
-    <view class="vehicleCar-foot"><vehicle-car-foot></vehicle-car-foot></view>
+    <view class="vehicleCar-foot">
+      <vehicle-car-foot @checkAll="checkAll" :seq="checkSEQ" :num="checkNum" :numAll="checkAllNum" :checked="checked" @comfimVehi="comfimVehi">
+      </vehicle-car-foot>
+    </view>
   </view>
 </template>
 
@@ -51,6 +54,10 @@ export default {
   },
   data() {
     return {
+      checked: false, // 全选单子
+      checkNum: 0, // 选中的单子
+      checkAllNum: 0, // 选中的单子的总金额
+      checkSEQ: '', // 选中的单子单号
       NUM: 0, // 有效产品数量
       puTongList: [],
       pingCheList: [],
@@ -81,9 +88,20 @@ export default {
   },
   created() {
     this.queryCarList(); // 整车购物车列表查询
-    this.getPayerList(); // 获取付款方接口
+    // this.getPayerList(); // 获取付款方接口
   },
   methods: {
+    clearInfo() {
+      this.NUM = 0;
+      this.failureGoodsList = [];
+      this.puTongList = [];
+      this.pingCheList = [];
+      this.guaDanList = [];
+      this.checked = false;
+      this.checkNum = 0; // 选中的单子
+      this.checkAllNum = 0; // 选中的单子的总金额
+      this.checkSEQ = ''; // 选中的单子单号
+    },
     async queryCarList() {
       const timetamp = new Date().valueOf();
       const longfeiUSERID = this.userInf.customerCode;
@@ -91,7 +109,7 @@ export default {
       if (code === '1') {
         console.log('整车购物车查询');
         console.log(data);
-        this.NUM = 0;
+        this.clearInfo();
         data.data.forEach((inf) => {
           if (inf.IBR_ISFLAG === '失效产品' && inf.orderList.length > 0) {
             inf.checked = false;
@@ -129,9 +147,35 @@ export default {
       }
     },
     goodsChange(item, index) {
-      console.log('222222');
+      console.log('uuuuuuu');
       console.log(item);
       console.log(index);
+      this.checked = false;
+      this.checkNum = 0; // 选中的单子
+      this.checkAllNum = 0; // 选中的单子的总金额
+      this.checkSEQ = ''; // 选中的单子单号
+      this.puTongList.forEach((inf) => { // 普通整车
+        if (inf.checked) {
+          this.checkNum = this.checkNum + 1;
+          this.checkAllNum = this.checkAllNum + (inf.SUMMONEY * 1);
+          this.checkSEQ = `${this.checkSEQ + inf.IBR_SEQ},`;
+        }
+      });
+      this.pingCheList.forEach((inf) => { // 拼车订单
+        if (inf.checked) {
+          this.checkNum = this.checkNum + 1;
+          this.checkAllNum = this.checkAllNum + (inf.SUMMONEY * 1);
+          this.checkSEQ = `${this.checkSEQ + inf.IBR_SEQ},`;
+        }
+      });
+      this.guaDanList.forEach((inf) => { // 我的挂单
+        if (inf.checked) {
+          this.checkNum = this.checkNum + 1;
+          this.checkAllNum = this.checkAllNum + (inf.SUMMONEY * 1);
+          this.checkSEQ = `${this.checkSEQ + inf.IBR_SEQ},`;
+        }
+      });
+      console.log(this.checkSEQ);
     },
     pullDetail(item) {
       // console.log(item);
@@ -182,6 +226,64 @@ export default {
           });
         }
       });
+    },
+    checkAll() {
+      console.log('2222');
+      if (this.checked) {
+        this.checked = false;
+        this.checkNum = 0; // 选中的单子
+        this.checkAllNum = 0; // 选中的单子的总金额
+        this.checkSEQ = ''; // 选中的单子单号
+        this.puTongList.forEach((inf) => { // 普通整车
+          inf.checked = false;
+        });
+        this.pingCheList.forEach((inf) => { // 拼车订单
+          inf.checked = false;
+        });
+        this.guaDanList.forEach((inf) => { // 我的挂单
+          inf.checked = false;
+        });
+      } else {
+        this.checked = true;
+        this.checkNum = 0; // 选中的单子
+        this.checkAllNum = 0; // 选中的单子的总金额
+        this.checkSEQ = ''; // 选中的单子单号
+        this.checkNum = this.puTongList.length + this.pingCheList.length + this.guaDanList.length;
+        this.puTongList.forEach((inf) => { // 普通整车
+          inf.checked = true;
+          this.checkAllNum = this.checkAllNum + (inf.SUMMONEY * 1);
+          this.checkSEQ = `${this.checkSEQ + inf.IBR_SEQ},`;
+        });
+        this.pingCheList.forEach((inf) => { // 拼车订单
+          inf.checked = true;
+          this.checkAllNum = this.checkAllNum + (inf.SUMMONEY * 1);
+          this.checkSEQ = `${this.checkSEQ + inf.IBR_SEQ},`;
+        });
+        this.guaDanList.forEach((inf) => { // 我的挂单
+          inf.checked = true;
+          this.checkAllNum = this.checkAllNum + (inf.SUMMONEY * 1);
+          this.checkSEQ = `${this.checkSEQ + inf.IBR_SEQ},`;
+        });
+      }
+    },
+    async comfimVehi(item) {
+      console.log('jiesuanzhengche');
+      if (item) { // 结算
+        console.log('结算');
+      } else { // 删除
+        console.log('删除');
+        const timetamp = new Date().valueOf();
+        const longfeiUSERID = this.userInf.customerCode;
+        const { code, data } = await this.vehicleService.deleteVehicleOrder(timetamp, longfeiUSERID, this.checkSEQ);
+        if (code === '1') {
+          console.log('结算1');
+          if (data.code === '200') {
+            console.log('结算2');
+          } else {
+          }
+          this.queryCarList();
+        }
+      }
     }
   }
 };
