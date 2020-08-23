@@ -16,7 +16,7 @@
         <view class="jOveragePay-cnt-item-total j-flex-aic">
           <view class="jOveragePay-cnt-item-total-item">
             <view class="jOveragePay-cnt-item-total-text">可用余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
+            <view class="jOveragePay-cnt-item-total-price">¥ {{item.balance}}</view>
           </view>
           <view class="jOveragePay-cnt-item-total-item-line">
           </view>
@@ -25,6 +25,7 @@
             <view class="jOveragePay-cnt-item-total-price">¥ {{item.totalMoney}}</view>
           </view>
           <button
+            v-if="compareMoney(item.balance, item.totalMoney)"
             type="button"
             class="jOveragePay-cnt-item-total-btn"
           >余额不足，去支付</button>
@@ -43,6 +44,19 @@ export default {
       type: Array,
       default: () => []
     },
+  },
+  created() {
+    console.log(this.payerMoneyList);
+  },
+  watch: {
+    payerMoneyList() {
+      console.log(this.payerMoneyList);
+    }
+  },
+  computed: {
+    compareMoney() {
+      return (val1, val2) => (parseFloat(val1) < parseFloat(val2));
+    }
   }
 };
 </script>
