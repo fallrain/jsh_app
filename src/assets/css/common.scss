@@ -315,6 +315,72 @@
 
 /*col end*/
 
+/*dis */
+
+.dis-none {
+  display: none;
+}
+
+.dis-none-imp {
+  display: none !important;
+}
+
+.dis-block {
+  display: block;
+}
+
+.dis-block-imp {
+  display: block !important;
+}
+
+.dis-inline {
+  display: inline;
+}
+
+.dis-inline-imp {
+  display: inline !important;
+}
+
+.dis-ib {
+  display: inline-block;
+}
+
+.dis-ib-imp {
+  display: inline-block !important;
+}
+
+.dis-table {
+  display: table;
+}
+
+.dis-cell {
+  display: table-cell;
+}
+
+.dis-flex {
+  display: flex;
+}
+
+.dis-flex-sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pseudo-clear:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+.pseudo-clear:before {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+/*dis end*/
+
 /*flex start*/
 .dis-flex {
   display: flex;

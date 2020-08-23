@@ -5,7 +5,7 @@
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
 
-          <view class="jSearchInput-wrap j-flex-aic">
+        <view class="jSearchInput-wrap j-flex-aic">
           <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
           <input
             class="jSearchInput"
@@ -19,7 +19,7 @@
         <view class='iconfont iconpeople homepage-top-head-icon'></view>
       </view>
       <!-- 全部 -->
-      <scroll-view 
+      <scroll-view
         class="homepage-top-center"
         scroll-x
         scroll-with-animation
@@ -30,20 +30,20 @@
           :key="index"
           scroll-x
           scroll-with-animation
-          @tap ="goGoodsList(item)"
+          @tap="goGoodsList(item)"
         >
-        {{item.title}}
+          {{item.title}}
         </view>
-      </scroll-view >
-          <!-- 轮播图 -->
+      </scroll-view>
+      <!-- 轮播图 -->
       <view class="homepage-swiper">
 
         <uni-swiper-dot
-        :info="bannerList"
-        :current="current"
-        :mode="mode"
-        field="content"
-        :dotsStyles="dotsStyles"
+          :current="current"
+          :dotsStyles="dotsStyles"
+          :info="bannerList"
+          :mode="mode"
+          field="content"
         >
           <swiper class="swiper-box" @change="changePic">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
@@ -63,97 +63,115 @@
         :key="item.id"
         @click="goCatalog(item)"
       >
-        <image class="cataloglist-item-img" :src="item.src" mode="aspectFill" />
+        <image :src="item.src" class="cataloglist-item-img" mode="aspectFill"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
       </view>
     </view>
 
     <!-- 头条公告 -->
-      <view class="homepage-headlines">
-        <image src="../../assets/img/index/topnew.png" mode="aspectFill" class="homepage-headlines-img"/>
-        <view class="homepage-headlines-title">最新</view>
-        <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
-        <view class="iconfont iconyou homepage-headlines-icon"></view>
-      </view>
-
-      <!-- 推荐 + 资讯-->
-      <view class="homepage-recommend-info">
-        <!-- 推荐 -->
-        <view class="homepage-recommend">
-          <view
-            class="homepage-recommend-list"
-            v-for="item in recommendList"
-            :key="item.id"
-        
-          >
-            <view class="homepage-recommend-name">
-              <view class="homepage-recommend-title">{{item.title}}</view>
-              <view class="homepage-recommend-describe">{{item.describe}}</view>
-            </view>
-            <image class="homepage-recommend-image" :src="item.image" mode="aspectFill" />
-            <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
-          </view>
-        </view>
-        <!-- 资讯 -->
-        <!-- <view class="homepage-info">
-          <view class="homepage-info-name">
-            <text class="homepage-info-title">热门资讯</text>
-            <text class="homepage-info-more">MORE</text>
-          </view>
-          <view>
-            <view
-            class="homepage-info-list"
-            v-for="item in infoList"
-            :key="item.id"
-          
-          >
-            <view class="homepage-info-list-hot">{{item.title}}</view>
-            <view class="homepage-info-list-title">{{item.info}}</view>
-          </view>
-          </view>
-
-        </view> -->
-      </view>
-      <!-- tabber -->
-        <!-- <view
-          v-for="item in tabBarList"
-          :key="item.id"
-        >
-          <image :src="item.image" mode="aspectFill" />
-          <image :src="item.img" mode="aspectFill" />
-        </view> -->
-      <!-- 广告图 -->
-          <view  class="homepage-nav" v-show="isShowNav">
-          <image src="../../assets/img/index/manypeople.png"  mode="aspectFill" />
-          <i 
-            class="homepage-nav-close iconfont iconcross"
-            @tap="deleteNav"
-          ></i>
-          </view>
+    <view class="homepage-headlines">
+      <image class="homepage-headlines-img" mode="aspectFill" src="../../assets/img/index/topnew.png"/>
+      <view class="homepage-headlines-title">最新</view>
+      <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
+      <view class="iconfont iconyou homepage-headlines-icon"></view>
     </view>
+
+    <!-- 推荐 + 资讯-->
+    <view class="homepage-recommend-info">
+      <!-- 推荐 -->
+      <view class="homepage-recommend">
+        <view
+          :key="item.id"
+          class="homepage-recommend-list"
+          v-for="item in recommendList"
+
+        >
+          <view class="homepage-recommend-name">
+            <view class="homepage-recommend-title">{{item.title}}</view>
+            <view class="homepage-recommend-describe">{{item.describe}}</view>
+          </view>
+          <image :src="item.image" class="homepage-recommend-image" mode="aspectFill"/>
+          <image :src="item.img" class="homepage-recommend-img" mode="aspectFill"/>
+        </view>
+      </view>
+      <!-- 资讯 -->
+      <!-- <view class="homepage-info">
+        <view class="homepage-info-name">
+          <text class="homepage-info-title">热门资讯</text>
+          <text class="homepage-info-more">MORE</text>
+        </view>
+        <view>
+          <view
+          class="homepage-info-list"
+          v-for="item in infoList"
+          :key="item.id"
+
+        >
+          <view class="homepage-info-list-hot">{{item.title}}</view>
+          <view class="homepage-info-list-title">{{item.info}}</view>
+        </view>
+        </view>
+
+      </view> -->
+    </view>
+    <!-- tabber -->
+    <!-- <view
+      v-for="item in tabBarList"
+      :key="item.id"
+    >
+      <image :src="item.image" mode="aspectFill" />
+      <image :src="item.img" mode="aspectFill" />
+    </view> -->
+    <!-- 广告图 -->
+    <view class="homepage-nav" v-show="isShowNav">
+      <image mode="aspectFill" src="../../assets/img/index/manypeople.png"/>
+      <i
+        @tap="deleteNav"
+        class="homepage-nav-close iconfont iconcross"
+      ></i>
+    </view>
+  </view>
 </template>
 
 <script>
 import {
   uniSwiperDot
 } from '@dcloudio/uni-ui';
-import JSearchInput from '../../components/form/JSearchInput';
 import {
-  mapActions, mapGetters
+  mapActions,
+  mapGetters
 } from 'vuex';
 import {
   USER
 } from '../../store/mutationsTypes';
 import './css/index.scss';
 
+import homePageImg from '@/assets/img/tabbar/shouye.png';
+import homePageImgActive from '@/assets/img/tabbar/shouye-actived.png';
+import categoryImg from '@/assets/img/tabbar/fenlei.png';
+import categoryImgActive from '@/assets/img/tabbar/fenlei-actived.png';
+import shoppingImg from '@/assets/img/tabbar/shopping.png';
+import shoppingImgImgActive from '@/assets/img/tabbar/shopping-actived.png';
+import mineImg from '@/assets/img/tabbar/mine.png';
+import mineImgImgActive from '@/assets/img/tabbar/mine-actived.png';
+
 export default {
   name: 'index',
   components: {
     uniSwiperDot,
-    JSearchInput
   },
   data() {
     return {
+      tabBarImgs: {
+        homePageImg,
+        homePageImgActive,
+        categoryImg,
+        categoryImgActive,
+        shoppingImg,
+        shoppingImgImgActive,
+        mineImg,
+        mineImgImgActive
+      },
       // 广告图显示
       isShowNav: true,
       // 搜索栏
@@ -191,14 +209,14 @@ export default {
         {
           id: 4,
           src: require('@/assets/img/index/function-washingmachine.png'),
-          title:"套餐",
-          url: "/pages/market/marketList"
+          title: '套餐',
+          url: '/pages/market/marketList'
         },
         {
           id: 5,
           src: require('@/assets/img/index/function-compose.png'),
-          title: "组合",
-          url: "/pages/market/marketList"
+          title: '组合',
+          url: '/pages/market/marketList'
         },
         {
           id: 6,
@@ -221,14 +239,14 @@ export default {
         {
           id: 9,
           src: require('@/assets/img/index/function-yang.png'),
-          title:"样品机",
-          url: "/pages/sampleMachine/sampleMachineList"
+          title: '样品机',
+          url: '/pages/sampleMachine/sampleMachineList'
         },
         {
           id: 10,
           src: require('@/assets/img/index/function-money.png'),
-          title:"反向定制",
-          url: "/pages/market/marketList"
+          title: '反向定制',
+          url: '/pages/market/marketList'
         }
       ],
       recommendList: [
@@ -319,31 +337,30 @@ export default {
 
       // ]
 
-   };
+    };
   },
 
-  created(){
-      this.getPageInf();
-      // (async() => {
-      //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      //   await this[USER.UPDATE_SALE_ASYNC]();
-      //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      // })().then(res =>{
-      //     // this.get()
-      // })
-      this.getIndexList()
-      this.getList()
-      this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      this[USER.UPDATE_SALE_ASYNC]();
-      this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      console.log(this.defaultSendToInf)
-      console.log(this.tokenUserInf)
-
+  created() {
+    this.getPageInf();
+    // (async() => {
+    //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+    //   await this[USER.UPDATE_SALE_ASYNC]();
+    //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
+    // })().then(res =>{
+    //     // this.get()
+    // })
+    this.getIndexList();
+    this.getList();
+    this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+    this[USER.UPDATE_SALE_ASYNC]();
+    this[USER.UPDATE_TOKEN_USER_ASYNC]();
+    console.log(this.defaultSendToInf);
+    console.log(this.tokenUserInf);
   },
   computed: {
     ...mapGetters({
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-      tokenUserInf:USER.GET_TOKEN_USER
+      tokenUserInf: USER.GET_TOKEN_USER
     })
   },
   methods: {
@@ -357,26 +374,25 @@ export default {
     ]),
     get() {
       // this.$nextTick(() => {
-      const a = JSON.stringify(this.defaultSendToInf);
+      // const a = JSON.stringify(this.defaultSendToInf);
     },
     changePic(e) {
       this.current = e.detail.current;
     },
     silentReSearch() {
       /* 静默搜索 */
-     
-      
-     
+
+
     },
     search() {
-      console.log(this.name)
-      if(this.name) {
+      console.log(this.name);
+      if (this.name) {
         uni.navigateTo({
           url: `/pages/goods/goodsList?name=${this.name}`
-        })  
+        });
       } else {
         uni.showToast({
-            title: '请输入搜索词',
+          title: '请输入搜索词',
         });
       }
     },
@@ -393,9 +409,8 @@ export default {
     },
     // 目录列表跳转
     goCatalog(item) {
-
       uni.navigateTo({
-        url:item.url
+        url: item.url
       });
       // console.log(url);
     },
@@ -405,90 +420,91 @@ export default {
     },
     // 新闻资讯
     async getIndexList() {
-      const list = await this.messageService.indexList ({
+      const list = await this.messageService.indexList({
         customerCode: this.defaultSendToInf.customerCode,
         unitId: this.tokenUserInf.name
-      })
-      if(list.code === "1") {
-        console.log(list.data)
-        this.infoList = list.data.slice(0,4)
+      });
+      if (list.code === '1') {
+        console.log(list.data);
+        this.infoList = list.data.slice(0, 4);
       }
     },
     // 应用列表
     async getList() {
-      const {code, data} = await this.commodityService.list ()
-      if(code === "1") {
-        data.map(item => {
-          item.categoryCode = item.code
-        })
+      const { code, data } = await this.commodityService.list();
+      if (code === '1') {
+        data.forEach((item) => {
+          item.categoryCode = item.code;
+        });
         data.unshift({
           id: 0,
-          code: "",
-          title: "全部",
-          categoryCode: ""
-        })
-        console.log(data)
-        this.list = data
-        this.list.map(item => {
-          item.active = false
-        })
-        this.list[0].active = true
-        console.log(this.list)
+          code: '',
+          title: '全部',
+          categoryCode: ''
+        });
+        console.log(data);
+        this.list = data;
+        this.list.forEach((item) => {
+          item.active = false;
+        });
+        this.list[0].active = true;
+        console.log(this.list);
       }
     },
     // 应用列表跳转
     goGoodsList(item) {
-      console.log(item)
-      this.list.map(v => {
-        v.active = false
-      })
-      item.active = true
-      console.log(item.active)
-      if(item.categoryCode) {
+      console.log(item);
+      this.list.forEach((v) => {
+        v.active = false;
+      });
+      item.active = true;
+      console.log(item.active);
+      if (item.categoryCode) {
         uni.navigateTo({
-        url: `/pages/goods/goodsList?code=${item.categoryCode}`
-        })  
+          url: `/pages/goods/goodsList?code=${item.categoryCode}`
+        });
       } else {
         uni.navigateTo({
-           url:"/pages/goods/goodsList"
-        }) 
-        
+          url: '/pages/goods/goodsList'
+        });
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
-/deep/  .jSearchInput-wrap {
-  width: 514px;
-  height: 52px;
-  background: rgba(102,135,168,0.15);
-  box-shadow:0px 0px 12px 0px rgba(102,135,168,0.15);
-  opacity: 0.8;
-  border-radius:32px;
-  border: 1px solid #6687A8;
-  padding-left: 22px;
-  padding-right: 26px;
-  margin-right:26px;
-}
-/deep/ .col_c{
-		 color: #fff;
-	}
+  /deep/ .jSearchInput-wrap {
+    width: 514px;
+    height: 52px;
+    background: rgba(102, 135, 168, 0.15);
+    box-shadow: 0px 0px 12px 0px rgba(102, 135, 168, 0.15);
+    opacity: 0.8;
+    border-radius: 32px;
+    border: 1px solid #6687A8;
+    padding-left: 22px;
+    padding-right: 26px;
+    margin-right: 26px;
+  }
 
-/deep/ .jSearchInput-icon{
-  color: #fff;
-  font-size:24px;
-}
+  /deep/ .col_c {
+    color: #fff;
+  }
 
-/deep/ .jSearchInput{
-  margin-left: 36px;
-  font-size: 24px;
-  color: #000;
-  background:rgba(102,135,168,0.15);
-}
-/* /deep/.jSearchInput::-ms-input-placeholder{
-  color:#fff;
-} */
+  /deep/ .jSearchInput-icon {
+    color: #fff;
+    font-size: 24px;
+  }
+
+  /deep/ .jSearchInput {
+    margin-left: 36px;
+    font-size: 24px;
+    color: #000;
+    background: rgba(102, 135, 168, 0.15);
+  }
+
+  /* /deep/.jSearchInput::-ms-input-placeholder{
+    color:#fff;
+  } */
 
 </style>
