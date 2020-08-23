@@ -74,10 +74,10 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 import './css/vehicleCarItem.scss';
-import vehicleMore from './vehicleMore';
+import vehicleMore from './VehicleMore';
 
 export default {
-  name: 'vehicleCartItem',
+  name: 'VehicleCartItem',
   components: {
     uniNumberBox,
     vehicleMore

@@ -38,7 +38,7 @@ import {
 import './css/vehicleItem.scss';
 
 export default {
-  name: 'vehicleItem',
+  name: 'VehicleItem',
   components: {
     uniNumberBox
   },

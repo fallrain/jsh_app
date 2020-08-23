@@ -70,7 +70,7 @@ import './css/vehicleCarItem.scss';
 import '../shoppingCart/css/jOrderConfirmItem.scss';
 
 export default {
-  name: 'vehicleDetailGood',
+  name: 'VehicleDetailGood',
   components: {
     uniNumberBox
   },

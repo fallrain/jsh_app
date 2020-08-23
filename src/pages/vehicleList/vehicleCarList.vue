@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import vehicleCarFoot from '../../components/vehicleList/vehicleCarFoot';
+import vehicleCarFoot from '../../components/vehicleList/VehicleCarFoot';
 import TFailureGoodsList from '../../components/transfer/TFailureGoodsList';
-import vehicleCartItem from '../../components/vehicleList/vehicleCartItem';
-import vehicleCartItemGD from '../../components/vehicleList/vehicleCartItem-gd';
-import vehicleCartItemPC from '../../components/vehicleList/vehicleCartItem-pc';
+import vehicleCartItem from '../../components/vehicleList/VehicleCartItem';
+import vehicleCartItemGD from '../../components/vehicleList/VehicleCartItem-gd';
+import vehicleCartItemPC from '../../components/vehicleList/VehicleCartItem-pc';
 import {
   mapGetters
 } from 'vuex';
@@ -45,7 +45,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_SALE,
+      defaultSendTo: USER.GET_DEFAULT_SEND_TO,
     }),
   },
   data() {
@@ -117,7 +118,7 @@ export default {
       }
     },
     async getPayerList() {
-      const { code, data } = await this.customerService.getcustomersList(this.userInf.saletoCode, {
+      const { code, data } = await this.customerService.getcustomersList(this.userInf.customerCode, {
         salesGroupCode: this.userInf.salesGroupCode,
         status: 1
       });
@@ -137,8 +138,8 @@ export default {
       // console.log(index);
       item.orderList.forEach(async (inf) => {
         const gbid = inf.GBID;
-        const longfeiUSERID = this.userInf.saletoCode;
-        const longfeiMFID = this.userInf.sendtoCode;
+        const longfeiUSERID = this.userInf.customerCode;
+        const longfeiMFID = this.defaultSendTo.customerCode;
         const timetamp = new Date().valueOf();
         try {
           // 获取价格

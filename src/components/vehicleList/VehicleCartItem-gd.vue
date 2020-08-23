@@ -75,7 +75,7 @@ import {
 import './css/vehicleCarItem-gd.scss';
 
 export default {
-  name: 'vehicleCartItemGD',
+  name: 'VehicleCartItemGD',
   components: {
     uniNumberBox
   },

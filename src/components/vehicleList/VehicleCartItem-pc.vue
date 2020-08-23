@@ -75,7 +75,7 @@ import {
 import './css/vehicleCarItem-pc.scss';
 
 export default {
-  name: 'vehicleCartItemPC',
+  name: 'VehicleCartItemPC',
   components: {
     uniNumberBox
   },
