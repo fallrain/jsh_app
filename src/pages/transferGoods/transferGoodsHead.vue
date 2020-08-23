@@ -162,11 +162,22 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-// ::v-deep .jHeadTabPicker-item{
-//   position: relative;
-//   width: 50%;
-//   overflow: hidden;
-//   margin-top:10px;
+// ::v-deep .jHeadTabPicker{
+//     position: fixed;
+//     z-index: 98;
+//     background: #F7F7F8;
+//     top: 24%;
+//     width: 100vw;
+//     min-height: 129px;
+//     padding-bottom: 44px;
+//     border-bottom-left-radius: 5px;
+//     border-bottom-right-radius: 5px;
+//     -webkit-transform: translateY(-100%);
+//     transform: translateY(-100%);
+//     -webkit-transition: -webkit-transform 0.3s;
+//     transition: -webkit-transform 0.3s;
+//     transition: transform 0.3s;
+//     margin-top: -0.5px;
   
 // }
 
@@ -178,10 +189,12 @@ export default {
 
 
 .jHeadTab-list-wrap{
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 99;
+    position: fixed;
+    background: #fff;
+    width: 100%;
+    height: 71px;
+    top: 170px;
+    z-index: 100;
 }
 
 .jHeadTab-list {

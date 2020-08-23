@@ -1,6 +1,6 @@
 <template>
     <view>
-        <web-view src="https://new.jsh.com"></web-view>
+        <web-view src="https://new.jsh.com/news/newsDetail/8858942086977"></web-view>
     </view>
 </template>
 <script>

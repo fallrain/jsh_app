@@ -4,7 +4,6 @@
       <view class="homepage-top-head">
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
-
           <view class="jSearchInput-wrap j-flex-aic">
           <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
           <input
@@ -48,7 +47,7 @@
           <swiper class="swiper-box" @change="changePic">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
               <view class="swiper-item">
-                <image class="image" :src="item.imageUrl" mode="aspectFill"/>
+                <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail'/>
               </view>
             </swiper-item>
           </swiper>
@@ -95,7 +94,7 @@
           </view>
         </view>
         <!-- 资讯 -->
-        <!-- <view class="homepage-info">
+        <view class="homepage-info">
           <view class="homepage-info-name">
             <text class="homepage-info-title">热门资讯</text>
             <text class="homepage-info-more">MORE</text>
@@ -105,14 +104,13 @@
             class="homepage-info-list"
             v-for="item in infoList"
             :key="item.id"
-          
           >
-            <view class="homepage-info-list-hot">{{item.title}}</view>
-            <view class="homepage-info-list-title">{{item.info}}</view>
+            <view class="homepage-info-list-hot" @tap="goDetail">{{item.title}}</view>
+            <!-- <view class="homepage-info-list-title">{{item.info}}</view> -->
           </view>
           </view>
 
-        </view> -->
+        </view>
       </view>
       <!-- tabber -->
         <!-- <view
@@ -363,10 +361,12 @@ export default {
       this.current = e.detail.current;
     },
     silentReSearch() {
-      /* 静默搜索 */
-     
-      
-     
+      /* 静默搜索 */ 
+    },
+    goDetail() {
+       uni.navigateTo({
+          url: `/pages/index/information`
+        })  
     },
     search() {
       console.log(this.name)
