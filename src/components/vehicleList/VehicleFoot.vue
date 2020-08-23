@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'vehicleFoot',
+  name: 'VehicleFoot',
   props: {
     carType: {
       type: String

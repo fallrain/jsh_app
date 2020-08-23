@@ -38,7 +38,7 @@
 import JInput from '../form/JInput';
 
 export default {
-  name: 'vehicleDetailSend',
+  name: 'VehicleDetailSend',
   components: {
     JInput
   },

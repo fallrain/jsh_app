@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import vehicleDetailInfo from '../../components/vehicleList/vehicleDetailInfo';
-import vehicleDetailGood from '../../components/vehicleList/vehicleDetailGood';
-import vehicleDetailSend from '../../components/vehicleList/vehicleDetailSend';
+import vehicleDetailInfo from '../../components/vehicleList/VehicleDetailInfo';
+import vehicleDetailGood from '../../components/vehicleList/VehicleDetailGood';
+import vehicleDetailSend from '../../components/vehicleList/VehicleDetailSend';
 import transferDetailBtm from '../../components/transfer/transferDetailBtm';
 
 export default {

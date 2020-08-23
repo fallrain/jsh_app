@@ -49,7 +49,7 @@
 import './css/vehicleDetailInfo.scss';
 
 export default {
-  name: 'vehicleDetailInfo',
+  name: 'VehicleDetailInfo',
   props: {
     goods: { // 商品数据
       type: Object

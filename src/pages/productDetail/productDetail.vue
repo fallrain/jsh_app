@@ -16,10 +16,12 @@
     </uni-swiper-dot>
     <view class="uni-common-mt" id="goods">
       <view class="uni-flex uni-row padding-15">
-        <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥ {{detailInfo.price.invoicePrice}}</view>
+        <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥ {{detailInfo.price && detailInfo.price.invoicePrice || '暂无价格!'}}</view>
         <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice}}</view>
-        <view @click="guanZhu" v-if="!ISGUANZHU" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"></view>
-        <view @click="guanZhu" v-else class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"></view>
+        <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"
+              v-if="!ISGUANZHU"></view>
+        <view @click="guanZhu" class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"
+              v-else></view>
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
         <view class="text modeller">
@@ -47,8 +49,9 @@
       </view>
       <view v-show="ActListInfo.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
-        <view class="col-70 text" >
-          <view class="smaller product-detail-lei2" @click="showAct" v-for="ack in ActListInfo" :key="ack">{{ack}}</view>
+        <view class="col-70 text">
+          <view :key="ack" @click="showAct" class="smaller product-detail-lei2" v-for="ack in ActListInfo">{{ack}}
+          </view>
         </view>
         <view class="col-10 text smaller">
           <view class="text-center iconfont iconyou"></view>
@@ -84,7 +87,8 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-ship :show.sync="isShowShip" :info="deliveryAddressList" :titles="titles" @checkedShip="checkedShip"></pro-com-ship>
+      <pro-com-ship :info="deliveryAddressList" :show.sync="isShowShip" :titles="titles"
+                    @checkedShip="checkedShip"></pro-com-ship>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row">
         <view class="padding-30 col-40 modeller">热门推荐</view>
@@ -110,11 +114,13 @@
         <view class=" col-40 modeller padding-30">图文详情</view>
       </view>
       <view class="uni-flex uni-row" v-for="(img,index) in detailInfo.longImages" :key="index">
-        <image style="width: 100%;" mode="widthFix" :src="img" ></image>
+        <image :src="img" mode="widthFix" style="width: 100%;"></image>
       </view>
     </view>
     <view class="product-detail-fot-high"></view>
-    <view class="product-detail-foot"><pro-com-foot :info.sync="footButtong"></pro-com-foot></view>
+    <view class="product-detail-foot">
+      <pro-com-foot :info.sync="footButtong"></pro-com-foot>
+    </view>
   </view>
 </template>
 
@@ -147,7 +153,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_SALE,
+      defaultSendTo: USER.GET_DEFAULT_SEND_TO,
     }),
   },
   data() {
@@ -163,9 +170,18 @@ export default {
       ISGUANZHU: false, // 商品关注
       detailInfo: [], // 商品信息
       tabs: [
-        { id: 'goods', name: '宝贝' },
-        { id: 'specs', name: '规格' },
-        { id: 'details', name: '详情' }
+        {
+          id: 'goods',
+          name: '宝贝'
+        },
+        {
+          id: 'specs',
+          name: '规格'
+        },
+        {
+          id: 'details',
+          name: '详情'
+        }
       ],
       goodsCheck: true,
       specsCheck: false,
@@ -221,7 +237,11 @@ export default {
       this.isF = true;
     },
     async getProductDetail() {
-      const { code, data } = await this.productDetailService.productDetail(this.productCode, this.userInf.saletoCode, this.userInf.sendtoCode);
+      const { code, data } = await this.productDetailService.productDetail({
+        code: this.productCode,
+        codeSale: this.userInf.customerCode,
+        codeSend: this.defaultSendTo.customerCode
+      });
       if (code === '1') {
         this.productNum = 1;
         this.detailInfo = data;
@@ -237,72 +257,120 @@ export default {
         this.ActInfo = [];
         if (this.detailInfo.tjPrice.tj.length > 0) { // 特价
           this.ActListInfo.push('特价');
-          const tj = { title: '特价版本', isMore: true, isSe: true, list: [] };
+          const tj = {
+            title: '特价版本',
+            isMore: true,
+            isSe: true,
+            list: []
+          };
           this.detailInfo.tjPrice.tj.forEach((lis) => {
-            const a = { titleLe: '特价版本',
+            const a = {
+              titleLe: '特价版本',
               name: lis.versionCode,
               price: lis.invoicePrice,
               time: lis.endDate,
               kou: lis.rebateRateShow * 100,
               num: lis.usableQty,
-              isCheck: false };
+              isCheck: false
+            };
             tj.list.push(a);
           });
           this.ActInfo.push(tj);
         }
         if (this.detailInfo.tjPrice.gc.length > 0) { // 工程
           this.ActListInfo.push('工程');
-          const gc = { title: '工程版本', isMore: true, isSe: true, list: [] };
+          const gc = {
+            title: '工程版本',
+            isMore: true,
+            isSe: true,
+            list: []
+          };
           this.detailInfo.tjPrice.gc.forEach((lis) => {
-            const a = { titleLe: '工程版本',
+            const a = {
+              titleLe: '工程版本',
               name: lis.versionCode,
               price: lis.invoicePrice,
               time: lis.endDate,
               kou: lis.rebateRateShow * 100,
               num: lis.usableQty,
-              isCheck: false };
+              isCheck: false
+            };
             gc.list.push(a);
           });
           this.ActInfo.push(gc);
         }
         if (this.detailInfo.tjPrice.yj.length > 0) { // 样机
           this.ActListInfo.push('样机');
-          const yj = { title: '样机版本', isMore: true, isSe: true, list: [] };
+          const yj = {
+            title: '样机版本',
+            isMore: true,
+            isSe: true,
+            list: []
+          };
           this.detailInfo.tjPrice.yj.forEach((lis) => {
-            const a = { titleLe: '样机版本',
+            const a = {
+              titleLe: '样机版本',
               name: lis.versionCode,
               price: lis.invoicePrice,
               time: lis.endDate,
               kou: lis.rebateRateShow * 100,
               num: lis.usableQty,
-              isCheck: false };
+              isCheck: false
+            };
             yj.list.push(a);
           });
           this.ActInfo.push(yj);
         }
         if (this.detailInfo.arbitrages.length > 0) { // 套餐
           this.ActListInfo.push('套餐');
-          const tc = { title: '套餐', isMore: false, isSe: true, list: [] };
+          const tc = {
+            title: '套餐',
+            isMore: false,
+            isSe: true,
+            list: []
+          };
           this.detailInfo.arbitrages.forEach((lis) => {
-            const a = { titleLe: '套餐', name: lis.activityName, time: lis.endTime };
+            const a = {
+              titleLe: '套餐',
+              name: lis.activityName,
+              time: lis.endTime
+            };
             tc.list.push(a);
           });
           this.ActInfo.push(tc);
         }
         if (this.detailInfo.composes.length > 0) { // 组合
           this.ActListInfo.push('组合');
-          const zh = { title: '组合', isMore: false, isSe: true, list: [] };
+          const zh = {
+            title: '组合',
+            isMore: false,
+            isSe: true,
+            list: []
+          };
           this.detailInfo.composes.forEach((lis) => {
-            const a = { titleLe: '组合', name: lis.activityName, time: lis.endTime };
+            const a = {
+              titleLe: '组合',
+              name: lis.activityName,
+              time: lis.endTime
+            };
             zh.list.push(a);
           });
           this.ActInfo.push(zh);
         }
         if (this.detailInfo.flashSales.length > 0) { // 抢单
           this.ActListInfo.push('抢单');
-          const qd = { title: '抢单', isMore: false, isSe: true, list: [] };
+          const qd = {
+            title: '抢单',
+            isMore: false,
+            isSe: true,
+            list: []
+          };
           this.detailInfo.flashSales.forEach((lis) => {
-            const a = { titleLe: '抢单', name: lis.activityName, time: lis.endTime };
+            const a = {
+              titleLe: '抢单',
+              name: lis.activityName,
+              time: lis.endTime
+            };
             qd.list.push(a);
           });
           this.ActInfo.push(qd);
@@ -311,7 +379,7 @@ export default {
       console.log(data);
     },
     async getHostLost() {
-      const { code, data } = await this.productDetailService.productHostList(this.userInf.saletoCode, this.userInf.sendtoCode);
+      const { code, data } = await this.productDetailService.productHostList(this.userInf.customerCode, this.defaultSendTo.customerCode);
       if (code === '1') {
         this.hostList = data;
       }
@@ -331,7 +399,7 @@ export default {
       }
     },
     async addGuan() {
-      const { code } = await this.productDetailService.productAddInter(this.userInf.saletoCode, this.userInf.sendtoCode, this.productCode);
+      const { code } = await this.productDetailService.productAddInter(this.userInf.customerCode, this.defaultSendTo.customerCode, this.productCode);
       if (code === '200') {
         this.ISGUANZHU = true;
       }
@@ -339,8 +407,8 @@ export default {
     async productStock() {
       const { code, data } = await this.productDetailService.productStock({
         productCodes: [this.productCode],
-        saletoCode: this.userInf.saletoCode,
-        sendtoCode: this.userInf.sendtoCode
+        saletoCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode
       });
       if (code === '1') {
         this.stock = data;

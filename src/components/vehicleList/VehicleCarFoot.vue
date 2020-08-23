@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'vehicleCarFoot',
+  name: 'VehicleCarFoot',
   props: {
     // 全选
     checked: {

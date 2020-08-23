@@ -68,12 +68,12 @@
 import './css/vehicleList.scss';
 import JHeadTab from '../../components/form/JHeadTab';
 import JSearchInput from '../../components/form/JSearchInput';
-import vehicleItem from '../../components/vehicleList/vehicleItem';
+import vehicleItem from '../../components/vehicleList/VehicleItem';
 import JDrawer from '../../components/form/JDrawer';
 import JDrawerFilterItem from '../../components/form/JDrawerFilterItem';
 import JSwitch from '../../components/form/JSwitch';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
-import vehicleFoot from '../../components/vehicleList/vehicleFoot';
+import vehicleFoot from '../../components/vehicleList/VehicleFoot';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import {
   mapGetters,

@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'vehicleMore',
+  name: 'VehicleMore',
   props: {
     isVehicleMore: {
       type: Boolean,

@@ -25,7 +25,7 @@
 import JHeadTabPicker from '../form/JHeadTabPicker';
 
 export default {
-  name: 'vehicleHead',
+  name: 'VehicleHead',
   components: {
     JHeadTabPicker
   },
