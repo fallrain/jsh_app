@@ -66,6 +66,18 @@ const util = {
         break;
     }
     return this.formatFloat(returnValue, floatNum);
+  },
+  genQueryStringByObj(obj, isFirst = true) {
+    /* 根据一个对象组合查询字符串 */
+    const args = [];
+    for (const p in obj) {
+      obj[p] !== undefined && (args.push(`${p}=${obj[p]}`));
+    }
+    let returnStr = '';
+    if (args.length) {
+      returnStr = (isFirst ? '?' : '') + args.join('&');
+    }
+    return returnStr;
   }
 };
 
