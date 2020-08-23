@@ -38,8 +38,8 @@
             :key="index"
             :code="item.code"
             :goods="item"
-            :saletoCode="defaultSendToInf.customerCode"
-            :sendtoCode="defaultSendToInf.customerCode"
+            :saletoCode="saleInfo.customerCode"
+            :sendtoCode="saleInfo.customerCode"
             :allPrice="item.$allPrice"
             @change="goodsChange"
             @query="getShoppingCartNum"
@@ -232,11 +232,13 @@ export default {
   },
   created() {
     this.getPageInfo();
+    console.log(this.saleInfo)
 
   },
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
+      saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     })
   },
@@ -312,15 +314,15 @@ export default {
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     getSearchCondition(pages) {
-      console.log(this.defaultSendToInf)
+      console.log(this.saleInfo)
       /* 获取不同条件下搜索的传参 */
       let condition = {
         pageNum: pages ? pages.num : 1,
         pageSize: 15,
-        customerCode: this.defaultSendToInf.customerCode,
-        // sendTo: this.defaultSendToInf.customerCode,
+        customerCode: this.saleInfo.customerCode,
+        // sendTo: this.saleInfo.customerCode,
       };
-      console.log( this.defaultSendToInf.customerCode)
+      console.log( this.saleInfo.customerCode)
         // tab条件
       const tab = this.tabs.find(v => v.active);
       // 其他条件
@@ -386,7 +388,7 @@ export default {
     },
     async getTransferList(pages) {
       console.log(pages)
-      const defaultSendToInf = this.defaultSendToInf;
+      const saleInfo = this.saleInfo;
       const condition = this.getSearchCondition(pages);
       console.log(condition)
       const scrollView = {};
@@ -396,7 +398,7 @@ export default {
         // categoryCode: "",
         attributeName: '',
         attributeValue: '',
-        customerCode: this.defaultSendToInf.customerCode,
+        customerCode: this.saleInfo.customerCode,
         // dstCode: '8800212607',
         // center: '12A02',
         group: '',
@@ -421,14 +423,14 @@ export default {
         const productCodes = curList.map(v => v.code);
         const priceArgsObj = {
           productCodes,
-          saletoCode: this.defaultSendToInf.customerCode,
+          saletoCode: this.saleInfo.customerCode,
           sendtoCode: condition.dstCode,
         };
         // 获取价格
         const getAllPrice = this.commodityService.getAllPrice(priceArgsObj);
         // 获取收藏
         const getProductQueryInter = this.customerService.queryCustomerInterestProductByAccount({
-          account: String(this.defaultSendToInf.customerCode),
+          account: String(this.saleInfo.customerCode),
           productCodeList: productCodes
         });
         const [
@@ -531,7 +533,7 @@ export default {
       // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.defaultSendToInf.customerCode,
+        longfeiUSERID: this.saleInfo.customerCode,
         sendtoCode: condition.dstCode ,
         sendtoMktid: condition.center
       })
@@ -553,7 +555,7 @@ export default {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.defaultSendToInf.customerCode
+        longfeiUSERID: this.saleInfo.customerCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
@@ -563,9 +565,9 @@ export default {
     },
     // 获取付款方数据
      async getpayerList() {
-      console.log(this.defaultSendToInf.customerCode);
-      const { code, data } = await this.customerService.getcustomersList(this.defaultSendToInf.customerCode, {
-        salesGroupCode: this.defaultSendToInf.salesGroupCode,
+      console.log(this.saleInfo.customerCode);
+      const { code, data } = await this.customerService.getcustomersList(this.saleInfo.customerCode, {
+        salesGroupCode: this.saleInfo.salesGroupCode,
         status: 1
       });
       if (code === '1') {
@@ -612,7 +614,7 @@ export default {
             IsKPO: Number(item.$PtPrice.isBB) ,   //商空标识  0：非商空  1：商空     //价格接口
             DH_VERCODE: "" , //特价版本
             DH_VERMONEY: "",	  //版本价格
-            USERID: this.defaultSendToInf.customerCode, //售达方编码
+            USERID: this.saleInfo.customerCode, //售达方编码
             longfeiMFID: this.address.customerCode,    //送达方编码
             DH_PAYTO: "8800101954",   //付款方编码       //付款方接口传递一份this.payer[0].payerCode
             DH_PAYTONAME: "(8800101954)青岛鸿程永泰商贸有限公司",    //付款方名称   //付款方接口传递一份`(${this.payer[0].payerCode})${this.payer[0].payerName}`
