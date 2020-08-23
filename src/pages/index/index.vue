@@ -79,7 +79,6 @@
       <view class="iconfont iconyou homepage-headlines-icon"></view>
     </view>
 
-<<<<<<< HEAD
       <!-- 推荐 + 资讯-->
       <view class="homepage-recommend-info">
         <!-- 推荐 -->
@@ -128,25 +127,6 @@
           </view>
           </view>
         </view> -->
-=======
-    <!-- 推荐 + 资讯-->
-    <view class="homepage-recommend-info">
-      <!-- 推荐 -->
-      <view class="homepage-recommend">
-        <view
-          :key="item.id"
-          class="homepage-recommend-list"
-          v-for="item in recommendList"
-
-        >
-          <view class="homepage-recommend-name">
-            <view class="homepage-recommend-title">{{item.title}}</view>
-            <view class="homepage-recommend-describe">{{item.describe}}</view>
-          </view>
-          <image :src="item.image" class="homepage-recommend-image" mode="aspectFill"/>
-          <image :src="item.img" class="homepage-recommend-img" mode="aspectFill"/>
-        </view>
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
       </view>
       <!-- 资讯 -->
       <!-- <view class="homepage-info">
@@ -424,7 +404,6 @@ export default {
     };
   },
 
-<<<<<<< HEAD
   created(){
       this.getPageInf();
       // (async() => {
@@ -446,34 +425,12 @@ export default {
       console.log(this.defaultSendToInf)
       console.log(this.tokenUserInf)
 
-=======
-  created() {
-    this.getPageInf();
-    // (async() => {
-    //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-    //   await this[USER.UPDATE_SALE_ASYNC]();
-    //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
-    // })().then(res =>{
-    //     // this.get()
-    // })
-    this.getIndexList();
-    this.getList();
-    this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-    this[USER.UPDATE_SALE_ASYNC]();
-    this[USER.UPDATE_TOKEN_USER_ASYNC]();
-    console.log(this.defaultSendToInf);
-    console.log(this.tokenUserInf);
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
   },
   computed: {
     ...mapGetters({
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-<<<<<<< HEAD
       tokenUserInf:USER.GET_TOKEN_USER,
       saleInfo: USER.GET_SALE
-=======
-      tokenUserInf: USER.GET_TOKEN_USER
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
     })
   },
   methods: {
@@ -493,18 +450,12 @@ export default {
       this.current = e.detail.current;
     },
     silentReSearch() {
-<<<<<<< HEAD
       /* 静默搜索 */ 
     },
     goDetail() {
        uni.navigateTo({
           url: `/pages/index/information`
         })  
-=======
-      /* 静默搜索 */
-
-
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
     },
     search() {
       console.log(this.name);
@@ -542,13 +493,8 @@ export default {
     },
     // 新闻资讯
     async getIndexList() {
-<<<<<<< HEAD
       const list = await this.messageService.indexList ({
         customerCode: this.saleInfo.customerCode,
-=======
-      const list = await this.messageService.indexList({
-        customerCode: this.defaultSendToInf.customerCode,
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
         unitId: this.tokenUserInf.name
       });
       if (list.code === '1') {
@@ -649,7 +595,6 @@ export default {
 </script>
 
 <style scoped>
-<<<<<<< HEAD
 /deep/  .jSearchInput-wrap {
   width: 514px;
   height: 52px;
@@ -669,20 +614,6 @@ export default {
 /deep/ .col_c{
 		 color: #fff;
 	}
-=======
-  /deep/ .jSearchInput-wrap {
-    width: 514px;
-    height: 52px;
-    background: rgba(102, 135, 168, 0.15);
-    box-shadow: 0px 0px 12px 0px rgba(102, 135, 168, 0.15);
-    opacity: 0.8;
-    border-radius: 32px;
-    border: 1px solid #6687A8;
-    padding-left: 22px;
-    padding-right: 26px;
-    margin-right: 26px;
-  }
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
 
   /deep/ .col_c {
     color: #fff;
