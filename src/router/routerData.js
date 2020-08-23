@@ -1,6 +1,7 @@
-
+/* 本数据仅供开发时导航页使用 */
 const data = [
   'pages/index/index',
+  "pages/index/information",
   'pages/applicationsIndex/applicationsIndex',
   'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',
@@ -33,6 +34,7 @@ const data = [
   'pages/mine/mySetDetail',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm',
-  'pages/concernedProducts/concernedProductsList'
+  'pages/concernedProducts/concernedProductsList',
+  'subPackages/finance/pages/recharge/rechargeOnline'
 ];
 export default { data };

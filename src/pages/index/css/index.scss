@@ -42,6 +42,7 @@
               // color:rgba(255,255,255,1);
               // line-height:34px;
           // }
+
           .homepage-top-head-icon{
               width:42px;
               height:45px;
@@ -55,14 +56,35 @@
           margin-top: 24px;
           margin-bottom: 24px;
           justify-content: space-between;
+          position: relative;
+          .uni-scroll-view {
+            &::-webkit-scrollbar {
+              display: none;
+            }
+          }
+        
+          .uni-scroll-view-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-bottom: 4px;
+          }
           .homepage-top-center-list{
-              // width:96px;
-              // height:34px;
-              font-size:28px;
-              font-family:PingFangSC-Regular,PingFang SC;
-              font-weight:400;
-              color:rgba(255,255,255,1);
-              line-height:34px;
+            // width:96px;
+            // height:34px;
+            position: relative;
+            flex-shrink: 0;
+            font-size:28px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:34px;
+            margin-right: 40px;
+           
+          }
+          .active {
+
+            color: #ED2856;
           }
         }  
       //  轮播图
@@ -180,7 +202,6 @@
 
     .homepage-recommend-info{
         width:700px;
-        height:732px;
         background:rgba(255,255,255,1);
         border-radius:10px;
         margin-left:26px;
@@ -233,8 +254,10 @@
     }
     // 资讯
     .homepage-info{
+        overflow: hidden;
         .homepage-info-name{
             margin:32px 20px 26px 24px;
+           
             .homepage-info-title{
             font-size:34px;
             color:rgba(237,40,86,1);
@@ -259,15 +282,17 @@
                 margin-left:24px;
                 align-items:center;
                 margin-bottom:18px;
+                overflow: hidden;
                 .homepage-info-list-hot{
-                    width:54px;
-                    height:28px;
+                    // width:54px;
+                    // height:28px;
                     border-radius:4px;
-                    border:1px solid rgba(255,148,20,1);
+                    // border:1px solid rgba(255,148,20,1);
                     font-size:20px;
                     font-family:PingFangSC-Regular,PingFang SC;
                     font-weight:400;
-                    color:rgba(255,148,20,1);
+                    // color:rgba(255,148,20,1);
+                    color:#333;
                     line-height:28px;
                     letter-spacing:4px;
                     margin-right:12px;
@@ -290,6 +315,16 @@
         height:130px;
         position:fixed;
         top:910px;
+        right:0px;
+        z-index:500px;
+        image {
+          width:100%;
+          height:100%
+        }
+    }
+    .homepage-nav-close{
+        position:fixed;
+        top:895px;
         right:0px;
         z-index:500px;
     }

@@ -3,7 +3,7 @@
     <view class="isFixed">
       <view class="vehicle-search j-flex-aic">
         <j-search-input v-model="searchVal" @search="silentReSearch"></j-search-input>
-        <button type="button" class="vehicle-btn" @search="silentReSearch">搜索</button>
+        <button type="button" class="vehicle-btn" @click="silentReSearch">搜索</button>
       </view>
     </view>
     <view class="nav">
@@ -66,7 +66,9 @@ export default {
     },
     silentReSearch() {
       /* sousuo */
-      console.log(this.searchVal);
+      uni.navigateTo({
+        url: `/pages/goods/goodsList?name=${this.searchVal}`
+      });
     },
     // 滑动
     upper(e) {
@@ -83,6 +85,9 @@ export default {
     },
     checkCat(item) {
       console.log(item);
+      uni.navigateTo({
+        url: `/pages/goods/goodsList?categoryCode=${item.code}`
+      });
     }
   },
   onLoad() {
@@ -106,6 +111,7 @@ export default {
     border-radius: 28px;
     color: #fff;
     font-size: 28px;
+    margin-left: 20px;
   }
   .vehicle-search{
     position: absolute;
@@ -119,8 +125,8 @@ export default {
   .isFixed{
     background-color:#Fff;
     z-index:999;
-    position: sticky;
-    top: 0;
+    position: fixed;
+    width: 100%;
   }
   .scroll-Y {
     height: 100%;
@@ -135,6 +141,7 @@ export default {
     height: 70%;/*左侧滑动展示区域高度*/
     overflow: auto;
     float: left;
+    padding-top: 88px;
   }
   .scroll-view-item {
     height: 40px;
@@ -154,6 +161,7 @@ export default {
     color: #666666;
   }
   .nav-right {
+    padding-top: 88px;
     margin-left: 25%;
     width: 75%;
     border-left: 1px #eeeeee solid;

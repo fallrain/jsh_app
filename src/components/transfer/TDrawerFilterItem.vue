@@ -45,6 +45,9 @@ export default {
       type: Number
     },
   },
+  creatd() {
+    console.log(this.filterItem)
+  },
   methods: {
     toggleExpand(item) {
       /* 展开或者收起 */

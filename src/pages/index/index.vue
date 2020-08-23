@@ -4,24 +4,37 @@
       <view class="homepage-top-head">
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
-          <j-search-input
-          v-model="filterForm"
-          @search="silentReSearch"
-          placeholder="请输入搜索信息"
-          placeholder-class="col_c"
-        ></j-search-input>
+
+          <view class="jSearchInput-wrap j-flex-aic">
+          <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
+          <input
+            class="jSearchInput"
+            type="text"
+            placeholder="请输入搜索信息"
+            placeholder-class="col_c"
+            v-model="name"
+          >
+        </view>
+
         <view class='iconfont iconpeople homepage-top-head-icon'></view>
       </view>
       <!-- 全部 -->
-      <view class="homepage-top-center">
+      <scroll-view 
+        class="homepage-top-center"
+        scroll-x
+        scroll-with-animation
+      >
         <view
-          class="homepage-top-center-list"
+          :class="['homepage-top-center-list',item.active && 'active']"
           v-for="(item,index) in list"
           :key="index"
+          scroll-x
+          scroll-with-animation
+          @tap ="goGoodsList(item)"
         >
-        {{item}}
+        {{item.title}}
         </view>
-      </view>
+      </scroll-view >
           <!-- 轮播图 -->
       <view class="homepage-swiper">
 
@@ -48,7 +61,7 @@
         class="homepage-cataloglist-item"
         v-for="item in cataloglist"
         :key="item.id"
-        @click="goCatalog(item.url)"
+        @click="goCatalog(item)"
       >
         <image class="cataloglist-item-img" :src="item.src" mode="aspectFill" />
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -71,7 +84,7 @@
             class="homepage-recommend-list"
             v-for="item in recommendList"
             :key="item.id"
-            @click="goCatalog(item.url)"
+        
           >
             <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
@@ -82,7 +95,7 @@
           </view>
         </view>
         <!-- 资讯 -->
-        <view class="homepage-info">
+        <!-- <view class="homepage-info">
           <view class="homepage-info-name">
             <text class="homepage-info-title">热门资讯</text>
             <text class="homepage-info-more">MORE</text>
@@ -92,14 +105,14 @@
             class="homepage-info-list"
             v-for="item in infoList"
             :key="item.id"
-            @click="goCatalog(item.url)"
+          
           >
-            <view class="homepage-info-list-hot">{{item.hot}}</view>
+            <view class="homepage-info-list-hot">{{item.title}}</view>
             <view class="homepage-info-list-title">{{item.info}}</view>
           </view>
           </view>
 
-        </view>
+        </view> -->
       </view>
       <!-- tabber -->
         <!-- <view
@@ -110,8 +123,12 @@
           <image :src="item.img" mode="aspectFill" />
         </view> -->
       <!-- 广告图 -->
-          <view>
-          <image class="homepage-nav" src="../../assets/img/index/manypeople.png"  mode="aspectFill" />
+          <view  class="homepage-nav" v-show="isShowNav">
+          <image src="../../assets/img/index/manypeople.png"  mode="aspectFill" />
+          <i 
+            class="homepage-nav-close iconfont iconcross"
+            @tap="deleteNav"
+          ></i>
           </view>
     </view>
 </template>
@@ -137,10 +154,13 @@ export default {
   },
   data() {
     return {
+      // 广告图显示
+      isShowNav: true,
       // 搜索栏
-      filterForm: '',
+      name: '',
       bannerList: [],
-      list: ['全部', '水洗空冷', '电视电脑', '厨房卫浴', '手机数码', '生活'],
+      list: [],
+      // list: ['全部', '水洗空冷', '电视电脑', '厨房卫浴', '手机数码', '生活'],
       current: 0, // 轮播图第几张
       mode: 'round', // 轮播图底部按钮样式
       dotsStyles: {
@@ -245,26 +265,27 @@ export default {
           url: '#'
         },
       ],
-      infoList: [
-        {
-          id: 1,
-          hot: '热门',
-          info: '这是一条热门资讯的内容,具体内容请查看详情......',
-          url: '#'
-        },
-        {
-          id: 2,
-          hot: '热门',
-          info: '这是一条热门资讯的内容,具体内容请查看详情......',
-          url: '#'
-        },
-        {
-          id: 3,
-          hot: '热门',
-          info: '这是一条热门资讯的内容,具体内容请查看详情......',
-          url: '#'
-        }
-      ],
+      infoList: []
+      // infoList: [
+      //   {
+      //     id: 1,
+      //     hot: '热门',
+      //     info: '这是一条热门资讯的内容,具体内容请查看详情......',
+      //     url: '#'
+      //   },
+      //   {
+      //     id: 2,
+      //     hot: '热门',
+      //     info: '这是一条热门资讯的内容,具体内容请查看详情......',
+      //     url: '#'
+      //   },
+      //   {
+      //     id: 3,
+      //     hot: '热门',
+      //     info: '这是一条热门资讯的内容,具体内容请查看详情......',
+      //     url: '#'
+      //   }
+      // ],
       // tabBarList: [
       //   {
       //     id: 1,
@@ -303,23 +324,26 @@ export default {
 
   created(){
       this.getPageInf();
-      (async() => {
-        await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-        await this[USER.UPDATE_SALE_ASYNC]();
-        await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      })().then(res =>{
-          // this.get()
-      })
-      // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      // this[USER.UPDATE_SALE_ASYNC]();
-      // this[USER.UPDATE_TOKEN_USER_ASYNC]();
-
+      // (async() => {
+      //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+      //   await this[USER.UPDATE_SALE_ASYNC]();
+      //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
+      // })().then(res =>{
+      //     // this.get()
+      // })
+      this.getIndexList()
+      this.getList()
+      this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+      this[USER.UPDATE_SALE_ASYNC]();
+      this[USER.UPDATE_TOKEN_USER_ASYNC]();
+      console.log(this.defaultSendToInf)
+      console.log(this.tokenUserInf)
 
   },
   computed: {
     ...mapGetters({
-      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
-
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      tokenUserInf:USER.GET_TOKEN_USER
     })
   },
   methods: {
@@ -340,7 +364,21 @@ export default {
     },
     silentReSearch() {
       /* 静默搜索 */
-      this.mescroll.resetUpScroll(true);
+     
+      
+     
+    },
+    search() {
+      console.log(this.name)
+      if(this.name) {
+        uni.navigateTo({
+          url: `/pages/goods/goodsList?name=${this.name}`
+        })  
+      } else {
+        uni.showToast({
+            title: '请输入搜索词',
+        });
+      }
     },
     getPageInf() {
       this.getbannerList();
@@ -353,14 +391,72 @@ export default {
         console.log(data);
       }
     },
-    goCatalog(url) {
+    // 目录列表跳转
+    goCatalog(item) {
+
       uni.navigateTo({
-        url
+        url:item.url
       });
-      console.log(url);
+      // console.log(url);
+    },
+    // 广告图
+    deleteNav() {
+      this.isShowNav = false;
+    },
+    // 新闻资讯
+    async getIndexList() {
+      const list = await this.messageService.indexList ({
+        customerCode: this.defaultSendToInf.customerCode,
+        unitId: this.tokenUserInf.name
+      })
+      if(list.code === "1") {
+        console.log(list.data)
+        this.infoList = list.data.slice(0,4)
+      }
+    },
+    // 应用列表
+    async getList() {
+      const {code, data} = await this.commodityService.list ()
+      if(code === "1") {
+        data.map(item => {
+          item.categoryCode = item.code
+        })
+        data.unshift({
+          id: 0,
+          code: "",
+          title: "全部",
+          categoryCode: ""
+        })
+        console.log(data)
+        this.list = data
+        this.list.map(item => {
+          item.active = false
+        })
+        this.list[0].active = true
+        console.log(this.list)
+      }
+    },
+    // 应用列表跳转
+    goGoodsList(item) {
+      console.log(item)
+      this.list.map(v => {
+        v.active = false
+      })
+      item.active = true
+      console.log(item.active)
+      if(item.categoryCode) {
+        uni.navigateTo({
+        url: `/pages/goods/goodsList?code=${item.categoryCode}`
+        })  
+      } else {
+        uni.navigateTo({
+           url:"/pages/goods/goodsList"
+        }) 
+        
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped>

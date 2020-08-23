@@ -409,7 +409,7 @@ export default {
     margin-left: 48px;
     padding-top: 44px;
     height: 14px;
-    font-size: 10px;
+    font-size: 20px;
     font-weight: 400;
     color: rgba(153, 153, 153, 1);
     line-height: 14px;
@@ -538,7 +538,7 @@ export default {
     height: 156px;
     background: url('./image/shangpinguanzhu.png') no-repeat;
     background-size: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-left: 120px;
     margin-bottom: 4px;
   }
@@ -567,7 +567,7 @@ export default {
     height: 156px;
     background: url('./image/jingyingkanban.png') no-repeat;
     background-size: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-left: 120px;
     margin-bottom: 4px;
   }

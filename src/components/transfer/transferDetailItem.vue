@@ -133,10 +133,6 @@ export default {
     }),
   },
   methods: {
-    // isCreditModeChange() {
-    //   /* switch change */
-    //   this.$emit('change', this.goods, this.index);
-    // },
     addFavorite(good) {
        console.log(good)
       if(good.$favorite) {
@@ -157,27 +153,15 @@ export default {
       good.$favorite = !good.$favorite
     },
     async changeNum(value, item) {
-      // if (value !== item.IBL_NUM) {
-      //   const result = await this.transfergoodsService.updateOrderQty({
-      //     timestamp: Date.parse(new Date()),
-      //     dhSeq: this.list.data.IBR_SEQ,
-      //     korderNo: item.IBL_KORDERNO,
-      //     longfeiUSERID: '8700010462',
-      //     qty: value
-      //   });
-      //   if(result.code === "1") {
-      //       // 价格修改
-            item.IBL_NUM = value
-            item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE)
-            let sum = 0
-            this.goods.orderList.forEach(ele => {
-              sum += Number(ele.SUMMONEY)
-            })
-            console.log(sum)
-            this.goods.SUMMONEY = sum
-           this.$emit("change",value, item,this.goods.SUMMONEY)
-      //   }
-      // }
+      item.IBL_NUM = value
+      item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE)
+      let sum = 0
+      this.goods.orderList.forEach(ele => {
+        sum += Number(ele.SUMMONEY)
+      })
+      console.log(sum)
+      this.goods.SUMMONEY = sum
+      // this.$emit("change",value, item,this.goods.SUMMONEY)
       
     },
     // 删除单个产品
@@ -189,7 +173,7 @@ export default {
       console.log(item)
       item.isExpand = !item.isExpand
       console.log(item.isExpand)
-      this.$emit('change', item, this.index);
+      // this.$emit('change', item, this.index);
     },
      // 切换付款方
     async togglePayer(item, it, index) {
@@ -225,7 +209,7 @@ export default {
           console.log(item)
           item.IBL_PAYMONEYNAME = "(" + it.payerCode + ")" + it.payerName
           console.log(item.isChecked)
-        this.$emit('change', item, it, this.index);
+        // this.$emit('change', item, it, this.index);
         // this.$emit('calBalance')
       }
 
