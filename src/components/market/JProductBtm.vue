@@ -18,6 +18,7 @@
         @change="goodsNumChange"
       ></uni-number-box>
       <button
+        @tap="goOrder(true)"
         type="button"
         class="jProductBtm-right-btn"
       >成套下单</button>
@@ -26,7 +27,7 @@
       <view class="condition-style" v-if="!conditionStatus">未满足</view>
       <view class="condition-style" v-if="conditionStatus">满足</view>
       <button
-        @tap="goOrder"
+        @tap="goOrder(conditionStatus)"
         type="button"
         class="jProductBtm-right-btn"
       >成套下单</button>
@@ -82,8 +83,10 @@ export default {
     goodsNumChange(val) {
       this.nums = val;
     },
-    goOrder() {
-      this.$emit('goOrder');
+    goOrder(state) {
+      if (state === true) {
+        this.$emit('goOrder');
+      }
     }
   }
 };

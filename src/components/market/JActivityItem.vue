@@ -144,7 +144,7 @@ export default {
       return function (val) {
         let total = 0;
         val.forEach((item) => {
-          total = ((parseFloat(item.priceDto.profitPrice) * parseInt(item.promotionNum))
+          total = ((parseFloat(item.priceDto.invoicePrice) * parseInt(item.promotionNum))
           + parseFloat(total)).toFixed(2);
         });
         return total;

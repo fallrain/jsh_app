@@ -38,8 +38,9 @@
                 style="color: #999;">{{goods.reason}}</view>
         </view>
         <view v-else class="jProductItem-cnt-price-inf">
-          <view class="jProductItem-cnt-price">¥ {{goods.priceDto.profitPrice}}</view>
-          <view class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
+          <view class="jProductItem-cnt-price">¥ {{goods.priceDto.invoicePrice}}</view>
+          <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：¥{{goods.promotionNum}}</view>
+          <view v-else class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
           <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
         </view>
       </view>

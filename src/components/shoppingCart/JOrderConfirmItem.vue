@@ -153,6 +153,7 @@ export default {
           if (index === 0) {
             initcustomerCode = item.customerCode;
           }
+          item.balance = item.payerBalance.balance;
           item.key = item.customerCode;
           item.value = `(${item.payerCode}) ${item.payerName}`;
         });

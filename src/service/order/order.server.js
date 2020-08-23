@@ -16,7 +16,7 @@ export default {
   sendVerify(data) { // 获取上上签验证联系方式接口
     return jPostJson(urlNoApi.sendVerify(data));
   },
-  mianMi(data) { //是否免密
+  mianMi(data) { // 是否免密
     return jGet(urlNoApi.mianMi, data);
   },
   send(data) { // 获取验证码
@@ -31,7 +31,10 @@ export default {
       pageSize: 10
     });
   },
-  validateProduct(data) { // 拆单校验
-    return jPostJson(urlNoApi.validateProduct, data);
+  validateProduct(data, cfg) { // 拆单校验
+    return jPostJson(urlNoApi.validateProduct, data, cfg);
+  },
+  splitOrder(data, cfg) { // 拆单
+    return jPostJson(urlNoApi.splitOrder, data, cfg);
   },
 };

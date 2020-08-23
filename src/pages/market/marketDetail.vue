@@ -345,7 +345,8 @@ export default {
     getTotalMoney() {
       let total = 0;
       this.currentDetail.products.forEach((item) => {
-        total += parseFloat(item.profitPrice);
+        total = ((parseFloat(item.priceDto.invoicePrice) * parseInt(item.promotionNum))
+          + parseFloat(total)).toFixed(2);
       });
       this.totalMoney = this.jshUtil.formatFloat(total, 2);
     },
@@ -438,13 +439,10 @@ export default {
             isCheckKuanXian: '0'
           };
           productArr.push(productItem);
-        }
-      });
-      this.currentDetail.pbProducts.forEach((item) => {
-        if (item.choosedNum !== 0) {
+        } else if (this.currentDetail.activityType === 'zuhe') {
           const productItem = {
             productCode: item.productCode,
-            number: parseInt(item.choosedNum),
+            number: item.promotionNum,
             isStock: '1',
             farWeek: '0',
             creditModel: '0',
@@ -461,10 +459,47 @@ export default {
           productArr.push(productItem);
         }
       });
+      if (this.currentDetail.pbProducts) {
+        this.currentDetail.pbProducts.forEach((item) => {
+          if (item.choosedNum !== 0) {
+            const productItem = {
+              productCode: item.productCode,
+              number: parseInt(item.choosedNum),
+              isStock: '1',
+              farWeek: '0',
+              creditModel: '0',
+              isCheckFarWeek: '0',
+              isCheckCreditModel: '0',
+              farWeekDate: '',
+              transferVersion: '',
+              priceType: 'PT',
+              priceVersion: '',
+              productSeries: '',
+              kuanXian: '0',
+              isCheckKuanXian: '0'
+            };
+            productArr.push(productItem);
+          }
+        });
+      }
       form.splitComposeList[0].productList = productArr;
-      const { code, data } = await this.orderService.validateProduct(form);
+      const { code, data } = await this.orderService.validateProduct(form, {
+        noToast: true
+      });
       if (code === '1') {
-        console.log(data);
+        const formData = JSON.stringify(form);
+        // 产品校验成功
+        uni.navigateTo({
+          url: `/pages/shoppingCart/orderConfirm?formData=${formData}`
+        });
+      } else {
+        uni.showModal({
+          title: '提示',
+          content: `型号${data[0][0].productCode}，${data[0][0].msg}${data[0][0].productName}`,
+          icon: 'none',
+          showCancel: false,
+          success: () => {}
+        });
       }
     },
     // 获取活动类型编码
