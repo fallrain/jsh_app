@@ -35,6 +35,16 @@ const urls = {
   },
   queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid) { // 整车购物车详情页面查询价格
     return `/base/queryGoodsPrice?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&longfeiMFID=${longfeiMFID}&gbid=${gbid}`;
+  },
+  cartSubmitPreCheck(timestamp, longfeiUSERID, IBR_SEQ) { // 整车购物车提交结算校验
+    return `/order/cartSubmitPreCheck?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&IBR_SEQ=${IBR_SEQ}`;
+  },
+  cartSubmit(timestamp, longfeiUSERID, IBR_SEQ, verifyCode, verifyKey) { // 整车购物车提交
+    return `/submit/cartSubmit?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&IBR_SEQ=
+    ${IBR_SEQ}&verifyCode=${verifyCode}&verifyKey=${verifyKey}`;
+  },
+  deleteVehicleOrder(timestamp, longfeiUSERID, IBR_SEQ) { // 删除订单
+    return `/deleteOrder/deleteAll?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&IBR_SEQ=${IBR_SEQ}`;
   }
 };
 util.addPrefix(baseURL, urls);
