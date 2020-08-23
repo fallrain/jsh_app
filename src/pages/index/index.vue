@@ -4,18 +4,28 @@
       <view class="homepage-top-head">
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
-          <j-search-input
-          v-model="name"
-          @search="silentReSearch"
-          placeholder="请输入搜索信息"
-          placeholder-class="col_c"
-        ></j-search-input>
+
+          <view class="jSearchInput-wrap j-flex-aic">
+          <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
+          <input
+            class="jSearchInput"
+            type="text"
+            placeholder="请输入搜索信息"
+            placeholder-class="col_c"
+            v-model="name"
+          >
+        </view>
+
         <view class='iconfont iconpeople homepage-top-head-icon'></view>
       </view>
       <!-- 全部 -->
-      <view class="homepage-top-center">
+      <scroll-view 
+        class="homepage-top-center"
+        scroll-x
+        scroll-with-animation
+      >
         <view
-          class="homepage-top-center-list"
+          :class="['homepage-top-center-list',item.active && 'active']"
           v-for="(item,index) in list"
           :key="index"
           scroll-x
@@ -24,7 +34,7 @@
         >
         {{item.title}}
         </view>
-      </view>
+      </scroll-view >
           <!-- 轮播图 -->
       <view class="homepage-swiper">
 
@@ -51,7 +61,7 @@
         class="homepage-cataloglist-item"
         v-for="item in cataloglist"
         :key="item.id"
-        @click="goCatalog(item.url)"
+        @click="goCatalog(item)"
       >
         <image class="cataloglist-item-img" :src="item.src" mode="aspectFill" />
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -85,7 +95,7 @@
           </view>
         </view>
         <!-- 资讯 -->
-        <view class="homepage-info">
+        <!-- <view class="homepage-info">
           <view class="homepage-info-name">
             <text class="homepage-info-title">热门资讯</text>
             <text class="homepage-info-more">MORE</text>
@@ -98,11 +108,11 @@
           
           >
             <view class="homepage-info-list-hot">{{item.title}}</view>
-            <!-- <view class="homepage-info-list-title">{{item.info}}</view> -->
+            <view class="homepage-info-list-title">{{item.info}}</view>
           </view>
           </view>
 
-        </view>
+        </view> -->
       </view>
       <!-- tabber -->
         <!-- <view
@@ -354,7 +364,21 @@ export default {
     },
     silentReSearch() {
       /* 静默搜索 */
-      this.mescroll.resetUpScroll(true);
+     
+      
+     
+    },
+    search() {
+      console.log(this.name)
+      if(this.name) {
+        uni.navigateTo({
+          url: `/pages/goods/goodsList?name=${this.name}`
+        })  
+      } else {
+        uni.showToast({
+            title: '请输入搜索词',
+        });
+      }
     },
     getPageInf() {
       this.getbannerList();
@@ -367,9 +391,11 @@ export default {
         console.log(data);
       }
     },
-    goCatalog(url) {
+    // 目录列表跳转
+    goCatalog(item) {
+
       uni.navigateTo({
-        url:url
+        url:item.url
       });
       // console.log(url);
     },
@@ -403,11 +429,21 @@ export default {
         })
         console.log(data)
         this.list = data
+        this.list.map(item => {
+          item.active = false
+        })
+        this.list[0].active = true
+        console.log(this.list)
       }
     },
     // 应用列表跳转
     goGoodsList(item) {
-      // alert(1)
+      console.log(item)
+      this.list.map(v => {
+        v.active = false
+      })
+      item.active = true
+      console.log(item.active)
       if(item.categoryCode) {
         uni.navigateTo({
         url: `/pages/goods/goodsList?code=${item.categoryCode}`

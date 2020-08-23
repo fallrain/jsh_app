@@ -42,6 +42,7 @@
               // color:rgba(255,255,255,1);
               // line-height:34px;
           // }
+
           .homepage-top-head-icon{
               width:42px;
               height:45px;
@@ -55,27 +56,35 @@
           margin-top: 24px;
           margin-bottom: 24px;
           justify-content: space-between;
+          position: relative;
+          .uni-scroll-view {
+            &::-webkit-scrollbar {
+              display: none;
+            }
+          }
+        
+          .uni-scroll-view-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-bottom: 4px;
+          }
           .homepage-top-center-list{
-              // width:96px;
-              // height:34px;
-              position: relative;
-              font-size:28px;
-              font-family:PingFangSC-Regular,PingFang SC;
-              font-weight:400;
-              color:rgba(255,255,255,1);
-              line-height:34px;
-              .uni-scroll-view {
-                &::-webkit-scrollbar {
-                  display: none;
-                }
-              }
-            
-              .uni-scroll-view-content {
-                position: relative;
-                display: flex;
-                align-items: center;
-                padding-bottom: 4px;
-              }
+            // width:96px;
+            // height:34px;
+            position: relative;
+            flex-shrink: 0;
+            font-size:28px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+            line-height:34px;
+            margin-right: 40px;
+           
+          }
+          .active {
+
+            color: #ED2856;
           }
         }  
       //  轮播图
