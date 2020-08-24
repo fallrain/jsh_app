@@ -584,7 +584,7 @@ export default {
       if (item.categoryCode) {
         console.log(item.categoryCode)
         uni.navigateTo({
-          url: `/pages/goods/goodsList?code=${item.categoryCode}`
+          url: `/pages/goods/goodsList?categoryCode=${item.categoryCode}`
         });
       } else {
         console.log(222)
