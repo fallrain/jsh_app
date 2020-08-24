@@ -245,6 +245,22 @@
   padding: 10px 6px 18px 10px;
 }
 
+.v-c-i-cnt-price-info {
+  width: 500px;
+  position: absolute;
+  top: 82%;
+  left: 28%;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.911);
+  border: 1px solid #c3c3c3;
+}
+.v-c-i-cnt-price-info-li {
+  margin:10px 0 10px 20px;
+}
+.v-c-i-cnt-price-info-li.active {
+  color: #ED2856;
+  background: #FFF5F7;
+}
 
 
 

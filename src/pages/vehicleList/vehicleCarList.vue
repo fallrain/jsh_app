@@ -54,6 +54,8 @@ export default {
   },
   data() {
     return {
+      JDWarehouse: [], // 京东异地地址列表
+      userInfMianMi: false, // 是否免密
       checked: false, // 全选单子
       checkNum: 0, // 选中的单子
       checkAllNum: 0, // 选中的单子的总金额
@@ -88,6 +90,7 @@ export default {
   },
   created() {
     this.queryCarList(); // 整车购物车列表查询
+    this.queryJDWarehouse();
     // this.getPayerList(); // 获取付款方接口
   },
   methods: {
@@ -102,48 +105,71 @@ export default {
       this.checkAllNum = 0; // 选中的单子的总金额
       this.checkSEQ = ''; // 选中的单子单号
     },
+    async queryJDWarehouse() {
+      const timetamp = new Date().valueOf();
+      const longfeiUSERID = this.userInf.customerCode;
+      const res = await this.vehicleService.queryJDWarehouse(timetamp, longfeiUSERID);
+      console.log(res);
+      if (res.code === '1') {
+        this.JDWarehouse = res.data.data.items;
+      }
+    },
     async queryCarList() {
       const timetamp = new Date().valueOf();
       const longfeiUSERID = this.userInf.customerCode;
       const { code, data } = await this.vehicleService.queryCarList(timetamp, longfeiUSERID);
       if (code === '1') {
-        console.log('整车购物车查询');
-        console.log(data);
         this.clearInfo();
         data.data.forEach((inf) => {
-          if (inf.IBR_ISFLAG === '失效产品' && inf.orderList.length > 0) {
-            inf.checked = false;
-            inf.typpe = 'ZC';
-            this.failureGoodsList.push(inf);
-            this.NUM = this.NUM + inf.orderList.length;
-          }
-          if (inf.IBR_ISFLAG === '普通整车' && inf.orderList.length > 0) {
-            inf.checked = false;
-            this.puTongList.push(inf);
-            this.NUM = this.NUM + inf.orderList.length;
-          }
-          if (inf.IBR_ISFLAG === '拼车订单' && inf.orderList.length > 0) {
-            inf.checked = false;
-            this.pingCheList.push(inf);
-            this.NUM = this.NUM + inf.orderList.length;
-          }
-          if (inf.IBR_ISFLAG === '我的挂单' && inf.orderList.length > 0) {
-            inf.checked = false;
-            this.guaDanList.push(inf);
-            this.NUM = this.NUM + inf.orderList.length;
+          if (inf.orderList.length > 0) {
+            this.getPayerList(inf).then(() => {
+              inf.JDWarehouse = this.JDWarehouse;
+              if (inf.IBR_ISFLAG === '失效产品' && inf.orderList.length > 0) {
+                inf.checked = false;
+                inf.typpe = 'ZC';
+                this.failureGoodsList.push(inf);
+                this.NUM = this.NUM + inf.orderList.length;
+              }
+              if (inf.IBR_ISFLAG === '普通整车' && inf.orderList.length > 0) {
+                inf.checked = false;
+                this.puTongList.push(inf);
+                this.NUM = this.NUM + inf.orderList.length;
+              }
+              if (inf.IBR_ISFLAG === '拼车订单' && inf.orderList.length > 0) {
+                inf.checked = false;
+                this.pingCheList.push(inf);
+                this.NUM = this.NUM + inf.orderList.length;
+              }
+              if (inf.IBR_ISFLAG === '我的挂单' && inf.orderList.length > 0) {
+                inf.checked = false;
+                this.guaDanList.push(inf);
+                this.NUM = this.NUM + inf.orderList.length;
+              }
+            });
           }
         });
+        console.log('整车购物车查询');
+        console.log(data);
       }
     },
-    async getPayerList() {
-      const { code, data } = await this.customerService.getcustomersList(this.userInf.customerCode, {
-        salesGroupCode: this.userInf.salesGroupCode,
-        status: 1
-      });
+    async getPayerList(inf) { // 获取付款方接口
+      const longfeiUSERID = this.userInf.customerCode;
+      const productGroup = inf.orderList[0].IBL_INVSORT;
+      const sendtoCode = this.defaultSendTo.customerCode;
+      const yuncangType = inf.IBR_ZCDELIVERYTYPE;
+      const bstnk = inf.orderList[0].IBL_KORDERNO;
+      const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
       if (code === '1') {
-        this.payerList = data;
-        this.currentPayer = data[0];
-        this.payerList[0].choosed = true;
+        data.data.items.forEach((item) => {
+          item.checked = false;
+        });
+        inf.orderList.forEach((item2) => {
+          item2.payCheck = false;
+          item2.payVehiList = data;
+          item2.payVehCheck = data.data.items[0];
+          item2.payVehiList.data.items[0].checked = true;
+          item2.payVehCheck.checked = true;
+        });
       }
     },
     goodsChange(item, index) {
@@ -180,6 +206,7 @@ export default {
     pullDetail(item) {
       // console.log(item);
       // console.log(index);
+      item.longfeiUSERID = this.userInf.customerCode;
       item.orderList.forEach(async (inf) => {
         const gbid = inf.GBID;
         const longfeiUSERID = this.userInf.customerCode;
@@ -270,21 +297,44 @@ export default {
       console.log('jiesuanzhengche');
       if (item) { // 结算
         console.log('结算');
+        if (this.checkSEQ === '') {
+          uni.showToast({
+            icon: 'none',
+            title: '请选择一个订单!',
+            duration: 3000
+          });
+          return;
+        }
+        this.getUserInfMianMi().then(() => {
+          console.log('获取免密2');
+        });
       } else { // 删除
         console.log('删除');
         const timetamp = new Date().valueOf();
         const longfeiUSERID = this.userInf.customerCode;
         const { code, data } = await this.vehicleService.deleteVehicleOrder(timetamp, longfeiUSERID, this.checkSEQ);
         if (code === '1') {
-          console.log('结算1');
-          if (data.code === '200') {
-            console.log('结算2');
-          } else {
-          }
+          console.log(`结算1${data}`);
           this.queryCarList();
         }
       }
-    }
+    },
+    async getUserInfMianMi() {
+      /* 获取免密 */
+      const data = await this.orderService.mianMi();
+      if (data.code === '1') {
+        console.log('获取免密');
+        console.log(data.data);
+        this.userInfMianMi = data.data;
+      }
+    },
+    showAddToCartToast(msg) {
+      this.$refs.toast.open({
+        type: 'success',
+        content: msg,
+        timeout: 2000,
+      });
+    },
   }
 };
 </script>
