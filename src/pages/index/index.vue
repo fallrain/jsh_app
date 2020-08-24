@@ -4,12 +4,7 @@
       <view class="homepage-top-head">
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
-<<<<<<< HEAD
           <view class="jSearchInput-wrap j-flex-aic">
-=======
-
-        <view class="jSearchInput-wrap j-flex-aic">
->>>>>>> 7361e59f898ea546be922a70e0785bcd04eaf087
           <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
           <input
             class="jSearchInput"
@@ -82,13 +77,13 @@
       <!-- 推荐 + 资讯-->
       <view class="homepage-recommend-info">
         <!-- 推荐 -->
-        <view class="homepage-recommend">
+        <!-- <view class="homepage-recommend">
           <view
             class="homepage-recommend-list"
             v-for="item in recommendList"
             :key="item.id"
         
-          >
+          > -->
             <!-- <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
@@ -96,7 +91,7 @@
             <image class="homepage-recommend-image" :src="item.image" mode="aspectFill" />
             <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
            -->
-           <view class="homepage-recommend-name">
+            <!-- <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
             </view>
@@ -107,9 +102,9 @@
               <uni-grid-item>                
                   <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />   
               </uni-grid-item>
-          </uni-grid>
-        </view>
-        </view>
+            </uni-grid>
+          </view>
+        </view> -->
         <!-- 资讯 -->
         <!-- <view class="homepage-info">
           <view class="homepage-info-name">
@@ -127,27 +122,10 @@
           </view>
           </view>
         </view> -->
+       <!-- </view> -->
+    
+    
       </view>
-      <!-- 资讯 -->
-      <!-- <view class="homepage-info">
-        <view class="homepage-info-name">
-          <text class="homepage-info-title">热门资讯</text>
-          <text class="homepage-info-more">MORE</text>
-        </view>
-        <view>
-          <view
-          class="homepage-info-list"
-          v-for="item in infoList"
-          :key="item.id"
-
-        >
-          <view class="homepage-info-list-hot">{{item.title}}</view>
-          <view class="homepage-info-list-title">{{item.info}}</view>
-        </view>
-        </view>
-
-      </view> -->
-    </view>
     <!-- tabber -->
     <!-- <view
       v-for="item in tabBarList"
@@ -179,7 +157,7 @@ import {
   USER
 } from '../../store/mutationsTypes';
 import './css/index.scss';
-
+import JSearchInput from '../../components/form/JSearchInput';
 import homePageImg from '@/assets/img/tabbar/shouye.png';
 import homePageImgActive from '@/assets/img/tabbar/shouye-actived.png';
 import categoryImg from '@/assets/img/tabbar/fenlei.png';
