@@ -72,5 +72,13 @@ export default {
         noToast: true
       }
     );
+  },
+  changeDefaultSendTo(data) {
+    /* 更改默认送达方 */
+    const {
+      // 送达方code
+      sendToCode,
+    } = data;
+    return jGet(urls.changeDefaultSendTo(sendToCode));
   }
 };

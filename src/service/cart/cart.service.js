@@ -20,8 +20,11 @@ export default {
   getSpecialPrice(data) {
     /* 获取版本价格 */
     const {
+      // 售达方code
       saletoCode,
+      // 送达方code
       sendtoCode,
+      // 账户（售达方code?）
       account
     } = data;
     return jGet(urls.getSpecialPrice({

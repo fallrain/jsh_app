@@ -45,7 +45,8 @@
       <button
         class="jShoppingCartBtm-btn-primary"
         type="button"
-      >结算
+        @tap="handleSubmit"
+      >提交订单
       </button>
     </block>
   </view>
@@ -104,6 +105,10 @@ export default {
     handleFollow() {
       /* 关注操作 */
       this.$emit('follow');
+    },
+    handleSubmit() {
+      /* 关注操作 */
+      this.$emit('submit');
     }
   },
 };
@@ -185,9 +190,10 @@ export default {
 
   .jShoppingCartBtm-btn-primary {
     display: inline-block;
-    width: 116px;
     height: 42px;
     margin-left: auto;
+    padding-left: 20px;
+    padding-right: 20px;
     line-height: 42px;
     text-align: center;
     background: $theme-color;
