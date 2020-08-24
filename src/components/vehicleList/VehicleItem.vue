@@ -21,11 +21,8 @@
       </view>
       <view class="VHIItem-cnt-opts">
         <view class="numberVHI"><uni-number-box :value="goods.$num" @change="goodsNumChange"></uni-number-box></view>
-        <button
-          @tap="addTransfer"
-          class="VHIItem-cnt-opts-primary ml26"
-          type="button"
-        >加入整车</button>
+        <button v-if="goods.$PtPrice.invoicePrice!==''&&goods.$PtPrice.invoicePrice!==undefined&&goods.$PtPrice.invoicePrice!==null" @tap="addTransfer" class="VHIItem-cnt-opts-primary ml26" type="button">加入整车</button>
+        <button v-else class="VHIItem-cnt-opts-primary-hui ml26" type="button">加入整车</button>
       </view>
     </view>
   </view>
