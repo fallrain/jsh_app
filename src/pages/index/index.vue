@@ -35,7 +35,6 @@
       </scroll-view>
       <!-- 轮播图 -->
       <view class="homepage-swiper">
-
         <uni-swiper-dot
           :current="current"
           :dotsStyles="dotsStyles"
@@ -70,8 +69,9 @@
     <view class="homepage-headlines">
       <image class="homepage-headlines-img" mode="aspectFill" src="../../assets/img/index/topnew.png"/>
       <view class="homepage-headlines-title">最新</view>
+      
       <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
-      <view class="iconfont iconyou homepage-headlines-icon"></view>
+      <!-- <view class="iconfont iconyou homepage-headlines-icon"></view> -->
     </view>
 
       <!-- 推荐 + 资讯-->
@@ -84,52 +84,25 @@
             :key="item.id"
         
           >
-            <!-- <view class="homepage-recommend-name">
-              <view class="homepage-recommend-title">{{item.title}}</view>
-              <view class="homepage-recommend-describe">{{item.describe}}</view>
-            </view>
-            <image class="homepage-recommend-image" :src="item.image" mode="aspectFill" />
-            <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
-           -->
             <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
             </view>
-            <swiper class="homepage-recommend-swiper" @change="change">
+            <swiper 
+              class="homepage-recommend-swiper" 
+              @change="change"
+              next-margin="68px"
+            >
               <swiper-item 
                 v-for="v in item.data" 
-                :key="v.id"
+                :key="v.id"                
                 class="homepage-recommend-swiper-item"
               >
-                <view class="homepage-recommend-imgs">
+                <view class="homepage-recommend-imgs" @tap="goDetail(v)">
                   <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill"/>
-               </view>
+                </view>
               </swiper-item>
             </swiper>
-
-            <!-- <uni-grid :column="1"  
-              class="homepage-recommend-imgs" 
-              @change="recommend"
-            >
-              <uni-grid-item                
-                v-for="v in item.data" 
-                :key="v.id"
-                :style="'width:'+width+';'+(square?'height:'+width:'')" 
-                class="uni-grid-item"
-              > 
-               
-                <view 
-                  v-if="width" 
-                  :class="{ 'uni-grid-item--border': showBorder,  'uni-grid-item--border-top': showBorder && index < column, 'uni-highlight': highlight }" 
-                  :style="{  'border-right-color': borderColor ,'border-bottom-color': borderColor ,'border-top-color': borderColor }" 
-                  class="uni-grid-item__box" 
-                  @click="_onClick"
-                >
-                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />  
-                </view> 
-              </uni-grid-item>
-              
-            </uni-grid> -->
 
           </view>
         </view>
@@ -413,7 +386,7 @@ export default {
       this.getXinPin();
       this.getBaoKuan();
       this.getZhuanGong();
-      this.getBaoKuan();
+      this.getZiYuanJi();
       // this.recommend();
       this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       this[USER.UPDATE_SALE_ASYNC]();
@@ -484,6 +457,7 @@ export default {
     },
     // 目录列表跳转
     goCatalog(item) {
+      console.log(item)
       uni.navigateTo({
         url: item.url
       });
@@ -512,15 +486,22 @@ export default {
     },
     // 新闻资讯详情
     goInfoDetail(item) {
-
+      console.log(item)
       uni.navigateTo({
         url: `/pages/index/information?id=${item.id}`
       })  
     },
 
-    // 推荐
+    // 推荐跳转详情
+    goDetail(v) {
+      console.log(v)
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${v.productCode}`
+      }) 
+    },
+
     change(e) {
-      this.current = e.detail.current;
+      // this.current = e.detail.current;
     },
     // 新品推荐列表
     async getXinPin() {
@@ -601,10 +582,12 @@ export default {
       item.active = true;
       console.log(item.active);
       if (item.categoryCode) {
+        console.log(item.categoryCode)
         uni.navigateTo({
           url: `/pages/goods/goodsList?code=${item.categoryCode}`
         });
       } else {
+        console.log(222)
         uni.navigateTo({
           url: '/pages/goods/goodsList'
         });

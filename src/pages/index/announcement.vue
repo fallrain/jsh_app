@@ -7,13 +7,13 @@
     >
       <view class="announcement-con-title">{{item.title}}</view> 
       <view class="announcement-con-row">
-        <view class="announcement-con-row-at">{{item.at}}</view>
-        <view class="announcement-con-row-bt">{{item.bt}}</view>
+        <view class="announcement-con-row-at">{{item.typeStr}}</view>
+        <view class="announcement-con-row-bt">{{item.creatorDept}}</view>
         <i class="announcement-con-row-icon iconfont iconshijian"></i>
-        <view class="announcement-con-row-time">{{item.time}}</view>
+        <view class="announcement-con-row-time">{{item.publishTime}}</view>
       </view>
       <view class="announcement-con-img">
-          <image :src="item.image">
+          <image :src="item.img">
       </view>
 
     </view>
@@ -80,8 +80,13 @@ export default {
           unitId: a 
         }));
         if (code === '1') {
-            this.list = data.list
+
+            data.list.map(item => {
+                item.img = require('@/assets/img/index/new-pic.png')
+               
+            })
             console.log(data);
+            this.list = data.list
         }
       }
   }
@@ -135,7 +140,7 @@ export default {
   line-height:32px;
   text-align: center;
   font-size: 24px;
-  margin-right: 300px;
+  margin-right: 284px;
 }
 .announcement-con-row-icon {
   font-size: 27px !important;
