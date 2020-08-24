@@ -62,12 +62,25 @@ button {
   .uni-body {
     .uni-popup-dialog {
       width: 400px;
-      .uni-dialog-button{
+
+      .uni-dialog-button {
         height: 60px;
       }
     }
-    .uni-dialog-content{
+
+    .uni-dialog-content {
       padding: 10px 20px 20px 20px;
+    }
+  }
+
+  .popup_list {
+    .mpopup {
+      width: 700px;
+      height: 64px;
+
+      .text {
+        font-size: 24px;
+      }
     }
   }
 }

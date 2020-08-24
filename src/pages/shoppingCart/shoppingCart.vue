@@ -24,7 +24,10 @@
         <text>配送至：{{choseSendAddress.name || ''}}</text>
       </view>
     </view>
-    <view class="shoppingCart-list">
+    <view
+      class="shoppingCart-list"
+      v-if="shoppingList.length"
+    >
       <j-shopping-cart-item
         v-for="(goods,index) in shoppingList"
         :key="index"
@@ -37,23 +40,41 @@
         @change="goodsChange"
       ></j-shopping-cart-item>
     </view>
-    <j-failure-goods-list
-      :list="failureGoodsList"
-      @change="failureGoodsListChange"
-    ></j-failure-goods-list>
-    <!-- --window-bottom -->
+    <view
+      class="shoppingCart-empty"
+      v-else
+    >
+      购物车空空如也~
+    </view>
+    <block v-if="failureGoodsList.length">
+      <j-failure-goods-list
+        :list="failureGoodsList"
+        @change="failureGoodsListChange"
+        @clear="clearFailureGoods"
+      ></j-failure-goods-list>
+    </block>
     <j-shopping-cart-btm
-      :checked.sync="isCheckAll"
+      :isCheckedAll.sync="isCheckAll"
+      :isEdit.sync="isEdit"
+      :total="totalGoodsNum"
+      :total-price="totalGoodsPrice"
       @checkAll="checkAll"
+      @del="deleteCart"
+      @follow="followGoods"
     ></j-shopping-cart-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
       :pickerList="sendCustomerList"
-      @change="sendCustomerListChange" s
+      @change="sendCustomerListChange"
     ></j-address-picker>
+    <m-toast
+      :isdistance="true"
+      ref="toast"
+    ></m-toast>
   </view>
 </template>
 <script>
+import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import JShoppingCartItem from '../../components/shoppingCart/JShoppingCartItem';
 import JShoppingCartBtm from '../../components/shoppingCart/JShoppingCartBtm';
 import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
@@ -69,13 +90,14 @@ import {
 
 
 export default {
-  name: 's',
+  name: 'shoppingCart',
   components: {
     JTab,
     JAddressPicker,
     JFailureGoodsList,
     JShoppingCartBtm,
     JShoppingCartItem,
+    MToast
   },
   data() {
     return {
@@ -98,19 +120,16 @@ export default {
       ],
       // 购物车列表
       shoppingList: [],
-      failureGoodsList: [
-        {
-          checked: false,
-        },
-        {
-          checked: false,
-        },
-        {
-          checked: false,
-        }
-      ],
+      // 失效产品列表
+      failureGoodsList: [],
       // 是否全选
       isCheckAll: false,
+      // 是否编辑模式
+      isEdit: false,
+      // 选中的商品总数
+      totalGoodsNum: 0,
+      // 选中的商品总价
+      totalGoodsPrice: 0.00,
       // 是否显示配送地址选择
       isShowAdsPicker: false,
       // 送达方数据
@@ -211,7 +230,7 @@ export default {
         // 失效商品
         const failureGoodsList = [];
         data.forEach((v) => {
-          if (v.productList[0].productEnable === 1) {
+          if (v.composeEnable === 1) {
             shoppingList.push({
               checked: false,
               isCreditMode: false,
@@ -263,9 +282,16 @@ export default {
     },
     checkAll(checked) {
       /* 全部选择回调函数 */
+      let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
         v.checked = checked;
+        // 计算选择的总价
+        totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, v.$PriceInfo.commonPrice.invoicePrice);
       });
+      // 更新选择的总商品数
+      this.totalGoodsNum = this.shoppingList.length;
+      // 更新选择的总商品价格
+      this.totalGoodsPrice = totalGoodsPrice;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -311,6 +337,82 @@ export default {
     },
     tabClick(tabs) {
       this.tabs = tabs;
+    },
+    deleteCart(idList) {
+      /* 删除购物车里的商品 */
+      /**
+       * @idList（Array）id的集合，如果传入则使用传入的id
+       * */
+      let ids;
+      if (idList && idList.length) {
+        ids = idList;
+      } else {
+        // 选出选中的商品的id集合
+        ids = [];
+        this.shoppingList.forEach((v) => {
+          if (v.checked) {
+            ids.push(v.id);
+          }
+        });
+      }
+      if (!ids.length) {
+        this.$refs.toast.open({
+          type: 'warn',
+          content: '请先选择商品',
+          timeout: 2000,
+        });
+        return;
+      }
+      uni.showModal({
+        title: '',
+        content: '确认要从购物车移除吗？',
+        async success(res) {
+          if (res.confirm) {
+            const { code } = await this.cartService.deleteCart(ids);
+            if (code === '1') {
+              this.$refs.toast.open({
+                type: 'success',
+                content: '删除成功',
+                timeout: 2000,
+              });
+            }
+          }
+        }
+      });
+    },
+    clearFailureGoods() {
+      /* 清空购物车的失效产品 */
+      const ids = this.shoppingList.map(v => v.id);
+      this.deleteCart(ids);
+    },
+    followGoods() {
+
+    },
+    async followGoods() {
+      /* 添加关注 */
+      const {
+        customerCode
+      } = this.userInf;
+      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, this.goods.productList[0].productCode);
+      if (code === '200') {
+        this.goods.followState = true;
+        this.$emit('change', this.goods, this.index);
+      }
+    },
+    async unfollowGoods() {
+      /* 取消关注 */
+      const {
+        customerCode
+      } = this.userInf;
+      const { code } = await this.productDetailService.productRemoveInter({
+        account: customerCode,
+        customerCode,
+        productCodeList: [this.goods.productList[0].productCode]
+      });
+      if (code === '1') {
+        this.goods.followState = false;
+        this.$emit('change', this.goods, this.index);
+      }
     }
   }
 };

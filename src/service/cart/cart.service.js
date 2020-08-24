@@ -38,5 +38,12 @@ export default {
     console.log('shoppingCart service');
 
     return jGet(urls.shoppingCart(uid));
+  },
+  deleteCart(ids) {
+    /* 从购物车里删除一个商品 */
+    /**
+     *@ids(Array)：商品在购物车里的id集合
+     * */
+    return jPostJson(urls.deleteCart, ids);
   }
 };
