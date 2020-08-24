@@ -150,6 +150,7 @@ export default {
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
+      saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     })
     
@@ -177,10 +178,10 @@ export default {
     },
     async getOrderList() {
       // 调货购物车数据
-      // console.log(this.defaultSendToInf.customerCode)
+      // console.log(this.saleInfo.customerCode)
       const { code, data } = await this.transfergoodsService.allOrderList({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.defaultSendToInf.customerCode
+        longfeiUSERID: this.saleInfo.customerCode
       })
       if(code === "1") { 
         console.log(data.data) 
@@ -240,7 +241,7 @@ export default {
         console.log(productCodes)
         // 获取收藏列表
         const getProductQueryInter = await this.customerService.queryCustomerInterestProductByAccount({
-          account: this.defaultSendToInf.customerCode,
+          account: this.saleInfo.customerCode,
           productCodeList: productCodes
         });
         console.log(getProductQueryInter)
@@ -382,7 +383,7 @@ export default {
     },
     async getUserInfById() {
       /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
-      const {code, data} =  await this.orderService.sendVerify(this.defaultSendToInf.customerCode);
+      const {code, data} =  await this.orderService.sendVerify(this.saleInfo.customerCode);
         if (code === "1") {
           const abc = data.data.account
           
@@ -411,7 +412,7 @@ export default {
       })
       const submitDhOrder  = await this.transfergoodsService.submitDhOrder({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.defaultSendToInf.customerCode,
+        longfeiUSERID: this.saleInfo.customerCode,
         orderNo: SEQ,
         verifyCode: this.form.verificationCode,
         verifyKey: '',
@@ -467,10 +468,10 @@ export default {
            console.log(item)         
         }
       })
-      console.log(this.defaultSendToInf.customerCode)
+      console.log(this.saleInfo.customerCode)
       const deleteForm = await this.transfergoodsService.deleteOrderForm ({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.defaultSendToInf.customerCode,
+        longfeiUSERID: this.saleInfo.customerCode,
         SEQ: temp.join(',')
       });
       if(deleteForm.code === "1") {
@@ -483,7 +484,7 @@ export default {
       // 购物车商品数量 
       const shoppingCart = await this.transfergoodsService.shoppingCartNum({
         timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.defaultSendToInf.customerCode
+        longfeiUSERID: this.saleInfo.customerCode
       })
       if(shoppingCart.code === "1") {   
         this.shoppingCartNum = shoppingCart.data.allNum
@@ -507,15 +508,10 @@ export default {
           this.isCheckAll = false
           return
         }
-        if(this.isCheckAll) {
+        if(ele.checked) {
           console.log(1)
-          chooseNum += ele.data.orderList.length
-          console.log(ele)
-          console.log(chooseNum)
-        } else {
-          console.log(2)
-          chooseNum = 0
-        }        
+          chooseNum += 1
+        }    
       })
       this.allChooseNum = chooseNum
       this.calBalance()
@@ -523,8 +519,8 @@ export default {
     // 付款方数据
     async getpayerList() {
       // console.log(this.userInf);
-      const { code, data } = await this.customerService.getcustomersList(this.defaultSendToInf.customerCode, {
-        salesGroupCode: this.defaultSendToInf.salesGroupCode,
+      const { code, data } = await this.customerService.getcustomersList(this.saleInfo.customerCode, {
+        salesGroupCode: this.saleInfo.salesGroupCode,
         status: 1
       });
       if (code === '1') {
@@ -656,6 +652,11 @@ export default {
       this.allOrderList.forEach((v) => {
         v.checked = checked;
       });
+      if (checked) {
+        this.allChooseNum = this.allOrderList.length
+      } else {
+        this.allChooseNum = 0
+      }
       this.calSettlement()
       this.calBalance();
     },
