@@ -12,7 +12,7 @@
     <button class="tShoppingCartBtm-check-cancel" @tap="cancel" v-show="isShowClear">取消</button>
 
     <view class="tShoppingCartBtm-text">
-      已选中<text class="tShoppingCartBtm-text-highlight">{{allChooseNum}}</text>种
+      已选中<text class="tShoppingCartBtm-text-highlight">{{allChooseNum}}</text>车
     </view>
     <view class="tShoppingCartBtm-text-row">|</view>
     <view class="tShoppingCartBtm-total">

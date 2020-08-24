@@ -95,10 +95,10 @@ export default {
     };
   },
   created() {
+      
   },
   methods: {
-    setPopTabs(wareHome, sendWay) { 
-      console.log(wareHome)  
+    setPopTabs(wareHome, sendWay) {   
       if (wareHome) {
         const tempArray = []
         wareHome.map(item => {
@@ -171,9 +171,12 @@ export default {
 // }
 
 .jHeadTab-wrap {
-  position: relative;
+  position: fixed;
   background: #fff;
   height: 130px;
+  width: 100%;
+  top: 180px;
+  z-index: 100;
 }
 
 
@@ -220,7 +223,7 @@ $jHeadTab-pop-tab-list: 24px;
   padding-bottom: $jHeadTab-pop-tab-list;
   background: #fff;
   height: 92px;
-
+  margin-top: -2px;
   &.isExpend {
     padding-bottom: 0;
   }

@@ -9,11 +9,11 @@
         background:url("../../../assets/img/index/top-bg.png") no-repeat;
         background-size:100%;
         background-position: 0px -50px;
-        padding:32px 24px 0px 38px;
+        padding:32px 24px 0px 28px;
         position: relative;
         .homepage-top-head{
           display: flex;
-          align-self: center;;
+          align-self: center;
       
           .homepage-top-head-name{       
               width:90px;
@@ -48,7 +48,9 @@
               height:45px;
               font-size: 48px !important;
               color:#fff;
-            
+              position: absolute;
+              top: 30px;
+              right:29px;
           }
         }
         .homepage-top-center{
@@ -94,7 +96,7 @@
     .homepage-swiper{
         //   width:670px;
         //   height:280px;
-          position: absolute;
+        //   position: absolute;
           top:170px;
           left:24px;
           border-radius: 20px;
@@ -212,8 +214,8 @@
             .homepage-recommend-list{
                 width:350px;
                 height:236px;
-                border-right:2px solid rgba(245,245,245,1);
-                border-bottom:2px solid rgba(245,245,245,1);
+                // border-right:2px solid rgba(245,245,245,1);
+                // border-bottom:2px solid rgba(245,245,245,1);
                 padding:20px 32px 30px 20px;
                 .homepage-recommend-name{
                     display:flex;
@@ -231,25 +233,35 @@
                         font-weight:400;
                         color:rgba(194,163,111,1);
                         margin-top:8px;
-                        &:nth-child(2){
-                            width:90px;
-                            height:26px;
-                            background:rgba(255,245,230,1);
-                            border-radius:13px;
-                            text-align:center;
-                            line-height:26px;
+                        // &:nth-child(2){
+                        //     width:90px;
+                        //     height:26px;
+                        //     background:rgba(255,245,230,1);
+                        //     border-radius:13px;
+                        //     text-align:center;
+                        //     line-height:26px;
                             
-                        }                    
+                        // }                    
                     }
                 }
                 
-                image{
-                    width:120px;
-                    height:120px;
-                }
-                .homepage-recommend-image{
-                    margin:0px 40px 0px 16px;
-                }
+                // image{
+                //     width:120px;
+                //     height:120px;
+                // }
+                // .homepage-recommend-image{
+                //     margin:0px 40px 0px 16px;
+                // }
+            }
+            .homepage-recommend-imgs {
+              width:120px;
+              height:120px;
+              display: flex;
+              overflow: hidden;
+              image {
+                width: 100px;
+                height: 100px;
+              }
             }
     }
     // 资讯

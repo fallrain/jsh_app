@@ -20,7 +20,7 @@
       <view class="jGoodsItem-cnt-price-inf">
         <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
         <view class="jGoodsItem-cnt-price-inf-item">供价：¥ {{goods.$PtPrice.supplyPrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockList[0].subCodeList[0].QTY }}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockNum}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box

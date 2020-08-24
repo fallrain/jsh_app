@@ -1,6 +1,7 @@
 <template>
     <view class="transferGoods">
-      <view class="transfer-search">
+      <view class= "transferGoods-head">
+        <view class="transfer-search">
           <j-search-input
             v-model="filterForm.name"
             @search="silentReSearch"
@@ -11,17 +12,18 @@
             @tap="silentReSearch"
           >搜索
           </button>
+        </view>
+        <view class="transfer-m"></view>
+        <transfer-goods-head
+            class="mb12"
+            :tabs="tabs"
+            @confirm="confirm"
+            @tabClick="tabClick"
+            :cargoWareHome="cargoWareHome"
+            :cargoSendWay="cargoSendWay" 
+            ref="transferGoodsHead"
+        ></transfer-goods-head>
       </view>
-      <view class="transfer-m"></view>
-      <transfer-goods-head
-          class="mb12"
-          :tabs="tabs"
-          @confirm="confirm"
-          @tabClick="tabClick"
-          :cargoWareHome="cargoWareHome"
-          :cargoSendWay="cargoSendWay" 
-          ref="transferGoodsHead"
-      ></transfer-goods-head>
 
       <mescroll-body
         ref="mescrollRef"
@@ -152,6 +154,8 @@ export default {
       sortDirection: '',
       conditionList:[],
       transferList:[],
+      // 库存数量
+      stockNum: 0,
       // 调出库位
       cargoWareHome: [],
       // 配送类型
@@ -266,10 +270,12 @@ export default {
     confirm(popTabs) {
       this.popTabs = popTabs
       console.log(this.popTabs)
+      console.log(this.list)
       if (this.popTabs && this.popTabs.length !== 0) {
         this.popTabs[0].children.forEach(ele => {
           if (ele.checked) {
             this.stock = ele.type
+            this.getStockNum()
           }
           let cargoWare = this.cargoWareHome
           // cargoWare.splice(0,1)
@@ -304,6 +310,40 @@ export default {
       this.mescroll.resetUpScroll(true);
 
     },
+    getStockNum() {
+      const tabs = this.$refs.transferGoodsHead.popTabs
+      // console.log(tabs)
+      if (tabs && tabs.length !== 0) {
+        tabs[0].children.forEach(ele => {
+          if (ele.checked) {
+            // 根据库位判断库存数量
+           let num = 0
+            console.log(ele)
+            if(ele.type === "") {
+              this.list.forEach(item => {
+                item.stockList.map(v => {
+                  num += v.qty
+                })
+                item.stockNum = num
+                // console.log(item)
+              })
+              
+            } else {
+              this.list.forEach(item => {
+                item.stockList.map(v => {
+                  if(ele.type === v.whcode) {
+                    num = v.qty
+                  }
+                })
+                item.stockNum = num
+                // console.log(item)
+              })
+              
+            }
+          }
+        })
+      }
+    },
     silentReSearch() {
       /* 静默搜索 */
       this.mescroll.resetUpScroll(true);
@@ -329,8 +369,8 @@ export default {
       const filtersMap = {
         name: this.filterForm.name
       };
-      console.log(this.filterForm)
-      console.log(this.filterList)
+      // console.log(this.filterForm)
+      // console.log(this.filterList)
       // 右侧筛选栏搜索数据
       if (this.filterList && this.filterList.length !== 0) {
         this.filterList[0].data.forEach((item) => {
@@ -353,13 +393,6 @@ export default {
         });
       }
       console.log(this.deliveryAddressList)
-      // this.filterList.forEach((item) => {
-      //   item.data.forEach((v) => {
-      //     if (v.isChecked) {
-      //       filtersMap[v.key] = 1;
-      //     }
-      //   });
-      // });
       // 最高价格，最低价格
       const {
         lowPrice,
@@ -465,20 +498,10 @@ export default {
           console.log(this.list)    
         }
         // 获取当前送达方地址
-         this.getAddress()
+        this.getAddress()
         this.setFilterList();
-        // this.filterList = this.conditionList.map(item => ({
-        //   name: item.title,
-        //   isExpand: true,
-        //   type: 'radio',
-        //   data: item.data.map(it => ({
-        //      key: it.Code,
-        //      value: it.Name,
-        //      isChecked: false
-        //   }))
-        // }))
-        // console.log(this.filterList);
-        
+        // 库存数量
+        this.getStockNum()
       } else {
         this.list = []
         this.mescroll.endErr();
@@ -571,7 +594,7 @@ export default {
         status: 1
       });
       if (code === '1') {
-        console.log(data)
+        // console.log(data)
         this.payer = data
       }
     },
@@ -589,8 +612,7 @@ export default {
     },
     // 加入调货
     inserOrder(item) {
-      // 获取当前配送地址
-      
+      // 获取当前配送地址    
       this.getAddress()
       if(item.stockList[0].qty !== "0") {
         console.log(item)
@@ -605,7 +627,7 @@ export default {
             PRODUCT_MODEL: item.module,//物料型号  ？
             DH_INVCODE: item.code,//物料编码
             DH_INVSTD:item.name,    //描述 
-            DH_QTY: Number(item.number),     //下单数量
+            DH_QTY: Number(item.amount),     //下单数量
             UnitPrice: String(item.$PtPrice.invoicePrice),  //开票价   价格接口
             ActPrice: Number(item.$PtPrice.supplyPrice), //供价     价格接口
             BateRate: Number(item.$PtPrice.rebateRate),  //扣点    价格接口
@@ -633,7 +655,7 @@ export default {
             DH_MAIN_CHANNEL_CODE: this.address.channel ,   // 大渠道    customer接口   配送接口address.channel
             DH_SUB_CHANNEL_CODE: this.address.subChannel,  //小渠道     customer接口  配送接口address.subChannel
           }]);
-          if(insertTransfer.code === "1") {
+          if(insertTransfer.code === "1" && insertTransfer.data.code === "200") {
             // confirm("加入调货成功")
             uni.showToast({
               title: '加入调货成功',
@@ -679,6 +701,7 @@ export default {
         this[tab.handler]();
       }
       this.getTransferList();
+      this.getStockNum();
     },
     showFilter() {
       /* 展示filter */
@@ -698,6 +721,7 @@ export default {
       console.log(this.filterList)
       
       this.getTransferList()
+      this.getStockNum()
       this.mescroll.resetUpScroll(true);
     },
     filterReset() {
@@ -729,12 +753,6 @@ export default {
 
           }));
           console.log(this.deliveryAddressList)
-          // 当前配送地址修改
-          // if (this.deliveryAddressList[1]) {
-          //   this.deliveryAddressList[1].checked = true;
-          //   this.curChoseDeliveryAddress = this.deliveryAddressList[1];
-          //   console.log(this.curChoseDeliveryAddress)
-          // }
           // 当前配送地址修改(选出默认地址)
           const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
           console.log(defaultIndex)
