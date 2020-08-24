@@ -8,6 +8,7 @@
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
           <view class="fs24 text-333">王芬芬，您好！</view>
+		  <view @click="callBBC">建行支付</view>
           <view class="logo">
             <image src="@/assets/img/appIndex/haier.png"></image>
           </view>
@@ -427,12 +428,35 @@ export default {
   created() {
     // this.getbannerList();
   },
+  mounted() {
+	  // 适配安卓客户端
+	AlipayJSBridge.call('myApiGetCode', {
+	  param1: 'JsParam1',
+	}, function (result) {
+		if(result.length > 1) {
+			this.code = result;
+			this.getToken();
+		}
+	});
+  },
   onLoad() {
+	  // 适配iOS客户端
     this.code = ALIPAYH5STARTUPPARAMS.webview_options;
     // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
-    this.getToken();
+	if(this.code.length > 0) {
+		this.getToken();
+	}
   },
   methods: {
+	  // 打开建行支付
+	  callBBC() {
+		  AlipayJSBridge.call('myApiCallCCB', {
+		    orderId: '123456',
+			payment: '8888',
+		  }, function (result) {
+		  	alert(JSON.stringify(result))
+		  });
+	  },
     // 获取token
     async getToken() {
       const { code, data } = await this.authService.getTokenByCode({

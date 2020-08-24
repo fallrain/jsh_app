@@ -2,6 +2,7 @@
 const data = [
   'pages/index/index',
   "pages/index/information",
+  "pages/index/announcement",
   'pages/applicationsIndex/applicationsIndex',
   'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',
@@ -9,6 +10,7 @@ const data = [
   'pages/shoppingCart/shoppingCart',
   'pages/shoppingCart/orderConfirm',
   'pages/shoppingCart/orderConfirmRemarks',
+  'pages/shoppingCart/orderConfirmAccept',
   'pages/productDetail/productDetail',
   'pages/category/category',
   'pages/market/marketList',
@@ -25,7 +27,6 @@ const data = [
   'pages/vehicleList/vehicleList',
   'pages/vehicleList/vehicleCarList',
   'pages/vehicleList/vehicleCarDetail',
-  'pages/sampleMachine/sampleMachineList',
   'pages/mine/myCenter',
   'pages/mine/myAlterTel',
   'pages/mine/myPayAlertPwd',

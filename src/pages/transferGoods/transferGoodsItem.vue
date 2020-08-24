@@ -124,19 +124,20 @@ export default {
       if(goods.$favorite) {
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: this.defaultSendToInf.customerCode,
-          account: this.defaultSendToInf.customerCode,
+          customerCode: this.saleInfo.customerCode,
+          account: this.saleInfo.customerCode,
           productCodeList: [goods.code]
         });
       } else {
         // 添加收藏
-         const addInterest = this.customerService.addInterestProduct({
-          customerCode: this.defaultSendToInf.customerCode,
-          account: this.defaultSendToInf.customerCode,
+         const addInterest = this.customerService.addInterestProduct ({
+          customerCode: this.saleInfo.customerCode,
+          account: this.saleInfo.customerCode,
           productCode: goods.code
         });
       }
       goods.$favorite = !goods.$favorite
+      console.log(goods.$favorite)
     },
     // 加入调货
     addTransfer(goods) {

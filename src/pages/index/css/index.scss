@@ -253,11 +253,20 @@
                 //     margin:0px 40px 0px 16px;
                 // }
             }
+            .homepage-recommend-swiper {
+              // width:120px;
+              height:120px;
+            }
+            .homepage-recommend-swiper-item {
+              // width:120px;
+              height:120px;
+            }
             .homepage-recommend-imgs {
               width:120px;
               height:120px;
               display: flex;
               overflow: hidden;
+              
               image {
                 width: 100px;
                 height: 100px;

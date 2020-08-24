@@ -253,14 +253,14 @@ export default {
     this.getAddressList();
   },
   created() {
-    console.log(this.defaultSendToInf);
-    this.form.saletoCode = this.defaultSendToInf.addressCode;
-    this.stockForm.saletoCode = this.defaultSendToInf.addressCode;
+    this.form.saletoCode = this.saleInfo.customerCode;
+    this.stockForm.saletoCode = this.saleInfo.customerCode;
     this.init();
   },
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
+      saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
     fomrmateDate() {
@@ -321,11 +321,11 @@ export default {
         productGroup: [],
         pageNum: pages.num,
         pageSize: pages.size,
-        saletoCode: this.defaultSendToInf.addressCode,
+        saletoCode: this.saleInfo.customerCode,
         sendtoCode: this.currentAdd.addressCode,
       };
       if (!this.currentAdd.addressCode) {
-        condition.sendtoCode = this.defaultSendToInf.addressCode
+        condition.sendtoCode = this.defaultSendToInf.addressCode;
       }
       // 活动类别选择后确认
       this.tabs[0].children.forEach((item) => {

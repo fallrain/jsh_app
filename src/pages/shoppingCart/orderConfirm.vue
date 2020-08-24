@@ -3,6 +3,7 @@
     <j-order-confirm-address
       :sendtoCode="dataInfo.sendtoCode"
       :sendtoAddress="dataInfo.sendtoAddress"
+      @change="choseSendType"
     ></j-order-confirm-address>
     <view v-if="dataInfo.composeProductList.length > 0" class="orderConfirm-list">
       <j-order-confirm-item
@@ -38,8 +39,39 @@
       >下一步</button>
     </view>
     <j-modal
-      :show="modalShow"
-    ></j-modal>
+      :show.sync="modalShow"
+      title="请输入验证码"
+      @confirm="submitOrder"
+      @cancel="()=>{this.modalShow = false}"
+    >
+      <template>
+        <view class="Verification-model">
+          <view class="Verification-row">
+            <view class="Verification-send">发送至</view>
+            <input
+              class="Verification-inputView"
+              placeholder="请输入手机号"
+              placeholder-class="col_c"
+              v-model="linkNum"
+            >
+          </view>
+          <view class="Verification-row">
+            <view class="Verification-send">验证码</view>
+            <input
+              class="Verification-inputView"
+              placeholder="请输入验证码"
+              placeholder-class="col_c"
+              v-model="formSubmit.bestSignVerifyCodeDto.verifyCode"
+            >
+          </view>
+          <view
+            class="send-btn">
+            <text v-if="!sendMessageStatus" @tap="sendMessage">发送验证码</text>
+            <text v-if="sendMessageStatus">{{time}}s后重新发送</text>
+          </view>
+        </view>
+      </template>
+    </j-modal>
   </view>
 </template>
 
@@ -63,6 +95,7 @@ export default {
   },
   data() {
     return {
+      show: false,
       modalShow: false,
       formData: {},
       // 结算接口返回数据
@@ -99,13 +132,30 @@ export default {
       // 所有付款方，有可能有重复的
       allPayer: [],
       linkNum: '', // 发送验证码的联系方式
-      userInfMianMi: false // 是否免密
+      sendMessageStatus: false, // 是否发送了验证码
+      time: 60,
+      userInfMianMi: false, // 是否免密
+      // 订单提交信息
+      formSubmit: {
+        deliveryType: 1,
+        // 上上签验证信息
+        bestSignVerifyCodeDto: {
+          note: '',
+          verifyCode: '',
+          verifyKey: ''
+        },
+        // 拆单后组信息
+        bigOrderInfoList: [],
+        saletoCode: ''
+      }
     };
   },
   onLoad(option) {
     if (option.formData) {
       this.formData = JSON.parse(option.formData);
+      this.formSubmit.saletoCode = this.formData.saletoCode;
       this.onLoadInit();
+      console.log(this.formData);
     }
     uni.$on('confirmremarks', (data) => {
       const remarksData = JSON.parse(data);
@@ -114,6 +164,21 @@ export default {
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
       console.log(this.dataInfo);
     });
+  },
+  watch: {
+    sendMessageStatus(val) {
+      if (val === true) {
+        // 发送了验证码开始倒计时
+        const time = setInterval(() => {
+          this.time--;
+          if (this.time === 0) {
+            clearInterval(time);
+            this.sendMessageStatus = false;
+            this.time = 60;
+          }
+        }, 1000);
+      }
+    }
   },
   methods: {
     async onLoadInit() {
@@ -207,7 +272,6 @@ export default {
       const { code, data } = await this.orderService.sendVerify(this.formData.saletoCode);
       if (code === '1') {
         const abc = data.data.account;
-        console.log(abc);
         this.linkNum = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
       }
     },
@@ -218,26 +282,76 @@ export default {
         this.userInfMianMi = data.data;
       }
     },
+    // 发送验证码
+    async sendMessage() {
+      const { code, data } = await this.orderService.send(this.formData.saletoCode);
+      if (code === '1') {
+        this.sendMessageStatus = true;
+        this.formSubmit.bestSignVerifyCodeDto.verifyKey = data.data.verifyKey;
+        uni.showToast({
+          title: '短信发送成功',
+        });
+        // // 提交订单
+        // this.submitOrder();
+      }
+    },
     async next() {
       // 判断是否免密，免密则直接支付否则弹出发送验证码弹窗
       await this.getUserInfMianMi();
       if (this.userInfMianMi) {
         console.log('true,提交');
       } else {
-        console.log('谈验证码');
         this.modalShow = true;
-        uni.showModal({
-          title: '提示',
-          content: '这是一个模态弹窗',
-          success: function (res) {
-            if (res.confirm) {
-              console.log('用户点击确定');
-            } else if (res.cancel) {
-              console.log('用户点击取消');
-            }
-          }
-        });
       }
+    },
+    // 提交订单
+    async submitOrder() {
+      console.log(this.dataInfo);
+      // 根据拆单结果组合订单提交信息
+      const orderList = [];
+      const productType = this.formData.splitComposeList[0].activityType;
+      this.dataInfo.composeProductList.forEach((item) => {
+        const orderItem = {
+          groupingNo: item.composeOrderNo,
+          orderDetailList: []
+        };
+        item.splitOrderDetailList.forEach((v) => {
+          const singleItem = {
+            productType,
+            isTCTP: v.isTCTP,
+            orderNo: v.orderNo,
+            stockType: v.stockType,
+            province: v.splitOrderProductList[0].province,
+            city: v.splitOrderProductList[0].city,
+            area: v.splitOrderProductList[0].area,
+            areaCode: v.splitOrderProductList[0].areaCode,
+            address: v.splitOrderProductList[0].address,
+            isBbOrProject: v.splitOrderProductList[0].isBbOrProject,
+            priceType: v.splitOrderProductList[0].priceType,
+            isCollectionAddress: '1',
+            deliveryYd: v.splitOrderProductList[0].deliveryYd,
+            isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
+            paytoCode: this.totalPayerMoneyInfo[v.orderNo].customerCode,
+            paytoName: this.totalPayerMoneyInfo[v.orderNo].customerName.split(')')[1],
+            paytoType: '99'
+          };
+          orderItem.orderDetailList.push(singleItem);
+        });
+        orderList.push(orderItem);
+      });
+      this.formSubmit.bigOrderInfoList = orderList;
+      const { code, data } = await this.orderService.updateOrderInfo(this.formSubmit);
+      if (code === '1') {
+        console.log(data);
+      }
+    },
+    choseSendType(types) {
+      console.log(types);
+      types.forEach((item) => {
+        if (item.checked === true) {
+          this.formSubmit.deliveryType = item.key;
+        }
+      });
     }
   }
 };

@@ -5,7 +5,9 @@
     mode="right"
   >
     <view class="filter-drawer">
-      <view class="filter-drawer-cnt-list">
+      <view
+        @touchmove.stop.prevent="true"
+        class="filter-drawer-cnt-list">
         <slot></slot>
       </view>
       <view class="filter-drawer-btn-wrap">
