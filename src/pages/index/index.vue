@@ -77,13 +77,13 @@
       <!-- 推荐 + 资讯-->
       <view class="homepage-recommend-info">
         <!-- 推荐 -->
-        <!-- <view class="homepage-recommend">
+        <view class="homepage-recommend">
           <view
             class="homepage-recommend-list"
             v-for="item in recommendList"
             :key="item.id"
         
-          > -->
+          >
             <!-- <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
@@ -91,25 +91,53 @@
             <image class="homepage-recommend-image" :src="item.image" mode="aspectFill" />
             <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
            -->
-            <!-- <view class="homepage-recommend-name">
+            <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
             </view>
-            <uni-grid :column="1"  class="homepage-recommend-imgs" v-for="(v,index) in item.data" :key="v.index">
-              <uni-grid-item>                
-                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />   
+            <swiper class="homepage-recommend-swiper" @change="change">
+              <swiper-item 
+                v-for="v in item.data" 
+                :key="v.id"
+                class="homepage-recommend-swiper-item"
+              >
+                <view class="homepage-recommend-imgs">
+                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill"/>
+               </view>
+              </swiper-item>
+            </swiper>
+
+            <!-- <uni-grid :column="1"  
+              class="homepage-recommend-imgs" 
+              @change="recommend"
+            >
+              <uni-grid-item                
+                v-for="v in item.data" 
+                :key="v.id"
+                :style="'width:'+width+';'+(square?'height:'+width:'')" 
+                class="uni-grid-item"
+              > 
+               
+                <view 
+                  v-if="width" 
+                  :class="{ 'uni-grid-item--border': showBorder,  'uni-grid-item--border-top': showBorder && index < column, 'uni-highlight': highlight }" 
+                  :style="{  'border-right-color': borderColor ,'border-bottom-color': borderColor ,'border-top-color': borderColor }" 
+                  class="uni-grid-item__box" 
+                  @click="_onClick"
+                >
+                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />  
+                </view> 
               </uni-grid-item>
-              <uni-grid-item>                
-                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />   
-              </uni-grid-item>
-            </uni-grid>
+              
+            </uni-grid> -->
+
           </view>
-        </view> -->
+        </view>
         <!-- 资讯 -->
-        <!-- <view class="homepage-info">
+        <view class="homepage-info">
           <view class="homepage-info-name">
             <text class="homepage-info-title">热门资讯</text>
-            <text class="homepage-info-more">MORE</text>
+            <text class="homepage-info-more" @tap="goAnnouncement">MORE</text>
           </view>
           <view>
             <view
@@ -121,10 +149,7 @@
             <view class="homepage-info-list-title">{{item.info}}</view>
           </view>
           </view>
-        </view> -->
-       <!-- </view> -->
-    
-    
+        </view>    
       </view>
     <!-- tabber -->
     <!-- <view
@@ -291,6 +316,17 @@ export default {
         },
 
       ],
+      current: 0,
+      isSwiper: true,
+      // column: 0,
+      // showBorder: true,
+      // square: true,
+      // highlight: true,
+      // left: 0,
+      // top: 0,
+      // openNum: 2,
+      // width: 40,
+      // borderColor: '#e5e5e5',
       // recommendList: [
       //   {
       //     id: 1,
@@ -326,26 +362,7 @@ export default {
       //   },
       // ],
       infoList: []
-      // infoList: [
-      //   {
-      //     id: 1,
-      //     hot: '热门',
-      //     info: '这是一条热门资讯的内容,具体内容请查看详情......',
-      //     url: '#'
-      //   },
-      //   {
-      //     id: 2,
-      //     hot: '热门',
-      //     info: '这是一条热门资讯的内容,具体内容请查看详情......',
-      //     url: '#'
-      //   },
-      //   {
-      //     id: 3,
-      //     hot: '热门',
-      //     info: '这是一条热门资讯的内容,具体内容请查看详情......',
-      //     url: '#'
-      //   }
-      // ],
+     
       // tabBarList: [
       //   {
       //     id: 1,
@@ -391,17 +408,29 @@ export default {
       // })().then(res =>{
       //     // this.get()
       // })
-      // this.getIndexList()
+      this.getIndexList()
       this.getList();
       this.getXinPin();
       this.getBaoKuan();
       this.getZhuanGong();
       this.getBaoKuan();
+      // this.recommend();
       this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       this[USER.UPDATE_SALE_ASYNC]();
       this[USER.UPDATE_TOKEN_USER_ASYNC]();
       console.log(this.defaultSendToInf)
       console.log(this.tokenUserInf)
+
+      // this.column = this.grid.column
+			// this.showBorder = this.grid.showBorder
+			// this.square = this.grid.square
+			// this.highlight = this.grid.highlight
+			// this.top = this.hor === 0 ? this.grid.hor : this.hor
+			// this.left = this.ver === 0 ? this.grid.ver : this.ver
+			// this.borderColor = this.grid.borderColor
+			// this.grid.children.push(this)
+			// this.grid.init()
+			// this.width = this.grid.width
 
   },
   computed: {
@@ -479,6 +508,16 @@ export default {
         console.log(list.data);
         this.infoList = list.data.slice(0, 4);
       }
+    },
+    // 新闻资讯公告
+    goAnnouncement() {
+      uni.navigateTo({
+        url: `/pages/index/announcement`
+      });
+    },
+    // 推荐
+    change(e) {
+      this.current = e.detail.current;
     },
     // 新品推荐列表
     async getXinPin() {

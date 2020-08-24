@@ -573,7 +573,7 @@ export default {
            this.payerCodeAll.forEach(item => {
             code.push({
             payerCode: item.payerCode,
-            salesGroupCode: this.defaultSendToInf.salesGroupCode
+            salesGroupCode: this.saleInfo.salesGroupCode
           })
         })
       console.log(code)
