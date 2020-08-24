@@ -8,7 +8,9 @@
     <view class="vehicleCarDetail-info">
       <vehicle-detail-send :infoss="vehicleDetail"></vehicle-detail-send>
     </view>
-    <view class="vehicleDetail-high" @click="showPayer"><transfer-detail-btm :fromWhere="fromWhere" :detailList="vehicleDetail"></transfer-detail-btm></view>
+    <view class="vehicleDetail-high" @click="showPayer">
+      <transfer-detail-btm :fromWhere="fromWhere" :detailList="vehicleDetail"></transfer-detail-btm>
+    </view>
   </view>
 </template>
 

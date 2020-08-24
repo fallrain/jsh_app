@@ -4,10 +4,10 @@
       <view class="v-d-s-fox1">京东异地</view>
       <view class="v-d-s-fox2">|</view>
       <view class="v-d-s-fox3" @tap="changeAde">{{adress}}</view>
-      <view class="v-d-sinfo" v-show="show">
-        <view class="v-d-sinfo-li" v-for="(it,index) in infoss.JDWarehouse" :key="index"
-              :class="[(it.IJWH_ADDRESS===adress)&& 'active']" @click="payVehicle(it,index)">{{it.IJWH_ADDRESS}}</view>
-      </view>
+    </view>
+    <view class="v-d-sinfo" v-show="show">
+      <view class="v-d-sinfo-li" v-for="(it,index) in infoss.JDWarehouse" :key="index"
+            :class="[(it.IJWH_ADDRESS===adress)&& 'active']" @click="payVehicle(it,index)">{{it.IJWH_ADDRESS}}</view>
     </view>
     <view v-if="sendType==='edit'" class="v-d-s-inp">
       <j-input v-model="name" placeholder='请输入手机号' handChange="this.valChange">
@@ -58,7 +58,8 @@ export default {
       name: '',
       mobile: '',
       pake: '',
-      show: false
+      show: false,
+      llc: 'YD'
     };
   },
   created() {
@@ -79,6 +80,7 @@ export default {
       this.name = item.YD_NAME;
       this.mobile = item.YD_TEL;
       this.pake = item.YD_CARDNO;
+      this.llc = `YD${item.IJWH_WHCODE}`;
       this.sendType = 'view';
       this.queryJDWarehouse();
     },
@@ -86,17 +88,19 @@ export default {
       this.sendType = 'edit';
     },
     changeSup() {
+      console.log('999999');
       // 保存地址信息
+      this.queryJDWarehouse().then(() => {
+        this.sendType = 'view';
+      });
     },
     async queryJDWarehouse() {
       console.log(this.infoss);
       const timetamp = new Date().valueOf();
       const longfeiUSERID = this.infoss.longfeiUSERID;
       const ibrSeq = this.infoss.IBR_SEQ;
-      // const res = await this.vehicleService.ydContact(timetamp, longfeiUSERID, ibrSeq, address, OESBS, ydCardNo, ydName, ydTel);
-      // console.log(res);
-      // if (res.code === '1') {
-      // }
+      const res = await this.vehicleService.ydContact(timetamp, longfeiUSERID, ibrSeq, this.adress, this.llc, this.pake, this.name, this.mobile);
+      console.log(res);
     },
   }
 };
@@ -175,10 +179,8 @@ export default {
     }
   }
   .v-d-sinfo {
-    width: 70%;
-    position: absolute;
-    top: 92%;
-    left: 22%;
+    width: 100%;
+    position: relative;
     z-index: 100;
     background: rgba(255, 255, 255, 0.911);
     border: 1px solid #c3c3c3;
