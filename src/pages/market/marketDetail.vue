@@ -167,6 +167,7 @@ export default {
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
+      saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
     computeMain() {
@@ -235,14 +236,14 @@ export default {
       this.limit1.choosedPBNum = 0;
       this.currentDetail.products.forEach((item) => {
         this.limit1.choosedMainNum += parseInt(item.choosedNum);
-        totalMoney += (parseInt(item.choosedNum) * item.priceDto.profitPrice);
+        totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
       });
       this.currentDetail.pbProducts.forEach((item) => {
         this.limit1.choosedPBNum += parseInt(item.choosedNum);
-        totalMoney += (parseInt(item.choosedNum) * item.priceDto.profitPrice);
+        totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
       });
       this.conditionStatus = this.isUpToCondition();
-      this.totalMoney = totalMoney;
+      this.totalMoney = totalMoney.toFixed(2);
     },
     // 判断套餐条件是否已经满足
     isUpToCondition() {
@@ -266,7 +267,7 @@ export default {
       console.log(this.defaultSendToInf);
       /* 获取异地云仓信息 */
       const { code, data } = await this.customerService.getWarehouse({
-        customerCode: this.defaultSendToInf.customerCode,
+        customerCode: this.saleInfo.customerCode,
         warehouseFlag: 'YD'
       });
       if (code === '1') {
@@ -362,7 +363,7 @@ export default {
     // 产品校验
     async validateProduct() {
       const form = {
-        saletoCode: this.defaultSendToInf.customerCode,
+        saletoCode: this.saleInfo.customerCode,
         sendtoCode: this.currentAdd.sendtoCode,
         yunCangCode: '',
         yunCangFlag: '',

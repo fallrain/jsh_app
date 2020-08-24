@@ -56,7 +56,7 @@
       <view v-if="goods.valid !== false" class="dis-flex">
         <view class="fs20 text-999">共计：</view>
         <view class="jProductItem-cnt-price">
-          ¥ {{computedPrice(goods.priceDto.profitPrice, goods.choosedNum)}}
+          ¥ {{computedPrice(goods.priceDto.invoicePrice, goods.choosedNum)}}
         </view>
         <uni-number-box
           :min="0"
@@ -72,7 +72,7 @@
           <view class="jProductItem-btm-tag">云</view>
           <view class="jProductItem-btm-tag">统</view>
         </view>
-        <view class="fs20 text-666 mr12">库存：456</view>
+        <!--<view class="fs20 text-666 mr12">库存：456</view>-->
       </view>
       <view class="">
         <j-switch

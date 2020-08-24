@@ -37,4 +37,10 @@ export default {
   splitOrder(data, cfg) { // 拆单
     return jPostJson(urlNoApi.splitOrder, data, cfg);
   },
+  updateOrderInfo(data) { // 订单提交
+    return jPostJson(urlNoApi.updateOrderInfo, data);
+  },
+  getOrderInfo(data) { // 获取订单信息
+    return jPostJson(urlNoApi.getOrderInfo, data);
+  },
 };

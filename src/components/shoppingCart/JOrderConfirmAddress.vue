@@ -42,12 +42,14 @@ export default {
     return {
       radioGroups: [
         {
+          key: 1,
           inf: '自提',
-          checked: true
+          checked: false
         },
         {
+          key: 2,
           inf: '配送',
-          checked: false
+          checked: true
         }
       ]
     };
@@ -56,6 +58,7 @@ export default {
     radioGroupChange(radioGroup) {
       /* radioGroupChange */
       this.radioGroups = radioGroup;
+      this.$emit('change', this.radioGroups);
     }
   }
 };
