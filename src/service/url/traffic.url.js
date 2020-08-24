@@ -45,6 +45,18 @@ const urls = {
   },
   deleteVehicleOrder(timestamp, longfeiUSERID, IBR_SEQ) { // 删除订单
     return `/deleteOrder/deleteAll?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&IBR_SEQ=${IBR_SEQ}`;
+  },
+  queryPayCode(longfeiUSERID, productGroup, sendToCode, yuncangType, bstnk) { // 整车购物车获取付款方
+    return `/base/queryPayCode?longfeiUSERID=${longfeiUSERID}&productGroup=${productGroup}&sendToCode=${sendToCode}&yuncangType=${yuncangType}&bstnk=${bstnk}`;
+  },
+  updatePayMoney(a, b, c, d, e, f, g, h, i, j, k, l) { // 切换付款方接口
+    return `/ydContact/updatePayMoney?timestamp=${a}&longfeiUSERID=${b}&IBL_ACTPRICE=${c}&IBL_BATERATE=${d}&IBL_ISFL=${e}&IBL_KORDERNO=${f}&IBL_NUM=${g}&IBL_PAYMONEY=${h}&IBL_PROCODE=&IBL_RETAILPRICE=${i}&IBL_UNITPRICE=${j}&IBL_LOSSRATE=${k}&IBL_TFSUMPRICE=${l}`;
+  },
+  queryJDWarehouse(timestamp, longfeiUSERID) { // 整车购物车获取京东异地地址
+    return `/base/queryJDWarehouse?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}`;
+  },
+  ydContact(timestamp, longfeiUSERID, ibrSeq, address, OESBS, ydCardNo, ydName, ydTel) { // 京东异地地址保存
+    return `/ydContact/save?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&ibrSeq=${ibrSeq}&address=${address}&OESBS=${OESBS}&ydCardNo=${ydCardNo}&ydName=${ydName}&ydTel=${ydTel}`;
   }
 };
 util.addPrefix(baseURL, urls);

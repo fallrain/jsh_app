@@ -1,0 +1,66 @@
+.order-confirm-accept{
+  position: relative;
+  min-height: 100vh;
+  background: #F5F5F5;
+  padding: 24px 24px 140px 24px;
+  .order-accept-head{
+    margin-bottom: 24px;
+  }
+  .order-accept-title{
+    text-align: center;
+    line-height: 52px;
+    padding: 60px 0 44px;
+    font-size: 36px;
+  }
+  .order-accept-head-result{
+    border-radius:20px;
+    padding: 40px;
+    background: #fff;
+    .order-accept-result-count{
+      display: flex;
+      justify-content: space-evenly;
+      margin-bottom: 54px;
+    }
+    .order-btn{
+      display: flex;
+      justify-content: center;
+      .order-btn-back{
+        width:266px;
+        height:54px;
+        border-radius:27px;
+        background: #fff;
+        border: 2px solid $theme-color;
+        font-size: 32px;
+        color: $theme-color;
+        text-align: center;
+        line-height: 54px;
+        margin-right: 68px;
+      }
+      .order-btn-goon{
+        width:266px;
+        height:54px;
+        border-radius:27px;
+        background: $theme-color;
+        font-size: 32px;
+        color: #fff;
+        text-align: center;
+        line-height: 54px;
+      }
+    }
+  }
+}
+.w50{
+  width: 50px;
+}
+.w200{
+  width: 200px;
+}
+.fs60{
+  font-size: 60px;
+}
+.text-theme{
+  color: $theme-color;
+}
+.text-666{
+  color: #666;
+}

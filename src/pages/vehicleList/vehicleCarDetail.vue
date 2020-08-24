@@ -6,9 +6,11 @@
       </vehicle-detail-good>
     </view>
     <view class="vehicleCarDetail-info">
-      <vehicle-detail-send></vehicle-detail-send>
+      <vehicle-detail-send :infoss="vehicleDetail"></vehicle-detail-send>
     </view>
-    <view class="vehicleDetail-high" @click="showPayer"><transfer-detail-btm :index="baifen"></transfer-detail-btm></view>
+    <view class="vehicleDetail-high" @click="showPayer">
+      <transfer-detail-btm :fromWhere="fromWhere" :detailList="vehicleDetail"></transfer-detail-btm>
+    </view>
   </view>
 </template>
 
@@ -40,6 +42,7 @@ export default {
   },
   data() {
     return {
+      fromWhere: 'ZC',
       baifen: '90',
       goodsList: [
         [

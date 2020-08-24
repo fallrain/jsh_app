@@ -31,10 +31,38 @@ export default {
       pageSize: 10
     });
   },
-  validateProduct(data, cfg) { // 拆单校验
-    return jPostJson(urlNoApi.validateProduct, data, cfg);
+  validateProduct(data, cfg) {
+    /* 拆单校验 */
+    const {
+      // (售达方编码):string
+      saletoCode,
+      // (售达方手机号)?:string
+      saletoPhone,
+      // (送达方编码):string
+      sendtoCode,
+      // (商品数据):array
+      splitComposeList,
+      // (云仓编码):string
+      yunCangCode,
+      // (云仓标识(yc:云仓,ydyc:异地云仓,gcyc:工厂云仓)):string
+      yunCangFlag
+    } = data;
+    return jPostJson(urlNoApi.validateProduct, {
+      saletoCode,
+      saletoPhone,
+      sendtoCode,
+      splitComposeList,
+      yunCangCode,
+      yunCangFlag
+    }, cfg);
   },
   splitOrder(data, cfg) { // 拆单
     return jPostJson(urlNoApi.splitOrder, data, cfg);
+  },
+  updateOrderInfo(data) { // 订单提交
+    return jPostJson(urlNoApi.updateOrderInfo, data);
+  },
+  getOrderInfo(data) { // 获取订单信息
+    return jPostJson(urlNoApi.getOrderInfo, data);
   },
 };

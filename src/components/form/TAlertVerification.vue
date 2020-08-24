@@ -1,11 +1,11 @@
-<template>  
+<template>
     <view class="TAlertVerification" v-show="show">
       <view class="TAlertVerification-cen"
         @tap="cancel"
       >
       </view>
-      <view class="TAlertVerification-model">  
-        <view class="TAlertVerification-title">请输入验证码</view>            
+      <view class="TAlertVerification-model">
+        <view class="TAlertVerification-title">请输入验证码</view>
         <view class="TAlertVerification-row">
           <view class="TAlertVerification-send">发送至</view>
           <input
@@ -22,7 +22,7 @@
             placeholder="请输入验证码"
             placeholder-class="col_c"
             v-model="form.verificationCode"
-          >   
+          >
         </view>
         <view class="TAlertVerification-row-right-wrap">
           <view class="TAlertVerification-row-right-gap"></view>
@@ -31,16 +31,15 @@
           ></j-verification-code>
           <button class="TAlertVerification-row-right-btn"
             @tap="determine"
-          >确定</button>    
+          >确定</button>
         </view>
-        
+
      </view>
-    </view>             
+    </view>
 </template>
 <script>
 
 import JVerificationCode from '../common/JVerificationcode';
-import jValidateRules from '@/lib/jValidate/JValidateRules';
 import JValidate from '@/lib/jValidate/JValidate';
 import {
   mapGetters
@@ -48,145 +47,144 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+
 export default {
-    name:"TAlertVerification",
-    components: {
-        // uniPopup,
-        JVerificationCode,
+  name: 'TAlertVerification',
+  components: {
+    // uniPopup,
+    JVerificationCode,
+  },
+  props: {
+    show: {
+      type: Boolean,
     },
-    props: {
-        show: {
-            type: Boolean,
-        },
-        form: {
-            type: Object,
-            default: () => {}
-        },
-        allOrderList: {
-          type: Array,
-          default: () => []
-        }  
-        // verificationCode: {
-        //   type: String
-        // },
-        // phone: {
-        //   type: String
-        // } 
+    form: {
+      type: Object,
+      default: () => {}
     },
-    data() {
-      return {
-        // form: {
-        //   // 手机号
-        //   phone: '',
-        //   // 手机号验证码
-        //   verificationCode: '',
-        // }
-        erifyKey: 0
-           
-      }
-    }, 
-    created() {
-      console.log(this.form)
-      this.setPageInfo();
+    allOrderList: {
+      type: Array,
+      default: () => []
+    }
+    // verificationCode: {
+    //   type: String
+    // },
+    // phone: {
+    //   type: String
+    // }
+  },
+  data() {
+    return {
+      // form: {
+      //   // 手机号
+      //   phone: '',
+      //   // 手机号验证码
+      //   verificationCode: '',
+      // }
+      erifyKey: 0
+
+    };
+  },
+  created() {
+    console.log(this.form);
+    this.setPageInfo();
+  },
+  computed: {
+    ...mapGetters({
+      userInf: USER.GET_USER,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO, // 售达方信息
+      [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER, // 用户信息
+    })
+  },
+  methods: {
+    setPageInfo() {
+      this.genVdt();
     },
-    computed: {
-      ...mapGetters({
-        userInf: USER.GET_USER,
-        defaultSendToInf: USER.GET_DEFAULT_SEND_TO,  //售达方信息
-         [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER,  //用户信息
-      })  
-    },
-    methods: {
-      setPageInfo() {
-        this.genVdt();
-      },
-      genVdt() {
-        this.vdt = new JValidate({
-          _this: this,
+    genVdt() {
+      this.vdt = new JValidate({
+        _this: this,
         //   formData: this.form,
-          rules: {  
-            phone: {
-              required: true,
-              mobile: true
-            },
-            verificationCode: {
-               required: true
-            },
+        rules: {
+          phone: {
+            required: true,
+            mobile: true
           },
-          messages: {
-            phone: {
-                required: '手机号不能为空',
-                mobile: '手机号格式不正确'
-            },
-            verificationCode: {
-                required: '必须输入新手机验证码'
-            },
+          verificationCode: {
+            required: true
+          },
+        },
+        messages: {
+          phone: {
+            required: '手机号不能为空',
+            mobile: '手机号格式不正确'
+          },
+          verificationCode: {
+            required: '必须输入新手机验证码'
+          },
+        }
+      });
+    },
+    cancel() {
+      this.$emit('update:show', false);
+    },
+
+    async getVerificationCode() {
+      // 发送验证码
+      //  return await this.orderService.send(this.defaultSendToInf.customerCode)
+      const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode);
+      if (code === '1') {
+        console.log(data.data.verifyKey);
+        this.erifyKey = data.data.verifyKey;
+        uni.showToast({
+          title: '短信发送成功',
+        });
+      }
+    },
+    getVerificationCodeByPhone() {
+      if (this.form.phone) {
+        return this.getVerificationCode();
+      }
+      uni.showToast({
+        title: '原手机号未获取',
+        icon: 'none'
+      });
+    },
+    // 点击确定
+    async determine() {
+      if (this.form.verificationCode) {
+        let SEQ = '';
+        this.allOrderList.forEach((ele) => {
+          if (ele.checked) {
+            SEQ = ele.IBR_SEQ;
           }
         });
-      },
-      cancel() {
-        this.$emit('update:show', false);
-      },
-
-      async getVerificationCode() {
-         // 发送验证码
-        //  return await this.orderService.send(this.defaultSendToInf.customerCode)
-         const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode)
-        if (code === "1") {
-            console.log(data.data.verifyKey)
-            this.erifyKey = data.data.verifyKey
-            uni.showToast({
-                    title: '短信发送成功',
-            });
-            
-        }
-      },
-      getVerificationCodeByPhone() {
-        if (this.form.phone) {
-            return this.getVerificationCode();
-        }
-        uni.showToast({
-            title: '原手机号未获取',
-            icon: 'none'
+        // 提交订单
+        const { code, data } = await this.transfergoodsService.submitDhOrder({
+          timestamp: Date.parse(new Date()),
+          longfeiUSERID: Number(this.defaultSendToInf.customerCode),
+          orderNo: 300000081,
+          verifyCode: Number(this.form.verificationCode),
+          verifyKey: this.erifyKey,
         });
-      },
-      // 点击确定
-      async determine() {         
-        if(this.form.verificationCode) { 
-            let SEQ = ""
-            this.allOrderList.forEach(ele => {
-              if(ele.checked) {
-                SEQ = ele.IBR_SEQ
-              }        
-            })         
-            // 提交订单
-
-            const { code, data } = await this.transfergoodsService.submitDhOrder({
-                timestamp: Date.parse(new Date()),
-                longfeiUSERID: Number(this.defaultSendToInf.customerCode),
-                orderNo: 300000081,
-                verifyCode: Number(this.form.verificationCode),
-                verifyKey: this.erifyKey,
-            })
-            if(code === "1" && data.code === "200") {
-                uni.showToast({
-                    title: '调货订单提交成功',
-                });
-                this.show = false
-            } else {
-                uni.showToast({
-                    title: '提交失败请重试',
-                });
-            }
+        if (code === '1' && data.code === '200') {
+          uni.showToast({
+            title: '调货订单提交成功',
+          });
+          this.show = false;
         } else {
-            uni.showToast({
-              title: '请输入验证码',
-            });
+          uni.showToast({
+            title: '提交失败请重试',
+          });
         }
+      } else {
+        uni.showToast({
+          title: '请输入验证码',
+        });
       }
+    }
 
-    }  
-}
+  }
+};
 </script>
 <style scoped>
 /deep/ .JVerificationCode-send-code {
@@ -221,7 +219,7 @@ export default {
 .TAlertVerification-row {
     display: flex;
     margin-bottom: 30px;
-    
+
 }
 .TAlertVerification-title {
     font-size: 30px;

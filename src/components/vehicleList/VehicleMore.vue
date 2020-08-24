@@ -1,7 +1,7 @@
 <template>
-  <view v-show="isVehicleMore" class="v_More">
-    <p style="height: 10px;"><span class="sanjiao"></span></p>
-    <view class="background">
+  <view v-show="isVehicleMore" :class="{'v_More':fromWhere==='GWCAN','v_More_f':fromWhere==='ZCFKF'}">
+    <p v-show="fromWhere==='GWCAN'" style="height: 10px;"><span class="sanjiao"></span></p>
+    <view v-show="fromWhere==='GWCAN'" class="background">
       <view class="v_More_text" @click="goVehicle('1')"><view class="iconfont iconfunction v_More_iconStyle"></view>选购其他</view>
       <view class="v_More_text" @click="goVehicle('2')"><view class="iconfont iconorder v_More_iconStyle"></view>设置挂单</view>
       <view class="v_More_text" @click="goVehicle('3')"><view class="iconfont iconcar1 v_More_iconStyle"></view>拼整车</view>
@@ -21,12 +21,18 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    fromWhere: {
+      type: String
+    },
+    index: {
+      type: [String, Number]
     }
   },
   methods: {
     goVehicle(zind) {
       this.$emit('anNiuVehicle', !this.isVehicleMore, zind);
-    }
+    },
   }
 };
 </script>
@@ -34,6 +40,9 @@ export default {
 <style lang="scss" scoped>
   .background{
     background-color: #FFFFFF;
+  }
+  .FKF_backGm{
+    background-color: #eeeeee;
   }
   .sanjiao {
     border: 14px solid transparent;
@@ -50,6 +59,13 @@ export default {
     margin-top: -13%;
     width: 29%;
   }
+  .v_More_f{
+    position: absolute;
+    z-index: 100;
+    width: 80%;
+    margin-left: 20%;
+    margin-top: 25%;
+  }
   .v_More_text {
     display: flex;
     color: #999999;
@@ -64,5 +80,21 @@ export default {
     margin-top: auto;
     margin-right: 6px;
     font-size: 24px;
+  }
+  .v_textSenRow-ship{
+    padding: 10px;
+  }
+  .v_textTick-ship {
+    text-align: center;
+    color: #eeeeee;
+    font-size: 32px;
+  }
+  .v_textRow-ship {
+    text-align: left;
+    color: #666666;
+    font-size: 24px;
+  }
+  .V_cheched{
+    color: #ED2856;
   }
 </style>

@@ -69,6 +69,12 @@
       }
     },
     {
+      "path": "pages/shoppingCart/orderConfirmAccept",
+      "style": {
+        "navigationBarTitleText": "确认订单"
+      }
+    },
+    {
       "path": "pages/productDetail/productDetail",
       "style": {
         "navigationBarTitleText": "产品详情",

@@ -15,7 +15,7 @@
       </j-tab>
     </view>
     <view class="shoppingCart-ads">
-      <view class="shoppingCart-ads-total">共4件宝贝</view>
+      <view class="shoppingCart-ads-total">共{{shoppingList.length}}件宝贝</view>
       <view
         @tap="showAdsPicker"
         class="shoppingCart-ads-detail"
@@ -61,6 +61,7 @@
       @checkAll="checkAll"
       @del="deleteCart"
       @follow="followGoods"
+      @submit="submitOrder"
     ></j-shopping-cart-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
@@ -82,12 +83,14 @@ import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import JTab from '../../components/common/JTab';
 import './css/shoppingCart.scss';
 import {
-  mapGetters
+  mapGetters,
+  mapMutations
 } from 'vuex';
 import {
   USER
 } from '../../store/mutationsTypes';
-
+import OrderSplitCompose from '../../model/OrderSplitCompose';
+import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
 
 export default {
   name: 'shoppingCart',
@@ -168,10 +171,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_SALE,
+      defaultSendTo: USER.GET_DEFAULT_SEND_TO,
     }),
   },
   methods: {
+    ...mapMutations([
+      USER.UPDATE_DEFAULT_SEND_TO
+    ]),
     setPageInfo() {
       // 异地云仓
       this.getWarehouse();
@@ -183,6 +190,22 @@ export default {
       this.getCreditQuota();
       // 获取特价版本
       this.getSpecialPrice();
+    },
+    reloadPageInfo() {
+      /* 重载页面信息 */
+      // 购物车列表
+      this.getShoppingCartList();
+      // 获取特价版本
+      this.getSpecialPrice();
+      // 重置结算底栏信息
+      this.resetBtmInf();
+    },
+    resetBtmInf() {
+      /* 重置底栏信息 */
+      this.isCheckAll = false;
+      this.isEdit = false;
+      this.totalGoodsNum = 0;
+      this.totalGoodsPrice = 0;
     },
     async getWarehouse() {
       /* 获取异地云仓信息 */
@@ -207,16 +230,16 @@ export default {
         const detail = data.map(v => ({
           id: v.addressCode,
           name: `（${v.customerCode}）${v.address}`,
-          checked: false
+          checked: this.defaultSendTo.customerCode === v.customerCode,
+          ...v
         }));
         this.sendCustomerList[2].children = detail;
-        // 第一个送达方为默认的送达地址
-        if (detail[0]) {
-          this.choseSendAddress = {
-            sendtoCode: detail[0].id,
-            name: detail[0].name
-          };
-        }
+        // 默认的送达地址
+        this.choseSendAddress = {
+          sendtoCode: this.defaultSendTo.id,
+          name: this.defaultSendTo.name,
+          ...this.defaultSendTo
+        };
       }
     },
     async getShoppingCartList() {
@@ -263,15 +286,11 @@ export default {
     },
     async getSpecialPrice() {
       /* 获取特价版本 */
-      const {
-        saletoCode,
-        sendtoCode,
-        customerCode
-      } = this.userInf;
+      const saletoCode = this.defaultSendTo.customerCode;
       const data = await this.cartService.getSpecialPrice({
         saletoCode,
-        sendtoCode,
-        account: customerCode
+        sendtoCode: this.userInf.customerCode,
+        account: saletoCode,
       });
       this.specialPriceMap = (data && data) || {};
     },
@@ -302,6 +321,7 @@ export default {
     },
     sendCustomerListChange(list, detail, parent) {
       /* 地址列表change */
+      // changeDefaultSendTo
       this.sendCustomerList = list;
       // 选中的送达仓库地址
       this.choseSendAddress = detail || {};
@@ -320,6 +340,17 @@ export default {
               sendtoCode: detail.id,
               name: detail.name
             };
+            // 更改默认的送达方
+            this.customerService.changeDefaultSendTo({
+              sendToCode: this.defaultSendTo.customerCode
+            }).then(({ code }) => {
+              if (code === '1') {
+                // 更改成功之后更新数据列表
+                this.reloadPageInfo();
+                // 更改成功之后更新store
+                this[USER.UPDATE_DEFAULT_SEND_TO](detail);
+              }
+            });
           }
         } else {
           if (parent.flag === 'yc') {
@@ -334,6 +365,8 @@ export default {
           }
         }
       }
+      // 选中之后关闭弹窗
+      this.isShowAdsPicker = false;
     },
     tabClick(tabs) {
       this.tabs = tabs;
@@ -341,8 +374,8 @@ export default {
     deleteCart(idList) {
       /* 删除购物车里的商品 */
       /**
-       * @idList（Array）id的集合，如果传入则使用传入的id
-       * */
+         * @idList（Array）id的集合，如果传入则使用传入的id
+         * */
       let ids;
       if (idList && idList.length) {
         ids = idList;
@@ -412,6 +445,43 @@ export default {
       if (code === '1') {
         this.goods.followState = false;
         this.$emit('change', this.goods, this.index);
+      }
+    },
+    async submitOrder() {
+      /* 提交订单 */
+      const formList = [];
+      this.shoppingList.forEach((v) => {
+        if (v.checked) {
+          const form = new OrderSplitCompose({
+            ...v,
+            composeId: v.id,
+          });
+          form.productList = v.productList.map(prdt => new OrderSplitComposeProduct({
+            ...prdt,
+            isCheckCreditModel: v.isCreditMode ? '1' : '0',
+            // farWeek: prdt.weekPromise,
+            // isCheckFarWeek: '0',
+            // isStock: '1',
+            // transferVersion: '',
+          }));
+
+          formList.push(form);
+        }
+      });
+      const form = {
+        saletoCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode,
+        splitComposeList: formList,
+        yunCangCode: this.choseSendAddress.yunCangCode,
+        yunCangFlag: this.choseSendAddress.yunCangFlag
+      };
+      const { code, data } = await this.orderService.validateProduct(form);
+      if (code === '1') {
+        const args = JSON.stringify(form);
+        // 产品校验成功
+        uni.navigateTo({
+          url: `/pages/shoppingCart/orderConfirm?formData=${args}`
+        });
       }
     }
   }
