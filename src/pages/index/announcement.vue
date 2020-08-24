@@ -21,31 +21,70 @@
   </view>   
 </template>
 <script>
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 export default {
   name: 'announcement',
   data() {
     return {
+    //   num: 0,
       list: [
-        {
-          id: 1,
-          title: "集成化家电会成为家电行业未来的新升级趋…",
-          at: "家电",
-          bt: "科普",
-          time:"2020-9-21",
-          image: require('@/assets/img/index/new-pic.png')
-        },
-        {
-          id: 2,
-          title: "集成化家电会成为家电行业未来的新升级趋…",
-          at: "家电",
-          bt: "科普",
-          time:"2020-9-21",
-          image: require('@/assets/img/index/new-pic.png')
-        }
+        // {
+        //   id: 1,
+        //   title: "集成化家电会成为家电行业未来的新升级趋…",
+        //   at: "家电",
+        //   bt: "科普",
+        //   time:"2020-9-21",
+        //   image: require('@/assets/img/index/new-pic.png')
+        // },
+        // {
+        //   id: 2,
+        //   title: "集成化家电会成为家电行业未来的新升级趋…",
+        //   at: "家电",
+        //   bt: "科普",
+        //   time:"2020-9-21",
+        //   image: require('@/assets/img/index/new-pic.png')
+        // }
 
       ]
     }
-    }
+  },
+  created() {
+    this.getList()
+  },
+  computed: {
+    ...mapGetters({
+        defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+        tokenUserInf:USER.GET_TOKEN_USER,
+        saleInfo: USER.GET_SALE
+    })
+  },
+  methods: {
+      async getList() {
+        let a = 0
+        a = `${this.saleInfo.customerCode}_admin`
+      
+        console.log(a)
+        const { code, data } = await this.messageService.page(this.jshUtil.genQueryStringByObj({
+          title: '',
+          customerCode: Number(this.saleInfo.customerCode),
+          pageNum: 1,
+          pageSize: 10,
+          type: '',
+          creatorDept: '',
+          publishTimeStr: '',
+          unitId: a 
+        }));
+        if (code === '1') {
+            this.list = data.list
+            console.log(data);
+        }
+      }
+  }
     
 }
 </script>

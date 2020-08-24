@@ -145,8 +145,8 @@
             v-for="item in infoList"
             :key="item.id"
           >
-            <view class="homepage-info-list-hot" @tap="goDetail">{{item.title}}</view>
-            <view class="homepage-info-list-title">{{item.info}}</view>
+            <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>
+            <!-- <view class="homepage-info-list-title">{{item.info}}</view> -->
           </view>
           </view>
         </view>    
@@ -459,11 +459,6 @@ export default {
     silentReSearch() {
       /* 静默搜索 */ 
     },
-    goDetail() {
-       uni.navigateTo({
-          url: `/pages/index/information`
-        })  
-    },
     search() {
       console.log(this.name);
       if (this.name) {
@@ -515,6 +510,14 @@ export default {
         url: `/pages/index/announcement`
       });
     },
+    // 新闻资讯详情
+    goInfoDetail(item) {
+
+      uni.navigateTo({
+        url: `/pages/index/information?id=${item.id}`
+      })  
+    },
+
     // 推荐
     change(e) {
       this.current = e.detail.current;
