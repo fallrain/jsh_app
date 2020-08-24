@@ -28,17 +28,24 @@ export default {
   name: 'transferDetailBtm',
   data() {
     return {
-      calue:""
+      calue: 0
     };
   },
   props: {
     detailList: {
       type: Object,
-      default:() => {}
+      default: () => {}
+    },
+    fromWhere: {
+      type: String
     }
   },
   created() {
-    this.calue = Math.round(this.detailList.IBR_JSTIJI/15*100)
+    if (this.fromWhere === 'ZC') {
+      this.calue = 50;
+    } else {
+      this.calue = Math.round(this.detailList.IBR_JSTIJI / 15 * 100);
+    }
   },
   methods: {
     // choose() {
@@ -47,13 +54,12 @@ export default {
     //   this.$emit('checkAll', checked);
     // }
     tlement() {
-      if(Number(this.calue) < 15) {
+      if (Number(this.calue) < 15) {
         // confirm("体积小于15，无法结算，请继续添加商品")
         uni.showToast({
           title: '体积小于15，无法结算，请继续添加商品',
           duration: 3000
         });
-        
       }
     }
   }

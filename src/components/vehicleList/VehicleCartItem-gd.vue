@@ -23,6 +23,7 @@
         <text class="v-c-gd-head-volume">{{goods.IBR_MODELSCARNAME}}</text>
       </view>
     </view>
+    <vehicle-more :fromWhere="fromWhere" :isVehicleMore="isVehicleMore" :anNiuINfo="goods" @anNiuVehicle="anNiuVehicle"></vehicle-more>
     <!-- 产品列表 -->
     <view class="v-c-gd-list" v-for="(item,index) in goods.data" :key="index">
       <view class="v-c-gd-cnt">
@@ -73,15 +74,18 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 import './css/vehicleCarItem-gd.scss';
+import vehicleMore from './VehicleMore';
 
 export default {
   name: 'VehicleCartItemGD',
   components: {
-    uniNumberBox
+    uniNumberBox,
+    vehicleMore
   },
   props: {
     goods: { // 商品数据
-      type: Object
+      type: Object,
+      default: () => {}
     },
     index: { // 商品索引
       type: [String, Number]
@@ -93,22 +97,41 @@ export default {
   },
   data() {
     return {
+      fromWhere: 'GWCAN', // 整车购物车按钮
       isShowSpecifications: false, // 是否显示版本规格
       isShowPayer: false,
+      isVehicleMore: false // 是否显示多个按钮
     };
   },
   methods: {
+    getMore() {
+      this.isVehicleMore = !this.isVehicleMore;
+      console.log(this.index);
+      console.log(this.isVehicleMore);
+    },
+    anNiuVehicle(inn, imm) {
+      console.log('22222');
+      console.log(inn);
+      console.log(imm);
+      this.isVehicleMore = false;
+      if (imm === '1') {
+        console.log(this.goods);
+        uni.navigateTo({
+          url: `/pages/vehicleList/vehicleList?SEQ=${this.goods.IBR_SEQ}`
+        });
+      }
+    },
+    tiji() {
+      const zhuangChe = (this.goods.IBR_JSTIJI * 1).toFixed(2);
+      const baifenbi = (zhuangChe / (this.goods.IBR_MAXTJ * 1)) * 100;
+      return `${baifenbi.toFixed(0)}%`;
+    },
     choose() {
       /* 选中本商品 */
       const { checked, data } = this.goods;
       this.goods.checked = !checked;
       console.log(data);
       this.$emit('change', this.goods, this.index);
-    },
-    tiji() {
-      const zhuangChe = (this.goods.IBR_JSTIJI * 1).toFixed(2);
-      const baifenbi = (zhuangChe / (this.goods.IBR_MAXTJ * 1)) * 100;
-      return `${baifenbi.toFixed(0)}%`;
     },
     isCreditModeChange() {
       /* switch change */

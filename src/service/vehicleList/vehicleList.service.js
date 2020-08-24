@@ -91,5 +91,44 @@ export default {
   },
   deleteVehicleOrder(timestamp, longfeiUSERID, IBR_SEQ) { // 删除订单
     return jGet(url.deleteVehicleOrder(timestamp, longfeiUSERID, IBR_SEQ));
+  },
+  queryPayCode(longfeiUSERID, productGroup, sendToCode, yuncangType, bstnk) { // 整车购物车获取付款方
+    return jGet(url.queryPayCode(longfeiUSERID, productGroup, sendToCode, yuncangType, bstnk));
+  },
+  updatePayMoney(params) { // 切换付款方接口
+    const {
+      timestamp,
+      longfeiUSERID,
+      IBL_ACTPRICE,
+      IBL_BATERATE,
+      IBL_ISFL,
+      IBL_KORDERNO,
+      IBL_NUM,
+      IBL_PAYMONEY,
+      IBL_RETAILPRICE,
+      IBL_UNITPRICE,
+      IBL_LOSSRATE,
+      IBL_TFSUMPRICE
+    } = params;
+    return jGet(url.updatePayMoney, {
+      timestamp,
+      longfeiUSERID,
+      IBL_ACTPRICE,
+      IBL_BATERATE,
+      IBL_ISFL,
+      IBL_KORDERNO,
+      IBL_NUM,
+      IBL_PAYMONEY,
+      IBL_RETAILPRICE,
+      IBL_UNITPRICE,
+      IBL_LOSSRATE,
+      IBL_TFSUMPRICE
+    });
+  },
+  queryJDWarehouse(timestamp, longfeiUSERID) { // 整车购物车获取京东异地地址
+    return jGet(url.queryJDWarehouse(timestamp, longfeiUSERID));
+  },
+  ydContact(timestamp, longfeiUSERID, ibrSeq, address, OESBS, ydCardNo, ydName, ydTel) { // 京东异地地址保存
+    return jGet(url.ydContact(timestamp, longfeiUSERID, ibrSeq, address, OESBS, ydCardNo, ydName, ydTel));
   }
 };
