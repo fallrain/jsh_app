@@ -38,16 +38,16 @@
         <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
       </view>
       <view class="jShoppingCartItem-cnt-img-wrap">
-        <image :src="goods.productList[0].productImageUrl"></image>
+        <image :src="goods.productList && goods.productList[0].productImageUrl"></image>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
-        <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList[0].productName}}</view>
+        <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList && goods.productList[0].productName}}</view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
-            ¥{{goods.$PriceInfo.commonPrice.invoicePrice}}
+            ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice}}
           </view>
           <view class="jShoppingCartItem-cnt-price-inf-item">
-            小计：¥{{jshUtil.arithmetic(goods.$PriceInfo.commonPrice.invoicePrice,goods.number,3)}}
+            小计：¥{{jshUtil.arithmetic(goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice,goods.number,3)}}
           </view>
           <uni-number-box
             @change="goodsNumChange"
@@ -117,21 +117,21 @@
               <view class="mt16 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">建议零售价：</view>
                 <view class="jVersionSpecifications-pop-head-cnt-price">
-                  ¥{{goods.$PriceInfo.commonPrice.invoicePrice}}
+                  ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  供价：{{goods.$PriceInfo.commonPrice.supplyPrice}}
+                  供价：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.supplyPrice}}
                 </view>
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">
-                  台返 ：{{goods.$PriceInfo.commonPrice.rebatePolicy | rebatePolicy}}
+                  台返 ：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.rebatePolicy | rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  返利：{{goods.$PriceInfo.commonPrice.rebateMoney}}
+                  返利：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.rebateMoney}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  直扣率：{{jshUtil.arithmetic(goods.$PriceInfo.commonPrice.rebateRate,100)}}%
+                  直扣率：{{jshUtil.arithmetic(goods.$PriceInfo && goods.$PriceInfo.commonPrice.rebateRate,100)}}%
                 </view>
               </view>
             </view>

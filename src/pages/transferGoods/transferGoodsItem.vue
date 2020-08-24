@@ -20,7 +20,7 @@
       <view class="jGoodsItem-cnt-price-inf">
         <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
         <view class="jGoodsItem-cnt-price-inf-item">供价：¥ {{goods.$PtPrice.supplyPrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockList[0].subCodeList[0].QTY }}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockNum}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
@@ -124,19 +124,20 @@ export default {
       if(goods.$favorite) {
         // 取消收藏
          const removeInterest = this.customerService.removeInterestProduct({
-          customerCode: this.defaultSendToInf.customerCode,
-          account: this.defaultSendToInf.customerCode,
+          customerCode: this.saleInfo.customerCode,
+          account: this.saleInfo.customerCode,
           productCodeList: [goods.code]
         });
       } else {
         // 添加收藏
-         const addInterest = this.customerService.addInterestProduct({
-          customerCode: this.defaultSendToInf.customerCode,
-          account: this.defaultSendToInf.customerCode,
+         const addInterest = this.customerService.addInterestProduct ({
+          customerCode: this.saleInfo.customerCode,
+          account: this.saleInfo.customerCode,
           productCode: goods.code
         });
       }
       goods.$favorite = !goods.$favorite
+      console.log(goods.$favorite)
     },
     // 加入调货
     addTransfer(goods) {

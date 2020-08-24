@@ -15,6 +15,7 @@ import vehicleService from './vehicleList/vehicleList.service';
 import authService from './auth/auth.service';
 import cocService from './coc/coc.service';
 import openAccountService from './openAccount/openAccount.service';
+import activityService from './activity/activity.service';
 
 export default {
   install(Vue) {
@@ -53,5 +54,7 @@ export default {
     Vue.prototype.cocService = cocService;
     // c.jsh账户服务
     Vue.prototype.openAccountService = openAccountService;
+    // 首页推荐栏数据
+    Vue.prototype.activityService = activityService;
   }
 };

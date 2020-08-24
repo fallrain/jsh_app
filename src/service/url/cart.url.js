@@ -22,7 +22,8 @@ const urls = {
     console.log('shoppingCart url');
     return `/shoppingCart/getNumberByValid/${uid}`;
   },
-
+  // 从购物车里移除商品
+  deleteCart: '/shoppingCart/delete/cart'
 };
 util.addPrefix(baseURL, urls);
 export default urls;

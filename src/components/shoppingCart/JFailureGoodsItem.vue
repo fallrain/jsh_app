@@ -1,21 +1,22 @@
 <template>
   <view class="jFailureGoodsItem">
     <view
+      v-if="showCheck"
       class="jShoppingCartItem-cnt-check"
       @tap="choose"
     >
-      <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
+      <i :class="['iconfont', checked ? 'iconradio active':'iconradio1',checkDisabled && 'disabled']"></i>
     </view>
     <view class="jShoppingCartItem-cnt-img-wrap">
-      <image :src="goods.productList[0].productImageUrl"></image>
+      <image :src="goods.productList && goods.productList[0].productImageUrl"></image>
     </view>
     <view class="jFailureGoodsItem-cnt">
       <view class="jFailureGoodsItem-cnt-head">
         <view class="jFailureGoodsItem-cnt-head-tag mr10">失效</view>
-        <text class="jFailureGoodsItem-cnt-head-text">{{goods.productList[0].productName}}</text>
+        <text class="jFailureGoodsItem-cnt-head-text">{{goods.productList && goods.productList[0].productName}}</text>
       </view>
       <view class="jFailureGoodsItem-cnt-btm">
-        <div class="jFailureGoodsItem-cnt-btm-tag">{{goods.productList[0].productEnableMsg}}</div>
+        <div class="jFailureGoodsItem-cnt-btm-tag">{{goods.composeEnableMsg}}</div>
       </view>
     </view>
   </view>
@@ -36,6 +37,16 @@ export default {
       type: Boolean,
       default: false
     },
+    // 禁止选中
+    checkDisabled: {
+      type: Boolean,
+      default: false
+    },
+    // 显示选中
+    showCheck: {
+      type: Boolean,
+      default: true
+    },
     // 索引
     index: {
       type: Number,
@@ -47,9 +58,11 @@ export default {
   methods: {
     choose() {
       /* 选中 */
-      const checked = !this.checked;
-      this.$emit('update:checked', checked);
-      this.$emit('change', checked, this.index);
+      if (!this.checkDisabled) {
+        const checked = !this.checked;
+        this.$emit('update:checked', checked);
+        this.$emit('change', checked, this.index);
+      }
     }
   }
 };

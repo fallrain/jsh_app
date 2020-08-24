@@ -1,7 +1,9 @@
 .transferGoods{
     min-height: 100vh;
     background: #F5F5F5;
+    .transferGoods-head{
 
+    }
   .uni-drawer__content {
     width: 608px !important;
   }
@@ -12,7 +14,10 @@
         padding-left: 24px;
         padding-right: 24px;
         border-bottom: 1px solid #F5F5F5;
-        display:flex;   
+        display:flex;  
+        position: fixed; 
+        left: 0;
+        width: 100%;
         .transfer-btn{
             width:160px;
             height:56px;

@@ -20,6 +20,12 @@
       }
     },
     {
+      "path": "pages/index/announcement",
+      "style": {
+        "navigationBarTitleText": "首页新闻公告"
+      }
+    },
+    {
       "path": "pages/nav/nav",
       "style": {
         "navigationBarTitleText": "导航"
@@ -261,6 +267,7 @@
     "color": "#999",
     "selectedColor": "#ED2856",
     "borderStyle": "#CDCDCD",
+    "borderStyle": "black",
     "backgroundColor": "#fff",
     "iconWidth": "20px",
     "fontSize": "24px",
