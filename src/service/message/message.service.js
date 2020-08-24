@@ -11,6 +11,12 @@ export default {
   },
   indexList(data) {
     return jGet(urls.indexList, data);
+  },
+  getInfomation(id,data) {
+    return jGet(urls.getInfomation(id),data);
+  },
+  page(queryStr) {
+    return jPostJson(urls.page(queryStr));
   }
 
 };

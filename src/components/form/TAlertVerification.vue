@@ -249,7 +249,7 @@ export default {
     color:#ccc;
 }
 .TAlertVerification-row-right-btn {
-    width: 105px;
+    /* width: 105px; */
     height: 60px;
     line-height: 60px;
     text-align: center;

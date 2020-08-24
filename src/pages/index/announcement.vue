@@ -7,13 +7,13 @@
     >
       <view class="announcement-con-title">{{item.title}}</view> 
       <view class="announcement-con-row">
-        <view class="announcement-con-row-at">{{item.at}}</view>
-        <view class="announcement-con-row-bt">{{item.bt}}</view>
+        <view class="announcement-con-row-at">{{item.typeStr}}</view>
+        <view class="announcement-con-row-bt">{{item.creatorDept}}</view>
         <i class="announcement-con-row-icon iconfont iconshijian"></i>
-        <view class="announcement-con-row-time">{{item.time}}</view>
+        <view class="announcement-con-row-time">{{item.publishTime}}</view>
       </view>
       <view class="announcement-con-img">
-          <image :src="item.image">
+          <image :src="item.img">
       </view>
 
     </view>
@@ -21,31 +21,75 @@
   </view>   
 </template>
 <script>
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 export default {
   name: 'announcement',
   data() {
     return {
+    //   num: 0,
       list: [
-        {
-          id: 1,
-          title: "集成化家电会成为家电行业未来的新升级趋…",
-          at: "家电",
-          bt: "科普",
-          time:"2020-9-21",
-          image: require('@/assets/img/index/new-pic.png')
-        },
-        {
-          id: 2,
-          title: "集成化家电会成为家电行业未来的新升级趋…",
-          at: "家电",
-          bt: "科普",
-          time:"2020-9-21",
-          image: require('@/assets/img/index/new-pic.png')
-        }
+        // {
+        //   id: 1,
+        //   title: "集成化家电会成为家电行业未来的新升级趋…",
+        //   at: "家电",
+        //   bt: "科普",
+        //   time:"2020-9-21",
+        //   image: require('@/assets/img/index/new-pic.png')
+        // },
+        // {
+        //   id: 2,
+        //   title: "集成化家电会成为家电行业未来的新升级趋…",
+        //   at: "家电",
+        //   bt: "科普",
+        //   time:"2020-9-21",
+        //   image: require('@/assets/img/index/new-pic.png')
+        // }
 
       ]
     }
-    }
+  },
+  created() {
+    this.getList()
+  },
+  computed: {
+    ...mapGetters({
+        defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+        tokenUserInf:USER.GET_TOKEN_USER,
+        saleInfo: USER.GET_SALE
+    })
+  },
+  methods: {
+      async getList() {
+        let a = 0
+        a = `${this.saleInfo.customerCode}_admin`
+      
+        console.log(a)
+        const { code, data } = await this.messageService.page(this.jshUtil.genQueryStringByObj({
+          title: '',
+          customerCode: Number(this.saleInfo.customerCode),
+          pageNum: 1,
+          pageSize: 10,
+          type: '',
+          creatorDept: '',
+          publishTimeStr: '',
+          unitId: a 
+        }));
+        if (code === '1') {
+
+            data.list.map(item => {
+                item.img = require('@/assets/img/index/new-pic.png')
+               
+            })
+            console.log(data);
+            this.list = data.list
+        }
+      }
+  }
     
 }
 </script>
@@ -96,7 +140,7 @@ export default {
   line-height:32px;
   text-align: center;
   font-size: 24px;
-  margin-right: 300px;
+  margin-right: 284px;
 }
 .announcement-con-row-icon {
   font-size: 27px !important;
