@@ -38,6 +38,7 @@
         :versionPrice="specialPriceMap"
         :warehouseFlag="choseSendAddress.yunCangFlag"
         @change="goodsChange"
+        @del="singleDeleteCart"
       ></j-shopping-cart-item>
     </view>
     <view
@@ -295,22 +296,37 @@ export default {
       this.specialPriceMap = (data && data) || {};
     },
     goodsChange(goods, index) {
-      console.log(goods);
+      /* 商品数据change */
       this.shoppingList[index] = goods;
       this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
+      // 更新选择的商品数目
+      this.totalGoodsNum = this.countTotalNumber();
+      // 更新选择的总商品价格
+      this.totalGoodsPrice = this.countTotalPrice();
     },
     checkAll(checked) {
       /* 全部选择回调函数 */
-      let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
         v.checked = checked;
-        // 计算选择的总价
-        totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, v.$PriceInfo.commonPrice.invoicePrice);
       });
       // 更新选择的总商品数
-      this.totalGoodsNum = this.shoppingList.length;
+      this.totalGoodsNum = checked ? this.shoppingList.length : 0;
       // 更新选择的总商品价格
-      this.totalGoodsPrice = totalGoodsPrice;
+      this.totalGoodsPrice = this.countTotalPrice();
+    },
+    countTotalPrice() {
+      /* 计算选择的商品的总价 */
+      let totalGoodsPrice = 0;
+      this.shoppingList.forEach((v) => {
+        if (v.checked) {
+          totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, v.$PriceInfo.commonPrice.invoicePrice);
+        }
+      });
+      return totalGoodsPrice;
+    },
+    countTotalNumber() {
+      /* 计算选择的商品的总数 */
+      return this.shoppingList.filter(v => v.checked).length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -371,18 +387,20 @@ export default {
     tabClick(tabs) {
       this.tabs = tabs;
     },
-    deleteCart(idList) {
+    deleteCart(idList, isFailure = false) {
       /* 删除购物车里的商品 */
       /**
          * @idList（Array）id的集合，如果传入则使用传入的id
+         * @isFailure?:boolean 是否是失效列表
          * */
+      const listName = isFailure ? 'failureGoodsList' : 'shoppingList';
       let ids;
       if (idList && idList.length) {
         ids = idList;
       } else {
         // 选出选中的商品的id集合
         ids = [];
-        this.shoppingList.forEach((v) => {
+        this[listName].forEach((v) => {
           if (v.checked) {
             ids.push(v.id);
           }
@@ -399,7 +417,7 @@ export default {
       uni.showModal({
         title: '',
         content: '确认要从购物车移除吗？',
-        async success(res) {
+        success: async (res) => {
           if (res.confirm) {
             const { code } = await this.cartService.deleteCart(ids);
             if (code === '1') {
@@ -408,14 +426,25 @@ export default {
                 content: '删除成功',
                 timeout: 2000,
               });
+              const listTemp = JSON.parse(JSON.stringify(this[listName]));
+              ids.forEach((id) => {
+                const index = listTemp.findIndex(v => v.id === id);
+                listTemp.splice(index, 1);
+              });
+              this[listName] = listTemp;
             }
           }
         }
       });
     },
+    singleDeleteCart(goods) {
+      /* 单个移除购物车 */
+      const ids = [goods.id];
+      this.deleteCart(ids);
+    },
     clearFailureGoods() {
       /* 清空购物车的失效产品 */
-      const ids = this.shoppingList.map(v => v.id);
+      const ids = this.failureGoodsList.map(v => v.id);
       this.deleteCart(ids);
     },
     followGoods() {
@@ -475,7 +504,7 @@ export default {
         yunCangCode: this.choseSendAddress.yunCangCode,
         yunCangFlag: this.choseSendAddress.yunCangFlag
       };
-      const { code, data } = await this.orderService.validateProduct(form);
+      const { code } = await this.orderService.validateProduct(form);
       if (code === '1') {
         const args = JSON.stringify(form);
         // 产品校验成功

@@ -28,7 +28,10 @@
         <view class="jShoppingCartItem-head-line"></view>
         <text class="jShoppingCartItem-head-text">直发订单</text>
       </block>
-      <view class="jShoppingCartItem-head-close iconfont iconcross"></view>
+      <view
+        @tap="handleDel"
+        class="jShoppingCartItem-head-close iconfont iconcross"
+      ></view>
     </view>
     <view class="jShoppingCartItem-cnt">
       <view
@@ -230,7 +233,7 @@ export default {
       const {
         number
       } = this.goods;
-      // 计算选择的商品的总价，信用额度做比较，超出则不允许开启
+        // 计算选择的商品的总价，信用额度做比较，超出则不允许开启
       const totalPrice = this.jshUtil.arithmetic(priceInfo.commonPrice.invoicePrice, number, 3);
       return this.beforeCreditModeChange && this.beforeCreditModeChange(productGroup, totalPrice);
     },
@@ -384,6 +387,10 @@ export default {
         this.goods.followState = false;
         this.$emit('change', this.goods, this.index);
       }
+    },
+    handleDel() {
+      /* 移除购物车操作 */
+      this.$emit('del', this.goods);
     }
   }
 };
