@@ -133,13 +133,13 @@
       <image :src="item.img" mode="aspectFill" />
     </view> -->
     <!-- 广告图 -->
-    <view class="homepage-nav" v-show="isShowNav">
+    <!-- <view class="homepage-nav" v-show="isShowNav">
       <image mode="aspectFill" src="../../assets/img/index/manypeople.png"/>
       <i
         @tap="deleteNav"
         class="homepage-nav-close iconfont iconcross"
       ></i>
-    </view>
+    </view> -->
   </view>
 </template>
 
