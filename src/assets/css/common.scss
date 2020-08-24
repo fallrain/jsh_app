@@ -64,6 +64,10 @@
   margin-left: 40px;
 }
 
+.ml80 {
+  margin-left: 80px;
+}
+
 .mb8 {
   margin-bottom: 8px;
 }
@@ -470,10 +474,14 @@
 
   .iconfont {
     font-size: 30px;
-  }
 
-  .iconfont.active {
-    color: $theme-color;
+    &.active {
+      color: $theme-color;
+    }
+
+    &.disabled {
+      color: #ccc;
+    }
   }
 }
 

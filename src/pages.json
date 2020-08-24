@@ -267,6 +267,7 @@
     "color": "#999",
     "selectedColor": "#ED2856",
     "borderStyle": "#CDCDCD",
+    "borderStyle": "black",
     "backgroundColor": "#fff",
     "iconWidth": "20px",
     "fontSize": "24px",

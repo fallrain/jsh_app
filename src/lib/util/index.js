@@ -38,8 +38,11 @@ const util = {
   },
   arithmetic(val1, val2, arithmetic = 1, floatNum = 2) {
     /* 避免损失精度 */
-    if ((!val1 && val1 !== 0) || (!val2 && val2 !== 0)) {
-      return '';
+    if (!val1) {
+      val1 = 0;
+    }
+    if (!val2) {
+      val2 = 0;
     }
     val1 += '';
     val2 += '';
@@ -66,6 +69,10 @@ const util = {
         break;
     }
     return this.formatFloat(returnValue, floatNum);
+  },
+  multiArithmetic(numbers, ...args) {
+    /* n个数值的计算 */
+    return numbers.reduce((pre, cur) => this.arithmetic(pre, cur, ...args), 0);
   },
   genQueryStringByObj(obj, isFirst = true) {
     /* 根据一个对象组合查询字符串 */

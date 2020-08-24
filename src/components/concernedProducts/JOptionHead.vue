@@ -24,9 +24,9 @@
         v-if="isEdit"
       >完成</text>
       <text
+        v-else
         @tap="toEditMode"
         class="jOptionHead-check-text"
-        v-else
       >编辑</text>
       <view
         class="jOptionHead-line"
