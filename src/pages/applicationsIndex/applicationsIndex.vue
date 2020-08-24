@@ -427,10 +427,25 @@ export default {
   created() {
     // this.getbannerList();
   },
+  mounted() {
+	  // 适配安卓客户端
+	AlipayJSBridge.call('myApiGetCode', {
+	  param1: 'JsParam1',
+	  param2: 'JsParam2'
+	}, function (result) {
+		if(result.length > )) {
+			this.code = result;
+			this.getToken();
+		}
+	});
+  }
   onLoad() {
+	  // 适配iOS客户端
     this.code = ALIPAYH5STARTUPPARAMS.webview_options;
     // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
-    this.getToken();
+	if(this.code.length > 0) {
+		this.getToken();
+	}
   },
   methods: {
     // 获取token
