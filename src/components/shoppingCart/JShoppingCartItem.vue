@@ -244,7 +244,6 @@ export default {
     showSpecifications() {
       /* 显示版本规格 */
       this.isShowSpecifications = true;
-      // versionPrice
     },
     getVersionPriceState() {
       /* versionPrice是否有值 */
@@ -252,6 +251,7 @@ export default {
     },
     genSpecificationsList() {
       /* 组合版本规格信息 */
+      this.specificationsList = [];
       if (!this.getVersionPriceState()) {
         return;
       }
@@ -343,6 +343,7 @@ export default {
     goodsNumChange(val) {
       /* 商品数量change */
       this.goods.number = val;
+      this.goods.productList[0].number = val;
       this.$emit('change', this.goods, this.index);
     },
     setFollowState() {

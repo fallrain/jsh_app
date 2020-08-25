@@ -1,4 +1,4 @@
-// import basicService from '@/services/basic';
+import cartService from '@/service/cart/cart.service';
 
 const util = {
   commonGet({ key, service }) {
@@ -23,13 +23,13 @@ const util = {
         }
       }
     }
-    // return basicService[service]().then(({ code, data }) => {
-    //   if (code === '1') {
-    //     uni.setStorageSync(localStorageKey, JSON.stringify(data));
-    //     uni.setStorageSync(localStorageTimeKey, `${new Date().getTime()}`);
-    //   }
-    //   return data || [];
-    // });
+    return service().then(({ code, data }) => {
+      if (code === '1') {
+        uni.setStorageSync(localStorageKey, JSON.stringify(data));
+        uni.setStorageSync(localStorageTimeKey, `${new Date().getTime()}`);
+      }
+      return data || [];
+    });
   }
 };
 
@@ -75,8 +75,32 @@ function getGoodsPriceType() {
   };
 }
 
+function getIndustryGroup() {
+  /* 获取全部产品组 */
+  return util.commonGet({
+    key: 'industryGroup',
+    service: cartService.getIndustryList
+  });
+}
+
+function getOrdinaryCartActivityType() {
+  /* 普通购物车活动类型映射 */
+  // 活动类型：1单品2组合3抢购4套餐5成套
+  // 普通购物车的活动只有抢单和反向定制
+  // 反向定制接口返回5，但是当做抢单（3），所以传3（真是无语）
+  return {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 3
+  };
+}
+
 export {
   getGoodsPriceType,
   getGoodsTag,
-  getGoodsType
+  getGoodsType,
+  getIndustryGroup,
+  getOrdinaryCartActivityType
 };
