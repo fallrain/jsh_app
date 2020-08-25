@@ -368,10 +368,10 @@ export default {
     },
     async getSpecialPrice() {
       /* 获取特价版本 */
-      const saletoCode = this.defaultSendTo.customerCode;
+      const saletoCode = this.userInf.customerCode;
       const data = await this.cartService.getSpecialPrice({
         saletoCode,
-        sendtoCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode,
         account: saletoCode,
       });
       this.specialPriceMap = (data && data) || {};

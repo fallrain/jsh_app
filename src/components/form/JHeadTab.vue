@@ -93,12 +93,13 @@ export default {
       /* tag tab 点击事件 */
     },
     showSecondCategory(item) {
+      /* 展示二级类目 */
+      const isShow = !item.show;
       this.popTabs.forEach((inf) => {
         inf.show = false;
       });
-      /* 展示二级类目 */
-      item.show = !item.show;
-      this.isExpend = item.show;
+      item.show = isShow;
+      this.isExpend = isShow;
       this.$emit('tabPickerChange', this.popTabs);
     },
     tabPickerShowChange(show) {

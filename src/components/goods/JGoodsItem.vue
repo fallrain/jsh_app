@@ -17,9 +17,13 @@
         {{goods.productName | rmHtml}}
       </view>
       <view class="jGoodsItem-cnt-price-tips">
-        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100)}}%</view>
+        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice &&
+          goods.$PtPrice.rebateRate,100)}}%
+        </view>
         <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
+          rebatePolicy}}
+        </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
         <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice && goods.$PtPrice.invoicePrice}}</view>
@@ -37,8 +41,14 @@
         >加入购物车
         </button>
         <button
+          @tap="goActivity"
           class="jGoodsItem-cnt-opts-default ml26"
           type="button"
+          v-if="
+            (goods.arbitrages && goods.arbitrages.length) ||
+            (goods.composes && goods.composes.length) ||
+            (goods.bigorders && goods.bigorders.length)
+          "
         >参加活动
         </button>
       </view>
@@ -338,6 +348,15 @@ export default {
       });
       uni.navigateTo({
         url: `/pages/productDetail/productDetail${queryStr}`
+      });
+    },
+    goActivity() {
+      /* 去参加活动 */
+      const queryStr = this.jshUtil.genQueryStringByObj({
+        productCode: this.goods.productCode
+      });
+      uni.navigateTo({
+        url: `/pages/market/marketList${queryStr}`
       });
     }
   }
