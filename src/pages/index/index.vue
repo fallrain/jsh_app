@@ -12,7 +12,8 @@
             placeholder="请输入搜索信息"
             placeholder-class="col_c"
             v-model="name"
-            @search="search"
+            confirm-type="search" 
+            @confirm="confirm" 
           >
         </view>
         <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
@@ -46,7 +47,7 @@
           <swiper class="swiper-box" @change="changePic">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
               <view class="swiper-item">
-                <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail'/>
+                <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
               </view>
             </swiper-item>
           </swiper>
@@ -387,12 +388,7 @@ export default {
       // })().then(res =>{
       //     // this.get()
       // })
-      this.getIndexList()
-      this.getList();
-      this.getXinPin();
-      this.getBaoKuan();
-      this.getZhuanGong();
-      this.getZiYuanJi();
+      
       // this.recommend();
       this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       this[USER.UPDATE_SALE_ASYNC]();
@@ -437,6 +433,7 @@ export default {
     },
     // 客服
     async service() {
+      let url = ''
       const { code, data } = await this.udeskService.getUdesk(this.saleInfo.customerCode, {
         addressArea: this.defaultSendToInf.customerCode
       });
@@ -457,30 +454,22 @@ export default {
           //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
           //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
           //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
-        const url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&c_phone='+this.tokenUserInf.phoneNumber+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;        console.log(url);
+        url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&c_phone='+this.tokenUserInf.phoneNumber+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;        
+        console.log(url);
         // InAppBrowserService.openAd(url);
       } else {
           // PopupService.showToast(response.message);
       }
+
+       uni.navigateTo({
+          url: `/pages/index/service?url=${url}`
+        });
  
     },
-     search({ detail: { value } })  {
+     confirm()  {
         console.log(this.name);
       // this.mescroll.resetUpScroll(true);
-      // if ((this.name).trim()) {
-      //   uni.navigateTo({
-      //     url: `/pages/goods/goodsList?name=${this.name}`
-      //   });
-      // } else {
-      //   uni.showToast({
-      //     title: '请输入搜索词',
-      //   });
-      // }
-    },
-      /* 静默搜索 */    
-    search({ detail: { value } }) {
-      console.log(this.name);
-      if (value.trim()) {
+      if ((this.name).trim()) {
         uni.navigateTo({
           url: `/pages/goods/goodsList?name=${this.name}`
         });
@@ -490,51 +479,14 @@ export default {
         });
       }
     },
-    // 首页客服
-// $scope.click = function () {
-//     if (typeof($scope.modelData.payPart) == "undefined"||$scope.modelData.payPart==null) {
-//         PopupService.showToast('获取送达放编码失败!');
-//         return;
-//     }
-//     var param={
-//         addressArea:$scope.modelData.payPart.aid,//'8800101954',
-//         account: UserService.getUser().uid,
-//         userid: UserService.getUser().uid,
-//         token: UserService.getUser().token
-//     };
-//     HomeService.udesk(param).success(function(response){
-//         console.log("查询udesk");
-//         console.log(param);
-//         console.log(response);
-//         if (response.code == 200) {
-//             var uid=response.data.resultData.data.udeskUid;
-//             var web_token1=response.data.resultData.data.accountId;
-//             var timestamp1=new Date().getTime();//时间戳
-//             var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-//             var nonce1 = "";//随机数
-//             for(var i = 0; i < 12 ; i ++) {
-//                 var id = Math.ceil(Math.random()*35);
-//                 nonce1 += chars[id];
-//             }
-//             var signature='nonce='+nonce1+'&timestamp='+timestamp1+'&web_token='+web_token1+'&9767b0677a6f46f5d3d0af8c00f3f16c';
-//             var sha = hex_sha1(signature);
-//             sha = sha.toUpperCase();
-//             console.log(signature); console.log(UserService.getUser()); console.log(sha);
-//             //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
-//             //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
-//             //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
-//             var url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&agent_id='+uid+'&c_phone='+UserService.getUser().mobile+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;
-//             console.log(url);
-//             InAppBrowserService.openAd(url);
-//         } else {
-//             PopupService.showToast(response.message);
-//         }
-//     }).error(function(response){
-//         console.log(response);
-//     });
-// };
     getPageInf() {
       this.getbannerList();
+      this.getIndexList()
+      this.getList();
+      this.getXinPin();
+      this.getBaoKuan();
+      this.getZhuanGong();
+      this.getZiYuanJi();
     },
     async getbannerList() {
       const { code, data } = await this.indexService.bannerList({});
@@ -542,6 +494,19 @@ export default {
         this.bannerList = data;
         console.log(this.bannerList);
         console.log(data);
+      }
+    },
+    // 轮播图跳转
+    goSwiperDetail(item) {
+      console.log(item)
+      if(item.type === "html") {
+        uni.navigateTo ({
+          url: `/pages/index/banner?url=${item.url}`
+        })
+      } else {
+        uni.navigateTo ({
+          url: `/pages/productDetail/productDetail?productCode=${item.code}`
+        });
       }
     },
     // 目录列表跳转
@@ -570,7 +535,7 @@ export default {
     // 新闻资讯公告
     goAnnouncement() {
       uni.navigateTo({
-        url: `/pages/index/announcement`
+        url: '/pages/index/announcement'
       });
     },
     // 新闻资讯详情

@@ -32,7 +32,7 @@
                 v-for="(item,index) in imageList"
                 :key="index">
                 <view class="swiper-item">
-                  <image :src="item.imageUrl" mode="aspectFill"/>
+                  <image :src="item.imageUrl" mode="aspectFill"  @tap='goSwiperDetail(item)' />
                 </view>
               </swiper-item>
             </swiper>
@@ -500,7 +500,20 @@ export default {
       } else {
         this.appFlag = false;
       }
-    }
+    },
+    // 轮播图跳转
+    goSwiperDetail(item) {
+      console.log(item)
+      if(item.type === "html") {
+        uni.navigateTo ({
+          url: `/pages/index/banner?url=${item.url}`
+        })
+      } else {
+        uni.navigateTo ({
+          url: `/pages/productDetail/productDetail?productCode=${item.code}`
+        });
+      }
+    },
   }
 };
 </script>
