@@ -8,7 +8,8 @@
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
           <view class="fs24 text-333">王芬芬，您好！</view>
-		  <view @click="callBBC">建行支付</view>
+		  <view @click="callBBC">建行支付测试</view>
+		  <view @click="popAction">返回测试</view>
           <view class="logo">
             <image src="@/assets/img/appIndex/haier.png"></image>
           </view>
@@ -427,6 +428,8 @@ export default {
   },
   created() {
     // this.getbannerList();
+	// 支持由前端 H5 页面禁止
+	AlipayJSBridge.call('setGestureBack',{val:false});
   },
   mounted() {
 	  // 适配安卓客户端
@@ -447,6 +450,10 @@ export default {
 	}
   },
   methods: {
+	  // 返回原生
+	  popAction() {
+		  AlipayJSBridge.call('popWindow');
+	  },
 	  // 打开建行支付
 	  callBBC() {
 		  AlipayJSBridge.call('myApiCallCCB', {
