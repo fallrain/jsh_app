@@ -162,23 +162,27 @@ export default {
       }
     },
     async getPayerList(inf) { // 获取付款方接口
-      const longfeiUSERID = this.userInf.customerCode;
-      const productGroup = inf.orderList[0].IBL_INVSORT;
-      const sendtoCode = this.defaultSendTo.customerCode;
-      const yuncangType = inf.IBR_ZCDELIVERYTYPE;
-      const bstnk = inf.orderList[0].IBL_KORDERNO;
-      const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
-      if (code === '1') {
-        data.data.items.forEach((item) => {
-          item.checked = false;
-        });
-        inf.orderList.forEach((item2) => {
-          item2.payCheck = false;
-          item2.payVehiList = data;
-          item2.payVehCheck = data.data.items[0];
-          item2.payVehiList.data.items[0].checked = true;
-          item2.payVehCheck.checked = true;
-        });
+      try {
+        const longfeiUSERID = this.userInf.customerCode;
+        const productGroup = inf.orderList[0].IBL_INVSORT;
+        const sendtoCode = this.defaultSendTo.customerCode;
+        const yuncangType = inf.IBR_ZCDELIVERYTYPE;
+        const bstnk = inf.orderList[0].IBL_KORDERNO;
+        const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
+        if (code === '1') {
+          data.data.items.forEach((item) => {
+            item.checked = false;
+          });
+          inf.orderList.forEach((item2) => {
+            item2.payCheck = false;
+            item2.payVehiList = data;
+            item2.payVehCheck = data.data.items[0];
+            item2.payVehiList.data.items[0].checked = true;
+            item2.payVehCheck.checked = true;
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
     goodsChange(item, index) { // 选中产品
