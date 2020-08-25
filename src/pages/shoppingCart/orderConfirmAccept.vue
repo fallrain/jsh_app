@@ -1,5 +1,6 @@
 <template>
   <view class="order-confirm-accept">
+    <view class="bg-style"></view>
     <view class="order-accept-head">
       <view class="order-accept-title">
         <i class="iconfont iconshijian"></i>
@@ -29,6 +30,7 @@
     <view class="order-accept-orderlist">
       <j-order-accept-item
         v-for="(item, index) in orderData"
+        @orderDetail="orderDetail"
         :orderItem="item"
         :index="index"
         :key="index"
@@ -50,11 +52,17 @@ export default {
   data() {
     return {
       orderData: [
-      ]
+      ],
+      form: []
     };
   },
   created() {
     this.getOrderInfo();
+  },
+  onLoad(option) {
+    if (option.groupings) {
+      this.form = JSON.parse(option.groupings);
+    }
   },
   methods: {
     // 获取订单信息
@@ -64,10 +72,17 @@ export default {
           groupingNo: '20200824180216294530'
         }
       ];
-      const { code, data } = await this.orderService.getOrderInfo(form);
+      const { code, data } = await this.orderService.getOrderInfo(this.form);
       if (code === '1') {
         this.orderData = data;
       }
+    },
+    // 订单详情
+    orderDetail(orderGroup) {
+      const data = JSON.stringify(orderGroup);
+      uni.navigateTo({
+        url: `/pages/shoppingCart/orderConfirmAcceptDetail?orderGroup=${data}`
+      });
     }
   }
 };

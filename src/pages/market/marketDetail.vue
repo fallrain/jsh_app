@@ -484,9 +484,10 @@ export default {
         });
       }
       form.splitComposeList[0].productList = productArr;
-      const { code, data } = await this.orderService.validateProduct(form, {
+      const { code, data, msg } = await this.orderService.validateProduct(form, {
         noToast: true
       });
+      debugger
       if (code === '1') {
         const formData = JSON.stringify(form);
         // 产品校验成功
@@ -494,13 +495,21 @@ export default {
           url: `/pages/shoppingCart/orderConfirm?formData=${formData}`
         });
       } else {
-        uni.showModal({
-          title: '提示',
-          content: `型号${data[0][0].productCode}，${data[0][0].msg}${data[0][0].productName}`,
-          icon: 'none',
-          showCancel: false,
-          success: () => {}
-        });
+        if (!data) {
+          uni.showToast({
+            title: msg,
+            duration: 2000,
+            icon: 'none'
+          });
+        } else {
+          uni.showModal({
+            title: '提示',
+            content: `型号${data[0][0].productCode}，${data[0][0].msg}${data[0][0].productName}`,
+            icon: 'none',
+            showCancel: false,
+            success: () => {}
+          });
+        }
       }
     },
     // 获取活动类型编码

@@ -252,6 +252,11 @@ export default {
   beforeMount() {
     this.getAddressList();
   },
+  onLoad(option) {
+    if (option.productCode) {
+      this.filterInputs[1].val = option.productCode;
+    }
+  },
   created() {
     this.form.saletoCode = this.saleInfo.customerCode;
     this.stockForm.saletoCode = this.saleInfo.customerCode;
@@ -308,7 +313,7 @@ export default {
       return scrollView;
     },
     getSearchCondition(pages) {
-      console.log(pages)
+      console.log(pages);
       console.log(this.addressList);
       /* 获取不同条件下搜索的传参 */
       const condition = {

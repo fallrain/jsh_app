@@ -42,7 +42,6 @@
       :show.sync="modalShow"
       title="请输入验证码"
       @confirm="submitOrder"
-      @cancel="()=>{this.modalShow = false}"
     >
       <template>
         <view class="Verification-model">
@@ -300,6 +299,7 @@ export default {
       await this.getUserInfMianMi();
       if (this.userInfMianMi) {
         console.log('true,提交');
+        this.submitOrder();
       } else {
         this.modalShow = true;
       }
@@ -309,12 +309,17 @@ export default {
       console.log(this.dataInfo);
       // 根据拆单结果组合订单提交信息
       const orderList = [];
+      const groupingArr = [];
       const productType = this.formData.splitComposeList[0].activityType;
       this.dataInfo.composeProductList.forEach((item) => {
         const orderItem = {
           groupingNo: item.composeOrderNo,
           orderDetailList: []
         };
+        const groupingNoItem = {
+          groupingNo: item.composeOrderNo
+        };
+        groupingArr.push(groupingNoItem);
         item.splitOrderDetailList.forEach((v) => {
           const singleItem = {
             productType,
@@ -343,6 +348,10 @@ export default {
       const { code, data } = await this.orderService.updateOrderInfo(this.formSubmit);
       if (code === '1') {
         console.log(data);
+        const groupings = JSON.stringify(groupingArr);
+        uni.navigateTo({
+          url: `/pages/shoppingCart/orderConfirmAccept?groupings=${groupings}`
+        });
       }
     },
     choseSendType(types) {

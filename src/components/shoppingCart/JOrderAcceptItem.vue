@@ -2,20 +2,22 @@
   <view :key="updateIndex" class="JOrderConfirmAcceptItem">
     <view class="item-head">
       <view class="item-head-left">
-        {{index+1}}订单信息
+        {{index+1}}.订单信息
       </view>
-      <view class="item-head-right">
+      <view
+        @tap="orderDetail"
+        class="item-head-right">
         点击查看详情
       </view>
     </view>
     <view class="item-content">
-      整单：{{orderItem.allId}}
+      整单：{{orderItem.groupingCode}}
     </view>
     <view class="item-content">
-      整单金额：{{orderItem.allMoney}}
+      整单金额：{{orderItem.payAmount}}
     </view>
     <view class="item-content">
-      送达方：{{orderItem.sdf}}
+      送达方：{{orderItem.sendtoAddress}}
     </view>
   </view>
 </template>
@@ -60,33 +62,8 @@ export default {
   computed: {
   },
   methods: {
-    getPayerMoneyInfo() {
-      const currentPayerMoneyInfo = {
-      };
-      this.orderItem.splitOrderDetailList.forEach((item) => {
-        const itemObj = {
-          totalMoney: item.totalMoney,
-          customerCode: this.currentPayer[item.orderNo].customerCode,
-          customerName: `(${this.currentPayer[item.orderNo].customerCode})${this.currentPayer[item.orderNo].customerName}`
-        };
-        currentPayerMoneyInfo[item.orderNo] = itemObj;
-      });
-      this.$emit('payerMoneyInfo', currentPayerMoneyInfo);
-    },
-    showPayer(currentOrderNo) {
-      this.currentOrderNo = currentOrderNo;
-      this.currentchosePayerOption[0] = this.currentPayer[currentOrderNo].key;
-      /* 展示付款地址 */
-      this.payerPickerShow = true;
-    },
-    goRemarks(index) {
-      uni.navigateTo({
-        url: `/pages/shoppingCart/orderConfirmRemarks?orderIndex=${this.index}&productIndex=${index}`
-      });
-    },
-    isCreditModeChange() {
-      /* switch change */
-      this.$emit('change', this.orderItem, this.index);
+    orderDetail() {
+      this.$emit('orderDetail', this.orderItem);
     },
   }
 };

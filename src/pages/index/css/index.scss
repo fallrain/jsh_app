@@ -218,9 +218,11 @@
           animation:mz 3s  infinite step-start both;
       }
       @keyframes mz{
-				0%{margin-left:380px;}
-				10%{margin-left:300px;}
-        20%{margin-left:220px;}
+        0%{margin-left:380px;}
+        5%{margin-left:320px;}
+        10%{margin-left:300px;}
+        15%{margin-left:250px;}
+        20%{margin-left:200px;}
 				30%{margin-left:150px;}
         40%{margin-left:80px;}
 				50%{margin-left:0px;}

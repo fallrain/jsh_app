@@ -39,11 +39,11 @@ export default {
   },
   methods: {
     cancel() {
-      debugger
+      debugger;
       this.$emit('update:show', false);
     },
     modalCancle() {
-      this.$emit('cancel');
+      this.$emit('update:show', false);
     },
     modalSure() {
       this.$emit('confirm');

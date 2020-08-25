@@ -102,7 +102,7 @@
         </view>
         <view @tap="goDetail()" class="mb12 dis-flex text-666">
           <view class="">活动结束时间：</view>
-          <view class="text-primary">{{activity.expTime}}</view>
+          <view class="text-primary">{{fomrmateDate(activity.expTime)}}</view>
         </view>
         <view @tap="goDetail()" class="mb12 dis-flex text-666">
           <view class="">主产品剩余可购买：</view>
@@ -151,7 +151,8 @@ export default {
       };
     },
     fomrmateDate() {
-      return val => this.jshUtil.formatDate(val);
+      // return val => this.jshUtil.formatDate(val);
+      return val => val.split(' ')[0];
     }
   },
   methods: {
