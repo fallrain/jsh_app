@@ -398,7 +398,9 @@ export default {
       let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
         if (v.checked) {
-          totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, v.$PriceInfo.commonPrice.invoicePrice);
+          const num = v.number;
+          const curTotal = this.jshUtil.arithmetic(v.$PriceInfo.commonPrice.invoicePrice, num, 3);
+          totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
         }
       });
       return totalGoodsPrice;
