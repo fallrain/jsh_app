@@ -9,11 +9,11 @@
     </view>
     <view class="vehicleCar-invalid" v-if="guaDanList.length>0">
       <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index" @pullDetail="pullDetail"
-             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
+      :goods="goods" :index="index" @change="goodsChange" @changeNum="changeNum"></vehicle-cart-item-g-d>
     </view>
     <view class="vehicleCar-invalid" v-if="pingCheList.length>0">
       <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index" @pullDetail="pullDetail"
-             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
+      :goods="goods" :index="index" @change="goodsChange" @changeNum="changeNum"></vehicle-cart-item-p-c>
     </view>
     <view class="vehicleCar-invalid" v-if="failureGoodsList.length>0">
       <t-failure-goods-list :list="failureGoodsList" @change="failureGoodsListChange"></t-failure-goods-list>
