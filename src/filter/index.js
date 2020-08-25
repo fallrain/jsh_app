@@ -1,7 +1,7 @@
 const filters = {
   rmHtml(str) {
     /* 替换html标签 */
-    return str.replace(/(<[\s\S]*>)([\s\S]*)(<\/[\s\S]*>)/g, (match, $1, $2) => $2);
+    return str.replace(/(<[^<>]*>)([^<>]*)(<\/[^<>]*>)/g, (match, $1, $2) => $2);
   },
   rebatePolicy(val) {
     /* 返利 */
