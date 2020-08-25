@@ -48,5 +48,9 @@ export default {
      *@ids(Array)：商品在购物车里的id集合
      * */
     return jPostJson(urls.deleteCart, ids);
+  },
+  getIndustryList() {
+    /* 获取产业 */
+    return jGet(urls.getIndustryList);
   }
 };

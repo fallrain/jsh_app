@@ -7,7 +7,10 @@
         @tabClick="tabClick"
       >
         <template #right>
-          <view class="shoppingCart-tab-picker">
+          <view
+            @tap="showIndustryPicker"
+            class="shoppingCart-tab-picker"
+          >
             <text class="mr8">产业</text>
             <i class="iconfont iconxia"></i>
           </view>
@@ -28,17 +31,28 @@
       class="shoppingCart-list"
       v-if="shoppingList.length"
     >
-      <j-shopping-cart-item
+      <view
         v-for="(goods,index) in shoppingList"
         :key="index"
-        :goods="goods"
-        :index="index"
-        :beforeCreditModeChange="checkCreditQuota"
-        :userInf="userInf"
-        :versionPrice="specialPriceMap"
-        :warehouseFlag="choseSendAddress.yunCangFlag"
-        @change="goodsChange"
-      ></j-shopping-cart-item>
+      >
+        <j-shopping-cart-item
+          :beforeCreditModeChange="checkCreditQuota"
+          :goods="goods"
+          :index="index"
+          :userInf="userInf"
+          :versionPrice="specialPriceMap"
+          :warehouseFlag="choseSendAddress.yunCangFlag"
+          @change="goodsChange"
+          @del="singleDeleteCart"
+          v-if="goods.isShow"
+        ></j-shopping-cart-item>
+      </view>
+      <view
+        class="shoppingCart-empty"
+        v-if="shoppingList.length && !shoppingList.filter(v=>v.isShow).length"
+      >
+        没有匹配的相关产品~
+      </view>
     </view>
     <view
       class="shoppingCart-empty"
@@ -72,6 +86,14 @@
       :isdistance="true"
       ref="toast"
     ></m-toast>
+    <j-pop-picker
+      :choseOptions.sync="choseIndustryOptions"
+      :options="industryGroupData"
+      :show.sync="isIndustryPickerShow"
+      @change="industryPickerChange"
+      keyName="code"
+      title="产业"
+    ></j-pop-picker>
   </view>
 </template>
 <script>
@@ -81,6 +103,7 @@ import JShoppingCartBtm from '../../components/shoppingCart/JShoppingCartBtm';
 import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import JTab from '../../components/common/JTab';
+import JPopPicker from '../../components/form/JPopPicker';
 import './css/shoppingCart.scss';
 import {
   mapGetters,
@@ -91,10 +114,16 @@ import {
 } from '../../store/mutationsTypes';
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
+import {
+  getIndustryGroup,
+  getOrdinaryCartActivityType
+} from '@/lib/dataDictionary';
+
 
 export default {
   name: 'shoppingCart',
   components: {
+    JPopPicker,
     JTab,
     JAddressPicker,
     JFailureGoodsList,
@@ -163,7 +192,13 @@ export default {
       // 信用额度列表（以产品大类为维度）
       creditQuotaList: [],
       // 版本价格对象
-      specialPriceMap: {}
+      specialPriceMap: {},
+      // 产业数据
+      isIndustryPickerShow: false,
+      // 产业数据
+      industryGroupData: [],
+      // 选中的产业数据
+      choseIndustryOptions: ['']
     };
   },
   created() {
@@ -180,6 +215,8 @@ export default {
       USER.UPDATE_DEFAULT_SEND_TO
     ]),
     setPageInfo() {
+      // 设置产业数据
+      this.setIndustry();
       // 异地云仓
       this.getWarehouse();
       // 送达方
@@ -199,6 +236,50 @@ export default {
       this.getSpecialPrice();
       // 重置结算底栏信息
       this.resetBtmInf();
+      //  重置产业
+      this.resetIndustry();
+      // 获取特价版本
+      this.getSpecialPrice();
+    },
+    setIndustry() {
+      // 获取产业并设置数据
+      getIndustryGroup().then((data) => {
+        const industryGroupData = data.map(v => ({
+          ...v,
+          value: v.codeName
+        }));
+        industryGroupData.unshift({
+          code: '',
+          value: '全部'
+        });
+        this.industryGroupData = industryGroupData;
+      });
+    },
+    resetIndustry() {
+      /* 重置产业 */
+      this.choseIndustryOptions = [''];
+    },
+    showIndustryPicker() {
+      /* 展示产业picker */
+      this.isIndustryPickerShow = true;
+    },
+    industryPickerChange(data) {
+      /* 产品组picker change */
+      const industryCode = data[0];
+      if (industryCode === '') {
+        this.shoppingList.forEach((v) => {
+          v.isShow = true;
+        });
+      } else {
+        this.shoppingList.forEach((v) => {
+          if (v.productList[0].industryCode === industryCode) {
+            v.isShow = true;
+          } else {
+            v.isShow = false;
+          }
+        });
+      }
+      this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
       /* 重置底栏信息 */
@@ -236,8 +317,8 @@ export default {
         this.sendCustomerList[2].children = detail;
         // 默认的送达地址
         this.choseSendAddress = {
-          sendtoCode: this.defaultSendTo.id,
-          name: this.defaultSendTo.name,
+          sendtoCode: this.defaultSendTo.customerCode,
+          name: this.defaultSendTo.customerName,
           ...this.defaultSendTo
         };
       }
@@ -255,6 +336,7 @@ export default {
         data.forEach((v) => {
           if (v.composeEnable === 1) {
             shoppingList.push({
+              isShow: true,
               checked: false,
               isCreditMode: false,
               $PriceInfo: v.productList[0].priceInfo,
@@ -295,22 +377,39 @@ export default {
       this.specialPriceMap = (data && data) || {};
     },
     goodsChange(goods, index) {
-      console.log(goods);
+      /* 商品数据change */
       this.shoppingList[index] = goods;
       this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
+      // 更新选择的商品数目
+      this.totalGoodsNum = this.countTotalNumber();
+      // 更新选择的总商品价格
+      this.totalGoodsPrice = this.countTotalPrice();
     },
     checkAll(checked) {
       /* 全部选择回调函数 */
-      let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
         v.checked = checked;
-        // 计算选择的总价
-        totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, v.$PriceInfo.commonPrice.invoicePrice);
       });
       // 更新选择的总商品数
-      this.totalGoodsNum = this.shoppingList.length;
+      this.totalGoodsNum = checked ? this.shoppingList.length : 0;
       // 更新选择的总商品价格
-      this.totalGoodsPrice = totalGoodsPrice;
+      this.totalGoodsPrice = this.countTotalPrice();
+    },
+    countTotalPrice() {
+      /* 计算选择的商品的总价 */
+      let totalGoodsPrice = 0;
+      this.shoppingList.forEach((v) => {
+        if (v.checked) {
+          const num = v.number;
+          const curTotal = this.jshUtil.arithmetic(v.$PriceInfo.commonPrice.invoicePrice, num, 3);
+          totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
+        }
+      });
+      return totalGoodsPrice;
+    },
+    countTotalNumber() {
+      /* 计算选择的商品的总数 */
+      return this.shoppingList.filter(v => v.checked).length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -371,18 +470,20 @@ export default {
     tabClick(tabs) {
       this.tabs = tabs;
     },
-    deleteCart(idList) {
+    deleteCart(idList, isFailure = false) {
       /* 删除购物车里的商品 */
       /**
          * @idList（Array）id的集合，如果传入则使用传入的id
+         * @isFailure?:boolean 是否是失效列表
          * */
+      const listName = isFailure ? 'failureGoodsList' : 'shoppingList';
       let ids;
       if (idList && idList.length) {
         ids = idList;
       } else {
         // 选出选中的商品的id集合
         ids = [];
-        this.shoppingList.forEach((v) => {
+        this[listName].forEach((v) => {
           if (v.checked) {
             ids.push(v.id);
           }
@@ -399,7 +500,7 @@ export default {
       uni.showModal({
         title: '',
         content: '确认要从购物车移除吗？',
-        async success(res) {
+        success: async (res) => {
           if (res.confirm) {
             const { code } = await this.cartService.deleteCart(ids);
             if (code === '1') {
@@ -408,18 +509,26 @@ export default {
                 content: '删除成功',
                 timeout: 2000,
               });
+              const listTemp = JSON.parse(JSON.stringify(this[listName]));
+              ids.forEach((id) => {
+                const index = listTemp.findIndex(v => v.id === id);
+                listTemp.splice(index, 1);
+              });
+              this[listName] = listTemp;
             }
           }
         }
       });
     },
-    clearFailureGoods() {
-      /* 清空购物车的失效产品 */
-      const ids = this.shoppingList.map(v => v.id);
+    singleDeleteCart(goods) {
+      /* 单个移除购物车 */
+      const ids = [goods.id];
       this.deleteCart(ids);
     },
-    followGoods() {
-
+    clearFailureGoods() {
+      /* 清空购物车的失效产品 */
+      const ids = this.failureGoodsList.map(v => v.id);
+      this.deleteCart(ids);
     },
     async followGoods() {
       /* 添加关注 */
@@ -455,6 +564,8 @@ export default {
           const form = new OrderSplitCompose({
             ...v,
             composeId: v.id,
+            // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
+            activityType: getOrdinaryCartActivityType()[v.activityType]
           });
           form.productList = v.productList.map(prdt => new OrderSplitComposeProduct({
             ...prdt,
@@ -475,7 +586,7 @@ export default {
         yunCangCode: this.choseSendAddress.yunCangCode,
         yunCangFlag: this.choseSendAddress.yunCangFlag
       };
-      const { code, data } = await this.orderService.validateProduct(form);
+      const { code } = await this.orderService.validateProduct(form);
       if (code === '1') {
         const args = JSON.stringify(form);
         // 产品校验成功

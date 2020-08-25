@@ -137,6 +137,12 @@
   color: #fff;
 }
 
+.VHIItem-cnt-opts-primary-hui{
+  @include VHIItem-cnt-opts-btn;
+  background: #666;
+  color: #fff;
+}
+
 .VHIItem-cnt-opts-default {
   @include VHIItem-cnt-opts-btn;
   background: #fff;

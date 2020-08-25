@@ -154,7 +154,7 @@ export default {
       this.$emit('pullDetail', this.goods, this.index);
     },
     async changeNum(value, item) {
-      if (value !== item.IBL_NUM) {
+      if (value !== (item.IBL_NUM * 1)) {
         this.$emit('changeNum', value, this.goods, item);
       }
     },

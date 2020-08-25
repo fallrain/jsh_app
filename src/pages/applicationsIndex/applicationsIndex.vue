@@ -430,21 +430,20 @@ export default {
   },
   mounted() {
 	  // 适配安卓客户端
-	AlipayJSBridge.call('myApiGetCode', {
-	  param1: 'JsParam1',
-	}, function (result) {
-		if(result.length > 1) {
-			this.code = result;
-			this.getToken();
-		}
-	});
+	  AlipayJSBridge.call('myApiGetCode', {
+	    param1: 'JsParam1',
+	  },  (result) =>  {
+	      if(result.code.length > 1) {
+	          this.getToken(result.code);
+	      }
+	  });
   },
   onLoad() {
 	  // 适配iOS客户端
-    this.code = ALIPAYH5STARTUPPARAMS.webview_options;
+    let code = ALIPAYH5STARTUPPARAMS.webview_options;
     // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
-	if(this.code.length > 0) {
-		this.getToken();
+	if(code.length > 0) {
+		this.getToken(code);
 	}
   },
   methods: {
@@ -458,9 +457,9 @@ export default {
 		  });
 	  },
     // 获取token
-    async getToken() {
+    async getToken(passCode) {
       const { code, data } = await this.authService.getTokenByCode({
-        code: this.code
+        code: passCode
       });
       if (code === '1') {
         const token = data.token;

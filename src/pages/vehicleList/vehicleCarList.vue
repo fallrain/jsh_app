@@ -162,23 +162,27 @@ export default {
       }
     },
     async getPayerList(inf) { // 获取付款方接口
-      const longfeiUSERID = this.userInf.customerCode;
-      const productGroup = inf.orderList[0].IBL_INVSORT;
-      const sendtoCode = this.defaultSendTo.customerCode;
-      const yuncangType = inf.IBR_ZCDELIVERYTYPE;
-      const bstnk = inf.orderList[0].IBL_KORDERNO;
-      const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
-      if (code === '1') {
-        data.data.items.forEach((item) => {
-          item.checked = false;
-        });
-        inf.orderList.forEach((item2) => {
-          item2.payCheck = false;
-          item2.payVehiList = data;
-          item2.payVehCheck = data.data.items[0];
-          item2.payVehiList.data.items[0].checked = true;
-          item2.payVehCheck.checked = true;
-        });
+      try {
+        const longfeiUSERID = this.userInf.customerCode;
+        const productGroup = inf.orderList[0].IBL_INVSORT;
+        const sendtoCode = this.defaultSendTo.customerCode;
+        const yuncangType = inf.IBR_ZCDELIVERYTYPE;
+        const bstnk = inf.orderList[0].IBL_KORDERNO;
+        const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
+        if (code === '1') {
+          data.data.items.forEach((item) => {
+            item.checked = false;
+          });
+          inf.orderList.forEach((item2) => {
+            item2.payCheck = false;
+            item2.payVehiList = data;
+            item2.payVehCheck = data.data.items[0];
+            item2.payVehiList.data.items[0].checked = true;
+            item2.payVehCheck.checked = true;
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
     goodsChange(item, index) { // 选中产品
@@ -363,46 +367,49 @@ export default {
       });
     },
     async changeNum(value, item, good) { // 修改购物车产品数量
-      console.log(value);
-      console.log(item);
-      console.log(good);
-      const timetamp = new Date().valueOf();
-      const res = await this.vehicleService.addToCart({// 加入整车购物车
-        ACTPRICE: good.ACTPRICE,
-        ADVICEPRICE: good.ADVICEPRICE,
-        BATERATE: good.BATERATE,
-        CARCODE: item.IBR_MODELSCAR,
-        CUSTUMER_TYPE: this.userInf.channelGroup,
-        HeightLimit: item.IBR_HEIGHTLIMIT,
-        IBL_LOSSRATE: good.LOSSRATE,
-        IBL_TFSUMPRICE: good.IBL_TFSUMPRICE,
-        IBR_KPF: '',
-        IBR_SOLDTO_NAME: item.IBR_SENDTONAME,
-        ICC_JDCODE: good.BASECODE,
-        INVCODE: good.GBID,
-        INVSORT: good.INVSORT,
-        INVSTD: good.PRODUCTNAME,
-        ISHeightFLAG: good.ISHEIGHTFLAG,
-        JDPC_JDCODE: item.IBR_JDPC_JDCODE,
-        JIDICAI: this.userInf.tagCode,
-        MKTID: item.IBR_MKTID,
-        NUM: value,
-        PRODUCT_MODEL: good.IBL_PRODUCT_MODEL,
-        SENDTO: item.IBR_DOOR,
-        SENDTONAME: item.IBR_SENDTONAME,
-        SEQ: item.IBR_SEQ,
-        SUMTJ: 0,
-        UNITPRICE: good.UNITPRICE,
-        USERID: this.userInf.customerCode,
-        YJMFID: good.IBL_MGCUSTCODE,
-        ZCDeliveryType: item.IBR_ZCDELIVERYTYPE,
-        ZCTYPECODE: item.IBR_ZCTYPECODE,
-        farWeekCode: '',
-        timestamp: timetamp,
-      });
-      console.log(res);
-      if (res.code === '1') {
-        this.queryCarList();
+      if (value !== (item.IBL_NUM * 1)) {
+        console.log(value);
+        console.log(item);
+        console.log(good);
+        const timetamp = new Date().valueOf();
+        const res = this.vehicleService.addToCart({// 加入整车购物车
+          ACTPRICE: good.ACTPRICE,
+          ADVICEPRICE: good.ADVICEPRICE,
+          BATERATE: good.BATERATE,
+          CARCODE: item.IBR_MODELSCAR,
+          CUSTUMER_TYPE: this.userInf.channelGroup,
+          HeightLimit: item.IBR_HEIGHTLIMIT,
+          IBL_LOSSRATE: good.LOSSRATE,
+          IBL_TFSUMPRICE: good.IBL_TFSUMPRICE,
+          IBR_KPF: '',
+          IBR_SOLDTO_NAME: item.IBR_SENDTONAME,
+          ICC_JDCODE: good.BASECODE,
+          INVCODE: good.GBID,
+          INVSORT: good.INVSORT,
+          INVSTD: good.PRODUCTNAME,
+          ISHeightFLAG: good.ISHEIGHTFLAG,
+          JDPC_JDCODE: item.IBR_JDPC_JDCODE,
+          JIDICAI: this.userInf.tagCode,
+          MKTID: item.IBR_MKTID,
+          NUM: value,
+          PRODUCT_MODEL: good.IBL_PRODUCT_MODEL,
+          SENDTO: item.IBR_DOOR,
+          SENDTONAME: item.IBR_SENDTONAME,
+          SEQ: item.IBR_SEQ,
+          SUMTJ: 0,
+          UNITPRICE: good.UNITPRICE,
+          USERID: this.userInf.customerCode,
+          YJMFID: good.IBL_MGCUSTCODE,
+          ZCDeliveryType: item.IBR_ZCDELIVERYTYPE,
+          ZCTYPECODE: item.IBR_ZCTYPECODE,
+          farWeekCode: '',
+          timestamp: timetamp,
+        });
+        const mms = await Promise.all([res]);
+        console.log(mms);
+        if (mms[0].code === '1') {
+          this.queryCarList();
+        }
       }
     },
   }
