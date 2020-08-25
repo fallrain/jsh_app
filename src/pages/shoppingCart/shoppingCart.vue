@@ -237,8 +237,8 @@ export default {
         this.sendCustomerList[2].children = detail;
         // 默认的送达地址
         this.choseSendAddress = {
-          sendtoCode: this.defaultSendTo.id,
-          name: this.defaultSendTo.name,
+          sendtoCode: this.defaultSendTo.customerCode,
+          name: this.defaultSendTo.customerName,
           ...this.defaultSendTo
         };
       }
