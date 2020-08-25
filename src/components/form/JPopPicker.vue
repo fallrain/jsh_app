@@ -15,11 +15,11 @@
       <view class="jPopPicker-pop-item-wrap">
         <view
           :class="[
-          'jPopPicker-pop-item',
-          choseOptions.find(v=>v===item.key) && 'active'
-        ]"
+            'jPopPicker-pop-item',
+            choseOptions.find(v=>v===item[keyName]) && 'active'
+          ]"
           v-for="(item) in options"
-          :key="item.key"
+          :key="item[keyName]"
           @tap="check(item)"
         >
           <view
@@ -64,6 +64,10 @@ export default {
       ],
       default: ''
     },
+    keyName: {
+      type: String,
+      default: 'key'
+    },
     // picker选项
     // 例:[{key:1,value:'馒头'}，{key:2,value:'米饭'}]
     options: {
@@ -85,8 +89,8 @@ export default {
   },
   watch: {
     show(val) {
-      console.log(this.choseOptions)
-      console.log(this.options)
+      console.log(this.choseOptions);
+      console.log(this.options);
       if (val) {
         this.$refs.pop.open();
       } else {
@@ -94,7 +98,7 @@ export default {
       }
     },
     choseOptions(val) {
-      console.log(val)
+      console.log(val);
     }
   },
   methods: {
@@ -108,7 +112,7 @@ export default {
     check(item) {
       /* 选中 */
       const {
-        key
+        [this.keyName]: key
       } = item;
       let choseOptionsAy;
       if (this.type === 'radio') {

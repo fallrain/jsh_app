@@ -20,8 +20,11 @@ export default {
   getSpecialPrice(data) {
     /* 获取版本价格 */
     const {
+      // 售达方code
       saletoCode,
+      // 送达方code
       sendtoCode,
+      // 账户（售达方code?）
       account
     } = data;
     return jGet(urls.getSpecialPrice({
@@ -45,5 +48,9 @@ export default {
      *@ids(Array)：商品在购物车里的id集合
      * */
     return jPostJson(urls.deleteCart, ids);
+  },
+  getIndustryList() {
+    /* 获取产业 */
+    return jGet(urls.getIndustryList);
   }
 };

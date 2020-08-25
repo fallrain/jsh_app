@@ -37,7 +37,11 @@
             <view class="v-c-pc-cnt-inf-picker v-c-pc-flox6" @tap="showPayer">
               <view class="v-c-pc-flox6">付款方</view>
               <i class="iconfont iconxia"></i>
-              <view class="v-c-pc-cnt-inf-picker-rk">家用静音全自动10KG洗烘一体高温eeeeeee杀菌除高...</view>
+              <view class="v-c-pc-cnt-price-info" v-if="item.payCheck">
+                <view class="v-c-pc-cnt-price-info-li" v-for="(it,index2) in item.payVehiList.data.items" :key="index2"
+                      :class="[it.checked && 'active']" @click="payVehicle(index, index2),getPayer(item)">{{it.TMCF_NAME}}</view>
+              </view>
+              <view class="v-c-pc-cnt-inf-picker-rk">{{item.payVehCheck.TMCF_NAME}}</view>
             </view>
           </view>
         </view>
@@ -53,7 +57,9 @@
           <text class="v-c-pc-cnt-foot-value"> ¥ {{item.SUMMONEY}}</text>
         </view>
         <view class="">
-          <uni-number-box :value="item.IBL_NUM"></uni-number-box>
+          <uni-number-box :value="item.IBL_NUM" :max="Number(item.IBL_MAXNUM)"
+                          :disabled="Number(item.IBL_MAXNUM) === 0" @change="changeNum($event, item)">
+          </uni-number-box>
         </view>
       </view>
     </view>
@@ -98,21 +104,31 @@ export default {
   data() {
     return {
       fromWhere: 'GWCAN', // 整车购物车按钮
-      isShowSpecifications: false, // 是否显示版本规格
-      isShowPayer: false,
-      isVehicleMore: false // 是否显示多个按钮
+      fromWhere2: 'ZCFKF', // 付款方列表
+      isVehicleMore: false, // 是否显示多个按钮
     };
   },
   methods: {
+    getPayer(item) { // 显示付款方
+      item.payCheck = !item.payCheck;
+      console.log(this.index);
+      console.log(item.payCheck);
+    },
+    payVehicle(index, index2) { // 选择付款方
+      this.goods.orderList[index].payCheck = false;
+      this.goods.orderList[index].payVehiList.data.items.forEach((inf) => {
+        inf.checked = false;
+      });
+      this.goods.orderList[index].payVehiList.data.items[index2].checked = true;
+      this.goods.orderList[index].payVehCheck = this.goods.orderList[index].payVehiList.data.items[index2];
+      this.goods.orderList[index].payCheck = false;
+    },
     getMore() {
       this.isVehicleMore = !this.isVehicleMore;
       console.log(this.index);
       console.log(this.isVehicleMore);
     },
     anNiuVehicle(inn, imm) {
-      console.log('22222');
-      console.log(inn);
-      console.log(imm);
       this.isVehicleMore = false;
       if (imm === '1') {
         console.log(this.goods);
@@ -133,22 +149,15 @@ export default {
       console.log(data);
       this.$emit('change', this.goods, this.index);
     },
-    isCreditModeChange() {
-      /* switch change */
-      this.$emit('change', this.goods, this.index);
-    },
-    showSpecifications() {
-      /* 显示版本规格 */
-      this.isShowSpecifications = true;
-    },
-    showPayer() {
-      // 显示付款方
-      this.isShowPayer = true;
-    },
     pullDetail() {
       console.log('22222');
       this.$emit('pullDetail', this.goods, this.index);
     }
-  }
+  },
+  async changeNum(value, item) {
+    if (value !== (item.IBL_NUM * 1)) {
+      this.$emit('changeNum', value, this.goods, item);
+    }
+  },
 };
 </script>

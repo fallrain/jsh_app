@@ -4,7 +4,7 @@
       <view :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></view>
       <text :class="['v-c-foot-lin-tex1',checked && 'active']">全选</text>
     </view>
-    <text class="v-c-foot-lin-edit" @click="changTex">{{exit ? '编辑' : '完成'}}</text>
+    <text class="v-c-foot-lin-edit" @click="changTex">{{exit ? '编辑' : '取消'}}</text>
     <view class="v-c-foot-lin-tex2">
       已选中<text class="v-c-foot-lin-tex2-highlight">{{num}}</text>车
     </view>

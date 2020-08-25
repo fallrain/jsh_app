@@ -30,6 +30,10 @@ const urls = {
   getSecretkey: '/customer/user/secretkey',
   // 关注商品
   queryCustomerInterestProduct: '/customer/queryCustomerInterestProduct',
+  changeDefaultSendTo(sendToCode) {
+    /* 切换默认送达方信息 */
+    return `/customers/auxiliary/relations/${sendToCode}/default`;
+  }
 };
 util.addPrefix(baseURL, urls);
 export default urls;

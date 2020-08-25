@@ -5,16 +5,18 @@
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
           <view class="jSearchInput-wrap j-flex-aic">
-          <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
+          <view class="jSearchInput-icon iconfont iconsousuo"></view>
           <input
             class="jSearchInput"
             type="text"
             placeholder="请输入搜索信息"
             placeholder-class="col_c"
             v-model="name"
+            confirm-type="search" 
+            @confirm="confirm" 
           >
         </view>
-        <view class='iconfont iconpeople homepage-top-head-icon'></view>
+        <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
       </view>
       <!-- 全部 -->
       <scroll-view
@@ -35,7 +37,6 @@
       </scroll-view>
       <!-- 轮播图 -->
       <view class="homepage-swiper">
-
         <uni-swiper-dot
           :current="current"
           :dotsStyles="dotsStyles"
@@ -46,7 +47,7 @@
           <swiper class="swiper-box" @change="changePic">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
               <view class="swiper-item">
-                <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail'/>
+                <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
               </view>
             </swiper-item>
           </swiper>
@@ -67,12 +68,17 @@
     </view>
 
     <!-- 头条公告 -->
-    <view class="homepage-headlines">
-      <image class="homepage-headlines-img" mode="aspectFill" src="../../assets/img/index/topnew.png"/>
-      <view class="homepage-headlines-title">最新</view>
-      <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
-      <view class="iconfont iconyou homepage-headlines-icon"></view>
+    <view class="homepage-headlines-nav">
+      <view class="homepage-headlines">
+        <image class="homepage-headlines-img" mode="aspectFill" src="../../assets/img/index/topnew.png"/>
+        <view class="homepage-headlines-title">最新</view>
+      </view>
+      <!-- <view class="iconfont iconyou homepage-headlines-icon"></view> -->
+      <view class="homepage-headlines-con">
+        <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
+      </view>
     </view>
+
 
       <!-- 推荐 + 资讯-->
       <view class="homepage-recommend-info">
@@ -84,52 +90,25 @@
             :key="item.id"
         
           >
-            <!-- <view class="homepage-recommend-name">
-              <view class="homepage-recommend-title">{{item.title}}</view>
-              <view class="homepage-recommend-describe">{{item.describe}}</view>
-            </view>
-            <image class="homepage-recommend-image" :src="item.image" mode="aspectFill" />
-            <image class="homepage-recommend-img" :src="item.img" mode="aspectFill" />
-           -->
             <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
             </view>
-            <swiper class="homepage-recommend-swiper" @change="change">
+            <swiper 
+              class="homepage-recommend-swiper" 
+              @change="change"
+              next-margin="68px"
+            >
               <swiper-item 
                 v-for="v in item.data" 
-                :key="v.id"
+                :key="v.id"                
                 class="homepage-recommend-swiper-item"
               >
-                <view class="homepage-recommend-imgs">
+                <view class="homepage-recommend-imgs" @tap="goDetail(v)">
                   <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill"/>
-               </view>
+                </view>
               </swiper-item>
             </swiper>
-
-            <!-- <uni-grid :column="1"  
-              class="homepage-recommend-imgs" 
-              @change="recommend"
-            >
-              <uni-grid-item                
-                v-for="v in item.data" 
-                :key="v.id"
-                :style="'width:'+width+';'+(square?'height:'+width:'')" 
-                class="uni-grid-item"
-              > 
-               
-                <view 
-                  v-if="width" 
-                  :class="{ 'uni-grid-item--border': showBorder,  'uni-grid-item--border-top': showBorder && index < column, 'uni-highlight': highlight }" 
-                  :style="{  'border-right-color': borderColor ,'border-bottom-color': borderColor ,'border-top-color': borderColor }" 
-                  class="uni-grid-item__box" 
-                  @click="_onClick"
-                >
-                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill" />  
-                </view> 
-              </uni-grid-item>
-              
-            </uni-grid> -->
 
           </view>
         </view>
@@ -145,8 +124,8 @@
             v-for="item in infoList"
             :key="item.id"
           >
-            <view class="homepage-info-list-hot" @tap="goDetail">{{item.title}}</view>
-            <view class="homepage-info-list-title">{{item.info}}</view>
+            <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>
+            <!-- <view class="homepage-info-list-title">{{item.info}}</view> -->
           </view>
           </view>
         </view>    
@@ -160,13 +139,13 @@
       <image :src="item.img" mode="aspectFill" />
     </view> -->
     <!-- 广告图 -->
-    <view class="homepage-nav" v-show="isShowNav">
+    <!-- <view class="homepage-nav" v-show="isShowNav">
       <image mode="aspectFill" src="../../assets/img/index/manypeople.png"/>
       <i
         @tap="deleteNav"
         class="homepage-nav-close iconfont iconcross"
       ></i>
-    </view>
+    </view> -->
   </view>
 </template>
 
@@ -182,6 +161,7 @@ import {
   USER
 } from '../../store/mutationsTypes';
 import './css/index.scss';
+import {hex_sha1} from '@/pages/index/SHA1.js'
 import JSearchInput from '../../components/form/JSearchInput';
 import homePageImg from '@/assets/img/tabbar/shouye.png';
 import homePageImgActive from '@/assets/img/tabbar/shouye-actived.png';
@@ -408,12 +388,7 @@ export default {
       // })().then(res =>{
       //     // this.get()
       // })
-      this.getIndexList()
-      this.getList();
-      this.getXinPin();
-      this.getBaoKuan();
-      this.getZhuanGong();
-      this.getBaoKuan();
+      
       // this.recommend();
       this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       this[USER.UPDATE_SALE_ASYNC]();
@@ -456,17 +431,45 @@ export default {
     changePic(e) {
       this.current = e.detail.current;
     },
-    silentReSearch() {
-      /* 静默搜索 */ 
-    },
-    goDetail() {
+    // 客服
+    async service() {
+      let url = ''
+      const { code, data } = await this.udeskService.getUdesk(this.saleInfo.customerCode, {
+        addressArea: this.defaultSendToInf.customerCode
+      });
+      if (code === '1') {
+        console.log(data);
+        var web_token1 = data.accountId;
+        var timestamp1 = new Date().getTime();//时间戳
+        var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        var nonce1 = "";//随机数
+        for(var i = 0; i < 12 ; i ++) {
+            var id = Math.ceil(Math.random()*35);
+            nonce1 += chars[id];
+        }
+        var signature='nonce='+nonce1+'&timestamp='+timestamp1+'&web_token='+web_token1+'&9767b0677a6f46f5d3d0af8c00f3f16c';
+        var sha = hex_sha1(signature);
+        sha = sha.toUpperCase();
+        console.log(signature);  console.log(sha);
+          //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
+          //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
+          //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
+        url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&c_phone='+this.tokenUserInf.phoneNumber+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;        
+        console.log(url);
+        // InAppBrowserService.openAd(url);
+      } else {
+          // PopupService.showToast(response.message);
+      }
+
        uni.navigateTo({
-          url: `/pages/index/information`
-        })  
+          url: `/pages/index/service?url=${url}`
+        });
+ 
     },
-    search() {
-      console.log(this.name);
-      if (this.name) {
+     confirm()  {
+        console.log(this.name);
+      // this.mescroll.resetUpScroll(true);
+      if ((this.name).trim()) {
         uni.navigateTo({
           url: `/pages/goods/goodsList?name=${this.name}`
         });
@@ -478,6 +481,12 @@ export default {
     },
     getPageInf() {
       this.getbannerList();
+      this.getIndexList()
+      this.getList();
+      this.getXinPin();
+      this.getBaoKuan();
+      this.getZhuanGong();
+      this.getZiYuanJi();
     },
     async getbannerList() {
       const { code, data } = await this.indexService.bannerList({});
@@ -487,8 +496,22 @@ export default {
         console.log(data);
       }
     },
+    // 轮播图跳转
+    goSwiperDetail(item) {
+      console.log(item)
+      if(item.type === "html") {
+        uni.navigateTo ({
+          url: `/pages/index/banner?url=${item.url}`
+        })
+      } else {
+        uni.navigateTo ({
+          url: `/pages/productDetail/productDetail?productCode=${item.code}`
+        });
+      }
+    },
     // 目录列表跳转
     goCatalog(item) {
+      console.log(item)
       uni.navigateTo({
         url: item.url
       });
@@ -512,12 +535,27 @@ export default {
     // 新闻资讯公告
     goAnnouncement() {
       uni.navigateTo({
-        url: `/pages/index/announcement`
+        url: '/pages/index/announcement'
       });
     },
-    // 推荐
+    // 新闻资讯详情
+    goInfoDetail(item) {
+      console.log(item)
+      uni.navigateTo({
+        url: `/pages/index/information?id=${item.id}`
+      })  
+    },
+
+    // 推荐跳转详情
+    goDetail(v) {
+      console.log(v)
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${v.productCode}`
+      }) 
+    },
+
     change(e) {
-      this.current = e.detail.current;
+      // this.current = e.detail.current;
     },
     // 新品推荐列表
     async getXinPin() {
@@ -598,10 +636,12 @@ export default {
       item.active = true;
       console.log(item.active);
       if (item.categoryCode) {
+        console.log(item.categoryCode)
         uni.navigateTo({
-          url: `/pages/goods/goodsList?code=${item.categoryCode}`
+          url: `/pages/goods/goodsList?categoryCode=${item.categoryCode}`
         });
       } else {
+        console.log(222)
         uni.navigateTo({
           url: '/pages/goods/goodsList'
         });

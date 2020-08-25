@@ -2,6 +2,8 @@
 const data = [
   'pages/index/index',
   "pages/index/information",
+  "pages/index/service",
+  "pages/index/banner",
   "pages/index/announcement",
   'pages/applicationsIndex/applicationsIndex',
   'pages/applicationsIndex/applicationsEdit',

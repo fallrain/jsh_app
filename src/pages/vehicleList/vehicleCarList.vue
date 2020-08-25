@@ -1,17 +1,19 @@
 <template>
   <view class="vehicleCarList">
+    <!-- 验证码弹窗 -->
+    <t-alert-verification :show.sync="isShowVf" :form="form"></t-alert-verification>
     <view class="vehicleCar-rouHead">共{{NUM}}件宝贝</view>
     <view class="vehicleCar-invalid" v-if="puTongList.length>0">
       <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index" @pullDetail="pullDetail"
-      :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item>
+      :goods="goods" :index="index" @change="goodsChange" @changeNum="changeNum"></vehicle-cart-item>
     </view>
     <view class="vehicleCar-invalid" v-if="guaDanList.length>0">
       <vehicle-cart-item-g-d v-for="(goods,index) in guaDanList" :key="index" @pullDetail="pullDetail"
-             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-g-d>
+      :goods="goods" :index="index" @change="goodsChange" @changeNum="changeNum"></vehicle-cart-item-g-d>
     </view>
     <view class="vehicleCar-invalid" v-if="pingCheList.length>0">
       <vehicle-cart-item-p-c v-for="(goods,index) in pingCheList" :key="index" @pullDetail="pullDetail"
-             :goods="goods" :index="index" @change="goodsChange"></vehicle-cart-item-p-c>
+      :goods="goods" :index="index" @change="goodsChange" @changeNum="changeNum"></vehicle-cart-item-p-c>
     </view>
     <view class="vehicleCar-invalid" v-if="failureGoodsList.length>0">
       <t-failure-goods-list :list="failureGoodsList" @change="failureGoodsListChange"></t-failure-goods-list>
@@ -30,6 +32,7 @@ import TFailureGoodsList from '../../components/transfer/TFailureGoodsList';
 import vehicleCartItem from '../../components/vehicleList/VehicleCartItem';
 import vehicleCartItemGD from '../../components/vehicleList/VehicleCartItem-gd';
 import vehicleCartItemPC from '../../components/vehicleList/VehicleCartItem-pc';
+import TAlertVerification from '../../components/form/TAlertVerification';
 import {
   mapGetters
 } from 'vuex';
@@ -44,7 +47,8 @@ export default {
     TFailureGoodsList,
     vehicleCartItem,
     vehicleCartItemGD,
-    vehicleCartItemPC
+    vehicleCartItemPC,
+    TAlertVerification
   },
   computed: {
     ...mapGetters({
@@ -54,6 +58,11 @@ export default {
   },
   data() {
     return {
+      isShowVf: false, // 验证码弹窗，判断是否展示
+      form: {
+        phone: '', // 手机号
+        verificationCode: '', // 手机号验证码
+      },
       JDWarehouse: [], // 京东异地地址列表
       userInfMianMi: false, // 是否免密
       checked: false, // 全选单子
@@ -153,26 +162,30 @@ export default {
       }
     },
     async getPayerList(inf) { // 获取付款方接口
-      const longfeiUSERID = this.userInf.customerCode;
-      const productGroup = inf.orderList[0].IBL_INVSORT;
-      const sendtoCode = this.defaultSendTo.customerCode;
-      const yuncangType = inf.IBR_ZCDELIVERYTYPE;
-      const bstnk = inf.orderList[0].IBL_KORDERNO;
-      const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
-      if (code === '1') {
-        data.data.items.forEach((item) => {
-          item.checked = false;
-        });
-        inf.orderList.forEach((item2) => {
-          item2.payCheck = false;
-          item2.payVehiList = data;
-          item2.payVehCheck = data.data.items[0];
-          item2.payVehiList.data.items[0].checked = true;
-          item2.payVehCheck.checked = true;
-        });
+      try {
+        const longfeiUSERID = this.userInf.customerCode;
+        const productGroup = inf.orderList[0].IBL_INVSORT;
+        const sendtoCode = this.defaultSendTo.customerCode;
+        const yuncangType = inf.IBR_ZCDELIVERYTYPE;
+        const bstnk = inf.orderList[0].IBL_KORDERNO;
+        const { code, data } = await this.vehicleService.queryPayCode(longfeiUSERID, productGroup, sendtoCode, yuncangType, bstnk);
+        if (code === '1') {
+          data.data.items.forEach((item) => {
+            item.checked = false;
+          });
+          inf.orderList.forEach((item2) => {
+            item2.payCheck = false;
+            item2.payVehiList = data;
+            item2.payVehCheck = data.data.items[0];
+            item2.payVehiList.data.items[0].checked = true;
+            item2.payVehCheck.checked = true;
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
-    goodsChange(item, index) {
+    goodsChange(item, index) { // 选中产品
       console.log('uuuuuuu');
       console.log(item);
       console.log(index);
@@ -307,6 +320,14 @@ export default {
         }
         this.getUserInfMianMi().then(() => {
           console.log('获取免密2');
+          if (this.userInfMianMi) {
+            // 免验证码
+          } else {
+            this.getUserInfById().then(() => {
+              // 展示验证码
+              this.isShowVf = true;
+            });
+          }
         });
       } else { // 删除
         console.log('删除');
@@ -328,12 +349,68 @@ export default {
         this.userInfMianMi = data.data;
       }
     },
+    async getUserInfById() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const { code, data } = await this.orderService.sendVerify(this.userInf.customerCode);
+      if (code === '1') {
+        const abc = data.data.account;
+        console.log(abc);
+        this.form.phone = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+      }
+      console.log(this.form.phone);
+    },
     showAddToCartToast(msg) {
       this.$refs.toast.open({
         type: 'success',
         content: msg,
         timeout: 2000,
       });
+    },
+    async changeNum(value, item, good) { // 修改购物车产品数量
+      if (value !== (item.IBL_NUM * 1)) {
+        console.log(value);
+        console.log(item);
+        console.log(good);
+        const timetamp = new Date().valueOf();
+        const res = this.vehicleService.addToCart({// 加入整车购物车
+          ACTPRICE: good.ACTPRICE,
+          ADVICEPRICE: good.ADVICEPRICE,
+          BATERATE: good.BATERATE,
+          CARCODE: item.IBR_MODELSCAR,
+          CUSTUMER_TYPE: this.userInf.channelGroup,
+          HeightLimit: item.IBR_HEIGHTLIMIT,
+          IBL_LOSSRATE: good.LOSSRATE,
+          IBL_TFSUMPRICE: good.IBL_TFSUMPRICE,
+          IBR_KPF: '',
+          IBR_SOLDTO_NAME: item.IBR_SENDTONAME,
+          ICC_JDCODE: good.BASECODE,
+          INVCODE: good.GBID,
+          INVSORT: good.INVSORT,
+          INVSTD: good.PRODUCTNAME,
+          ISHeightFLAG: good.ISHEIGHTFLAG,
+          JDPC_JDCODE: item.IBR_JDPC_JDCODE,
+          JIDICAI: this.userInf.tagCode,
+          MKTID: item.IBR_MKTID,
+          NUM: value,
+          PRODUCT_MODEL: good.IBL_PRODUCT_MODEL,
+          SENDTO: item.IBR_DOOR,
+          SENDTONAME: item.IBR_SENDTONAME,
+          SEQ: item.IBR_SEQ,
+          SUMTJ: 0,
+          UNITPRICE: good.UNITPRICE,
+          USERID: this.userInf.customerCode,
+          YJMFID: good.IBL_MGCUSTCODE,
+          ZCDeliveryType: item.IBR_ZCDELIVERYTYPE,
+          ZCTYPECODE: item.IBR_ZCTYPECODE,
+          farWeekCode: '',
+          timestamp: timetamp,
+        });
+        const mms = await Promise.all([res]);
+        console.log(mms);
+        if (mms[0].code === '1') {
+          this.queryCarList();
+        }
+      }
     },
   }
 };

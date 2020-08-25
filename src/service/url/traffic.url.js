@@ -36,7 +36,7 @@ const urls = {
   queryCarPrice(timestamp, longfeiUSERID, longfeiMFID, gbid) { // 整车购物车详情页面查询价格
     return `/base/queryGoodsPrice?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&longfeiMFID=${longfeiMFID}&gbid=${gbid}`;
   },
-  cartSubmitPreCheck(timestamp, longfeiUSERID, IBR_SEQ) { // 整车购物车提交结算校验
+  cartSubmitPreCheck(timestamp, longfeiUSERID, IBR_SEQ) { // 整车购物车提交结算校验--体积车型等的校验
     return `/order/cartSubmitPreCheck?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&IBR_SEQ=${IBR_SEQ}`;
   },
   cartSubmit(timestamp, longfeiUSERID, IBR_SEQ, verifyCode, verifyKey) { // 整车购物车提交

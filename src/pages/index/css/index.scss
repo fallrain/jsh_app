@@ -158,21 +158,32 @@
         }     
     }
       // 头条公告
+    .homepage-headlines-nav {
+      width:702px;
+      display: flex;
+      height:70px;
+      border-radius:10px;
+      margin:0px 22px 24px 26px;
+      align-items: center;
+      background: #fff;
+      align-items: center;
+      
+    }
     .homepage-headlines{
-        width:702px;
+        width:250px;
         height:70px;
-        background:rgba(255,255,255,1);
         border-radius:10px;
         margin:0px 22px 24px 26px;
         display:flex;
         align-items: center;
+        margin-top: 20px;
         .homepage-headlines-img{
             width:118px;
             height:28px;
             margin-right:44px;
             margin-left:20px;
         }
-        .homepage-headlines-title{
+        .homepage-headlines-title {
             width:54px;
             height:28px;
             border-radius:4px;
@@ -185,22 +196,68 @@
             letter-spacing:4px;
             text-align:center;
             margin-right:24px;
+            line-height: 28px;
         }
-        .homepage-headlines-content{
-            width:360px;
-            height:34px;
-            font-size:24px;
-            font-family:PingFangSC-Regular,PingFang SC;
-            font-weight:400;
-            color:rgba(153,153,153,1);
-            line-height:34px;
-            margin-right:32px;
-        }
-        .homepage-headlines-icon{
-            font-size:24px !important;
-            margin-top: 4px;
-        }
-    }
+      }
+      .homepage-headlines-box {
+        width:360px;
+      }
+      .homepage-headlines-con{
+        width:400px;
+        overflow: hidden;
+      }
+      .homepage-headlines-content{
+          width:360px;
+          height:34px;
+          font-size:24px;
+          font-family:PingFangSC-Regular,PingFang SC;
+          font-weight:400;
+          color:rgba(153,153,153,1);
+          line-height:34px;
+          margin-right:32px;
+          animation:mz 3s  infinite step-start both;
+      }
+      @keyframes mz{
+        0%{margin-left:380px;}
+        5%{margin-left:320px;}
+        10%{margin-left:300px;}
+        15%{margin-left:250px;}
+        20%{margin-left:200px;}
+				30%{margin-left:150px;}
+        40%{margin-left:80px;}
+				50%{margin-left:0px;}
+				60%{margin-left:-80px;}
+        70%{margin-left:-150px;}
+        80%{margin-left:-220px;}
+        90%{margin-left:-300px;}
+				100%{margin-left:-360px;}
+			}
+
+
+
+      // @keyframes mz{
+			// 	0%{
+			// 		margin-left:0px;
+			// 	}
+			// 	10%{
+			// 		margin-left:-60px;
+			// 	}
+			// 	30%{
+			// 		margin-left:-120px;
+			// 	}
+			// 	45%{margin-left:-180px;}
+			// 	60%{margin-left:-240px;}
+			// 	70%{margin-left:-300px;}
+			// 	100%{margin-left:-360px;}
+			// }
+
+
+
+      .homepage-headlines-icon{
+          font-size:24px !important;
+          margin-top: 4px;
+      }
+      
 
     .homepage-recommend-info{
         width:700px;
@@ -255,20 +312,26 @@
             }
             .homepage-recommend-swiper {
               // width:120px;
-              height:120px;
+              width: 90%;
+              height:100px;
+
             }
             .homepage-recommend-swiper-item {
               // width:120px;
-              height:120px;
+              height:140px;
+              display: flex;
+              // &:nth-child(2n) {
+              //   margin-right:20px;
+              // }
             }
             .homepage-recommend-imgs {
-              width:120px;
-              height:120px;
+              width:140px;
+              height:100px;
               display: flex;
               overflow: hidden;
               
               image {
-                width: 100px;
+                width: 140px;
                 height: 100px;
               }
             }

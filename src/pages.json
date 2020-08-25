@@ -20,6 +20,18 @@
       }
     },
     {
+      "path": "pages/index/service",
+      "style": {
+        "navigationBarTitleText": "首页客服"
+      }
+    },
+    {
+      "path": "pages/index/banner",
+      "style": {
+        "navigationBarTitleText": "首页轮播图"
+      }
+    },
+    {
       "path": "pages/index/announcement",
       "style": {
         "navigationBarTitleText": "首页新闻公告"

@@ -57,7 +57,9 @@
           <text class="v-c-i-cnt-foot-value"> ¥ {{item.SUMMONEY}}</text>
         </view>
         <view class="">
-          <uni-number-box :value="item.IBL_NUM"></uni-number-box>
+          <uni-number-box :value="item.IBL_NUM" :max="Number(item.IBL_MAXNUM)"
+                          :disabled="Number(item.IBL_MAXNUM) === 0" @change="changeNum($event, item)">
+          </uni-number-box>
         </view>
       </view>
     </view>
@@ -150,7 +152,12 @@ export default {
     pullDetail() {
       console.log('22222');
       this.$emit('pullDetail', this.goods, this.index);
-    }
+    },
+    async changeNum(value, item) {
+      if (value !== (item.IBL_NUM * 1)) {
+        this.$emit('changeNum', value, this.goods, item);
+      }
+    },
   }
 };
 </script>

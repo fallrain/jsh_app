@@ -8,7 +8,8 @@
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
           <view class="fs24 text-333">王芬芬，您好！</view>
-		  <view @click="callBBC">建行支付</view>
+		  <view @click="callBBC">建行支付测试</view>
+		  <view @click="popAction">返回测试</view>
           <view class="logo">
             <image src="@/assets/img/appIndex/haier.png"></image>
           </view>
@@ -32,7 +33,7 @@
                 v-for="(item,index) in imageList"
                 :key="index">
                 <view class="swiper-item">
-                  <image :src="item.imageUrl" mode="aspectFill"/>
+                  <image :src="item.imageUrl" mode="aspectFill"  @tap='goSwiperDetail(item)' />
                 </view>
               </swiper-item>
             </swiper>
@@ -427,27 +428,32 @@ export default {
   },
   created() {
     // this.getbannerList();
+	// 支持由前端 H5 页面禁止
+	AlipayJSBridge.call('setGestureBack',{val:false});
   },
   mounted() {
 	  // 适配安卓客户端
-	AlipayJSBridge.call('myApiGetCode', {
-	  param1: 'JsParam1',
-	}, function (result) {
-		if(result.length > 1) {
-			this.code = result;
-			this.getToken();
-		}
-	});
+	  AlipayJSBridge.call('myApiGetCode', {
+	    param1: 'JsParam1',
+	  },  (result) =>  {
+	      if(result.code.length > 1) {
+	          this.getToken(result.code);
+	      }
+	  });
   },
   onLoad() {
 	  // 适配iOS客户端
-    this.code = ALIPAYH5STARTUPPARAMS.webview_options;
+    let code = ALIPAYH5STARTUPPARAMS.webview_options;
     // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
-	if(this.code.length > 0) {
-		this.getToken();
+	if(code.length > 0) {
+		this.getToken(code);
 	}
   },
   methods: {
+	  // 返回原生
+	  popAction() {
+		  AlipayJSBridge.call('popWindow');
+	  },
 	  // 打开建行支付
 	  callBBC() {
 		  AlipayJSBridge.call('myApiCallCCB', {
@@ -458,9 +464,9 @@ export default {
 		  });
 	  },
     // 获取token
-    async getToken() {
+    async getToken(passCode) {
       const { code, data } = await this.authService.getTokenByCode({
-        code: this.code
+        code: passCode
       });
       if (code === '1') {
         const token = data.token;
@@ -501,7 +507,20 @@ export default {
       } else {
         this.appFlag = false;
       }
-    }
+    },
+    // 轮播图跳转
+    goSwiperDetail(item) {
+      console.log(item)
+      if(item.type === "html") {
+        uni.navigateTo ({
+          url: `/pages/index/banner?url=${item.url}`
+        })
+      } else {
+        uni.navigateTo ({
+          url: `/pages/productDetail/productDetail?productCode=${item.code}`
+        });
+      }
+    },
   }
 };
 </script>
