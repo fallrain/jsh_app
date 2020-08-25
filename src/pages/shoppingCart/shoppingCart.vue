@@ -31,7 +31,6 @@
       class="shoppingCart-list"
       v-if="shoppingList.length"
     >
-
       <view
         v-for="(goods,index) in shoppingList"
         :key="index"
@@ -116,7 +115,8 @@ import {
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
 import {
-  getIndustryGroup
+  getIndustryGroup,
+  getOrdinaryCartActivityType
 } from '@/lib/dataDictionary';
 
 
@@ -528,9 +528,6 @@ export default {
       const ids = this.failureGoodsList.map(v => v.id);
       this.deleteCart(ids);
     },
-    followGoods() {
-
-    },
     async followGoods() {
       /* 添加关注 */
       const {
@@ -565,6 +562,8 @@ export default {
           const form = new OrderSplitCompose({
             ...v,
             composeId: v.id,
+            // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
+            activityType: getOrdinaryCartActivityType()[v.activityType]
           });
           form.productList = v.productList.map(prdt => new OrderSplitComposeProduct({
             ...prdt,

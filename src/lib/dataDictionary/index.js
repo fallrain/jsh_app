@@ -83,9 +83,24 @@ function getIndustryGroup() {
   });
 }
 
+function getOrdinaryCartActivityType() {
+  /* 普通购物车活动类型映射 */
+  // 活动类型：1单品2组合3抢购4套餐5成套
+  // 普通购物车的活动只有抢单和反向定制
+  // 反向定制接口返回5，但是当做抢单（3），所以传3（真是无语）
+  return {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 3
+  };
+}
+
 export {
   getGoodsPriceType,
   getGoodsTag,
   getGoodsType,
-  getIndustryGroup
+  getIndustryGroup,
+  getOrdinaryCartActivityType
 };
