@@ -3,7 +3,19 @@
   min-height: 100vh;
   background: #F5F5F5;
   padding: 24px 24px 140px 24px;
+  .bg-style{
+    width: 1200px;
+    height: 600px;
+    border-radius: 50%;
+    position: absolute;
+    left: -240px;
+    top: -30%;
+    z-index: 1;
+    background: $theme-color;
+  }
   .order-accept-head{
+    z-index: 11;
+    position: relative;
     margin-bottom: 24px;
   }
   .order-accept-title{
@@ -11,6 +23,7 @@
     line-height: 52px;
     padding: 60px 0 44px;
     font-size: 36px;
+    color: #fff;
   }
   .order-accept-head-result{
     border-radius:20px;
