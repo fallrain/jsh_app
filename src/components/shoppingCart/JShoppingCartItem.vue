@@ -47,10 +47,11 @@
         <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList && goods.productList[0].productName}}</view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
-            ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice}}
+            ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice | formatMoney}}
           </view>
           <view class="jShoppingCartItem-cnt-price-inf-item">
-            小计：¥{{jshUtil.arithmetic(goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice,goods.number,3)}}
+            小计：¥{{jshUtil.arithmetic(goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice,goods.number,3) |
+            formatMoney}}
           </view>
           <uni-number-box
             @change="goodsNumChange"
@@ -120,10 +121,10 @@
               <view class="mt16 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">建议零售价：</view>
                 <view class="jVersionSpecifications-pop-head-cnt-price">
-                  ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice}}
+                  ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice | formatMoney}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  供价：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.supplyPrice}}
+                  供价：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.supplyPrice | formatMoney}}
                 </view>
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
