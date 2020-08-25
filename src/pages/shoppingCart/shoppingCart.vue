@@ -238,6 +238,8 @@ export default {
       this.resetBtmInf();
       //  重置产业
       this.resetIndustry();
+      // 获取特价版本
+      this.getSpecialPrice();
     },
     setIndustry() {
       // 获取产业并设置数据

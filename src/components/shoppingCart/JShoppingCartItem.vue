@@ -251,6 +251,7 @@ export default {
     },
     genSpecificationsList() {
       /* 组合版本规格信息 */
+      this.specificationsList = [];
       if (!this.getVersionPriceState()) {
         return;
       }
