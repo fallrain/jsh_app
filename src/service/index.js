@@ -16,6 +16,7 @@ import authService from './auth/auth.service';
 import cocService from './coc/coc.service';
 import openAccountService from './openAccount/openAccount.service';
 import activityService from './activity/activity.service';
+import udeskService from './udesk/udesk.service';
 
 export default {
   install(Vue) {
@@ -56,5 +57,7 @@ export default {
     Vue.prototype.openAccountService = openAccountService;
     // 首页推荐栏数据
     Vue.prototype.activityService = activityService;
+    // 首页客服
+    Vue.prototype.udeskService = udeskService;
   }
 };

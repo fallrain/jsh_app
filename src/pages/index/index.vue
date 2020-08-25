@@ -5,16 +5,17 @@
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
                mode="aspectFill"></image>
           <view class="jSearchInput-wrap j-flex-aic">
-          <view class="jSearchInput-icon iconfont iconsousuo" @tap="search"></view>
+          <view class="jSearchInput-icon iconfont iconsousuo"></view>
           <input
             class="jSearchInput"
             type="text"
             placeholder="请输入搜索信息"
             placeholder-class="col_c"
             v-model="name"
+            @search="search"
           >
         </view>
-        <view class='iconfont iconpeople homepage-top-head-icon'></view>
+        <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
       </view>
       <!-- 全部 -->
       <scroll-view
@@ -66,13 +67,17 @@
     </view>
 
     <!-- 头条公告 -->
-    <view class="homepage-headlines">
-      <image class="homepage-headlines-img" mode="aspectFill" src="../../assets/img/index/topnew.png"/>
-      <view class="homepage-headlines-title">最新</view>
-      
-      <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
+    <view class="homepage-headlines-nav">
+      <view class="homepage-headlines">
+        <image class="homepage-headlines-img" mode="aspectFill" src="../../assets/img/index/topnew.png"/>
+        <view class="homepage-headlines-title">最新</view>
+      </view>
       <!-- <view class="iconfont iconyou homepage-headlines-icon"></view> -->
+      <view class="homepage-headlines-con">
+        <view class="homepage-headlines-content">这是一条公告内容，请点击查看…</view>
+      </view>
     </view>
+
 
       <!-- 推荐 + 资讯-->
       <view class="homepage-recommend-info">
@@ -155,6 +160,7 @@ import {
   USER
 } from '../../store/mutationsTypes';
 import './css/index.scss';
+import {hex_sha1} from '@/pages/index/SHA1.js'
 import JSearchInput from '../../components/form/JSearchInput';
 import homePageImg from '@/assets/img/tabbar/shouye.png';
 import homePageImgActive from '@/assets/img/tabbar/shouye-actived.png';
@@ -429,12 +435,52 @@ export default {
     changePic(e) {
       this.current = e.detail.current;
     },
-    silentReSearch() {
-      /* 静默搜索 */ 
+    // 客服
+    async service() {
+      const { code, data } = await this.udeskService.getUdesk(this.saleInfo.customerCode, {
+        addressArea: this.defaultSendToInf.customerCode
+      });
+      if (code === '1') {
+        console.log(data);
+        var web_token1 = data.accountId;
+        var timestamp1 = new Date().getTime();//时间戳
+        var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        var nonce1 = "";//随机数
+        for(var i = 0; i < 12 ; i ++) {
+            var id = Math.ceil(Math.random()*35);
+            nonce1 += chars[id];
+        }
+        var signature='nonce='+nonce1+'&timestamp='+timestamp1+'&web_token='+web_token1+'&9767b0677a6f46f5d3d0af8c00f3f16c';
+        var sha = hex_sha1(signature);
+        sha = sha.toUpperCase();
+        console.log(signature);  console.log(sha);
+          //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
+          //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
+          //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
+        const url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&c_phone='+this.tokenUserInf.phoneNumber+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;        console.log(url);
+        // InAppBrowserService.openAd(url);
+      } else {
+          // PopupService.showToast(response.message);
+      }
+ 
     },
-    search() {
+     search({ detail: { value } })  {
+        console.log(this.name);
+      // this.mescroll.resetUpScroll(true);
+      // if ((this.name).trim()) {
+      //   uni.navigateTo({
+      //     url: `/pages/goods/goodsList?name=${this.name}`
+      //   });
+      // } else {
+      //   uni.showToast({
+      //     title: '请输入搜索词',
+      //   });
+      // }
+    },
+      /* 静默搜索 */    
+    search({ detail: { value } }) {
       console.log(this.name);
-      if (this.name) {
+      if (value.trim()) {
         uni.navigateTo({
           url: `/pages/goods/goodsList?name=${this.name}`
         });
@@ -444,6 +490,49 @@ export default {
         });
       }
     },
+    // 首页客服
+// $scope.click = function () {
+//     if (typeof($scope.modelData.payPart) == "undefined"||$scope.modelData.payPart==null) {
+//         PopupService.showToast('获取送达放编码失败!');
+//         return;
+//     }
+//     var param={
+//         addressArea:$scope.modelData.payPart.aid,//'8800101954',
+//         account: UserService.getUser().uid,
+//         userid: UserService.getUser().uid,
+//         token: UserService.getUser().token
+//     };
+//     HomeService.udesk(param).success(function(response){
+//         console.log("查询udesk");
+//         console.log(param);
+//         console.log(response);
+//         if (response.code == 200) {
+//             var uid=response.data.resultData.data.udeskUid;
+//             var web_token1=response.data.resultData.data.accountId;
+//             var timestamp1=new Date().getTime();//时间戳
+//             var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+//             var nonce1 = "";//随机数
+//             for(var i = 0; i < 12 ; i ++) {
+//                 var id = Math.ceil(Math.random()*35);
+//                 nonce1 += chars[id];
+//             }
+//             var signature='nonce='+nonce1+'&timestamp='+timestamp1+'&web_token='+web_token1+'&9767b0677a6f46f5d3d0af8c00f3f16c';
+//             var sha = hex_sha1(signature);
+//             sha = sha.toUpperCase();
+//             console.log(signature); console.log(UserService.getUser()); console.log(sha);
+//             //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
+//             //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
+//             //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
+//             var url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&agent_id='+uid+'&c_phone='+UserService.getUser().mobile+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;
+//             console.log(url);
+//             InAppBrowserService.openAd(url);
+//         } else {
+//             PopupService.showToast(response.message);
+//         }
+//     }).error(function(response){
+//         console.log(response);
+//     });
+// };
     getPageInf() {
       this.getbannerList();
     },

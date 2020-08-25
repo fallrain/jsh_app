@@ -171,11 +171,11 @@ export default {
 // }
 
 .jHeadTab-wrap {
-  position: fixed;
+  position: absolute;
   background: #fff;
   height: 130px;
   width: 100%;
-  top: 180px;
+  top: 100px;
   z-index: 100;
 }
 

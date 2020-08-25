@@ -7,9 +7,9 @@
       <view :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></view>
       <text :class="['tShoppingCartBtm-check-text',checked && 'active']">全选</text>
     </view>
-    <text class="tShoppingCartBtm-check-edit" @tap="edit" v-show="!isShowClear">编辑</text>
-    <button class="tShoppingCartBtm-check-delete" type="button" @tap="editDelete" v-show="isShowClear">删除选中产品</button>
-    <button class="tShoppingCartBtm-check-cancel" @tap="cancel" v-show="isShowClear">取消</button>
+    <text class="tShoppingCartBtm-check-edit" @tap="edit" v-if="!isShowClear">编辑</text>
+    <button class="tShoppingCartBtm-check-delete" type="button" @tap="editDelete" v-if="isShowClear">删除选中产品</button>
+    <button class="tShoppingCartBtm-check-cancel" @tap="cancel" v-if="isShowClear">取消</button>
 
     <view class="tShoppingCartBtm-text">
       已选中<text class="tShoppingCartBtm-text-highlight">{{allChooseNum}}</text>车
@@ -49,17 +49,20 @@ export default {
       type: Number,
       default: 0
     },
-    // 显示隐藏编辑
-    isShowClear: {
-      type: Boolean,
-      default: false
-    }
+    // // 显示隐藏编辑
+    // isShowClear: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
   data() {
     return {
-      active:false
+      active:false,
+       // 编辑选中显示
+      isShowClear: false,
     }
   },
+  
   methods: {
     choose() {
       const checked = !this.checked;
@@ -70,17 +73,19 @@ export default {
     tlement() {
       this.$emit("query")
     },
-    // 编辑
+       // 编辑
     edit() {
-      this.$emit("edit")
+      this.isShowClear = !this.isShowClear;
+      console.log(this.isShowClear);
+    },
+    // 取消
+    cancel() {
+      this.isShowClear = !this.isShowClear;
     },
     // 删除选中的产品
     editDelete() {
       this.$emit("editDelete")
     },
-    cancel() {
-      this.$emit("cancel")
-    }
 
   }
 };
