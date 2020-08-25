@@ -11,7 +11,9 @@
 }
 
 .jPopPicker-pop-item-wrap{
+  max-height: 760px;
   padding-left: 40px;
+  overflow-y: auto;
 }
 
 .jPopPicker-pop-item {

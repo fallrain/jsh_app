@@ -7,7 +7,10 @@
         @tabClick="tabClick"
       >
         <template #right>
-          <view class="shoppingCart-tab-picker">
+          <view
+            @tap="showIndustryPicker"
+            class="shoppingCart-tab-picker"
+          >
             <text class="mr8">产业</text>
             <i class="iconfont iconxia"></i>
           </view>
@@ -28,18 +31,29 @@
       class="shoppingCart-list"
       v-if="shoppingList.length"
     >
-      <j-shopping-cart-item
+
+      <view
         v-for="(goods,index) in shoppingList"
         :key="index"
-        :goods="goods"
-        :index="index"
-        :beforeCreditModeChange="checkCreditQuota"
-        :userInf="userInf"
-        :versionPrice="specialPriceMap"
-        :warehouseFlag="choseSendAddress.yunCangFlag"
-        @change="goodsChange"
-        @del="singleDeleteCart"
-      ></j-shopping-cart-item>
+      >
+        <j-shopping-cart-item
+          :beforeCreditModeChange="checkCreditQuota"
+          :goods="goods"
+          :index="index"
+          :userInf="userInf"
+          :versionPrice="specialPriceMap"
+          :warehouseFlag="choseSendAddress.yunCangFlag"
+          @change="goodsChange"
+          @del="singleDeleteCart"
+          v-if="goods.isShow"
+        ></j-shopping-cart-item>
+      </view>
+      <view
+        class="shoppingCart-empty"
+        v-if="shoppingList.length && !shoppingList.filter(v=>v.isShow).length"
+      >
+        没有匹配的相关产品~
+      </view>
     </view>
     <view
       class="shoppingCart-empty"
@@ -73,6 +87,14 @@
       :isdistance="true"
       ref="toast"
     ></m-toast>
+    <j-pop-picker
+      :choseOptions.sync="choseIndustryOptions"
+      :options="industryGroupData"
+      :show.sync="isIndustryPickerShow"
+      @change="industryPickerChange"
+      keyName="code"
+      title="产业"
+    ></j-pop-picker>
   </view>
 </template>
 <script>
@@ -82,6 +104,7 @@ import JShoppingCartBtm from '../../components/shoppingCart/JShoppingCartBtm';
 import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import JTab from '../../components/common/JTab';
+import JPopPicker from '../../components/form/JPopPicker';
 import './css/shoppingCart.scss';
 import {
   mapGetters,
@@ -92,10 +115,15 @@ import {
 } from '../../store/mutationsTypes';
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
+import {
+  getIndustryGroup
+} from '@/lib/dataDictionary';
+
 
 export default {
   name: 'shoppingCart',
   components: {
+    JPopPicker,
     JTab,
     JAddressPicker,
     JFailureGoodsList,
@@ -164,7 +192,13 @@ export default {
       // 信用额度列表（以产品大类为维度）
       creditQuotaList: [],
       // 版本价格对象
-      specialPriceMap: {}
+      specialPriceMap: {},
+      // 产业数据
+      isIndustryPickerShow: false,
+      // 产业数据
+      industryGroupData: [],
+      // 选中的产业数据
+      choseIndustryOptions: ['']
     };
   },
   created() {
@@ -181,6 +215,8 @@ export default {
       USER.UPDATE_DEFAULT_SEND_TO
     ]),
     setPageInfo() {
+      // 设置产业数据
+      this.setIndustry();
       // 异地云仓
       this.getWarehouse();
       // 送达方
@@ -200,6 +236,48 @@ export default {
       this.getSpecialPrice();
       // 重置结算底栏信息
       this.resetBtmInf();
+      //  重置产业
+      this.resetIndustry();
+    },
+    setIndustry() {
+      // 获取产业并设置数据
+      getIndustryGroup().then((data) => {
+        const industryGroupData = data.map(v => ({
+          ...v,
+          value: v.codeName
+        }));
+        industryGroupData.unshift({
+          code: '',
+          value: '全部'
+        });
+        this.industryGroupData = industryGroupData;
+      });
+    },
+    resetIndustry() {
+      /* 重置产业 */
+      this.choseIndustryOptions = [''];
+    },
+    showIndustryPicker() {
+      /* 展示产业picker */
+      this.isIndustryPickerShow = true;
+    },
+    industryPickerChange(data) {
+      /* 产品组picker change */
+      const industryCode = data[0];
+      if (industryCode === '') {
+        this.shoppingList.forEach((v) => {
+          v.isShow = true;
+        });
+      } else {
+        this.shoppingList.forEach((v) => {
+          if (v.productList[0].industryCode === industryCode) {
+            v.isShow = true;
+          } else {
+            v.isShow = false;
+          }
+        });
+      }
+      this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
       /* 重置底栏信息 */
@@ -256,6 +334,7 @@ export default {
         data.forEach((v) => {
           if (v.composeEnable === 1) {
             shoppingList.push({
+              isShow: true,
               checked: false,
               isCreditMode: false,
               $PriceInfo: v.productList[0].priceInfo,

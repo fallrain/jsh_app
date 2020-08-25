@@ -23,7 +23,9 @@ const urls = {
     return `/shoppingCart/getNumberByValid/${uid}`;
   },
   // 从购物车里移除商品
-  deleteCart: '/shoppingCart/delete/cart'
+  deleteCart: '/shoppingCart/delete/cart',
+  // 查询产业
+  getIndustryList: '/shoppingCart/get/industryList'
 };
 util.addPrefix(baseURL, urls);
 export default urls;

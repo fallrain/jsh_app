@@ -1,4 +1,4 @@
-// import basicService from '@/services/basic';
+import cartService from '@/service/cart/cart.service';
 
 const util = {
   commonGet({ key, service }) {
@@ -23,13 +23,13 @@ const util = {
         }
       }
     }
-    // return basicService[service]().then(({ code, data }) => {
-    //   if (code === '1') {
-    //     uni.setStorageSync(localStorageKey, JSON.stringify(data));
-    //     uni.setStorageSync(localStorageTimeKey, `${new Date().getTime()}`);
-    //   }
-    //   return data || [];
-    // });
+    return service().then(({ code, data }) => {
+      if (code === '1') {
+        uni.setStorageSync(localStorageKey, JSON.stringify(data));
+        uni.setStorageSync(localStorageTimeKey, `${new Date().getTime()}`);
+      }
+      return data || [];
+    });
   }
 };
 
@@ -75,8 +75,17 @@ function getGoodsPriceType() {
   };
 }
 
+function getIndustryGroup() {
+  /* 获取全部产品组 */
+  return util.commonGet({
+    key: 'industryGroup',
+    service: cartService.getIndustryList
+  });
+}
+
 export {
   getGoodsPriceType,
   getGoodsTag,
-  getGoodsType
+  getGoodsType,
+  getIndustryGroup
 };
