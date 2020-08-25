@@ -26,7 +26,7 @@
       </view>
     </view>
     <!-- 金额数据栏 -->
-    <view class="moneyArea">
+    <!-- <view class="moneyArea">
       <view>
         <view class="moneyName">账户余额（元）</view>
         <view class="moneyCount">¥ {{accountTotal}}</view>
@@ -36,9 +36,29 @@
         <view class="moneyName">可用返利</view>
         <view class="moneyCount">¥ {{outstandingAmount}}</view>
       </view>
-    </view>
+    </view> -->
+	<view class="moneyArea">
+	  <view class="myOrderRow">
+	    <view class="colorBlock"></view>
+	    <view class="orderTitle">我的订单</view>
+	    <view class="allOrder" @click="goAllOrder">全部订单</view>
+	  </view>
+	  
+	  <view class="order-cataloglist">
+	    <view
+	      class="order-cataloglist-item"
+	      v-for="item in cataloglist"
+	      :key="item.id"
+	      @click="goCatalog(item.url,item.sex)"
+	    >
+	      <image :src="item.src" class="infor-item-img" mode="aspectFit"/>
+	      <view class="cataloglist-item-title">{{item.title}}</view>
+	    </view>
+	  </view>
+	</view>
+	<view style="height: 10px;"></view>
     <!-- 我的订单 -->
-    <view class="myOrderRow">
+    <!-- <view class="myOrderRow">
       <view class="colorBlock"></view>
       <view class="orderTitle">我的订单</view>
       <view class="allOrder" @click="goAllOrder">全部订单</view>
@@ -54,7 +74,7 @@
         <image :src="item.src" class="infor-item-img" mode="aspectFit"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
       </view>
-    </view>
+    </view> -->
 
     <!-- 分割线 -->
     <view class="line"></view>
@@ -242,7 +262,7 @@ export default {
     setPageInfo() {
       this.getUserInfoByToken();
       this.getSaleInfo();
-      this.auxiliaryFun('2110', '1');
+      // this.auxiliaryFun('2110', '1');
       this.outstandingAmountFun();
     },
     async getUserInfoByToken() {
@@ -337,7 +357,6 @@ export default {
   }
 
   .topView {
-    position: relative;
     width: 750px;
     height: 398px;
     background: url('./image/top.png') no-repeat;
@@ -394,15 +413,15 @@ export default {
   }
 
   .moneyArea {
-    position: relative;
+    /* position: relative; */
     width: 718px;
-    height: 194px;
-    background: url('./image/money-bg.png') no-repeat;
+    height: 444px;
+    background: url('./image/bg.png') no-repeat;
     background-size: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: -150px;
-    display: flex;
+    margin-top: -160px;
+    /* display: flex; */
   }
 
   .moneyName {
@@ -432,7 +451,8 @@ export default {
 
   .myOrderRow {
     display: flex;
-    margin-top: 40px;
+    /* margin-top: 40px; */
+	padding-top: 26px;
   }
 
   .colorBlock {
@@ -469,7 +489,7 @@ export default {
     display: flex;
     column-count: 5;
     flex-wrap: wrap;
-    margin: 40px 22px 0px 32px;
+    margin: 50px 22px 0px 32px;
   }
 
   .order-cataloglist-item {
@@ -557,7 +577,7 @@ export default {
   }
 
   .infor-item-img {
-    width: 100px;
+    width: 90px;
     height: 68px;
     background-size: 100%;
   }

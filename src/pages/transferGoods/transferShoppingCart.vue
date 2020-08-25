@@ -24,7 +24,6 @@
           ref="TShoppingCartItem"
           @calBalance="calBalance"
           @goTransferDetail="goTransferDetail"
-          :isShowClear="isShowClear"
         ></t-shopping-cart-item>
       </view>
        <!--余额支付信息 -->
@@ -45,11 +44,8 @@
         @checkAll="checkAll"
         :settlement="settlement"
         :allChooseNum="allChooseNum"
-        @query="Settlement"
-        @edit="edit"
+        @query="Settlement" 
         @editDelete="editDelete"
-        @cancel="cancel"
-        :isShowClear="isShowClear"
       ></t-shopping-cart-btm>
 
     </view>
@@ -115,8 +111,7 @@ export default {
       },
       // 是否免密
       userInfMianMi: false,
-      // 编辑选中显示
-      isShowClear: false,
+     
 
       tabs: [
         {
@@ -421,15 +416,7 @@ export default {
     },
 
 
-    // 编辑
-    edit() {
-      this.isShowClear = !this.isShowClear;
-      console.log(this.allOrderList);
-    },
-    // 取消
-    cancel() {
-      this.isShowClear = !this.isShowClear;
-    },
+
     // 清除选中产品
     editDelete() {
       // confirm("确认要删除选中订单")

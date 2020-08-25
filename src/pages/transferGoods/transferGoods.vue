@@ -307,12 +307,12 @@ export default {
       console.log(this.SendWay)
       console.log(this.brand)
       this.getTransferList()
-      this.mescroll.resetUpScroll(true);
+      // this.mescroll.resetUpScroll(true);
 
     },
     getStockNum() {
       const tabs = this.$refs.transferGoodsHead.popTabs
-      // console.log(tabs)
+      console.log(tabs)
       if (tabs && tabs.length !== 0) {
         tabs[0].children.forEach(ele => {
           if (ele.checked) {
