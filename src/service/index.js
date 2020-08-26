@@ -14,9 +14,11 @@ import samplemachineService from './samplemachine/samplemachine.service';
 import vehicleService from './vehicleList/vehicleList.service';
 import authService from './auth/auth.service';
 import cocService from './coc/coc.service';
+import cocSeachService from './cocSearch/cocSearch.service';
 import openAccountService from './openAccount/openAccount.service';
 import activityService from './activity/activity.service';
 import udeskService from './udesk/udesk.service';
+
 
 export default {
   install(Vue) {
@@ -59,5 +61,7 @@ export default {
     Vue.prototype.activityService = activityService;
     // 首页客服
     Vue.prototype.udeskService = udeskService;
+	// 用户类型
+	Vue.prototype.cocSeachService = cocSeachService;
   }
 };
