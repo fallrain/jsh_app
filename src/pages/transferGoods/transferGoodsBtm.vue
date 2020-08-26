@@ -14,14 +14,14 @@
 <script>
 export default {
   name: 'transferGoodsBtm',
-  props:["shoppingCartNum"],
-//   props: {
-//     // 全选
-//     checked: {
-//       type: Boolean,
-//       default: false
-//     }
-//   },
+  props: ['shoppingCartNum'],
+  //   props: {
+  //     // 全选
+  //     checked: {
+  //       type: Boolean,
+  //       default: false
+  //     }
+  //   },
   methods: {
     // choose() {
     //   const checked = !this.checked;
@@ -29,9 +29,9 @@ export default {
     //   this.$emit('checkAll', checked);
     // }
     goShoppingCart() {
-       uni.navigateTo({
-         url: '/pages/transferGoods/transferShoppingCart'
-      })  
+      uni.navigateTo({
+        url: '/pages/transferGoods/transferShoppingCart'
+      });
     }
   }
 };
@@ -60,13 +60,13 @@ export default {
     background:#ED2856;
     border-radius:27px;
     display: flex;
-    align-items: center; 
-    margin-left:490px; 
+    align-items: center;
+    margin-left:490px;
     font-size:24px;
     color:#fff;
   }
   .shoppingcart {
-    font-size:34px !important; 
+    font-size:34px !important;
     margin-left:26px;
     margin-right:6px;
     color:#fff;

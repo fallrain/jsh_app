@@ -7,7 +7,7 @@ const urls = {
   // 首页新闻资讯
   indexList: '/notice/indexList',
   // 首页新闻资讯详情
-  getInfomation (id) {
+  getInfomation(id) {
     return `/notice/detail/${id}`;
   },
   page:(queryStr) => `/notice/page${queryStr}`

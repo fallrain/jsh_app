@@ -107,32 +107,41 @@ export default {
       type: Array,
       default: () => []
     },
-    // 当前选中的银行子列表
-    curSubItems: []
+  },
+  data() {
+    return {
+      // 当前选中的银行子列表
+      curSubItems: [],
+      // 当前选中的父index
+      curParIndex: 0
+    };
   },
   created() {
+    this.list[0].isChecked = true;
+    this.$emit('change', this.list);
     this.curSubItems = this.list[0].children;
   },
   watch: {
     isShow: {
       immediate: true,
       handler(val) {
-        val ? this.open() : this.close();
+        this.$nextTick(() => {
+          val ? this.open() : this.close();
+        });
       }
     }
   },
   methods: {
     open() {
-      if (!this.$refs.popup) {
-        this.$nextTick(() => {
-          this.$refs.popup.open();
-        });
+      if (this.$refs.popup) {
+        this.$refs.popup.open();
       }
     },
     close() {
       this.$refs.popup.close();
     },
-    check(item) {
+    check(item, index) {
+      /* 选中子item */
       this.curSubItems.forEach((v) => {
         v.isChecked = false;
       });
@@ -141,12 +150,18 @@ export default {
       });
       this.curSubItems = item.children;
       item.isChecked = true;
+      this.list[index] = item;
+      // 保存父index,在子item 改变的时候用
+      this.curParIndex = index;
+      this.$emit('change', this.list);
     },
-    checkSub(item) {
+    checkSub(item, index) {
       this.curSubItems.forEach((v) => {
         v.isChecked = false;
       });
       item.isChecked = true;
+      this.list[this.curParIndex].children[index] = item;
+      this.$emit('change', this.list);
     }
   }
 };

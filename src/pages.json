@@ -10,7 +10,9 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        // "navigationBarTitleText": "首页"
+
+        "navigationStyle" :"custom"
       }
     },
     {
@@ -23,6 +25,12 @@
       "path": "pages/index/service",
       "style": {
         "navigationBarTitleText": "首页客服"
+      }
+    },
+    {
+      "path": "pages/index/historical",
+      "style": {
+        "navigationBarTitleText": "首页历史记录"
       }
     },
     {
@@ -43,7 +51,6 @@
         "navigationBarTitleText": "导航"
       }
     },
-
     {
       "path": "pages/applicationsIndex/applicationsEdit",
       "style": {

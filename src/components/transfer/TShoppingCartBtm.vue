@@ -8,7 +8,7 @@
       <text :class="['tShoppingCartBtm-check-text',checked && 'active']">全选</text>
     </view>
     <text class="tShoppingCartBtm-check-edit" @tap="edit" v-if="!isShowClear">编辑</text>
-    <button class="tShoppingCartBtm-check-delete" type="button" @tap="editDelete" v-if="isShowClear">删除选中产品</button>
+    <button class="tShoppingCartBtm-check-delete" type="button" @tap="editDelete" v-if="isShowClear">删除</button>
     <button class="tShoppingCartBtm-check-cancel" @tap="cancel" v-if="isShowClear">取消</button>
 
     <view class="tShoppingCartBtm-text">
@@ -57,12 +57,12 @@ export default {
   },
   data() {
     return {
-      active:false,
-       // 编辑选中显示
+      active: false,
+      // 编辑选中显示
       isShowClear: false,
-    }
+    };
   },
-  
+
   methods: {
     choose() {
       const checked = !this.checked;
@@ -71,9 +71,9 @@ export default {
     },
     // 结算
     tlement() {
-      this.$emit("query")
+      this.$emit('query');
     },
-       // 编辑
+    // 编辑
     edit() {
       this.isShowClear = !this.isShowClear;
       console.log(this.isShowClear);
@@ -84,7 +84,7 @@ export default {
     },
     // 删除选中的产品
     editDelete() {
-      this.$emit("editDelete")
+      this.$emit('editDelete');
     },
 
   }
@@ -138,7 +138,7 @@ export default {
     margin-left: 26px;
     margin-right: 30px;
   }
-  
+
   .tShoppingCartBtm-check-delete {
     height: 42px;
     line-height: 42px;

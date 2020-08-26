@@ -18,10 +18,10 @@
       </view>
       <view class="jGoodsItem-cnt-price-tips">
         <view class="jGoodsItem-cnt-price-tips-item">
-          直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100)}}%
+          直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}
+        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
@@ -62,7 +62,7 @@
       </view>
     </view>
     <j-version-specifications
-      title="营销活动"
+      title="版本规格"
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
       cancelBtnText="重置"
@@ -185,7 +185,7 @@ export default {
       // 样机版本信息
       if (yjList && yjList.length) {
         const version = {
-          title: '工程版本',
+          title: '样机版本',
           isExpand: true,
           list: []
         };
@@ -212,6 +212,8 @@ export default {
       this.specificationsCheckList = [];
     },
     checkSpecifications() {
+      this.showAddToCartToast();
+      return;
       /* 检查是否有版本规格的数据，没有直接加入购物车 */
       if (this.specificationsList.length) {
         // 有版本数据才显示选择版本的弹层
@@ -262,7 +264,7 @@ export default {
       this.$refs.toast.open({
         type: 'success',
         content: '加入购物车成功',
-        timeout: 2000,
+        timeout: 2000000,
       });
     },
     addToCart(product) {

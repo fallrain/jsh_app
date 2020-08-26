@@ -1,12 +1,12 @@
 <template>
     <view class="message">
-        <messageInfoListTab 
+        <messageInfoListTab
             @tabClick="tabClick"
             @tabmsg="tabmsg"
         >
         </messageInfoListTab>
-        
-        <view class="message-concent"> 
+
+        <view class="message-concent">
           <view class="uni-flex uni-info" >
             <view class=" message-unread">共{{unread}}条消息未读</view>
             <view class=" message-read" @click="readAll">全部已读</view>
@@ -29,10 +29,10 @@
           </view>
         </view>
     </view>
-</template> 
+</template>
 <script>
-import messageInfoListTab from './messageInfoListTab'
-import jPost from '../../lib/request'
+import messageInfoListTab from './messageInfoListTab';
+import jPost from '../../lib/request';
 
 export default {
   name: 'messageInfoList',
@@ -47,7 +47,7 @@ export default {
       //     id: '1',
       //     name: '消息',
       //     active: true
-      //   }, 
+      //   },
       //   {
       //     id: '2',
       //     name: '任务',
@@ -58,41 +58,39 @@ export default {
       tabIndex: 1,
       unread: 0,
       messageList: [],
-      messageactive:0
-    }
- 
+      messageactive: 0
+    };
   },
- 
-  methods:{
-    async tabClick(item,index){
-      console.log(index)
+
+  methods: {
+    async tabClick(item, index) {
+      console.log(index);
       // this.tabs = e
-      this.tabIndex = index; 
+      this.tabIndex = index;
       this.unread = 2;
       const param = {
         pageNum: 1,
         pageSize: 10,
-        unitId: "8700014608_admin",
-        typeName: "",
-        createDateStr: ""
+        unitId: '8700014608_admin',
+        typeName: '',
+        createDateStr: ''
       };
-      const { code , data } = await this.messageService.messageList(param);
+      const { code, data } = await this.messageService.messageList(param);
       if (code === '1') {
         const {
           list
         } = data;
         // console.log(page.result);
         this.messageList = list;
-         console.log(this.messageList);
+        console.log(this.messageList);
       }
-     
     },
 
-    showDetail(id,item) {   
-      console.log(id,JSON.stringify(item))
+    showDetail(id, item) {
+      console.log(id, JSON.stringify(item));
       uni.navigateTo({
-         url: '/pages/messageInfoList/messageInfoListDetail?id='+ id + '&item='+ JSON.stringify(item)
-      })    
+        url: `/pages/messageInfoList/messageInfoListDetail?id=${id}&item=${JSON.stringify(item)}`
+      });
     },
     readAll() {
     }
@@ -102,7 +100,6 @@ export default {
 
   onLoad() {
     this.tabClick(1);
-  
   }
 };
 </script>
@@ -111,7 +108,7 @@ export default {
   width:750px;
   height:1520px;
   background:rgba(245,245,245,1);
-  
+
  .message-concent{
     box-sizing:border-box;
     width:750px;
@@ -159,7 +156,7 @@ export default {
         margin-top:10px;
       }
     }
-  
+
     .message-textTalRow{
       width:702px;
       height:142px;
@@ -227,7 +224,7 @@ export default {
             line-height:16px;
           }
         }
-      
+
     }
   }
 }

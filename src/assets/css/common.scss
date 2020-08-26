@@ -617,6 +617,10 @@
   width: 80px;
   height: 80px;
   border-radius: 100%;
+
+  &.type0 {
+    background: #3D96EE;
+  }
 }
 
 .jVersionSpecifications-pop-detail-item-check-icon {

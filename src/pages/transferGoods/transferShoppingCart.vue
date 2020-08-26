@@ -44,7 +44,7 @@
         @checkAll="checkAll"
         :settlement="settlement"
         :allChooseNum="allChooseNum"
-        @query="Settlement" 
+        @query="Settlement"
         @editDelete="editDelete"
       ></t-shopping-cart-btm>
 
@@ -111,7 +111,7 @@ export default {
       },
       // 是否免密
       userInfMianMi: false,
-     
+
 
       tabs: [
         {
@@ -296,7 +296,7 @@ export default {
           sum += Number(ele.data.SUMMONEY);
         }
       });
-      this.settlement = sum;
+      this.settlement = Number(sum.toFixed(2));
     },
     // 结算跳转
     async Settlement() {
@@ -414,7 +414,6 @@ export default {
         });
       }
     },
-
 
 
     // 清除选中产品
@@ -590,7 +589,7 @@ export default {
             });
           }
         });
-        a.toBePaid = needPay;
+        a.toBePaid = Number(needPay.toFixed());
         if (a.isShow) {
           all.push(a);
         }
@@ -625,7 +624,7 @@ export default {
       } else {
         this.allChooseNum = 0;
       }
-      this.calSettlement();
+      this.calF();
       this.calBalance();
     },
     invalidListChange(list) {

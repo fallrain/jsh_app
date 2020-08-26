@@ -6,7 +6,7 @@
           <view class="infomation-row-time">{{this.list.time}}</view>
         </view>
         <view class="infomation-con" v-html="this.list.content">
-            
+
         </view>
     </view>
 </template>
@@ -17,48 +17,50 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+
 export default {
 
   data() {
     return {
-      id:'',
-      list:{}
-    }
+      id: '',
+      list: {}
+    };
   },
   onLoad(option) {
-    this.id = option.id
-    console.log(this.id)
+    this.id = option.id;
+    console.log(this.id);
   },
   computed: {
     ...mapGetters({
-        defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-        tokenUserInf:USER.GET_TOKEN_USER,
-        saleInfo: USER.GET_SALE
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      tokenUserInf: USER.GET_TOKEN_USER,
+      saleInfo: USER.GET_SALE
     })
   },
   created() {
-    this.getDetail()
+    this.getDetail();
   },
   methods: {
-      async getDetail() {
-        const { code, data } = await this.messageService.getInfomation(this.id,{
-            customerCode: this.saleInfo.customerCode,
-            unitId: `${this.saleInfo.customerCode}_admin`
-        });
-        if (code === '1') {         
-            console.log(data.publishTime)
-            this.list = data
-            let temp = this.list.publishTime
-            let arr1 = temp.split("年")
-            let arr2 = arr1[1].split("月")
-            let arr3 = arr2[1].split("日")
-            console.log(arr1,arr2,arr3)
-            this.list.time = arr1[0] + "-" + arr2[0] + "-" + arr3[0]
-            console.log(this.list)
-        }
+    // 新闻详情
+    async getDetail() {
+      const { code, data } = await this.messageService.getInfomation(this.id, {
+        customerCode: this.saleInfo.customerCode,
+        unitId: `${this.saleInfo.customerCode}_admin`
+      });
+      if (code === '1') {
+        console.log(data.publishTime);
+        this.list = data;
+        const temp = this.list.publishTime;
+        const arr1 = temp.split('年');
+        const arr2 = arr1[1].split('月');
+        const arr3 = arr2[1].split('日');
+        console.log(arr1, arr2, arr3);
+        this.list.time = `${arr1[0]}-${arr2[0]}-${arr3[0]}`;
+        console.log(this.list);
       }
-  }   
-    
+    }
+  }
+
 };
 </script>
 <style scoped>
