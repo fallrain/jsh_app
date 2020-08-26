@@ -382,6 +382,7 @@ export default {
         if (item.defaultFlag === 1) {
           this.currentAdd = item;
           getdefaultFlag = true;
+          item.checked = true;
         }
       });
       if (!getdefaultFlag) {

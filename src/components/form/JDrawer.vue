@@ -4,27 +4,28 @@
     ref="filterDrawer"
     mode="right"
   >
-    <view class="filter-drawer">
-      <view
-        @touchmove.stop.prevent="true"
-        class="filter-drawer-cnt-list">
-        <slot></slot>
+    <scroll-view class="scroll-container" scroll-y="true">
+      <view class="filter-drawer">
+        <view
+          class="filter-drawer-cnt-list">
+          <slot></slot>
+        </view>
+        <view class="filter-drawer-btn-wrap">
+          <button
+            type="button"
+            class="filter-drawer-btn-confirm"
+            @click="filterConfirm"
+          >确定
+          </button>
+          <button
+            @click="filterReset"
+            type="button"
+            class="filter-drawer-btn-reset"
+          >重置
+          </button>
+        </view>
       </view>
-      <view class="filter-drawer-btn-wrap">
-        <button
-          type="button"
-          class="filter-drawer-btn-confirm"
-          @click="filterConfirm"
-        >确定
-        </button>
-        <button
-          @click="filterReset"
-          type="button"
-          class="filter-drawer-btn-reset"
-        >重置
-        </button>
-      </view>
-    </view>
+    </scroll-view>
   </uni-drawer>
 </template>
 
@@ -71,6 +72,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .scroll-container{
+    height: 100%;
+  }
   .filter-drawer {
     position: relative;
     height: 100%;
