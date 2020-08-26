@@ -436,7 +436,7 @@ export default {
 	    param1: 'JsParam1',
 	  }, (result) => {
 	      if (result.code.length > 1) {
-	          this.getToken(result.code);
+	          this.init(result.code);
 	      }
 	  });
   },
@@ -444,9 +444,11 @@ export default {
     this.init();
   },
   methods: {
-    async init() {
-      // 适配iOS客户端
-      const code = ALIPAYH5STARTUPPARAMS.webview_options;
+    async init(code) {
+		if(code.length > 0) {
+			// 适配iOS客户端
+			code = ALIPAYH5STARTUPPARAMS.webview_options;
+		}
       // let code = 'oiDi8SemSIm2-kiAiOBTnw';
       if (code.length > 0) {
         // 获取token
