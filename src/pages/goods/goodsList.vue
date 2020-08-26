@@ -33,7 +33,7 @@
       <view class="goodsList-items-wrap">
         <j-goods-item
           v-for="(item,index) in list"
-          :key="index"
+          :key="item.productCode"
           :goods="item"
           :index="index"
           :saletoCode="userInf.customerCode"
@@ -379,7 +379,10 @@ export default {
         // 组合tab的搜索条件数据（popTabs）
         this.genTabCondition(dataCondition);
         // 当前页码的数据
-        const curList = page.result;
+        const curList = page.result.map(v => ({
+          ...v,
+          number: 1
+        }));
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
         // 组合下面3个接口所需的数据

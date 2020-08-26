@@ -32,9 +32,22 @@ const util = {
     res = res.replace(/ss/g, obj.seconds);
     return res;
   },
+  formatNumber(number, digit) {
+    /* 把一个数字四舍五入为一个指定精度的数字 */
+    const m = Math.pow(10, digit);
+    const resetNum = `${Math.round(number * m) / m}`;
+    const newNum = `${resetNum}.${new Array(digit).fill(0).join('')}`;
+    return newNum.replace(/([\s\S]*)(\.)([\s\S]*)(\.)([\s\S]*)/g, (match, $1, $2, $3) => {
+      let $3Temp = $3;
+      if ($3Temp.length < digit) {
+        $3Temp += new Array(digit - $3Temp.length).fill(0).join('');
+      }
+      return $1 + $2 + $3Temp;
+    });
+  },
   formatFloat(f, digit) {
     const m = Math.pow(10, digit);
-    return Math.round(f * m, 10) / m;
+    return Math.round(f * m) / m;
   },
   arithmetic(val1, val2, arithmetic = 1, floatNum = 2) {
     /* 避免损失精度 */

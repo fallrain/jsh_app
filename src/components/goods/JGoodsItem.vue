@@ -17,18 +17,18 @@
         {{goods.productName | rmHtml}}
       </view>
       <view class="jGoodsItem-cnt-price-tips">
-        <view class="jGoodsItem-cnt-price-tips-item">直扣：{{jshUtil.arithmetic(goods.$PtPrice &&
-          goods.$PtPrice.rebateRate,100)}}%
+        <view class="jGoodsItem-cnt-price-tips-item">
+          直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100)}}%
         </view>
         <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
-          rebatePolicy}}
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice && goods.$PtPrice.invoicePrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice && goods.$PtPrice.supplyPrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum}}</view>
+        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice && goods.$PtPrice.invoicePrice | formatMoney}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice && goods.$PtPrice.supplyPrice | formatMoney}}
+        </view>
+        <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
