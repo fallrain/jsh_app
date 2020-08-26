@@ -13,10 +13,13 @@
             @tap="hide"
           ></i>
         </view>
+        <view class="jChooseDeliveryAddressDrawer-input">
+          <input v-model="searchVal" type="text" placeholder="请输入地址">
+        </view>
         <view class="jChooseDeliveryAddressDrawer-list">
           <view
             :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
-            v-for="(item,index) in addressList"
+            v-for="(item,index) in searchAddResult"
             :key="index"
             @tap="check(item)"
           >
@@ -58,6 +61,8 @@ export default {
   },
   data() {
     return {
+      searchVal: '',
+      searchAddResult: [],
       list: [
         {
           id: 1,
@@ -83,10 +88,25 @@ export default {
       } else {
         jChooseDeliveryAddressDrawer.close();
       }
+    },
+    searchVal(val) {
+      const addArr = [];
+      this.addressList.forEach((item) => {
+        if (item.addressName.indexOf(val) > -1) {
+          addArr.push(item);
+        }
+      });
+      this.searchAddResult = addArr;
+    },
+    addressList() {
+      this.searchAddResult = this.addressList;
     }
   },
   methods: {
     drawerChange(val) {
+      if (val === false) {
+        this.searchVal = '';
+      }
       /* 回馈抽屉值，修改props.show */
       this.$emit('update:show', val);
     },
@@ -98,6 +118,7 @@ export default {
       this.$emit('changeAddress', this.addressList, item);
     },
     hide() {
+      this.searchVal = '';
       this.$emit('update:show', false);
     }
   }
@@ -125,7 +146,18 @@ export default {
       font-weight: 400;
     }
   }
-
+  .jChooseDeliveryAddressDrawer-input{
+    padding-right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    input{
+      width: 400px;
+      height: 60px;
+      line-height: 60px;
+      border: 1px solid #eee;
+      border-radius: 20px;
+    }
+  }
   .jChooseDeliveryAddressDrawer-list{
     margin-top: 10px;
   }
