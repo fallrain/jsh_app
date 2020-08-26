@@ -8,6 +8,6 @@ import {
 export default {
   cocSearch(code) {
     /* 用户类型 */
-    return jGet(urls.cocSearch, code);
+    return jGet(urls.cocSearch(code));
   },
 };

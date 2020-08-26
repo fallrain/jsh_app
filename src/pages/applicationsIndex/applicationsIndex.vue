@@ -8,8 +8,8 @@
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
           <view class="fs24 text-333">王芬芬，您好！</view>
-		  <view @click="callBBC">建行支付测试</view>
-		  <view @click="popAction">返回测试</view>
+<!-- 		  <view @click="callBBC">建行支付测试</view>
+		  <view @click="popAction">返回测试</view> -->
           <view class="logo">
             <image src="@/assets/img/appIndex/haier.png"></image>
           </view>
@@ -490,7 +490,6 @@ export default {
     },
 	// 获取用户类型
 	async getUserType(passCode) {
-		debugger
 		const { code, data } = await this.cocSeachService.cocSearch(passCode);
 		if (code === '1') {
 		  this.cocData = data;
