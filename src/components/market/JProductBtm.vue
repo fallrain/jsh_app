@@ -86,6 +86,11 @@ export default {
     goOrder(state) {
       if (state === true) {
         this.$emit('goOrder');
+      } else {
+        uni.showToast({
+          title: '条件未满足',
+          icon: 'none'
+        });
       }
     }
   }

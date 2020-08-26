@@ -61,7 +61,7 @@ export default {
     Vue.prototype.activityService = activityService;
     // 首页客服
     Vue.prototype.udeskService = udeskService;
-	// 用户类型
-	Vue.prototype.cocSeachService = cocSeachService;
+    // 用户类型
+    Vue.prototype.cocSeachService = cocSeachService;
   }
 };

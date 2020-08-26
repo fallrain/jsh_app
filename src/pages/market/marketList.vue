@@ -22,6 +22,7 @@
           :activity="item"
           @activityDetail ="activityDetail"
         ></j-activity-item>
+        <!--<view v-if="list.length === 0" class="">暂无数据</view>-->
       </view>
     </mescroll-body>
     <j-drawer
@@ -304,6 +305,12 @@ export default {
           this.list = data.list;
         } else {
           this.list = this.list.concat(data.list);
+        }
+        if (this.list.length === 0) {
+          uni.showToast({
+            title: '暂无数据！',
+            icon: 'none'
+          });
         }
       }
       // 当前页码的数据

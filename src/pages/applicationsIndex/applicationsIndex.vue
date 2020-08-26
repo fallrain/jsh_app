@@ -177,6 +177,13 @@ import {
   uniDrawer,
   uniSwiperDot
 } from '@dcloudio/uni-ui';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 import JCell from '../../components/form/JCell';
 import './css/applicationsIndex.scss';
 
@@ -443,13 +450,29 @@ export default {
   onLoad() {
     this.init();
   },
+  computed: {
+    ...mapGetters({
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      tokenUserInf: USER.GET_TOKEN_USER,
+      saleInfo: USER.GET_SALE
+    })
+  },
   methods: {
+    ...mapActions([
+      // 默认送达方信息
+      USER.UPDATE_DEFAULT_SEND_TO_ASYNC,
+      // 获取售达方信息
+      USER.UPDATE_SALE_ASYNC,
+      // 修改token用户信息
+      USER.UPDATE_TOKEN_USER_ASYNC
+    ]),
     async init(code) {
-		if(code.length > 0) {
-			// 适配iOS客户端
-			code = ALIPAYH5STARTUPPARAMS.webview_options;
-		}
-      // let code = 'oiDi8SemSIm2-kiAiOBTnw';
+      if (code.length > 0) {
+        // 适配iOS客户端
+        code = ALIPAYH5STARTUPPARAMS.webview_options;
+      }
+      // const code1 = 'Ff6C96umSoWRjQjHgOYpog';
+      // 获取token
       if (code.length > 0) {
         // 获取token
         await this.getToken(code);
@@ -485,18 +508,20 @@ export default {
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-		this.getUserType(passCode)
+        this.getUserType(passCode);
+        this[USER.UPDATE_SALE_ASYNC]();
+        console.log(this.saleInfo);
       }
     },
-	// 获取用户类型
-	async getUserType(passCode) {
-		const { code, data } = await this.cocSeachService.cocSearch(passCode);
-		if (code === '1') {
-		  this.cocData = data;
-		}
-		alert('===========')
-		alert(data)
-	},
+    // 获取用户类型
+    async getUserType(passCode) {
+      const { code, data } = await this.cocSeachService.cocSearch(passCode);
+      if (code === '1') {
+        this.cocData = data;
+      }
+      alert('===========');
+      alert(data);
+    },
     changePic(e) {
       this.current = e.detail.current;
     },
