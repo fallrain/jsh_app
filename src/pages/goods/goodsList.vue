@@ -379,7 +379,10 @@ export default {
         // 组合tab的搜索条件数据（popTabs）
         this.genTabCondition(dataCondition);
         // 当前页码的数据
-        const curList = page.result;
+        const curList = page.result.map(v => ({
+          ...v,
+          number: 1
+        }));
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
         // 组合下面3个接口所需的数据
