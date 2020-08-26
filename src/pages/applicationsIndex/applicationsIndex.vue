@@ -483,8 +483,19 @@ export default {
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
+		this.getUserType(passCode)
       }
     },
+	// 获取用户类型
+	async getUserType(passCode) {
+		debugger
+		const { code, data } = await this.cocSeachService.cocSearch(passCode);
+		if (code === '1') {
+		  this.cocData = data;
+		}
+		alert('===========')
+		alert(data)
+	},
     changePic(e) {
       this.current = e.detail.current;
     },

@@ -1,4 +1,4 @@
-import urls from '../url/commodity.url';
+import urls from '../url/cocSearch.url';
 import {
   jPost,
   jPostJson,
