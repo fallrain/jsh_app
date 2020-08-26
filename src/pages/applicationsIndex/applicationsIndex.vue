@@ -1,16 +1,10 @@
 <template>
     <view v-if="loadUserType">
-      <!-- <view style="margin-top: 100px;
-                  margin-left: auto;
-                  margin-right: auto;
-                  width: 400px;
-                  height: 268px;
-                  background: url('@/assets/img/appIndex/error-lock.png') no-repeat;
-                  background-size: 100%;
-                  background-position: 0 -25px;
-                  padding-top: 54px;">
-      </view> -->
-      <image class="errorImg" :src="errorImg"></image>
+      <view class="testImg">
+      </view>
+      <view class="errorImg">
+        <image :src="errorImg"></image>
+      </view>
       <view class="errorMsg">{{errorMsg}}</view>
       <button class="btnStyle">返回</button>
     </view>
@@ -446,15 +440,14 @@ export default {
           url: '#'
         }
       ],
-      loadUserType:true,
+      loadUserType:false,
       errorMsg:'你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。',
       errorImg:'@/assets/img/appIndex/error-lock.png'
-
     };
   },
   created() {
     // 支持由前端 H5 页面禁止
-    AlipayJSBridge.call('setGestureBack', { val: false });
+    // AlipayJSBridge.call('setGestureBack', { val: false });
   },
   mounted() {
     // 适配安卓客户端
@@ -486,7 +479,7 @@ export default {
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
     async init(code) {
-      if (code.length > 0) {
+      if (!code) {
         // 适配iOS客户端
         code = ALIPAYH5STARTUPPARAMS.webview_options;
       }
@@ -507,16 +500,16 @@ export default {
     },
 	  // 返回原生
 	  popAction() {
-		  AlipayJSBridge.call('popWindow');
+		  // AlipayJSBridge.call('popWindow');
 	  },
 	  // 打开建行支付
 	  callBBC() {
-		  AlipayJSBridge.call('myApiCallCCB', {
-		    orderId: '123456',
-        payment: '8888',
-		  }, (result) => {
-		  	alert(JSON.stringify(result));
-		  });
+		  // AlipayJSBridge.call('myApiCallCCB', {
+		  //   orderId: '123456',
+      //   payment: '8888',
+		  // }, (result) => {
+		  // 	alert(JSON.stringify(result));
+		  // });
 	  },
     // 获取token
     async getToken(passCode) {
@@ -527,9 +520,10 @@ export default {
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-        this.getUserType(passCode);
+        
         this[USER.UPDATE_SALE_ASYNC]();
         console.log(this.saleInfo);
+        // this.getUserType(passCode);
       }
     },
     // 获取用户类型
@@ -538,7 +532,7 @@ export default {
       if (code === '1') {
         this.cocData = data;
       }
-      alert('===========');
+      // alert('===========');
       alert(data);
     },
     changePic(e) {
