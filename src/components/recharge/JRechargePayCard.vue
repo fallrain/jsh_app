@@ -4,6 +4,12 @@
       :class="['jRechargePayCard-check iconfont',isChecked ? 'iconradio':'iconradio1']"
       @tap="handleCheck"
     ></view>
+    <view
+      :class="['jVersionSpecifications-pop-detail-item-check','type' + type]"
+      v-if="isChecked"
+    >
+      <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+    </view>
     <view class="jRechargePayCard-check-img">
       <image></image>
     </view>
@@ -60,6 +66,7 @@ export default {
 
 <style lang="scss">
   .jRechargePayCard-wrap {
+    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
@@ -69,6 +76,7 @@ export default {
     font-size: 36px;
     color: #333;
     margin-top: 24px;
+    overflow: hidden;
 
     &:first-child {
       margin-top: 0;

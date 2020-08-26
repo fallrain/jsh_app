@@ -1,6 +1,8 @@
 .rechargeOnline-wrap {
   background: #F5F5F5;
   min-height: 100vh;
+
+
 }
 
 .rechargeOnline-head {
@@ -82,6 +84,14 @@
   }
 }
 
-.rechargeOnline-btn-wrap{
+.rechargeOnline-btn-wrap {
   padding: 60px 24px;
+}
+
+.jRechargePayCard-par-item {
+  margin-top: 24px;
+
+  &.first-child {
+    margin-top: 0;
+  }
 }

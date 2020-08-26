@@ -29,6 +29,7 @@
             <view
               :key="index"
               v-for="(item,index) in payCardTypes"
+              class="jRechargePayCard-par-item"
             >
               <j-recharge-pay-card
                 :index="index"
@@ -73,6 +74,7 @@
       :is-show="isShowBankPicker"
       :list="bankList"
       title="选择银行"
+      @change="bankListChange"
     ></j-recharge-bank-picker>
   </view>
 </template>
@@ -118,7 +120,7 @@ export default {
         }
       ],
       // 是否显示银行选择picker
-      isShowBankPicker: true,
+      isShowBankPicker: false,
       bankList: [
         {
           key: 'cxk',
@@ -175,6 +177,10 @@ export default {
     showBankPicker() {
       /* 显示银行picker */
       this.isShowBankPicker = true;
+    },
+    bankListChange(bankList) {
+      /* 银行列表change */
+      this.bankList = bankList;
     }
   },
 };
