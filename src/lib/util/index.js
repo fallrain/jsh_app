@@ -37,7 +37,13 @@ const util = {
     const m = Math.pow(10, digit);
     const resetNum = `${Math.round(number * m) / m}`;
     const newNum = `${resetNum}.${new Array(digit).fill(0).join('')}`;
-    return newNum.replace(/([\s\S]*)(\.)([\s\S]*)(\.)([\s\S]*)/g, (match, $1, $2, $3) => $1 + $2 + $3);
+    return newNum.replace(/([\s\S]*)(\.)([\s\S]*)(\.)([\s\S]*)/g, (match, $1, $2, $3) => {
+      let $3Temp = $3;
+      if ($3Temp.length < digit) {
+        $3Temp += new Array(digit - $3Temp.length).fill(0).join('');
+      }
+      return $1 + $2 + $3Temp;
+    });
   },
   formatFloat(f, digit) {
     const m = Math.pow(10, digit);
