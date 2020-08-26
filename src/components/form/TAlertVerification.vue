@@ -166,7 +166,7 @@ export default {
             }
           });
           // 提交订单
-          const { code, data } = await this.transfergoodsService.submitDhOrder({
+          const {code, data} = await this.transfergoodsService.submitDhOrder({
             timestamp: Date.parse(new Date()),
             longfeiUSERID: Number(this.defaultSendToInf.customerCode),
             orderNo: Number(SEQ),
@@ -189,7 +189,7 @@ export default {
           title: '请输入验证码',
         });
       }
-
+    }
   }
 };
 </script>
