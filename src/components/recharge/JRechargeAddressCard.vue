@@ -3,9 +3,9 @@
     <view
       :key="index"
       class="jRechargeAddressCard-item"
-      v-for="(item,index) in data"
+      v-for="(item,index) in list"
     >
-      <block v-if="index<data.length-1">
+      <block v-if="index<list.length-1">
         <view class="jRechargeAddressCard-icon-wrap-l">
           <view class="jRechargeAddressCard-icon-left"></view>
         </view>
@@ -27,7 +27,7 @@ export default {
   name: 'JRechargeAddressCard',
   props: {
     // item数据
-    data: {
+    list: {
       type: Array,
       default: () => []
     }

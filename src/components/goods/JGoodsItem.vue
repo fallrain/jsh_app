@@ -64,7 +64,7 @@
     <j-version-specifications
       title="营销活动"
       :show.sync="isShowSpecifications"
-      :data="specificationsList"
+      :versionData="specificationsList"
       cancelBtnText="重置"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"

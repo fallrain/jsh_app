@@ -33,12 +33,12 @@
     >
       <view
         v-for="(goods,index) in shoppingList"
-        :key="index"
+        :key="goods.id"
       >
         <j-shopping-cart-item
           :beforeCreditModeChange="checkCreditQuota"
           :goods="goods"
-          :index="goods.id"
+          :index="index"
           :userInf="userInf"
           :versionPrice="specialPriceMap"
           :warehouseFlag="choseSendAddress.yunCangFlag"

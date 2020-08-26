@@ -96,8 +96,8 @@ import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddres
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import {
   uniPopup,
+  uniPopupDialog
 } from '@dcloudio/uni-ui';
-import uniPopupDialog from '@dcloudio/uni-ui/lib/uni-popup/uni-popup-dialog';
 import './css/concernedProductsList.scss';
 import {
   USER
