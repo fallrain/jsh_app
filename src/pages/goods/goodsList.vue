@@ -33,7 +33,7 @@
       <view class="goodsList-items-wrap">
         <j-goods-item
           v-for="(item,index) in list"
-          :key="index"
+          :key="item.productCode"
           :goods="item"
           :index="index"
           :saletoCode="userInf.customerCode"

@@ -38,7 +38,7 @@
         <j-shopping-cart-item
           :beforeCreditModeChange="checkCreditQuota"
           :goods="goods"
-          :index="index"
+          :index="goods.id"
           :userInf="userInf"
           :versionPrice="specialPriceMap"
           :warehouseFlag="choseSendAddress.yunCangFlag"
