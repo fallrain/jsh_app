@@ -1,10 +1,11 @@
 /* 本数据仅供开发时导航页使用 */
 const data = [
   'pages/index/index',
-  "pages/index/information",
-  "pages/index/service",
-  "pages/index/banner",
-  "pages/index/announcement",
+  'pages/index/information',
+  'pages/index/service',
+  'pages/index/banner',
+  'pages/index/announcement',
+  'pages/index/historical',
   'pages/applicationsIndex/applicationsIndex',
   'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',

@@ -34,135 +34,136 @@
   </view>
 </template>
 <script>
-  import './css/applicationsEdit.scss'
-  export default {
-    name: "applicationsEdit",
-    data() {
-      return {
-        list: [
-          {
-            id:1,
-            title:"海尔直采",
-            children:[
-              {
-                id:1,
-                src: require('@/assets/img/appIndex/shopping.png'),
-                Subhead:"采购下单"
-              },
-              {
-                id:2,
-                src: require('@/assets/img/appIndex/finance.png'),
-                Subhead:"财务自助"
-              },
-              {
-                id:3,
-                src: require('@/assets/img/appIndex/work.png'),
-                Subhead:"业务办理"
-              }
-            ]
-          },
-          {
-            id:2,
-            title:"分销管理",
-            children:[
-              {
-                id:1,
-                src: require('@/assets/img/appIndex/shopping.png'),
-                Subhead:"采购下单"
-              },
-              {
-                id:2,
-                src: require('@/assets/img/appIndex/finance.png'),
-                Subhead:"财务自助"
-              },
-              {
-                id:3,
-                src: require('@/assets/img/appIndex/work.png'),
-                Subhead:"业务办理"
-              },
-              {
-                id:4,
-                src: require('@/assets/img/appIndex/report.png'),
-                Subhead:"报表查询"
-              },
-              {
-                id:5,
-                src: require('@/assets/img/appIndex/recharge.png'),
-                Subhead:"在线充值"
-              }
+import './css/applicationsEdit.scss';
 
-            ]
-          },
-          {
-            id:3,
-            title:"门店经营",
-            children:[
-              {
-                id:1,
-                src: require('@/assets/img/appIndex/gooods.png'),
-                Subhead:"其他进货"
-              },
-              {
-                id:2,
-                src: require('@/assets/img/appIndex/accept.png'),
-                Subhead:"收货办理"
-              },
-              {
-                id:3,
-                src: require('@/assets/img/appIndex/stock.png'),
-                Subhead:"库存查询"
-              },
-              {
-                id:4,
-                src: require('@/assets/img/appIndex/list.png'),
-                Subhead:"差单据"
-              },
-              {
-                id:5,
-                src: require('@/assets/img/appIndex/member.png'),
-                Subhead:"会员清单"
-              }
-            ]
-          },
-          {
-            id:4,
-            title:"零售管理",
-            children:[
-              {
-                id:1,
-                src: require('@/assets/img/appIndex/shopping.png'),
-                Subhead:"采购下单"
-              },
-              {
-                id:2,
-                src: require('@/assets/img/appIndex/finance.png'),
-                Subhead:"财务自助"
-              },
-              {
-                id:3,
-                src: require('@/assets/img/appIndex/work.png'),
-                Subhead:"业务办理"
-              },
-              {
-                id:4,
-                src: require('@/assets/img/appIndex/report.png'),
-                Subhead:"报表查询"
-              },
-              {
-                id:5,
-                src: require('@/assets/img/appIndex/recharge.png'),
-                Subhead:"在线充值"
-              }
-            ]
-          }
+export default {
+  name: 'applicationsEdit',
+  data() {
+    return {
+      list: [
+        {
+          id: 1,
+          title: '海尔直采',
+          children: [
+            {
+              id: 1,
+              src: require('@/assets/img/appIndex/shopping.png'),
+              Subhead: '采购下单'
+            },
+            {
+              id: 2,
+              src: require('@/assets/img/appIndex/finance.png'),
+              Subhead: '财务自助'
+            },
+            {
+              id: 3,
+              src: require('@/assets/img/appIndex/work.png'),
+              Subhead: '业务办理'
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: '分销管理',
+          children: [
+            {
+              id: 1,
+              src: require('@/assets/img/appIndex/shopping.png'),
+              Subhead: '采购下单'
+            },
+            {
+              id: 2,
+              src: require('@/assets/img/appIndex/finance.png'),
+              Subhead: '财务自助'
+            },
+            {
+              id: 3,
+              src: require('@/assets/img/appIndex/work.png'),
+              Subhead: '业务办理'
+            },
+            {
+              id: 4,
+              src: require('@/assets/img/appIndex/report.png'),
+              Subhead: '报表查询'
+            },
+            {
+              id: 5,
+              src: require('@/assets/img/appIndex/recharge.png'),
+              Subhead: '在线充值'
+            }
 
-        ]
-      }
-    },
-    methods: {
-      goDetail() {
+          ]
+        },
+        {
+          id: 3,
+          title: '门店经营',
+          children: [
+            {
+              id: 1,
+              src: require('@/assets/img/appIndex/gooods.png'),
+              Subhead: '其他进货'
+            },
+            {
+              id: 2,
+              src: require('@/assets/img/appIndex/accept.png'),
+              Subhead: '收货办理'
+            },
+            {
+              id: 3,
+              src: require('@/assets/img/appIndex/stock.png'),
+              Subhead: '库存查询'
+            },
+            {
+              id: 4,
+              src: require('@/assets/img/appIndex/list.png'),
+              Subhead: '差单据'
+            },
+            {
+              id: 5,
+              src: require('@/assets/img/appIndex/member.png'),
+              Subhead: '会员清单'
+            }
+          ]
+        },
+        {
+          id: 4,
+          title: '零售管理',
+          children: [
+            {
+              id: 1,
+              src: require('@/assets/img/appIndex/shopping.png'),
+              Subhead: '采购下单'
+            },
+            {
+              id: 2,
+              src: require('@/assets/img/appIndex/finance.png'),
+              Subhead: '财务自助'
+            },
+            {
+              id: 3,
+              src: require('@/assets/img/appIndex/work.png'),
+              Subhead: '业务办理'
+            },
+            {
+              id: 4,
+              src: require('@/assets/img/appIndex/report.png'),
+              Subhead: '报表查询'
+            },
+            {
+              id: 5,
+              src: require('@/assets/img/appIndex/recharge.png'),
+              Subhead: '在线充值'
+            }
+          ]
+        }
 
-      }
+      ]
+    };
+  },
+  methods: {
+    goDetail() {
+
     }
   }
+};
 </script>

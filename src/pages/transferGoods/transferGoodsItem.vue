@@ -6,8 +6,8 @@
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-head">
         <view v-html="goods.name" class="jGoodsItem-cnt-goodsName j-goods-title">
-        </view>   
-        <i 
+        </view>
+        <i
           :class="['transferDetailItem-detail-like','iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"
           @tap="addFavorite(goods)"
         ></i>
@@ -25,14 +25,16 @@
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
           :value="goods.amount"
-          :max="Number(goods.stockList[0].qty)" 
-          :disabled="Number(goods.stockList[0].qty) === 0"
+          :max="Number(goods.stockNum)"
+          :disabled="Number(goods.stockNum) === 0"
           @change="goodsNumChange($event, goods)"
         ></uni-number-box>
         <button
           class="jGoodsItem-cnt-opts-primary ml26"
+          :class="[isDisabled ? 'disabled' : 'jGoodsItem-cnt-opts-primary']"
           type="button"
           @tap="addTransfer(goods)"
+          :disabled="isDisabled"
         >加入调货</button>
       </view>
     </view>
@@ -50,6 +52,7 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+
 export default {
   name: 'transferGoodsItem',
   components: {
@@ -58,11 +61,12 @@ export default {
   data() {
     return {
       ischecked: false,
-       // 控制列表数据
-      isShowList:false,
+      // 控制列表数据
+      isShowList: false,
       value: 1,
-      isDisposal:false
-    }
+      isDisposal: false,
+      isDisabled: false
+    };
   },
 
   props: {
@@ -93,26 +97,29 @@ export default {
       }
     }
   },
+  created() {
+    this.showDisabled();
+  },
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
       saleInfo: USER.GET_SALE,
-      defaultSendToInf: USER.GET_DEFAULT_SEND_TO  
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
   },
-  methods:{
-     goodsNumChange(value,goods) {
+  methods: {
+    goodsNumChange(value, goods) {
       /* 商品数量change */
-      if (goods.stockList[0].qty === 0) {
-        value = 0
+      if (goods.stockNum === 0) {
+        value = 0;
       }
-     
-      goods.amount = value
+
+      goods.amount = value;
       // console.log(goods.amount, goods)
       // this.value = value
       // 改变价格
       this.goods.number = value;
-      console.log(goods.amount)
+      console.log(goods.amount);
       this.$emit('change', this.goods, this.index);
     },
     goNext() {
@@ -120,33 +127,43 @@ export default {
         url: `/pages/productDetail/productDetail?productCode=${this.goods.code}`
       });
     },
-    addFavorite(goods) {  
-      console.log(goods)
-      if(goods.$favorite) {
+    addFavorite(goods) {
+      console.log(goods);
+      if (goods.$favorite) {
         // 取消收藏
-         const removeInterest = this.customerService.removeInterestProduct({
+        const removeInterest = this.customerService.removeInterestProduct({
           customerCode: this.saleInfo.customerCode,
           account: this.saleInfo.customerCode,
           productCodeList: [goods.code]
         });
       } else {
         // 添加收藏
-         const addInterest = this.customerService.addInterestProduct ({
+        const addInterest = this.customerService.addInterestProduct({
           customerCode: this.saleInfo.customerCode,
           account: this.saleInfo.customerCode,
           productCode: goods.code
         });
       }
-      goods.$favorite = !goods.$favorite
-      console.log(goods.$favorite)
+      goods.$favorite = !goods.$favorite;
+      console.log(goods.$favorite);
     },
     // 加入调货
     addTransfer(goods) {
-      console.log(goods)
+      console.log(goods);
 
-      
-      this.$emit("inserOrder",goods)
-      this.$emit("query")
+
+      this.$emit('inserOrder', goods);
+      this.$emit('query');
+    },
+    // 判断是否禁用加入调货
+    showDisabled() {
+      if (!this.goods.stockNum) {
+        console.log(1115555);
+        this.isDisabled = true;
+      } else {
+        this.isDisabled = false;
+        console.log(222);
+      }
     }
 
   }
@@ -159,7 +176,7 @@ export default {
     height:40px;
     background:rgba(255,255,255,1);
     border-radius:8px;
-  
+
 }
 
 ::v-deep .uni-numbox--text {
@@ -204,7 +221,7 @@ export default {
     border-bottom: 1px solid #F5F5F5;
   }
 
- 
+
 }
 
 .jGoodsItem-left {
@@ -232,7 +249,7 @@ export default {
   font-weight: 400;
   color: #333;
   line-height: 34px;
-  
+
 }
 .transferDetailItem-detail-like{
   width: 40px;
@@ -300,6 +317,10 @@ export default {
 .jGoodsItem-cnt-opts-primary {
   @include jGoodsItem-cnt-opts-btn;
   background: #ED2856;
+  color: #fff;
+}
+.disabled {
+  background: #ccc;
   color: #fff;
 }
 
