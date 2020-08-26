@@ -165,30 +165,30 @@ export default {
               SEQ = ele.IBR_SEQ;
             }
           });
-        // 提交订单
-        const { code, data } = await this.transfergoodsService.submitDhOrder({
-          timestamp: Date.parse(new Date()),
-          longfeiUSERID: Number(this.defaultSendToInf.customerCode),
-          orderNo: Number(SEQ),
-          verifyCode: Number(this.form.verificationCode),
-          verifyKey: `${this.erifyKey}`,
-        });
-        if (code === '1' && data.code === '200') {
-          uni.showToast({
-            title: '调货订单提交成功',
+          // 提交订单
+          const { code, data } = await this.transfergoodsService.submitDhOrder({
+            timestamp: Date.parse(new Date()),
+            longfeiUSERID: Number(this.defaultSendToInf.customerCode),
+            orderNo: Number(SEQ),
+            verifyCode: Number(this.form.verificationCode),
+            verifyKey: `${this.erifyKey}`,
           });
-          this.show = false;
-        } else {
-          uni.showToast({
-            title: `${data.message}`,
-          });
+          if (code === '1' && data.code === '200') {
+            uni.showToast({
+              title: '调货订单提交成功',
+            });
+            this.show = false;
+          } else {
+            uni.showToast({
+              title: `${data.message}`,
+            });
+          }
         }
       } else {
         uni.showToast({
           title: '请输入验证码',
         });
       }
-    }
 
   }
 };
