@@ -427,29 +427,40 @@ export default {
     };
   },
   created() {
-    // this.getbannerList();
-	// 支持由前端 H5 页面禁止
-	AlipayJSBridge.call('setGestureBack',{val:false});
+    // 支持由前端 H5 页面禁止
+    AlipayJSBridge.call('setGestureBack', { val: false });
   },
   mounted() {
-	  // 适配安卓客户端
+    // 适配安卓客户端
 	  AlipayJSBridge.call('myApiGetCode', {
 	    param1: 'JsParam1',
-	  },  (result) =>  {
-	      if(result.code.length > 1) {
+	  }, (result) => {
+	      if (result.code.length > 1) {
 	          this.getToken(result.code);
 	      }
 	  });
   },
   onLoad() {
-	  // 适配iOS客户端
-    let code = ALIPAYH5STARTUPPARAMS.webview_options;
-    // this.code = 'oiDi8SemSIm2-kiAiOBTnw';
-	if(code.length > 0) {
-		this.getToken(code);
-	}
+    this.init();
   },
   methods: {
+    async init() {
+      // 适配iOS客户端
+      const code = ALIPAYH5STARTUPPARAMS.webview_options;
+      // let code = 'oiDi8SemSIm2-kiAiOBTnw';
+      if (code.length > 0) {
+        // 获取token
+        await this.getToken(code);
+        // 获取首页轮播图
+        await this.getbannerList();
+      } else {
+        uni.showToast({
+          title: '获取code失败',
+          icon: 'none',
+          duration: 3000
+        });
+      }
+    },
 	  // 返回原生
 	  popAction() {
 		  AlipayJSBridge.call('popWindow');
@@ -458,9 +469,9 @@ export default {
 	  callBBC() {
 		  AlipayJSBridge.call('myApiCallCCB', {
 		    orderId: '123456',
-			payment: '8888',
-		  }, function (result) {
-		  	alert(JSON.stringify(result))
+        payment: '8888',
+		  }, (result) => {
+		  	alert(JSON.stringify(result));
 		  });
 	  },
     // 获取token
@@ -468,6 +479,7 @@ export default {
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
+      console.log(2);
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
@@ -510,13 +522,13 @@ export default {
     },
     // 轮播图跳转
     goSwiperDetail(item) {
-      console.log(item)
-      if(item.type === "html") {
-        uni.navigateTo ({
+      console.log(item);
+      if (item.type === 'html') {
+        uni.navigateTo({
           url: `/pages/index/banner?url=${item.url}`
-        })
+        });
       } else {
-        uni.navigateTo ({
+        uni.navigateTo({
           url: `/pages/productDetail/productDetail?productCode=${item.code}`
         });
       }
