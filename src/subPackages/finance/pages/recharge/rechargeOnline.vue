@@ -9,7 +9,7 @@
     <view class="rechargeOnline-cnt">
       <view class="rechargeOnline-address-card-warp">
         <j-recharge-address-card
-          :data="addressData"
+          :list="addressData"
         >
         </j-recharge-address-card>
       </view>

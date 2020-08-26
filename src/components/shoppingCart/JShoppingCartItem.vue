@@ -106,7 +106,7 @@
     </view>
     <j-version-specifications
       :show.sync="isShowSpecifications"
-      :data="specificationsList"
+      :versionData="specificationsList"
       @cancel="specificationsCancel"
       @confirm="specificationsConfirm"
     >

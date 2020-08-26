@@ -16,7 +16,7 @@
       <view class="jVersionSpecifications-pop-detail-wrap">
         <view
           class="jVersionSpecifications-pop-detail"
-          v-for="(item,index) in data"
+          v-for="(item,index) in versionData"
           :key="index"
         >
           <view class="jVersionSpecifications-pop-detail-head">
@@ -119,7 +119,7 @@ export default {
       default: ''
     },
     // 版本数据
-    data: {
+    versionData: {
       type: Array,
       default: () => []
     },
@@ -159,7 +159,7 @@ export default {
       /* 选择版本 */
       const curChecked = version.checked;
       // 除了当前版本，其他版本的选择都取消
-      this.data.forEach((v, index) => {
+      this.versionData.forEach((v, index) => {
         if (parIndex !== index) {
           v.list.forEach((otherItem) => {
             otherItem.checked = false;
@@ -167,17 +167,17 @@ export default {
         }
       });
       version.checked = !curChecked;
-      this.$emit('change', this.data);
+      this.$emit('change', this.versionData);
     },
     toggleExpand(item) {
       /* 选择规格展开or收起 */
       item.isExpand = !item.isExpand;
-      this.$emit('change', this.data);
+      this.$emit('change', this.versionData);
     },
     confirm() {
       /* 确定 */
       let checkedList = [];
-      this.data.forEach((version) => {
+      this.versionData.forEach((version) => {
         checkedList = checkedList.concat(version.list.filter(v => v.checked));
       });
       // 选中的版本列表数据
