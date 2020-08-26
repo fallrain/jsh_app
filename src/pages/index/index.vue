@@ -1,5 +1,6 @@
 <template>
   <view class="homepage">
+    <!-- <uni-nav-bar left-icon="back" title="首页" fixed="true" @clickLeft="goBack"></uni-nav-bar> -->
     <view class="homepage-top">
       <view class="homepage-top-head">
         <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
@@ -12,8 +13,8 @@
             placeholder="请输入搜索信息"
             placeholder-class="col_c"
             v-model="name"
-            confirm-type="search" 
-            @confirm="confirm" 
+            confirm-type="search"
+            @confirm="confirm"
           >
         </view>
         <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
@@ -88,20 +89,20 @@
             class="homepage-recommend-list"
             v-for="item in recommendList"
             :key="item.id"
-        
+
           >
             <view class="homepage-recommend-name">
               <view class="homepage-recommend-title">{{item.title}}</view>
               <view class="homepage-recommend-describe">{{item.describe}}</view>
             </view>
-            <swiper 
-              class="homepage-recommend-swiper" 
+            <swiper
+              class="homepage-recommend-swiper"
               @change="change"
               next-margin="68px"
             >
-              <swiper-item 
-                v-for="v in item.data" 
-                :key="v.id"                
+              <swiper-item
+                v-for="v in item.data"
+                :key="v.id"
                 class="homepage-recommend-swiper-item"
               >
                 <view class="homepage-recommend-imgs" @tap="goDetail(v)">
@@ -113,22 +114,22 @@
           </view>
         </view>
         <!-- 资讯 -->
-        <view class="homepage-info">
-          <view class="homepage-info-name">
-            <text class="homepage-info-title">热门资讯</text>
-            <text class="homepage-info-more" @tap="goAnnouncement">MORE</text>
-          </view>
-          <view>
-            <view
-            class="homepage-info-list"
-            v-for="item in infoList"
-            :key="item.id"
-          >
-            <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>
-            <!-- <view class="homepage-info-list-title">{{item.info}}</view> -->
-          </view>
-          </view>
-        </view>    
+<!--         <view class="homepage-info">-->
+<!--          <view class="homepage-info-name">-->
+<!--            <text class="homepage-info-title">热门资讯</text>-->
+<!--            <text class="homepage-info-more" @tap="goAnnouncement">MORE</text>-->
+<!--          </view>-->
+<!--          <view>-->
+<!--            <view-->
+<!--            class="homepage-info-list"-->
+<!--            v-for="item in infoList"-->
+<!--            :key="item.id"-->
+<!--          >-->
+<!--            <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>-->
+<!--&lt;!&ndash;            <view class="homepage-info-list-title">{{item.info}}</view>&ndash;&gt;-->
+<!--          </view>-->
+<!--          </view>-->
+<!--        </view>-->
       </view>
     <!-- tabber -->
     <!-- <view
@@ -151,7 +152,8 @@
 
 <script>
 import {
-  uniSwiperDot,uniGrid,uniGridItem
+  uniSwiperDot, uniGrid, uniGridItem,
+  uniNavBar
 } from '@dcloudio/uni-ui';
 import {
   mapActions,
@@ -160,8 +162,10 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
-import './css/index.scss';
-import {hex_sha1} from '@/pages/index/SHA1.js'
+
+import {
+  hex_sha1
+} from '@/pages/index/SHA1.js';
 import JSearchInput from '../../components/form/JSearchInput';
 import homePageImg from '@/assets/img/tabbar/shouye.png';
 import homePageImgActive from '@/assets/img/tabbar/shouye-actived.png';
@@ -171,6 +175,7 @@ import shoppingImg from '@/assets/img/tabbar/shopping.png';
 import shoppingImgImgActive from '@/assets/img/tabbar/shopping-actived.png';
 import mineImg from '@/assets/img/tabbar/mine.png';
 import mineImgImgActive from '@/assets/img/tabbar/mine-actived.png';
+import './css/index.scss';
 
 export default {
   name: 'index',
@@ -178,7 +183,8 @@ export default {
     uniSwiperDot,
     JSearchInput,
     uniGrid,
-    uniGridItem
+    uniGridItem,
+    uniNavBar
   },
   data() {
     return {
@@ -269,30 +275,30 @@ export default {
           url: '/pages/market/marketList'
         }
       ],
-      recommendList:[
+      recommendList: [
         {
           id: 1,
           title: '新品推荐',
           describe: '人气榜',
-          data:[]
+          data: []
         },
         {
           id: 2,
           title: '爆款推荐',
           describe: 'HOT',
-          data:[]
+          data: []
         },
         {
           id: 3,
           title: '我的专供',
           describe: '热卖好物',
-          data:[]
+          data: []
         },
         {
           id: 4,
           title: '聚划算',
           describe: '精选榜单',
-          data:[]
+          data: []
         },
 
       ],
@@ -342,7 +348,7 @@ export default {
       //   },
       // ],
       infoList: []
-     
+
       // tabBarList: [
       //   {
       //     id: 1,
@@ -379,39 +385,38 @@ export default {
     };
   },
 
-  created(){
-      this.getPageInf();
-      // (async() => {
-      //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      //   await this[USER.UPDATE_SALE_ASYNC]();
-      //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      // })().then(res =>{
-      //     // this.get()
-      // })
-      
-      // this.recommend();
-      this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-      this[USER.UPDATE_SALE_ASYNC]();
-      this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      console.log(this.defaultSendToInf)
-      console.log(this.tokenUserInf)
+  created() {
+    this.getPageInf();
+    // (async() => {
+    //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+    //   await this[USER.UPDATE_SALE_ASYNC]();
+    //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
+    // })().then(res =>{
+    //     // this.get()
+    // })
 
-      // this.column = this.grid.column
-			// this.showBorder = this.grid.showBorder
-			// this.square = this.grid.square
-			// this.highlight = this.grid.highlight
-			// this.top = this.hor === 0 ? this.grid.hor : this.hor
-			// this.left = this.ver === 0 ? this.grid.ver : this.ver
-			// this.borderColor = this.grid.borderColor
-			// this.grid.children.push(this)
-			// this.grid.init()
-			// this.width = this.grid.width
+    // this.recommend();
+    this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+    this[USER.UPDATE_SALE_ASYNC]();
+    this[USER.UPDATE_TOKEN_USER_ASYNC]();
+    console.log(this.defaultSendToInf);
+    console.log(this.tokenUserInf);
 
+    // this.column = this.grid.column
+    // this.showBorder = this.grid.showBorder
+    // this.square = this.grid.square
+    // this.highlight = this.grid.highlight
+    // this.top = this.hor === 0 ? this.grid.hor : this.hor
+    // this.left = this.ver === 0 ? this.grid.ver : this.ver
+    // this.borderColor = this.grid.borderColor
+    // this.grid.children.push(this)
+    // this.grid.init()
+    // this.width = this.grid.width
   },
   computed: {
     ...mapGetters({
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-      tokenUserInf:USER.GET_TOKEN_USER,
+      tokenUserInf: USER.GET_TOKEN_USER,
       saleInfo: USER.GET_SALE
     })
   },
@@ -424,6 +429,15 @@ export default {
       // 修改token用户信息
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
+    // 导航栏返回
+    goBack() {
+      // uni.navigateBack({
+      //     delta: 1
+      // });
+      // uni.reLaunch({
+      //   url: 'pages/applicationsIndex/applicationsIndex'
+      // });
+    },
     get() {
       // this.$nextTick(() => {
       // const a = JSON.stringify(this.defaultSendToInf);
@@ -433,41 +447,40 @@ export default {
     },
     // 客服
     async service() {
-      let url = ''
+      let url = '';
       const { code, data } = await this.udeskService.getUdesk(this.saleInfo.customerCode, {
         addressArea: this.defaultSendToInf.customerCode
       });
       if (code === '1') {
         console.log(data);
-        var web_token1 = data.accountId;
-        var timestamp1 = new Date().getTime();//时间戳
-        var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        var nonce1 = "";//随机数
-        for(var i = 0; i < 12 ; i ++) {
-            var id = Math.ceil(Math.random()*35);
-            nonce1 += chars[id];
+        const web_token1 = data.accountId;
+        const timestamp1 = new Date().getTime();// 时间戳
+        const chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        let nonce1 = '';// 随机数
+        for (let i = 0; i < 12; i++) {
+          const id = Math.ceil(Math.random() * 35);
+          nonce1 += chars[id];
         }
-        var signature='nonce='+nonce1+'&timestamp='+timestamp1+'&web_token='+web_token1+'&9767b0677a6f46f5d3d0af8c00f3f16c';
-        var sha = hex_sha1(signature);
+        const signature = `nonce=${nonce1}&timestamp=${timestamp1}&web_token=${web_token1}&9767b0677a6f46f5d3d0af8c00f3f16c`;
+        let sha = hex_sha1(signature);
         sha = sha.toUpperCase();
-        console.log(signature);  console.log(sha);
-          //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
-          //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
-          //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
-        url='https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token='+web_token1+'&c_phone='+this.tokenUserInf.phoneNumber+'&nonce='+nonce1+'&signature='+sha+'&timestamp='+timestamp1+'&web_token='+web_token1;        
+        console.log(signature); console.log(sha);
+        //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
+        //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
+        //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
+        url = `https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token=${web_token1}&c_phone=${this.tokenUserInf.phoneNumber}&nonce=${nonce1}&signature=${sha}&timestamp=${timestamp1}&web_token=${web_token1}`;
         console.log(url);
         // InAppBrowserService.openAd(url);
       } else {
-          // PopupService.showToast(response.message);
+        // PopupService.showToast(response.message);
       }
 
-       uni.navigateTo({
-          url: `/pages/index/service?url=${url}`
-        });
- 
+      uni.navigateTo({
+        url: `/pages/index/service?url=${url}`
+      });
     },
-     confirm()  {
-        console.log(this.name);
+    confirm() {
+      console.log(this.name);
       // this.mescroll.resetUpScroll(true);
       if ((this.name).trim()) {
         uni.navigateTo({
@@ -481,7 +494,7 @@ export default {
     },
     getPageInf() {
       this.getbannerList();
-      this.getIndexList()
+      this.getIndexList();
       this.getList();
       this.getXinPin();
       this.getBaoKuan();
@@ -498,20 +511,20 @@ export default {
     },
     // 轮播图跳转
     goSwiperDetail(item) {
-      console.log(item)
-      if(item.type === "html") {
-        uni.navigateTo ({
+      console.log(item);
+      if (item.type === 'html') {
+        uni.navigateTo({
           url: `/pages/index/banner?url=${item.url}`
-        })
+        });
       } else {
-        uni.navigateTo ({
+        uni.navigateTo({
           url: `/pages/productDetail/productDetail?productCode=${item.code}`
         });
       }
     },
     // 目录列表跳转
     goCatalog(item) {
-      console.log(item)
+      console.log(item);
       uni.navigateTo({
         url: item.url
       });
@@ -523,7 +536,7 @@ export default {
     },
     // 新闻资讯
     async getIndexList() {
-      const list = await this.messageService.indexList ({
+      const list = await this.messageService.indexList({
         customerCode: this.saleInfo.customerCode,
         unitId: this.tokenUserInf.name
       });
@@ -540,18 +553,18 @@ export default {
     },
     // 新闻资讯详情
     goInfoDetail(item) {
-      console.log(item)
+      console.log(item);
       uni.navigateTo({
         url: `/pages/index/information?id=${item.id}`
-      })  
+      });
     },
 
     // 推荐跳转详情
     goDetail(v) {
-      console.log(v)
+      console.log(v);
       uni.navigateTo({
         url: `/pages/productDetail/productDetail?productCode=${v.productCode}`
-      }) 
+      });
     },
 
     change(e) {
@@ -559,50 +572,47 @@ export default {
     },
     // 新品推荐列表
     async getXinPin() {
-      const {code, data} = await this.activityService.xinPin ({
-       saletoCode: this.saleInfo.customerCode,
-       sendtoCode: this.defaultSendToInf.customerCode,
-      })
-      if(code === "1") {
-        console.log(this.recommendList[0])
-        this.recommendList[0].data = data
-        
+      const { code, data } = await this.activityService.xinPin({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        console.log(this.recommendList[0]);
+        this.recommendList[0].data = data;
       }
     },
     // 爆款推荐
     async getBaoKuan() {
-      const {code, data} = await this.activityService.baoKuan ({
-       saletoCode: this.saleInfo.customerCode,
-       sendtoCode: this.defaultSendToInf.customerCode,
-      })
-      if(code === "1") {
-        console.log(this.recommendList[1])
-        this.recommendList[1].data = data
-        
+      const { code, data } = await this.activityService.baoKuan({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        console.log(this.recommendList[1]);
+        this.recommendList[1].data = data;
       }
     },
     // 我的专供
     async getZhuanGong() {
-      const {code, data} = await this.activityService.zhuanGong ({
-       saletoCode: this.saleInfo.customerCode,
-       sendtoCode: this.defaultSendToInf.customerCode,
-      })
-      if(code === "1") {
-        this.recommendList[2].data = data
-        console.log(this.recommendList[2])
-        
+      const { code, data } = await this.activityService.zhuanGong({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        this.recommendList[2].data = data;
+        console.log(this.recommendList[2]);
       }
     },
     // 聚划算
     async getZiYuanJi() {
-      const {code, data} = await this.activityService.ziYuanJi ({
-       saletoCode: this.saleInfo.customerCode,
-       sendtoCode: this.defaultSendToInf.customerCode,
-      })
-      if(code === "1") {
-        this.recommendList[3].data = data
-        console.log(data)
-        console.log(this.recommendList)
+      const { code, data } = await this.activityService.ziYuanJi({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        this.recommendList[3].data = data;
+        console.log(data);
+        console.log(this.recommendList);
       }
     },
     // 应用列表
@@ -636,12 +646,12 @@ export default {
       item.active = true;
       console.log(item.active);
       if (item.categoryCode) {
-        console.log(item.categoryCode)
+        console.log(item.categoryCode);
         uni.navigateTo({
           url: `/pages/goods/goodsList?categoryCode=${item.categoryCode}`
         });
       } else {
-        console.log(222)
+        console.log(222);
         uni.navigateTo({
           url: '/pages/goods/goodsList'
         });

@@ -1,5 +1,20 @@
 <template>
-    <view class="applicationsIndex">
+    <view v-if="loadUserType">
+      <!-- <view style="margin-top: 100px;
+                  margin-left: auto;
+                  margin-right: auto;
+                  width: 400px;
+                  height: 268px;
+                  background: url('@/assets/img/appIndex/error-lock.png') no-repeat;
+                  background-size: 100%;
+                  background-position: 0 -25px;
+                  padding-top: 54px;">
+      </view> -->
+      <image class="errorImg" :src="errorImg"></image>
+      <view class="errorMsg">{{errorMsg}}</view>
+      <button class="btnStyle">返回</button>
+    </view>
+    <view v-else class="applicationsIndex">
       <view class="app-nav">
         <view class="app-nav-left">
           <view
@@ -177,6 +192,13 @@ import {
   uniDrawer,
   uniSwiperDot
 } from '@dcloudio/uni-ui';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 import JCell from '../../components/form/JCell';
 import './css/applicationsIndex.scss';
 
@@ -423,7 +445,11 @@ export default {
           src: require('@/assets/img/appIndex/yuncang-pic.png'),
           url: '#'
         }
-      ]
+      ],
+      loadUserType:true,
+      errorMsg:'你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。',
+      errorImg:'@/assets/img/appIndex/error-lock.png'
+
     };
   },
   created() {
@@ -443,13 +469,29 @@ export default {
   onLoad() {
     this.init();
   },
+  computed: {
+    ...mapGetters({
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      tokenUserInf: USER.GET_TOKEN_USER,
+      saleInfo: USER.GET_SALE
+    })
+  },
   methods: {
+    ...mapActions([
+      // 默认送达方信息
+      USER.UPDATE_DEFAULT_SEND_TO_ASYNC,
+      // 获取售达方信息
+      USER.UPDATE_SALE_ASYNC,
+      // 修改token用户信息
+      USER.UPDATE_TOKEN_USER_ASYNC
+    ]),
     async init(code) {
-		if(code.length > 0) {
-			// 适配iOS客户端
-			code = ALIPAYH5STARTUPPARAMS.webview_options;
-		}
-      // let code = 'oiDi8SemSIm2-kiAiOBTnw';
+      if (code.length > 0) {
+        // 适配iOS客户端
+        code = ALIPAYH5STARTUPPARAMS.webview_options;
+      }
+      // const code1 = 'Ff6C96umSoWRjQjHgOYpog';
+      // 获取token
       if (code.length > 0) {
         // 获取token
         await this.getToken(code);
@@ -485,18 +527,20 @@ export default {
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-		this.getUserType(passCode)
+        this.getUserType(passCode);
+        this[USER.UPDATE_SALE_ASYNC]();
+        console.log(this.saleInfo);
       }
     },
-	// 获取用户类型
-	async getUserType(passCode) {
-		const { code, data } = await this.cocSeachService.cocSearch(passCode);
-		if (code === '1') {
-		  this.cocData = data;
-		}
-		alert('===========')
-		alert(data)
-	},
+    // 获取用户类型
+    async getUserType(passCode) {
+      const { code, data } = await this.cocSeachService.cocSearch(passCode);
+      if (code === '1') {
+        this.cocData = data;
+      }
+      alert('===========');
+      alert(data);
+    },
     changePic(e) {
       this.current = e.detail.current;
     },

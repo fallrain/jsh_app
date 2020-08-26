@@ -1,7 +1,7 @@
 <template>
   <view class="jHeadTab-wrap">
     <view class="jHeadTab-list-wrap">
-      <view class="jHeadTab-list"> 
+      <view class="jHeadTab-list">
         <view
           :class="['jHeadTab-item', item.active && 'active']"
           v-for="(item,index) in tabs"
@@ -56,6 +56,7 @@
 
 <script>
 import JHeadTabPicker from '../../components/form/JHeadTabPicker';
+
 export default {
   name: 'transferGoodsHead',
   components: {
@@ -82,12 +83,12 @@ export default {
         {
           name: '调出库位',
           show: false,
-          children:[]
+          children: []
         },
         {
           name: '配送类型',
           show: false,
-          children:[]
+          children: []
         },
       ],
       // 扩展
@@ -95,43 +96,43 @@ export default {
     };
   },
   created() {
-      
+
   },
   methods: {
-    setPopTabs(wareHome, sendWay) {   
+    setPopTabs(wareHome, sendWay) {
       if (wareHome) {
-        const tempArray = []
-        wareHome.map(item => {
+        const tempArray = [];
+        wareHome.map((item) => {
           // console.log(item.OUTWHNAME)
           const temp = {
             name: item.OUTWHNAME,
             checked: false,
             type: item.OUTWHCODE
-          }
-          tempArray.push(temp)  
-        })
-        this.popTabs[0].children = tempArray
+          };
+          tempArray.push(temp);
+        });
+        this.popTabs[0].children = tempArray;
       }
       if (sendWay) {
-        const tempArray = []
-        sendWay.map(item => {
+        const tempArray = [];
+        sendWay.map((item) => {
           // console.log(item.sendWay)
           const temp = {
             name: item.sendWay,
             checked: false,
             type: item.brandGroup
-          }
-          tempArray.push(temp)  
-        })
-        this.popTabs[1].children = tempArray
+          };
+          tempArray.push(temp);
+        });
+        this.popTabs[1].children = tempArray;
       }
-      console.log(this.popTabs)
-       this.popTabs[0].children[0].checked = true;
-       this.popTabs[1].children[1].checked = true;
-       this.popTabs[1].children[0].ycFlag = "JSHSW"
-       this.popTabs[1].children[1].ycFlag = ""
+      console.log(this.popTabs);
+      this.popTabs[0].children[0].checked = true;
+      this.popTabs[1].children[0].checked = true;
+      this.popTabs[1].children[0].ycFlag = 'JSHSW';
+      this.popTabs[1].children[1].ycFlag = '';
     },
-    
+
     tabHandle(item, index) {
       /* tab 点击事件 */
       this.tabs.forEach((v) => {
@@ -155,8 +156,8 @@ export default {
       this.popTabs[index].children = children;
     },
     confirm(index) {
-      console.log(this.popTabs)
-      this.$emit("confirm", this.popTabs)
+      console.log(this.popTabs);
+      this.$emit('confirm', this.popTabs);
     }
   }
 };
@@ -167,7 +168,7 @@ export default {
 //   width: 50%;
 //   overflow: hidden;
 //   margin-top:10px;
-  
+
 // }
 
 .jHeadTab-wrap {
@@ -269,4 +270,3 @@ $jHeadTab-pop-tab-list: 24px;
 
 
 </style>
-

@@ -65,10 +65,10 @@ export default {
     allOrderList: {
       type: Array,
       default: () => []
-    }
-    // verificationCode: {
-    //   type: String
-    // },
+    },
+    typpew: {
+      type: String
+    },
     // phone: {
     //   type: String
     // }
@@ -152,19 +152,26 @@ export default {
     // 点击确定
     async determine() {
       if (this.form.verificationCode) {
-        let SEQ = '';
-        this.allOrderList.forEach((ele) => {
-          if (ele.checked) {
-            SEQ = ele.IBR_SEQ;
-          }
-        });
+        if (this.typpew === 'ZC') {
+          console.log(this.typpew);
+          console.log('999999');
+          this.$emit('update:show', false);
+          this.$emit('zhengCheUp', Number(this.form.verificationCode), this.erifyKey);
+        } else {
+          console.log('888888');
+          let SEQ = '';
+          this.allOrderList.forEach((ele) => {
+            if (ele.checked) {
+              SEQ = ele.IBR_SEQ;
+            }
+          });
         // 提交订单
         const { code, data } = await this.transfergoodsService.submitDhOrder({
           timestamp: Date.parse(new Date()),
           longfeiUSERID: Number(this.defaultSendToInf.customerCode),
-          orderNo: 300000081,
+          orderNo: Number(SEQ),
           verifyCode: Number(this.form.verificationCode),
-          verifyKey: this.erifyKey,
+          verifyKey: `${this.erifyKey}`,
         });
         if (code === '1' && data.code === '200') {
           uni.showToast({
@@ -173,7 +180,7 @@ export default {
           this.show = false;
         } else {
           uni.showToast({
-            title: '提交失败请重试',
+            title: `${data.message}`,
           });
         }
       } else {
