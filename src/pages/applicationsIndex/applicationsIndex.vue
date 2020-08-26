@@ -1,5 +1,20 @@
 <template>
-    <view class="applicationsIndex">
+    <view v-if="loadUserType">
+      <!-- <view style="margin-top: 100px;
+                  margin-left: auto;
+                  margin-right: auto;
+                  width: 400px;
+                  height: 268px;
+                  background: url('@/assets/img/appIndex/error-lock.png') no-repeat;
+                  background-size: 100%;
+                  background-position: 0 -25px;
+                  padding-top: 54px;">
+      </view> -->
+      <image class="errorImg" :src="errorImg"></image>
+      <view class="errorMsg">{{errorMsg}}</view>
+      <button class="btnStyle">返回</button>
+    </view>
+    <view v-else class="applicationsIndex">
       <view class="app-nav">
         <view class="app-nav-left">
           <view
@@ -423,7 +438,11 @@ export default {
           src: require('@/assets/img/appIndex/yuncang-pic.png'),
           url: '#'
         }
-      ]
+      ],
+      loadUserType:true,
+      errorMsg:'你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。',
+      errorImg:'@/assets/img/appIndex/error-lock.png'
+
     };
   },
   created() {
