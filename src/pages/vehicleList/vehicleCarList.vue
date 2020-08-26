@@ -1,7 +1,7 @@
 <template>
   <view class="vehicleCarList">
     <!-- 验证码弹窗 -->
-    <t-alert-verification :show.sync="isShowVf" :form="form"></t-alert-verification>
+    <t-alert-verification :show.sync="isShowVf" :form="form" :typpew="typpew" :zhengChe="zhengCheCode" @zhengCheUp="zhengCheUp"></t-alert-verification>
     <view class="vehicleCar-rouHead">共{{NUM}}件宝贝</view>
     <view class="vehicleCar-invalid" v-if="puTongList.length>0">
       <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index" @pullDetail="pullDetail"
@@ -58,6 +58,8 @@ export default {
   },
   data() {
     return {
+      zhengCheCode: '', // 提交的整车单号
+      typpew: 'ZC', // 弹框页面类型
       isShowVf: false, // 验证码弹窗，判断是否展示
       form: {
         phone: '', // 手机号
@@ -100,7 +102,7 @@ export default {
   created() {
     this.queryCarList(); // 整车购物车列表查询
     this.queryJDWarehouse();
-    // this.getPayerList(); // 获取付款方接口
+    this.getUserInfById(); // 获取发送手机号人电话
   },
   methods: {
     clearInfo() {
@@ -320,13 +322,13 @@ export default {
         }
         this.getUserInfMianMi().then(() => {
           console.log('获取免密2');
-          if (this.userInfMianMi) {
-            // 免验证码
+          const codeList = this.checkSEQ.split(',');
+          this.zhengCheCode = codeList[0];
+          if (this.userInfMianMi) { // 免验证码
+            this.zhengCheUp('','');
           } else {
-            this.getUserInfById().then(() => {
-              // 展示验证码
-              this.isShowVf = true;
-            });
+            // 展示验证码
+            this.isShowVf = true;
           }
         });
       } else { // 删除
@@ -338,6 +340,34 @@ export default {
           console.log(`结算1${data}`);
           this.queryCarList();
         }
+      }
+    },
+    async zhengCheUp(verifyCo, verifyK) { // 提交验证码之后
+      // 提交订单
+      const timetamp = new Date().valueOf();
+      const longfeiUSE = this.userInf.customerCode;
+      const { code, data } = await this.vehicleService.cartSubmitPreCheck(timetamp,longfeiUSE,this.zhengCheCode);
+      if (code === '1' && data.code === '200') {
+        this.cartSubmit(verifyCo,verifyK);
+      } else {
+        uni.showToast({
+          title: '提交失败请重试',
+        });
+      }
+    },
+    async cartSubmit(verifyCo,verifyK) { // 提交订单
+      const timetamp = new Date().valueOf();
+      const longfeiUSE = this.userInf.customerCode;
+      const { code, data } = await this.vehicleService.cartSubmit(timetamp,longfeiUSE,this.zhengCheCode,verifyCo,verifyK);
+      if (code === '1' && data.code === '200') {
+        uni.showToast({
+          title: '整车提交成功',
+        });
+        this.queryCarList();
+      } else {
+        uni.showToast({
+          title: data.message,
+        });
       }
     },
     async getUserInfMianMi() {
