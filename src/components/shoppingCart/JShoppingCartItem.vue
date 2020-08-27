@@ -119,6 +119,7 @@
     <j-version-specifications
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
+      type="radio"
       @cancel="specificationsCancel"
       @confirm="specificationsConfirm"
     >
