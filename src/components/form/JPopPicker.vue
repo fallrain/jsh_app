@@ -110,6 +110,13 @@ export default {
       this.$emit('update:show', show);
     },
     check(item) {
+      if (item.isCanChecked === false) {
+        uni.showToast({
+          title: '此账户为风险005账户，不支持付款',
+          icon: 'none'
+        });
+        return;
+      }
       /* 选中 */
       const {
         [this.keyName]: key

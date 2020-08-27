@@ -47,10 +47,11 @@
             <view class="stock-type">
               满足方式：{{goods.stockTypeName}}
             </view>
-            <view class="store-type">
+            <view v-if="goods.stockTypeName !== '周承诺'&&goods.stockTypeName !== '款先直发'"
+                  class="store-type">
               库位类型：{{stockType[goods.stockType]}}
             </view>
-            <view class="dis-flex">
+            <view v-else class="dis-flex">
               WD：
               <input v-model="WDval" type="text" class="WD-input">
             </view>
@@ -96,9 +97,14 @@
       </view>
     </view>
     <view class="jOrderConfirmItem-total">
-      <view class="jOrderConfirmItem-total-text">{{orderItem.composeOrderNo}}</view>
-      <view class="jOrderConfirmItem-total-text ml48">共计金额：</view>
-      <view class="jOrderConfirmItem-total-price ml20">¥ {{orderItem.totalMoney}}</view>
+      <view class="flex-grow-1 dis-flex">
+        <view class="type-flag">{{activityTypeList[orderItem.activityType]}}</view>
+        <view class="jOrderConfirmItem-total-text">{{orderItem.composeOrderNo}}</view>
+      </view>
+      <view class="dis-flex">
+        <view class="jOrderConfirmItem-total-text">共计金额：</view>
+        <view class="jOrderConfirmItem-total-price ml20">¥ {{orderItem.totalMoney}}</view>
+      </view>
     </view>
     <j-pop-picker
       title="付款方"
@@ -138,6 +144,13 @@ export default {
   },
   data() {
     return {
+      activityTypeList: {
+        1: '单品',
+        2: '组合',
+        3: '抢购',
+        4: '套餐',
+        5: '成套'
+      },
       stockType: {
         1: 'rrs库存',
         2: 'TC共享库存',
