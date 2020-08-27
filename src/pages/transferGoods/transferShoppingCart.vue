@@ -418,14 +418,15 @@ export default {
 
     // 清除选中产品
     editDelete() {
+      const _this = this;
       // confirm("确认要删除选中订单")
       uni.showModal({
         title: '',
         content: '确认要删除选中订单吗',
         success(res) {
           if (res.confirm) {
-            this.deleteOrderForm();
             console.log(res);
+            _this.deleteOrderForm();
           } else if (res.cancel) {
             console.log('用户点击取消');
           }
@@ -433,9 +434,10 @@ export default {
       });
     },
     async deleteOrderForm() {
-      // console.log(item)
+      // console.log(item);
       // 删除购物车订单产品
       const temp = [];
+      // eslint-disable-next-line array-callback-return
       this.allOrderList.map((item) => {
         if (item.checked) {
           temp.push(item.data.IBR_SEQ);
@@ -451,6 +453,13 @@ export default {
       if (deleteForm.code === '1') {
         console.log(deleteForm.data);
         this.getOrderList();
+        uni.showToast({
+          title: deleteForm.data.message,
+        });
+      } else {
+        uni.showToast({
+          title: deleteForm.data.message,
+        });
       }
     },
     async getShoppingCartNum() {
@@ -589,7 +598,7 @@ export default {
             });
           }
         });
-        a.toBePaid = Number(needPay.toFixed());
+        a.toBePaid = Number(needPay.toFixed(2));
         if (a.isShow) {
           all.push(a);
         }

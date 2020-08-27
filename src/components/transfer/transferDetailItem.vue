@@ -162,10 +162,11 @@ export default {
       });
       console.log(sum);
       this.goods.SUMMONEY = sum;
-      // this.$emit("change",value, item,this.goods.SUMMONEY)
+      this.$emit('change',item,this.index);
     },
     // 删除单个产品
     deleteProduct(item) {
+      console.log('******123');
       this.$emit('delete', item);
     },
     showPayer(item) {
@@ -173,7 +174,7 @@ export default {
       console.log(item);
       item.isExpand = !item.isExpand;
       console.log(item.isExpand);
-      // this.$emit('change', item, this.index);
+      this.$emit('change', item, this.index);
     },
     // 切换付款方
     async togglePayer(item, it, index) {
