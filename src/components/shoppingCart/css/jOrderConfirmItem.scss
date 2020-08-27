@@ -104,7 +104,22 @@
 .jOrderConfirmItem-detail-match-type-text {
   color: #333;
   font-size: 24px;
-  margin-left: 44px;
+  display: flex;
+  line-height: 60px;
+  .stock-type{
+    margin-right: 40px;
+  }
+  .store-type{
+    margin-right: 40px;
+  }
+  .WD-input{
+    border-radius: 10px;
+    border: 1px solid #eee;
+    width: 100px;
+    height: 60px;
+    line-height: 60px;
+    padding: 10px;
+  }
 }
 
 .jOrderConfirmItem-detail-mark-wrap {

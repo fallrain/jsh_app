@@ -1,12 +1,9 @@
 <template>
     <view v-if="loadUserType">
-      <view class="testImg">
-      </view>
       <view class="errorImg">
-        <image :src="errorImg"></image>
       </view>
       <view class="errorMsg">{{errorMsg}}</view>
-      <button class="btnStyle">返回</button>
+      <button @click="popAction" class="btnStyle">返回</button>
     </view>
     <view v-else class="applicationsIndex">
       <view class="app-nav">
@@ -441,8 +438,7 @@ export default {
         }
       ],
       loadUserType:false,
-      errorMsg:'你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。',
-      errorImg:'@/assets/img/appIndex/error-lock.png'
+      errorMsg:'',
     };
   },
   created() {
@@ -516,24 +512,54 @@ export default {
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
-      console.log(2);
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
         
         this[USER.UPDATE_SALE_ASYNC]();
-        console.log(this.saleInfo);
-        // this.getUserType(passCode);
+        this.getUserType(this.saleInfo.customerCode);
       }
     },
     // 获取用户类型
     async getUserType(passCode) {
       const { code, data } = await this.cocSeachService.cocSearch(passCode);
-      if (code === '1') {
+      if (code == '1') {
         this.cocData = data;
       }
-      // alert('===========');
-      alert(data);
+      this.manageData(data);
+    },
+    // 解析用户权限类型数据
+    manageData(data) {
+      this.errorMsg = '';
+      this.loadUserType = false;
+      const tags = data.tags;
+      // 僵尸户
+      if(tags.zombie && tags.zombie.status == 0) {
+        this.loadUserType = true;
+        this.errorMsg = this.errorMsg + "你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。";
+      }
+      // 无门店
+      if(tags.noStore && tags.noStore.status == 0) {
+        this.loadUserType = true;
+        this.errorMsg = this.errorMsg + "您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理";
+      }
+      // 供应链金融冻结
+      if(tags.gylFreezed && tags.gylFreezed.status == 0) {
+        this.loadUserType = true;
+        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。";
+      }
+
+      // MDM冻结
+      if(data.status == 1) {
+        this.loadUserType = true;
+        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。";
+      }
+      
+      // 市场秩序串货
+      if(data.marketCollusionGroup[0] == 'DA') {
+        this.loadUserType = true;
+        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。";
+      }
     },
     changePic(e) {
       this.current = e.detail.current;

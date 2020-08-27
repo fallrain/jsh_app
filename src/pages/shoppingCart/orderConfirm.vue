@@ -1,5 +1,11 @@
 <template>
   <view class="orderConfirm">
+    <view class="bg-style">
+    </view>
+    <view class="head-tip">
+      <i class="iconfont iconjinggao head-tip-icon"></i>
+      尊敬的客户，请尽快核对订单，由于产品库位分布不同可能导致拆单，带来不便敬请谅解。
+    </view>
     <j-order-confirm-address
       :sendtoCode="dataInfo.sendtoCode"
       :sendtoAddress="dataInfo.sendtoAddress"
