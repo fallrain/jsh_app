@@ -46,6 +46,7 @@
             @change="goodsChange"
             @query="getShoppingCartNum"
             @inserOrder="inserOrder(item)"
+            ref="transferGoodsItem"
           ></transfer-goods-item>
         </view>
         <view class="transferList-items-else" v-else>暂无数据</view>
@@ -280,7 +281,6 @@ export default {
         this.popTabs[0].children.forEach((ele) => {
           if (ele.checked) {
             this.stock = ele.type;
-            this.getStockNum();
           }
           let cargoWare = this.cargoWareHome;
           // cargoWare.splice(0,1)
@@ -309,6 +309,8 @@ export default {
             }
           }
         });
+        this.getStockNum();
+        // this.$refs.transferGoodsItem.showDisabled();
       }
       console.log(this.SendWay);
       console.log(this.brand);
@@ -340,11 +342,15 @@ export default {
             } else {
               this.list.forEach((item) => {
                 item.stockList.map((v) => {
-                  if (ele.type === v.whcode) {
-                    num = v.qty;
-                  }
+                  console.log(v)
+                  v.subCodeList.map((e) => {
+                    if (ele.type === v.whcode) {
+                      num += Number(e.QTY);
+                    }
+                  });
                 });
                 item.stockNum = num;
+                num = 0;
                 // console.log(item)
               });
             }
@@ -749,6 +755,8 @@ export default {
     },
     filterReset() {
       /* 抽屉筛选重置 */
+      this.filterForm.highPrice = '';
+      this.filterForm.lowPrice = '';
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
           v.isChecked = false;
