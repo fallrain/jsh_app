@@ -9,7 +9,8 @@
       <!-- 调货商品列表 -->
       <transfer-detail-item
         :goods="detailList"
-
+        @delete="deleteProductMe"
+        @change="goodsChange"
       >
       </transfer-detail-item>
     </view>
@@ -73,7 +74,7 @@ export default {
       userInf: USER.GET_USER
     }),
     // eslint-disable-next-line vue/return-in-computed-property
-    goodsChange(goods, good, index) {
+    goodsChange(goods, good,index) {
       console.log(goods);
       /* 商品 change */
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -107,7 +108,6 @@ export default {
       });
       if (deleteOrder.code === '1') {
         console.log(deleteOrder.data);
-
         this.detailList.orderList.forEach((v, i) => {
           if (v.IBL_KORDERNO === item.IBL_KORDERNO) {
             this.detailList.orderList.splice(i, 1);
@@ -120,6 +120,13 @@ export default {
 
         this[TRANSFER.UPDATE_TSHOPCART]({
           allOrderList: this.allList,
+        });
+        uni.showToast({
+          title: deleteOrder.data.message,
+        });
+      } else {
+        uni.showToast({
+          title: deleteOrder.data.message,
         });
       }
     },

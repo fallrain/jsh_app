@@ -48,7 +48,9 @@
 .jShoppingCartItem-head {
   position: relative;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
   color: #333;
   font-size: 16px;
   padding-right: 36px;
@@ -57,7 +59,7 @@
 .jShoppingCartItem-btn-primary {
   display: inline-block;
   flex-shrink: 0;
-  max-width: 86px;
+  min-width: 86px;
   background: #ED2856;
   border-radius: 14px;
   color: #fff;
@@ -155,7 +157,9 @@
 
 .jShoppingCartItem-btm {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-right: 16px;
@@ -227,10 +231,10 @@
 }
 
 .jShoppingCartItem-btm-version-picker {
-  margin-left: auto;
   display: flex;
   align-items: center;
   height: 38px;
+  margin-left: auto;
   line-height: 38px;
   padding-left: 8px;
   padding-right: 8px;

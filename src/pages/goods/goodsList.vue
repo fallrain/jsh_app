@@ -67,7 +67,10 @@
             </view>
             <i class="iconfont iconyou goodsList-drawer-filter-head-icon-right"></i>
           </view>
-          <view class="goodsList-drawer-filter-head-ads">
+          <view
+            @tap="showDeliveryAddress"
+            class="goodsList-drawer-filter-head-ads"
+          >
             ({{curChoseDeliveryAddress.customerCode}}){{curChoseDeliveryAddress.customerName}}
           </view>
         </view>
@@ -116,7 +119,8 @@ import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import './css/goodsList.scss';
 import {
   getGoodsTag,
-  getGoodsType
+  getGoodsType,
+  getStockType
 } from '@/lib/dataDictionary';
 import {
   mapGetters,
@@ -314,7 +318,7 @@ export default {
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
           if (v.isChecked) {
-            filtersMap[v.key] = 1;
+            filtersMap[v.searchKey || v.key] = v[v.keyAttr] || 1;
           }
         });
       });
@@ -507,6 +511,17 @@ export default {
       this.filterList[1].data = Object.keys(goodsTagData).map(key => ({
         key,
         value: goodsTagData[key],
+        isChecked: false
+      }));
+      // 有货商品
+      const stockTypeData = getStockType();
+      this.filterList[2].data = Object.keys(stockTypeData).map(key => ({
+        // 传向接口的key name
+        searchKey: 'stockType',
+        // 传向接口的key的value的属性
+        keyAttr: 'key',
+        key,
+        value: stockTypeData[key],
         isChecked: false
       }));
     },

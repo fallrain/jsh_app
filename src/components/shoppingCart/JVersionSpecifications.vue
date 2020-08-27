@@ -10,10 +10,14 @@
         <view
           class="jVersionSpecifications-head-title-icon"
           @tap="close"
-        >X</view>
+        >X
+        </view>
       </view>
       <slot name="head"></slot>
-      <view class="jVersionSpecifications-pop-detail-wrap">
+      <scroll-view
+        :scroll-y="true"
+        class="jVersionSpecifications-pop-detail-wrap"
+      >
         <view
           class="jVersionSpecifications-pop-detail"
           v-for="(item,index) in versionData"
@@ -77,7 +81,7 @@
             </div>
           </view>
         </view>
-      </view>
+      </scroll-view>
       <view class="jVersionSpecifications-btn-wrap">
         <button
           type="button"
@@ -123,6 +127,11 @@ export default {
       type: Array,
       default: () => []
     },
+    // 类型: radio(单选) checkbox（多选）
+    type: {
+      type: String,
+      default: 'checkbox'
+    },
     // 确认按钮文字
     confirmBtnText: {
       type: String,
@@ -135,8 +144,7 @@ export default {
     }
   },
   data() {
-    return {
-    };
+    return {};
   },
   watch: {
     show(val) {
@@ -160,7 +168,15 @@ export default {
       const curChecked = version.checked;
       // 除了当前版本，其他版本的选择都取消
       this.versionData.forEach((v, index) => {
-        if (parIndex !== index) {
+        // checkbox模式下可在当前版本里多选
+        if (this.type === 'checkbox') {
+          if (parIndex !== index) {
+            v.list.forEach((otherItem) => {
+              otherItem.checked = false;
+            });
+          }
+        } else {
+          // radio模式下，只能单选
           v.list.forEach((otherItem) => {
             otherItem.checked = false;
           });

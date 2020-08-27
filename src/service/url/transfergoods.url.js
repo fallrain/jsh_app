@@ -17,7 +17,7 @@ const urls = {
   // 删除订单接口
   deleteOrderForm: '/dhDeleteOrder/deleteOrderForm',
   // // 删除订单中产品
-  // deleteProduct:'dhDeleteOrder/deleteProduct',
+  // deleteProduct:'/dhDeleteOrder/deleteProduct',
   // 加入调货购物车
   insertOrder: '/addToCart/insertOrder',
   // 切换付款方
@@ -25,9 +25,9 @@ const urls = {
   // 清空失效宝贝
   deleteProduct: '/dhDeleteOrder/deleteProduct',
   // 提交订单
-  submitDhOrder: '/defaultOrder/submitDhOrder'
-
-
+  submitDhOrder: '/defaultOrder/submitDhOrder',
+  // 订单返回数据
+  cargoDispose: '/cargoQuery/cargoDispose'
 };
 util.addPrefix(baseURL, urls);
 export default urls;

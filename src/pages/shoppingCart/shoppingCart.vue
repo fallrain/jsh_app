@@ -118,7 +118,7 @@ import {
   getIndustryGroup,
   getOrdinaryCartActivityType
 } from '@/lib/dataDictionary';
-
+import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
 
 export default {
   name: 'shoppingCart',
@@ -131,6 +131,9 @@ export default {
     JShoppingCartItem,
     MToast
   },
+  mixins: [
+    shoppingCartMixin
+  ],
   data() {
     return {
       tabs: [
@@ -318,7 +321,7 @@ export default {
         // 默认的送达地址
         this.choseSendAddress = {
           sendtoCode: this.defaultSendTo.customerCode,
-          name: this.defaultSendTo.customerName,
+          name: `（${this.defaultSendTo.customerCode}）${this.defaultSendTo.address}`,
           ...this.defaultSendTo
         };
       }
@@ -338,7 +341,10 @@ export default {
             shoppingList.push({
               isShow: true,
               checked: false,
+              // 信用模式
               isCreditMode: false,
+              // 直发模式
+              isDirectMode: false,
               $PriceInfo: v.productList[0].priceInfo,
               ...v
             });
@@ -490,10 +496,9 @@ export default {
         });
       }
       if (!ids.length) {
-        this.$refs.toast.open({
+        this.showToast({
           type: 'warn',
-          content: '请先选择商品',
-          timeout: 2000,
+          content: '请先选择商品'
         });
         return;
       }
@@ -504,10 +509,9 @@ export default {
           if (res.confirm) {
             const { code } = await this.cartService.deleteCart(ids);
             if (code === '1') {
-              this.$refs.toast.open({
+              this.showToast({
                 type: 'success',
-                content: '删除成功',
-                timeout: 2000,
+                content: '删除成功'
               });
               const listTemp = JSON.parse(JSON.stringify(this[listName]));
               ids.forEach((id) => {
@@ -567,18 +571,34 @@ export default {
             // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
             activityType: getOrdinaryCartActivityType()[v.activityType]
           });
-          form.productList = v.productList.map(prdt => new OrderSplitComposeProduct({
+          // 判断产品的取值的字段名
+          let productListName = 'productList';
+          // 如果选择了版本，则从choseOtherVersions字段取商品
+          if (v.choseOtherVersions && v.choseOtherVersions.length) {
+            productListName = 'choseOtherVersions';
+          }
+          form.productList = v[productListName].map(prdt => new OrderSplitComposeProduct({
             ...prdt,
+            number: v.number,
+            // 是否信用模式
             isCheckCreditModel: v.isCreditMode ? '1' : '0',
             // farWeek: prdt.weekPromise,
             // isCheckFarWeek: '0',
-            // isStock: '1',
+            // 是否直发
+            isStock: v.isDirectMode ? '1' : '0',
             // transferVersion: '',
           }));
 
           formList.push(form);
         }
       });
+      if (!formList.length) {
+        this.showToast({
+          type: 'warn',
+          content: '请先选择商品'
+        });
+        return;
+      }
       const form = {
         saletoCode: this.userInf.customerCode,
         sendtoCode: this.defaultSendTo.customerCode,

@@ -1,7 +1,33 @@
 .orderConfirm {
+  position: relative;
   min-height: 100vh;
   background: #F5F5F5;
   padding: 24px 24px 140px 24px;
+  .bg-style{
+    width: 1200px;
+    height: 600px;
+    border-radius: 50%;
+    position: absolute;
+    left: -240px;
+    top: -20%;
+    z-index: 1;
+    background: $theme-color;
+  }
+  .head-tip{
+    z-index: 11;
+    padding: 24px 0 24px 56px;
+    line-height: 40px;
+    position: relative;
+    color: #fff;
+    font-size: 28px;
+    word-wrap: break-word;
+    .head-tip-icon{
+      position: absolute;
+      left: 10px;
+      top: 30px;
+      font-size: 40px;
+    }
+  }
 }
 
 .orderConfirm-list {

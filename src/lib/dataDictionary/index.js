@@ -97,10 +97,22 @@ function getOrdinaryCartActivityType() {
   };
 }
 
+function getStockType() {
+  /* 库存类型 */
+  return {
+    RRS库存: 'RRS库存',
+    TC库存: 'TC库存',
+    基地仓库存: '基地仓库存',
+    安防库存: '安防库存',
+    生活家电: '生活家电'
+  };
+}
+
 export {
   getGoodsPriceType,
   getGoodsTag,
   getGoodsType,
   getIndustryGroup,
-  getOrdinaryCartActivityType
+  getOrdinaryCartActivityType,
+  getStockType
 };
