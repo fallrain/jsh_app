@@ -18,10 +18,10 @@
       </view>
       <view class="jGoodsItem-cnt-price-tips">
         <view class="jGoodsItem-cnt-price-tips-item">
-          直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100)}}%
+          直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}</view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}
+        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">

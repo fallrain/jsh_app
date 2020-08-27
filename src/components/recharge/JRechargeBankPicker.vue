@@ -6,7 +6,10 @@
     <view class="jRechargeBankPicker-wrap">
       <view class="jRechargeBankPicker-head">
         <view class="jRechargeBankPicker-head-title">{{title}}</view>
-        <view class="jRechargeBankPicker-head-close">X</view>
+        <view
+          @tap="close"
+          class="jRechargeBankPicker-head-close"
+        >X</view>
       </view>
       <view class="jRechargeBankPicker-cnt">
         <view class="jRechargeBankPicker-list-l">
