@@ -29,16 +29,14 @@ export default {
   },
   methods: {
     goCarList() {
-      console.log(this.info);
-      uni.navigateTo({
-        url: '/pages/shoppingCart/shoppingCart'
-      });
+      this.$emit('goCarList');
     },
     putcar() {
+      this.$emit('putcar');
       console.log(2);
     },
     putplay() {
-      console.log(2);
+      this.$emit('putplay');
     }
   }
 };
