@@ -61,7 +61,7 @@
       <view class="jGoodsItem-tags">
         <view
           class="jGoodsItem-tag-item"
-          v-for="(item,index) in goods.tags"
+          v-for="(item,index) in tags"
           :key="index"
         >{{item}}
         </view>
@@ -143,6 +143,8 @@ export default {
       specificationsList: [],
       // 版本规格选中的信息
       specificationsCheckList: [],
+      // 所有包含的标签
+      tags: []
     };
   },
   created() {
@@ -155,7 +157,8 @@ export default {
       const {
         tj,
         gc,
-        yjList
+        yjList,
+        tags
       } = this.allPrice;
         // 特价版本信息
       const tjList = tj.specialList;
@@ -210,6 +213,20 @@ export default {
         specificationsList.push(version);
       }
       this.specificationsList = specificationsList;
+      // 组合tags
+      const tagsTemp = [
+        ...this.goods.tags,
+        ...tags
+      ];
+      // isSale为false时代表此商品有活动且不可版本外销售
+      // 如果产品isSale为false，即使存在特价标签也不展示
+      if (this.isSale === false) {
+        const index = tags.findIndex(v => v === '特价');
+        if (index > -1) {
+          tags.splice(index, 1);
+        }
+      }
+      this.tags = tagsTemp;
     },
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */
