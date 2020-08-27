@@ -14,7 +14,10 @@
         </view>
       </view>
       <slot name="head"></slot>
-      <view class="jVersionSpecifications-pop-detail-wrap">
+      <scroll-view
+        :scroll-y="true"
+        class="jVersionSpecifications-pop-detail-wrap"
+      >
         <view
           class="jVersionSpecifications-pop-detail"
           v-for="(item,index) in versionData"
@@ -78,7 +81,7 @@
             </div>
           </view>
         </view>
-      </view>
+      </scroll-view>
       <view class="jVersionSpecifications-btn-wrap">
         <button
           type="button"

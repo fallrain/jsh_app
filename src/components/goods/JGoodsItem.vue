@@ -274,7 +274,7 @@ export default {
       this.$refs.toast.open({
         type: 'success',
         content: '加入购物车成功',
-        timeout: 2000000,
+        timeout: 2000,
       });
     },
     addToCart(product) {
