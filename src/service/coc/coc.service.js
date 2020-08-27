@@ -18,4 +18,13 @@ export default {
       valueSetId
     });
   },
+  getValueSyncValue(data) {
+    /* 区域代码？ */
+    const {
+      valueSetId
+    } = data;
+    return jPostJson(urls.getValueSync, {
+      valueSetId
+    });
+  },
 };
