@@ -7,6 +7,10 @@
     >
     </view>
     <view
+      :class="['jGoodsItem-cnt-like iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"
+      @tap="toggleFollow"
+    ></view>
+    <view
       @tap="goDetail"
       class="jGoodsItem-left"
     >
@@ -20,7 +24,9 @@
         <view class="jGoodsItem-cnt-price-tips-item">
           直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
+          rebatePolicy}}
+        </view>
         <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
@@ -55,7 +61,7 @@
       <view class="jGoodsItem-tags">
         <view
           class="jGoodsItem-tag-item"
-          v-for="(item,index) in goods.tags"
+          v-for="(item,index) in tags"
           :key="index"
         >{{item}}
         </view>
@@ -82,8 +88,9 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
-import './css/jGoodsItem.scss';
 import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
+import './css/jGoodsItem.scss';
+import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 
 export default {
   name: 'JGoodsItem',
@@ -92,6 +99,9 @@ export default {
     uniNumberBox,
     MToast
   },
+  mixins: [
+    followGoodsMixin
+  ],
   props: {
     // 商品对象
     goods: {
@@ -133,6 +143,8 @@ export default {
       specificationsList: [],
       // 版本规格选中的信息
       specificationsCheckList: [],
+      // 所有包含的标签
+      tags: []
     };
   },
   created() {
@@ -145,7 +157,8 @@ export default {
       const {
         tj,
         gc,
-        yjList
+        yjList,
+        tags
       } = this.allPrice;
         // 特价版本信息
       const tjList = tj.specialList;
@@ -200,6 +213,20 @@ export default {
         specificationsList.push(version);
       }
       this.specificationsList = specificationsList;
+      // 组合tags
+      const tagsTemp = [
+        ...this.goods.tags,
+        ...tags
+      ];
+      // isSale为false时代表此商品有活动且不可版本外销售
+      // 如果产品isSale为false，即使存在特价标签也不展示
+      if (this.isSale === false) {
+        const index = tags.findIndex(v => v === '特价');
+        if (index > -1) {
+          tags.splice(index, 1);
+        }
+      }
+      this.tags = tagsTemp;
     },
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */
@@ -212,8 +239,6 @@ export default {
       this.specificationsCheckList = [];
     },
     checkSpecifications() {
-      this.showAddToCartToast();
-      return;
       /* 检查是否有版本规格的数据，没有直接加入购物车 */
       if (this.specificationsList.length) {
         // 有版本数据才显示选择版本的弹层
@@ -264,7 +289,7 @@ export default {
       this.$refs.toast.open({
         type: 'success',
         content: '加入购物车成功',
-        timeout: 2000000,
+        timeout: 2000,
       });
     },
     addToCart(product) {
@@ -360,7 +385,39 @@ export default {
       uni.navigateTo({
         url: `/pages/market/marketList${queryStr}`
       });
-    }
+    },
+    toggleFollow() {
+      /* 切换关注状态 */
+      if (this.goods.$favorite) {
+        this.unFollowGoods();
+      } else {
+        this.followGoods();
+      }
+    },
+    async followGoods() {
+      /* 添加关注 */
+      const {
+        saletoCode: customerCode
+      } = this;
+      await this.$mFollowGoods({
+        customerCode,
+        productCode: this.goods.productCode
+      });
+      this.goods.$favorite = true;
+      this.$emit('change', this.goods, this.index);
+    },
+    async unFollowGoods() {
+      /* 取消关注 */
+      const {
+        saletoCode: customerCode
+      } = this;
+      await this.$mUnFollowGoods({
+        customerCode,
+        productCodeList: [this.goods.productCode]
+      });
+      this.goods.$favorite = false;
+      this.$emit('change', this.goods, this.index);
+    },
   }
 };
 </script>
