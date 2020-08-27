@@ -44,7 +44,16 @@
             @change="isCreditModeChange"
           ></j-switch>
           <view class="jOrderConfirmItem-detail-match-type-text">
-            满足方式：{{goods.stockTypeName}}
+            <view class="stock-type">
+              满足方式：{{goods.stockTypeName}}
+            </view>
+            <view class="store-type">
+              库位类型：{{stockType[goods.stockType]}}
+            </view>
+            <view class="dis-flex">
+              WD：
+              <input v-model="WDval" type="text" class="WD-input">
+            </view>
           </view>
         </view>
         <view class="jOrderConfirmItem-detail-mark-wrap mt24">
@@ -129,6 +138,18 @@ export default {
   },
   data() {
     return {
+      stockType: {
+        1: 'rrs库存',
+        2: 'TC共享库存',
+        3: '天猫共享库存',
+        4: '在途',
+        5: 'PTD',
+        6: '排产',
+        7: '排定',
+        8: '基地（生活家电）',
+        9: 'JJ直接传安防'
+      },
+      WDval: '',
       updateIndex: 1,
       baseUrl: process.env.BASE_URL,
       // 配送地址显示隐藏
