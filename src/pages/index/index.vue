@@ -236,13 +236,13 @@ export default {
           id: 4,
           src: require('@/assets/img/index/function-washingmachine.png'),
           title: '套餐',
-          url: '/pages/market/marketList'
+          url: '/pages/market/marketList?activityType=taocan'
         },
         {
           id: 5,
           src: require('@/assets/img/index/function-compose.png'),
           title: '组合',
-          url: '/pages/market/marketList'
+          url: '/pages/market/marketList?activityType=zuhe'
         },
         {
           id: 6,
@@ -272,7 +272,7 @@ export default {
           id: 10,
           src: require('@/assets/img/index/function-money.png'),
           title: '反向定制',
-          url: '/pages/market/marketList'
+          url: '/pages/market/marketList?activityType=baoxiao'
         }
       ],
       recommendList: [

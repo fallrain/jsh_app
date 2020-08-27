@@ -4,12 +4,16 @@
     ref="filterDrawer"
     mode="right"
   >
-    <scroll-view class="scroll-container" scroll-y="true">
+    <view
+      class="scroll-container"
+    >
       <view class="filter-drawer">
-        <view
-          class="filter-drawer-cnt-list">
+        <scroll-view
+          :scroll-y="true"
+          class="filter-drawer-cnt-list"
+        >
           <slot></slot>
-        </view>
+        </scroll-view>
         <view class="filter-drawer-btn-wrap">
           <button
             type="button"
@@ -25,7 +29,7 @@
           </button>
         </view>
       </view>
-    </scroll-view>
+    </view>
   </uni-drawer>
 </template>
 
@@ -72,22 +76,27 @@ export default {
 </script>
 
 <style lang="scss">
-  .scroll-container{
+  .scroll-container {
     height: 100%;
   }
+
   .filter-drawer {
     position: relative;
     height: 100%;
+    overflow: auto;
   }
+
   .filter-drawer-cnt-list {
     height: calc(100vh - 160px);
     overflow-y: auto;
     padding-left: 32px;
+    padding-bottom: 60px;
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
+
   .filter-drawer-btn-wrap {
     display: flex;
     align-items: center;

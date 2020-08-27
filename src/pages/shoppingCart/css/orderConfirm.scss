@@ -42,9 +42,13 @@
   height: 100px;
   background: #fff;
   border-top: 1px solid #CDCDCD;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding-left: 18px;
   padding-right: 18px;
+  .btn-style{
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 .orderConfirm-btm-text {
@@ -57,7 +61,18 @@
   font-size: 28px;
 }
 
-.orderConfirm-btm-btn {
+.orderConfirm-btm-btn-cancle {
+  display: inline-block;
+  width: 154px;
+  height: 42px;
+  line-height: 42px;
+  color: $theme-color;
+  border-radius: 21px;
+  border: 1px solid $theme-color;
+  font-size: 24px;
+  background: #fff;
+}
+.orderConfirm-btm-btn-sure {
   display: inline-block;
   width: 154px;
   height: 42px;

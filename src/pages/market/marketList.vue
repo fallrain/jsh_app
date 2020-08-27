@@ -195,7 +195,7 @@ export default {
             { name: '全部', checked: false, key: '' },
             { name: '套餐', checked: false, key: 'taocan' },
             { name: '组合', checked: false, key: 'zuhe' },
-            { name: '反向定制', checked: false, key: 'fanxiangdingzhi' }
+            { name: '反向定制', checked: false, key: 'baoxiao' }
           ]
         },
         {
@@ -256,6 +256,14 @@ export default {
   onLoad(option) {
     if (option.productCode) {
       this.filterInputs[1].val = option.productCode;
+    }
+    if (option.activityType) {
+      const activity = option.activityType;
+      this.tabs[0].children.forEach((item) => {
+        if (item.key === activity) {
+          item.checked = true;
+        }
+      });
     }
   },
   created() {

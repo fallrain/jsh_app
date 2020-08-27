@@ -59,7 +59,7 @@ export default {
       mobile: '',
       pake: '',
       show: false,
-      llc: 'YD'
+      llc: 'YD',
     };
   },
   created() {
