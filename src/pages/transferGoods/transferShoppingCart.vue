@@ -111,7 +111,8 @@ export default {
       },
       // 是否免密
       userInfMianMi: false,
-
+      //提交订单大单号
+      SEQ: '',
 
       tabs: [
         {
@@ -349,14 +350,15 @@ export default {
         this.payerBalance.forEach((ele) => {
           if (ele.balance > ele.toBePaid) {
             // this.getUserInfMianMi()
-            if (this.userInfMianMi) {
-              console.log('true,提交');
-              // 提交订单
-              this.getsubmitDhOrderTwo();
-            } else {
-              console.log('谈验证码');
-              this.changeVf();
-            }
+            // if (this.userInfMianMi) {
+            //   console.log('true,提交');
+            //   // 提交订单
+            //   this.getsubmitDhOrderTwo();
+            //
+            // } else {
+            console.log('谈验证码');
+            this.changeVf();
+            // }
           } else {
             this.payerBalance.forEach((ele) => {
               uni.showModal({
@@ -390,35 +392,36 @@ export default {
       }
     },
     // 提交订单
-    async getsubmitDhOrderTwo() {
-      let SEQ = '';
-      this.allOrderList.forEach((ele) => {
-        if (ele.checked) {
-          SEQ = ele.IBR_SEQ;
-        }
-      });
-      const submitDhOrder = await this.transfergoodsService.submitDhOrder({
-        timestamp: Date.parse(new Date()),
-        longfeiUSERID: this.saleInfo.customerCode,
-        orderNo: SEQ,
-        verifyCode: this.form.verificationCode,
-        verifyKey: '',
-      });
-      if (submitDhOrder.code === '1') {
-        uni.showToast({
-          title: '调货订单提交成功',
-        });
-      } else {
-        uni.showToast({
-          title: '提交失败请重试',
-        });
-      }
-    },
-
-
-    // 清除选中产品
+    // async getsubmitDhOrderTwo() {
+    //   let _this = this;
+    //   this.allOrderList.forEach((ele) => {
+    //     if (ele.checked) {
+    //       this.SEQ = ele.IBR_SEQ;
+    //     }
+    //   });
+    //   const submitDhOrder = await this.transfergoodsService.submitDhOrder({
+    //     timestamp: Date.parse(new Date()),
+    //     longfeiUSERID: this.saleInfo.customerCode,
+    //     orderNo: this.SEQ,
+    //     verifyCode: this.form.verificationCode,
+    //     verifyKey: '',
+    //   });
+    //   if (submitDhOrder.code === '1') {
+    //     this.getCargoDispose();
+    //     _this.getCargoDispose();
+    //     uni.showToast({
+    //       title: '调货订单提交成功',
+    //     });
+    //
+    //   } else {
+    //     uni.showToast({
+    //       title: '提交失败请重试',
+    //     });
+    //   }
+    // },
+    // 删除选中产品
     editDelete() {
-      const _this = this;
+      let _this = this;
       // confirm("确认要删除选中订单")
       uni.showModal({
         title: '',

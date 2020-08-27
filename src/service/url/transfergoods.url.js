@@ -25,9 +25,9 @@ const urls = {
   // 清空失效宝贝
   deleteProduct: '/dhDeleteOrder/deleteProduct',
   // 提交订单
-  submitDhOrder: '/defaultOrder/submitDhOrder'
-
-
+  submitDhOrder: '/defaultOrder/submitDhOrder',
+  // 订单返回数据
+  cargoDispose: '/cargoQuery/cargoDispose'
 };
 util.addPrefix(baseURL, urls);
 export default urls;
