@@ -127,6 +127,7 @@ export default {
       this.info[a].list[b].isCheck = true;
       this.checkedInfo = this.info[a].list[b];
       this.checkedInfo.title = `${this.info[a].title}：${this.info[a].list[b].name}`;
+      console.log(this.checkedInfo);
     },
     putAct() { // 确认
       this.$emit('update:show', false);
