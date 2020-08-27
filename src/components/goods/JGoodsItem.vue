@@ -239,8 +239,6 @@ export default {
       this.specificationsCheckList = [];
     },
     checkSpecifications() {
-      this.showAddToCartToast();
-      return;
       /* 检查是否有版本规格的数据，没有直接加入购物车 */
       if (this.specificationsList.length) {
         // 有版本数据才显示选择版本的弹层
