@@ -166,6 +166,7 @@ import {
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
 import './css/JShoppingCartItem.scss';
+import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 
 export default {
   name: 'JShoppingCartItem',
@@ -174,6 +175,9 @@ export default {
     JSwitch,
     uniNumberBox
   },
+  mixins: [
+    followGoodsMixin
+  ],
   props: {
     // 商品数据
     goods: {
@@ -408,7 +412,7 @@ export default {
     toggleFollow() {
       /* 切换关注状态 */
       if (this.goods.followState) {
-        this.unfollowGoods();
+        this.unFollowGoods();
       } else {
         this.followGoods();
       }
@@ -418,26 +422,24 @@ export default {
       const {
         customerCode
       } = this.userInf;
-      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, this.goods.productList[0].productCode);
-      if (code === '200') {
-        this.goods.followState = true;
-        this.$emit('change', this.goods, this.index);
-      }
+      await this.$mFollowGoods({
+        customerCode,
+        productCode: this.goods.productList[0].productCode
+      });
+      this.goods.followState = true;
+      this.$emit('change', this.goods, this.index);
     },
-    async unfollowGoods() {
+    async unFollowGoods() {
       /* 取消关注 */
       const {
         customerCode
       } = this.userInf;
-      const { code } = await this.productDetailService.productRemoveInter({
-        account: customerCode,
+      await this.$mUnFollowGoods({
         customerCode,
         productCodeList: [this.goods.productList[0].productCode]
       });
-      if (code === '1') {
-        this.goods.followState = false;
-        this.$emit('change', this.goods, this.index);
-      }
+      this.goods.followState = false;
+      this.$emit('change', this.goods, this.index);
     },
     handleDel() {
       /* 移除购物车操作 */

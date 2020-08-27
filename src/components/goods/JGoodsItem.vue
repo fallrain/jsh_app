@@ -7,6 +7,10 @@
     >
     </view>
     <view
+      :class="['jGoodsItem-cnt-like iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"
+      @tap="toggleFollow"
+    ></view>
+    <view
       @tap="goDetail"
       class="jGoodsItem-left"
     >
@@ -20,7 +24,9 @@
         <view class="jGoodsItem-cnt-price-tips-item">
           直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy | rebatePolicy}}</view>
+        <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
+          rebatePolicy}}
+        </view>
         <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
@@ -82,8 +88,9 @@ import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
-import './css/jGoodsItem.scss';
 import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
+import './css/jGoodsItem.scss';
+import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 
 export default {
   name: 'JGoodsItem',
@@ -92,6 +99,9 @@ export default {
     uniNumberBox,
     MToast
   },
+  mixins: [
+    followGoodsMixin
+  ],
   props: {
     // 商品对象
     goods: {
@@ -360,7 +370,39 @@ export default {
       uni.navigateTo({
         url: `/pages/market/marketList${queryStr}`
       });
-    }
+    },
+    toggleFollow() {
+      /* 切换关注状态 */
+      if (this.goods.$favorite) {
+        this.unFollowGoods();
+      } else {
+        this.followGoods();
+      }
+    },
+    async followGoods() {
+      /* 添加关注 */
+      const {
+        saletoCode: customerCode
+      } = this;
+      await this.$mFollowGoods({
+        customerCode,
+        productCode: this.goods.productCode
+      });
+      this.goods.$favorite = true;
+      this.$emit('change', this.goods, this.index);
+    },
+    async unFollowGoods() {
+      /* 取消关注 */
+      const {
+        saletoCode: customerCode
+      } = this;
+      await this.$mUnFollowGoods({
+        customerCode,
+        productCodeList: [this.goods.productCode]
+      });
+      this.goods.$favorite = false;
+      this.$emit('change', this.goods, this.index);
+    },
   }
 };
 </script>
