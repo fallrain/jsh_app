@@ -75,22 +75,14 @@ export default {
     cargoSendWay: {
       type: Array,
       default: () => []
+    },
+    popTabs: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      popTabs: [
-        {
-          name: '调出库位',
-          show: false,
-          children: []
-        },
-        {
-          name: '配送类型',
-          show: false,
-          children: []
-        },
-      ],
       // 扩展
       isExpend: false
     };
@@ -99,39 +91,6 @@ export default {
 
   },
   methods: {
-    setPopTabs(wareHome, sendWay) {
-      if (wareHome) {
-        const tempArray = [];
-        wareHome.map((item) => {
-          // console.log(item.OUTWHNAME)
-          const temp = {
-            name: item.OUTWHNAME,
-            checked: false,
-            type: item.OUTWHCODE
-          };
-          tempArray.push(temp);
-        });
-        this.popTabs[0].children = tempArray;
-      }
-      if (sendWay) {
-        const tempArray = [];
-        sendWay.map((item) => {
-          // console.log(item.sendWay)
-          const temp = {
-            name: item.sendWay,
-            checked: false,
-            type: item.brandGroup
-          };
-          tempArray.push(temp);
-        });
-        this.popTabs[1].children = tempArray;
-      }
-      console.log(this.popTabs);
-      this.popTabs[0].children[0].checked = true;
-      this.popTabs[1].children[0].checked = true;
-      this.popTabs[1].children[0].ycFlag = 'JSHSW';
-      this.popTabs[1].children[1].ycFlag = '';
-    },
 
     tabHandle(item, index) {
       /* tab 点击事件 */

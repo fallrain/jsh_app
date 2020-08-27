@@ -81,17 +81,21 @@ export default {
       //   // 手机号验证码
       //   verificationCode: '',
       // }
-      erifyKey: 0
+      erifyKey: 0,
+      //订单返回数据
+      orderData: [],
+      //提交订单单号
+      seq: 0
 
     };
   },
   created() {
-    console.log(this.form);
     this.setPageInfo();
   },
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
+      saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO, // 售达方信息
       [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER, // 用户信息
     })
@@ -130,8 +134,8 @@ export default {
 
     async getVerificationCode() {
       // 发送验证码
-      //  return await this.orderService.send(this.defaultSendToInf.customerCode)
-      const { code, data } = await this.orderService.send(this.defaultSendToInf.customerCode);
+      //  return await this.orderService.send(this.saleInfo.customerCode)
+      const { code, data } = await this.orderService.send(this.saleInfo.customerCode);
       if (code === '1') {
         console.log(data.data.verifyKey);
         this.erifyKey = data.data.verifyKey;
@@ -151,6 +155,7 @@ export default {
     },
     // 点击确定
     async determine() {
+      console.log(this.allOrderList);
       if (this.form.verificationCode) {
         if (this.typpew === 'ZC') {
           console.log(this.typpew);
@@ -159,33 +164,71 @@ export default {
           this.$emit('zhengCheUp', Number(this.form.verificationCode), this.erifyKey);
         } else {
           console.log('888888');
-          let SEQ = '';
+          let SEQ = 0;
           this.allOrderList.forEach((ele) => {
             if (ele.checked) {
-              SEQ = ele.IBR_SEQ;
+              console.log(ele);
+              SEQ = ele.data.IBR_SEQ;
+              this.seq = SEQ
+              console.log(SEQ);
             }
           });
           // 提交订单
           const { code, data } = await this.transfergoodsService.submitDhOrder({
             timestamp: Date.parse(new Date()),
-            longfeiUSERID: Number(this.defaultSendToInf.customerCode),
+            longfeiUSERID: Number(this.saleInfo.customerCode),
             orderNo: Number(SEQ),
             verifyCode: Number(this.form.verificationCode),
             verifyKey: `${this.erifyKey}`,
           });
           if (code === '1' && data.code === '200') {
             uni.showToast({
-              title: '调货订单提交成功',
+              title: data.message,
+            });
+            this.allOrderList.forEach((ele,i) => {
+              if (SEQ === ele.data.IBR_SEQ) {
+                this.allOrderList.splice(i,1)
+              }
             });
             this.show = false;
+            this.getCargoDispose();
           } else {
             uni.showToast({
               title: `${data.message}`,
             });
           }
         }
+      } else {
+        uni.showToast({
+          title: '请输入验证码',
+        });
       }
-    }
+    },
+    // 提交订单返回数据
+    async getCargoDispose() {
+      // let SEQ = '';
+      // this.allOrderList.forEach((ele) => {
+      //   if (ele.checked) {
+      //     SEQ = ele.IBR_SEQ;
+      //   }
+      // });
+      console.log(this.seq);
+      console.log(Number(this.seq));
+      const dispose = await this.transfergoodsService.cargoDispose({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.saleInfo.customerCode,
+        OrderForm: Number(this.seq)
+      });
+      console.log(Number(this.seq));
+      if (dispose.code === '1' && dispose.data.code === '200') {
+        console.log(dispose.data);
+        this.orderData = JSON.Stringfy(dispose.data.data);
+        console.log(this.orderData);
+        uni.navigateTo({
+          url: `/pages/shoppingCart/orderConfirmAccept?seqList=${SEQ}&orderData=${this.orderData}`
+        });
+      }
+    },
   }
 };
 </script>
