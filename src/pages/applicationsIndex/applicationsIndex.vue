@@ -3,7 +3,7 @@
       <view class="errorImg">
       </view>
       <view class="errorMsg">{{errorMsg}}</view>
-      <button class="btnStyle">返回</button>
+      <button @click="popAction" class="btnStyle">返回</button>
     </view>
     <view v-else class="applicationsIndex">
       <view class="app-nav">
