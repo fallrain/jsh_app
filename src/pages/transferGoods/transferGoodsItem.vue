@@ -157,12 +157,12 @@ export default {
     },
     // 判断是否禁用加入调货
     showDisabled() {
-      if (!this.goods.stockNum) {
-        console.log(1115555);
-        this.isDisabled = true;
-      } else {
+      if (this.goods.stockNum) {
+        console.log(false);
         this.isDisabled = false;
-        console.log(222);
+      } else {
+        this.isDisabled = true;
+        console.log(true);
       }
     }
 

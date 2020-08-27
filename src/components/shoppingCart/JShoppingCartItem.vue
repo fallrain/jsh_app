@@ -14,8 +14,9 @@
         <view class="jShoppingCartItem-head-line"></view>
         <text class="jShoppingCartItem-head-text">活动数量：{{goods.canBuy}}</text>
       </block>
+      <!--普通购物车5代表反向定制，属于抢购=。=-->
       <block
-        v-else-if="goods.activityType===6"
+        v-else-if="goods.activityType===5"
       >
         <button
           class="jShoppingCartItem-btn-primary mr12"
@@ -24,7 +25,7 @@
         </button>
         <text class="jShoppingCartItem-head-text">活动到期日：{{goods.expTime}}</text>
         <view class="jShoppingCartItem-head-line"></view>
-        <text class="jShoppingCartItem-head-text">预定金比例：16%</text>
+        <text class="jShoppingCartItem-head-text">预定金比例：{{goods.intentionMoney}}%</text>
         <view class="jShoppingCartItem-head-line"></view>
         <text class="jShoppingCartItem-head-text">直发订单</text>
       </block>
@@ -94,6 +95,17 @@
         </j-switch>
         <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
       </view>
+      <view
+        class="jShoppingCartItem-btm-switch-wrap"
+        v-if="isDirect || hasGCVersion"
+      >
+        <j-switch
+          :active.sync="goods.isDirectMode"
+          @change="isDirectModeChange"
+        >
+        </j-switch>
+        <text class="jShoppingCartItem-btm-switch-text mr32 ml8">直发</text>
+      </view>
       <!--v-if="goods.productList[0].specialPrice==='Y'"-->
       <view
         v-if="specificationsList.length"
@@ -107,6 +119,7 @@
     <j-version-specifications
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
+      type="radio"
       @cancel="specificationsCancel"
       @confirm="specificationsConfirm"
     >
@@ -153,6 +166,7 @@ import {
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
 import './css/JShoppingCartItem.scss';
+import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 
 export default {
   name: 'JShoppingCartItem',
@@ -161,6 +175,9 @@ export default {
     JSwitch,
     uniNumberBox
   },
+  mixins: [
+    followGoodsMixin
+  ],
   props: {
     // 商品数据
     goods: {
@@ -200,16 +217,37 @@ export default {
       // 版本信息
       specificationsList: [],
       // 选择的版本
-      specificationsCheckList: []
+      specificationsCheckList: [],
+      // 是否选择了工程版本
+      hasGCVersion: false
     };
   },
   created() {
+    debugger;
     this.genSpecificationsList();
   },
   watch: {
     versionPrice() {
       this.genSpecificationsList();
       this.setFollowState();
+    }
+  },
+  computed: {
+    isDirect() {
+      /* 直发 */
+      let product;
+      if (this.goods.productList && this.goods.productList[0]) {
+        product = this.goods.productList[0];
+      } else {
+        return false;
+      }
+      // 符合显示直发的产品组
+      const directProducts = ['BA', 'BB', 'BD'];
+      const {
+        productGroup
+      } = product;
+      const inProductGroup = directProducts.find(v => v === productGroup);
+      return inProductGroup;
     }
   },
   methods: {
@@ -239,7 +277,11 @@ export default {
       return this.beforeCreditModeChange && this.beforeCreditModeChange(productGroup, totalPrice);
     },
     isCreditModeChange() {
-      /* switch change */
+      /* 信用模式switch change */
+      this.$emit('change', this.goods, this.index);
+    },
+    isDirectModeChange() {
+      /* 直发模式switch change */
       this.$emit('change', this.goods, this.index);
     },
     showSpecifications() {
@@ -272,6 +314,8 @@ export default {
           list: []
         };
         tjVersion.list = tjList.map(v => ({
+          ...v,
+          priceVersion: v.versionCode,
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
@@ -289,6 +333,8 @@ export default {
           list: []
         };
         version.list = gc.map(v => ({
+          ...v,
+          priceVersion: v.versionCode,
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
@@ -306,6 +352,8 @@ export default {
           list: []
         };
         version.list = yjList.map(v => ({
+          ...v,
+          priceVersion: v.versionCode,
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
@@ -324,6 +372,8 @@ export default {
           list: []
         };
         version.list = transformVersionList.map(v => ({
+          ...v,
+          priceVersion: v.versionCode,
           name: v.versionCode,
           price: v.price,
           num: v.number,
@@ -336,6 +386,9 @@ export default {
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */
       this.specificationsCheckList = checkedList;
+      // 如果选中了工程版本，则会显示【直发】switch
+      this.hasGCVersion = !!checkedList.find(v => v.priceType === 'GC');
+      this.goods.choseOtherVersions = checkedList;
     },
     specificationsCancel() {
       /* 选中版本取消 */
@@ -359,7 +412,7 @@ export default {
     toggleFollow() {
       /* 切换关注状态 */
       if (this.goods.followState) {
-        this.unfollowGoods();
+        this.unFollowGoods();
       } else {
         this.followGoods();
       }
@@ -369,26 +422,24 @@ export default {
       const {
         customerCode
       } = this.userInf;
-      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, this.goods.productList[0].productCode);
-      if (code === '200') {
-        this.goods.followState = true;
-        this.$emit('change', this.goods, this.index);
-      }
+      await this.$mFollowGoods({
+        customerCode,
+        productCode: this.goods.productList[0].productCode
+      });
+      this.goods.followState = true;
+      this.$emit('change', this.goods, this.index);
     },
-    async unfollowGoods() {
+    async unFollowGoods() {
       /* 取消关注 */
       const {
         customerCode
       } = this.userInf;
-      const { code } = await this.productDetailService.productRemoveInter({
-        account: customerCode,
+      await this.$mUnFollowGoods({
         customerCode,
         productCodeList: [this.goods.productList[0].productCode]
       });
-      if (code === '1') {
-        this.goods.followState = false;
-        this.$emit('change', this.goods, this.index);
-      }
+      this.goods.followState = false;
+      this.$emit('change', this.goods, this.index);
     },
     handleDel() {
       /* 移除购物车操作 */

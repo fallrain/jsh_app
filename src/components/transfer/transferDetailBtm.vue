@@ -42,7 +42,8 @@ export default {
   },
   created() {
     if (this.fromWhere === 'ZC') {
-      this.calue = 50;
+      const baifenbi = ((this.detailList.IBR_JSTIJI * 1) / (this.detailList.IBR_MAXTJ * 1)) * 100;
+      this.calue = baifenbi.toFixed(0);
     } else {
       this.calue = Math.round(this.detailList.IBR_JSTIJI / 15 * 100);
     }
@@ -54,12 +55,17 @@ export default {
     //   this.$emit('checkAll', checked);
     // }
     tlement() {
-      if (Number(this.calue) < 15) {
-        // confirm("体积小于15，无法结算，请继续添加商品")
-        uni.showToast({
-          title: '体积小于15，无法结算，请继续添加商品',
-          duration: 3000
-        });
+      if (this.fromWhere === 'ZC') {
+        // 整车结算
+        this.$emit('checkUp');
+      } else {
+        if (Number(this.calue) < 15) {
+          // confirm("体积小于15，无法结算，请继续添加商品")
+          uni.showToast({
+            title: '体积小于15，无法结算，请继续添加商品',
+            duration: 3000
+          });
+        }
       }
     }
   }

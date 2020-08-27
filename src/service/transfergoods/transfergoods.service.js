@@ -53,6 +53,10 @@ export default {
   submitDhOrder(data) {
     /* 提交订单 */
     return jGet(urls.submitDhOrder, data);
+  },
+  cargoDispose(data) {
+    /* 提交订单返回数据 */
+    return jGet(urls.cargoDispose, data);
   }
 
 };

@@ -21,6 +21,7 @@
             @tabClick="tabClick"
             :cargoWareHome="cargoWareHome"
             :cargoSendWay="cargoSendWay"
+            :popTabs="popTabs"
             ref="transferGoodsHead"
         ></transfer-goods-head>
       </view>
@@ -46,6 +47,7 @@
             @change="goodsChange"
             @query="getShoppingCartNum"
             @inserOrder="inserOrder(item)"
+            ref="transferGoodsItem"
           ></transfer-goods-item>
         </view>
         <view class="transferList-items-else" v-else>暂无数据</view>
@@ -169,7 +171,7 @@ export default {
       // 购物车商品数量
       shoppingCartNum: [],
       priceList: [],
-      popTabs: [],
+      // popTabs: [],
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
       stock: '', // 库位
@@ -234,7 +236,19 @@ export default {
       // 付款方数据
       payer: [],
       //  选购其他的大单号
-      otherSEQ: ''
+      otherSEQ: '',
+      popTabs: [
+        {
+          name: '调出库位',
+          show: false,
+          children: []
+        },
+        {
+          name: '配送类型',
+          show: false,
+          children: []
+        },
+      ],
     };
   },
   onLoad(option) {
@@ -261,11 +275,11 @@ export default {
       // this.setFilterData();
       (async () => {
         await this.getDeliveryAddress();
+        await this.getCargoQuery();
         await this.getTransferList();
         // await this.setFilterList();
         await this.getpayerList();
         await this.getAddress();
-        await this.getCargoQuery();
       })();
 
       this.getShoppingCartNum();
@@ -273,14 +287,13 @@ export default {
     },
     // 调出库位和配送类型点击确定时
     confirm(popTabs) {
-      this.popTabs = popTabs;
+      // this.popTabs = popTabs;
       console.log(this.popTabs);
       console.log(this.list);
       if (this.popTabs && this.popTabs.length !== 0) {
         this.popTabs[0].children.forEach((ele) => {
           if (ele.checked) {
             this.stock = ele.type;
-            this.getStockNum();
           }
           let cargoWare = this.cargoWareHome;
           // cargoWare.splice(0,1)
@@ -309,6 +322,7 @@ export default {
             }
           }
         });
+        this.getStockNum();
       }
       console.log(this.SendWay);
       console.log(this.brand);
@@ -316,40 +330,52 @@ export default {
       this.mescroll.resetUpScroll(true);
     },
     getStockNum() {
-      const tabs = this.$refs.transferGoodsHead.popTabs;
+      const tabs = this.popTabs;
       console.log(tabs);
       if (tabs && tabs.length !== 0) {
-        tabs[0].children.forEach((ele) => {
-          if (ele.checked) {
-            // 根据库位判断库存数量
-            let num = 0;
+        console.log(111111111111);
+        console.log(tabs[0]);
+        if (tabs && tabs[0].children.length > 0) {
+          console.log(2222222);
+          tabs[0].children.forEach((ele) => {
+            console.log(33333333);
             console.log(ele);
-            if (ele.type === '') {
-              this.list.forEach((item) => {
-                item.stockList.map((v) => {
-                  console.log(v);
-                  v.subCodeList.map((e) => {
-                    num += Number(e.QTY);
+            if (ele.checked) {
+              // 根据库位判断库存数量
+              let num = 0;
+              console.log(ele);
+              if (ele.type === '') {
+                this.list.forEach((item) => {
+                  item.stockList.map((v) => {
+                    console.log(v);
+                    v.subCodeList.map((e) => {
+                      num += Number(e.QTY);
+                    });
                   });
+                  console.log(num);
+                  item.stockNum = num;
+                  num = 0;
+                  // console.log(item)
                 });
-                console.log(num);
-                item.stockNum = num;
-                num = 0;
-                // console.log(item)
-              });
-            } else {
-              this.list.forEach((item) => {
-                item.stockList.map((v) => {
-                  if (ele.type === v.whcode) {
-                    num = v.qty;
-                  }
+              } else {
+                this.list.forEach((item) => {
+                  item.stockList.map((v) => {
+                    console.log(v);
+                    v.subCodeList.map((e) => {
+                      if (ele.type === v.whcode) {
+                        num += Number(e.QTY);
+                      }
+                    });
+                  });
+                  item.stockNum = num;
+                  num = 0;
+                  // console.log(item)
                 });
-                item.stockNum = num;
-                // console.log(item)
-              });
+              }
             }
-          }
-        });
+          });
+        }
+
         // 获取初始化时配送类型
         tabs[1].children.forEach((ele) => {
           if (ele.checked) {
@@ -553,6 +579,9 @@ export default {
     async getCargoQuery(pages) {
       const condition = this.getSearchCondition(pages);
       console.log(condition);
+      // let prop = this.popTabs;
+      // console.log('xxxxxxxxx',this.popTabs)
+      // console.log('xxxxxxxxx',prop)
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
         timestamp: Date.parse(new Date()),
@@ -567,6 +596,23 @@ export default {
           OUTWHNAME: '全部'
         });
         this.cargoWareHome = home;
+        console.log(11111111111111111111111111)
+        console.log(this.cargoWareHome)
+        if (this.cargoWareHome) {
+          const tempArray = [];
+          this.cargoWareHome.map((item) => {
+            // console.log(item.OUTWHNAME)
+            const temp = {
+              name: item.OUTWHNAME,
+              checked: false,
+              type: item.OUTWHCODE
+            };
+            tempArray.push(temp);
+          });
+          console.log(this.popTabs[0]);
+          this.popTabs[0].children = tempArray;
+          console.log(this.popTabs[0]);
+        }
         console.log(this.cargoWareHome);
         this.cargoWareHome.forEach((item) => {
           item.isSelected = false;
@@ -588,11 +634,29 @@ export default {
           brandGroup += (`${item.PROD}:${item.SWRH};`);
         });
         temp.data.data[1].brandGroup = brandGroup;
-        this.cargoSendWay = temp.data.data;
         console.log(brandGroup);
+        this.cargoSendWay = temp.data.data;
+        if (this.cargoSendWay) {
+          const tempArray = [];
+          this.cargoSendWay.map((item) => {
+            // console.log(item.sendWay)
+            const temp = {
+              name: item.sendWay,
+              checked: false,
+              type: item.brandGroup
+            };
+            tempArray.push(temp);
+          });
+          this.popTabs[1].children = tempArray;
+        }
       }
-      console.log(this.cargoSendWay);
-      this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay);
+      // console.log(this.cargoSendWay);
+      // this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay);
+      console.log(this.popTabs);
+      this.popTabs[0].children[0].checked = true;
+      this.popTabs[1].children[0].checked = true;
+      this.popTabs[1].children[0].ycFlag = 'JSHSW';
+      this.popTabs[1].children[1].ycFlag = '';
     },
     async getShoppingCartNum() {
       // 购物车商品数量
@@ -624,7 +688,8 @@ export default {
       this.addressesList.forEach((item) => {
         console.log(item);
         console.log(this.curChoseDeliveryAddress.name);
-        if (this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.addressName}`) {
+        if (this.curChoseDeliveryAddress.name === `${item.customerCode}${item.addressName}`) {
+
           this.address = item;
         }
       });
@@ -725,6 +790,7 @@ export default {
       }
       this.getTransferList();
       this.getStockNum();
+      // this.$refs.transferGoodsItem.showDisabled();
     },
     showFilter() {
       /* 展示filter */
@@ -749,6 +815,8 @@ export default {
     },
     filterReset() {
       /* 抽屉筛选重置 */
+      this.filterForm.highPrice = '';
+      this.filterForm.lowPrice = '';
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
           v.isChecked = false;
