@@ -14,7 +14,8 @@
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
           <view class="fs24 text-333">王芬芬，您好！</view>
-<!-- 		  <view @click="callBBC">建行支付测试</view>
+		  <!-- <view @click="callBBC">建行支付测试</view>
+      <view @click="callABC">农行支付测试</view>
 		  <view @click="popAction">返回测试</view> -->
           <view class="logo">
             <image src="@/assets/img/appIndex/haier.png"></image>
@@ -507,7 +508,15 @@ export default {
 		  // }, (result) => {
 		  // 	alert(JSON.stringify(result));
 		  // });
-	  },
+    },
+    // 打开农行支付
+    callABC(){
+		  // AlipayJSBridge.call('myApiCallABC', {
+		  //   tokenId: '14406457162720037182',
+		  // }, (result) => {
+		  // 	alert(JSON.stringify(result));
+		  // });
+    },
     // 获取token
     async getToken(passCode) {
       const { code, data } = await this.authService.getTokenByCode({
