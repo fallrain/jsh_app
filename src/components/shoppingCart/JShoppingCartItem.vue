@@ -109,9 +109,9 @@
         </view>
         <!--v-if="goods.productList[0].specialPrice==='Y'"-->
         <view
-          @tap="showSpecifications"
-          class="jShoppingCartItem-btm-version-picker"
           v-if="isShowSpecificationsBtn"
+          :class="['jShoppingCartItem-btm-version-picker',goods.choseOtherVersions.length && 'active']"
+          @tap="showSpecifications"
         >
           <text>版本规格</text>
           <i class="iconfont iconxia"></i>
@@ -519,6 +519,7 @@ export default {
       // 如果选中了工程版本，则会显示【直发】switch
       this.hasGCVersion = !!checkedList.find(v => v.priceType === 'GC');
       this.goods.choseOtherVersions = checkedList;
+      this.$emit('change', this.goods, this.index);
     },
     specificationsCancel() {
       /* 选中版本取消 */

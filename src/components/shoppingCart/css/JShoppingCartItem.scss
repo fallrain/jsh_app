@@ -248,8 +248,17 @@
   border-radius: 8px;
 
   .iconfont {
-    font-size: 18px;
+    font-size: 14px;
     margin-left: 12px;
+  }
+
+  &.active {
+    background: #FFECF0;
+    color: $theme-color;
+
+    .iconfont {
+      color: $theme-color;
+    }
   }
 }
 
@@ -268,7 +277,7 @@
   color: #666;
 }
 
-.jShoppingCartItem-btm-inf-close{
+.jShoppingCartItem-btm-inf-close {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
