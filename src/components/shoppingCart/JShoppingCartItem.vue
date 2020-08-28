@@ -110,7 +110,7 @@
         <view
           @tap="showSpecifications"
           class="jShoppingCartItem-btm-version-picker"
-          v-if="specificationsList.length"
+          v-if="specificationsList.length && chosePrice.priceType==='PT'"
         >
           <text>版本规格</text>
           <i class="iconfont iconxia"></i>
@@ -177,6 +177,9 @@ import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
 import './css/JShoppingCartItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
+import {
+  getPriceKeyFromAllPrice
+} from '@/lib/dataDictionary';
 
 export default {
   name: 'JShoppingCartItem',
@@ -263,39 +266,45 @@ export default {
       if (!product) {
         return '';
       }
-      const {
-        priceType,
-        productCode,
-        // 价格版本，根据这个去版本价里轮询匹配
-        priceVersion
-      } = product;
+      // 选择的版本
+      let curVersion = {};
+      // 如果存在在购物车才选择了的价格版本(购物车可替换版本)
+      if (this.goods.choseOtherVersions && JSON.stringify(this.goods.choseOtherVersions) !== '{}') {
+        curVersion = this.goods.choseOtherVersions;
+      } else {
+        const {
+          priceType,
+          productCode,
+          // 价格版本，根据这个去版本价里轮询匹配
+          priceVersion
+        } = product;
         // 普通版本不显示
         // 接口大写小写都可能返回
-      const priceTypeUpper = this.getPriceType(priceType);
-      if (priceType === 'PT') {
-        return '';
-      }
-      let str = '';
-      // 取版本价格
-      if (JSON.stringify(this.versionPrice) !== '{}') {
-        // 获取当前产品的所有版本价格信息
-        const curAllVersion = this.versionPrice.activity[productCode];
-        if (curAllVersion) {
-          const curVersion = curAllVersion[priceTypeUpper].find(v => v.versionCode === priceVersion);
-          const {
-            // 版本名
-            priceTypeName,
-            // 版本编号
-            versionCode,
-            // 版本发票价
-            invoicePrice,
-            // 版本可用数量
-            usableQty
-          } = curVersion;
-          str = `${priceTypeName}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
+        const priceTypeUpper = this.getPriceType(priceType);
+        if (priceType === 'PT') {
+          return '';
+        }
+
+        // 取版本价格
+        if (JSON.stringify(this.versionPrice) !== '{}') {
+          // 获取当前产品的所有版本价格信息
+          const curAllVersion = this.versionPrice.activity[productCode];
+          if (curAllVersion) {
+            curVersion = curAllVersion[priceTypeUpper].find(v => v.versionCode === priceVersion);
+          }
         }
       }
-      return str;
+      const {
+        // 版本名
+        priceTypeName,
+        // 版本编号
+        versionCode,
+        // 版本发票价
+        invoicePrice,
+        // 版本可用数量
+        usableQty
+      } = curVersion;
+      return `${priceTypeName}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
     },
     chosePrice() {
       /* 选择的版本信息 */
@@ -303,33 +312,36 @@ export default {
       if (!product) {
         return {};
       }
-      const {
-        priceType,
-        productCode,
-        // 价格版本，根据这个去版本价里轮询匹配
-        priceVersion
-      } = product;
-      let price = {};
-      // 普通版本
-      // 接口大写小写都可能返回
-      const priceTypeUpper = this.getPriceType(priceType);
-      if (priceTypeUpper === 'PT') {
-        // 格式化不（普通价格接口未做两位小数处理）
-        product.priceInfo.commonPrice.invoicePrice = this.jshUtil.formatNumber(product.priceInfo.commonPrice.invoicePrice, 2);
-        price = product.priceInfo.commonPrice;
+      let curVersion = {};
+      if (this.goods.choseOtherVersions && JSON.stringify(this.goods.choseOtherVersions) !== '{}') {
+        curVersion = this.goods.choseOtherVersions;
       } else {
-        // 取版本价格
-        if (JSON.stringify(this.versionPrice) !== '{}') {
-          // 获取当前产品的所有版本价格信息
-          const curAllVersion = this.versionPrice.activity[productCode];
-          if (curAllVersion) {
-            // 查找匹配的大版本（工程 特价 样机。。）的匹配的版本
-            const curVersion = curAllVersion[priceTypeUpper].find(v => v.versionCode === priceVersion);
-            price = curVersion;
+        const {
+          priceType,
+          productCode,
+          // 价格版本，根据这个去版本价里轮询匹配
+          priceVersion
+        } = product;
+        // 普通版本
+        // 接口大写小写都可能返回
+        const priceTypeUpper = this.getPriceType(priceType);
+        if (priceTypeUpper === 'PT') {
+          // 格式化不（普通价格接口未做两位小数处理）
+          product.priceInfo.commonPrice.invoicePrice = this.jshUtil.formatNumber(product.priceInfo.commonPrice.invoicePrice, 2);
+          curVersion = product.priceInfo.commonPrice;
+        } else {
+          // 取版本价格
+          if (JSON.stringify(this.versionPrice) !== '{}') {
+            // 获取当前产品的所有版本价格信息
+            const curAllVersion = this.versionPrice.activity[productCode];
+            if (curAllVersion) {
+              // 查找匹配的大版本（工程 特价 样机。。）的匹配的版本
+              curVersion = curAllVersion[priceTypeUpper].find(v => v.versionCode === priceVersion);
+            }
           }
         }
       }
-      return price;
+      return curVersion;
     },
     totalChosePrice() {
       /* 本产品的总价格 */
@@ -348,14 +360,7 @@ export default {
     getPriceType(type) {
       /* 获取价格类型 */
       const typeTemp = type.toUpperCase();
-      return {
-        PT: 'PT',
-        GC: 'GC',
-        YJCT: 'YJCY',
-        YJCY: 'YJCY',
-        MFJK: 'YJCY',
-        MFYJ: 'YJCY',
-      }[typeTemp];
+      return getPriceKeyFromAllPrice()[typeTemp];
     },
     choose() {
       /* 选中本商品 */

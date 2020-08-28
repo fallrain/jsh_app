@@ -90,6 +90,19 @@ function getGoodsInCartPriceType() {
   };
 }
 
+function getPriceKeyFromAllPrice() {
+  /* 获取从all price等接口获取的价格的key */
+  return {
+    PT: 'PT',
+    TJ: 'TJ',
+    GC: 'GC',
+    YJCT: 'YJCY',
+    YJCY: 'YJCY',
+    MFJK: 'YJCY',
+    MFYJ: 'YJCY',
+  };
+}
+
 function getIndustryGroup() {
   /* 获取全部产品组 */
   return util.commonGet({
@@ -130,5 +143,6 @@ export {
   getGoodsType,
   getIndustryGroup,
   getOrdinaryCartActivityType,
+  getPriceKeyFromAllPrice,
   getStockType
 };
