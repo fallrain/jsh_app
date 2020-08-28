@@ -34,6 +34,7 @@
         :orderItem="item"
         :index="index"
         :key="index"
+        :status="status"
       >
       </j-order-accept-item>
     </view>
@@ -51,6 +52,8 @@ export default {
   },
   data() {
     return {
+      status: 1, // 1 购物车、套餐、组合 2 调货
+      seqList: '', // 调货购物车下单成功后 订单号
       total: 0,
       successNum: 0,
       failNum: 0,
@@ -60,11 +63,18 @@ export default {
     };
   },
   created() {
-    this.getOrderInfo();
   },
   onLoad(option) {
     if (option.groupings) {
+      this.status = 1;
       this.form = JSON.parse(option.groupings);
+      this.getOrderInfo();
+    }
+    if (option.seqList) {
+      // 调货购物车下单成功之后
+      this.status = 2;
+      this.seqList = option.seqList;
+      this.orderData = option.orderData;
     }
   },
   methods: {
