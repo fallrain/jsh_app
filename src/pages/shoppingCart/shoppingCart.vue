@@ -350,6 +350,8 @@ export default {
               // 直发模式
               isDirectMode: false,
               $PriceInfo: v.productList[0].priceInfo,
+              // 在购物车里更换的其他版本数据，使得计算属性能监控到
+              choseOtherVersions: [],
               ...v
             });
           } else {

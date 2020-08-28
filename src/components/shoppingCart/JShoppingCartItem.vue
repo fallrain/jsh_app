@@ -54,6 +54,7 @@
             小计：¥{{totalChosePrice}}
           </view>
           <uni-number-box
+            :value="goods.number"
             @change="goodsNumChange"
           ></uni-number-box>
         </view>
@@ -110,7 +111,7 @@
         <view
           @tap="showSpecifications"
           class="jShoppingCartItem-btm-version-picker"
-          v-if="specificationsList.length && chosePrice.priceType==='PT'"
+          v-if="isShowSpecificationsBtn"
         >
           <text>版本规格</text>
           <i class="iconfont iconxia"></i>
@@ -120,6 +121,10 @@
         class="jShoppingCartItem-btm-inf-wrap"
         v-if="choseVersionInf"
       >
+        <view
+          @tap="handleDelVersion"
+          class="jShoppingCartItem-btm-inf-close iconfont iconcross"
+        ></view>
         <view class="jShoppingCartItem-btm-inf-icon">
           <view class="iconfont iconi"></view>
         </view>
@@ -259,6 +264,13 @@ export default {
       const inProductGroup = directProducts.find(v => v === productGroup);
       return inProductGroup;
     },
+    isShowSpecificationsBtn() {
+      /* 是否显示【版本规格】按钮 */
+      const product = this.getProduct();
+      // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
+      const isPT = product && product.priceType === 'PT';
+      return !!(this.specificationsList.length && isPT);
+    },
     choseVersionInf() {
       /* 选择的版本信息 */
       // priceType
@@ -269,8 +281,8 @@ export default {
       // 选择的版本
       let curVersion = {};
       // 如果存在在购物车才选择了的价格版本(购物车可替换版本)
-      if (this.goods.choseOtherVersions && JSON.stringify(this.goods.choseOtherVersions) !== '{}') {
-        curVersion = this.goods.choseOtherVersions;
+      if (this.goods.choseOtherVersions && JSON.stringify(this.goods.choseOtherVersions) !== '[]') {
+        curVersion = this.goods.choseOtherVersions[0];
       } else {
         const {
           priceType,
@@ -313,8 +325,8 @@ export default {
         return {};
       }
       let curVersion = {};
-      if (this.goods.choseOtherVersions && JSON.stringify(this.goods.choseOtherVersions) !== '{}') {
-        curVersion = this.goods.choseOtherVersions;
+      if (this.goods.choseOtherVersions && JSON.stringify(this.goods.choseOtherVersions) !== '[]') {
+        curVersion = this.goods.choseOtherVersions[0];
       } else {
         const {
           priceType,
@@ -555,6 +567,11 @@ export default {
     handleDel() {
       /* 移除购物车操作 */
       this.$emit('del', this.goods);
+    },
+    handleDelVersion() {
+      /* 移除一个版本操作 */
+      this.goods.choseOtherVersions = [];
+      this.$emit('change', this.goods, this.index);
     }
   }
 };
