@@ -31,10 +31,10 @@
         ></uni-number-box>
         <button
           class="jGoodsItem-cnt-opts-primary ml26"
-          :class="[isDisabled ? 'disabled' : 'jGoodsItem-cnt-opts-primary']"
+          :class="[Number(goods.stockNum) === 0 ? 'disabled' : 'jGoodsItem-cnt-opts-primary']"
           type="button"
           @tap="addTransfer(goods)"
-          :disabled="isDisabled"
+          :disabled="Number(goods.stockNum) === 0"
         >加入调货</button>
       </view>
     </view>
@@ -98,7 +98,7 @@ export default {
     }
   },
   created() {
-    this.showDisabled();
+    // this.showDisabled();
   },
   computed: {
     ...mapGetters({
@@ -106,6 +106,7 @@ export default {
       saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
+
   },
   methods: {
     goodsNumChange(value, goods) {
@@ -156,15 +157,15 @@ export default {
       this.$emit('query');
     },
     // 判断是否禁用加入调货
-    showDisabled() {
-      if (this.goods.stockNum) {
-        console.log(false);
-        this.isDisabled = false;
-      } else {
-        this.isDisabled = true;
-        console.log(true);
-      }
-    }
+    // showDisabled() {
+    //   if (this.goods.stockNum) {
+    //     console.log(false);
+    //     this.isDisabled = false;
+    //   } else {
+    //     this.isDisabled = true;
+    //     console.log(true);
+    //   }
+    // }
 
   }
 

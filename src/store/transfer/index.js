@@ -14,6 +14,8 @@ export default {
     /* eslint注释请不要删除 */
     /* eslint-disable no-unused-expressions */
     [TRANSFER.UPDATE_TSHOPCART](state, data) {
+      console.log(state);
+      console.log(data);
       state.allOrderList = data;
     }
   },

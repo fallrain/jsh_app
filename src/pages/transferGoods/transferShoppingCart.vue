@@ -147,7 +147,8 @@ export default {
     ...mapGetters({
       userInf: USER.GET_USER,
       saleInfo: USER.GET_SALE,
-      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      TSHOPCART: TRANSFER.GET_TSHOPCART,
     })
 
   },

@@ -10,7 +10,7 @@
       <transfer-detail-item
         :goods="detailList"
         @delete="deleteProductMe"
-        @change="goodsChange"
+        @changeGood="goodsChange"
       >
       </transfer-detail-item>
     </view>
@@ -73,15 +73,6 @@ export default {
       TSHOPCART: TRANSFER.GET_TSHOPCART,
       userInf: USER.GET_USER
     }),
-    // eslint-disable-next-line vue/return-in-computed-property
-    goodsChange(goods, good,index) {
-      console.log(goods);
-      /* 商品 change */
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.detailList.orderList[index] = good;
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.detailList = JSON.parse(JSON.stringify(this.detailList));
-    },
   },
   created() {
     this.allList = this.TSHOPCART.allOrderList;
@@ -97,6 +88,18 @@ export default {
     showPayer() {
       /* 展示付款地址 */
       this.payerPickerShow = true;
+    },
+    goodsChange(good, index) {
+      console.log(good);
+      console.log(index);
+      /* 商品 change */
+      this.detailList.orderList[index] = good;
+      // this.detailList = JSON.parse(JSON.stringify(this.detailList));
+      this.allList.data = this.detailList;
+      console.log(this.allList);
+      this[TRANSFER.UPDATE_TSHOPCART]({
+        allOrderList: this.allList,
+      });
     },
     async deleteProductMe(item) {
       console.log(item);
