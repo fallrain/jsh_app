@@ -9,6 +9,17 @@ export default {
     /* 添加到购物车 */
     return jPostJson(urls.addToCart, data);
   },
+  getShoppingCartList(data) {
+    /* 从获取购物车数据  */
+    const {
+      saletoCode,
+      sendtoCode
+    } = data;
+    return jGet(urls.getShoppingCartList({
+      saletoCode,
+      sendtoCode
+    }));
+  },
   getShoppingCartListFromCache(data) {
     /* 从缓存获取购物车数据 */
     const {

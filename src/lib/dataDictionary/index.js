@@ -75,6 +75,21 @@ function getGoodsPriceType() {
   };
 }
 
+function getGoodsInCartPriceType() {
+  /* 在购物车里的商品标签 */
+  return {
+    PT: '普通价格',
+    TJ: '特价',
+    GC: '工程',
+    YJCY: '样机',
+    MFJK: '免费机壳',
+    MFYJ: '样机',
+    MFYJJS: '免费样机结算',
+    YPJ: '样品机',
+    CTYJ: '成套样机'
+  };
+}
+
 function getIndustryGroup() {
   /* 获取全部产品组 */
   return util.commonGet({
@@ -110,6 +125,7 @@ function getStockType() {
 
 export {
   getGoodsPriceType,
+  getGoodsInCartPriceType,
   getGoodsTag,
   getGoodsType,
   getIndustryGroup,
