@@ -351,7 +351,7 @@ export default {
       return {
         PT: 'PT',
         GC: 'GC',
-        YJCT: 'YJCT',
+        YJCT: 'YJCY',
         YJCY: 'YJCY',
         MFJK: 'YJCY',
         MFYJ: 'YJCY',
