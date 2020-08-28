@@ -411,6 +411,7 @@ export default {
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
         }
       });
+      totalGoodsPrice = this.jshUtil.formatNumber(totalGoodsPrice, 2);
       return totalGoodsPrice;
     },
     countTotalNumber() {

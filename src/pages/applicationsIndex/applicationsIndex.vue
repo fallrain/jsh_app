@@ -14,7 +14,8 @@
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
           <view class="fs24 text-333">王芬芬，您好！</view>
-<!-- 		  <view @click="callBBC">建行支付测试</view>
+		  <!-- <view @click="callBBC">建行支付测试</view>
+      <view @click="callABC">农行支付测试</view>
 		  <view @click="popAction">返回测试</view> -->
           <view class="logo">
             <image src="@/assets/img/appIndex/haier.png"></image>
@@ -439,6 +440,7 @@ export default {
       ],
       loadUserType:false,
       errorMsg:'',
+      valueSyncData:'',
     };
   },
   created() {
@@ -506,7 +508,15 @@ export default {
 		  // }, (result) => {
 		  // 	alert(JSON.stringify(result));
 		  // });
-	  },
+    },
+    // 打开农行支付
+    callABC(){
+		  // AlipayJSBridge.call('myApiCallABC', {
+		  //   tokenId: '14406457162720037182',
+		  // }, (result) => {
+		  // 	alert(JSON.stringify(result));
+		  // });
+    },
     // 获取token
     async getToken(passCode) {
       const { code, data } = await this.authService.getTokenByCode({
@@ -528,23 +538,73 @@ export default {
       }
       this.manageData(data);
     },
+    // 获取代码对应产品组
+    async getvaluesync(){
+      const { code, data } = await this.cocService.getValueSyncValue(
+      {
+        valueSetId: 'ProductGroup'
+      });
+      if (code == '1') {
+        return data;
+      } else {
+        return [];
+      }
+    },
     // 解析用户权限类型数据
     manageData(data) {
       this.errorMsg = '';
       this.loadUserType = false;
       const tags = data.tags;
+
+      let errorAlertMsg = '';
+      
       // 僵尸户
-      if(tags.zombie && tags.zombie.status == 0) {
-        this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。";
+      if(tags.zombie && tags.zombie.status == 1) {
+        errorAlertMsg = errorAlertMsg + "你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。";
       }
       // 无门店
-      if(tags.noStore && tags.noStore.status == 0) {
-        this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理";
+      if(tags.noStore && tags.noStore.status == 1) {
+        errorAlertMsg = errorAlertMsg + "您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理";
       }
+    
+      var marketCollusionGroupValue = [];
+
+      if(data.marketCollusionGroup.length>0) {
+        marketCollusionGroupValue = this.getvaluesync();
+      }
+
+      let marketErrorMsg = '';
+      // 市场秩序串货
+      for (let index = 0; index < data.marketCollusionGroup.length; index++) {
+        const element = data.marketCollusionGroup[index];
+        for (let y = 0; y < marketCollusionGroupValue.length; y++) {
+          const elementValue = marketCollusionGroupValue[y];
+          if(data.marketCollusionGroup[index] == element.value) {
+            marketErrorMsg = marketErrorMsg + element.valueMeaning;
+          }
+        }
+      }
+      
+      if(marketErrorMsg.length > 0) {
+        errorAlertMsg += '您好，市场运营管理限制，您'+marketErrorMsg+'产品组相关产品限制交易，如有疑问请联系交互师或业务人员处理。';
+      }
+
+      if(errorAlertMsg.length > 0) {
+        uni.showModal({
+        title: '提示',
+        content: errorAlertMsg,
+        showCancel:false,
+        confirmText:'确定',
+        success: function (res) {
+            if (res.confirm) {
+                console.log('用户点击确定');
+            } 
+          }
+        });
+      }
+
       // 供应链金融冻结
-      if(tags.gylFreezed && tags.gylFreezed.status == 0) {
+      if(tags.gylFreezed && tags.gylFreezed.status == 1) {
         this.loadUserType = true;
         this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。";
       }
@@ -553,12 +613,6 @@ export default {
       if(data.status == 1) {
         this.loadUserType = true;
         this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。";
-      }
-      
-      // 市场秩序串货
-      if(data.marketCollusionGroup[0] == 'DA') {
-        this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。";
       }
     },
     changePic(e) {

@@ -75,27 +75,6 @@ export default {
       puTongList: [],
       pingCheList: [],
       guaDanList: [],
-      shoppingList: [
-        {
-          checked: false,
-          data: [
-            {
-              show: true,
-            },
-            {
-              show: true,
-            }
-          ]
-        },
-        {
-          checked: true,
-          data: [
-            {
-              show: true,
-            }
-          ]
-        },
-      ],
       failureGoodsList: []
     };
   },
@@ -119,10 +98,9 @@ export default {
     async queryJDWarehouse() {
       const timetamp = new Date().valueOf();
       const longfeiUSERID = this.userInf.customerCode;
-      const res = await this.vehicleService.queryJDWarehouse(timetamp, longfeiUSERID);
-      console.log(res);
-      if (res.code === '1') {
-        this.JDWarehouse = res.data.data.items;
+      const { code, data } = await this.vehicleService.queryJDWarehouse(timetamp, longfeiUSERID);
+      if (code === '1' && data.code === '200') {
+        this.JDWarehouse = data.data.items;
       }
     },
     async queryCarList() {
@@ -221,6 +199,8 @@ export default {
     pullDetail(item) {
       // console.log(item);
       // console.log(index);
+      item.userInfMianMi = this.userInfMianMi;
+      item.form = this.form;
       item.longfeiUSERID = this.userInf.customerCode;
       item.orderList.forEach(async (inf) => {
         const gbid = inf.GBID;
@@ -325,7 +305,7 @@ export default {
           const codeList = this.checkSEQ.split(',');
           this.zhengCheCode = codeList[0];
           if (this.userInfMianMi) { // 免验证码
-            this.zhengCheUp('','');
+            this.zhengCheUp('', '');
           } else {
             // 展示验证码
             this.isShowVf = true;

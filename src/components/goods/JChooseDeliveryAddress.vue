@@ -13,7 +13,10 @@
             @tap="hide"
           ></i>
         </view>
-        <view class="jChooseDeliveryAddressDrawer-list">
+        <scroll-view
+          :scroll-y="true"
+          class="jChooseDeliveryAddressDrawer-list"
+        >
           <view
             :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
             v-for="(item,index) in list"
@@ -30,7 +33,7 @@
             </view>
             <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.name}}</view>
           </view>
-        </view>
+        </scroll-view>
       </view>
     </uni-drawer>
   </view>
@@ -59,12 +62,12 @@ export default {
     // 当前选中的item
     curItem: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
-    return {
-    };
+    return {};
   },
   watch: {
     show(val) {
@@ -99,6 +102,7 @@ export default {
 
 <style lang="scss">
   .jChooseDeliveryAddressDrawer {
+    height: 100%;
     padding: 56px 24px;
     padding-right: 0;
   }
@@ -121,7 +125,8 @@ export default {
   }
 
   .jChooseDeliveryAddressDrawer-list {
-    margin-top: 10px;
+    padding-top: 18px;
+    height: calc(100% - 42px);
   }
 
   .jChooseDeliveryAddressDrawer-item {

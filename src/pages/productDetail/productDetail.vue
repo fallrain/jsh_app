@@ -25,7 +25,7 @@
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
         <view class="text modeller">
-          <image v-if="detailInfo.isScf==='1'" src="/static/logo.png" style="width: 20px;height: 20px;"></image>
+          <image v-if="detailInfo.isScf==='1'" src="@/assets/img/orderDetail/rongZi.png" style="width: 20px;height: 20px;"></image>
           {{detailInfo.product.productName}}
         </view>
       </view>
@@ -119,7 +119,7 @@
     </view>
     <view class="product-detail-fot-high"></view>
     <view class="product-detail-foot">
-      <pro-com-foot :info.sync="footButtong"></pro-com-foot>
+      <pro-com-foot :info.sync="footButtong" @putcar="putcar" @putplay="putplay" @goCarList="goCarList"></pro-com-foot>
     </view>
   </view>
 </template>
@@ -511,7 +511,57 @@ export default {
         this.detailsCheck = false;
         this.specsCheck = true;
       }
-    }
+    },
+    putcar() {
+      if (this.CheckActivityInfo === '') { // 没选活动
+        if (this.detailInfo.flashSales.length > 0) { // 有抢单
+          this.jiaGou1('PT', 3);
+        } else {
+          this.jiaGou1('PT', 1);
+        }
+      } else { // 样机版本?
+        if (this.CheckActivityInfo.titleLe === '特价版本') {
+          this.jiaGou1('TJ', 1);
+        } else if (this.CheckActivityInfo.titleLe === '工程版本') {
+          this.jiaGou1('GC', 1);
+        }
+      }
+    },
+    putplay() {
+      uni.navigateTo({
+        url: `/pages/market/marketList?productCode=${this.productCode}`
+      });
+    },
+    goCarList() {
+      console.log('gezhonghuodong');
+      uni.reLaunch({
+        url: '/pages/shoppingCart/shoppingCart'
+      });
+    },
+    async jiaGou1(pt, num1) { // 提交验证码之后
+      const product = [{ priceType: pt,
+        priceVersion: '',
+        stockVersion: '',
+        productCode: this.productCode,
+        number: this.productNum }];
+      const { code } = await this.cartService.addToCart({
+        activityType: num1, // 组合类型(1单品2组合3抢购4套餐5成套)
+        number: this.productNum,
+        productCode: this.productCode, // 产品编码
+        productList: product, // 产品编码
+        saletoCode: this.userInf.customerCode, // 售达方编码,
+        sendtoCode: this.defaultSendTo.customerCode, // 送达方编码
+      });
+      if (code === '1') {
+        uni.showToast({
+          title: '提交成功',
+        });
+      } else {
+        uni.showToast({
+          title: '提交失败请重试',
+        });
+      }
+    },
   }
 };
 

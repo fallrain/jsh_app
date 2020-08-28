@@ -36,13 +36,23 @@
       ></j-overage-pay>
     </view>
     <view class="orderConfirm-btm j-flex-aic">
-      <view class="orderConfirm-btm-text">实付总额：</view>
-      <view class="orderConfirm-btm-price">¥{{dataInfo.totalMoney}}</view>
-      <button
-        type="button"
-        class="orderConfirm-btm-btn ml20"
-        @tap="next"
-      >下一步</button>
+      <view class="dis-flex">
+        <view class="orderConfirm-btm-text">实付总额：</view>
+        <view class="orderConfirm-btm-price">¥{{dataInfo.totalMoney}}</view>
+      </view>
+      <view class="btn-style">
+        <button
+          type="button"
+          class="orderConfirm-btm-btn-cancle ml20"
+          @tap="cancle"
+        >取消订单</button>
+        <button
+          type="button"
+          class="orderConfirm-btm-btn-sure ml20"
+          @tap="next"
+        >提交订单</button>
+      </view>
+
     </view>
     <j-modal
       :show.sync="modalShow"
@@ -87,6 +97,12 @@ import JFailureOrderItem from '../../components/shoppingCart/JFailureOrderItem';
 import JOveragePay from '../../components/shoppingCart/JOveragePay';
 import JModal from '../../components/form/JModal';
 import './css/orderConfirm.scss';
+import {
+  mapGetters, mapMutations
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 
 export default {
@@ -142,7 +158,7 @@ export default {
       userInfMianMi: false, // 是否免密
       // 订单提交信息
       formSubmit: {
-        deliveryType: 1,
+        deliveryType: 2,
         // 上上签验证信息
         bestSignVerifyCodeDto: {
           note: '',
@@ -169,6 +185,12 @@ export default {
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
       console.log(this.dataInfo);
     });
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+    })
   },
   watch: {
     sendMessageStatus(val) {
@@ -207,7 +229,6 @@ export default {
       const payerList = [];
       const payerObj = {};
       for (const k in this.totalPayerMoneyInfo) {
-        console.log(this.totalPayerMoneyInfo[k]);
         if (payerObj[this.totalPayerMoneyInfo[k].customerCode]) {
           const totalmoney = parseFloat(payerObj[this.totalPayerMoneyInfo[k].customerCode].totalMoney)
             + parseFloat(this.totalPayerMoneyInfo[k].totalMoney);
@@ -223,6 +244,8 @@ export default {
         this.allPayer.forEach((v) => {
           if (v.customerCode === item.customerCode) {
             item.balance = v.payerBalance.balance;
+            item.bookbalance = v.payerBalance.bookbalance;
+            item.payerType = v.payerType;
           }
         });
       });
@@ -300,6 +323,8 @@ export default {
         // this.submitOrder();
       }
     },
+    async cancle() {
+    },
     async next() {
       // 判断是否免密，免密则直接支付否则弹出发送验证码弹窗
       await this.getUserInfMianMi();
@@ -344,7 +369,7 @@ export default {
             isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
             paytoCode: this.totalPayerMoneyInfo[v.orderNo].customerCode,
             paytoName: this.totalPayerMoneyInfo[v.orderNo].customerName.split(')')[1],
-            paytoType: '99'
+            paytoType: this.totalPayerMoneyInfo[v.orderNo].payerType
           };
           orderItem.orderDetailList.push(singleItem);
         });

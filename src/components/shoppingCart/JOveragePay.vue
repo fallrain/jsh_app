@@ -16,7 +16,12 @@
         <view class="jOveragePay-cnt-item-total j-flex-aic">
           <view class="jOveragePay-cnt-item-total-item">
             <view class="jOveragePay-cnt-item-total-text">可用余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ {{item.balance}}</view>
+            <view
+              v-if="saleInfo.channelGroup === 'ZY'"
+              class="jOveragePay-cnt-item-total-price">¥ {{item.balance}}</view>
+            <view
+              v-if="saleInfo.channelGroup === 'CT'"
+              class="jOveragePay-cnt-item-total-price">¥ {{item.bookbalance}}</view>
           </view>
           <view class="jOveragePay-cnt-item-total-item-line">
           </view>
@@ -25,7 +30,12 @@
             <view class="jOveragePay-cnt-item-total-price">¥ {{item.totalMoney}}</view>
           </view>
           <button
-            v-if="compareMoney(item.balance, item.totalMoney)"
+            v-if="compareMoney(item.balance, item.totalMoney)&&saleInfo.channelGroup === 'ZY'"
+            type="button"
+            class="jOveragePay-cnt-item-total-btn"
+          >余额不足，去支付</button>
+          <button
+            v-if="compareMoney(item.bookbalance, item.totalMoney)&&saleInfo.channelGroup === 'CT'"
             type="button"
             class="jOveragePay-cnt-item-total-btn"
           >余额不足，去支付</button>
@@ -36,6 +46,13 @@
 </template>
 
 <script>
+import {
+  mapGetters, mapMutations
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
+
 export default {
   name: 'JOveragePay',
   props: {
@@ -54,6 +71,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+    }),
     compareMoney() {
       return (val1, val2) => (parseFloat(val1) < parseFloat(val2));
     }

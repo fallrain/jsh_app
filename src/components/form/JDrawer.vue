@@ -83,6 +83,7 @@ export default {
   .filter-drawer {
     position: relative;
     height: 100%;
+    overflow: auto;
   }
 
   .filter-drawer-cnt-list {
