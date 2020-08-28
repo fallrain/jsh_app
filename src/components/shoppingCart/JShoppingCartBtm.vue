@@ -73,7 +73,10 @@ export default {
     },
     // 选择的商品总价
     totalPrice: {
-      type: Number,
+      type: [
+        Number,
+        String
+      ],
       default: 0
     }
   },

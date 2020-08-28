@@ -224,7 +224,9 @@ export default {
       this.getWarehouse();
       // 送达方
       this.getSendCustomer();
-      // 购物车列表
+      // 刷新购物车列表缓存
+      this.refreshShoppingCartList();
+      // 购物车列表（缓存里取）
       this.getShoppingCartList();
       // 获取信用额度
       this.getCreditQuota();
@@ -233,6 +235,8 @@ export default {
     },
     reloadPageInfo() {
       /* 重载页面信息 */
+      // 刷新购物车列表缓存
+      this.refreshShoppingCartList();
       // 购物车列表
       this.getShoppingCartList();
       // 获取特价版本
@@ -357,6 +361,14 @@ export default {
         this.shoppingList = shoppingList;
         this.failureGoodsList = failureGoodsList;
       }
+    },
+    refreshShoppingCartList() {
+      /* 刷新购物车数据 */
+      // todo 是否需要同步？
+      this.cartService.getShoppingCartList({
+        saletoCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode
+      });
     },
     async getCreditQuota() {
       /* 获取各个产品组的信用额度 */

@@ -6,6 +6,13 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
+      "icon_id": "72671",
+      "name": "i",
+      "font_class": "i",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
       "icon_id": "14054227",
       "name": "时间",
       "font_class": "shijian",
