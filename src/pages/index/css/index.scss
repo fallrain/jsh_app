@@ -17,7 +17,7 @@
 }
 .homepage{
     width:750px;
-    height:1900px;
+    height:1700px;
     background:rgba(245,245,245,1);
     position: relative;
     .homepage-top{
@@ -276,6 +276,7 @@
       }
 
 
+
     .homepage-recommend-info{
         width:700px;
         background:rgba(255,255,255,1);
@@ -317,6 +318,7 @@
 
                         // }
                     }
+
                 }
 
                 // image{
@@ -384,30 +386,56 @@
                 align-items:center;
                 margin-bottom:18px;
                 overflow: hidden;
-                .homepage-info-list-hot{
-                    // width:54px;
-                    // height:28px;
-                    border-radius:4px;
-                    // border:1px solid rgba(255,148,20,1);
-                    font-size:20px;
-                    font-family:PingFangSC-Regular,PingFang SC;
-                    font-weight:400;
-                    // color:rgba(255,148,20,1);
-                    color:#333;
-                    line-height:28px;
-                    letter-spacing:4px;
-                    margin-right:12px;
-                    text-align:center;
-                }
-                .homepage-info-list-title{
-                    width:552px;
-                    height:34px;
-                    font-size:24px;
-                    font-family:PingFangSC-Regular,PingFang SC;
-                    font-weight:400;
-                    color:rgba(153,153,153,1);
-                    line-height:34px;
-                }
+              //资讯测试版
+              .homepage-info-list-hot {
+                width:54px;
+                height:28px;
+                border-radius:4px;
+                border:1px solid red;
+                font-size:20px;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                color:rgba(255,148,20,1);
+                color:red;
+                line-height:28px;
+                letter-spacing:4px;
+                margin-right:12px;
+                text-align:center;
+              }
+              .homepage-info-list-title{
+                width:552px;
+                height:34px;
+                font-size:24px;
+                font-family:PingFangSC-Regular,PingFang SC;
+                font-weight:400;
+                color:rgba(153,153,153,1);
+                line-height:34px;
+              }
+                //资讯正式版
+                //.homepage-info-list-hot{
+                //    // width:54px;
+                //    // height:28px;
+                //    border-radius:4px;
+                //    // border:1px solid rgba(255,148,20,1);
+                //    font-size:20px;
+                //    font-family:PingFangSC-Regular,PingFang SC;
+                //    font-weight:400;
+                //    // color:rgba(255,148,20,1);
+                //    color:#333;
+                //    line-height:28px;
+                //    letter-spacing:4px;
+                //    margin-right:12px;
+                //    text-align:center;
+                //}
+                //.homepage-info-list-title{
+                //    width:552px;
+                //    height:34px;
+                //    font-size:24px;
+                //    font-family:PingFangSC-Regular,PingFang SC;
+                //    font-weight:400;
+                //    color:rgba(153,153,153,1);
+                //    line-height:34px;
+                //}
             }
         }
     }

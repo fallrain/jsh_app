@@ -253,8 +253,7 @@ export default {
   },
   onLoad(option) {
     console.log(option);
-    this.otherSEQ = option.IBR_SEQ
-
+    this.otherSEQ = option.IBR_SEQ;
   },
   created() {
     this.getPageInfo();
@@ -347,7 +346,7 @@ export default {
               if (ele.type === '') {
                 this.list.forEach((item) => {
                   item.stockList.map((v) => {
-                    console.log(v);
+                    console.log('cccccccccccccccccccc', v);
                     v.subCodeList.map((e) => {
                       num += Number(e.QTY);
                     });
@@ -360,7 +359,7 @@ export default {
               } else {
                 this.list.forEach((item) => {
                   item.stockList.map((v) => {
-                    console.log(v);
+                    console.log('dddddddddddd', v);
                     v.subCodeList.map((e) => {
                       if (ele.type === v.whcode) {
                         num += Number(e.QTY);
@@ -590,14 +589,13 @@ export default {
       });
       if (code === '1') {
         const home = data.data;
-        console.log(home);
+        console.log('w 时候   是哦', home);
         home.unshift({
           OUTWHCODE: '',
           OUTWHNAME: '全部'
         });
         this.cargoWareHome = home;
-        console.log(11111111111111111111111111)
-        console.log(this.cargoWareHome)
+        console.log('sossososososoos', this.cargoWareHome);
         if (this.cargoWareHome) {
           const tempArray = [];
           this.cargoWareHome.map((item) => {
@@ -618,7 +616,7 @@ export default {
           item.isSelected = false;
         });
         this.cargoSend = this.cargoWareHome.filter(e => e.OUTWHCODE !== '');
-        console.log(this.cargoSend);
+        console.log('000000000000', this.cargoSend);
       }
       // 配送类型数据
       const temp = await this.transfergoodsService.cargoSendWay({
@@ -630,11 +628,13 @@ export default {
       if (temp.code === '1') {
         console.log(temp.data);
         let brandGroup = '';
-        temp.data.data[1].PRODandSWRH.forEach((item) => {
-          brandGroup += (`${item.PROD}:${item.SWRH};`);
-        });
-        temp.data.data[1].brandGroup = brandGroup;
-        console.log(brandGroup);
+        if (temp.data.data[0].PRODandSWRH) {
+          temp.data.data[0].PRODandSWRH.forEach((item) => {
+            brandGroup += (`${item.PROD}:${item.SWRH};`);
+          });
+          temp.data.data[0].brandGroup = brandGroup;
+          console.log(brandGroup);
+        }
         this.cargoSendWay = temp.data.data;
         if (this.cargoSendWay) {
           const tempArray = [];
@@ -650,9 +650,9 @@ export default {
           this.popTabs[1].children = tempArray;
         }
       }
-      // console.log(this.cargoSendWay);
+      console.log('sssssssssssssssssss', this.cargoSendWay);
       // this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay);
-      console.log(this.popTabs);
+      console.log('aannnnnnnnnnnaaaaa', this.popTabs);
       this.popTabs[0].children[0].checked = true;
       this.popTabs[1].children[0].checked = true;
       this.popTabs[1].children[0].ycFlag = 'JSHSW';
@@ -687,9 +687,8 @@ export default {
       console.log(111);
       this.addressesList.forEach((item) => {
         console.log(item);
-        console.log(this.curChoseDeliveryAddress.name);
+        console.log(this.curChoseDeliveryAddress);
         if (this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.addressName}`) {
-
           this.address = item;
         }
       });
