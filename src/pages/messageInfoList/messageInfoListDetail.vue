@@ -10,38 +10,38 @@
             <view>
                 <text class="massageDetail-time">{{detail.createTime}}</text>
                 <text class="massageDetail-time massageDetail-delete">X 删除此消息</text>
-            </view> 
+            </view>
         </view>
     </view>
 </template>
 <script>
 export default {
-    name: "messageInfoListDetail",
-    data(){
-        return {
-            detail:[]
-        }
-    },
-    methods:{
-        findDetailById(id,item){
-            this.detail= {
-                id:id,
-                typeNameShow:item.typeNameShow,
-                title:item.typeName,
-                createTime:item.createTime,
-                info: item.title,
-                description:item.description,
-                isNew: false
-            }
-        }
-    },
-    onLoad(option){
-        let {id,item } = option
-       
-        this.findDetailById(id,JSON.parse(item))
-        // console.log(option.id)
+  name: 'messageInfoListDetail',
+  data() {
+    return {
+      detail: []
+    };
+  },
+  methods: {
+    findDetailById(id, item) {
+      this.detail = {
+        id,
+        typeNameShow: item.typeNameShow,
+        title: item.typeName,
+        createTime: item.createTime,
+        info: item.title,
+        description: item.description,
+        isNew: false
+      };
     }
-}
+  },
+  onLoad(option) {
+    const { id, item } = option;
+
+    this.findDetailById(id, JSON.parse(item));
+    // console.log(option.id)
+  }
+};
 </script>
 <style lang="scss" scoped>
     .massageDetail{
@@ -60,7 +60,7 @@ export default {
             line-height:32px;
             margin:8px 26px 8px 10px;
             text-align:center;
-        
+
         }
         .massageDetail-title{
             display: inline-block;
@@ -71,7 +71,7 @@ export default {
             font-weight:300;
             color:rgba(51,51,51,1);
             line-height:48px;
-            
+
         }
         .massageDetail-info{
             width:702px;
@@ -92,7 +92,7 @@ export default {
                border-bottom:1px solid #D8D8D8;
                 margin-top:24px;
             }
-            .massageDetail-time{   
+            .massageDetail-time{
                 width:238px;
                 height:34px;
                 font-size:24px;
@@ -105,8 +105,8 @@ export default {
             .massageDetail-delete{
                 margin-left:272px;
             }
-            
+
         }
-        
+
     }
 </style>

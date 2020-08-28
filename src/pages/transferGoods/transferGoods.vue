@@ -688,12 +688,12 @@ export default {
       this.addressesList.forEach((item) => {
         console.log(item);
         console.log(this.curChoseDeliveryAddress.name);
-        if (this.curChoseDeliveryAddress.name === `${item.customerCode}${item.addressName}`) {
+        if (this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.addressName}`) {
 
           this.address = item;
         }
       });
-      console.log(this.address);
+      console.log('aaaaaaaa',this.address);
     },
     // 加入调货
     async inserOrder(item) {

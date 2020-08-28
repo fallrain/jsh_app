@@ -68,7 +68,7 @@
             :value="good.IBL_NUM"
             :max="Number(good.IBL_MAXNUM)"
             :disabled="Number(good.IBL_MAXNUM) === 0"
-            @change="changeNum($event, good)"
+            @change="changeNum($event, good, index)"
 
           >
           </uni-number-box>
@@ -119,7 +119,7 @@ export default {
   },
   data() {
     return {
-      baseUrl: process.env.BASE_URL
+      // baseUrl: process.env.BASE_URL
     };
   },
   onLoad() {
@@ -153,7 +153,8 @@ export default {
       }
       good.$favorite = !good.$favorite;
     },
-    async changeNum(value, item) {
+    changeNum(value, item, index) {
+      console.log(index);
       item.IBL_NUM = value;
       item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
       let sum = 0;
@@ -161,20 +162,21 @@ export default {
         sum += Number(ele.SUMMONEY);
       });
       console.log(sum);
+      console.log('2222222222', item);
       this.goods.SUMMONEY = sum;
-      this.$emit('change',item,this.index);
+      this.$emit('changeGood', item, index);
     },
     // 删除单个产品
     deleteProduct(item) {
       console.log('******123');
       this.$emit('delete', item);
     },
-    showPayer(item) {
+    showPayer(item, index) {
       // 显示付款方
       console.log(item);
       item.isExpand = !item.isExpand;
       console.log(item.isExpand);
-      this.$emit('change', item, this.index);
+      this.$emit('changeGood', item, index);
     },
     // 切换付款方
     async togglePayer(item, it, index) {
