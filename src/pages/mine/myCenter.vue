@@ -517,7 +517,7 @@ export default {
   .cataloglist-item-title {
     margin-top: 12px;
     height: 34px;
-    font-size: 12px;
+    font-size: 24px;
     font-weight: 400;
     color: rgba(102, 102, 102, 1);
     line-height: 17px;
