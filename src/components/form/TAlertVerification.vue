@@ -185,12 +185,12 @@ export default {
             uni.showToast({
               title: data.message,
             });
-            this.allOrderList.forEach((ele,i) => {
+            this.allOrderList.forEach((ele, i) => {
               if (SEQ === ele.data.IBR_SEQ) {
-                this.allOrderList.splice(i,1)
+                this.allOrderList.splice(i, 1);
               }
             });
-            this.show = false;
+            this.cancel();
             this.getCargoDispose();
           } else {
             uni.showToast({
@@ -222,11 +222,12 @@ export default {
       console.log(Number(this.seq));
       if (dispose.code === '1' && dispose.data.code === '200') {
         console.log(dispose.data);
-        this.orderData = JSON.Stringfy(dispose.data.data);
+        this.orderData = JSON.stringify(dispose.data.data);
         console.log(this.orderData);
         uni.navigateTo({
-          url: `/pages/shoppingCart/orderConfirmAccept?seqList=${SEQ}&orderData=${this.orderData}`
+          url: `/pages/shoppingCart/orderConfirmAccept?seqList=${this.seq}&orderData=${this.orderData}`
         });
+        console.log(111)
       }
     },
   }
