@@ -122,8 +122,9 @@
         v-if="choseVersionInf"
       >
         <view
-          @tap="handleDelVersion"
           class="jShoppingCartItem-btm-inf-close iconfont iconcross"
+          v-if="isShowSpecificationsInfDel"
+          @tap="handleDelVersion"
         ></view>
         <view class="jShoppingCartItem-btm-inf-icon">
           <view class="iconfont iconi"></view>
@@ -270,6 +271,12 @@ export default {
       // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
       const isPT = product && product.priceType === 'PT';
       return !!(this.specificationsList.length && isPT);
+    },
+    isShowSpecificationsInfDel() {
+      /* 是否显示【版本规格信息】删除按钮 */
+      const product = this.getProduct();
+      // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
+      return !!(product && product.priceType === 'PT');
     },
     choseVersionInf() {
       /* 选择的版本信息 */
