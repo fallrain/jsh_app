@@ -40,7 +40,7 @@
           :goods="goods"
           :index="index"
           :userInf="userInf"
-          :versionPrice="specialPriceMap"
+          :versionPrice="versionPrice"
           :warehouseFlag="choseSendAddress.yunCangFlag"
           @change="goodsChange"
           @del="singleDeleteCart"
@@ -195,7 +195,7 @@ export default {
       // 信用额度列表（以产品大类为维度）
       creditQuotaList: [],
       // 版本价格对象
-      specialPriceMap: {},
+      versionPrice: {},
       // 产业数据
       isIndustryPickerShow: false,
       // 产业数据
@@ -206,6 +206,16 @@ export default {
   },
   created() {
     this.setPageInfo();
+  },
+  onPullDownRefresh() {
+    /* 重置页面 */
+    this.reloadPageInfo().then(() => {
+      uni.stopPullDownRefresh();
+      this.showToast({
+        type: 'success',
+        content: '刷新完成'
+      });
+    });
   },
   computed: {
     ...mapGetters({
@@ -236,17 +246,16 @@ export default {
     reloadPageInfo() {
       /* 重载页面信息 */
       // 刷新购物车列表缓存
-      this.refreshShoppingCartList();
+      const getRefreshShoppingCartList = this.refreshShoppingCartList();
       // 购物车列表
-      this.getShoppingCartList();
+      const getShoppingCartList = this.getShoppingCartList();
       // 获取特价版本
-      this.getSpecialPrice();
+      const getSpecialPrice = this.getSpecialPrice();
       // 重置结算底栏信息
       this.resetBtmInf();
       //  重置产业
       this.resetIndustry();
-      // 获取特价版本
-      this.getSpecialPrice();
+      return Promise.all([getRefreshShoppingCartList, getShoppingCartList, getSpecialPrice]).then(() => true);
     },
     setIndustry() {
       // 获取产业并设置数据
@@ -350,6 +359,8 @@ export default {
               // 直发模式
               isDirectMode: false,
               $PriceInfo: v.productList[0].priceInfo,
+              // 在购物车里更换的其他版本数据，使得计算属性能监控到
+              choseOtherVersions: [],
               ...v
             });
           } else {
@@ -361,11 +372,12 @@ export default {
         this.shoppingList = shoppingList;
         this.failureGoodsList = failureGoodsList;
       }
+      return true;
     },
     refreshShoppingCartList() {
       /* 刷新购物车数据 */
       // todo 是否需要同步？
-      this.cartService.getShoppingCartList({
+      return this.cartService.getShoppingCartList({
         saletoCode: this.userInf.customerCode,
         sendtoCode: this.defaultSendTo.customerCode
       });
@@ -392,7 +404,8 @@ export default {
         sendtoCode: this.defaultSendTo.customerCode,
         account: saletoCode,
       });
-      this.specialPriceMap = (data && data) || {};
+      this.versionPrice = (data && data) || {};
+      return this.versionPrice;
     },
     goodsChange(goods, index) {
       /* 商品数据change */
@@ -419,7 +432,9 @@ export default {
       this.shoppingList.forEach((v) => {
         if (v.checked) {
           const num = v.number;
-          const curTotal = this.jshUtil.arithmetic(v.$PriceInfo.commonPrice.invoicePrice, num, 3);
+          // 获取应该计算的版本数据
+          const version = this.getPriceVersionData(v);
+          const curTotal = this.jshUtil.arithmetic(version.invoicePrice, num, 3);
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
         }
       });
