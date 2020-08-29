@@ -207,6 +207,16 @@ export default {
   created() {
     this.setPageInfo();
   },
+  onPullDownRefresh() {
+    /* 重置页面 */
+    this.reloadPageInfo().then(() => {
+      uni.stopPullDownRefresh();
+      this.showToast({
+        type: 'success',
+        content: '刷新完成'
+      });
+    });
+  },
   computed: {
     ...mapGetters({
       userInf: USER.GET_SALE,
@@ -236,17 +246,16 @@ export default {
     reloadPageInfo() {
       /* 重载页面信息 */
       // 刷新购物车列表缓存
-      this.refreshShoppingCartList();
+      const getRefreshShoppingCartList = this.refreshShoppingCartList();
       // 购物车列表
-      this.getShoppingCartList();
+      const getShoppingCartList = this.getShoppingCartList();
       // 获取特价版本
-      this.getSpecialPrice();
+      const getSpecialPrice = this.getSpecialPrice();
       // 重置结算底栏信息
       this.resetBtmInf();
       //  重置产业
       this.resetIndustry();
-      // 获取特价版本
-      this.getSpecialPrice();
+      return Promise.all([getRefreshShoppingCartList, getShoppingCartList, getSpecialPrice]).then(() => true);
     },
     setIndustry() {
       // 获取产业并设置数据
@@ -363,11 +372,12 @@ export default {
         this.shoppingList = shoppingList;
         this.failureGoodsList = failureGoodsList;
       }
+      return true;
     },
     refreshShoppingCartList() {
       /* 刷新购物车数据 */
       // todo 是否需要同步？
-      this.cartService.getShoppingCartList({
+      return this.cartService.getShoppingCartList({
         saletoCode: this.userInf.customerCode,
         sendtoCode: this.defaultSendTo.customerCode
       });
@@ -395,6 +405,7 @@ export default {
         account: saletoCode,
       });
       this.specialPriceMap = (data && data) || {};
+      return this.specialPriceMap;
     },
     goodsChange(goods, index) {
       /* 商品数据change */
