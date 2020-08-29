@@ -263,7 +263,7 @@ export default {
       //  uni.navigateTo({
       //    url: '/pages/transferGoods/transferDetail?IBR_SEQ='+ seq + '&list='+ JSON.stringify(list)
       // })
-      this.$emit('goTransferDetail', seq, list);
+      this.$emit('goTransferDetail', seq, list, this.index);
     },
     async deleteShoppingCart(item) {
       // 删除购物车订单

@@ -82,9 +82,9 @@ export default {
       //   verificationCode: '',
       // }
       erifyKey: 0,
-      //订单返回数据
+      // 订单返回数据
       orderData: [],
-      //提交订单单号
+      // 提交订单单号
       seq: 0
 
     };
@@ -169,7 +169,7 @@ export default {
             if (ele.checked) {
               console.log(ele);
               SEQ = ele.data.IBR_SEQ;
-              this.seq = SEQ
+              this.seq = SEQ;
               console.log(SEQ);
             }
           });
@@ -220,14 +220,22 @@ export default {
         OrderForm: Number(this.seq)
       });
       console.log(Number(this.seq));
-      if (dispose.code === '1' && dispose.data.code === '200') {
-        console.log(dispose.data);
-        this.orderData = JSON.stringify(dispose.data.data);
-        console.log(this.orderData);
-        uni.navigateTo({
-          url: `/pages/shoppingCart/orderConfirmAccept?seqList=${this.seq}&orderData=${this.orderData}`
+      if (dispose.code === '1') {
+        const page = dispose.data.data;
+        page.orderList.forEach((item) => {
+          if (item.ISFLAG === '提交成功' || item.ISFLAG === '提交失敗') {
+            this.orderData = JSON.stringify(dispose.data.data);
+            console.log(this.orderData);
+            uni.navigateTo({
+              url: `/pages/shoppingCart/orderConfirmAccept?seqList=${this.seq}&orderData=${this.orderData}`
+            });
+            console.log(111);
+          } else {
+            uni.showToast({
+              title: '正在提交，请等待',
+            });
+          }
         });
-        console.log(111)
       }
     },
   }

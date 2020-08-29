@@ -13,8 +13,7 @@
             placeholder="请输入搜索信息"
             placeholder-class="col_c"
             v-model="name"
-            confirm-type="search"
-            @confirm="confirm"
+            @tap="confirm"
           >
         </view>
         <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
@@ -511,20 +510,14 @@ export default {
     confirm() {
       console.log(this.name);
       // this.mescroll.resetUpScroll(true);
-      if ((this.name).trim()) {
-        uni.navigateTo({
-          url: `/pages/goods/goodsList?name=${this.name}`
-        });
-      } else {
-        uni.showToast({
-          title: '请输入搜索词',
-        });
-      }
+      uni.navigateTo({
+        url: '/pages/index/historical'
+      });
     },
     getPageInf() {
       this.getbannerList();
       // this.getIndexList();
-      // this.getList();
+      this.getList();
       this.getXinPin();
       this.getBaoKuan();
       this.getZhuanGong();

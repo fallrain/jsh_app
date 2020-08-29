@@ -71,13 +71,16 @@ export default {
   computed: {
     ...mapGetters({
       TSHOPCART: TRANSFER.GET_TSHOPCART,
+      INDEX: TRANSFER.GET_INDEX,
       userInf: USER.GET_USER
     }),
   },
   created() {
     this.allList = this.TSHOPCART.allOrderList;
-    this.detailList = this.allList.data;
-    this.balance = this.allList.data.payerBalance;
+    // console.log(this.allList[0].list);
+    // debugger
+    this.detailList = this.allList[0].list.data;
+    this.balance = this.allList[0].list.data.payerBalance;
     console.log(this.detailList);
     // this.goodsList = this[TRANSFER.GET_TSHOPCART].allOrderList.data
   },
@@ -95,13 +98,13 @@ export default {
       /* 商品 change */
       this.detailList.orderList[index] = good;
       // this.detailList = JSON.parse(JSON.stringify(this.detailList));
-      this.allList.data = this.detailList;
+      this.allList[0].list.data = this.detailList;
       console.log(this.allList);
       this[TRANSFER.UPDATE_TSHOPCART]({
         allOrderList: this.allList,
       });
     },
-    async deleteProductMe(item) {
+    async deleteProductMe(item, index) {
       console.log(item);
       // 删除购物车产品
       const deleteOrder = await this.transfergoodsService.deleteProduct({
@@ -122,7 +125,7 @@ export default {
         console.log(this.allList);
 
         this[TRANSFER.UPDATE_TSHOPCART]({
-          allOrderList: this.allList,
+          obj: item
         });
         uni.showToast({
           title: deleteOrder.data.message,
