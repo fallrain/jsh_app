@@ -47,6 +47,10 @@ export default {
   },
   created() {
     this.history = JSON.parse(localStorage.getItem('history'));
+    // this.history = uni.getStorage({
+    //   key: 'history'
+    // });
+    console.log(this.history);
   },
   methods: {
     silentReSearch() {
@@ -72,6 +76,10 @@ export default {
           this.history.pop();
         }
         localStorage.setItem('history', JSON.stringify(this.history));
+        // uni.setStorage({
+        //   key: 'history',
+        //   data: JSON.stringify(this.history),
+        // });
       } else {
         uni.navigateTo({
           url: '/pages/goods/goodsList'

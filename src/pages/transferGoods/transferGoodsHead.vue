@@ -122,13 +122,16 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-// ::v-deep .jHeadTabPicker-item{
-//   position: relative;
-//   width: 50%;
-//   overflow: hidden;
-//   margin-top:10px;
-
-// }
+ ::v-deep .jHeadTabPicker-item{
+   position: relative;
+   width: 50%;
+   height: 54px;
+   line-height: 54px;
+   display: flex;
+   align-items: center;
+   padding-left: 30px;
+   text-align: center;
+ }
 
 .jHeadTab-wrap {
   position: absolute;

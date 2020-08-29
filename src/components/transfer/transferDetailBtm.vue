@@ -4,11 +4,11 @@
       class="transferDetailBtm-check"
     >
       <text class="transferDetailBtm-check-shop">装车体积： </text>
-      <view class="transferDetailBtm-check-order">{{Number(calue)}}%</view>
+      <view class="transferDetailBtm-check-order">{{Number(detailList.calue)}}%</view>
       <view class="uni-padding-wrap uni-common-mt">
         <view class="progress-box">
             <progress
-              :percent='calue'
+              :percent='detailList.calue'
               activeColor="#2283E2"
               backgroundColor="#DEDEDE"
               stroke-width="10"
@@ -41,12 +41,8 @@ export default {
     }
   },
   created() {
-    if (this.fromWhere === 'ZC') {
-      const baifenbi = ((this.detailList.IBR_JSTIJI * 1) / (this.detailList.IBR_MAXTJ * 1)) * 100;
-      this.calue = baifenbi.toFixed(0);
-    } else {
-      this.calue = Math.round(this.detailList.IBR_JSTIJI / 15 * 100);
-    }
+    console.log(this.detailList.calue);
+    this.setCalue();
   },
   methods: {
     // choose() {
@@ -54,6 +50,14 @@ export default {
     //   this.$emit('update:checked', checked);
     //   this.$emit('checkAll', checked);
     // }
+    setCalue() {
+      // if (this.fromWhere === 'ZC') {
+      //   const baifenbi = ((this.detailList.IBR_JSTIJI * 1) / (this.detailList.IBR_MAXTJ * 1)) * 100;
+      //   this.detailList.calue = baifenbi.toFixed(0);
+      // } else {
+      //   // this.detailList.calue = Math.round(this.detailList.IBR_JSTIJI / 15 * 100);
+      // }
+    },
     tlement() {
       if (this.fromWhere === 'ZC') {
         // 整车结算

@@ -123,7 +123,7 @@ export default {
     };
   },
   onLoad() {
-    console.log(this.goods);
+
     // this.isCreditModeChange()
   },
   computed: {
@@ -154,6 +154,7 @@ export default {
       good.$favorite = !good.$favorite;
     },
     changeNum(value, item, index) {
+      console.log('hahahhaha', this.goods);
       console.log(index);
       item.IBL_NUM = value;
       item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
@@ -164,6 +165,7 @@ export default {
       console.log(sum);
       console.log('2222222222', item);
       this.goods.SUMMONEY = sum;
+      console.log(this.goods.calue);
       this.$emit('changeGood', item, index);
     },
     // 删除单个产品

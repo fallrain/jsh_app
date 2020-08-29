@@ -113,7 +113,6 @@ export default {
       userInfMianMi: false,
       // 提交订单大单号
       SEQ: '',
-      shuJu: [],
       tabs: [
         {
           id: 'gwc',
@@ -140,19 +139,15 @@ export default {
   },
   onLoad(option) {
     console.log(option);
+    console.log(this.infoList);
   },
   created() {
+    // this.infoList = JSON.parse(localStorage.getItem('infoList'));
+    // console.log(this.infoList);
     this.getShopInfo();
-    console.log(this.defaultSendToInf);
-    console.log(this.TSHOPCART.allOrderList);
-    if (this.TSHOPCART.allOrderList) {
-      this.shuJu = this.TSHOPCART.allOrderList;
-      // this.allOrderList.forEach((item) => {
-      //   if (item.data.IBR_SEQ === this.shuJu.data.IBR_SEQ) {
-      //     item = this.shuJu;
-      //   }
-      // });
-    }
+  },
+  watch: {
+    $route: ['set', 'getShopInfo']
   },
   computed: {
     ...mapGetters({
@@ -177,6 +172,15 @@ export default {
     ...mapMutations([
       TRANSFER.UPDATE_TSHOPCART
     ]),
+    set() {
+      if (this.TSHOPCART.allOrderList) {
+        console.log('ffffffffffffffffff', this.TSHOPCART.allOrderList[0]);
+        console.log('jjjjjjjjjjjjjjjjjjjj', this.allOrderList[this.TSHOPCART.allOrderList[0].index]);
+        this.allOrderList[this.TSHOPCART.allOrderList[0].index] = this.TSHOPCART.allOrderList[0].list;
+        console.log('eeeeeeeeeeeeeeeeeeee', this.allOrderList[this.TSHOPCART.allOrderList[0].index]);
+        // debugger
+      }
+    },
     // 显示验证码弹窗
     changeVf() {
       this.isShowVf = true;
@@ -234,6 +238,8 @@ export default {
           productCodes.push(...tempList);
           // 总价保留两位小数
           item.data.SUMMONEY = Number(item.data.SUMMONEY).toFixed(2);
+          item.data.calue = Math.round(item.data.IBR_JSTIJI / 15 * 100);
+          console.log('bbbbbbbbbbbbbbbbbbb', item.data.calue);
           item.data.orderList.forEach((v) => {
             v.IBL_NUM = v.IBL_NUM ? Number(v.IBL_NUM) : 1,
             v.IBL_MAXNUM = v.IBL_MAXNUM ? Number(v.IBL_MAXNUM) : 0;
@@ -293,7 +299,8 @@ export default {
         index,
         list
       });
-      console.log(infoList);
+      console.log(this.infoList);
+      // localStorage.setItem('infoList', JSON.stringify(this.infoList));
       this[TRANSFER.UPDATE_TSHOPCART]({
         allOrderList: infoList
       });
