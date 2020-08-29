@@ -40,7 +40,7 @@
           :goods="goods"
           :index="index"
           :userInf="userInf"
-          :versionPrice="specialPriceMap"
+          :versionPrice="versionPrice"
           :warehouseFlag="choseSendAddress.yunCangFlag"
           @change="goodsChange"
           @del="singleDeleteCart"
@@ -195,7 +195,7 @@ export default {
       // 信用额度列表（以产品大类为维度）
       creditQuotaList: [],
       // 版本价格对象
-      specialPriceMap: {},
+      versionPrice: {},
       // 产业数据
       isIndustryPickerShow: false,
       // 产业数据
@@ -404,8 +404,8 @@ export default {
         sendtoCode: this.defaultSendTo.customerCode,
         account: saletoCode,
       });
-      this.specialPriceMap = (data && data) || {};
-      return this.specialPriceMap;
+      this.versionPrice = (data && data) || {};
+      return this.versionPrice;
     },
     goodsChange(goods, index) {
       /* 商品数据change */
@@ -432,7 +432,9 @@ export default {
       this.shoppingList.forEach((v) => {
         if (v.checked) {
           const num = v.number;
-          const curTotal = this.jshUtil.arithmetic(v.$PriceInfo.commonPrice.invoicePrice, num, 3);
+          // 获取应该计算的版本数据
+          const version = this.getPriceVersionData(v);
+          const curTotal = this.jshUtil.arithmetic(version.invoicePrice, num, 3);
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
         }
       });
