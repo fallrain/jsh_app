@@ -398,6 +398,9 @@ export default {
     async getGoodsList(pages) {
       /* 搜索产品列表 */
       // 公共用户信息
+      if (pages.num === 1) {
+        this.mescroll.scrollTo(0, 100);
+      }
       const userInf = this.userInf;
       const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
@@ -484,13 +487,20 @@ export default {
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
-      this.tabs = tabs;
-      // tab为价格的时候，降序升序操作
-      if (tab.id === 'price') {
-        const sortDirection = tab.condition.sortDirection;
-        tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
-        tab.iconClass = tab.condition.sortDirection;
-        this.tabs[index] = tab;
+      if (!tab.noActive) {
+        this.tabs = tabs;
+        // tab为价格的时候，降序升序操作
+        if (tab.id === 'price') {
+          const sortDirection = tab.condition.sortDirection;
+          tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+          tab.iconClass = tab.condition.sortDirection;
+          this.tabs[index] = tab;
+        } else {
+          // 重置价格的状态
+          const priceTab = tabs.find(v => v.id === 'price');
+          priceTab.condition.sortDirection = 'desc';
+          priceTab.iconClass = '';
+        }
       }
       if (!tab.noSearch) {
         this.mescroll.resetUpScroll(true);
