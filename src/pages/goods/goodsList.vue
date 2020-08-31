@@ -560,8 +560,6 @@ export default {
           v.isChecked = false;
         });
       });
-      // 重新搜索
-      this.mescroll.resetUpScroll(true);
     },
     showDeliveryAddress() {
       /* 展示配送地址 */

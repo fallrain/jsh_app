@@ -168,7 +168,7 @@ export default {
           isExpand: true,
           list: []
         };
-        tjVersion.list = this.allPrice.tj.specialList.map(v => ({
+        tjVersion.list = tj.specialList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
@@ -202,7 +202,7 @@ export default {
           isExpand: true,
           list: []
         };
-        version.list = gc.projectList.map(v => ({
+        version.list = yjList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
