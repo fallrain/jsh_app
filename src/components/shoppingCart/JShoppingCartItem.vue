@@ -117,27 +117,34 @@
           <i class="iconfont iconxia"></i>
         </view>
       </view>
-      <view
-        class="jShoppingCartItem-btm-inf-wrap"
-        v-if="choseVersionInf"
-      >
+      <block v-if="choseVersionInf && choseVersionInf.length">
         <view
-          class="jShoppingCartItem-btm-inf-close iconfont iconcross"
-          v-if="isShowSpecificationsInfDel"
-          @tap="handleDelVersion"
-        ></view>
-        <view class="jShoppingCartItem-btm-inf-icon">
-          <view class="iconfont iconi"></view>
+          :key="index"
+          v-for="(inf,index) in choseVersionInf"
+        >
+          <view
+            class="jShoppingCartItem-btm-inf-wrap"
+            v-if="inf"
+          >
+            <view
+              @tap="handleDelVersion"
+              class="jShoppingCartItem-btm-inf-close iconfont iconcross"
+              v-if="isShowSpecificationsInfDel"
+            ></view>
+            <view class="jShoppingCartItem-btm-inf-icon">
+              <view class="iconfont iconi"></view>
+            </view>
+            <view>{{inf}}</view>
+          </view>
         </view>
-        <view>{{choseVersionInf}}</view>
-      </view>
+      </block>
     </view>
     <j-version-specifications
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
       type="radio"
-      @cancel="specificationsCancel"
       @confirm="specificationsConfirm"
+      @cancel="specificationsCancel"
     >
       <template #head>
         <view class="jVersionSpecifications-pop-head-wrap">
@@ -266,10 +273,7 @@ export default {
     },
     isShowSpecificationsBtn() {
       /* 是否显示【版本规格】按钮 */
-      const product = this.getProduct(this.goods);
-      // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
-      const isPT = product && product.priceType === 'PT';
-      return !!(this.specificationsList.length && isPT);
+      return !!(this.specificationsList.length);
     },
     isShowSpecificationsInfDel() {
       /* 是否显示【版本规格信息】删除按钮 */
@@ -279,54 +283,39 @@ export default {
     },
     choseVersionInf() {
       /* 选择的版本信息 */
-      // priceType
-      const product = this.getProduct(this.goods);
-      if (!product) {
-        return '';
-      }
-      // 选择的版本
-      let curVersion = {};
-      // 如果存在在购物车才选择了的价格版本(购物车可替换版本)
-      if (this.goods.choseOtherVersions && this.goods.choseOtherVersions.length) {
-        curVersion = this.goods.choseOtherVersions[0];
-      } else {
+      const curVersions = this.getPriceVersionData(this.goods);
+      return curVersions.map((curVersion) => {
+        // 普通价格不额外显示
         const {
-          priceType,
-          productCode,
-          // 价格版本，根据这个去版本价里轮询匹配
-          priceVersion
-        } = product;
-        // 普通版本不显示
-        // 接口大写小写都可能返回
-        const priceTypeUpper = this.getPriceType(priceType);
-        if (priceType === 'PT') {
+          // 版本类型
+          priceType
+        } = curVersion;
+        if (JSON.stringify(curVersion) === '{}' || priceType === 'PT') {
           return '';
         }
-
-        // 取版本价格
-        if (JSON.stringify(this.versionPrice) !== '{}') {
-          // 获取当前产品的所有版本价格信息
-          const curAllVersion = this.versionPrice.activity[productCode];
-          if (curAllVersion) {
-            curVersion = curAllVersion[priceTypeUpper].find(v => v.versionCode === priceVersion);
-          }
+        const {
+          // 版本名
+          priceTypeName,
+          // 版本编号
+          versionCode,
+          // 版本发票价
+          invoicePrice,
+          // 版本可用数量
+          usableQty,
+          // 版本调货可用数量
+          num
+        } = curVersion;
+        if (priceType) {
+          return `${priceTypeName}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
         }
-      }
-      const {
-        // 版本名
-        priceTypeName,
-        // 版本编号
-        versionCode,
-        // 版本发票价
-        invoicePrice,
-        // 版本可用数量
-        usableQty
-      } = curVersion;
-      return `${priceTypeName}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
+        return `版本调货：${versionCode} 数量：${num}`;
+      });
     },
     chosePrice() {
       /* 选择的版本信息 */
-      return this.getPriceVersionData(this.goods);
+      const versions = this.getPriceVersionData(this.goods);
+      // 非版本调货的才显示
+      return versions.find(v => v.priceType) || {};
     },
     totalChosePrice() {
       /* 本产品的总价格 */
@@ -386,87 +375,102 @@ export default {
         return;
       }
       const specificationsList = [];
-      const productCode = this.goods.productList[0].productCode;
+      const {
+        productCode,
+      } = this.goods.productList[0];
+      let {
+        priceType
+      } = this.goods.productList[0];
       const {
         TJ: tj,
         GC: gc,
         YJCY: yjList
       } = this.versionPrice.activity[productCode];
-        // 特价版本信息
-      const tjList = tj;
-      if (tjList && tjList.length) {
-        const tjVersion = {
-          title: '特价版本',
-          isExpand: true,
-          list: []
-        };
-        tjVersion.list = tjList.map(v => ({
-          ...v,
-          priceVersion: v.versionCode,
-          name: v.versionCode,
-          price: v.invoicePrice,
-          time: v.endDate,
-          num: v.usableQty,
-          priceType: v.priceType,
-          checked: false
-        }));
-        specificationsList.push(tjVersion);
+      // priceType转为大写
+      priceType && (priceType = priceType.toUpperCase());
+      // 特价版本信息，已经有非普通版本价格的不可选择（调货除外）
+      if (!priceType || priceType === 'PT') {
+        const tjList = tj;
+        if (tjList && tjList.length) {
+          const tjVersion = {
+            id: 'special',
+            title: '特价版本',
+            isExpand: true,
+            list: []
+          };
+          tjVersion.list = tjList.map(v => ({
+            ...v,
+            priceVersion: v.versionCode,
+            name: v.versionCode,
+            price: v.invoicePrice,
+            time: v.endDate,
+            num: v.usableQty,
+            priceType: v.priceType,
+            checked: false
+          }));
+          specificationsList.push(tjVersion);
+        }
+        // 工程版本信息
+        if (gc && gc.length) {
+          const version = {
+            id: 'project',
+            title: '工程版本',
+            isExpand: true,
+            list: []
+          };
+          version.list = gc.map(v => ({
+            ...v,
+            priceVersion: v.versionCode,
+            name: v.versionCode,
+            price: v.invoicePrice,
+            time: v.endDate,
+            num: v.usableQty,
+            priceType: v.priceType,
+            checked: false
+          }));
+          specificationsList.push(version);
+        }
+        // 样机版本信息
+        if (yjList && yjList.length) {
+          const version = {
+            id: 'example',
+            title: '样机版本',
+            isExpand: true,
+            list: []
+          };
+          version.list = yjList.map(v => ({
+            ...v,
+            priceVersion: v.versionCode,
+            name: v.versionCode,
+            price: v.invoicePrice,
+            time: v.endDate,
+            num: v.usableQty,
+            priceType: v.priceType,
+            checked: false
+          }));
+          specificationsList.push(version);
+        }
       }
-      // 工程版本信息
-      if (gc && gc.length) {
-        const version = {
-          title: '工程版本',
-          isExpand: true,
-          list: []
-        };
-        version.list = gc.map(v => ({
-          ...v,
-          priceVersion: v.versionCode,
-          name: v.versionCode,
-          price: v.invoicePrice,
-          time: v.endDate,
-          num: v.usableQty,
-          priceType: v.priceType,
-          checked: false
-        }));
-        specificationsList.push(version);
-      }
-      // 样机版本信息
-      if (yjList && yjList.length) {
-        const version = {
-          title: '样机版本',
-          isExpand: true,
-          list: []
-        };
-        version.list = yjList.map(v => ({
-          ...v,
-          priceVersion: v.versionCode,
-          name: v.versionCode,
-          price: v.invoicePrice,
-          time: v.endDate,
-          num: v.usableQty,
-          priceType: v.priceType,
-          checked: false
-        }));
-        specificationsList.push(version);
-      }
-      // 调货
-      const transformVersionList = this.versionPrice.version.version[productCode];
-      if (transformVersionList && transformVersionList.length) {
-        const version = {
-          title: '调货版本',
-          isExpand: true,
-          list: []
-        };
-        version.list = transformVersionList.map(v => ({
-          ...v,
-          priceVersion: v.versionCode,
-          name: v.versionCode,
-          price: v.price,
-          num: v.number,
-          checked: false
-        }));
-        specificationsList.push(version);
+      // 调货 选的是普通、特价、工程的时候，还可选个调货
+      if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
+        const transformVersionList = this.versionPrice.version.version[productCode];
+        if (transformVersionList && transformVersionList.length) {
+          const version = {
+            id: 'transfer',
+            title: '调货版本',
+            isExpand: true,
+            list: []
+          };
+          version.list = transformVersionList.map(v => ({
+            ...v,
+            priceVersion: v.versionCode,
+            name: v.versionCode,
+            price: v.price,
+            num: v.number,
+            checked: false
+          }));
+          specificationsList.push(version);
+        }
       }
       this.specificationsList = specificationsList;
     },

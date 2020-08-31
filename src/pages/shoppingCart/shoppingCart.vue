@@ -410,7 +410,6 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.shoppingList[index] = goods;
-      this.shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
       // 更新选择的商品数目
       this.totalGoodsNum = this.countTotalNumber();
       // 更新选择的总商品价格
@@ -433,7 +432,7 @@ export default {
         if (v.checked) {
           const num = v.number;
           // 获取应该计算的版本数据
-          const version = this.getPriceVersionData(v);
+          const version = this.getPriceVersionData(v).find(data => data.priceType);
           const curTotal = this.jshUtil.arithmetic(version.invoicePrice, num, 3);
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
         }
@@ -601,20 +600,34 @@ export default {
           });
           // 判断产品的取值的字段名
           let productListName = 'productList';
+          // 调货版本号
+          let transferVersion;
+          // 调货数量
+          let transferVersionNumber;
           // 如果选择了版本，则从choseOtherVersions字段取商品
           if (v.choseOtherVersions && v.choseOtherVersions.length) {
-            productListName = 'choseOtherVersions';
+            // 是否存在版本调货
+            const transfer = v.choseOtherVersions.find(vs => !vs.priceType);
+            // 版本调货本质不算版本，只需要在已选的版本里添加调货字段
+            if (transfer) {
+              transferVersion = transfer.versionCode;
+              transferVersionNumber = transfer.num;
+            } else {
+              productListName = 'choseOtherVersions';
+            }
           }
           form.productList = v[productListName].map(prdt => new OrderSplitComposeProduct({
             ...prdt,
-            number: v.number,
+            // 存在版本调货，则传版本调货提供的数量
+            number: transferVersion ? transferVersionNumber : v.number,
             // 是否信用模式
             isCheckCreditModel: v.isCreditMode ? '1' : '0',
             // farWeek: prdt.weekPromise,
             // isCheckFarWeek: '0',
             // 是否直发
             isStock: v.isDirectMode ? '1' : '0',
-            // transferVersion: '',
+            // 版本调货版本号
+            transferVersion: transferVersion || undefined
           }));
 
           formList.push(form);
