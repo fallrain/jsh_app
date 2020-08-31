@@ -474,7 +474,7 @@ export default {
             };
             // 更改默认的送达方
             this.customerService.changeDefaultSendTo({
-              sendToCode: this.defaultSendTo.customerCode
+              sendToCode: detail.customerCode
             }).then(({ code }) => {
               if (code === '1') {
                 // 更改成功之后更新数据列表

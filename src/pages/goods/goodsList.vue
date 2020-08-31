@@ -227,7 +227,9 @@ export default {
       // 配送地址数据
       deliveryAddressList: [],
       // 当前选中的配送地址
-      curChoseDeliveryAddress: {}
+      curChoseDeliveryAddress: {},
+      // 上一组搜索对象数据
+      preSearchCondition: {}
     };
   },
   onLoad(options) {
@@ -269,6 +271,13 @@ export default {
   },
   created() {
     this.getPageInf();
+  },
+  watch: {
+    isShowGoodsFilterDrawer(val) {
+      if (!val) {
+
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -372,6 +381,7 @@ export default {
       const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
       const { code, data } = await this.commodityService.goodsList(condition);
+      this.preSearchCondition = condition;
       const scrollView = {};
       if (code === '1') {
         const {
@@ -532,6 +542,15 @@ export default {
     filterConfirm() {
       /* 抽屉筛选确认 */
       // 重新搜索
+      const condition = this.getSearchCondition({
+        num: 1,
+        size: 10
+      });
+      const difKeys = this.jshUtil.findDifKey(this.preSearchCondition, condition);
+      // 没有不同则直接返回
+      if (!Object.keys(difKeys).length) {
+        return;
+      }
       this.mescroll.resetUpScroll(true);
     },
     filterReset() {
@@ -560,13 +579,16 @@ export default {
           }));
           // 当前配送地址修改(选出默认地址)
           const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          let curChoseDeliveryAddress;
           if (defaultIndex > -1) {
-            const curChoseDeliveryAddress = data[defaultIndex];
-            // 更新默认送达方store
-            this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
-            this.deliveryAddressList[defaultIndex].checked = true;
-            this.curChoseDeliveryAddress = curChoseDeliveryAddress;
+            curChoseDeliveryAddress = data[defaultIndex];
+          } else {
+            curChoseDeliveryAddress = data[0];
           }
+          // 更新默认送达方store
+          this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
+          this.deliveryAddressList[defaultIndex].checked = true;
+          this.curChoseDeliveryAddress = curChoseDeliveryAddress;
         }
       });
     },
@@ -574,6 +596,15 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+      // 更改默认的送达方
+      this.customerService.changeDefaultSendTo({
+        sendToCode: item.customerCode
+      }).then(({ code }) => {
+        if (code === '1') {
+          // 更改成功之后更新store
+          this[USER.UPDATE_DEFAULT_SEND_TO](item);
+        }
+      });
     }
   }
 };
