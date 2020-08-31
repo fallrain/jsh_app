@@ -184,6 +184,7 @@ export default {
           ],
           handler: 'showFilter',
           noSearch: true,
+          noActive: true,
           active: false
         }
       ],
