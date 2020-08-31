@@ -235,8 +235,13 @@ export default {
       this.addToCartForEveryVersion();
     },
     specificationsCancel() {
-      /* 选中版本取消 */
+      /* 选中版本重置 */
       this.specificationsCheckList = [];
+      this.specificationsList.forEach((version) => {
+        version.list.forEach((v) => {
+          v.checked = false;
+        });
+      });
     },
     checkSpecifications() {
       /* 检查是否有版本规格的数据，没有直接加入购物车 */
