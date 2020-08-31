@@ -74,6 +74,7 @@
       cancelBtnText="重置"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
+      @close="clearChoseSpecifications"
     >
     </j-version-specifications>
     <m-toast
@@ -237,6 +238,10 @@ export default {
     specificationsCancel() {
       /* 选中版本重置 */
       this.specificationsCheckList = [];
+      this.clearChoseSpecifications();
+    },
+    clearChoseSpecifications() {
+      /* 清除版本选中 */
       this.specificationsList.forEach((version) => {
         version.list.forEach((v) => {
           v.checked = false;
