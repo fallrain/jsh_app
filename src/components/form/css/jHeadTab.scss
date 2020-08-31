@@ -45,13 +45,23 @@ $jHeadTab-pop-tab-list: 24px;
   padding-left: 12px;
   padding-right: 12px;
   padding-bottom: $jHeadTab-pop-tab-list;
-  overflow-x: auto;
   background: #fff;
   height: 92px;
   margin-top: -3px !important;
 
   &.isExpend {
     padding-bottom: 0;
+  }
+
+  .uni-scroll-view-content {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .uni-scroll-view {
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 

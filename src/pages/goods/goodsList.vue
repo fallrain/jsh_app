@@ -127,7 +127,8 @@ import {
   mapMutations
 } from 'vuex';
 import {
-  USER
+  USER,
+  COMMODITY
 } from '../../store/mutationsTypes';
 
 export default {
@@ -273,17 +274,11 @@ export default {
   created() {
     this.getPageInf();
   },
-  watch: {
-    isShowGoodsFilterDrawer(val) {
-      if (!val) {
-
-      }
-    }
-  },
   computed: {
     ...mapGetters({
       userInf: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      catalogList: COMMODITY.GET_CATALOG_LIST
     }),
   },
   methods: {
@@ -375,12 +370,40 @@ export default {
       });
       this.popTabs = popTabs;
     },
+    genFilterDataOfStock(categoryCode) {
+      /* 组合有货商品，并选中 */
+      const catalog = this.catalogList.find(v => v.categoryCode.substring(0, 3) === categoryCode.substring(0, 3));
+      if (catalog) {
+        const data = catalog.stockTypes.map(v => ({
+          // 传向接口的key name
+          searchKey: 'stockType',
+          // 传向接口的key的value的属性
+          keyAttr: 'key',
+          key: v.stockType,
+          value: v.stockType,
+          isChecked: false
+        }));
+        // 如果之前有选中的有货商品，设置选中
+        const checkedObj = this.filterList[2].data.find(v => v.isChecked);
+        if (checkedObj) {
+          const newCheckObj = data.find(v => v.key === checkedObj.key);
+          if (newCheckObj) {
+            newCheckObj.isChecked = true;
+          }
+        }
+        // 修改有货商品
+        this.filterList[2].data = data;
+      }
+    },
     async getGoodsList(pages) {
       /* 搜索产品列表 */
       // 公共用户信息
       const userInf = this.userInf;
       const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
+      if (condition.categoryCode) {
+        this.genFilterDataOfStock(condition.categoryCode);
+      }
       const { code, data } = await this.commodityService.goodsList(condition);
       this.preSearchCondition = condition;
       const scrollView = {};
