@@ -10,9 +10,8 @@
     {
       "path": "pages/index/index",
       "style": {
-        // "navigationBarTitleText": "首页"
-
-        "navigationStyle" :"custom"
+         "navigationBarTitleText": "采购首页"
+         // "navigationStyle" :"custom"
       }
     },
     {
@@ -72,7 +71,8 @@
     {
       "path": "pages/shoppingCart/shoppingCart",
       "style": {
-        "navigationBarTitleText": "购物车"
+        "navigationBarTitleText": "购物车",
+        "enablePullDownRefresh": true
       }
     },
     {

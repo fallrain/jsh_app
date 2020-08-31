@@ -19,7 +19,7 @@
       </view>
       <view>
           <text class="tShoppingCartItem-head-text">装车体积:</text>
-          <text class="tShoppingCartItem-head-volume">{{Math.round(list.data.IBR_JSTIJI/15*100)}}%</text>
+          <text class="tShoppingCartItem-head-volume">{{Number(list.data.calue)}}%</text>
       </view>
       <view class="tShoppingCartItem-btm-btn iconfont iconxia" @click="getMore"></view>
         <view v-show="isOrderMore" class="transfer_more">
@@ -252,7 +252,7 @@ export default {
           this.list.data.orderList.forEach((ele) => {
             sum += Number(ele.SUMMONEY);
           });
-          console.log(sum);
+          console.log(this.list.data);
           this.list.data.SUMMONEY = sum.toFixed(2);
           this.$emit('query');
         }
@@ -263,7 +263,7 @@ export default {
       //  uni.navigateTo({
       //    url: '/pages/transferGoods/transferDetail?IBR_SEQ='+ seq + '&list='+ JSON.stringify(list)
       // })
-      this.$emit('goTransferDetail', seq, list);
+      this.$emit('goTransferDetail', seq, list, this.index);
     },
     async deleteShoppingCart(item) {
       // 删除购物车订单

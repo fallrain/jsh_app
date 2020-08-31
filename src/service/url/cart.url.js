@@ -4,6 +4,14 @@ const baseURL = 'cart';
 const urls = {
   // 添加到购物车
   addToCart: '/shoppingCart/add/cart',
+  // 获取购物车数据,刷新缓存
+  getShoppingCartList(data) {
+    const {
+      saletoCode,
+      sendtoCode
+    } = data;
+    return `/shoppingCart/get/list/${saletoCode}/${sendtoCode}`;
+  },
   // 从缓存获取购物车数据
   getShoppingCartListFromCache(saleToCode) {
     return `/shoppingCart/get/list/cache/${saleToCode}`;

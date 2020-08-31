@@ -11,7 +11,7 @@
       >
         <view class="transferDetailItem-detail-odd">
           调货单号：<text class="transferDetailItem-detail-odd-num">{{good.IBL_KORDERNO}}</text>
-          <view class="transferDetailItem-detail-close iconfont iconcross" @tap="deleteProduct(good)"></view>
+          <view class="transferDetailItem-detail-close iconfont iconcross" @tap="deleteProduct(good,index)"></view>
         </view>
         <view class="transferDetailItem-detail-cnt">
           <view class="transferDetailItem-detail-cnt-img-wrap">
@@ -123,7 +123,7 @@ export default {
     };
   },
   onLoad() {
-    console.log(this.goods);
+
     // this.isCreditModeChange()
   },
   computed: {
@@ -154,6 +154,7 @@ export default {
       good.$favorite = !good.$favorite;
     },
     changeNum(value, item, index) {
+      console.log('hahahhaha', this.goods);
       console.log(index);
       item.IBL_NUM = value;
       item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
@@ -164,12 +165,13 @@ export default {
       console.log(sum);
       console.log('2222222222', item);
       this.goods.SUMMONEY = sum;
+      console.log(this.goods.calue);
       this.$emit('changeGood', item, index);
     },
     // 删除单个产品
-    deleteProduct(item) {
+    deleteProduct(item, index) {
       console.log('******123');
-      this.$emit('delete', item);
+      this.$emit('delete', item, index);
     },
     showPayer(item, index) {
       // 显示付款方

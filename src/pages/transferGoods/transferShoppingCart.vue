@@ -111,9 +111,8 @@ export default {
       },
       // 是否免密
       userInfMianMi: false,
-      //提交订单大单号
+      // 提交订单大单号
       SEQ: '',
-
       tabs: [
         {
           id: 'gwc',
@@ -133,15 +132,22 @@ export default {
       ],
       // 是否全选
       isCheckAll: false,
+      infoList: [],
+
 
     };
   },
   onLoad(option) {
     console.log(option);
+    console.log(this.infoList);
   },
   created() {
+    // this.infoList = JSON.parse(localStorage.getItem('infoList'));
+    // console.log(this.infoList);
     this.getShopInfo();
-    console.log(this.defaultSendToInf);
+  },
+  watch: {
+    $route: ['set', 'getShopInfo']
   },
   computed: {
     ...mapGetters({
@@ -149,14 +155,32 @@ export default {
       saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
       TSHOPCART: TRANSFER.GET_TSHOPCART,
+      INDEX: TRANSFER.GET_INDEX
     })
 
   },
-
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log(to);
+  //   console.log(this.TSHOPCART.allOrderList);
+  //   debugger;
+  //   // if (from.path === 'pages/transferGoods/transferDetail') {
+  //   //   // this.allOrderList[this.TSHOPCART.index] = this.TSHOPCART.allOrderList;
+  //   // }
+  //   // next();
+  // },
   methods: {
     ...mapMutations([
       TRANSFER.UPDATE_TSHOPCART
     ]),
+    set() {
+      if (this.TSHOPCART.allOrderList) {
+        console.log('ffffffffffffffffff', this.TSHOPCART.allOrderList[0]);
+        console.log('jjjjjjjjjjjjjjjjjjjj', this.allOrderList[this.TSHOPCART.allOrderList[0].index]);
+        this.allOrderList[this.TSHOPCART.allOrderList[0].index] = this.TSHOPCART.allOrderList[0].list;
+        console.log('eeeeeeeeeeeeeeeeeeee', this.allOrderList[this.TSHOPCART.allOrderList[0].index]);
+        // debugger
+      }
+    },
     // 显示验证码弹窗
     changeVf() {
       this.isShowVf = true;
@@ -214,6 +238,8 @@ export default {
           productCodes.push(...tempList);
           // 总价保留两位小数
           item.data.SUMMONEY = Number(item.data.SUMMONEY).toFixed(2);
+          item.data.calue = Math.round(item.data.IBR_JSTIJI / 15 * 100);
+          console.log('bbbbbbbbbbbbbbbbbbb', item.data.calue);
           item.data.orderList.forEach((v) => {
             v.IBL_NUM = v.IBL_NUM ? Number(v.IBL_NUM) : 1,
             v.IBL_MAXNUM = v.IBL_MAXNUM ? Number(v.IBL_MAXNUM) : 0;
@@ -266,12 +292,18 @@ export default {
       }
     },
     // 跳转到详情页
-    goTransferDetail(seq, list, e) {
-      console.log(seq, list);
-      this[TRANSFER.UPDATE_TSHOPCART]({
-        allOrderList: list,
+    goTransferDetail(seq, list, index) {
+      console.log(seq);
+      const infoList = [];
+      infoList.push({
+        index,
+        list
       });
-
+      console.log(this.infoList);
+      // localStorage.setItem('infoList', JSON.stringify(this.infoList));
+      this[TRANSFER.UPDATE_TSHOPCART]({
+        allOrderList: infoList
+      });
       uni.navigateTo({
         url: `/pages/transferGoods/transferDetail?IBR_SEQ=${seq}`
       });
@@ -392,37 +424,9 @@ export default {
         this.userInfMianMi = data.data;
       }
     },
-    // 提交订单
-    // async getsubmitDhOrderTwo() {
-    //   let _this = this;
-    //   this.allOrderList.forEach((ele) => {
-    //     if (ele.checked) {
-    //       this.SEQ = ele.IBR_SEQ;
-    //     }
-    //   });
-    //   const submitDhOrder = await this.transfergoodsService.submitDhOrder({
-    //     timestamp: Date.parse(new Date()),
-    //     longfeiUSERID: this.saleInfo.customerCode,
-    //     orderNo: this.SEQ,
-    //     verifyCode: this.form.verificationCode,
-    //     verifyKey: '',
-    //   });
-    //   if (submitDhOrder.code === '1') {
-    //     this.getCargoDispose();
-    //     _this.getCargoDispose();
-    //     uni.showToast({
-    //       title: '调货订单提交成功',
-    //     });
-    //
-    //   } else {
-    //     uni.showToast({
-    //       title: '提交失败请重试',
-    //     });
-    //   }
-    // },
     // 删除选中产品
     editDelete() {
-      let _this = this;
+      const _this = this;
       // confirm("确认要删除选中订单")
       uni.showModal({
         title: '',
@@ -652,7 +656,21 @@ export default {
 
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+::v-deep .jTab-item.active {
+  font-size: 36px;
+  color: #2283E2;
+  &:after {
+     content: '';
+     display: block;
+     position: absolute;
+     top: 100%;
+     left: 0;
+     right: 0;
+     height: 4px;
+     background: #2283E2;
+   }
+}
 
 
 </style>

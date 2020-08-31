@@ -24,5 +24,9 @@ export default {
       /* 订单详情信息 */
       return state.allOrderList;
     },
+    [TRANSFER.GET_INDEX](state) {
+      /* 订单详情信息 */
+      return state.index;
+    },
   }
 };

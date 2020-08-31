@@ -48,13 +48,13 @@
         <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList && goods.productList[0].productName}}</view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
-            ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice | formatMoney}}
+            ¥{{chosePrice.invoicePrice}}
           </view>
           <view class="jShoppingCartItem-cnt-price-inf-item">
-            小计：¥{{jshUtil.arithmetic(goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice,goods.number,3) |
-            formatMoney}}
+            小计：¥{{totalChosePrice}}
           </view>
           <uni-number-box
+            :value="goods.number"
             @change="goodsNumChange"
           ></uni-number-box>
         </view>
@@ -65,55 +65,71 @@
       ></view>
     </view>
     <view class="jShoppingCartItem-btm">
-      <view class="jShoppingCartItem-btm-tags mr34">
-        <view
-          class="jShoppingCartItem-btm-tag"
-          v-if="goods.productList[0].swrhFlag==='Y'"
-        >统
+      <view class="jShoppingCartItem-btm-options-wrap">
+        <view class="jShoppingCartItem-btm-tags mr34">
+          <view
+            class="jShoppingCartItem-btm-tag"
+            v-if="goods.productList[0].swrhFlag==='Y'"
+          >统
+          </view>
+          <view
+            class="jShoppingCartItem-btm-tag"
+            v-if="goods.productList[0].signStatus==='Y'"
+          >云
+          </view>
+          <view
+            class="jShoppingCartItem-btm-tag"
+            v-if="goods.productList[0].ydzfFlag==='Y'"
+          >异
+          </view>
         </view>
+        <view class="jShoppingCartItem-btm-text">库存：{{goods.productList[0].productStock}}</view>
         <view
-          class="jShoppingCartItem-btm-tag"
-          v-if="goods.productList[0].signStatus==='Y'"
-        >云
-        </view>
-        <view
-          class="jShoppingCartItem-btm-tag"
-          v-if="goods.productList[0].ydzfFlag==='Y'"
-        >异
-        </view>
-      </view>
-      <view class="jShoppingCartItem-btm-text">库存：{{goods.productList[0].productStock}}</view>
-      <view
-        class="jShoppingCartItem-btm-switch-wrap"
-        v-if="goods.productList[0].creditModel==='1' && !warehouseFlag"
-      >
-        <j-switch
-          :active.sync="goods.isCreditMode"
-          :beforeChange="handleBeforeCreditModeChange"
-          @change="isCreditModeChange"
+          class="jShoppingCartItem-btm-switch-wrap"
+          v-if="goods.productList[0].creditModel==='1' && !warehouseFlag"
         >
-        </j-switch>
-        <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
-      </view>
-      <view
-        class="jShoppingCartItem-btm-switch-wrap"
-        v-if="isDirect || hasGCVersion"
-      >
-        <j-switch
-          :active.sync="goods.isDirectMode"
-          @change="isDirectModeChange"
+          <j-switch
+            :active.sync="goods.isCreditMode"
+            :beforeChange="handleBeforeCreditModeChange"
+            @change="isCreditModeChange"
+          >
+          </j-switch>
+          <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
+        </view>
+        <view
+          class="jShoppingCartItem-btm-switch-wrap"
+          v-if="isDirect || hasGCVersion"
         >
-        </j-switch>
-        <text class="jShoppingCartItem-btm-switch-text mr32 ml8">直发</text>
+          <j-switch
+            :active.sync="goods.isDirectMode"
+            @change="isDirectModeChange"
+          >
+          </j-switch>
+          <text class="jShoppingCartItem-btm-switch-text mr32 ml8">直发</text>
+        </view>
+        <!--v-if="goods.productList[0].specialPrice==='Y'"-->
+        <view
+          v-if="isShowSpecificationsBtn"
+          :class="['jShoppingCartItem-btm-version-picker',goods.choseOtherVersions.length && 'active']"
+          @tap="showSpecifications"
+        >
+          <text>版本规格</text>
+          <i class="iconfont iconxia"></i>
+        </view>
       </view>
-      <!--v-if="goods.productList[0].specialPrice==='Y'"-->
       <view
-        v-if="specificationsList.length"
-        class="jShoppingCartItem-btm-version-picker"
-        @tap="showSpecifications"
+        class="jShoppingCartItem-btm-inf-wrap"
+        v-if="choseVersionInf"
       >
-        <text>版本规格</text>
-        <i class="iconfont iconxia"></i>
+        <view
+          class="jShoppingCartItem-btm-inf-close iconfont iconcross"
+          v-if="isShowSpecificationsInfDel"
+          @tap="handleDelVersion"
+        ></view>
+        <view class="jShoppingCartItem-btm-inf-icon">
+          <view class="iconfont iconi"></view>
+        </view>
+        <view>{{choseVersionInf}}</view>
       </view>
     </view>
     <j-version-specifications
@@ -134,21 +150,21 @@
               <view class="mt16 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">建议零售价：</view>
                 <view class="jVersionSpecifications-pop-head-cnt-price">
-                  ¥{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.invoicePrice | formatMoney}}
+                  ¥{{chosePrice.invoicePrice}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  供价：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.supplyPrice | formatMoney}}
+                  供价：{{chosePrice.supplyPrice}}
                 </view>
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">
-                  台返 ：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.rebatePolicy | rebatePolicy}}
+                  台返 ：{{chosePrice.rebateMoney | rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  返利：{{goods.$PriceInfo && goods.$PriceInfo.commonPrice.rebateMoney}}
+                  返利：{{chosePrice.rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  直扣率：{{jshUtil.arithmetic(goods.$PriceInfo && goods.$PriceInfo.commonPrice.rebateRate,100)}}%
+                  直扣率：{{chosePrice.rebatePolicy}}%
                 </view>
               </view>
             </view>
@@ -167,6 +183,7 @@ import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
 import './css/JShoppingCartItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
+import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
 
 export default {
   name: 'JShoppingCartItem',
@@ -176,7 +193,8 @@ export default {
     uniNumberBox
   },
   mixins: [
-    followGoodsMixin
+    followGoodsMixin,
+    shoppingCartMixin
   ],
   props: {
     // 商品数据
@@ -219,11 +237,10 @@ export default {
       // 选择的版本
       specificationsCheckList: [],
       // 是否选择了工程版本
-      hasGCVersion: false
+      hasGCVersion: false,
     };
   },
   created() {
-    debugger;
     this.genSpecificationsList();
   },
   watch: {
@@ -235,10 +252,8 @@ export default {
   computed: {
     isDirect() {
       /* 直发 */
-      let product;
-      if (this.goods.productList && this.goods.productList[0]) {
-        product = this.goods.productList[0];
-      } else {
+      const product = this.getProduct(this.goods);
+      if (!product) {
         return false;
       }
       // 符合显示直发的产品组
@@ -248,6 +263,78 @@ export default {
       } = product;
       const inProductGroup = directProducts.find(v => v === productGroup);
       return inProductGroup;
+    },
+    isShowSpecificationsBtn() {
+      /* 是否显示【版本规格】按钮 */
+      const product = this.getProduct(this.goods);
+      // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
+      const isPT = product && product.priceType === 'PT';
+      return !!(this.specificationsList.length && isPT);
+    },
+    isShowSpecificationsInfDel() {
+      /* 是否显示【版本规格信息】删除按钮 */
+      const product = this.getProduct(this.goods);
+      // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
+      return !!(product && product.priceType === 'PT');
+    },
+    choseVersionInf() {
+      /* 选择的版本信息 */
+      // priceType
+      const product = this.getProduct(this.goods);
+      if (!product) {
+        return '';
+      }
+      // 选择的版本
+      let curVersion = {};
+      // 如果存在在购物车才选择了的价格版本(购物车可替换版本)
+      if (this.goods.choseOtherVersions && this.goods.choseOtherVersions.length) {
+        curVersion = this.goods.choseOtherVersions[0];
+      } else {
+        const {
+          priceType,
+          productCode,
+          // 价格版本，根据这个去版本价里轮询匹配
+          priceVersion
+        } = product;
+        // 普通版本不显示
+        // 接口大写小写都可能返回
+        const priceTypeUpper = this.getPriceType(priceType);
+        if (priceType === 'PT') {
+          return '';
+        }
+
+        // 取版本价格
+        if (JSON.stringify(this.versionPrice) !== '{}') {
+          // 获取当前产品的所有版本价格信息
+          const curAllVersion = this.versionPrice.activity[productCode];
+          if (curAllVersion) {
+            curVersion = curAllVersion[priceTypeUpper].find(v => v.versionCode === priceVersion);
+          }
+        }
+      }
+      const {
+        // 版本名
+        priceTypeName,
+        // 版本编号
+        versionCode,
+        // 版本发票价
+        invoicePrice,
+        // 版本可用数量
+        usableQty
+      } = curVersion;
+      return `${priceTypeName}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
+    },
+    chosePrice() {
+      /* 选择的版本信息 */
+      return this.getPriceVersionData(this.goods);
+    },
+    totalChosePrice() {
+      /* 本产品的总价格 */
+      let total = 0;
+      if (this.chosePrice && this.chosePrice.invoicePrice) {
+        total = this.jshUtil.arithmetic(this.chosePrice.invoicePrice, this.goods.number, 3);
+      }
+      return this.jshUtil.formatNumber(total, 2);
     }
   },
   methods: {
@@ -389,6 +476,7 @@ export default {
       // 如果选中了工程版本，则会显示【直发】switch
       this.hasGCVersion = !!checkedList.find(v => v.priceType === 'GC');
       this.goods.choseOtherVersions = checkedList;
+      this.$emit('change', this.goods, this.index);
     },
     specificationsCancel() {
       /* 选中版本取消 */
@@ -444,6 +532,11 @@ export default {
     handleDel() {
       /* 移除购物车操作 */
       this.$emit('del', this.goods);
+    },
+    handleDelVersion() {
+      /* 移除一个版本操作 */
+      this.goods.choseOtherVersions = [];
+      this.$emit('change', this.goods, this.index);
     }
   }
 };

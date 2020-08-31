@@ -6,6 +6,27 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
+      "icon_id": "10339965",
+      "name": "垃圾桶",
+      "font_class": "lajitong",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "16839037",
+      "name": "calculator",
+      "font_class": "calculator",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "72671",
+      "name": "i",
+      "font_class": "i",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
       "icon_id": "14054227",
       "name": "时间",
       "font_class": "shijian",

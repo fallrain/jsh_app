@@ -99,7 +99,7 @@ export default {
   }
 
   .tFailureGoodsList-head-opt {
-    color: $theme-color;
+    color: #2283E2;
     font-size: 20px;
   }
 </style>

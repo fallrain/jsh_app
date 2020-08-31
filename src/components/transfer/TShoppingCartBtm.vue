@@ -128,12 +128,12 @@ export default {
     margin-left: 16px;
 
     &.active {
-      color: $theme-color;
+      color: #2283E2;
     }
   }
 
   .tShoppingCartBtm-check-edit {
-    color: $theme-color;
+    color: #2283E2;
     font-size: 24px;
     margin-left: 26px;
     margin-right: 30px;
@@ -146,7 +146,7 @@ export default {
     font-size: 24px;
     margin-left: 10px;
     margin-right: 10px;
-    background: $theme-color;
+    background: #2283E2;
     border-radius: 40px;
   }
   .tShoppingCartBtm-check-cancel {
@@ -194,7 +194,7 @@ export default {
     margin-left: 6px;
     line-height: 42px;
     text-align: center;
-    background: $theme-color;
+    background: #2283E2;
     border-radius: 21px;
     color: #fff;
     font-size: 24px;
