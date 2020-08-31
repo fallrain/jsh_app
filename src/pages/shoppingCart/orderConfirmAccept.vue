@@ -1,6 +1,8 @@
 <template>
   <view class="order-confirm-accept">
-    <view class="bg-style"></view>
+    <view
+      :class="['bg-style',status===2&&'bg-primary']"
+      class=""></view>
     <view class="order-accept-head">
       <view class="order-accept-title">
         <i class="iconfont iconshijian"></i>
@@ -9,27 +11,50 @@
       <view class="order-accept-head-result">
         <view class="order-accept-result-count">
           <view class="w200 text-center">
-            <view class="fs60 text-theme">{{successNum}}</view>
+            <view
+              :class="['fs60 text-theme', status===2&&'text-primary']"
+              >{{successNum}}</view>
             <view class="fs24 text-666">成功</view>
           </view>
           <view class="w200 text-center">
-            <view class="fs60 text-theme">{{failNum}}</view>
+            <view
+              :class="['fs60 text-theme', status===2&&'text-primary']">
+              {{failNum}}
+            </view>
             <view class="fs24 text-666">失败</view>
           </view>
           <view class="w200 text-center">
-            <view class="fs60 text-theme">{{total}}</view>
+            <view
+              :class="['fs60 text-theme', status===2&&'text-primary']">
+              {{total}}</view>
             <view class="fs24 text-666">合计</view>
           </view>
         </view>
-        <view class="order-btn">
+        <view v-if="status === 1" class="order-btn">
           <button @tap="goBackIndex" class="order-btn-back">返回首页</button>
           <button @tap="continueShopping" class="order-btn-goon">继续购物</button>
         </view>
+        <view v-if="status === 2" class="order-btn">
+          <button @tap="goBackIndex" class="order-btn-back br-primary text-primary">返回首页</button>
+          <button @tap="continueWholeCar" class="order-btn-goon bg-primary">再来一车</button>
+        </view>
       </view>
     </view>
-    <view class="order-accept-orderlist">
+    <view v-if="status === 1" class="order-accept-orderlist">
       <j-order-accept-item
         v-for="(item, index) in orderData"
+        @orderDetail="orderDetail"
+        :orderItem="item"
+        :index="index"
+        :key="index"
+        :status="status"
+      >
+      </j-order-accept-item>
+    </view>
+    <view
+      v-if="status === 2" class="order-accept-orderlist">
+      <j-order-accept-item
+        v-for="(item, index) in wholeorderData"
         @orderDetail="orderDetail"
         :orderItem="item"
         :index="index"
@@ -59,6 +84,7 @@ export default {
       failNum: 0,
       orderData: [
       ],
+      wholeorderData: [], // 调货数据列表
       form: []
     };
   },
@@ -74,7 +100,10 @@ export default {
       // 调货购物车下单成功之后
       this.status = 2;
       this.seqList = option.seqList;
-      this.orderData = option.orderData;
+      this.wholeorderData = JSON.parse(option.orderData);
+      console.log(this.wholeorderData);
+      // 处理成功失败数量
+      this.computeWholeOrderNum();
     }
   },
   methods: {
@@ -111,11 +140,33 @@ export default {
       this.failNum = failNum;
       this.total = successNum + failNum;
     },
+    // 统计整车订单成功失败数量
+    computeWholeOrderNum() {
+      let successNum = 0;
+      let failNum = 0;
+      let orderState = true;
+      this.wholeorderData.forEach((item) => {
+        item.orderList.forEach((v) => {
+          if (v.ISFLAG !== '提交成功') {
+            // 失败订单
+            orderState = false;
+          }
+        });
+        if (!orderState) {
+          failNum++;
+        } else {
+          successNum++;
+        }
+      });
+      this.failNum = failNum;
+      this.successNum = successNum;
+      this.total = this.failNum + this.successNum;
+    },
     // 订单详情
     orderDetail(orderGroup) {
       const data = JSON.stringify(orderGroup);
       uni.navigateTo({
-        url: `/pages/shoppingCart/orderConfirmAcceptDetail?orderGroup=${data}`
+        url: `/pages/shoppingCart/orderConfirmAcceptDetail?orderGroup=${data}&status=${this.status}`
       });
     },
     // 返回首页
@@ -128,6 +179,12 @@ export default {
     continueShopping() {
       uni.navigateTo({
         url: '/pages/goods/goodsList'
+      });
+    },
+    // 再来一车
+    continueWholeCar() {
+      uni.navigateTo({
+        url: '/pages/transferGoods/transferGoods'
       });
     },
   }

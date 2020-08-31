@@ -220,7 +220,10 @@ export default {
         const itemObj = {
           totalMoney: item.totalMoney,
           customerCode: this.currentPayer[item.orderNo].customerCode,
-          customerName: `(${this.currentPayer[item.orderNo].customerCode})${this.currentPayer[item.orderNo].customerName}`
+          customerName: `(${this.currentPayer[item.orderNo].customerCode})${this.currentPayer[item.orderNo].customerName}`,
+          balance: this.currentPayer[item.orderNo].payerBalance.balance,
+          bookbalance: this.currentPayer[item.orderNo].payerBalance.bookbalance,
+          payerType: this.currentPayer[item.orderNo].payerType
         };
         currentPayerMoneyInfo[item.orderNo] = itemObj;
       });
