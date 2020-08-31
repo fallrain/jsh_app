@@ -479,6 +479,14 @@ export default {
       this.specificationsCheckList = checkedList;
       // 如果选中了工程版本，则会显示【直发】switch
       this.hasGCVersion = !!checkedList.find(v => v.priceType === 'GC');
+      // 搜索调货版本
+      const transfer = checkedList.find(v => !v.priceType);
+      // 选了调货版本，则数量为调货的最大数量
+      // todo 还有库存的判断
+      if (transfer) {
+        this.goods.number = transfer.num;
+        this.goods.productList[0].number = transfer.num;
+      }
       this.goods.choseOtherVersions = checkedList;
       this.$emit('change', this.goods, this.index);
     },
