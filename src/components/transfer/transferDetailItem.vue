@@ -153,20 +153,67 @@ export default {
       }
       good.$favorite = !good.$favorite;
     },
-    changeNum(value, item, index) {
-      console.log('hahahhaha', this.goods);
-      console.log(index);
-      item.IBL_NUM = value;
-      item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
-      let sum = 0;
-      this.goods.orderList.forEach((ele) => {
-        sum += Number(ele.SUMMONEY);
-      });
-      console.log(sum);
-      console.log('2222222222', item);
-      this.goods.SUMMONEY = sum;
-      console.log(this.goods.calue);
-      this.$emit('changeGood', item, index);
+    // async getOrderList(ele) {
+    //   console.log('wwwwwwwwwwww', ele);
+    //   // 调货购物车数据
+    //   // console.log(this.saleInfo.customerCode)
+    //
+    // },
+    async changeNum(value, item, index) {
+      console.log(item);
+      //购物车列表数据
+      // const { code, data } = await this.transfergoodsService.allOrderList({
+      //   timestamp: Date.parse(new Date()),
+      //   longfeiUSERID: this.saleInfo.customerCode
+      // });
+      // if (code === '1') {
+      //   console.log(data.data);
+      //   const page = data.data;
+      //   if (page && page.length > 0) {
+      //     page.forEach(ele => {
+      //       // console.log(ele);
+      //       console.log(this.goods.IBR_SEQ);
+      //       if (ele.IBR_SEQ === this.goods.IBR_SEQ) {
+      //         console.log('3333333', ele);
+      //         ele.orderList.forEach(v => {
+      //           if (v.IBL_KORDERNO === item.IBL_KORDERNO) {
+      //             item.IBL_NUM = value;
+      //             console.log('xxxxxxxxxx', item.IBL_NUM);
+      //           }
+      //         });
+      //         this.goods.calue = Math.round(ele.IBR_JSTIJI / 15 * 100);
+      //         console.log('444444444', this.goods.calue);
+      //       }
+      //     });
+      //   }
+      // }
+      // 购物车修改数量接口
+      if (value !== item.IBL_NUM) {
+        const result = await this.transfergoodsService.updateOrderQty({
+          timestamp: Date.parse(new Date()),
+          dhSeq: this.goods.IBR_SEQ,
+          korderNo: item.IBL_KORDERNO,
+          longfeiUSERID: this.saleInfo.customerCode,
+          qty: value
+        });
+        if (result.code === '1') {
+          console.log('ddddddddddd',result.data.data.ALLVOLUMN);
+          this.goods.calue = Math.round(result.data.data.ALLVOLUMN / 15 * 100);
+          // console.log('hahahhaha', this.goods);
+          console.log(index);
+          item.IBL_NUM = value;
+          item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
+          let sum = 0;
+          this.goods.orderList.forEach((ele) => {
+            sum += Number(ele.SUMMONEY);
+          });
+          console.log(sum);
+          console.log('2222222222', item);
+          this.goods.SUMMONEY = sum;
+          console.log(this.goods.calue);
+          this.$emit('changeGood', item, index);
+        }
+      }
     },
     // 删除单个产品
     deleteProduct(item, index) {

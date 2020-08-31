@@ -326,7 +326,9 @@ export default {
       console.log(this.SendWay);
       console.log(this.brand);
       this.getTransferList();
-      this.mescroll.resetUpScroll(true);
+      if (this.list && this.list.length > 0) {
+        this.mescroll.resetUpScroll(true);
+      }
     },
     getStockNum() {
       const tabs = this.popTabs;
@@ -787,9 +789,9 @@ export default {
       if (tab.handler) {
         this[tab.handler]();
       }
+      this.mescroll.resetUpScroll(true);
       this.getTransferList();
       this.getStockNum();
-      // this.$refs.transferGoodsItem.showDisabled();
     },
     showFilter() {
       /* 展示filter */

@@ -65,11 +65,14 @@ export default {
       // 余额支付信息
       balance: [],
       // 选中的
-      chosePayerOptions: []
+      chosePayerOptions: [],
+      // 装车体积
+      calue: 0
     };
   },
   computed: {
     ...mapGetters({
+      saleInfo: USER.GET_SALE,
       TSHOPCART: TRANSFER.GET_TSHOPCART,
       INDEX: TRANSFER.GET_INDEX,
       userInf: USER.GET_USER
@@ -93,8 +96,9 @@ export default {
       this.payerPickerShow = true;
     },
     goodsChange(good, index) {
+      // this.getOrderList();
       console.log(good);
-      console.log(index);
+      console.log(this.detailList);
       /* 商品 change */
       this.detailList.orderList[index] = good;
       // this.detailList = JSON.parse(JSON.stringify(this.detailList));
