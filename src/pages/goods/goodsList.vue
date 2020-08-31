@@ -584,6 +584,9 @@ export default {
           v.isChecked = false;
         });
       });
+      // 重置最低价 最高价
+      this.filterForm.lowPrice = '';
+      this.filterForm.highPrice = '';
     },
     showDeliveryAddress() {
       /* 展示配送地址 */
