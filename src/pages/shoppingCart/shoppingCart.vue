@@ -557,7 +557,6 @@ export default {
       this.deleteCart(ids);
     },
     clearFailureGoods() {
-      debugger;
       /* 清空购物车的失效产品 */
       const ids = this.failureGoodsList.map(v => v.id);
       this.deleteCart(ids, true);
