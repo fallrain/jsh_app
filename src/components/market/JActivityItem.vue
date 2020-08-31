@@ -3,8 +3,14 @@
     class="jActivityItem">
     <view class="dis-flex mb16">
       <view class="dis-flex" v-if="activity.valid === false">
-        <view class="tag-default mr20">失效组合</view>
-        <view class="active-title text-999">{{activity.name}}</view>
+        <view v-if="activity.activityType === 'taocan'">
+          <view class="tag-default mr20">失效套餐</view>
+          <view class="active-title text-999">{{activity.name}}</view>
+        </view>
+        <view v-if="activity.activityType === 'zuhe'">
+          <view class="tag-default mr20">失效组合</view>
+          <view class="active-title text-999">{{activity.name}}</view>
+        </view>
       </view>
       <view @tap="goDetail()" class="dis-flex" v-else>
         <view v-if="activity.activityType === 'taocan'" class="tag-primary mr20">套餐</view>
@@ -16,7 +22,9 @@
       </view>
     </view>
     <view v-if="activity.valid === false" class="jActivity-content">
-      <view class="dis-flex justify-sb mb12">
+      <view
+        v-if="activity.activityType === 'zuhe'"
+        class="dis-flex justify-sb mb12">
         <view class="fs40 text-999">
           组合失效
         </view>
@@ -26,6 +34,13 @@
             class="btn-default ml26"
             type="button"
           >成套下单</button>
+        </view>
+      </view>
+      <view
+        v-if="activity.activityType === 'taocan'"
+        class="dis-flex justify-sb mb12">
+        <view class="fs40 text-999">
+          套餐失效
         </view>
       </view>
       <view class="mb12 dis-flex text-666">

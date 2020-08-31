@@ -9,7 +9,7 @@
     border-radius: 50%;
     position: absolute;
     left: -240px;
-    top: -30%;
+    top: -200px;
     z-index: 1;
     background: $theme-color;
   }
@@ -76,4 +76,13 @@
 }
 .text-666{
   color: #666;
+}
+.bg-primary{
+  background: #2283E2 !important;
+}
+.text-primary{
+  color: #2283E2!important;
+}
+.br-primary{
+  border:2px solid #2283E2!important;
 }

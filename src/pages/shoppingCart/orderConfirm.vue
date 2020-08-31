@@ -338,6 +338,7 @@ export default {
     // 提交订单
     async submitOrder() {
       console.log(this.dataInfo);
+      console.log(this.totalPayerMoneyInfo);
       // 根据拆单结果组合订单提交信息
       const orderList = [];
       const groupingArr = [];
