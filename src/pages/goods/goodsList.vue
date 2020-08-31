@@ -210,7 +210,7 @@ export default {
         {
           name: '有货商品',
           isExpand: true,
-          type: 'checkbox',
+          type: 'radio',
           data: []
         }
       ],
