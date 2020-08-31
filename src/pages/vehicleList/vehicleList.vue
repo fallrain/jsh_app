@@ -2,7 +2,7 @@
   <view class="vehicleList">
     <view class="vehicleList-tab">
       <view class="vehicle-search j-flex-aic">
-        <j-search-input v-model="filterForm.name" @search="silentReSearch"></j-search-input>
+        <j-search-input v-model="filterForm.name" @search="silentReSearch" placeholder='请输入搜索信息'></j-search-input>
         <button @tap="silentReSearch" class="vehicle-btn" type="button">搜索</button>
       </view>
       <view>
