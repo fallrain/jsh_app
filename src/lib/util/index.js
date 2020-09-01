@@ -1,3 +1,7 @@
+import {
+  getPriceKeyFromAllPrice
+} from '@/lib/dataDictionary';
+
 const util = {
   // 日期格式化
   formatDate(date, pattern) {
@@ -125,7 +129,12 @@ const util = {
       }
     });
     return keys;
-  }
+  },
+  getPriceType(type) {
+    /* 获取价格类型 */
+    const typeTemp = type.toUpperCase();
+    return getPriceKeyFromAllPrice()[typeTemp];
+  },
 };
 
 export default util;
