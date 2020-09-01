@@ -144,6 +144,7 @@ export default {
       currentDetail: {},
       // 0 套餐 1 组合
       groupType: 0,
+      groupProductNum: 1, // 组合成套下单 数量
       activityList: [
       ],
       // 是否全选
@@ -161,8 +162,7 @@ export default {
     if (this.currentDetail.activityType === 'zuhe') {
       this.getTotalMoney();
     }
-    /*
-    this.getAllStock(); */
+    this.getAllStock();
   },
   computed: {
     ...mapGetters({
@@ -220,8 +220,6 @@ export default {
         item.choosedNum = 0; // 增加选择数量字段
       });
       this.updateIndex++;
-      console.log(this.currentDetail.products);
-      console.log(this.currentDetail.pbProducts);
     },
     goodsChange(goods, index) {
       let totalMoney = 0;
@@ -356,7 +354,8 @@ export default {
       this.isShowAdsPicker = true;
     },
     // 成套下单
-    async goOrder() {
+    async goOrder(nums) {
+      this.groupProductNum = nums;
       console.log(this.currentDetail);
       await this.validateProduct();
     },
@@ -403,7 +402,7 @@ export default {
                 kuanXian: '0',
                 isCheckKuanXian: '0'
               }],
-            number: 1
+            number: this.groupProductNum
           }]
       };
       if (this.currentAdd.yunCangFlag) {
@@ -443,7 +442,7 @@ export default {
         } else if (this.currentDetail.activityType === 'zuhe') {
           const productItem = {
             productCode: item.productCode,
-            number: item.promotionNum,
+            number: item.promotionNum * this.groupProductNum,
             isStock: '1',
             farWeek: '0',
             creditModel: '0',
@@ -487,7 +486,7 @@ export default {
       const { code, data, msg } = await this.orderService.validateProduct(form, {
         noToast: true
       });
-      debugger
+      debugger;
       if (code === '1') {
         const formData = JSON.stringify(form);
         // 产品校验成功

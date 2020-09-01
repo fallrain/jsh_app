@@ -43,13 +43,13 @@
             inf="统仓统配"
             @change="isCreditModeChange"
           ></j-switch>
-          <view class="jOrderConfirmItem-detail-match-type-text">
+          <view class="jOrderConfirmItem-detail-match-type-text ml20">
             <view class="stock-type">
               满足方式：{{goods.stockTypeName}}
             </view>
             <view v-if="goods.stockTypeName !== '周承诺'&&goods.stockTypeName !== '款先直发'"
                   class="store-type">
-              库位类型：{{stockType[goods.stockType]}}
+              {{goods.whCode}}
             </view>
             <view v-else class="dis-flex">
               WD：
@@ -76,7 +76,7 @@
             <view
               @tap="goRemarks(index)"
               class="jOrderConfirmItem-detail-mark-item-val">
-              <view v-if="JSON.stringify(goods.splitOrderProductList[0].spareAddress)!=='{}'">
+              <view v-if="JSON.stringify(Bbaddress)!=='{}'">
                 <text>
                   {{goods.splitOrderProductList[0].spareAddress.address}} {{goods.splitOrderProductList[0].spareAddress.addressDetail}} {{goods.splitOrderProductList[0].spareAddress.name}} {{goods.splitOrderProductList[0].spareAddress.mobile}}
                 </text>
@@ -144,6 +144,7 @@ export default {
   },
   data() {
     return {
+      Bbaddress: {},
       activityTypeList: {
         1: '单品',
         2: '组合',
@@ -230,6 +231,8 @@ export default {
       this.$emit('payerMoneyInfo', currentPayerMoneyInfo);
     },
     showPayer(currentOrderNo) {
+      console.log(currentOrderNo);
+      console.log(this.currentPayer);
       this.currentOrderNo = currentOrderNo;
       this.currentchosePayerOption[0] = this.currentPayer[currentOrderNo].key;
       /* 展示付款地址 */

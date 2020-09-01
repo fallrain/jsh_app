@@ -85,7 +85,7 @@ export default {
     },
     goOrder(state) {
       if (state === true) {
-        this.$emit('goOrder');
+        this.$emit('goOrder', this.nums);
       } else {
         uni.showToast({
           title: '条件未满足',
