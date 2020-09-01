@@ -47,13 +47,16 @@ function showError(msg, status,url,params) {
   } else {
     const errorMap = {
       401: '没有权限',
-      403: '没有权限',
+      403: '登录已过期',
       404: '资源不存在'
     };
     message = errorMap[status] || '请求失败';
   }
   let str = JSON.stringify(params)
   showModal(message + url + str);
+  if(status == 403){
+    AlipayJSBridge.call('popWindow');
+  }
 }
 
 function jSend(option) {
