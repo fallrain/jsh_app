@@ -302,7 +302,7 @@ export default {
             item.isSelected = false;
             if (this.stock === item.OUTWHCODE) {
               item.isSelected = true;
-              this.cargoSend = item;
+              this.cargoSend.push(item);
             }
           });
           console.log(this.cargoSend);
@@ -527,6 +527,7 @@ export default {
           curList.forEach((v) => {
             v.amount = 1;
             v.$PtPrice = allPriceData[v.code].pt;
+            v.$PtPrice.invoicePrice = Number(v.$PtPrice.invoicePrice).toFixed(2);
             v.$allPrice = allPriceData[v.code];
           });
         }
@@ -652,13 +653,18 @@ export default {
           this.popTabs[1].children = tempArray;
         }
       }
-      console.log('sssssssssssssssssss', this.cargoSendWay);
-      // this.$refs.transferGoodsHead.setPopTabs(this.cargoWareHome, this.cargoSendWay);
-      console.log('aannnnnnnnnnnaaaaa', this.popTabs);
+      console.log(this.cargoSendWay);
+      console.log(this.popTabs);
       this.popTabs[0].children[0].checked = true;
       this.popTabs[1].children[0].checked = true;
-      this.popTabs[1].children[0].ycFlag = 'JSHSW';
-      this.popTabs[1].children[1].ycFlag = '';
+      this.popTabs[1].children.forEach((item) => {
+        console.log('qqqqqqqqqqqqqqq', item);
+        if (item.name === '统仓统配') item.ycFlag = 'JSHSW';
+        if (item.name === '客户自有仓') item.ycFlag = '';
+      });
+      // this.popTabs[1].children[0].ycFlag = 'JSHSW';
+      // this.popTabs[1].children[1].ycFlag = '';
+      console.log('zzzzzzzzzzzzzzzzzz', this.popTabs[1].children);
     },
     async getShoppingCartNum() {
       // 购物车商品数量
@@ -687,14 +693,16 @@ export default {
     // 获取当前配送地址
     getAddress() {
       console.log(111);
+
       this.addressesList.forEach((item) => {
         console.log(item);
         console.log(this.curChoseDeliveryAddress);
-        if (this.curChoseDeliveryAddress.name === `(${item.customerCode})${item.addressName}`) {
+        if (this.curChoseDeliveryAddress.customerCode === `${item.customerCode}`) {
+          console.log(item);
           this.address = item;
         }
       });
-      console.log('aaaaaaaa',this.address);
+      console.log('aaaaaaaa', this.address);
     },
     // 加入调货
     async inserOrder(item) {
@@ -730,7 +738,7 @@ export default {
           DH_PROCODE: '', // 工程版本
           DH_PROLOSSMONEY: '',
           DH_LOSSRATE: 0, // 不用改
-          DH_OUTWHCODE: this.stock, // 调出库位     //当前选的调出库位
+          DH_OUTWHCODE: '', // 调出库位     //当前选的调出库位    this.stock
           DH_IMG: item.searchImage,
           DH_SENDTONAME: this.address.addressName, // 送达方名称   配送至 接口
           SENDTO_ADDRESS: this.address.address, // 送达方地址   配送至 接口
@@ -745,12 +753,12 @@ export default {
           console.log(111);
           this.getShoppingCartNum();
           uni.showToast({
-            title: '加入调货成功',
+            title: insertTransfer.data.message,
             duration: 3000,
           });
         } else {
           uni.showToast({
-            title: '加入调货失败，请重试',
+            title: insertTransfer.data.message,
             duration: 3000,
           });
         }
