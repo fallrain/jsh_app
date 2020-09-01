@@ -283,11 +283,11 @@ status: "正常" -->
             <view class="fithPageTitle">{{saleInf.customerName}}</view>
           </view>
         </view>
-        <view class="breakLine"></view>
+        <!-- <view class="breakLine"></view>
         <view class="firstItem">
           <view class="firstPageLeft">账户总额：</view>
           <view class="firstPageRightRed">¥{{accountTotal}}</view>
-        </view>
+        </view> -->
       </view>
 
       <view
