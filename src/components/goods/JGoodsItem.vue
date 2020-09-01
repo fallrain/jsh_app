@@ -285,26 +285,32 @@ export default {
         yjList,
         tags
       } = this.allPrice;
-      // 是否存在工程或则样机
+      const {
+        isSale
+      } = this.goods;
+        // 是否存在工程或则样机
       let isGcOrYj = false;
       // 特价版本信息
-      const tjList = tj.specialList;
-      if (tjList && tjList.length) {
-        const tjVersion = {
-          id: 'tj',
-          title: '特价版本',
-          isExpand: true,
-          list: []
-        };
-        tjVersion.list = tj.specialList.map(v => ({
-          name: v.versionCode,
-          price: v.invoicePrice,
-          time: v.endDate,
-          num: v.usableQty,
-          priceType: v.priceType,
-          checked: false
-        }));
-        specificationsList.push(tjVersion);
+      // isSale为false 无特价
+      if (isSale) {
+        const tjList = tj.specialList;
+        if (tjList && tjList.length) {
+          const tjVersion = {
+            id: 'tj',
+            title: '特价版本',
+            isExpand: true,
+            list: []
+          };
+          tjVersion.list = tj.specialList.map(v => ({
+            name: v.versionCode,
+            price: v.invoicePrice,
+            time: v.endDate,
+            num: v.usableQty,
+            priceType: v.priceType,
+            checked: false
+          }));
+          specificationsList.push(tjVersion);
+        }
       }
       // 工程版本信息
       if (gc.projectList && gc.projectList.length) {
@@ -346,7 +352,7 @@ export default {
       }
       this.specificationsList = specificationsList;
       // 当产品isSale为false，且没有工程或样机时，列表页不显示加入购物车按钮，显示查看详情按钮
-      if (!isGcOrYj && this.goods.isSale === false) {
+      if (!isGcOrYj && isSale === false) {
         this.isShowAddCart = false;
       }
       // 组合tags
@@ -421,7 +427,9 @@ export default {
           }
         });
       } else {
-        // 如果没选版本规格，则加入一个普通版本的商品
+        // 如果没选版本规格
+        // 如果存在抢购的版本，则默认加入一个抢购的版本
+        // 如果没抢购的，则加入一个普通版本的商品
         this.addToCart().then(({ code }) => {
           if (code === '1') {
             this.showAddToCartToast();
