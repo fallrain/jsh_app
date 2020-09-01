@@ -54,9 +54,6 @@ function showError(msg, status,url,params) {
   }
   let str = JSON.stringify(params)
   showModal(message + url + str);
-  if(status == 403){
-    AlipayJSBridge.call('popWindow');
-  }
 }
 
 function jSend(option) {

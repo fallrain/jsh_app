@@ -472,11 +472,14 @@ export default {
       }
     },
     async getOrderMonthSummery() {
-      /* 获取基本信息-订单交易状态 */
-      const { code, data } = await this.orderService.getOrderMonthSummery({
-        jshi_saleto_code: this.userInf.saletoCode,
+
+      const param = {
+        jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: 7
-      });
+      }
+
+      /* 获取基本信息-订单交易状态 */
+      const { code, data } = await this.orderService.getOrderMonthSummery(param);
       if (code === '1') {
         this.baseTransactionInfo = data || {};
       }
