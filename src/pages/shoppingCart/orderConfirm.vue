@@ -332,6 +332,31 @@ export default {
     },
     // 取消订单
     async cancle() {
+      console.log(this.dataInfo);
+      // const dataArr = this.dataInfo.composeProductList || this.dataInfo.disableComposeProductList;
+      const saletoCode = this.dataInfo.sendtoCode;
+      const cancleForm = [];
+      this.dataInfo.composeProductList.forEach((item) => {
+        const groupIngNo = item.composeOrderNo;
+        item.splitOrderDetailList.forEach((v) => {
+          const itemObj = {
+            groupIngNo,
+            orderNo: v.orderNo,
+            saletoCode
+          };
+          cancleForm.push(itemObj);
+        });
+      });
+      const { code } = await this.orderService.cancelOrder(cancleForm);
+      if (code === '1') {
+        const that = this;
+        uni.showToast({
+          title: '取消订单成功'
+        });
+        this.setTimeout(() => {
+          that.goIndex();
+        }, 2000);
+      }
     },
     // 返回首页
     goIndex() {

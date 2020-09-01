@@ -62,8 +62,8 @@ export default {
   updateOrderInfo(data) { // 订单提交
     return jPostJson(urlNoApi.updateOrderInfo, data);
   },
-  cancelOrder(data) { // 订单提交
-    return jPostJson(urlNoApi.updateOrderInfo, data);
+  cancelOrder(data) { // 取消订单
+    return jPostJson(urlNoApi.cancelOrder, data);
   },
   getOrderInfo(data) { // 获取订单信息
     return jPostJson(urlNoApi.getOrderInfo, data);
