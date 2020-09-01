@@ -47,10 +47,17 @@
           @tap="cancle"
         >取消订单</button>
         <button
+          v-if="dataInfo.composeProductList.length > 0"
           type="button"
           class="orderConfirm-btm-btn-sure ml20"
           @tap="next"
         >提交订单</button>
+        <button
+          v-if="dataInfo.disableComposeProductList.length > 0"
+          type="button"
+          class="orderConfirm-btm-btn-sure ml20"
+          @tap="goIndex"
+        >返回首页</button>
       </view>
 
     </view>
@@ -323,7 +330,14 @@ export default {
         // this.submitOrder();
       }
     },
+    // 取消订单
     async cancle() {
+    },
+    // 返回首页
+    goIndex() {
+      uni.switchTab({
+        url: '/pages/index/index'
+      });
     },
     async next() {
       // 判断是否免密，免密则直接支付否则弹出发送验证码弹窗

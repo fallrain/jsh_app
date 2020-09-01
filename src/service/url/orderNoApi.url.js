@@ -13,6 +13,7 @@ const urls = {
   validateProduct: '/order/post/validate/product', // 拆单校验
   splitOrder: '/order/splitOrder', // 拆单
   updateOrderInfo: '/order/updateOrderInfo', // 提交订单
+  cancelOrder: '/order/cancelOrder', // 取消订单
   getOrderInfo: '/order/post/orderInfo', // 获取订单信息
 
 };

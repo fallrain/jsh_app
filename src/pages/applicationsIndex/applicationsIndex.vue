@@ -438,9 +438,9 @@ export default {
           url: '#'
         }
       ],
-      loadUserType:false,
-      errorMsg:'',
-      valueSyncData:'',
+      loadUserType: false,
+      errorMsg: '',
+      valueSyncData: '',
     };
   },
   created() {
@@ -449,13 +449,13 @@ export default {
   },
   mounted() {
     // 适配安卓客户端
-	  AlipayJSBridge.call('myApiGetCode', {
+	  /* AlipayJSBridge.call('myApiGetCode', {
 	    param1: 'JsParam1',
 	  }, (result) => {
 	      if (result.code.length > 1) {
 	          this.init(result.code);
 	      }
-	  });
+	  }); */
   },
   onLoad() {
     this.init();
@@ -479,11 +479,15 @@ export default {
     async init(code) {
       if (!code) {
         // 适配iOS客户端
-        code = ALIPAYH5STARTUPPARAMS.webview_options;
+        // code = ALIPAYH5STARTUPPARAMS.webview_options;
       }
-      // const code1 = 'Ff6C96umSoWRjQjHgOYpog';
+      const code1 = 'Ff6C96umSoWRjQjHgOYpog';
       // 获取token
-      if (code.length > 0) {
+      await this.getToken(code1);
+      // 获取首页轮播图
+      await this.getbannerList();
+      // 获取token
+     /* if (code.length > 0) {
         // 获取token
         await this.getToken(code);
         // 获取首页轮播图
@@ -494,7 +498,7 @@ export default {
           icon: 'none',
           duration: 3000
         });
-      }
+      }*/
     },
 	  // 返回原生
 	  popAction() {
@@ -510,7 +514,7 @@ export default {
 		  // });
     },
     // 打开农行支付
-    callABC(){
+    callABC() {
 		  // AlipayJSBridge.call('myApiCallABC', {
 		  //   tokenId: '14406457162720037182',
 		  // }, (result) => {
@@ -519,13 +523,17 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
+      
+      this[USER.UPDATE_SALE_ASYNC]();
+      this.getUserType(this.saleInfo.customerCode);
+
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-        
+
         this[USER.UPDATE_SALE_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
       }
@@ -539,16 +547,16 @@ export default {
       this.manageData(data);
     },
     // 获取代码对应产品组
-    async getvaluesync(){
+    async getvaluesync() {
       const { code, data } = await this.cocService.getValueSyncValue(
-      {
-        valueSetId: 'ProductGroup'
-      });
+        {
+          valueSetId: 'ProductGroup'
+        }
+      );
       if (code == '1') {
         return data;
-      } else {
-        return [];
       }
+      return [];
     },
     // 解析用户权限类型数据
     manageData(data) {
@@ -557,19 +565,19 @@ export default {
       const tags = data.tags;
 
       let errorAlertMsg = '';
-      
+
       // 僵尸户
-      if(tags.zombie && tags.zombie.status == 1) {
-        errorAlertMsg = errorAlertMsg + "你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。";
+      if (tags.zombie && tags.zombie.status == 1) {
+        errorAlertMsg += '你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。';
       }
       // 无门店
-      if(tags.noStore && tags.noStore.status == 1) {
-        errorAlertMsg = errorAlertMsg + "您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理";
+      if (tags.noStore && tags.noStore.status == 1) {
+        errorAlertMsg += '您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理';
       }
-    
-      var marketCollusionGroupValue = [];
 
-      if(data.marketCollusionGroup.length>0) {
+      let marketCollusionGroupValue = [];
+
+      if (data.marketCollusionGroup.length > 0) {
         marketCollusionGroupValue = this.getvaluesync();
       }
 
@@ -579,40 +587,40 @@ export default {
         const element = data.marketCollusionGroup[index];
         for (let y = 0; y < marketCollusionGroupValue.length; y++) {
           const elementValue = marketCollusionGroupValue[y];
-          if(data.marketCollusionGroup[index] == element.value) {
-            marketErrorMsg = marketErrorMsg + element.valueMeaning;
+          if (data.marketCollusionGroup[index] == element.value) {
+            marketErrorMsg += element.valueMeaning;
           }
         }
       }
-      
-      if(marketErrorMsg.length > 0) {
-        errorAlertMsg += '您好，市场运营管理限制，您'+marketErrorMsg+'产品组相关产品限制交易，如有疑问请联系交互师或业务人员处理。';
+
+      if (marketErrorMsg.length > 0) {
+        errorAlertMsg += `您好，市场运营管理限制，您${marketErrorMsg}产品组相关产品限制交易，如有疑问请联系交互师或业务人员处理。`;
       }
 
-      if(errorAlertMsg.length > 0) {
+      if (errorAlertMsg.length > 0) {
         uni.showModal({
-        title: '提示',
-        content: errorAlertMsg,
-        showCancel:false,
-        confirmText:'确定',
-        success: function (res) {
+          title: '提示',
+          content: errorAlertMsg,
+          showCancel: false,
+          confirmText: '确定',
+          success(res) {
             if (res.confirm) {
-                console.log('用户点击确定');
-            } 
+              console.log('用户点击确定');
+            }
           }
         });
       }
 
       // 供应链金融冻结
-      if(tags.gylFreezed && tags.gylFreezed.status == 1) {
+      if (tags.gylFreezed && tags.gylFreezed.status == 1) {
         this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。";
+        this.errorMsg = `${this.errorMsg}抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。`;
       }
 
       // MDM冻结
-      if(data.status == 1) {
+      if (data.status == 1) {
         this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。";
+        this.errorMsg = `${this.errorMsg}抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。`;
       }
     },
     changePic(e) {
