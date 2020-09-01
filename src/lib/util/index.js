@@ -98,6 +98,33 @@ const util = {
       returnStr = (isFirst ? '?' : '') + args.join('&');
     }
     return returnStr;
+  },
+  findDifKey(obj1, obj2) {
+    /* 查找不同的属性 */
+    const map = {
+      obj1,
+      obj2
+    };
+    const keys = [];
+    let keyName;
+    let anotherKeyName;
+    if (Object.keys(obj1).length > Object.keys(obj2).length) {
+      keyName = 'obj1';
+      anotherKeyName = 'obj2';
+    } else {
+      keyName = 'obj2';
+      anotherKeyName = 'obj1';
+    }
+    Object.keys(map[keyName]).forEach((key) => {
+      if (map[keyName][key] !== map[anotherKeyName][key]) {
+        keys.push({
+          key,
+          value1: map[keyName][key],
+          value2: map[anotherKeyName][key]
+        });
+      }
+    });
+    return keys;
   }
 };
 

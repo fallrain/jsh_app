@@ -171,21 +171,20 @@
 
 <script>
 import {
-  uniSwiperDot, uniGrid, uniGridItem,
-  uniNavBar
+  uniSwiperDot,
 } from '@dcloudio/uni-ui';
 import {
   mapActions,
   mapGetters
 } from 'vuex';
 import {
-  USER
+  USER,
+  COMMODITY
 } from '../../store/mutationsTypes';
 
 import {
   hex_sha1
 } from '@/pages/index/SHA1.js';
-import JSearchInput from '../../components/form/JSearchInput';
 import homePageImg from '@/assets/img/tabbar/shouye.png';
 import homePageImgActive from '@/assets/img/tabbar/shouye-actived.png';
 import categoryImg from '@/assets/img/tabbar/fenlei.png';
@@ -199,11 +198,7 @@ import './css/index.scss';
 export default {
   name: 'index',
   components: {
-    uniSwiperDot,
-    JSearchInput,
-    uniGrid,
-    uniGridItem,
-    uniNavBar
+    uniSwiperDot
   },
   data() {
     return {
@@ -321,7 +316,6 @@ export default {
         },
 
       ],
-      current: 0,
       isSwiper: true,
       // column: 0,
       // showBorder: true,
@@ -455,7 +449,9 @@ export default {
       // 获取售达方信息
       USER.UPDATE_SALE_ASYNC,
       // 修改token用户信息
-      USER.UPDATE_TOKEN_USER_ASYNC
+      USER.UPDATE_TOKEN_USER_ASYNC,
+      // 更新有货商品分类
+      COMMODITY.UPDATE_CATALOG_LIST_ASYNC
     ]),
     // 导航栏返回
     goBack() {
@@ -644,7 +640,7 @@ export default {
     },
     // 应用列表
     async getList() {
-      const { code, data } = await this.commodityService.list();
+      const { code, data } = await this[COMMODITY.UPDATE_CATALOG_LIST_ASYNC]();
       if (code === '1') {
         data.forEach((item) => {
           item.categoryCode = item.code;

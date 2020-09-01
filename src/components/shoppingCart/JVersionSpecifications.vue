@@ -152,6 +152,7 @@ export default {
         this.$refs.pop.open();
       } else {
         this.$refs.pop.close();
+        this.$emit('close');
       }
     }
   },
