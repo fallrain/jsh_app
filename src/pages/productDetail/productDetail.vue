@@ -17,7 +17,7 @@
     <view class="uni-common-mt" id="goods">
       <view class="uni-flex uni-row padding-15">
         <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥ {{detailInfo.price && detailInfo.price.invoicePrice || '暂无价格!'}}</view>
-        <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice}}</view>
+        <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
         <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"
               v-if="!ISGUANZHU"></view>
         <view @click="guanZhu" class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"

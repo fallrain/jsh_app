@@ -20,7 +20,7 @@
         整单金额：{{orderItem.payAmount}}
       </view>
       <view class="item-content">
-        送达方：{{orderItem.sendtoAddress}}
+        送达方：({{orderItem.saletoCode}}){{orderItem.sendtoAddress}}
       </view>
     </view>
     <view v-if="status === 2">

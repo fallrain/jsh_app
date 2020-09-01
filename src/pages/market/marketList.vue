@@ -21,6 +21,7 @@
           :key="index+'^-^'"
           :activity="item"
           @activityDetail ="activityDetail"
+          @goOrder ="goOrder"
         ></j-activity-item>
         <!--<view v-if="list.length === 0" class="">暂无数据</view>-->
       </view>
@@ -302,6 +303,9 @@ export default {
       }
     },
     async getActivityList(pages) {
+      if (this.saleInfo === 'CT') {
+        return;
+      }
       const condition = this.getSearchCondition(pages);
       // 获取活动
       const { code, data } = await this.marketService.activityList(condition);
@@ -379,8 +383,8 @@ export default {
         }
       });
       this.filterInputs.forEach((item) => {
-        if (item.value) {
-          condition[item.key] = item.value;
+        if (item.val) {
+          condition[item.key] = item.val;
         }
       });
       return condition;
@@ -505,9 +509,117 @@ export default {
           item.choosedNum = 0; // 增加选择数量字段
         });
       }
-      console.log(currentInfo);
       return currentInfo;
     },
+    // 成套下单
+    async goOrder(currentInfo) {
+      console.log(this.currentAdd);
+      const detail = await this.getAllStock(currentInfo);
+      await this.validateProduct(detail);
+    },
+    // 产品校验
+    async validateProduct(currentInfo) {
+      const form = {
+        saletoCode: this.form.saletoCode,
+        sendtoCode: this.currentAdd.addressCode,
+        yunCangCode: '',
+        yunCangFlag: '',
+        splitComposeList: [
+          {
+            activityType: this.getActivityTypeCode(currentInfo.activityType),
+            activityId: currentInfo.id,
+            number: 1,
+            productList: [
+              {
+                productCode: 'CBAGD4000',
+                number: 1,
+                isStock: '1',
+                farWeek: '0',
+                creditModel: '0',
+                isCheckFarWeek: '0',
+                isCheckCreditModel: '0',
+                farWeekDate: '',
+                transferVersion: '',
+                priceType: 'PT',
+                priceVersion: '',
+                productSeries: '',
+                kuanXian: '0',
+                isCheckKuanXian: '0'
+              }]
+          }
+        ]
+      };
+      if (this.currentAdd.yunCangFlag) {
+        if (this.currentAdd.yunCangFlag === 'yc') {
+          // 云仓
+          form.yunCangFlag = 'yc';
+        } else {
+          // 异地云仓
+          form.yunCangFlag = 'ydyc';
+          form.yunCangCode = this.currentAdd.yunCangCode;
+        }
+      } else {
+        // 送达方地址
+        form.sendtoCode = this.currentAdd.addressCode;
+      }
+      // 订单产品遍历组合
+      const productArr = [];
+      currentInfo.products.forEach((item) => {
+        const productItem = {
+          productCode: item.productCode,
+          number: item.promotionNum,
+          isStock: '1',
+          farWeek: '0',
+          creditModel: '0',
+          isCheckFarWeek: '0',
+          isCheckCreditModel: '0',
+          farWeekDate: '',
+          transferVersion: '',
+          priceType: 'PT',
+          priceVersion: '',
+          productSeries: '',
+          kuanXian: '0',
+          isCheckKuanXian: '0'
+        };
+        productArr.push(productItem);
+      });
+      form.splitComposeList[0].productList = productArr;
+      const { code, data, msg } = await this.orderService.validateProduct(form, {
+        noToast: true
+      });
+      if (code === '1') {
+        const formData = JSON.stringify(form);
+        // 产品校验成功
+        uni.navigateTo({
+          url: `/pages/shoppingCart/orderConfirm?formData=${formData}`
+        });
+      } else {
+        if (!data) {
+          uni.showToast({
+            title: msg,
+            duration: 2000,
+            icon: 'none'
+          });
+        } else {
+          uni.showModal({
+            title: '提示',
+            content: `型号${data[0][0].productCode}，${data[0][0].msg}${data[0][0].productName}`,
+            icon: 'none',
+            showCancel: false,
+            success: () => {}
+          });
+        }
+      }
+    },
+    // 获取活动类型编码
+    getActivityTypeCode(activityType) {
+      if (activityType === 'taocan') {
+        return 4;
+      }
+      if (activityType === 'zuhe') {
+        return 2;
+      }
+    }
   }
 };
 </script>

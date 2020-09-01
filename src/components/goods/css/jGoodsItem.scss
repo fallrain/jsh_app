@@ -39,7 +39,7 @@
     line-height: 40px;
   }
 
-  &.checked{
+  &.checked {
     padding-left: 48px;
   }
 }
@@ -59,6 +59,7 @@
 }
 
 .jGoodsItem-left {
+  position: relative;
   width: 220px;
   height: 228px;
   padding: 10px;
@@ -68,7 +69,21 @@
     width: 100%;
     height: 100%;
   }
+
+  .jGoodsItem-left-float {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 100%;
+    height: 46px;
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
+
 
 .jGoodsItem-cnt {
   flex-grow: 1;
@@ -171,7 +186,7 @@
   }
 }
 
-.jGoodsItem-cnt-like{
+.jGoodsItem-cnt-like {
   position: absolute;
   top: 78px;
   right: 14px;

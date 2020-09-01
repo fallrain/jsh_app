@@ -106,10 +106,10 @@
           </view>
           <view class="dis-flex">
             <uni-number-box
-              data-target="box"
 
             ></uni-number-box>
             <button
+              @tap="goOrder"
               class="btn-primary ml26"
               type="button"
             >成套下单</button>
@@ -171,10 +171,13 @@ export default {
     }
   },
   methods: {
-    goDetail(e) {
+    goDetail() {
       // console.log(e);
       // console.log(e.currentTarget.getAttributeNode('class'));
       this.$emit('activityDetail', this.activity);
+    },
+    goOrder() {
+      this.$emit('goOrder', this.activity);
     }
   }
 };

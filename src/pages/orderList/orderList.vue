@@ -90,11 +90,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_SALE
     }),
   },
   onLoad(options) {
-    console.log('SSSSSEEEEE');
     console.log(options);
     this.sexID = options.index * 1;
     console.log(this.tabs[this.sexID]);
@@ -111,13 +110,15 @@ export default {
       ORDER.UPDATE_ORDER
     ]),
     async orderList(e, pgNo) {
-      const { code, data } = await this.orderService.orderList({
+      const param = {
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
         pageNo: pgNo,
         pageSize: 10
-      });
+      };
+
+      const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
         this.orderListInfo = data.dataList;
       }
