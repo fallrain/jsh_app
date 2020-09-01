@@ -476,7 +476,7 @@ export default {
 
   .allOrder {
     height: 40px;
-    font-size: 12px;
+    font-size: 24px;
     font-weight: 300;
     color: rgba(153, 153, 153, 1);
     line-height: 40px;

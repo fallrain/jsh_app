@@ -14,12 +14,14 @@
           ></i>
         </view>
         <scroll-view
+          :scroll-into-view="activeItemName"
           :scroll-y="true"
           class="jChooseDeliveryAddressDrawer-list"
         >
           <view
             :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
             v-for="(item,index) in list"
+            :id="'item'+item.customerCode"
             :key="index"
             @tap="check(item)"
           >
@@ -64,10 +66,16 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    // 默认在视口内的item
+    activeItemName: {
+      type: String,
+      default: ''
     }
   },
   data() {
-    return {};
+    return {
+    };
   },
   watch: {
     show(val) {

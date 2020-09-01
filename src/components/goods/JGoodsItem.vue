@@ -11,10 +11,15 @@
       @tap="toggleFollow"
     ></view>
     <view
-      @tap="goDetail"
       class="jGoodsItem-left"
+      @tap="goDetail"
     >
       <image :src="goods.image.masterImage"></image>
+      <image
+        :src="tagImg"
+        class="jGoodsItem-left-float"
+        v-if="tagImg"
+      ></image>
     </view>
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-goodsName j-goods-title">
@@ -92,6 +97,13 @@ import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xua
 import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
 import './css/jGoodsItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
+import projectSpecial from '@/assets/img/goods/projectSpecial.png';
+import projectSpecialScf from '@/assets/img/goods/projectSpecial-scf.png';
+import scf from '@/assets/img/goods/scf.png';
+import threeSpecial from '@/assets/img/goods/threeSpecial.png';
+import threeSpecialScf from '@/assets/img/goods/threeSpecial-scf.png';
+import townSpecial from '@/assets/img/goods/townSpecial.png';
+import townSpecialScf from '@/assets/img/goods/townSpecial-scf.png';
 
 export default {
   name: 'JGoodsItem',
@@ -145,11 +157,47 @@ export default {
       // 版本规格选中的信息
       specificationsCheckList: [],
       // 所有包含的标签
-      tags: []
+      tags: [],
+      projectSpecial,
+      'projectSpecial-scf': projectSpecialScf,
+      scf,
+      threeSpecial,
+      'threeSpecial-scf': threeSpecialScf,
+      townSpecial,
+      'townSpecial-scf': townSpecialScf
     };
   },
   created() {
     this.genSpecificationsList();
+  },
+  computed: {
+    tagImg() {
+      /* tag图片 */
+      const {
+        // 融资
+        isScf,
+        // 乡镇专供
+        isTownSpecial,
+        // 三专专供
+        isThreeSpecial,
+        // 工程专供
+        isProjectSpecial
+      } = this.goods;
+      const tagAy = [];
+      if (isTownSpecial === '1') {
+        tagAy.push('townSpecial');
+      }
+      if (isThreeSpecial === '1') {
+        tagAy.push('threeSpecial');
+      }
+      if (isProjectSpecial === '1') {
+        tagAy.push('projectSpecial');
+      }
+      if (isScf === '1') {
+        tagAy.push('scf');
+      }
+      return this[tagAy.join('-')];
+    }
   },
   methods: {
     genSpecificationsList() {
@@ -219,8 +267,8 @@ export default {
         ...this.goods.tags,
         ...tags
       ];
-      // isSale为false时代表此商品有活动且不可版本外销售
-      // 如果产品isSale为false，即使存在特价标签也不展示
+        // isSale为false时代表此商品有活动且不可版本外销售
+        // 如果产品isSale为false，即使存在特价标签也不展示
       if (this.isSale === false) {
         const index = tags.findIndex(v => v === '特价');
         if (index > -1) {

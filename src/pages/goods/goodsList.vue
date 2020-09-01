@@ -71,7 +71,7 @@
             @tap="showDeliveryAddress"
             class="goodsList-drawer-filter-head-ads"
           >
-            ({{curChoseDeliveryAddress.customerCode}}){{curChoseDeliveryAddress.customerName}}
+            ({{curChoseDeliveryAddress.customerCode}}){{curChoseDeliveryAddress.address}}
           </view>
         </view>
         <view class="goodsList-drawer-filter-head-ads-wrap">
@@ -101,6 +101,7 @@
     <j-choose-delivery-address
       :show.sync="isShowAddressDrawer"
       :list="deliveryAddressList"
+      :activeItemName="'item'+curChoseDeliveryAddress.customerCode"
       @change="deliveryAddressListChange"
     ></j-choose-delivery-address>
   </view>
@@ -148,6 +149,12 @@ export default {
   },
   data() {
     return {
+      pageCfg: {
+        page: {
+          pageSize: 10,
+          pageNum: 1
+        }
+      },
       list: [],
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
@@ -578,7 +585,7 @@ export default {
       // 重新搜索
       const condition = this.getSearchCondition({
         num: 1,
-        size: 10
+        size: this.pageCfg.page.pageSize
       });
       const difKeys = this.jshUtil.findDifKey(this.preSearchCondition, condition);
       // 没有不同则直接返回
@@ -609,17 +616,15 @@ export default {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
-            name: `(${v.customerCode})${v.customerName}`,
+            name: `(${v.customerCode})${v.address}`,
             ...v
           }));
           // 当前配送地址修改(选出默认地址)
-          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
-          let curChoseDeliveryAddress;
-          if (defaultIndex > -1) {
-            curChoseDeliveryAddress = data[defaultIndex];
-          } else {
-            curChoseDeliveryAddress = data[0];
+          let defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          if (defaultIndex === -1) {
+            defaultIndex = 0;
           }
+          const curChoseDeliveryAddress = data[defaultIndex];
           // 更新默认送达方store
           this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
           this.deliveryAddressList[defaultIndex].checked = true;

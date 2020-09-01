@@ -410,6 +410,9 @@ export default {
         duration: 10
       });
       switch (newVal) {
+        case '0':
+          this.getCustomerBasicInformation()
+          break;
         case '1':
           this.getCustomerSigned();
           break;
@@ -431,7 +434,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER,
+      userInf: USER.GET_SALE,
       saleInf: USER.GET_SALE
     }),
   },
@@ -504,9 +507,13 @@ export default {
         // 签约品牌编码转化为数组
         for (let index = 0; index < tmp.contractMessageDtoList.length; index++) {
           const element = tmp.contractMessageDtoList[index];
-          const tagList = element.brandName.split(',');
-          element.tagList = tagList;
-          contractMessageDtoList.push(element);
+          if(element.brandName) {
+            const tagList = element.brandName.split(',');
+            element.tagList = tagList;
+            contractMessageDtoList.push(element);
+          } else {
+            element.tagList = [];
+          }
         }
 
         this.customerSigned = {
