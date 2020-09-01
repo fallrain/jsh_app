@@ -475,8 +475,11 @@ export default {
         saletoCode,
         sendtoCode
       } = this;
-        // product不传则默认普通类型
+      // 是否选择了版本
+      let choseVersion = true;
+      // product不传则默认普通类型
       if (!product) {
+        choseVersion = false;
         product = {
           priceType: 'PT',
           priceVersion: '',
@@ -488,7 +491,7 @@ export default {
         // 商品组合编码
         activityId,
         // 组合类型(1单品2组合3抢购4套餐5成套)
-        activityType: activityType || 1,
+        activityType: choseVersion ? 1 : (activityType || 1),
         // 购买的数量(组合就是组合的数量)
         number,
         //  促销活动价格类型
