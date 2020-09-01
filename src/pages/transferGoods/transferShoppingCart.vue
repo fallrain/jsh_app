@@ -37,6 +37,7 @@
       <t-failure-goods-list
         :list="invalidList"
         @change="invalidListChange"
+        @query="getOrderList"
       ></t-failure-goods-list>
       <!-- 底部 -->
       <t-shopping-cart-btm
@@ -208,12 +209,14 @@ export default {
         console.log(data.data);
         const page = data.data;
         let setinvalid = [];
-        page.forEach((item, i) => {
-          console.log(item);
-          if (item.IBR_ISFLAG === '失效产品') {
-            setinvalid = page.splice(i, 1);
-          }
-        });
+        if (page && page.length > 0) {
+          page.forEach((item, i) => {
+            console.log(item);
+            if (item.IBR_ISFLAG === '失效产品') {
+              setinvalid = page.splice(i, 1);
+            }
+          });
+        }
         console.log(setinvalid);
         console.log(page);
         const temp = page;
@@ -221,13 +224,15 @@ export default {
         this.invalid = setinvalid;
 
         const allList = [];
-        temp.map((item) => {
-          const list = {
-            checked: false,
-            data: item
-          };
-          allList.push(list);
-        });
+        if (temp && temp.length > 0) {
+          temp.forEach((item) => {
+            const list = {
+              checked: false,
+              data: item
+            };
+            allList.push(list);
+          });
+        }
         // console.log(this.allOrderList)
         const productCodes = [];
         let chooseNum = 0;
@@ -241,14 +246,10 @@ export default {
           item.data.calue = Math.round(item.data.IBR_JSTIJI / 15 * 100);
           console.log('bbbbbbbbbbbbbbbbbbb', item.data.calue);
           item.data.orderList.forEach((v) => {
-            v.IBL_NUM = v.IBL_NUM ? Number(v.IBL_NUM) : 1,
+            v.IBL_NUM = v.IBL_NUM ? Number(v.IBL_NUM) : 1;
             v.IBL_MAXNUM = v.IBL_MAXNUM ? Number(v.IBL_MAXNUM) : 0;
             v.ADVICEPRICE = Number(v.ADVICEPRICE).toFixed(2);
             v.SUMMONEY = Number(v.SUMMONEY).toFixed(2);
-
-            // if (v.IBL_MAXNUM === 0) {
-            //   v.IBL_NUM = 0
-            // }
           });
 
           if (item.checked) {
@@ -280,7 +281,7 @@ export default {
         this.calSettlement();
         console.log(this.allOrderList);
         let sum1 = 0;
-        this.allOrderList.map((item) => {
+        this.allOrderList.forEach((item) => {
           sum1 += item.data.orderList.length;
         });
         this.transferNum = sum1;

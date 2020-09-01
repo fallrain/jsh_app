@@ -1,7 +1,7 @@
 <template>
-    <view>
-        <web-view :src="url"></web-view>
-    </view>
+  <view>
+    <web-view :src="url"></web-view>
+  </view>
 </template>
 <script>
 let wv;// 计划创建的webview
@@ -12,8 +12,8 @@ export default {
     };
   },
   onLoad(option) {
-    this.url = option.url;
-    // console.log(option)
+    this.url = `https://www.yilihuo.com/ylh-cloud-service-user/api/composite/live/list-live-info-for-b2b?userId=${option.userId}`;
+    console.log(option);
     console.log(this.url);
   },
   onReady() {
@@ -27,7 +27,3 @@ export default {
   }
 };
 </script>
-<style>
-
-</style>
-

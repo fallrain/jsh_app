@@ -74,6 +74,7 @@
       cancelBtnText="重置"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
+      @close="clearChoseSpecifications"
     >
     </j-version-specifications>
     <m-toast
@@ -168,7 +169,7 @@ export default {
           isExpand: true,
           list: []
         };
-        tjVersion.list = this.allPrice.tj.specialList.map(v => ({
+        tjVersion.list = tj.specialList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
@@ -202,7 +203,7 @@ export default {
           isExpand: true,
           list: []
         };
-        version.list = gc.projectList.map(v => ({
+        version.list = yjList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
           time: v.endDate,
@@ -235,8 +236,17 @@ export default {
       this.addToCartForEveryVersion();
     },
     specificationsCancel() {
-      /* 选中版本取消 */
+      /* 选中版本重置 */
       this.specificationsCheckList = [];
+      this.clearChoseSpecifications();
+    },
+    clearChoseSpecifications() {
+      /* 清除版本选中 */
+      this.specificationsList.forEach((version) => {
+        version.list.forEach((v) => {
+          v.checked = false;
+        });
+      });
     },
     checkSpecifications() {
       /* 检查是否有版本规格的数据，没有直接加入购物车 */
