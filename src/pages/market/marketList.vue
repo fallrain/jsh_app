@@ -378,11 +378,13 @@ export default {
           condition[item.key] = val;
         }
       });
+      console.log(this.filterInputs)
       this.filterInputs.forEach((item) => {
-        if (item.value) {
-          condition[item.key] = item.value;
+        if (item.val) {
+          condition[item.key] = item.val;
         }
       });
+      console.log(condition)
       return condition;
     },
     async getAddressList() {

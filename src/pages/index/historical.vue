@@ -46,7 +46,11 @@ export default {
     };
   },
   created() {
-    this.history = JSON.parse(localStorage.getItem('history'));
+    console.log(localStorage.getItem('history'));
+    if (localStorage.getItem('history')) {
+      console.log(1111);
+      this.history = JSON.parse(localStorage.getItem('history'));
+    }
     // this.history = uni.getStorage({
     //   key: 'history'
     // });
@@ -61,8 +65,8 @@ export default {
           url: `/pages/goods/goodsList?name=${this.name}`
         });
         this.val = this.name;
-        // this.history.push(this.his);
-        if (this.history.length > 0) { // 有数据的话 判断
+        console.log(this.val);
+        if (this.history && this.history.length > 0) { // 有数据的话 判断
           if (this.history.indexOf(this.val) !== -1) { // 有相同的，先删除 再添加
             this.history.splice(this.history.indexOf(this.val), 1);
             this.history.unshift(this.val);
@@ -70,6 +74,7 @@ export default {
             this.history.unshift(this.val);
           }
         } else { // 没有数据 添加
+          console.log(this.history);
           this.history.unshift(this.val);
         }
         if (this.history.length > 10) { // 保留六个值

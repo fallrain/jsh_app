@@ -1,7 +1,7 @@
 <template>
   <view class="pos-r mb120">
-    <view :key="updateIndex" class="JOrderConfirmAcceptDetailItem">
-      <view class="item-head">
+    <view class="JOrderConfirmAcceptDetailItem">
+      <view v-if="status===1" class="item-head">
         <view class="item-row">
           <view class="item-row-left">
             订单号：<text class="text-999">{{orderItem.gvsOrderNo}}</text>
@@ -16,7 +16,27 @@
           失败原因：{{orderItem.errorMsg}}
         </view>
       </view>
-      <view class="item-products">
+      <view v-if="status===2" class="item-head br-b-primary">
+        <view class="item-row">
+          <view class="item-row-left">
+            调货单号：<text class="text-999">{{orderItem.IBL_KORDERNO}}</text>
+          </view>
+          <view
+            class="item-row-right">
+            <view v-if="orderItem.ISFLAG === '提交成功'" class="pay-success">{{orderItem.ISFLAG}}</view>
+            <view v-else class="pay-fail">{{orderItem.ISFLAG}}</view>
+          </view>
+        </view>
+        <view class="item-row">
+          <view class="">
+            下单日期：<text class="text-999">{{orderItem.IBL_CREATETIME}}</text>
+          </view>
+        </view>
+        <view v-if="orderItem.ISFLAG === '提交失败'" class="item-row">
+          失败原因：{{orderItem.IBL_ERRORMESSAGE}}
+        </view>
+      </view>
+      <view v-if="status===1" class="item-products">
         <view class="product-left">
           <image :src="orderItem.productImgUrl"></image>
         </view>
@@ -32,11 +52,25 @@
           </view>
         </view>
       </view>
+      <view v-if="status===2" class="fs28 mt32">
+        <view class="lh40">
+          {{orderItem.IBL_INVSTD}}
+        </view>
+        <view class="dis-flex text-333 justify-sb fs20">
+          <view class="">下单日期：{{orderItem.IBL_CREATETIME}}</view>
+          <view class="dis-flex">
+            <view class="">
+              数量：
+              <text class="fs24 text-333">{{orderItem.IBL_NUM}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
-    <view class="item-bottom">
+    <view
+      :class="['item-bottom', status===2&&'bg-primary']">
       <view class="fs24">共计金额：</view>
-      <view class="">{{orderItem.productTotalMoney}}</view>
-
+      <view class="">{{orderItem.IBL_SUMMONEY}}</view>
     </view>
   </view>
 </template>
@@ -50,6 +84,9 @@ export default {
     orderItem: {
       type: Object,
       default: () => {}
+    },
+    status: {
+      type: [Number, String]
     },
     // 索引
     index: {
@@ -88,9 +125,10 @@ export default {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
+      font-size: 28px;
+      margin-bottom: 12px;
       .item-row-left{
         color: #333;
-        font-size: 28px;
       }
       .item-row-right{
         .pay-fail{
@@ -136,6 +174,18 @@ export default {
     }
   }
 }
+.JOrderConfirmAcceptDetailItem:before{
+  content: "";
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #F5F5F5;
+  position: absolute;
+  bottom:60px;
+  left: -20px;
+  transform:translateY(-50%);
+}
 .item-bottom{
   display: flex;
   width: 100%;
@@ -151,8 +201,14 @@ export default {
   line-height: 120px;
   padding-right: 30px;
 }
+.br-b-primary{
+  border-bottom: 2px solid #2283E2 !important;
+}
 .mb120{
   margin-bottom: 120px;
+}
+.mt32{
+  margin-top: 32px;
 }
 .pos-r{
   position: relative;
@@ -165,6 +221,15 @@ export default {
 }
 .text-theme{
   color: $theme-color;
+}
+.text-primary{
+  color: #2283E2 !important;
+}
+.bg-primary{
+  background: #2283E2 !important;
+}
+.lh40{
+  line-height: 40px;
 }
 .fs28{
   font-size: 28px;

@@ -1,23 +1,44 @@
 <template>
   <view :key="updateIndex" class="JOrderConfirmAcceptItem">
     <view class="item-head">
-      <view class="item-head-left">
+      <view
+        :class="['item-head-left', status===2&&'text-primary']">
         {{index+1}}.订单信息
       </view>
       <view
         @tap="orderDetail"
-        class="item-head-right">
+        :class="['item-head-right', status===2&&'text-primary']"
+        >
         点击查看详情
       </view>
     </view>
-    <view class="item-content">
-      整单：{{orderItem.groupingCode}}
+    <view v-if="status === 1">
+      <view class="item-content">
+        整单：{{orderItem.groupingCode}}
+      </view>
+      <view class="item-content">
+        整单金额：{{orderItem.payAmount}}
+      </view>
+      <view class="item-content">
+        送达方：({{orderItem.saletoCode}}){{orderItem.sendtoAddress}}
+      </view>
     </view>
-    <view class="item-content">
-      整单金额：{{orderItem.payAmount}}
-    </view>
-    <view class="item-content">
-      送达方：{{orderItem.sendtoAddress}}
+    <view v-if="status === 2">
+      <view class="item-content">
+        系统单号：{{orderItem.SEQ}}
+      </view>
+      <view class="item-content">
+        预计到货时间：{{orderItem.PLANINDATE}}
+      </view>
+      <view class="item-content">
+        总装车体积：{{orderItem.ONEVOLUME}}
+      </view>
+      <view class="item-content">
+        库位：{{orderItem.OUTWHNAME}}
+      </view>
+      <view class="item-content">
+        总计：{{orderItem.TOTALPRICES}}
+      </view>
     </view>
   </view>
 </template>
@@ -27,6 +48,9 @@
 export default {
   name: 'JOrderAcceptItem',
   props: {
+    status: {
+      type: [String, Number]
+    },
     // 单个订单
     orderItem: {
       type: Object,

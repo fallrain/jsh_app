@@ -17,9 +17,9 @@
       >失效产品
       </view>
       <view class="jProductItem-btm-tags mt8">
-        <view class="jProductItem-btm-tag">异</view>
-        <view class="jProductItem-btm-tag">云</view>
-        <view class="jProductItem-btm-tag">统</view>
+        <view v-if="goods.ydyc" class="jProductItem-btm-tag">异</view>
+        <view v-if="goods.ptyc" class="jProductItem-btm-tag">云</view>
+        <view v-if="goods.tctp" class="jProductItem-btm-tag">统</view>
       </view>
     </view>
     <view class="jProductItem-cnt">
@@ -68,9 +68,9 @@
     <view v-if="groupType === 'zuhe'" class="jProductItem-btm">
       <view class="dis-flex">
         <view class="jProductItem-btm-tags mr34">
-          <view class="jProductItem-btm-tag">异</view>
-          <view class="jProductItem-btm-tag">云</view>
-          <view class="jProductItem-btm-tag">统</view>
+          <view v-if="goods.ydyc" class="jProductItem-btm-tag">异</view>
+          <view v-if="goods.ptyc" class="jProductItem-btm-tag">云</view>
+          <view v-if="goods.tctp" class="jProductItem-btm-tag">统</view>
         </view>
         <!--<view class="fs20 text-666 mr12">库存：456</view>-->
       </view>

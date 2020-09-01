@@ -29,7 +29,13 @@
     {
       "path": "pages/index/historical",
       "style": {
-        "navigationBarTitleText": "首页历史记录"
+        "navigationBarTitleText": "搜索"
+      }
+    },
+    {
+      "path": "pages/index/liveBroadcast",
+      "style": {
+        "navigationBarTitleText": "直播"
       }
     },
     {

@@ -5,6 +5,7 @@ import user from '@/store/user';
 import order from '@/store/order';
 import transfer from '@/store/transfer';
 import vehicle from '@/store/vehicle';
+import commodity from '@/store/commodity';
 
 
 Vue.use(Vuex);
@@ -23,5 +24,6 @@ export default new Vuex.Store({
     order,
     transfer,
     vehicle,
+    commodity
   }
 });

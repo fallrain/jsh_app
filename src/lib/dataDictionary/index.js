@@ -82,7 +82,7 @@ function getGoodsInCartPriceType() {
     TJ: '特价',
     GC: '工程',
     YJCY: '样机',
-    MFJK: '免费机壳',
+    MFJK: '样机',
     MFYJ: '样机',
     MFYJJS: '免费样机结算',
     YPJ: '样品机',

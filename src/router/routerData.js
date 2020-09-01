@@ -6,6 +6,7 @@ const data = [
   'pages/index/banner',
   'pages/index/announcement',
   'pages/index/historical',
+  'pages/index/liveBroadcast',
   'pages/applicationsIndex/applicationsIndex',
   'pages/applicationsIndex/applicationsEdit',
   'pages/login/login/login',

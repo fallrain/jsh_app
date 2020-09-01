@@ -2,26 +2,25 @@
   <view class="jFailureOrderItem">
     <view class="jFailureOrderItem-head">失败订单</view>
     <view
-      v-for="(goods,index) in orderItem.splitOrderDetailList"
+      v-for="(goods,index) in orderItem.splitProductDtoList"
       :key="index"
       class="jFailureProductItem">
       <view
-        v-if="goods.splitOrderProductList"
         class="jFailureOrderItem-cnt j-flex-aic mt16">
         <view class="jFailureOrderItem-cnt-portrait">
           <image
-            :src="goods.splitOrderProductList[0].productImageUrl">
+            :src="goods.productImageUrl">
           </image>
         </view>
         <view class="jFailureOrderItem-cnt-right">
           <view class="j-goods-title">
-            {{goods.splitOrderProductList[0].productName}}
+            {{goods.productName}}
           </view>
           <view class="jFailureOrderItem-cnt-price-wrap j-flex-aic">
             <view class="jOrderConfirmItem-detail-cnt-price">
-              ¥{{goods.splitOrderProductList[0].price}}
+              ¥{{goods.price}}
               <view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">
-                *{{goods.splitOrderProductList[0].storeNum}}</view>
+                *{{goods.number}}</view>
             </view>
           </view>
         </view>

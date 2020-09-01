@@ -21,7 +21,10 @@
           </view>
         </view>
       </view>
-      <view :class="['jHeadTab-pop-tab-list',isExpend && 'isExpend']">
+      <scroll-view
+        :class="['jHeadTab-pop-tab-list',isExpend && 'isExpend']"
+        scroll-x
+      >
         <view
           :class="[
           'jHeadTab-pop-tab-item',
@@ -38,7 +41,7 @@
             <view class="iconfont iconxia jHeadTab-pop-tab-item-icon"></view>
           </view>
         </view>
-      </view>
+      </scroll-view>
     </view>
     <j-head-tab-picker
       v-for="(pickerItem,pIndex) in popTabs"
@@ -83,10 +86,13 @@ export default {
   methods: {
     tabHandle(item, index) {
       /* tab 点击事件 */
-      this.tabs.forEach((v) => {
-        v.active = false;
-      });
-      item.active = true;
+      // 除去不能点击的item
+      if (!item.noActive) {
+        this.tabs.forEach((v) => {
+          v.active = false;
+        });
+        item.active = true;
+      }
       this.$emit('tabClick', this.tabs, item, index);
     },
     tabTagHandle() {

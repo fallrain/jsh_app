@@ -54,6 +54,7 @@ export default {
         filterDrawer.open();
       } else {
         filterDrawer.close();
+        this.$emit('filterConfirm');
       }
     }
   },
@@ -68,7 +69,6 @@ export default {
     },
     filterConfirm() {
       /* 确定 */
-      this.$emit('filterConfirm');
       this.$emit('update:show', false);
     }
   }

@@ -18,8 +18,8 @@ export default {
     /* 商品库存 */
     return jPostJson(urls.getStock, data);
   },
-  list(data) {
-     /* 首页商品 */
-     return jGet(urls.list, data);
+  catalogList(data) {
+    /* 有货商品分类 */
+    return jGet(urls.list, data);
   }
 };

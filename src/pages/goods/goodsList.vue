@@ -127,7 +127,8 @@ import {
   mapMutations
 } from 'vuex';
 import {
-  USER
+  USER,
+  COMMODITY
 } from '../../store/mutationsTypes';
 
 export default {
@@ -184,6 +185,7 @@ export default {
           ],
           handler: 'showFilter',
           noSearch: true,
+          noActive: true,
           active: false
         }
       ],
@@ -209,7 +211,7 @@ export default {
         {
           name: '有货商品',
           isExpand: true,
-          type: 'checkbox',
+          type: 'radio',
           data: []
         }
       ],
@@ -227,7 +229,9 @@ export default {
       // 配送地址数据
       deliveryAddressList: [],
       // 当前选中的配送地址
-      curChoseDeliveryAddress: {}
+      curChoseDeliveryAddress: {},
+      // 上一组搜索对象数据
+      preSearchCondition: {}
     };
   },
   onLoad(options) {
@@ -274,6 +278,7 @@ export default {
     ...mapGetters({
       userInf: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      catalogList: COMMODITY.GET_CATALOG_LIST
     }),
   },
   methods: {
@@ -365,13 +370,45 @@ export default {
       });
       this.popTabs = popTabs;
     },
+    genFilterDataOfStock(categoryCode) {
+      /* 组合有货商品，并选中 */
+      const catalog = this.catalogList.find(v => v.categoryCode.substring(0, 3) === categoryCode.substring(0, 3));
+      if (catalog) {
+        const data = catalog.stockTypes.map(v => ({
+          // 传向接口的key name
+          searchKey: 'stockType',
+          // 传向接口的key的value的属性
+          keyAttr: 'key',
+          key: v.stockType,
+          value: v.stockType,
+          isChecked: false
+        }));
+        // 如果之前有选中的有货商品，设置选中
+        const checkedObj = this.filterList[2].data.find(v => v.isChecked);
+        if (checkedObj) {
+          const newCheckObj = data.find(v => v.key === checkedObj.key);
+          if (newCheckObj) {
+            newCheckObj.isChecked = true;
+          }
+        }
+        // 修改有货商品
+        this.filterList[2].data = data;
+      }
+    },
     async getGoodsList(pages) {
       /* 搜索产品列表 */
       // 公共用户信息
+      if (pages.num === 1) {
+        this.mescroll.scrollTo(0, 100);
+      }
       const userInf = this.userInf;
       const defaultSendToInf = this.defaultSendToInf;
       const condition = this.getSearchCondition(pages);
+      if (condition.categoryCode) {
+        this.genFilterDataOfStock(condition.categoryCode);
+      }
       const { code, data } = await this.commodityService.goodsList(condition);
+      this.preSearchCondition = condition;
       const scrollView = {};
       if (code === '1') {
         const {
@@ -450,13 +487,20 @@ export default {
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
-      this.tabs = tabs;
-      // tab为价格的时候，降序升序操作
-      if (tab.id === 'price') {
-        const sortDirection = tab.condition.sortDirection;
-        tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
-        tab.iconClass = tab.condition.sortDirection;
-        this.tabs[index] = tab;
+      if (!tab.noActive) {
+        this.tabs = tabs;
+        // tab为价格的时候，降序升序操作
+        if (tab.id === 'price') {
+          const sortDirection = tab.condition.sortDirection;
+          tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+          tab.iconClass = tab.condition.sortDirection;
+          this.tabs[index] = tab;
+        } else {
+          // 重置价格的状态
+          const priceTab = tabs.find(v => v.id === 'price');
+          priceTab.condition.sortDirection = 'desc';
+          priceTab.iconClass = '';
+        }
       }
       if (!tab.noSearch) {
         this.mescroll.resetUpScroll(true);
@@ -532,6 +576,15 @@ export default {
     filterConfirm() {
       /* 抽屉筛选确认 */
       // 重新搜索
+      const condition = this.getSearchCondition({
+        num: 1,
+        size: 10
+      });
+      const difKeys = this.jshUtil.findDifKey(this.preSearchCondition, condition);
+      // 没有不同则直接返回
+      if (!Object.keys(difKeys).length) {
+        return;
+      }
       this.mescroll.resetUpScroll(true);
     },
     filterReset() {
@@ -541,8 +594,9 @@ export default {
           v.isChecked = false;
         });
       });
-      // 重新搜索
-      this.mescroll.resetUpScroll(true);
+      // 重置最低价 最高价
+      this.filterForm.lowPrice = '';
+      this.filterForm.highPrice = '';
     },
     showDeliveryAddress() {
       /* 展示配送地址 */
@@ -560,13 +614,16 @@ export default {
           }));
           // 当前配送地址修改(选出默认地址)
           const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          let curChoseDeliveryAddress;
           if (defaultIndex > -1) {
-            const curChoseDeliveryAddress = data[defaultIndex];
-            // 更新默认送达方store
-            this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
-            this.deliveryAddressList[defaultIndex].checked = true;
-            this.curChoseDeliveryAddress = curChoseDeliveryAddress;
+            curChoseDeliveryAddress = data[defaultIndex];
+          } else {
+            curChoseDeliveryAddress = data[0];
           }
+          // 更新默认送达方store
+          this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
+          this.deliveryAddressList[defaultIndex].checked = true;
+          this.curChoseDeliveryAddress = curChoseDeliveryAddress;
         }
       });
     },
@@ -574,6 +631,15 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+      // 更改默认的送达方
+      this.customerService.changeDefaultSendTo({
+        sendToCode: item.customerCode
+      }).then(({ code }) => {
+        if (code === '1') {
+          // 更改成功之后更新store
+          this[USER.UPDATE_DEFAULT_SEND_TO](item);
+        }
+      });
     }
   }
 };
