@@ -22,7 +22,7 @@
           </view>
         </view>
         <view class="app-nav-right">
-          <image src="@/assets/img/appIndex/kefu.png"></image>
+          <image src="@/assets/img/appIndex/kefu.png" @tap="service"></image>
         </view>
       </view>
       <view class="app-header">
@@ -193,6 +193,9 @@ import {
 } from '../../store/mutationsTypes';
 import JCell from '../../components/form/JCell';
 import './css/applicationsIndex.scss';
+import {
+  hex_sha1
+} from '@/pages/index/SHA1';
 
 export default {
   name: 'applicationsIndex',
@@ -301,115 +304,115 @@ export default {
             }
           ]
         },
-        {
-          id: 2,
-          title: '分销管理',
-          children: [
-            {
-              id: 1,
-              src: require('@/assets/img/appIndex/shopping.png'),
-              url: '#',
-              Subhead: '采购下单'
-            },
-            {
-              id: 2,
-              src: require('@/assets/img/appIndex/finance.png'),
-              url: '#',
-              Subhead: '财务自助'
-            },
-            {
-              id: 3,
-              src: require('@/assets/img/appIndex/work.png'),
-              url: '#',
-              Subhead: '业务办理'
-            },
-            {
-              id: 4,
-              src: require('@/assets/img/appIndex/report.png'),
-              url: '#',
-              Subhead: '报表查询'
-            },
-            {
-              id: 5,
-              src: require('@/assets/img/appIndex/recharge.png'),
-              url: '#',
-              Subhead: '在线充值'
-            }
+        // {
+        //   id: 2,
+        //   title: '分销管理',
+        //   children: [
+        //     {
+        //       id: 1,
+        //       src: require('@/assets/img/appIndex/shopping.png'),
+        //       url: '#',
+        //       Subhead: '采购下单'
+        //     },
+        //     {
+        //       id: 2,
+        //       src: require('@/assets/img/appIndex/finance.png'),
+        //       url: '#',
+        //       Subhead: '财务自助'
+        //     },
+        //     {
+        //       id: 3,
+        //       src: require('@/assets/img/appIndex/work.png'),
+        //       url: '#',
+        //       Subhead: '业务办理'
+        //     },
+        //     {
+        //       id: 4,
+        //       src: require('@/assets/img/appIndex/report.png'),
+        //       url: '#',
+        //       Subhead: '报表查询'
+        //     },
+        //     {
+        //       id: 5,
+        //       src: require('@/assets/img/appIndex/recharge.png'),
+        //       url: '#',
+        //       Subhead: '在线充值'
+        //     }
 
-          ]
-        },
-        {
-          id: 3,
-          title: '门店经营',
-          children: [
-            {
-              id: 1,
-              src: require('@/assets/img/appIndex/gooods.png'),
-              url: '#',
-              Subhead: '其他进货'
-            },
-            {
-              id: 2,
-              src: require('@/assets/img/appIndex/accept.png'),
-              url: '#',
-              Subhead: '收货办理'
-            },
-            {
-              id: 3,
-              src: require('@/assets/img/appIndex/stock.png'),
-              url: '#',
-              Subhead: '库存查询'
-            },
-            {
-              id: 4,
-              src: require('@/assets/img/appIndex/list.png'),
-              url: '#',
-              Subhead: '差单据'
-            },
-            {
-              id: 5,
-              src: require('@/assets/img/appIndex/member.png'),
-              url: '#',
-              Subhead: '会员清单'
-            }
-          ]
-        },
-        {
-          id: 4,
-          title: '零售管理',
-          children: [
-            {
-              id: 1,
-              src: require('@/assets/img/appIndex/shopping.png'),
-              url: '#',
-              Subhead: '采购下单'
-            },
-            {
-              id: 2,
-              src: require('@/assets/img/appIndex/finance.png'),
-              url: '#',
-              Subhead: '财务自助'
-            },
-            {
-              id: 3,
-              src: require('@/assets/img/appIndex/work.png'),
-              url: '#',
-              Subhead: '业务办理'
-            },
-            {
-              id: 4,
-              src: require('@/assets/img/appIndex/report.png'),
-              url: '#',
-              Subhead: '报表查询'
-            },
-            {
-              id: 5,
-              src: require('@/assets/img/appIndex/recharge.png'),
-              url: '#',
-              Subhead: '在线充值'
-            }
-          ]
-        }
+        //   ]
+        // },
+        // {
+        //   id: 3,
+        //   title: '门店经营',
+        //   children: [
+        //     {
+        //       id: 1,
+        //       src: require('@/assets/img/appIndex/gooods.png'),
+        //       url: '#',
+        //       Subhead: '其他进货'
+        //     },
+        //     {
+        //       id: 2,
+        //       src: require('@/assets/img/appIndex/accept.png'),
+        //       url: '#',
+        //       Subhead: '收货办理'
+        //     },
+        //     {
+        //       id: 3,
+        //       src: require('@/assets/img/appIndex/stock.png'),
+        //       url: '#',
+        //       Subhead: '库存查询'
+        //     },
+        //     {
+        //       id: 4,
+        //       src: require('@/assets/img/appIndex/list.png'),
+        //       url: '#',
+        //       Subhead: '差单据'
+        //     },
+        //     {
+        //       id: 5,
+        //       src: require('@/assets/img/appIndex/member.png'),
+        //       url: '#',
+        //       Subhead: '会员清单'
+        //     }
+        //   ]
+        // },
+        // {
+        //   id: 4,
+        //   title: '零售管理',
+        //   children: [
+        //     {
+        //       id: 1,
+        //       src: require('@/assets/img/appIndex/shopping.png'),
+        //       url: '#',
+        //       Subhead: '采购下单'
+        //     },
+        //     {
+        //       id: 2,
+        //       src: require('@/assets/img/appIndex/finance.png'),
+        //       url: '#',
+        //       Subhead: '财务自助'
+        //     },
+        //     {
+        //       id: 3,
+        //       src: require('@/assets/img/appIndex/work.png'),
+        //       url: '#',
+        //       Subhead: '业务办理'
+        //     },
+        //     {
+        //       id: 4,
+        //       src: require('@/assets/img/appIndex/report.png'),
+        //       url: '#',
+        //       Subhead: '报表查询'
+        //     },
+        //     {
+        //       id: 5,
+        //       src: require('@/assets/img/appIndex/recharge.png'),
+        //       url: '#',
+        //       Subhead: '在线充值'
+        //     }
+        //   ]
+        // }
 
       ],
       functionList: [
@@ -438,9 +441,9 @@ export default {
           url: '#'
         }
       ],
-      loadUserType:false,
-      errorMsg:'',
-      valueSyncData:'',
+      loadUserType: false,
+      errorMsg: '',
+      valueSyncData: '',
     };
   },
   created() {
@@ -510,7 +513,7 @@ export default {
 		  // });
     },
     // 打开农行支付
-    callABC(){
+    callABC() {
 		  // AlipayJSBridge.call('myApiCallABC', {
 		  //   tokenId: '14406457162720037182',
 		  // }, (result) => {
@@ -525,7 +528,7 @@ export default {
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-        
+
         this[USER.UPDATE_SALE_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
       }
@@ -539,16 +542,16 @@ export default {
       this.manageData(data);
     },
     // 获取代码对应产品组
-    async getvaluesync(){
+    async getvaluesync() {
       const { code, data } = await this.cocService.getValueSyncValue(
-      {
-        valueSetId: 'ProductGroup'
-      });
+        {
+          valueSetId: 'ProductGroup'
+        }
+      );
       if (code == '1') {
         return data;
-      } else {
-        return [];
       }
+      return [];
     },
     // 解析用户权限类型数据
     manageData(data) {
@@ -557,19 +560,19 @@ export default {
       const tags = data.tags;
 
       let errorAlertMsg = '';
-      
+
       // 僵尸户
-      if(tags.zombie && tags.zombie.status == 1) {
-        errorAlertMsg = errorAlertMsg + "你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。";
+      if (tags.zombie && tags.zombie.status == 1) {
+        errorAlertMsg += '你好，由于您的账户超180天未提货，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理。';
       }
       // 无门店
-      if(tags.noStore && tags.noStore.status == 1) {
-        errorAlertMsg = errorAlertMsg + "您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理";
+      if (tags.noStore && tags.noStore.status == 1) {
+        errorAlertMsg += '您好，由于您的账户无有效门店，已被冻结，当前限制交易，如需解冻请联系交互师或业务人员处理';
       }
-    
-      var marketCollusionGroupValue = [];
 
-      if(data.marketCollusionGroup.length>0) {
+      let marketCollusionGroupValue = [];
+
+      if (data.marketCollusionGroup.length > 0) {
         marketCollusionGroupValue = this.getvaluesync();
       }
 
@@ -579,40 +582,40 @@ export default {
         const element = data.marketCollusionGroup[index];
         for (let y = 0; y < marketCollusionGroupValue.length; y++) {
           const elementValue = marketCollusionGroupValue[y];
-          if(data.marketCollusionGroup[index] == element.value) {
-            marketErrorMsg = marketErrorMsg + element.valueMeaning;
+          if (data.marketCollusionGroup[index] == element.value) {
+            marketErrorMsg += element.valueMeaning;
           }
         }
       }
-      
-      if(marketErrorMsg.length > 0) {
-        errorAlertMsg += '您好，市场运营管理限制，您'+marketErrorMsg+'产品组相关产品限制交易，如有疑问请联系交互师或业务人员处理。';
+
+      if (marketErrorMsg.length > 0) {
+        errorAlertMsg += `您好，市场运营管理限制，您${marketErrorMsg}产品组相关产品限制交易，如有疑问请联系交互师或业务人员处理。`;
       }
 
-      if(errorAlertMsg.length > 0) {
+      if (errorAlertMsg.length > 0) {
         uni.showModal({
-        title: '提示',
-        content: errorAlertMsg,
-        showCancel:false,
-        confirmText:'确定',
-        success: function (res) {
+          title: '提示',
+          content: errorAlertMsg,
+          showCancel: false,
+          confirmText: '确定',
+          success(res) {
             if (res.confirm) {
-                console.log('用户点击确定');
-            } 
+              console.log('用户点击确定');
+            }
           }
         });
       }
 
       // 供应链金融冻结
-      if(tags.gylFreezed && tags.gylFreezed.status == 1) {
+      if (tags.gylFreezed && tags.gylFreezed.status == 1) {
         this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。";
+        this.errorMsg = `${this.errorMsg}抱歉，由于您的账户及子账户 因供应链金融业务被冻结，限制登录系统，如有疑问请联系交互师处理。`;
       }
 
       // MDM冻结
-      if(data.status == 1) {
+      if (data.status == 1) {
         this.loadUserType = true;
-        this.errorMsg = this.errorMsg + "抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。";
+        this.errorMsg = `${this.errorMsg}抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。`;
       }
     },
     changePic(e) {
@@ -623,6 +626,40 @@ export default {
       if (code === '1') {
         this.imageList = data;
       }
+    },
+    // 客服
+    async service() {
+      let url = '';
+      const { code, data } = await this.udeskService.getUdesk(this.saleInfo.customerCode, {
+        addressArea: this.defaultSendToInf.customerCode
+      });
+      if (code === '1') {
+        console.log(data);
+        const web_token1 = data.accountId;
+        const timestamp1 = new Date().getTime();// 时间戳
+        const chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        let nonce1 = '';// 随机数
+        for (let i = 0; i < 12; i++) {
+          const id = Math.ceil(Math.random() * 35);
+          nonce1 += chars[id];
+        }
+        const signature = `nonce=${nonce1}&timestamp=${timestamp1}&web_token=${web_token1}&9767b0677a6f46f5d3d0af8c00f3f16c`;
+        let sha = hex_sha1(signature);
+        sha = sha.toUpperCase();
+        console.log(signature); console.log(sha);
+        //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
+        //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
+        //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
+        url = `https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token=${web_token1}&c_phone=${this.tokenUserInf.phoneNumber}&nonce=${nonce1}&signature=${sha}&timestamp=${timestamp1}&web_token=${web_token1}`;
+        console.log(url);
+        // InAppBrowserService.openAd(url);
+      } else {
+        // PopupService.showToast(response.message);
+      }
+
+      uni.navigateTo({
+        url: `/pages/index/service?url=${url}`
+      });
     },
     openMenu() {
       /* 打开抽屉 */

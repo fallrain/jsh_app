@@ -41,6 +41,7 @@ export default {
     }
   },
   created() {
+    console.log(this.detailList);
     console.log(this.detailList.calue);
     this.setCalue();
   },
@@ -51,23 +52,37 @@ export default {
     //   this.$emit('checkAll', checked);
     // }
     setCalue() {
-      // if (this.fromWhere === 'ZC') {
-      //   const baifenbi = ((this.detailList.IBR_JSTIJI * 1) / (this.detailList.IBR_MAXTJ * 1)) * 100;
-      //   this.detailList.calue = baifenbi.toFixed(0);
-      // } else {
-      //   // this.detailList.calue = Math.round(this.detailList.IBR_JSTIJI / 15 * 100);
-      // }
+      if (this.fromWhere === 'ZC') {
+        const baifenbi = ((this.detailList.IBR_JSTIJI * 1) / (this.detailList.IBR_MAXTJ * 1)) * 100;
+        this.detailList.calue = baifenbi.toFixed(0);
+      } else {
+        this.detailList.calue = this.detailList.calue;
+      }
     },
     tlement() {
       if (this.fromWhere === 'ZC') {
         // 整车结算
         this.$emit('checkUp');
       } else {
-        if (Number(this.calue) < 15) {
-          // confirm("体积小于15，无法结算，请继续添加商品")
+        if (Number(this.detailList.calue) < 100) {
           uni.showToast({
-            title: '体积小于15，无法结算，请继续添加商品',
+            title: `单号${this.detailList.IBR_SEQ}体积不满足，无法结算，请继续添加商品`,
             duration: 3000
+          });
+        } else {
+          this.detailList.orderList.forEach(item => {
+            item.payer.forEach(ele => {
+              if (ele.customerCode === item.IBL_PAYMONEY) {
+                if (ele.balance > this.detailList.SUMMONEY) {
+                  this.$emit('changeVf');
+                }
+              } else {
+                uni.showModal({
+                  title: '提示',
+                  content: `付款方${item.IBL_PAYMONEY}余额不足，无法提交！`,
+                });
+              }
+            });
           });
         }
       }
@@ -84,8 +99,9 @@ export default {
     right: 0;
     height: 100px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 40px;
+    padding-left: 30px;
     padding-right: 18px;
     background: #fff;
     border-top: 1px solid #CDCDCD;
@@ -96,6 +112,7 @@ export default {
     display: flex;
     align-items: center;
     font-size: 28px;
+    justify-content: space-between;
   }
   .transferDetailBtm-check-shop {
     color: #333;

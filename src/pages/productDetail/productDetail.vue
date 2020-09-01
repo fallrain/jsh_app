@@ -25,7 +25,7 @@
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
         <view class="text modeller">
-          <image v-if="detailInfo.isScf==='1'" src="@/assets/img/orderDetail/rongZi.png" style="width: 20px;height: 20px;"></image>
+          <image v-if="detailInfo.isScf==='1'" src="../../assets/img/orderDetail/rongZi.png" style="width:20px;height:20px;"></image>
           {{detailInfo.product.productName}}
         </view>
       </view>
@@ -96,7 +96,7 @@
       <view class="uni-flex uni-row">
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
           <view v-for="ieen in hostList" :key="ieen.productCode" class="scroll-view-item_H">
-            <image :src="ieen.imageUrl" style="height: 76px;width: 76px;"></image>
+            <image :src="ieen.imageUrl[0]" style="height: 76px;width: 76px;"></image>
             <view>
               <span class="product-detail-lei1">{{ieen.title}}</span>
               <br><span style="color: #ED2856;font-size: 8px;">￥{{ieen.price}}</span>
@@ -244,6 +244,8 @@ export default {
       });
       if (code === '1') {
         this.productNum = 1;
+        console.log(data);
+        data.price.invoicePrice = data.price.invoicePrice.toFixed(2);
         this.detailInfo = data;
         this.footButtong.isSale = this.detailInfo.product.isSale;
         if (this.detailInfo.activities.length > 0) {
@@ -375,8 +377,27 @@ export default {
           });
           this.ActInfo.push(qd);
         }
+        if (this.detailInfo.isOmsSample) {
+          const dh = {
+            title: '调货',
+            isMore: false,
+            isSe: true,
+            list: []
+          };
+          this.detailInfo.omsSamples.forEach((lis) => {
+            const a = {
+              titleLe: '调货',
+              name: lis.versionCode,
+              time: lis.endDate,
+              num: lis.usableQty
+            };
+            dh.list.push(a);
+          });
+          this.ActInfo.push(dh);
+        }
       }
       console.log(data);
+      console.log(this.ActInfo);
     },
     async getHostLost() {
       const { code, data } = await this.productDetailService.productHostList(this.userInf.customerCode, this.defaultSendTo.customerCode);
@@ -466,12 +487,13 @@ export default {
       this.productNum = e;
     },
     checkedAct(e, n) { // 活动选择的内容
-      console.log('youmeiyou');
+      console.log('55555555555',n);
       this.CheckActivityInfo = n;
       if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本')) {
         this.footButtong.isSaleLe = true;
       }
       console.log(this.CheckActivityInfo);
+      // debugger;
     },
     checkedShip(list, e) { // 选择的地址
       this.ShipInfo = this.deliveryAddressList[e].name;

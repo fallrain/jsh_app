@@ -15,7 +15,10 @@
     <view class="history">
       <view class="history-nav">
         <view class="history-title">历史记录</view>
-        <i class="iconfont iconlajitong"></i>
+        <i
+          class="iconfont iconlajitong"
+          @click="deleteItem"
+        ></i>
       </view>
       <view class="history-top">
         <view
@@ -95,6 +98,10 @@ export default {
       uni.navigateTo({
         url: `/pages/goods/goodsList?name=${item}`
       });
+    },
+    deleteItem() {
+      localStorage.removeItem('history');
+      this.history = [];
     }
   }
 
