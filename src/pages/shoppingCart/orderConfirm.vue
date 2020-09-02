@@ -265,15 +265,16 @@ export default {
     },
     getPayForm() {
       const payFormArr = [];
-      this.dataInfo.composeProductList.forEach((item, index) => {
+      this.dataInfo.composeProductList.forEach((item) => {
         item.splitOrderDetailList.forEach((v) => {
           const conditionItem = {
-            isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
+            isCheckCreditModel: null,
+            // isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
             orderNo: v.orderNo,
             priceType: v.splitOrderProductList[0].priceType,
             priceVersion: v.splitOrderProductList[0].priceVersion,
-            productCode: v.productCode,
-            productGroup: v.productCode,
+            productCode: v.splitOrderProductList[0].productCode,
+            productGroup: v.splitOrderProductList[0].productGroup,
             saletoCode: this.dataInfo.saletoCode,
             sendtoCode: this.dataInfo.sendtoCode,
             yunCangFlag: '',
