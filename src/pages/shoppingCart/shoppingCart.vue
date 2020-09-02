@@ -173,18 +173,22 @@ export default {
         {
           flag: 'yc',
           name: '云仓',
-          checked: false
+          checked: false,
+          // 没有子元素
+          isSingle: true
         },
         {
           flag: 'ydyc',
           name: '异地云仓',
           childrenType: 'short',
+          isCanBeCheck: false,
           checked: false,
           isExpand: true,
           children: []
         },
         {
           name: '配送至',
+          isCanBeCheck: false,
           checked: false,
           isExpand: true,
           childrenType: 'long',
@@ -315,7 +319,8 @@ export default {
         this.sendCustomerList[1].children = data.map(v => ({
           id: v.code,
           name: v.codeName,
-          checked: false
+          checked: false,
+          yunCangFlag: 'ydyc'
         }));
       }
     },
@@ -350,26 +355,28 @@ export default {
         const shoppingList = [];
         // 失效商品
         const failureGoodsList = [];
-        data.forEach((v) => {
-          if (v.composeEnable === 1) {
-            shoppingList.push({
-              isShow: true,
-              checked: false,
-              // 信用模式
-              isCreditMode: false,
-              // 直发模式
-              isDirectMode: false,
-              $PriceInfo: v.productList[0].priceInfo,
-              // 在购物车里更换的其他版本数据，使得计算属性能监控到
-              choseOtherVersions: [],
-              ...v
-            });
-          } else {
-            failureGoodsList.push({
-              ...v
-            });
-          }
-        });
+        if (data) {
+          data.forEach((v) => {
+            if (v.composeEnable === 1) {
+              shoppingList.push({
+                isShow: true,
+                checked: false,
+                // 信用模式
+                isCreditMode: false,
+                // 直发模式
+                isDirectMode: false,
+                $PriceInfo: v.productList[0].priceInfo,
+                // 在购物车里更换的其他版本数据，使得计算属性能监控到
+                choseOtherVersions: [],
+                ...v
+              });
+            } else {
+              failureGoodsList.push({
+                ...v
+              });
+            }
+          });
+        }
         this.shoppingList = shoppingList;
         this.failureGoodsList = failureGoodsList;
       }
@@ -452,7 +459,7 @@ export default {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
     },
-    sendCustomerListChange(list, detail, parent) {
+    sendCustomerListChange(list, detail, parent, isShow) {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
@@ -464,7 +471,7 @@ export default {
           if (detail.yunCangFlag) {
             this.choseSendAddress = {
               yunCangCode: detail.id,
-              yunCangFlag: detail.flag,
+              yunCangFlag: detail.yunCangFlag,
               name: detail.name,
             };
           } else {
@@ -499,7 +506,7 @@ export default {
         }
       }
       // 选中之后关闭弹窗
-      this.isShowAdsPicker = false;
+      this.isShowAdsPicker = isShow || false;
     },
     tabClick(tabs) {
       this.tabs = tabs;
@@ -642,7 +649,7 @@ export default {
             // farWeek: prdt.weekPromise,
             // isCheckFarWeek: '0',
             // 是否直发
-            isStock: v.isDirectMode ? '1' : '0',
+            isStock: v.isDirectMode ? '0' : '1',
             // 版本调货版本号
             transferVersion: transferVersion || undefined
           }));
