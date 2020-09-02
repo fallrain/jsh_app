@@ -80,7 +80,7 @@
     <view class="line"></view>
 
     <!-- 商品关注 -->
-    <view class="focusProduct">
+    <view @click="productAction" class="focusProduct">
       <view>
         <view class="productTitle">商品关注</view>
         <view class="productSubTitle">快捷便利查看关注商品</view>
@@ -340,6 +340,12 @@ export default {
     goAllOrder() { // 前往订单列表，全部
       uni.navigateTo({
         url: `/pages/orderList/orderList?index=${0}`
+      });
+    },
+    // 商品关注
+    productAction() {
+      uni.navigateTo({
+        url: '/pages/concernedProducts/concernedProductsList'
       });
     }
   },
