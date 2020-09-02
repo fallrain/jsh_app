@@ -10,6 +10,10 @@
 
 <script>
 import mineSignInfo from '../../components/mine/mine-sign-item';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
 
 export default {
   name: 'mySignInfo',
@@ -23,12 +27,26 @@ export default {
       pageNo: 1
     };
   },
+  computed: {
+    ...mapGetters({
+      [USER.GET_SALE]: USER.GET_SALE,
+      [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER,
+      userInf: USER.GET_USER,
+    })
+  },
   created() {
     this.getSignList(this.pageNo);
   },
   methods: {
+    ...mapActions([
+      USER.UPDATE_SALE_ASYNC,
+      USER.UPDATE_TOKEN_USER_ASYNC,
+    ]),
     async getSignList(pageNo) {
-      const { code, data } = await this.mineServer.mineSignList('8800012497', pageNo);
+
+      console.log(this.userInf)
+
+      const { code, data } = await this.mineServer.mineSignList(this.userInf.customerCode, pageNo);
       if (code === '1') {
         const { contractMessageDtoList } = data;
         if (pageNo === 1) {
