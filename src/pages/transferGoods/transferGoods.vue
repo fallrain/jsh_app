@@ -256,8 +256,19 @@ export default {
     this.otherSEQ = option.IBR_SEQ;
   },
   created() {
-    this.getPageInfo();
-    console.log(this.saleInfo);
+    // this.getPageInfo();
+    // console.log(this.saleInfo);
+  },
+  mounted() {
+    if (this.saleInfo.channelGroup === 'CT') {
+      console.log(555555555555)
+      uni.showToast({
+        title: `当前客户${this.saleInfo.customerCode}无调货权限`,
+        duration: 5000,
+      });
+    } else {
+      this.getPageInfo();
+    }
   },
   computed: {
     ...mapGetters({
@@ -399,6 +410,14 @@ export default {
     },
     async upCallback(pages) {
       /* 上推加载 */
+      if (this.saleInfo.channelGroup === 'CT') {
+        uni.showToast({
+          title: `当前客户${this.saleInfo.customerCode}无调货权限`,
+          duration: 5000,
+        });
+        this.mescroll.endBySize(10, 0);
+        return;
+      }
       const scrollView = await this.getTransferList(pages);
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },

@@ -429,7 +429,11 @@ export default {
         // 当前页码的数据
         const curList = page.result.map(v => ({
           ...v,
-          number: 1
+          number: 1,
+          // 库存
+          $stock: {},
+          // 收藏
+          $favorite: false
         }));
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
@@ -449,39 +453,42 @@ export default {
           productCodes,
           account: userInf.customerCode
         });
-        const [
-          allPriceRes,
-          stockRes,
-          productQueryInterRes
-        ] = await Promise.all([getAllPrice, getStock, getProductQueryInter]);
-        if (allPriceRes.code === '1') {
-          // 添加价格
-          const allPriceData = allPriceRes.data;
-          // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
-          curList.forEach((v) => {
-            v.$PtPrice = allPriceData[v.productCode].pt;
-            v.$allPrice = allPriceData[v.productCode];
-          });
-        }
-        if (stockRes.code === '1') {
-          // 添加库存
-          const stockData = stockRes.data;
-          curList.forEach((v) => {
-            v.$stock = stockData[v.productCode];
-          });
-        }
-        if (productQueryInterRes.code === '1') {
-          // 添加点赞
-          const productQueryInterData = productQueryInterRes.data;
-          curList.forEach((v) => {
-            v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
-          });
-        }
-        if (pages.num === 1) {
-          this.list = curList;
-        } else {
-          this.list = this.list.concat(curList);
-        }
+        getAllPrice.then((allPriceRes) => {
+          if (allPriceRes.code === '1') {
+            // 添加价格
+            const allPriceData = allPriceRes.data;
+            // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
+            curList.forEach((v) => {
+              v.$PtPrice = allPriceData[v.productCode].pt;
+              v.$allPrice = allPriceData[v.productCode];
+            });
+            if (pages.num === 1) {
+              this.list = curList;
+            } else {
+              this.list = this.list.concat(curList);
+            }
+          } else {
+            this.mescroll.endErr();
+          }
+        });
+        getStock.then((stockRes) => {
+          if (stockRes.code === '1') {
+            // 添加库存
+            const stockData = stockRes.data;
+            curList.forEach((v) => {
+              v.$stock = stockData[v.productCode];
+            });
+          }
+        });
+        getProductQueryInter.then((productQueryInterRes) => {
+          if (productQueryInterRes.code === '1') {
+            // 添加点赞
+            const productQueryInterData = productQueryInterRes.data;
+            curList.forEach((v) => {
+              v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
+            });
+          }
+        });
       } else {
         this.mescroll.endErr();
       }

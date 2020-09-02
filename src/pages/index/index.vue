@@ -1,22 +1,26 @@
 <template>
   <view class="homepage">
-    <!-- <uni-nav-bar left-icon="back" title="首页" fixed="true" @clickLeft="goBack"></uni-nav-bar> -->
+<!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
     <view class="homepage-top">
       <view class="homepage-top-head">
-        <image class="homepage-top-head-name" src="../../assets/img/index/logo-white.png"
-               mode="aspectFill"></image>
-          <view class="jSearchInput-wrap j-flex-aic">
-          <view class="jSearchInput-icon iconfont iconsousuo"></view>
-          <input
+        <view class='iconfont iconzuo homepage-top-head-iconl'  @tap="goBack"></view>
+        <image
+          class="homepage-top-head-name"
+          src="../../assets/img/index/logo-white.png"
+          mode="aspectFill"
+        ></image>
+        <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
+      </view>
+      <view class="jSearchInput-wrap j-flex-aic">
+        <view class="jSearchInput-icon iconfont iconsousuo"></view>
+        <input
             class="jSearchInput"
             type="text"
             placeholder="请输入搜索信息"
             placeholder-class="col_c"
             v-model="name"
             @tap="confirm"
-          >
-        </view>
-        <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
+        >
       </view>
       <!-- 全部 -->
       <scroll-view
@@ -44,7 +48,7 @@
           :mode="mode"
           field="content"
         >
-          <swiper class="swiper-box" @change="changePic">
+          <swiper class="swiper-box" @change="changePic" autoplay="true"  interval="5000" circular="true">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
               <view class="swiper-item">
                 <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
@@ -98,6 +102,9 @@
               class="homepage-recommend-swiper"
               @change="change"
               next-margin="68px"
+              autoplay="true"
+              interval="5000"
+              circular="true"
             >
               <swiper-item
                 v-for="v in item.data"
@@ -171,7 +178,7 @@
 
 <script>
 import {
-  uniSwiperDot,
+  uniSwiperDot,uniNavBar
 } from '@dcloudio/uni-ui';
 import {
   mapActions,
@@ -198,7 +205,8 @@ import './css/index.scss';
 export default {
   name: 'index',
   components: {
-    uniSwiperDot
+    uniSwiperDot,
+    uniNavBar
   },
   data() {
     return {
@@ -458,9 +466,9 @@ export default {
       // uni.navigateBack({
       //     delta: 1
       // });
-      // uni.reLaunch({
-      //   url: 'pages/applicationsIndex/applicationsIndex'
-      // });
+      uni.redirectTo({
+        url: '/pages/applicationsIndex/applicationsIndex'
+      });
     },
     get() {
       // this.$nextTick(() => {
@@ -686,9 +694,9 @@ export default {
 
 <style scoped>
 /deep/  .jSearchInput-wrap {
-  width: 514px;
-  height: 52px;
-  background: rgba(102,135,168,0.15);
+  width: 702px;
+  height: 58px;
+  background: rgba(209, 209, 239,1);
   box-shadow:0px 0px 12px 0px rgba(102,135,168,0.15);
   opacity: 0.8;
   border-radius:32px;
@@ -696,19 +704,18 @@ export default {
   padding-left: 22px;
   padding-right: 26px;
   margin-right:26px;
-  position: absolute;
-  left: 150px;
-  top:30px;
-  margin: 0px;
+  /*position: absolute;*/
+  /*left: 150px;*/
+  /*top:30px;*/
+  margin-bottom: 32px;
 }
 /deep/ .col_c{
-		 color: #fff;
+	color: #fff;
+  font-size: 28px;
+  font-family: PingFangSC-Light, PingFang SC;
+  font-weight: 300;
+  background: rgba(209, 209, 239,0.8);
 	}
-
-  /deep/ .col_c {
-    color: #fff;
-  }
-
   /deep/ .jSearchInput-icon {
     color: #fff;
     font-size: 24px;
@@ -717,7 +724,8 @@ export default {
   /deep/ .jSearchInput {
     margin-left: 36px;
     font-size: 24px;
-    color: #000;
+    color: #fff;
+    opacity: 0.8;
     background: rgba(102, 135, 168, 0.15);
   }
 

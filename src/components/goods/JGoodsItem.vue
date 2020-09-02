@@ -36,8 +36,8 @@
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ {{goods.$PtPrice && goods.$PtPrice.invoicePrice | formatMoney}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice && goods.$PtPrice.supplyPrice | formatMoney}}
+        <view class="jGoodsItem-cnt-price">¥ {{priceInf.invoicePrice}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice}}
         </view>
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
@@ -46,10 +46,18 @@
           @change="goodsNumChange"
         ></uni-number-box>
         <button
+          v-if="isShowAddCart"
           class="jGoodsItem-cnt-opts-primary ml26"
           type="button"
           @tap="checkSpecifications"
         >加入购物车
+        </button>
+        <button
+          @tap="goDetail"
+          class="jGoodsItem-cnt-opts-primary ml26"
+          type="button"
+          v-else
+        >查看详情
         </button>
         <button
           @tap="goActivity"
@@ -136,7 +144,7 @@ export default {
       type: String,
       default: ''
     },
-    // 所有版本的价格
+    // 所有版本的价格 isSale
     allPrice: {
       type: Object,
       default: () => {
@@ -150,6 +158,8 @@ export default {
   },
   data() {
     return {
+      // 是否显示加入购物车按钮
+      isShowAddCart: true,
       // 显示选择商品版本弹层
       isShowSpecifications: false,
       // 版本规格信息
@@ -197,9 +207,75 @@ export default {
         tagAy.push('scf');
       }
       return this[tagAy.join('-')];
+    },
+    priceInf() {
+      /* 价格信息 */
+      // 优先级一：
+      // isSale为false：
+      // 1）存在套餐/组合：组合价>套餐价
+      // 2）无套餐/组合：不展示价格显示营销活动进行中
+      // 优先级二：
+      // isSale为true：
+      // 抢单价>组合价>套餐价>普通价
+      let inf = {};
+      const {
+        isSale,
+      } = this.goods;
+      let priceKeyOrder;
+      if (isSale) {
+        priceKeyOrder = [
+          // 抢单
+          'flashSales',
+          // 组合
+          'composes',
+          // 套餐价
+          'arbitrages',
+          // 普通价
+          '$PtPrice'
+        ];
+      } else {
+        priceKeyOrder = [
+          // 组合
+          'composes',
+          // 套餐价
+          'arbitrages'
+        ];
+      }
+      const choseKey = this.findTruePriceKey(priceKeyOrder);
+      let priceInf;
+      if (choseKey) {
+        priceInf = this.goods[choseKey][0];
+      } else {
+        priceInf = {};
+        if (!isSale) {
+          priceInf.invoicePrice = '营销活动进行中';
+        }
+      }
+
+      inf = {
+        ...priceInf
+      };
+      if (priceInf.promotionPrice) {
+        // 附加的数据字段,方便统一展示
+        inf.invoicePrice = this.jshUtil.formatNumber(priceInf.promotionPrice, 2);
+      }
+      // fix 供价
+      inf.supplyPric = this.jshUtil.formatNumber(inf.supplyPric, 2);
+      return inf;
     }
   },
   methods: {
+    findTruePriceKey(priceKeyOrder) {
+      /* 找到应该显示的价格的key */
+      const choseKey = priceKeyOrder.find((v) => {
+        const chosePrice = this.goods[v];
+        if (chosePrice && chosePrice.length) {
+          return true;
+        }
+        return false;
+      });
+      return choseKey;
+    },
     genSpecificationsList() {
       /* 组合版本规格信息 */
       const specificationsList = [];
@@ -209,27 +285,37 @@ export default {
         yjList,
         tags
       } = this.allPrice;
-        // 特价版本信息
-      const tjList = tj.specialList;
-      if (tjList && tjList.length) {
-        const tjVersion = {
-          title: '特价版本',
-          isExpand: true,
-          list: []
-        };
-        tjVersion.list = tj.specialList.map(v => ({
-          name: v.versionCode,
-          price: v.invoicePrice,
-          time: v.endDate,
-          num: v.usableQty,
-          priceType: v.priceType,
-          checked: false
-        }));
-        specificationsList.push(tjVersion);
+      const {
+        isSale
+      } = this.goods;
+        // 是否存在工程或则样机
+      let isGcOrYj = false;
+      // 特价版本信息
+      // isSale为false 无特价
+      if (isSale) {
+        const tjList = tj.specialList;
+        if (tjList && tjList.length) {
+          const tjVersion = {
+            id: 'tj',
+            title: '特价版本',
+            isExpand: true,
+            list: []
+          };
+          tjVersion.list = tj.specialList.map(v => ({
+            name: v.versionCode,
+            price: v.invoicePrice,
+            time: v.endDate,
+            num: v.usableQty,
+            priceType: v.priceType,
+            checked: false
+          }));
+          specificationsList.push(tjVersion);
+        }
       }
       // 工程版本信息
       if (gc.projectList && gc.projectList.length) {
         const version = {
+          id: 'gc',
           title: '工程版本',
           isExpand: true,
           list: []
@@ -243,10 +329,12 @@ export default {
           checked: false
         }));
         specificationsList.push(version);
+        isGcOrYj = true;
       }
       // 样机版本信息
       if (yjList && yjList.length) {
         const version = {
+          id: 'yj',
           title: '样机版本',
           isExpand: true,
           list: []
@@ -260,8 +348,13 @@ export default {
           checked: false
         }));
         specificationsList.push(version);
+        isGcOrYj = true;
       }
       this.specificationsList = specificationsList;
+      // 当产品isSale为false，且没有工程或样机时，列表页不显示加入购物车按钮，显示查看详情按钮
+      if (!isGcOrYj && isSale === false) {
+        this.isShowAddCart = false;
+      }
       // 组合tags
       const tagsTemp = [
         ...this.goods.tags,
@@ -334,7 +427,9 @@ export default {
           }
         });
       } else {
-        // 如果没选版本规格，则加入一个普通版本的商品
+        // 如果没选版本规格
+        // 如果存在抢购的版本，则默认加入一个抢购的版本
+        // 如果没抢购的，则加入一个普通版本的商品
         this.addToCart().then(({ code }) => {
           if (code === '1') {
             this.showAddToCartToast();
@@ -380,8 +475,11 @@ export default {
         saletoCode,
         sendtoCode
       } = this;
-        // product不传则默认普通类型
+      // 是否选择了版本
+      let choseVersion = true;
+      // product不传则默认普通类型
       if (!product) {
+        choseVersion = false;
         product = {
           priceType: 'PT',
           priceVersion: '',
@@ -393,7 +491,7 @@ export default {
         // 商品组合编码
         activityId,
         // 组合类型(1单品2组合3抢购4套餐5成套)
-        activityType: activityType || 1,
+        activityType: choseVersion ? 1 : (activityType || 1),
         // 购买的数量(组合就是组合的数量)
         number,
         //  促销活动价格类型
