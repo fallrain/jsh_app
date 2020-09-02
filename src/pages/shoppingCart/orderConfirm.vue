@@ -268,8 +268,7 @@ export default {
       this.dataInfo.composeProductList.forEach((item) => {
         item.splitOrderDetailList.forEach((v) => {
           const conditionItem = {
-            isCheckCreditModel: null,
-            // isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
+            isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
             orderNo: v.orderNo,
             priceType: v.splitOrderProductList[0].priceType,
             priceVersion: v.splitOrderProductList[0].priceVersion,

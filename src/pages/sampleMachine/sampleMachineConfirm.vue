@@ -16,7 +16,7 @@
             </view>
             <uni-number-box
               :min="0"
-              v-model="confirmInfo.number"
+              v-model="choosedNum"
               @change="change"
             ></uni-number-box>
           </view>
@@ -56,7 +56,7 @@
         <view class="">物流托管仓：</view>
         <view class="">
           <j-switch
-            :active.sync="goods.isSend"
+            :active.sync="isSend"
             inf="直发"
             @change="switchChange"
           ></j-switch>
@@ -70,7 +70,7 @@
   </view>
   <view class="payfor-info-bottom">
     <view class="">
-      总价：<text class="text-theme">￥2345</text>
+      总价：<text class="text-theme">￥{{totalMoney}}</text>
     </view>
     <button
       @tap="sureOrder"
@@ -83,11 +83,18 @@
     :choseOptions.sync="currentChoosePayer"
     @change="changePayer"
   ></j-pop-picker>
+  <!-- 验证码弹窗 -->
+  <!--<j-sample-machinel-alert
+    :show.sync="isShowVf"
+    :form="form"
+    :confirmInfo="confirmInfo"
+  ></j-sample-machinel-alert>-->
 </view>
 </template>
 <script>
 import JSwitch from '@/components/form/JSwitch';
 import JPopPicker from '@/components/form/JPopPicker';
+import JSampleMachinelAlert from '@/components/sampleMachine/JSampleMachinelAlert';
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
@@ -99,6 +106,7 @@ import {
   USER
 } from '../../store/mutationsTypes';
 
+
 export default {
   name: 'sampleMachineConfirm',
   components: {
@@ -108,8 +116,12 @@ export default {
   },
   data() {
     return {
+      isShowVf: false,
+      form: {},
+      totalMoney: 0,
+      isSend: true,
       payerPickerShow: false,
-      choosedNum: 0,
+      choosedNum: 1,
       confirmInfo: {},
       currentPayer: {},
       currentChoosePayer: [],
@@ -121,6 +133,8 @@ export default {
     const { confirmInfo } = option;
     this.confirmInfo = JSON.parse(confirmInfo);
     this.getpayerList();
+    // 计算总价格
+    this.totalMoney = (this.confirmInfo.$allPrice.UnitPrice * this.choosedNum).toFixed(2);
     console.log(this.confirmInfo);
   },
   computed: {
@@ -134,7 +148,23 @@ export default {
       };
     }
   },
+  watch: {
+    choosedNum(val) {
+      this.totalMoney = (this.confirmInfo.$allPrice.UnitPrice * val).toFixed(2);
+    }
+  },
   methods: {
+    sureOrder() {
+      const money = this.currentPayer.balance || this.currentPayer.bookBalance;
+      if (parseFloat(money) < parseFloat(this.totalMoney)) {
+        uni.showToast({
+          title: '余额不足，请切换付款方'
+        });
+        return;
+      }
+      this.isShowVf = true;
+      console.log(this.currentPayer);
+    },
     changePayer(payerInfo) {
       this.currentPayer = this.payerList.find(v => v.payerCode === payerInfo[0]);
     },
