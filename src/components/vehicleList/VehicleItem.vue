@@ -16,8 +16,8 @@
         <view class="VHIItem-cnt-price-tips-item">台返：{{goods.$PtPrice.rebateMoney}}</view>
       </view>
       <view class="VHIItem-cnt-price-inf">
-        <view class="VHIItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice}}</view>
-        <view class="VHIItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice}}</view>
+        <view class="VHIItem-cnt-price">¥ {{goods.$PtPrice.invoicePrice.toFixed(2)}}</view>
+        <view class="VHIItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice.toFixed(2)}}</view>
       </view>
       <view class="VHIItem-cnt-opts">
         <view class="numberVHI"><uni-number-box :value="goods.$num" @change="goodsNumChange"></uni-number-box></view>
