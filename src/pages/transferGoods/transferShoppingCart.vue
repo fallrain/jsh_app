@@ -515,7 +515,7 @@ export default {
         status: 1
       });
       if (code === '1') {
-        console.log(data);
+        // console.log(data);
         const page = data;
         // let code = []
         // page.forEach((item, index) => {
@@ -527,7 +527,7 @@ export default {
         this.payerCodeAll = page;
         console.log(this.payerCodeAll);
         this.allOrderList.forEach((ele) => {
-          ele.data.orderList.map((item) => {
+          ele.data.orderList.forEach((item) => {
             item.checkedTwo = false;
             item.payer = [...page];
             item.payer.forEach((ele1) => {
@@ -541,9 +541,9 @@ export default {
           });
         });
         console.log(this.allOrderList);
-        this.invalidList.map((ele) => {
+        this.invalidList.forEach((ele) => {
           ele.data.payer = page;
-          ele.data.orderList.map((item) => {
+          ele.data.orderList.forEach((item) => {
             item.isExpand = false;
             item.Checked = false;
           });
@@ -572,14 +572,14 @@ export default {
         // 付款方余额信息
           console.log(allInquire.data);
           const payerBal = allInquire.data;
-          console.log(payerBal);
+          // console.log(payerBal);
           this.payer.forEach((item) => {
-            console.log(item);
+            // console.log(item);
             item.CodeName = `(${item.payerCode})${item.payerName}`;
             const same = payerBal.find(ele => item.payerCode === ele.payerCode);
-            console.log(same);
+            // console.log(same);
             if (same) {
-              item.balance = same.balance;
+              item.balance = same.balance ? same.balance : 0;
             }
           });
           // console.log(a)
@@ -590,29 +590,38 @@ export default {
     // 付款方  余额支付信息
     calBalance() {
       const all = [];
-      console.log(this.payer);
+      // console.log(this.payer);
+      const pays = [];
       console.log(this.allOrderList);
       this.payer.forEach((item) => {
         const a = { ...item };
+        // console.log(a);
         let needPay = 0;
         this.allOrderList.forEach((e) => {
           if (e.checked) {
-            e.data.orderList.map((v) => {
+            e.data.orderList.forEach((v) => {
               // if (v.IBL_PAYMONEYNAME === a.CodeName) {
               if (v.IBL_PAYMONEY === a.payerCode) {
-                a.isShow = true;
-                needPay += Number(v.SUMMONEY);
-                // a.CodeName = item.CodeName
+                // console.log(a);
+                console.log(pays.find(ele => ele === a.payerCode));
+                if (!pays.find(ele => ele === a.payerCode)) {
+                  a.isShow = true;
+                  needPay += Number(v.SUMMONEY);
+                  pays.push(a.payerCode);
+                  console.log(pays)
+                }
               }
             });
           }
         });
         a.toBePaid = Number(needPay.toFixed(2));
         if (a.isShow) {
+          console.log(a);
           all.push(a);
         }
       });
-      // console.log(a)
+
+      console.log(all);
       this.payerBalance = all;
       this.isShowpayer = (this.payerBalance.length !== 0);
       console.log(this.payerBalance);

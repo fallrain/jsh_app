@@ -16,7 +16,9 @@ input,
 button,
 text,
 label,
-image {
+image,
+input,
+scroll-view{
   box-sizing: border-box;
 }
 
@@ -79,7 +81,9 @@ button {
       height: 86px;
 
       .text {
+        text-align: center;
         font-size: 30px;
+        color: #67c23a;
       }
     }
   }

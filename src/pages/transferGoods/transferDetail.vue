@@ -1,5 +1,10 @@
 <template>
   <view class="transferDetail">
+    <t-alert-verification
+        :show.sync="isShowVf"
+        :form="form"
+        :allOrderList="detailList"
+    ></t-alert-verification>
     <!-- 调货信息 -->
     <transfer-detail-address
       :detailList="detailList"
@@ -23,6 +28,7 @@
       <!-- 结算 -->
       <transfer-detail-btm
         :detailList="detailList"
+        @changeVf="changeVf"
       >
       </transfer-detail-btm>
 
@@ -35,6 +41,7 @@ import transferDetailAddress from '../../components/transfer/transferDetailAddre
 import transferDetailItem from '../../components/transfer/transferDetailItem';
 import transferDetailBtm from '../../components/transfer/transferDetailBtm';
 import TOveragePay from '../../components/transfer/TOveragePay';
+import TAlertVerification from '../../components/form/TAlertVerification';
 import {
   mapGetters, mapMutations
 } from 'vuex';
@@ -49,7 +56,8 @@ export default {
     transferDetailAddress,
     transferDetailItem,
     TOveragePay,
-    transferDetailBtm
+    transferDetailBtm,
+    TAlertVerification
 
   },
   data() {
@@ -67,7 +75,15 @@ export default {
       // 选中的
       chosePayerOptions: [],
       // 装车体积
-      calue: 0
+      calue: 0,
+      // 验证码弹窗
+      isShowVf: false,
+      form: {
+        // 手机号
+        phone: '',
+        // 手机号验证码
+        verificationCode: '',
+      },
     };
   },
   computed: {
@@ -83,6 +99,12 @@ export default {
     // console.log(this.allList[0].list);
     // debugger
     this.detailList = this.allList[0].list.data;
+    this.detailList.orderList.forEach((item) => {
+      item.BATERATE = Number(item.BATERATE).toFixed(2);
+      item.IBL_ISFL = Number(item.IBL_ISFL).toFixed(2);
+      item.BATEMONEY = Number(item.BATEMONEY).toFixed(2);
+      item.ACTPRICE = Number(item.ACTPRICE).toFixed(2);
+    });
     this.balance = this.allList[0].list.data.payerBalance;
     console.log(this.detailList);
     // this.goodsList = this[TRANSFER.GET_TSHOPCART].allOrderList.data
@@ -91,6 +113,10 @@ export default {
     ...mapMutations([
       TRANSFER.UPDATE_TSHOPCART
     ]),
+    //显示验证码
+    changeVf() {
+      this.isShowVf = true;
+    },
     showPayer() {
       /* 展示付款地址 */
       this.payerPickerShow = true;

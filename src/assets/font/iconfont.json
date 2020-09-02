@@ -6,6 +6,13 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
+      "icon_id": "2074615",
+      "name": "左",
+      "font_class": "zuo",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
       "icon_id": "10339965",
       "name": "垃圾桶",
       "font_class": "lajitong",

@@ -19,7 +19,7 @@
       <view v-if="status===2" class="item-head br-b-primary">
         <view class="item-row">
           <view class="item-row-left">
-            调货单号：<text class="text-999">{{orderItem.IBL_KORDERNO}}</text>
+            调货单号：<text class="text-primary">{{orderItem.IBL_KORDERNO}}</text>
           </view>
           <view
             class="item-row-right">
@@ -31,9 +31,6 @@
           <view class="">
             下单日期：<text class="text-999">{{orderItem.IBL_CREATETIME}}</text>
           </view>
-        </view>
-        <view v-if="orderItem.ISFLAG === '提交失败'" class="item-row">
-          失败原因：{{orderItem.IBL_ERRORMESSAGE}}
         </view>
       </view>
       <view v-if="status===1" class="item-products">
@@ -53,17 +50,19 @@
         </view>
       </view>
       <view v-if="status===2" class="fs28 mt32">
-        <view class="lh40">
+        <view class="lh40 fs32 mb12">
           {{orderItem.IBL_INVSTD}}
         </view>
-        <view class="dis-flex text-333 justify-sb fs20">
-          <view class="">下单日期：{{orderItem.IBL_CREATETIME}}</view>
+        <view class="dis-flex text-333 fs28">
           <view class="dis-flex">
             <view class="">
-              数量：
-              <text class="fs24 text-333">{{orderItem.IBL_NUM}}</text>
+              采购数量：
+              <text class="fs28 text-999">{{orderItem.IBL_NUM}}</text>
             </view>
           </view>
+        </view>
+        <view v-if="orderItem.ISFLAG === '提交失败'" class="item-row">
+          说明：<text class="">{{orderItem.IBL_ERRORMESSAGE}}</text>
         </view>
       </view>
     </view>

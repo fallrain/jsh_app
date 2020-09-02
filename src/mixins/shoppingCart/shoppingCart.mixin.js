@@ -1,6 +1,3 @@
-import {
-  getPriceKeyFromAllPrice
-} from '@/lib/dataDictionary';
 
 export default {
   methods: {
@@ -14,11 +11,6 @@ export default {
     getProduct(goods) {
       /* 获取产品 */
       return goods.productList && goods.productList[0];
-    },
-    getPriceType(type) {
-      /* 获取价格类型 */
-      const typeTemp = type.toUpperCase();
-      return getPriceKeyFromAllPrice()[typeTemp];
     },
     getPriceVersionData(goods) {
       /* 获取应该取值价格版本数据 */
@@ -44,7 +36,7 @@ export default {
       } = product;
         // 普通版本
         // 接口大写小写都可能返回
-      const priceTypeUpper = this.getPriceType(priceType);
+      const priceTypeUpper = this.jshUtil.getPriceType(priceType);
       if (priceTypeUpper === 'PT') {
         if (updateVersion) {
           choseVersions = [updateVersion];

@@ -71,7 +71,7 @@
             @tap="showDeliveryAddress"
             class="goodsList-drawer-filter-head-ads"
           >
-            ({{curChoseDeliveryAddress.customerCode}}){{curChoseDeliveryAddress.customerName}}
+            ({{curChoseDeliveryAddress.customerCode}}){{curChoseDeliveryAddress.address}}
           </view>
         </view>
         <view class="goodsList-drawer-filter-head-ads-wrap">
@@ -101,6 +101,7 @@
     <j-choose-delivery-address
       :show.sync="isShowAddressDrawer"
       :list="deliveryAddressList"
+      :activeItemName="'item'+curChoseDeliveryAddress.customerCode"
       @change="deliveryAddressListChange"
     ></j-choose-delivery-address>
   </view>
@@ -148,6 +149,12 @@ export default {
   },
   data() {
     return {
+      pageCfg: {
+        page: {
+          pageSize: 10,
+          pageNum: 1
+        }
+      },
       list: [],
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
@@ -422,7 +429,11 @@ export default {
         // 当前页码的数据
         const curList = page.result.map(v => ({
           ...v,
-          number: 1
+          number: 1,
+          // 库存
+          $stock: {},
+          // 收藏
+          $favorite: false
         }));
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
@@ -442,39 +453,42 @@ export default {
           productCodes,
           account: userInf.customerCode
         });
-        const [
-          allPriceRes,
-          stockRes,
-          productQueryInterRes
-        ] = await Promise.all([getAllPrice, getStock, getProductQueryInter]);
-        if (allPriceRes.code === '1') {
-          // 添加价格
-          const allPriceData = allPriceRes.data;
-          // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
-          curList.forEach((v) => {
-            v.$PtPrice = allPriceData[v.productCode].pt;
-            v.$allPrice = allPriceData[v.productCode];
-          });
-        }
-        if (stockRes.code === '1') {
-          // 添加库存
-          const stockData = stockRes.data;
-          curList.forEach((v) => {
-            v.$stock = stockData[v.productCode];
-          });
-        }
-        if (productQueryInterRes.code === '1') {
-          // 添加点赞
-          const productQueryInterData = productQueryInterRes.data;
-          curList.forEach((v) => {
-            v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
-          });
-        }
-        if (pages.num === 1) {
-          this.list = curList;
-        } else {
-          this.list = this.list.concat(curList);
-        }
+        getAllPrice.then((allPriceRes) => {
+          if (allPriceRes.code === '1') {
+            // 添加价格
+            const allPriceData = allPriceRes.data;
+            // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
+            curList.forEach((v) => {
+              v.$PtPrice = allPriceData[v.productCode].pt;
+              v.$allPrice = allPriceData[v.productCode];
+            });
+            if (pages.num === 1) {
+              this.list = curList;
+            } else {
+              this.list = this.list.concat(curList);
+            }
+          } else {
+            this.mescroll.endErr();
+          }
+        });
+        getStock.then((stockRes) => {
+          if (stockRes.code === '1') {
+            // 添加库存
+            const stockData = stockRes.data;
+            curList.forEach((v) => {
+              v.$stock = stockData[v.productCode];
+            });
+          }
+        });
+        getProductQueryInter.then((productQueryInterRes) => {
+          if (productQueryInterRes.code === '1') {
+            // 添加点赞
+            const productQueryInterData = productQueryInterRes.data;
+            curList.forEach((v) => {
+              v.$favorite = !!productQueryInterData.find(productCode => v.productCode === productCode);
+            });
+          }
+        });
       } else {
         this.mescroll.endErr();
       }
@@ -578,7 +592,7 @@ export default {
       // 重新搜索
       const condition = this.getSearchCondition({
         num: 1,
-        size: 10
+        size: this.pageCfg.page.pageSize
       });
       const difKeys = this.jshUtil.findDifKey(this.preSearchCondition, condition);
       // 没有不同则直接返回
@@ -609,17 +623,15 @@ export default {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
-            name: `(${v.customerCode})${v.customerName}`,
+            name: `(${v.customerCode})${v.address}`,
             ...v
           }));
           // 当前配送地址修改(选出默认地址)
-          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
-          let curChoseDeliveryAddress;
-          if (defaultIndex > -1) {
-            curChoseDeliveryAddress = data[defaultIndex];
-          } else {
-            curChoseDeliveryAddress = data[0];
+          let defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          if (defaultIndex === -1) {
+            defaultIndex = 0;
           }
+          const curChoseDeliveryAddress = data[defaultIndex];
           // 更新默认送达方store
           this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
           this.deliveryAddressList[defaultIndex].checked = true;
