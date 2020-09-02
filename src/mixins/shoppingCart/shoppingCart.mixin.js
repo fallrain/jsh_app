@@ -27,6 +27,8 @@ export default {
       let updateVersion;
       if (goods.choseOtherVersions && goods.choseOtherVersions.length) {
         updateVersion = goods.choseOtherVersions[0];
+        // 来源，update表示来着更新的值，更新的的版本可取消
+        updateVersion.$origin = 'update';
       }
       const {
         priceType,
