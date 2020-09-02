@@ -88,7 +88,7 @@
         <view class="jShoppingCartItem-btm-text">库存：{{goods.productList[0].productStock}}</view>
         <view
           class="jShoppingCartItem-btm-switch-wrap"
-          v-if="goods.productList[0].creditModel==='1' && !warehouseFlag"
+          v-if="isCreditModel"
         >
           <j-switch
             :active.sync="goods.isCreditMode"
@@ -194,7 +194,7 @@ import './css/JShoppingCartItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
 import {
-  getGoodsInCartPriceType
+  getGoodsInCartPriceType,
 } from '@/lib/dataDictionary';
 
 export default {
@@ -248,8 +248,6 @@ export default {
       specificationsList: [],
       // 选择的版本
       specificationsCheckList: [],
-      // 是否选择了工程版本
-      hasGCVersion: false,
     };
   },
   created() {
@@ -275,6 +273,27 @@ export default {
       } = product;
       const inProductGroup = directProducts.find(v => v === productGroup);
       return inProductGroup;
+    },
+    isCreditModel() {
+      /* 是否支持信用模式 */
+      const {
+        activityType,
+        productList
+      } = this.goods;
+      let state = false;
+      // 异地云仓 抢购、反向定制都不支持信用模式
+      state = productList[0].creditModel === '1'
+          && !this.warehouseFlag
+          && (activityType !== 3 || activityType !== 5);
+
+      if (this.choseVersions && this.choseVersions.length) {
+        // 查找是否有非普通版本，非普通版本也没有信用模式
+        state = state && !this.choseVersions.find((v) => {
+          const priceType = v.priceType;
+          return !!(priceType && priceType.toUpperCase() !== 'PT');
+        });
+      }
+      return state;
     },
     isShowSpecificationsBtn() {
       /* 是否显示【版本规格】按钮 */
@@ -324,10 +343,19 @@ export default {
       });
     },
     chosePrice() {
-      /* 选择的版本信息 */
+      /* 选择的用来显示价格的版本信息 */
       const versions = this.getPriceVersionData(this.goods);
       // 非版本调货的才显示
       return versions.find(v => v.priceType) || {};
+    },
+    choseVersions() {
+      /* 选择的所有版本信息 */
+      return this.getPriceVersionData(this.goods);
+    },
+    hasGCVersion() {
+      /* 是否选择了工程版本 */
+      // 如果选中了工程版本，则会显示【直发】switch
+      return !!this.choseVersions.find(v => v.priceType === 'GC');
     },
     totalChosePrice() {
       /* 本产品的总价格 */
@@ -348,12 +376,23 @@ export default {
         // 有活动的时候,取canBuy
       if (activityType !== 1) {
         maxNum = canBuy;
-      } else {
-        // 无活动看是否选择了版本
-        if (this.chosePrice && Object.keys(this.chosePrice).length) {
-          maxNum = this.chosePrice.usableQty;
-        }
       }
+      // 无活动看是否选择了版本
+      if (this.choseVersions && this.choseVersions.length) {
+        maxNum = this.chosePrice.usableQty;
+      }
+      // 设置各个版本的最低数量
+      this.choseVersions.forEach((v) => {
+        let curNum;
+        if (v.priceType) {
+          curNum = v.usableQty;
+        } else {
+          curNum = v.num;
+        }
+        if (curNum < maxNum) {
+          maxNum = curNum;
+        }
+      });
       return maxNum;
     },
   },
@@ -426,7 +465,7 @@ export default {
         activityType,
         productList
       } = this.goods;
-      // (priceType)特价版本信息，已经有非普通版本价格的不可选择（调货除外）
+        // (priceType)特价版本信息，已经有非普通版本价格的不可选择（调货除外）
       if (!priceType || priceType === 'PT') {
         // 是否有特价
         let hasTj = true;
@@ -528,8 +567,6 @@ export default {
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */
       this.specificationsCheckList = checkedList;
-      // 如果选中了工程版本，则会显示【直发】switch
-      this.hasGCVersion = !!checkedList.find(v => v.priceType === 'GC');
       // 搜索调货版本
       const transfer = checkedList.find(v => !v.priceType);
       // 选了调货版本，则数量为调货的最大数量
@@ -604,7 +641,7 @@ export default {
         // 在picker里的子版本条目index
         $choseIndex
       } = item;
-      // 重置选中状态
+        // 重置选中状态
       const choseItem = this.specificationsList.find(v => v.id === $parentId);
       choseItem.list[$choseIndex].checked = false;
       this.goods.choseOtherVersions = [];

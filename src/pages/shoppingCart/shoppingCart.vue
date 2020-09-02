@@ -350,26 +350,28 @@ export default {
         const shoppingList = [];
         // 失效商品
         const failureGoodsList = [];
-        data.forEach((v) => {
-          if (v.composeEnable === 1) {
-            shoppingList.push({
-              isShow: true,
-              checked: false,
-              // 信用模式
-              isCreditMode: false,
-              // 直发模式
-              isDirectMode: false,
-              $PriceInfo: v.productList[0].priceInfo,
-              // 在购物车里更换的其他版本数据，使得计算属性能监控到
-              choseOtherVersions: [],
-              ...v
-            });
-          } else {
-            failureGoodsList.push({
-              ...v
-            });
-          }
-        });
+        if (data) {
+          data.forEach((v) => {
+            if (v.composeEnable === 1) {
+              shoppingList.push({
+                isShow: true,
+                checked: false,
+                // 信用模式
+                isCreditMode: false,
+                // 直发模式
+                isDirectMode: false,
+                $PriceInfo: v.productList[0].priceInfo,
+                // 在购物车里更换的其他版本数据，使得计算属性能监控到
+                choseOtherVersions: [],
+                ...v
+              });
+            } else {
+              failureGoodsList.push({
+                ...v
+              });
+            }
+          });
+        }
         this.shoppingList = shoppingList;
         this.failureGoodsList = failureGoodsList;
       }
