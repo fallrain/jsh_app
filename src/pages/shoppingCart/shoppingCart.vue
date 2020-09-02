@@ -649,7 +649,7 @@ export default {
             // farWeek: prdt.weekPromise,
             // isCheckFarWeek: '0',
             // 是否直发
-            isStock: v.isDirectMode ? '1' : '0',
+            isStock: v.isDirectMode ? '0' : '1',
             // 版本调货版本号
             transferVersion: transferVersion || undefined
           }));
