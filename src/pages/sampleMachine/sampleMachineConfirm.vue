@@ -84,17 +84,18 @@
     @change="changePayer"
   ></j-pop-picker>
   <!-- 验证码弹窗 -->
-  <!--<j-sample-machinel-alert
+  <j-samplemachine-alert
     :show.sync="isShowVf"
     :form="form"
     :confirmInfo="confirmInfo"
-  ></j-sample-machinel-alert>-->
+    :currentPayer="currentPayer"
+  ></j-samplemachine-alert>
 </view>
 </template>
 <script>
-import JSwitch from '@/components/form/JSwitch';
-import JPopPicker from '@/components/form/JPopPicker';
-import JSampleMachinelAlert from '@/components/sampleMachine/JSampleMachinelAlert';
+import JSwitch from '../../components/form/JSwitch';
+import JPopPicker from '../../components/form/JPopPicker';
+import JSamplemachineAlert from '../../components/sampleMachine/JSamplemachineAlert';
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
@@ -112,12 +113,18 @@ export default {
   components: {
     JSwitch,
     JPopPicker,
-    uniNumberBox
+    uniNumberBox,
+    JSamplemachineAlert
   },
   data() {
     return {
       isShowVf: false,
-      form: {},
+      form: {
+        // 手机号
+        phone: '',
+        // 手机号验证码
+        verificationCode: '',
+      },
       totalMoney: 0,
       isSend: true,
       payerPickerShow: false,
@@ -135,6 +142,7 @@ export default {
     this.getpayerList();
     // 计算总价格
     this.totalMoney = (this.confirmInfo.$allPrice.UnitPrice * this.choosedNum).toFixed(2);
+    this.getUserInfById();
     console.log(this.confirmInfo);
   },
   computed: {
@@ -220,6 +228,15 @@ export default {
         v.choosed = false;
       });
       this.payerList[index].choosed = true;
+    },
+    async getUserInfById() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const { code, data } = await this.orderService.sendVerify(this.saleInfo.customerCode);
+      if (code === '1') {
+        const abc = data.data.account;
+        this.form.phone = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+      }
+      console.log(this.form.phone);
     }
   }
 };
