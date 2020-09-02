@@ -92,8 +92,8 @@ export default {
     //   {
     //     name: '云仓',
     //     checked: false,
-    //     // 是否自动隐藏
-    //     autoHide:true
+    //     // 是否无子元素
+    //     isSingle:true
     //   },
     //   {
     //     name: '异地云仓',
@@ -153,19 +153,24 @@ export default {
     choose(item, index) {
       /* 选中一个item */
       // @isCanBeCheck 能被点才能点击
+      // @isSingle 是否没子元素
       if (item.isCanBeCheck === undefined || item.isCanBeCheck) {
-        this.pickerList.forEach((v, i) => {
-          v.checked = false;
-          // 存在children 且不是当前的item
-          if (v.children && index !== undefined && index !== i) {
-            v.children.forEach((child) => {
-              child.checked = false;
-            });
-          }
-        });
+        this.reset(index);
         item.checked = true;
-        this.$emit('change', this.pickerList, null, item, !item.autoHide);
+        this.$emit('change', this.pickerList, null, item, !item.isSingle);
       }
+    },
+    reset(index) {
+      /* 重置 */
+      this.pickerList.forEach((v, i) => {
+        v.checked = false;
+        // 存在children 且不是当前的item
+        if (v.children && index !== undefined && index !== i) {
+          v.children.forEach((child) => {
+            child.checked = false;
+          });
+        }
+      });
     },
     checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
@@ -173,8 +178,9 @@ export default {
         v.checked = false;
       });
       item.checked = true;
+      this.reset(parIndex);
       // 选中上级
-      if (!parent.checked) {
+      if (this.isCanBeCheck && !parent.checked) {
         this.choose(parent, parIndex);
       }
       this.$emit('change', this.pickerList, item, parent);
@@ -182,7 +188,7 @@ export default {
     toggleExpand(item) {
       /* 展开收起 */
       item.isExpand = !item.isExpand;
-      this.$emit('change', this.pickerList);
+      this.$emit('change', this.pickerList, null, null, true);
     }
   }
 };

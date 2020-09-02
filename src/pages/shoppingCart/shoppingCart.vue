@@ -174,7 +174,8 @@ export default {
           flag: 'yc',
           name: '云仓',
           checked: false,
-          autoHide: true
+          // 没有子元素
+          isSingle: true
         },
         {
           flag: 'ydyc',
@@ -318,7 +319,8 @@ export default {
         this.sendCustomerList[1].children = data.map(v => ({
           id: v.code,
           name: v.codeName,
-          checked: false
+          checked: false,
+          yunCangFlag: 'ydyc'
         }));
       }
     },
@@ -469,7 +471,7 @@ export default {
           if (detail.yunCangFlag) {
             this.choseSendAddress = {
               yunCangCode: detail.id,
-              yunCangFlag: detail.flag,
+              yunCangFlag: detail.yunCangFlag,
               name: detail.name,
             };
           } else {
