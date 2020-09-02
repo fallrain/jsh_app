@@ -12,7 +12,11 @@
           @tap="close"
         ></view>
       </view>
-      <view class="jPopPicker-pop-item-wrap">
+
+      <scroll-view
+        :scroll-y="true"
+        class="jPopPicker-pop-item-wrap"
+      >
         <view
           :class="[
             'jPopPicker-pop-item',
@@ -29,7 +33,7 @@
           ></view>
           <view class="jPopPicker-pop-item-cnt">{{item.value}}</view>
         </view>
-      </view>
+      </scroll-view>
     </view>
   </uni-popup>
 </template>
