@@ -123,6 +123,7 @@ export default {
     bottom: var(--window-bottom);
     left: 0;
     right: 0;
+    z-index: 20;
     display: flex;
     align-items: center;
     flex-wrap: wrap;

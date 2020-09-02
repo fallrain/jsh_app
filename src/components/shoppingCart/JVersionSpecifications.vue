@@ -193,9 +193,17 @@ export default {
     },
     confirm() {
       /* 确定 */
-      let checkedList = [];
+      const checkedList = [];
       this.versionData.forEach((version) => {
-        checkedList = checkedList.concat(version.list.filter(v => v.checked));
+        version.list.forEach((v, index) => {
+          if (v.checked) {
+            checkedList.push({
+              ...v,
+              $parentId: version.id,
+              $choseIndex: index
+            });
+          }
+        });
       });
       // 选中的版本列表数据
       this.$emit('confirm', checkedList);

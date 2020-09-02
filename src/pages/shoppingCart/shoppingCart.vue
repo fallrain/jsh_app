@@ -36,6 +36,7 @@
         :key="goods.id"
       >
         <j-shopping-cart-item
+          :ref="'shoppingCartItem'+index"
           :beforeCreditModeChange="checkCreditQuota"
           :goods="goods"
           :index="index"
@@ -590,8 +591,24 @@ export default {
     async submitOrder() {
       /* 提交订单 */
       const formList = [];
-      this.shoppingList.forEach((v) => {
+      const len = this.shoppingList.length;
+      for (let i = 0; i < len; i++) {
+        const v = this.shoppingList[i];
         if (v.checked) {
+          const {
+            number,
+            productList
+          } = v;
+          // 检查最大可购买数量，超出提示并返回
+          const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
+          if (number > maxNum) {
+            uni.showModal({
+              title: '提示',
+              showCancel: false,
+              content: `商品：${productList[0].productName}可购买数量不足，活动剩余可购买数${maxNum}请调整购物车`
+            });
+            return;
+          }
           const form = new OrderSplitCompose({
             ...v,
             composeId: v.id,
@@ -632,7 +649,7 @@ export default {
 
           formList.push(form);
         }
-      });
+      }
       if (!formList.length) {
         this.showToast({
           type: 'warn',

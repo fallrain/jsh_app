@@ -55,6 +55,8 @@
           </view>
           <uni-number-box
             :value="goods.number"
+            :max="maxGoodsNumber"
+            :min="1"
             @change="goodsNumChange"
           ></uni-number-box>
         </view>
@@ -119,22 +121,22 @@
       </view>
       <block v-if="choseVersionInf && choseVersionInf.length">
         <view
-          :key="index"
           v-for="(inf,index) in choseVersionInf"
+          :key="index"
         >
           <view
             class="jShoppingCartItem-btm-inf-wrap"
             v-if="inf"
           >
             <view
-              @tap="handleDelVersion"
+              @tap="handleDelVersion(inf)"
               class="jShoppingCartItem-btm-inf-close iconfont iconcross"
-              v-if="isShowSpecificationsInfDel"
+              v-if="inf.origin==='update'"
             ></view>
             <view class="jShoppingCartItem-btm-inf-icon">
               <view class="iconfont iconi"></view>
             </view>
-            <view>{{inf}}</view>
+            <view>{{inf.content}}</view>
           </view>
         </view>
       </block>
@@ -165,13 +167,13 @@
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">
-                  台返 ：{{chosePrice.rebateMoney | rebatePolicy}}
+                  台返 ：{{chosePrice.rebateMoney || 0}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  返利：{{chosePrice.rebatePolicy}}
+                  返利：{{chosePrice.rebatePolicy | rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  直扣率：{{chosePrice.rebatePolicy}}%
+                  直扣率：{{jshUtil.arithmetic(chosePrice.rebateRate,100,3)}}%
                 </view>
               </view>
             </view>
@@ -191,6 +193,9 @@ import JVersionSpecifications from './JVersionSpecifications';
 import './css/JShoppingCartItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
+import {
+  getGoodsInCartPriceType
+} from '@/lib/dataDictionary';
 
 export default {
   name: 'JShoppingCartItem',
@@ -248,7 +253,7 @@ export default {
     };
   },
   created() {
-    this.genSpecificationsList();
+    this.setPageInf();
   },
   watch: {
     versionPrice() {
@@ -275,27 +280,23 @@ export default {
       /* 是否显示【版本规格】按钮 */
       return !!(this.specificationsList.length);
     },
-    isShowSpecificationsInfDel() {
-      /* 是否显示【版本规格信息】删除按钮 */
-      const product = this.getProduct(this.goods);
-      // 普通价格才显示规格，如果是其他价格类型，则是因为已经选了规格，不可更改
-      return !!(product && product.priceType === 'PT');
-    },
     choseVersionInf() {
       /* 选择的版本信息 */
       const curVersions = this.getPriceVersionData(this.goods);
+      // !!(product && product.priceType === 'PT');
       return curVersions.map((curVersion) => {
         // 普通价格不额外显示
         const {
           // 版本类型
-          priceType
+          priceType,
+          $origin
         } = curVersion;
         if (JSON.stringify(curVersion) === '{}' || priceType === 'PT') {
           return '';
         }
         const {
           // 版本名
-          priceTypeName,
+          // priceTypeName,
           // 版本编号
           versionCode,
           // 版本发票价
@@ -303,12 +304,23 @@ export default {
           // 版本可用数量
           usableQty,
           // 版本调货可用数量
-          num
+          num,
+          // 更新的版本的picker父id
+          $parentId,
+          // 更新的版本在picker里的index
+          $choseIndex
         } = curVersion;
+        const inf = {
+          $parentId,
+          $choseIndex,
+          origin: $origin
+        };
         if (priceType) {
-          return `${priceTypeName}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
+          inf.content = `${getGoodsInCartPriceType()[priceType.toUpperCase()]}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
+        } else {
+          inf.content = `版本调货：${versionCode} 数量：${num}`;
         }
-        return `版本调货：${versionCode} 数量：${num}`;
+        return inf;
       });
     },
     chosePrice() {
@@ -324,9 +336,31 @@ export default {
         total = this.jshUtil.arithmetic(this.chosePrice.invoicePrice, this.goods.number, 3);
       }
       return this.jshUtil.formatNumber(total, 2);
-    }
+    },
+    maxGoodsNumber() {
+      /* 计算最大可购买数量 */
+      let maxNum = Infinity;
+      const {
+        activityType,
+        // 可购买的数量
+        canBuy
+      } = this.goods;
+        // 有活动的时候,取canBuy
+      if (activityType !== 1) {
+        maxNum = canBuy;
+      } else {
+        // 无活动看是否选择了版本
+        if (this.chosePrice && Object.keys(this.chosePrice).length) {
+          maxNum = this.chosePrice.usableQty;
+        }
+      }
+      return maxNum;
+    },
   },
   methods: {
+    setPageInf() {
+      this.genSpecificationsList();
+    },
     choose() {
       /* 选中本商品 */
       const {
@@ -386,71 +420,88 @@ export default {
         GC: gc,
         YJCY: yjList
       } = this.versionPrice.activity[productCode];
-      // priceType转为大写
+        // priceType转为大写
       priceType && (priceType = priceType.toUpperCase());
-      // 特价版本信息，已经有非普通版本价格的不可选择（调货除外）
+      const {
+        activityType,
+        productList
+      } = this.goods;
+      // (priceType)特价版本信息，已经有非普通版本价格的不可选择（调货除外）
       if (!priceType || priceType === 'PT') {
-        const tjList = tj;
-        if (tjList && tjList.length) {
-          const tjVersion = {
-            id: 'special',
-            title: '特价版本',
-            isExpand: true,
-            list: []
-          };
-          tjVersion.list = tjList.map(v => ({
-            ...v,
-            priceVersion: v.versionCode,
-            name: v.versionCode,
-            price: v.invoicePrice,
-            time: v.endDate,
-            num: v.usableQty,
-            priceType: v.priceType,
-            checked: false
-          }));
-          specificationsList.push(tjVersion);
+        // 是否有特价
+        let hasTj = true;
+        // 如果是抢单或者反向定制，则specialPrice需要为Y才行
+        if ((activityType === 3 || activityType === 5) && productList[0].specialPrice === 'N') {
+          hasTj = false;
         }
-        // 工程版本信息
-        if (gc && gc.length) {
-          const version = {
-            id: 'project',
-            title: '工程版本',
-            isExpand: true,
-            list: []
-          };
-          version.list = gc.map(v => ({
-            ...v,
-            priceVersion: v.versionCode,
-            name: v.versionCode,
-            price: v.invoicePrice,
-            time: v.endDate,
-            num: v.usableQty,
-            priceType: v.priceType,
-            checked: false
-          }));
-          specificationsList.push(version);
+        if (hasTj) {
+          const tjList = tj;
+          if (tjList && tjList.length) {
+            const tjVersion = {
+              id: 'special',
+              title: '特价版本',
+              isExpand: true,
+              list: []
+            };
+            tjVersion.list = tjList.map(v => ({
+              ...v,
+              priceVersion: v.versionCode,
+              name: v.versionCode,
+              price: v.invoicePrice,
+              time: v.endDate,
+              num: v.usableQty,
+              priceType: v.priceType,
+              checked: false
+            }));
+            specificationsList.push(tjVersion);
+          }
         }
-        // 样机版本信息
-        if (yjList && yjList.length) {
-          const version = {
-            id: 'example',
-            title: '样机版本',
-            isExpand: true,
-            list: []
-          };
-          version.list = yjList.map(v => ({
-            ...v,
-            priceVersion: v.versionCode,
-            name: v.versionCode,
-            price: v.invoicePrice,
-            time: v.endDate,
-            num: v.usableQty,
-            priceType: v.priceType,
-            checked: false
-          }));
-          specificationsList.push(version);
+
+        // (activityType)如果加入类型为抢单或者反向定制，则没有工程和样机
+        if (activityType !== 3 && activityType !== 5) {
+          // 工程版本信息
+          if (gc && gc.length) {
+            const version = {
+              id: 'project',
+              title: '工程版本',
+              isExpand: true,
+              list: []
+            };
+            version.list = gc.map(v => ({
+              ...v,
+              priceVersion: v.versionCode,
+              name: v.versionCode,
+              price: v.invoicePrice,
+              time: v.endDate,
+              num: v.usableQty,
+              priceType: v.priceType,
+              checked: false
+            }));
+            specificationsList.push(version);
+          }
+          // 样机版本信息
+          if (yjList && yjList.length) {
+            const version = {
+              id: 'example',
+              title: '样机版本',
+              isExpand: true,
+              list: []
+            };
+            version.list = yjList.map(v => ({
+              ...v,
+              priceVersion: v.versionCode,
+              name: v.versionCode,
+              price: v.invoicePrice,
+              time: v.endDate,
+              num: v.usableQty,
+              priceType: v.priceType,
+              checked: false
+            }));
+            specificationsList.push(version);
+          }
         }
       }
+
       // 调货 选的是普通、特价、工程的时候，还可选个调货
       if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
         const transformVersionList = this.versionPrice.version.version[productCode];
@@ -545,8 +596,17 @@ export default {
       /* 移除购物车操作 */
       this.$emit('del', this.goods);
     },
-    handleDelVersion() {
+    handleDelVersion(item) {
       /* 移除一个版本操作 */
+      const {
+        // 在picker里的版本id
+        $parentId,
+        // 在picker里的子版本条目index
+        $choseIndex
+      } = item;
+      // 重置选中状态
+      const choseItem = this.specificationsList.find(v => v.id === $parentId);
+      choseItem.list[$choseIndex].checked = false;
       this.goods.choseOtherVersions = [];
       this.$emit('change', this.goods, this.index);
     }
