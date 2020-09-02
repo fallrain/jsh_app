@@ -1,11 +1,5 @@
 <template>
   <view class="jSampleMachineItem">
-    <view
-      class="jShoppingCartItem-cnt-check"
-      @tap="choose"
-    >
-      <i :class="['iconfont', goods.$favorite ? 'iconradio active':'iconradio1']"></i>
-    </view>
     <view class="jSampleMachine-left">
       <image :src="goods.SEARCHIMAGE"></image>
     </view>
@@ -44,7 +38,10 @@
         </view>
       </view>
     </view>
-    <view :class="['jSampleMachine-cnt-like iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"></view>
+    <view
+      @tap="choose"
+      :class="['jSampleMachine-cnt-like iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']">
+    </view>
     <m-toast
       ref="toast"
       :isdistance="true"

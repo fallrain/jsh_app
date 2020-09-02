@@ -27,7 +27,12 @@
 <script>
 import './css/jOrderConfirmAddress.scss';
 import JRadioGroup from '../form/JRadioGroup';
-
+import {
+  mapGetters, mapMutations
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'JOrderConfirmAddress',
@@ -53,6 +58,22 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    if (this.saleInfo.channelGroup === 'CT') {
+      this.radioGroups = [
+        {
+          key: 2,
+          inf: '配送',
+          checked: true
+        }
+      ];
+    }
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE
+    })
   },
   methods: {
     radioGroupChange(radioGroup) {

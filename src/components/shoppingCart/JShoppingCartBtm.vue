@@ -131,6 +131,7 @@ export default {
     padding-left: 40px;
     padding-right: 18px;
     background: #fff;
+    z-index: 10;
   }
 
   .jShoppingCartBtm-check {
