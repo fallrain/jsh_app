@@ -173,18 +173,21 @@ export default {
         {
           flag: 'yc',
           name: '云仓',
-          checked: false
+          checked: false,
+          autoHide: true
         },
         {
           flag: 'ydyc',
           name: '异地云仓',
           childrenType: 'short',
+          isCanBeCheck: false,
           checked: false,
           isExpand: true,
           children: []
         },
         {
           name: '配送至',
+          isCanBeCheck: false,
           checked: false,
           isExpand: true,
           childrenType: 'long',
@@ -454,7 +457,7 @@ export default {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
     },
-    sendCustomerListChange(list, detail, parent) {
+    sendCustomerListChange(list, detail, parent, isShow) {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
@@ -501,7 +504,7 @@ export default {
         }
       }
       // 选中之后关闭弹窗
-      this.isShowAdsPicker = false;
+      this.isShowAdsPicker = isShow || false;
     },
     tabClick(tabs) {
       this.tabs = tabs;

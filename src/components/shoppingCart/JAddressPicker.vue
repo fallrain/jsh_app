@@ -12,7 +12,10 @@
           @tap="close"
         ></view>
       </view>
-      <view class="jAddressPicker-cnt">
+      <scroll-view
+        :scroll-y="true"
+        class="jAddressPicker-cnt"
+      >
         <view
           :class="['jAddressPicker-cnt-item',item.checked && 'active']"
           v-for="(item,index) in pickerList"
@@ -61,7 +64,7 @@
             </view>
           </block>
         </view>
-      </view>
+      </scroll-view>
     </view>
   </uni-popup>
 </template>
@@ -88,11 +91,15 @@ export default {
     // pickerList: [
     //   {
     //     name: '云仓',
-    //     checked: false
+    //     checked: false,
+    //     // 是否自动隐藏
+    //     autoHide:true
     //   },
     //   {
     //     name: '异地云仓',
     //     childrenType: 'short',
+    //     // 是否能被点击
+    //     isCanBeCheck: false,
     //     checked: false,
     //     isExpand: true,
     //     children: [
@@ -145,17 +152,20 @@ export default {
     },
     choose(item, index) {
       /* 选中一个item */
-      this.pickerList.forEach((v, i) => {
-        v.checked = false;
-        // 存在children 且不是当前的item
-        if (v.children && index !== undefined && index !== i) {
-          v.children.forEach((child) => {
-            child.checked = false;
-          });
-        }
-      });
-      item.checked = true;
-      this.$emit('change', this.pickerList, null, item);
+      // @isCanBeCheck 能被点才能点击
+      if (item.isCanBeCheck === undefined || item.isCanBeCheck) {
+        this.pickerList.forEach((v, i) => {
+          v.checked = false;
+          // 存在children 且不是当前的item
+          if (v.children && index !== undefined && index !== i) {
+            v.children.forEach((child) => {
+              child.checked = false;
+            });
+          }
+        });
+        item.checked = true;
+        this.$emit('change', this.pickerList, null, item, !item.autoHide);
+      }
     },
     checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
