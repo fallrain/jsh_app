@@ -206,6 +206,7 @@ export default {
     async init() {
       await this.getAddressList();
       await this.queryBrandAndInvsort();
+      this.mescroll.resetUpScroll(true);
     },
     async getAddressList() {
       // 获取地址
@@ -263,9 +264,15 @@ export default {
     async upCallback(pages) {
       /* 上推加载 */
       const scrollView = await this.getsampleMachineList(pages);
-      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+      if (scrollView) {
+        this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+      }
     },
     getSearchCondition(pages) {
+      console.log(this.curChoseDeliveryAddress);
+      if (!this.curChoseDeliveryAddress.addressCode) {
+        return false;
+      }
       /* 获取不同条件下搜索的传参 */
       let condition = {
         timestamp: new Date().getTime(),
@@ -303,6 +310,9 @@ export default {
     async getsampleMachineList(pages) {
       /* 搜索产品列表 */
       const condition = this.getSearchCondition(pages);
+      if (condition === false) {
+        return;
+      }
       const { data } = await this.samplemachineService.queryInventory(condition);
       let dataObj = {};
       const scrollView = {};

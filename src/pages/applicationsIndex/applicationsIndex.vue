@@ -494,7 +494,7 @@ export default {
         // 适配iOS客户端
         code = ALIPAYH5STARTUPPARAMS.webview_options;
       }
-      // code = 'jKBbwYspQQKBAX4R7yoZyA';
+      // code = 'HSWGj3SWS0OtfqUAAskzjw';
       // 获取token
       await this.getToken(code);
       // 获取首页轮播图
