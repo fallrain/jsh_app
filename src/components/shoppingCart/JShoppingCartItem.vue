@@ -258,6 +258,12 @@ export default {
     versionPrice() {
       this.genSpecificationsList();
       this.setFollowState();
+    },
+    isCreditModel(val) {
+      /* 如果不支持信用模式了，已经打开的则关闭 */
+      if (val === false) {
+        this.goods.isCreditMode = false;
+      }
     }
   },
   computed: {
