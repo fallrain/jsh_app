@@ -536,8 +536,8 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
-      
-      const tmpCode = uni.getStorageSync('code') 
+
+      const tmpCode = uni.getStorageSync('code')
       // alert('tmp1'+tmpCode + 'passcode' + passCode)
       // code
       if(tmpCode && (tmpCode == passCode) ) {
