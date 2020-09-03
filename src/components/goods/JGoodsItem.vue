@@ -32,7 +32,7 @@
         <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
           rebatePolicy}}
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney || 0}}
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">

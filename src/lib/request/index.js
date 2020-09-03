@@ -47,7 +47,7 @@ function showError(msg, status,url,params) {
   } else {
     const errorMap = {
       401: '没有权限',
-      403: '没有权限',
+      403: '登录已过期',
       404: '资源不存在'
     };
     message = errorMap[status] || '请求失败';

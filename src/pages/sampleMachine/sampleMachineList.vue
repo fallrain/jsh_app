@@ -197,13 +197,16 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userInf: USER.GET_USER
+      userInf: USER.GET_USER,
+      saleInfo: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
     }),
   },
   methods: {
     async init() {
       await this.getAddressList();
       await this.queryBrandAndInvsort();
+      this.mescroll.resetUpScroll(true);
     },
     async getAddressList() {
       // 获取地址
@@ -229,7 +232,7 @@ export default {
     async queryBrandAndInvsort() {
       const form = {
         timestamp: new Date().getTime(),
-        customerCode: this.userInf.customerCode
+        customerCode: this.saleInfo.customerCode
       };
       // 获取产品组和品牌
       const { data } = await this.samplemachineService.queryBrandAndInvsort(form);
@@ -261,9 +264,15 @@ export default {
     async upCallback(pages) {
       /* 上推加载 */
       const scrollView = await this.getsampleMachineList(pages);
-      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+      if (scrollView) {
+        this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+      }
     },
     getSearchCondition(pages) {
+      console.log(this.curChoseDeliveryAddress);
+      if (!this.curChoseDeliveryAddress.addressCode) {
+        return false;
+      }
       /* 获取不同条件下搜索的传参 */
       let condition = {
         timestamp: new Date().getTime(),
@@ -273,8 +282,8 @@ export default {
         mktid: '12A02',
         pageNo: pages.num,
         pageSize: pages.size,
-        customerCode: this.userInf.customerCode,
-        sendToCode: this.userInf.sendtoCode,
+        customerCode: this.saleInfo.customerCode,
+        sendToCode: this.curChoseDeliveryAddress.addressCode,
       };
         // tab条件
       const tab = this.tabs.find(v => v.active);
@@ -300,10 +309,10 @@ export default {
     },
     async getsampleMachineList(pages) {
       /* 搜索产品列表 */
-      // 公共用户信息
-      const userInf = this.userInf;
       const condition = this.getSearchCondition(pages);
-      // const { code, data } = await this.commodityService.goodsList(condition);
+      if (condition === false) {
+        return;
+      }
       const { data } = await this.samplemachineService.queryInventory(condition);
       let dataObj = {};
       const scrollView = {};
@@ -327,15 +336,15 @@ export default {
       const productCodes = curList.map(v => v.CODE);
       const priceArgsObj = {
         gbid: productCodes,
-        longfeiUSERID: userInf.saletoCode,
-        longfeiMFID: userInf.sendtoCode
+        longfeiUSERID: this.saleInfo.customerCode,
+        longfeiMFID: this.curChoseDeliveryAddress.addressCode // 送达方地址
       };
       // 获取价格
       const getAllPrice = this.samplemachineService.queryGoodsPrice(priceArgsObj);
       // 获取收藏
       const getProductQueryInter = this.productDetailService.productQueryInter({
         productCodes,
-        account: userInf.customerCode
+        account: this.saleInfo.customerCode
       });
       const [
         allPriceRes,
@@ -369,11 +378,20 @@ export default {
       } */
       return scrollView;
     },
-    goodsChange(goods, index) {
+    async goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
-      // 设置商品的收藏状态
       console.log(goods);
+      // 设置商品的收藏状态
+      const { code } = await this.productDetailService.productAddInter(
+        this.saleInfo.customerCode,
+        this.curChoseDeliveryAddress.addressCode,
+        goods.CODE
+      );
+      if (code === '200') {
+        this.goods.followState = true;
+        this.$emit('change', this.goods, this.index);
+      }
     },
     async followGoods() {
       /* 添加关注 */

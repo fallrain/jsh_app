@@ -134,6 +134,7 @@
           </view>
           <view class="drawer-menu">
             <j-cell
+              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
               class="border-b"
               title="个人资料"
             >
@@ -144,6 +145,7 @@
               </template>
             </j-cell>
             <j-cell
+              @cellClick="cellClick('/pages/mine/myAlterTel')"
               class="border-b"
               title="修改手机号"
             >
@@ -154,6 +156,7 @@
               </template>
             </j-cell>
             <j-cell
+              @cellClick="cellClick('/pages/mine/myAlertLoginPwd')"
               class="border-b"
               title="修改登录密码"
             >
@@ -164,6 +167,7 @@
               </template>
             </j-cell>
             <j-cell
+              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
               class="border-b pos-r"
               title="待办任务"
             >
@@ -452,13 +456,13 @@ export default {
   },
   mounted() {
     // 适配安卓客户端
-	  /* AlipayJSBridge.call('myApiGetCode', {
+	  AlipayJSBridge.call('myApiGetCode', {
 	    param1: 'JsParam1',
 	  }, (result) => {
 	      if (result.code.length > 1) {
 	          this.init(result.code);
 	      }
-	  }); */
+	  });
   },
   onLoad() {
     this.init();
@@ -479,18 +483,24 @@ export default {
       // 修改token用户信息
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
+    // 首页菜单跳转
+    cellClick(url) {
+      uni.navigateTo({
+        url
+      });
+    },
     async init(code) {
       if (!code) {
         // 适配iOS客户端
-        // code = ALIPAYH5STARTUPPARAMS.webview_options;
+        code = ALIPAYH5STARTUPPARAMS.webview_options;
       }
-      const code1 = 'Ff6C96umSoWRjQjHgOYpog';
+      // code = 'HSWGj3SWS0OtfqUAAskzjw';
       // 获取token
-      await this.getToken(code1);
+      await this.getToken(code);
       // 获取首页轮播图
       await this.getbannerList();
       // 获取token
-     /* if (code.length > 0) {
+      /* if (code.length > 0) {
         // 获取token
         await this.getToken(code);
         // 获取首页轮播图
@@ -501,7 +511,7 @@ export default {
           icon: 'none',
           duration: 3000
         });
-      }*/
+      } */
     },
 	  // 返回原生
 	  popAction() {
@@ -526,7 +536,6 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
-      
       this[USER.UPDATE_SALE_ASYNC]();
       this.getUserType(this.saleInfo.customerCode);
 

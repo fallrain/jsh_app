@@ -5,7 +5,7 @@
   >
     <view
       class="jHeadTabPicker-list"
-      v-if="value[0]&&(value[0].type==='ZCPC'||value[0].type==='ZCPSLX'||value[0].type==='ZCLX')"
+      v-if="value&&(value[0].type==='ZCPC'||value[0].type==='ZCPSLX'||value[0].type==='ZCLX')"
     >
       <view
         :class="['jHeadTabPicker-item-ZC',item.checked && 'active']"
