@@ -543,8 +543,8 @@ export default {
         const token = data.token;
         uni.setStorageSync('token', token);
 
-        this[USER.UPDATE_SALE_ASYNC]();
-        this.getUserType(this.saleInfo.customerCode);
+        await this[USER.UPDATE_SALE_ASYNC]();
+        await this.getUserType(this.saleInfo.customerCode);
       }
     },
     // 获取用户类型

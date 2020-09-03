@@ -198,7 +198,7 @@ export default {
           verifyKey: `${this.erifyKey}`,
         }); */
         const time = new Date().getTime();
-        const beforeSign = `${this.saleInfo.customerCode}${this.form.verificationCode}${time}1${this.confirmInfo.CODE}YPJSINGCODE20200814`;
+        const beforeSign = `${this.saleInfo.customerCode}${this.form.verificationCode}${time}${this.confirmInfo.CODE}1YPJSINGCODE20200814`;
         console.log(beforeSign);
         const signCode = md5(beforeSign);
         console.log(signCode);
@@ -276,27 +276,19 @@ export default {
         OrderForm: this.orderNo
       });
       if (dispose.code === '1' && dispose.data.code === '200') {
-        console.log(dispose.data.data[0]);
         const page = dispose.data.data[0];
-        console.log(page);
-        return;
         if (page) {
-          console.log(2222222);
           page.orderList.forEach((item) => {
-            console.log(item.ISFLAG);
             if (item.ISFLAG == '订单提交中') {
+              const _this = this;
               uni.showLoading({
                 title: '加载中'
               });
+              setTimeout(() => {
+                _this.getCargoDispose();
+              }, 1000);
             } else {
-              console.log(4444444444444);
               uni.hideLoading();
-              this.allOrderList.forEach((ele, i) => {
-                if (this.seq == ele.data.IBR_SEQ) {
-                  this.allOrderList.splice(i, 1);
-                }
-              });
-              console.log(5555555555555555555555);
               this.cancel();
               this.orderData = JSON.stringify(dispose.data.data);
               console.log(this.orderData);

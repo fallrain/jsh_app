@@ -229,7 +229,6 @@ export default {
             });
             setTimeout(() => {
               _this.getCargoDispose();
-              _this.index += 1;
             }, 1000);
           } else {
             this.index = 0;
