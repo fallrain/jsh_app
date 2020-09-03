@@ -533,7 +533,7 @@ export default {
         // 组合类型(1单品2组合3抢购4套餐5成套)
         activityType: choseVersion ? 1 : (activityType || 1),
         // 购买的数量(组合就是组合的数量)
-        number: isTransfer ? product.number : isTransfer,
+        number: isTransfer ? product.number : number,
         //  促销活动价格类型
         //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
         priceType,

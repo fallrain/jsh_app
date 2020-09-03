@@ -694,7 +694,7 @@ export default {
         yunCangCode: this.choseSendAddress.yunCangCode,
         yunCangFlag: this.choseSendAddress.yunCangFlag
       };
-      const { code, data } = await this.orderService.validateProduct(form, {
+      const { code, data, msg } = await this.orderService.validateProduct(form, {
         noToast: true
       });
       if (code === '1') {
@@ -704,9 +704,15 @@ export default {
           url: `/pages/shoppingCart/orderConfirm?formData=${args}`
         });
       } else {
+        let content;
+        if (data) {
+          content = data[0][0].msg || '请求失败';
+        } else {
+          content = msg || '请求失败';
+        }
         uni.showModal({
           title: '',
-          content: data[0][0].msg || '请求失败'
+          content
         });
       }
     }
