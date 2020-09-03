@@ -317,7 +317,7 @@ export default {
           tjVersion.list = tj.specialList.map(v => ({
             name: v.versionCode,
             price: v.invoicePrice,
-            time: v.endDate,
+            time: v.endDate && v.endDate.substring(0, 10),
             num: v.usableQty,
             priceType: v.priceType,
             checked: false
@@ -336,7 +336,7 @@ export default {
         version.list = gc.projectList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
-          time: v.endDate,
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType,
           checked: false
@@ -355,7 +355,7 @@ export default {
         version.list = yjList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
-          time: v.endDate,
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType,
           checked: false

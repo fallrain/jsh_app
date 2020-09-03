@@ -487,7 +487,7 @@ export default {
               priceVersion: v.versionCode,
               name: v.versionCode,
               price: v.invoicePrice,
-              time: v.endDate,
+              time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
               checked: false
@@ -511,7 +511,7 @@ export default {
               priceVersion: v.versionCode,
               name: v.versionCode,
               price: v.invoicePrice,
-              time: v.endDate,
+              time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
               checked: false
@@ -531,7 +531,7 @@ export default {
               priceVersion: v.versionCode,
               name: v.versionCode,
               price: v.invoicePrice,
-              time: v.endDate,
+              time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
               checked: false
