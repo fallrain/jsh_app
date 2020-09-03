@@ -459,7 +459,7 @@ export default {
 	  AlipayJSBridge.call('myApiGetCode', {
 	    param1: 'JsParam1',
 	  }, (result) => {
-	      if (result.code.length > 1) {
+	      if (result.code && result.code.length > 1) {
 	          this.init(result.code);
 	      }
 	  });
@@ -536,20 +536,29 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
+
+      const tmpCode = uni.getStorageSync('code')
+      // alert('tmp1'+tmpCode + 'passcode' + passCode)
+      // code
+      if(tmpCode && (tmpCode == passCode) ) {
+        return;
+      }
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-
+        uni.setStorageSync('code', passCode);
+        // alert('已经存储token'+this.saleInfo.customerCode)
         await this[USER.UPDATE_SALE_ASYNC]();
-        await this.getUserType(this.saleInfo.customerCode);
+        this.getUserType(this.saleInfo.customerCode);
       }
     },
     // 获取用户类型
-    async getUserType(passCode) {
-      const { code, data } = await this.cocSeachService.cocSearch(passCode);
+    async getUserType(customerCode) {
+      // alert('customerCode'+customerCode)
+      const { code, data } = await this.cocSeachService.cocSearch(customerCode);
       if (code == '1') {
         this.cocData = data;
       }
