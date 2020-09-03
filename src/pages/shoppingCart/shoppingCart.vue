@@ -81,6 +81,8 @@
     <j-address-picker
       :show.sync="isShowAdsPicker"
       :pickerList="sendCustomerList"
+      :beforeCheck="adsPickerBeforeCheck"
+      :beforeCheckParent="adsPickerBeforeCheckParent"
       @change="sendCustomerListChange"
     ></j-address-picker>
     <m-toast
@@ -461,14 +463,45 @@ export default {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
     },
+    checkHasCreditMode() {
+      /* 检查是否有开启了信用模式的商品 */
+      return !!this.shoppingList.find(v => v.isCreditMode);
+    },
+    adsPickerBeforeCheckParent(item) {
+      /* 云仓点击前置事件 */
+      let state = true;
+      if (!item.checked && this.checkHasCreditMode()) {
+        this.showToast({
+          type: 'warn',
+          content: '信用产品不支持云仓'
+        });
+        state = false;
+      }
+      return state;
+    },
+    adsPickerBeforeCheck({
+      item,
+      parent,
+    }) {
+      let state = true;
+      if (parent && item && item.yunCangFlag) {
+        // 异地云仓
+        if (this.checkHasCreditMode()) {
+          state = false;
+          this.showToast({
+            type: 'warn',
+            content: '信用产品不支持异地云仓'
+          });
+        }
+      }
+      return state;
+    },
     sendCustomerListChange(list, detail, parent, isShow, type) {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
       // 非扩展操作
       if (type !== 'expand') {
-        // 选中的送达仓库地址
-        this.choseSendAddress = detail || {};
         if (parent) {
           if (detail) {
             // 异地云仓
@@ -478,6 +511,10 @@ export default {
                 yunCangFlag: detail.yunCangFlag,
                 name: detail.name,
               };
+              this.showToast({
+                type: 'warn',
+                content: '海尔将收取一定托管费用'
+              });
             } else {
               // 送达方
               this.choseSendAddress = {
@@ -504,6 +541,10 @@ export default {
                 yunCangFlag: 'yc',
                 name: '云仓',
               };
+              this.showToast({
+                type: 'warn',
+                content: '海尔将收取一定托管费用'
+              });
             } else {
               this.choseSendAddress = {};
             }
@@ -627,7 +668,7 @@ export default {
             number,
             productList
           } = v;
-          // 检查最大可购买数量，超出提示并返回
+            // 检查最大可购买数量，超出提示并返回
           const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
           if (number > maxNum) {
             uni.showModal({
@@ -643,7 +684,7 @@ export default {
             // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
             activityType: getOrdinaryCartActivityType()[v.activityType]
           });
-          // 判断产品的取值的字段名
+            // 判断产品的取值的字段名
           let productListName = 'productList';
           // 调货版本号
           let transferVersion;
