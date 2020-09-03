@@ -298,7 +298,7 @@ export default {
     },
     isShowSpecificationsBtn() {
       /* 是否显示【版本规格】按钮 */
-      return !!(this.specificationsList.length);
+      return !!(this.specificationsList.length) && !this.goods.isCreditMode;
     },
     choseVersionInf() {
       /* 选择的版本信息 */
