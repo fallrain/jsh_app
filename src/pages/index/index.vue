@@ -16,7 +16,7 @@
         <input
             class="jSearchInput"
             type="text"
-            placeholder="请输入搜索信息"
+            :placeholder="mendli"
             placeholder-class="col_c"
             v-model="name"
             @tap="confirm"
@@ -178,7 +178,7 @@
 
 <script>
 import {
-  uniSwiperDot,uniNavBar
+  uniSwiperDot, uniNavBar
 } from '@dcloudio/uni-ui';
 import {
   mapActions,
@@ -208,6 +208,7 @@ export default {
     uniSwiperDot,
     uniNavBar
   },
+
   data() {
     return {
       tabBarImgs: {
@@ -325,15 +326,6 @@ export default {
 
       ],
       isSwiper: true,
-      // column: 0,
-      // showBorder: true,
-      // square: true,
-      // highlight: true,
-      // left: 0,
-      // top: 0,
-      // openNum: 2,
-      // width: 40,
-      // borderColor: '#e5e5e5',
       // recommendList: [
       //   {
       //     id: 1,
@@ -389,7 +381,9 @@ export default {
           url: '#'
         }
       ],
-
+      // 首页推荐轮播
+      mend: [],
+      mendli: ''
       // tabBarList: [
       //   {
       //     id: 1,
@@ -422,10 +416,8 @@ export default {
       //   },
 
       // ]
-
     };
   },
-
   created() {
     this.getPageInf();
     // (async() => {
@@ -442,6 +434,19 @@ export default {
     this[USER.UPDATE_TOKEN_USER_ASYNC]();
     console.log(this.defaultSendToInf);
     console.log(this.tokenUserInf);
+  },
+  onLoad() {
+    const _this = this;
+    let index = 0;
+    setInterval(() => {
+      // console.log(1111);
+      _this.mendli = _this.mend[index];
+      console.log(_this.mendli);
+      index += 1;
+      if (index >= _this.mend.length) {
+        index = 0;
+      }
+    }, 5000);
   },
   computed: {
     ...mapGetters({
@@ -461,6 +466,16 @@ export default {
       // 更新有货商品分类
       COMMODITY.UPDATE_CATALOG_LIST_ASYNC
     ]),
+    getPageInf() {
+      this.getbannerList();
+      // this.getIndexList();
+      this.getList();
+      this.getXinPin();
+      this.getBaoKuan();
+      this.getZhuanGong();
+      this.getZiYuanJi();
+      this.getShow();
+    },
     // 导航栏返回
     goBack() {
       // uni.navigateBack({
@@ -518,15 +533,33 @@ export default {
         url: '/pages/index/historical'
       });
     },
-    getPageInf() {
-      this.getbannerList();
-      // this.getIndexList();
-      this.getList();
-      this.getXinPin();
-      this.getBaoKuan();
-      this.getZhuanGong();
-      this.getZiYuanJi();
+    async getShow() {
+      const params = {
+        bigChannel: [this.saleInfo.channel],
+        centerCode: [this.saleInfo.tradeCode],
+        custCode: [this.saleInfo.customerCode],
+        smallChannel: [this.saleInfo.subChannel],
+        type: 1,
+        userId: this.tokenUserInf.name,
+        userName: this.tokenUserInf.nickname
+      };
+      const { code, data } = await this.commodityService.show({
+        pageNum: 1,
+        pageSize: 4,
+        params
+      });
+      if (code === '10000') {
+        console.log(data.records);
+        let word = '';
+        data.records.forEach((item) => {
+          word = item.recoWord;
+          this.mend.push(word);
+        });
+        console.log(this.mend);
+        this.mendli = this.mend[0];
+      }
     },
+    // 轮播图
     async getbannerList() {
       const { code, data } = await this.indexService.bannerList({});
       if (code === '1') {

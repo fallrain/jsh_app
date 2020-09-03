@@ -100,6 +100,7 @@ function getPriceKeyFromAllPrice() {
     YJCY: 'YJCY',
     MFJK: 'YJCY',
     MFYJ: 'YJCY',
+    YJ: 'YJCY',
   };
 }
 

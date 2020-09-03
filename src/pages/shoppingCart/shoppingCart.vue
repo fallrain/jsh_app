@@ -36,6 +36,7 @@
         :key="goods.id"
       >
         <j-shopping-cart-item
+          :ref="'shoppingCartItem'+index"
           :beforeCreditModeChange="checkCreditQuota"
           :goods="goods"
           :index="index"
@@ -172,18 +173,22 @@ export default {
         {
           flag: 'yc',
           name: '云仓',
-          checked: false
+          checked: false,
+          // 没有子元素
+          isSingle: true
         },
         {
           flag: 'ydyc',
           name: '异地云仓',
           childrenType: 'short',
+          isCanBeCheck: false,
           checked: false,
           isExpand: true,
           children: []
         },
         {
           name: '配送至',
+          isCanBeCheck: false,
           checked: false,
           isExpand: true,
           childrenType: 'long',
@@ -314,7 +319,8 @@ export default {
         this.sendCustomerList[1].children = data.map(v => ({
           id: v.code,
           name: v.codeName,
-          checked: false
+          checked: false,
+          yunCangFlag: 'ydyc'
         }));
       }
     },
@@ -349,26 +355,28 @@ export default {
         const shoppingList = [];
         // 失效商品
         const failureGoodsList = [];
-        data.forEach((v) => {
-          if (v.composeEnable === 1) {
-            shoppingList.push({
-              isShow: true,
-              checked: false,
-              // 信用模式
-              isCreditMode: false,
-              // 直发模式
-              isDirectMode: false,
-              $PriceInfo: v.productList[0].priceInfo,
-              // 在购物车里更换的其他版本数据，使得计算属性能监控到
-              choseOtherVersions: [],
-              ...v
-            });
-          } else {
-            failureGoodsList.push({
-              ...v
-            });
-          }
-        });
+        if (data) {
+          data.forEach((v) => {
+            if (v.composeEnable === 1) {
+              shoppingList.push({
+                isShow: true,
+                checked: false,
+                // 信用模式
+                isCreditMode: false,
+                // 直发模式
+                isDirectMode: false,
+                $PriceInfo: v.productList[0].priceInfo,
+                // 在购物车里更换的其他版本数据，使得计算属性能监控到
+                choseOtherVersions: [],
+                ...v
+              });
+            } else {
+              failureGoodsList.push({
+                ...v
+              });
+            }
+          });
+        }
         this.shoppingList = shoppingList;
         this.failureGoodsList = failureGoodsList;
       }
@@ -451,7 +459,7 @@ export default {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
     },
-    sendCustomerListChange(list, detail, parent) {
+    sendCustomerListChange(list, detail, parent, isShow) {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
@@ -463,7 +471,7 @@ export default {
           if (detail.yunCangFlag) {
             this.choseSendAddress = {
               yunCangCode: detail.id,
-              yunCangFlag: detail.flag,
+              yunCangFlag: detail.yunCangFlag,
               name: detail.name,
             };
           } else {
@@ -498,7 +506,7 @@ export default {
         }
       }
       // 选中之后关闭弹窗
-      this.isShowAdsPicker = false;
+      this.isShowAdsPicker = isShow || false;
     },
     tabClick(tabs) {
       this.tabs = tabs;
@@ -590,8 +598,24 @@ export default {
     async submitOrder() {
       /* 提交订单 */
       const formList = [];
-      this.shoppingList.forEach((v) => {
+      const len = this.shoppingList.length;
+      for (let i = 0; i < len; i++) {
+        const v = this.shoppingList[i];
         if (v.checked) {
+          const {
+            number,
+            productList
+          } = v;
+          // 检查最大可购买数量，超出提示并返回
+          const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
+          if (number > maxNum) {
+            uni.showModal({
+              title: '提示',
+              showCancel: false,
+              content: `商品：${productList[0].productName}可购买数量不足，活动剩余可购买数${maxNum}请调整购物车`
+            });
+            return;
+          }
           const form = new OrderSplitCompose({
             ...v,
             composeId: v.id,
@@ -625,14 +649,14 @@ export default {
             // farWeek: prdt.weekPromise,
             // isCheckFarWeek: '0',
             // 是否直发
-            isStock: v.isDirectMode ? '1' : '0',
+            isStock: v.isDirectMode ? '0' : '1',
             // 版本调货版本号
             transferVersion: transferVersion || undefined
           }));
 
           formList.push(form);
         }
-      });
+      }
       if (!formList.length) {
         this.showToast({
           type: 'warn',

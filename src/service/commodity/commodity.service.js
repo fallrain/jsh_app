@@ -21,5 +21,9 @@ export default {
   catalogList(data) {
     /* 有货商品分类 */
     return jGet(urls.list, data);
+  },
+  show(data) {
+    /* 采购首页搜索栏显示数据 */
+    return jPostJson(urls.show, data);
   }
 };

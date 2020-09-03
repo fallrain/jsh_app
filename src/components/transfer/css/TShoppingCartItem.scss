@@ -265,6 +265,7 @@
       align-items: center;
     }
     .tShoppingCartItem-cnt-price-inf-mrr {
+      width:80px;
       color: #333;
     }
     .reverse {
@@ -278,6 +279,8 @@
     }
     .tShoppingCartItem-cnt-price-info {
       width: 500px;
+      height: 280px;
+      overflow: auto;
       position: absolute;
       top: 50px;
       left: -4px;

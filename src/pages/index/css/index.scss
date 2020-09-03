@@ -239,6 +239,7 @@
           color:rgba(153,153,153,1);
           line-height:34px;
           margin-right:32px;
+          transition: 3s;
           animation:mz 3s  infinite step-start both;
       }
       @keyframes mz{

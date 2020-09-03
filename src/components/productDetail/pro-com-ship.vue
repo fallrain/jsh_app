@@ -96,7 +96,7 @@ export default {
   }
   .sorrowC-ship{
     padding-left: 24px;
-    max-height: 766px;
+    max-height: 888px;
     overflow-y: auto;
   }
   .textSenRow-ship {

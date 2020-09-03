@@ -12,7 +12,10 @@
           @tap="close"
         ></view>
       </view>
-      <view class="jAddressPicker-cnt">
+      <scroll-view
+        :scroll-y="true"
+        class="jAddressPicker-cnt"
+      >
         <view
           :class="['jAddressPicker-cnt-item',item.checked && 'active']"
           v-for="(item,index) in pickerList"
@@ -61,7 +64,7 @@
             </view>
           </block>
         </view>
-      </view>
+      </scroll-view>
     </view>
   </uni-popup>
 </template>
@@ -88,11 +91,15 @@ export default {
     // pickerList: [
     //   {
     //     name: '云仓',
-    //     checked: false
+    //     checked: false,
+    //     // 是否无子元素
+    //     isSingle:true
     //   },
     //   {
     //     name: '异地云仓',
     //     childrenType: 'short',
+    //     // 是否能被点击
+    //     isCanBeCheck: false,
     //     checked: false,
     //     isExpand: true,
     //     children: [
@@ -145,6 +152,16 @@ export default {
     },
     choose(item, index) {
       /* 选中一个item */
+      // @isCanBeCheck 能被点才能点击
+      // @isSingle 是否没子元素
+      if (item.isCanBeCheck === undefined || item.isCanBeCheck) {
+        this.reset(index);
+        item.checked = true;
+        this.$emit('change', this.pickerList, null, item, !item.isSingle);
+      }
+    },
+    reset(index) {
+      /* 重置 */
       this.pickerList.forEach((v, i) => {
         v.checked = false;
         // 存在children 且不是当前的item
@@ -154,8 +171,6 @@ export default {
           });
         }
       });
-      item.checked = true;
-      this.$emit('change', this.pickerList, null, item);
     },
     checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
@@ -163,8 +178,9 @@ export default {
         v.checked = false;
       });
       item.checked = true;
+      this.reset(parIndex);
       // 选中上级
-      if (!parent.checked) {
+      if (this.isCanBeCheck && !parent.checked) {
         this.choose(parent, parIndex);
       }
       this.$emit('change', this.pickerList, item, parent);
@@ -172,7 +188,7 @@ export default {
     toggleExpand(item) {
       /* 展开收起 */
       item.isExpand = !item.isExpand;
-      this.$emit('change', this.pickerList);
+      this.$emit('change', this.pickerList, null, null, true);
     }
   }
 };

@@ -17,5 +17,17 @@ export default {
   queryBrandAndInvsort(data) {
     /* 查询产品组和品牌 */
     return jGet(urls.queryBrandAndInvsort, data);
+  },
+  getSampleOrder(data) {
+    /* 发送短信 */
+    return jGet(urls.getSampleOrder, data);
+  },
+  sendMessage(data) {
+    /* 发送短信 */
+    return jGet(urls.sendMessage, data);
+  },
+  submitOrder(data, param) {
+    /* 提交订单 */
+    return jPostJson(urls.submitOrder, data, param);
   }
 };
