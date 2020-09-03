@@ -438,15 +438,15 @@ export default {
   onLoad() {
     const _this = this;
     let index = 0;
-    // setInterval(() => {
-    //   // console.log(1111);
-    //   _this.mendli = _this.mend[index];
-    //   console.log(_this.mendli);
-    //   index += 1;
-    //   if (index >= _this.mend.length) {
-    //     index = 0;
-    //   }
-    // }, 5000);
+    setInterval(() => {
+      // console.log(1111);
+      _this.mendli = _this.mend[index];
+      console.log(_this.mendli);
+      index += 1;
+      if (index >= _this.mend.length) {
+        index = 0;
+      }
+    }, 5000);
   },
   computed: {
     ...mapGetters({
