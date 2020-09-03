@@ -36,6 +36,7 @@
         :key="goods.id"
       >
         <j-shopping-cart-item
+          v-if="goods.isShow"
           :ref="'shoppingCartItem'+index"
           :beforeCreditModeChange="checkCreditQuota"
           :goods="goods"
@@ -45,7 +46,6 @@
           :warehouseFlag="choseSendAddress.yunCangFlag"
           @change="goodsChange"
           @del="singleDeleteCart"
-          v-if="goods.isShow"
         ></j-shopping-cart-item>
       </view>
       <view
@@ -75,7 +75,7 @@
       :total-price="totalGoodsPrice"
       @checkAll="checkAll"
       @del="deleteCart"
-      @follow="followGoods"
+      @follow="multiFollowGoods"
       @submit="submitOrder"
     ></j-shopping-cart-btm>
     <j-address-picker
@@ -359,6 +359,7 @@ export default {
           data.forEach((v) => {
             if (v.composeEnable === 1) {
               shoppingList.push({
+                ...v,
                 isShow: true,
                 checked: false,
                 // 信用模式
@@ -368,7 +369,8 @@ export default {
                 $PriceInfo: v.productList[0].priceInfo,
                 // 在购物车里更换的其他版本数据，使得计算属性能监控到
                 choseOtherVersions: [],
-                ...v
+                // 关注状态
+                followState: false
               });
             } else {
               failureGoodsList.push({
@@ -572,16 +574,32 @@ export default {
       const ids = this.failureGoodsList.map(v => v.id);
       this.deleteCart(ids, true);
     },
-    async followGoods() {
+    multiFollowGoods() {
+      // 选出选中的商品的id集合
+      const ids = this.shoppingList.filter(v => v.checked);
+      if (!ids.length) {
+        this.showToast({
+          type: 'warn',
+          content: '请先选择商品'
+        });
+        return;
+      }
+      // todo 接口应该优化
+      for (let i = 0; i < ids.length; i++) {
+        this.followGoods(ids[i]);
+      }
+    },
+    async followGoods(obj) {
       /* 添加关注 */
       const {
         customerCode
       } = this.userInf;
-      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, this.goods.productList[0].productCode);
+      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, obj.productList[0].productCode);
       if (code === '200') {
-        this.goods.followState = true;
-        this.$emit('change', this.goods, this.index);
+        this.shoppingList.find(v => obj.id === v.id).followState = true;
+        return { code: '1' };
       }
+      return { code: '0' };
     },
     async unfollowGoods() {
       /* 取消关注 */
