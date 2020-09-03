@@ -168,13 +168,13 @@
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">
-                  台返 ：{{chosePrice.rebateMoney || 0}}
+                  台返 ：{{chosePrice.rebateMoney || 0.00}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
                   返利：{{chosePrice.rebatePolicy | rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  直扣率：{{jshUtil.arithmetic(chosePrice.rebateRate,100,3)}}%
+                  直扣率：{{chosePrice.rebateRate}}%
                 </view>
               </view>
             </view>
@@ -353,7 +353,12 @@ export default {
       /* 选择的用来显示价格的版本信息 */
       const versions = this.getPriceVersionData(this.goods);
       // 非版本调货的才显示
-      return versions.find(v => v.priceType) || {};
+      const v = versions.find(vs => vs.priceType) || {};
+      v.invoicePrice = this.jshUtil.formatNumber(v.invoicePrice, 2);
+      v.supplyPrice = this.jshUtil.formatNumber(v.supplyPrice, 2);
+      v.rebateMoney = this.jshUtil.formatNumber(v.rebateMoney, 2);
+      v.rebateRate = this.jshUtil.formatNumber(this.jshUtil.arithmetic(v.rebateRate, 100, 3), 2);
+      return v;
     },
     choseVersions() {
       /* 选择的所有版本信息 */
