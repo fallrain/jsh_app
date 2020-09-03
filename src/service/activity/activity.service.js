@@ -17,7 +17,11 @@ export default {
     return jGet(urls.ziyuanji, data);
   },
   zhuanGong(data) {
-      /* 我的专供 */
+    /* 我的专供 */
     return jGet(urls.zhuangong, data);
+  },
+  allProductActivity(data) {
+    /* 详情页抢单 反向定制 */
+    return jGet(urls.allProductActivity, data);
   }
 };
