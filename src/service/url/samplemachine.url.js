@@ -13,7 +13,17 @@ const urls = {
   // 发送短信验证
   sendMessage: '/verify-code/send-message',
   // 提交订单
-  submitOrder: '/addToCart/submitOrder',
+  submitOrder(param) {
+    const paramArr = [];
+    for (const key in param) {
+      const item = `${key}=${param[key]}`;
+      paramArr.push(item);
+    }
+    const str = paramArr.join('&');
+    return `/addToCart/submitOrder?${str}`; // 获取上上签验证联系方式接口
+  },
+  // 请求订单信息
+  sampleOrderDispose: '/sampleOrder/sampleOrderDispose',
 };
 util.addPrefix(baseURL, urls);
 export default urls;

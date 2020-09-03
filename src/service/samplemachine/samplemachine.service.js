@@ -28,6 +28,10 @@ export default {
   },
   submitOrder(data, param) {
     /* 提交订单 */
-    return jPostJson(urls.submitOrder, data, param);
+    return jPostJson(urls.submitOrder(param), data);
+  },
+  sampleOrderDispose(data) {
+    /* 请求订单信息 */
+    return jGet(urls.sampleOrderDispose, data);
   }
 };

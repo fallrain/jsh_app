@@ -89,6 +89,8 @@
     :form="form"
     :confirmInfo="confirmInfo"
     :currentPayer="currentPayer"
+    :currentAddress="currentAddress"
+    :totalMoney="totalMoney"
   ></j-samplemachine-alert>
 </view>
 </template>
@@ -130,6 +132,7 @@ export default {
       payerPickerShow: false,
       choosedNum: 1,
       confirmInfo: {},
+      currentAddress: {},
       currentPayer: {},
       currentChoosePayer: [],
       payerList: [],
@@ -137,8 +140,9 @@ export default {
     };
   },
   onLoad(option) {
-    const { confirmInfo } = option;
+    const { confirmInfo, address } = option;
     this.confirmInfo = JSON.parse(confirmInfo);
+    this.currentAddress = JSON.parse(address);
     this.getpayerList();
     // 计算总价格
     this.totalMoney = (this.confirmInfo.$allPrice.UnitPrice * this.choosedNum).toFixed(2);
@@ -164,12 +168,12 @@ export default {
   methods: {
     sureOrder() {
       const money = this.currentPayer.balance || this.currentPayer.bookBalance;
-      if (parseFloat(money) < parseFloat(this.totalMoney)) {
+      /* if (parseFloat(money) < parseFloat(this.totalMoney)) {
         uni.showToast({
           title: '余额不足，请切换付款方'
         });
         return;
-      }
+      } */
       this.isShowVf = true;
       console.log(this.currentPayer);
     },
@@ -216,7 +220,16 @@ export default {
         this.currentChoosePayer = [];
         this.currentChoosePayer[0] = this.currentPayer.key;
         this.payerList = payerList;
-        console.log(this.payerList);
+      } else {
+        payerList.forEach((item) => {
+          item.key = item.payerCode;
+          item.value = `(${item.payerCode}) ${item.payerName}`;
+        });
+        this.currentPayer = payerList[0];
+        payerList[0].choosed = true;
+        this.currentChoosePayer = [];
+        this.currentChoosePayer[0] = this.currentPayer.key;
+        this.payerList = payerList;
       }
     },
     toggleExpand() {

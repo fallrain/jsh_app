@@ -503,8 +503,9 @@ export default {
       this.curChoseDeliveryAddress = item;
     },
     sampleMachineConfirm(confirmInfo) {
+      const address = JSON.stringify(this.curChoseDeliveryAddress);
       uni.navigateTo({
-        url: `/pages/sampleMachine/sampleMachineConfirm?confirmInfo=${JSON.stringify(confirmInfo)}`
+        url: `/pages/sampleMachine/sampleMachineConfirm?confirmInfo=${JSON.stringify(confirmInfo)}&address=${address}`
       });
     }
   }

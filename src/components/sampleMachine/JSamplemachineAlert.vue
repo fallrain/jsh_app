@@ -40,6 +40,8 @@
 <script>
 import JVerificationCode from '../common/JVerificationcode';
 import JValidate from '@/lib/jValidate/JValidate';
+import md5 from 'js-md5';
+
 import {
   mapGetters
 } from 'vuex';
@@ -69,9 +71,16 @@ export default {
       type: Object,
       default: () => {}
     },
+    currentAddress: {
+      type: Object,
+      default: () => {}
+    },
     typpew: {
       type: String
     },
+    totalMoney: {
+      type: [Number, String]
+    }
     // phone: {
     //   type: String
     // }
@@ -89,6 +98,7 @@ export default {
   created() {
     console.log(this.confirmInfo);
     console.log(this.currentPayer);
+    console.log(this.currentAddress);
     this.setPageInfo();
     this.getSampleOrder();
   },
@@ -106,8 +116,13 @@ export default {
       const { code, data } = await this.samplemachineService.getSampleOrder({
         timestamp: Date.parse(new Date())
       });
-      if (code === '1') {
+      if (code === '1' && data.code === '200') {
         this.orderNo = data.data.YBR_SEQ;
+      } else {
+        uni.showToast({
+          title: '样品机单号生成失败，请重试！',
+          icon: 'none'
+        });
       }
     },
     setPageInfo() {
@@ -150,8 +165,10 @@ export default {
         werks: this.confirmInfo.detailList[0].YGS_WERKS
       });
       if (code === '1') {
-        console.log(data.data.verifyKey);
-        this.erifyKey = data.data.verifyKey;
+        if (data.data.verifyKey) {
+          console.log(data.data.verifyKey);
+          this.erifyKey = data.data.verifyKey;
+        }
         uni.showToast({
           title: '短信发送成功',
         });
@@ -168,6 +185,9 @@ export default {
     },
     // 点击确定
     async determine() {
+      console.log(this.currentPayer);
+      console.log(this.currentAddress);
+      console.log(this.confirmInfo);
       if (this.form.verificationCode) {
         // 提交订单
         /* const { code, data } = await this.transfergoodsService.submitDhOrder({
@@ -177,7 +197,12 @@ export default {
           verifyCode: Number(this.form.verificationCode),
           verifyKey: `${this.erifyKey}`,
         }); */
-        const {code, data} = await this.samplemachineService.submitOrder([
+        const time = new Date().getTime();
+        const beforeSign = `${this.saleInfo.customerCode}${this.form.verificationCode}${time}1${this.confirmInfo.CODE}YPJSINGCODE20200814`;
+        console.log(beforeSign);
+        const signCode = md5(beforeSign);
+        console.log(signCode);
+        const { code, data } = await this.samplemachineService.submitOrder([
           {
             FACTORYTYPE: '1',
             ISFL: '2',
@@ -185,41 +210,48 @@ export default {
             MAINCHANNEL: this.saleInfo.channel,
             MKTID: this.saleInfo.tradeCode,
             PAYTO_NAME: this.saleInfo.customerName,
-            PAYTO_TYPE: '00',
-            PRODUCT_MODEL: 'KFR-35GW/03EBA23AU1套机',
-            SENDTO_ADDRESS: '测试账号',
-            SENDTO_NAME: '青岛鸿程永泰商贸有限公司',
+            PAYTO_TYPE: this.currentPayer.payerType,
+            PRODUCT_MODEL: this.confirmInfo.MODEL,
+            SENDTO_ADDRESS: this.currentAddress.address,
+            SENDTO_NAME: this.currentAddress.addressName,
             SUBCHANNEL: this.saleInfo.subChannel,
             WHCODE: this.confirmInfo.detailList[0].YGS_LGORT,
             WHNAME: this.confirmInfo.detailList[0].YGS_LGOBE,
-            YJMFID: 'B1001312',
-            YJMFID_NAME: 'B1001312',
-            actPrice: '2310.0',
-            bateMoney: '0',
-            bateRate: '0',
-            brand: '000',
+            YJMFID: this.currentAddress.manageCustomerCode,
+            YJMFID_NAME: this.currentAddress.manageCustomerCode,
+            actPrice: this.confirmInfo.$allPrice.ActPrice,
+            bateMoney: this.confirmInfo.$allPrice.ReBateMoney,
+            bateRate: this.confirmInfo.$allPrice.BateRate,
+            brand: this.confirmInfo.BRAND,
             canChange: true,
-            invcode: 'AA9WG9072',
-            invsort: 'CA',
-            invstd: '海尔家用空调KFR-35GW/03EBA23AU1套机1.5P变频白',
-            longfeiMFID: '8800101954',
-            lossPrice: '1617.00',
-            lossRate: '0.3',
-            maxNum: '',
-            minNum: '',
-            num: '',
+            invcode: this.confirmInfo.CODE,
+            invsort: this.confirmInfo.YGS_SPART,
+            invstd: this.confirmInfo.NAME,
+            longfeiMFID: this.currentAddress.addressCode,
+            lossPrice: this.confirmInfo.$allPrice.UnitPrice,
+            lossRate: this.confirmInfo.$allPrice.ReLossRate,
+            maxNum: 1,
+            minNum: 0,
+            num: 1,
             orderSource: '',
-            payto: '8800101954',
-            realPrice: '2310.0',
-            searchImage: 'http://file.c.haier.net/docs/2017/04/28/517bc33f4fe03fe9f1b07682e450d37a.jpg180',
-            seq: 'YJ0210000403',
-            summoney: 161,
-            unitPrice: '1617.00',
-            userId: '8800101954',
-            werks: '2002',
+            payto: this.saleInfo.customerCode,
+            realPrice: this.confirmInfo.$allPrice.ActPrice,
+            searchImage: this.confirmInfo.SEARCHIMAGE,
+            seq: this.orderNo,
+            summoney: parseFloat(this.totalMoney),
+            unitPrice: this.confirmInfo.$allPrice.UnitPrice,
+            userId: this.saleInfo.customerCode,
+            werks: this.confirmInfo.detailList[0].YGS_WERKS,
             yuncang: 'false',
           }
-        ])
+        ], {
+          timestamp: time,
+          validateCode: '5503',
+          verifyCode: this.form.verificationCode,
+          verifyKey: '',
+          customerCode: this.saleInfo.customerCode,
+          signCode
+        });
         if (code === '1' && data.code === '200') {
           uni.showToast({
             title: data.message,
@@ -238,24 +270,16 @@ export default {
     },
     // 提交订单返回数据
     async getCargoDispose() {
-      // let SEQ = '';
-      // this.allOrderList.forEach((ele) => {
-      //   if (ele.checked) {
-      //     SEQ = ele.IBR_SEQ;
-      //   }
-      // });
-      console.log(this.seq);
-      console.log(Number(this.seq));
-      const dispose = await this.transfergoodsService.cargoDispose({
+      const dispose = await this.samplemachineService.sampleOrderDispose({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.saleInfo.customerCode,
-        OrderForm: Number(this.seq)
+        OrderForm: this.orderNo
       });
-      console.log(Number(this.seq));
       if (dispose.code === '1' && dispose.data.code === '200') {
         console.log(dispose.data.data[0]);
         const page = dispose.data.data[0];
         console.log(page);
+        return;
         if (page) {
           console.log(2222222);
           page.orderList.forEach((item) => {
