@@ -694,12 +694,19 @@ export default {
         yunCangCode: this.choseSendAddress.yunCangCode,
         yunCangFlag: this.choseSendAddress.yunCangFlag
       };
-      const { code } = await this.orderService.validateProduct(form);
+      const { code, data } = await this.orderService.validateProduct(form, {
+        noToast: true
+      });
       if (code === '1') {
         const args = JSON.stringify(form);
         // 产品校验成功
         uni.navigateTo({
           url: `/pages/shoppingCart/orderConfirm?formData=${args}`
+        });
+      } else {
+        uni.showModal({
+          title: '',
+          content: data[0][0].msg || '请求失败'
         });
       }
     }
