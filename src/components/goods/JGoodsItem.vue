@@ -244,7 +244,12 @@ export default {
       const choseKey = this.findTruePriceKey(priceKeyOrder);
       let priceInf;
       if (choseKey) {
-        priceInf = this.goods[choseKey][0];
+        if (Array.isArray(this.goods[choseKey])) {
+          priceInf = this.goods[choseKey][0];
+        } else {
+          // 普通价为对象
+          priceInf = this.goods[choseKey];
+        }
       } else {
         priceInf = {};
         if (!isSale) {
@@ -269,8 +274,14 @@ export default {
       /* 找到应该显示的价格的key */
       const choseKey = priceKeyOrder.find((v) => {
         const chosePrice = this.goods[v];
-        if (chosePrice && chosePrice.length) {
-          return true;
+        if (chosePrice) {
+          let len;
+          if (typeof chosePrice === 'object') {
+            len = Object.keys(chosePrice).length;
+          } else {
+            len = chosePrice.length;
+          }
+          return !!len;
         }
         return false;
       });
