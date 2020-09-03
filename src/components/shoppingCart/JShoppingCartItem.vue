@@ -367,7 +367,7 @@ export default {
     },
     maxGoodsNumber() {
       /* 计算最大可购买数量 */
-      let maxNum = Infinity;
+      let maxNum = Number.MAX_VALUE;
       const {
         activityType,
         // 可购买的数量
@@ -379,21 +379,20 @@ export default {
       }
       // 无活动看是否选择了版本
       if (this.choseVersions && this.choseVersions.length) {
-        maxNum = this.chosePrice.usableQty;
+        // 设置各个版本的最低数量
+        this.choseVersions.forEach((v) => {
+          let curNum;
+          if (v.priceType) {
+            curNum = v.usableQty;
+          } else {
+            curNum = v.num;
+          }
+          if (curNum < maxNum) {
+            maxNum = curNum;
+          }
+        });
       }
-      // 设置各个版本的最低数量
-      this.choseVersions.forEach((v) => {
-        let curNum;
-        if (v.priceType) {
-          curNum = v.usableQty;
-        } else {
-          curNum = v.num;
-        }
-        if (curNum < maxNum) {
-          maxNum = curNum;
-        }
-      });
-      return maxNum;
+      return maxNum === undefined || maxNum === null ? Number.MAX_VALUE : maxNum;
     },
   },
   methods: {
