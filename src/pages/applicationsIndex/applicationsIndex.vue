@@ -536,24 +536,29 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
-      // 取token比较
-      if(this.tokenUserInf && (this.tokenUserInf.code == passCode)) {
+      
+      const tmpCode = uni.getStorageSync('code') 
+      // alert('tmp1'+tmpCode + 'passcode' + passCode)
+      // code
+      if(tmpCode && (tmpCode == passCode) ) {
         return;
       }
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
       if (code === '1') {
-        token.code = passCode;
         const token = data.token;
         uni.setStorageSync('token', token);
-        this[USER.UPDATE_SALE_ASYNC]();
+        uni.setStorageSync('code', passCode);
+        // alert('已经存储token'+this.saleInfo.customerCode)
+        await this[USER.UPDATE_SALE_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
       }
     },
     // 获取用户类型
-    async getUserType(passCode) {
-      const { code, data } = await this.cocSeachService.cocSearch(passCode);
+    async getUserType(customerCode) {
+      // alert('customerCode'+customerCode)
+      const { code, data } = await this.cocSeachService.cocSearch(customerCode);
       if (code == '1') {
         this.cocData = data;
       }
