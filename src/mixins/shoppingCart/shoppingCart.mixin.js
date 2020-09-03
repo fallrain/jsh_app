@@ -26,9 +26,11 @@ export default {
       // 后来修改的版本
       let updateVersion;
       if (goods.choseOtherVersions && goods.choseOtherVersions.length) {
-        updateVersion = goods.choseOtherVersions[0];
+        updateVersion = goods.choseOtherVersions;
         // 来源，update表示来着更新的值，更新的的版本可取消
-        updateVersion.$origin = 'update';
+        updateVersion.forEach((v) => {
+          v.$origin = 'update';
+        });
       }
       const {
         priceType,
@@ -41,7 +43,7 @@ export default {
       const priceTypeUpper = this.jshUtil.getPriceType(priceType);
       if (priceTypeUpper === 'PT') {
         if (updateVersion) {
-          choseVersions = [updateVersion];
+          choseVersions = updateVersion;
         } else {
           // 格式化不（普通价格接口未做两位小数处理）
           product.priceInfo.commonPrice.invoicePrice = this.jshUtil.formatNumber(product.priceInfo.commonPrice.invoicePrice, 2);
@@ -66,14 +68,14 @@ export default {
           // 如果了改的是版本调货，且之前选择了工程或者特价，则就增加个版本调货
           if (!updateVersion.priceType && (priceTypeUpper === 'TJ' || priceTypeUpper === 'GC')) {
             choseVersions = [
-              updateVersion
+              ...updateVersion
             ];
             if (preVersion) {
               choseVersions.push(preVersion);
             }
           } else {
             // 否则就是修改后的版本
-            choseVersions = [updateVersion];
+            choseVersions = updateVersion;
           }
         } else {
           // 无修改用之前的版本

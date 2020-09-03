@@ -64,6 +64,34 @@
                 </view>
               </div>
             </view>
+            <view v-if="act.isC">
+              <div class="pro-act-pop-detail-item-one" v-for="(aac,indexD) in act.list" :key="indexD">
+                <view class="jVersionSpecifications-pop-detail-item-check" v-if="aac.isCheck">
+                  <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+                </view>
+                <view class="pro-act-pop-detail-thr mb8">
+                  <view class="marker"></view>
+                  <view class="pro-act-pop-detail-item-oneNam">名称：</view>
+                </view>
+                <view class="pro-act-pop-detail-for mb8">
+                  <view class="pro-act-pop-detail-item-oneNam">{{aac.name}}</view>
+                </view>
+                <view class="pro-act-pop-detail-thr mb8">
+                  <view class="marker"></view>
+                  <view class="pro-act-pop-detail-item-oneNam">有效期：</view>
+                </view>
+                <view class="pro-act-pop-detail-for mb8">
+                  <view class="pro-act-pop-detail-item-oneNam">{{aac.time}}</view>
+                </view>
+                <view class="pro-act-pop-detail-thr mb8">
+                  <view class="marker"></view>
+                  <view class="pro-act-pop-detail-item-oneNam">数量：</view>
+                </view>
+                <view class="pro-act-pop-detail-for mb8">
+                  <view class="pro-act-pop-detail-item-oneNam">{{aac.num}}</view>
+                </view>
+              </div>
+            </view>
           </view>
         </view>
       </scroll-view>

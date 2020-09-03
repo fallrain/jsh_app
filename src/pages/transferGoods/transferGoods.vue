@@ -254,6 +254,9 @@ export default {
   onLoad(option) {
     console.log(option);
     this.otherSEQ = option.IBR_SEQ;
+    if (this.otherSEQ) {
+      this.getOrderList();
+    }
   },
   created() {
     // this.getPageInfo();
@@ -673,9 +676,11 @@ export default {
             if (item.sendWay === '客户自有仓') {
               console.log(item);
               let brandGroup = '';
-              item.PRODandSWRH.map(item => {
-                brandGroup += (`${item.PROD}:${item.SWRH};`);
-              });
+              if (item.PRODandSWRH && item.PRODandSWRH) {
+                item.PRODandSWRH.map(item => {
+                  brandGroup += (`${item.PROD}:${item.SWRH};`);
+                });
+              }
               console.log(brandGroup);
               const temp = {
                 name: item.sendWay,
@@ -700,6 +705,19 @@ export default {
       // this.popTabs[1].children[0].ycFlag = 'JSHSW';
       // this.popTabs[1].children[1].ycFlag = '';
       console.log('zzzzzzzzzzzzzzzzzz', this.popTabs[1].children);
+    },
+    //点击选购其他 返回列表页
+    async getOrderList() {
+      const { code, data } = await this.transfergoodsService.allOrderList({
+        timestamp: Date.parse(new Date()),
+        longfeiUSERID: this.saleInfo.customerCode,
+        DH_SEQ: this.otherSEQ
+      });
+      if (code === '1' && data.code === '200') {
+        console.log(data);
+        // this.curChoseDeliveryAddress.name = data[0].DH_SENDTO_ADDRESS;
+        // this.stock = data[0].
+      }
     },
     async getShoppingCartNum() {
       // 购物车商品数量
@@ -732,7 +750,7 @@ export default {
       this.addressesList.forEach((item) => {
         console.log(item);
         console.log(this.curChoseDeliveryAddress);
-        if (this.curChoseDeliveryAddress.customerCode === `${item.customerCode}`) {
+        if (this.curChoseDeliveryAddress.id === `${item.customerCode}`) {
           console.log(item);
           this.address = item;
         }

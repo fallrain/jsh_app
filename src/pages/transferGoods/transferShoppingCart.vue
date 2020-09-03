@@ -572,12 +572,13 @@ export default {
         // 付款方余额信息
           console.log(allInquire.data);
           const payerBal = allInquire.data;
-          // console.log(payerBal);
+          console.log('555555555555555', payerBal);
           this.payer.forEach((item) => {
             // console.log(item);
             item.CodeName = `(${item.payerCode})${item.payerName}`;
+            console.log(item.CodeName);
             const same = payerBal.find(ele => item.payerCode === ele.payerCode);
-            // console.log(same);
+            console.log(same);
             if (same) {
               item.balance = same.balance ? same.balance : 0;
             }

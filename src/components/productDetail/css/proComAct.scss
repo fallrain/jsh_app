@@ -147,7 +147,6 @@
 .pro-act-pop-detail-item-name-wrap0 {
   display: flex;
   align-items: center;
-  width: 65%;
   height: 40px;
 }
 .pro-act-pop-detail-item-name-wrap1 {
@@ -199,4 +198,12 @@
   height: 100px;
   background: #fff;
   padding-right: 32px;
+}
+.filter-drawer-cnt-list {
+  padding-left: 24px;
+  max-height: 766px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
