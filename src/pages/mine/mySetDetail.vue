@@ -61,7 +61,7 @@ export default {
   created() {
     AlipayJSBridge.call('myApiAppVersion', {
     }, (result) => {
-      this.version = result;
+      this.version = result.version;
     });
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
