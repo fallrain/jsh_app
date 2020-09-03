@@ -224,21 +224,13 @@ export default {
           console.log(2222222);
 
           if (page.orderList.find(item => item.ISFLAG == '订单提交中')) {
-            if (this.index <= 20) {
-              uni.showLoading({
-                title: '加载中'
-              });
-              setTimeout(() => {
-                _this.getCargoDispose();
-                _this.index += 1;
-              }, 1000);
-            } else { // todo
-              this.index = 0;
-              uni.showLoading({
-                title: '订单提交失败，请重试'
-              });
-              uni.hideLoading();
-            }
+            uni.showLoading({
+              title: '加载中'
+            });
+            setTimeout(() => {
+              _this.getCargoDispose();
+              _this.index += 1;
+            }, 1000);
           } else {
             this.index = 0;
             console.log(4444444444444);

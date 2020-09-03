@@ -16,7 +16,7 @@
     </uni-swiper-dot>
     <view class="uni-common-mt" id="goods">
       <view class="uni-flex uni-row padding-15">
-        <view class="text col-34 larger" style="color: #ed2856;margin: auto;">¥ {{detailInfo.product.invoicePrice}}</view>
+        <view class="text col-34 larger" style="color: #ed2856;margin: auto;">¥ {{detailInfo.product.invoicePrice ? detailInfo.product.invoicePrice : ''}}</view>
         <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
         <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"
               v-if="!ISGUANZHU"></view>
@@ -46,6 +46,9 @@
           <span v-else-if="detailInfo.price.rebatePolicy===5">BZK</span>
         </view>
         <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：{{detailInfo.price.rebateRate}}%</view>
+      </view>
+      <view class="uni-flex uni-row padding-8">
+        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">品&nbsp;&nbsp;&nbsp;牌：{{detailInfo.product.productBrand}}</view>
       </view>
       <view v-show="ActListInfo.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
         <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
@@ -77,7 +80,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo" @checkedNum="checkedNum"></pro-com-num>
+      <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo" @checkedNum="checkedNum($event, item)"></pro-com-num>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">配送至：</view>
         <view class="col-70 text" @click="showShip('OPEN')">
@@ -206,7 +209,8 @@ export default {
       scrollHight: 0,
       goodsHight: 0,
       specsHight: 0,
-      detailsHight: 0
+      detailsHight: 0,
+      flash: {}
     };
   },
   onPageScroll() {
@@ -226,6 +230,10 @@ export default {
     console.log(options.productCode);
   },
   created() {
+    (async () => {
+      await this.getAllProductActivity(); // 抢单  反向定制数据
+    })();
+
     this.getProductDetail();// 获取产品详情
     this.getHostLost();// 获取热门推荐列表
     this.productQueryInter();// 产品是否关注
@@ -300,7 +308,7 @@ export default {
             title: '特价版本',
             isMore: true,
             isSe: true,
-            isT: false,
+            isT: true,
             list: []
           };
           this.detailInfo.tjPrice.tj.forEach((lis) => {
@@ -401,25 +409,32 @@ export default {
           });
           this.ActInfo.push(zh);
         }
-        if (this.detailInfo.flashSales.length > 0) { // 抢单
-          this.ActListInfo.push('抢单');
-          const qd = {
-            title: '抢单',
-            isMore: false,
-            isSe: true,
-            isT: false,
-            list: []
-          };
-          this.detailInfo.flashSales.forEach((lis) => {
-            const a = {
-              titleLe: '抢单',
-              name: lis.activityName,
-              time: lis.endTime
-            };
-            qd.list.push(a);
-          });
-          this.ActInfo.push(qd);
-        }
+        // if (this.detailInfo.flashSales.length > 0) { // 抢单
+        //   this.ActListInfo.push('抢单');
+        //   const qd = {
+        //     title: '抢单',
+        //     isMore: false,
+        //     // isSe: true,
+        //     isT: false,
+        //     isC: true,
+        //     list: []
+        //   };
+        //   console.log('wwwwwwwwwwwwwwwww', this.flash);
+        //   // if (this.flash.graborders && this.flash.graborders.length > 0) {
+        //   //   this.flash.graborders.forEach((lis) => {
+        //   //     lis.lastUpdateDate = lis.lastUpdateDate.split(' ')[0];
+        //   //     const a = {
+        //   //       titleLe: '抢单',
+        //   //       name: lis.promotionName,
+        //   //       time: lis.lastUpdateDate,
+        //   //       num: lis.availableQuantity
+        //   //     };
+        //   //     console.log(a);
+        //   //     qd.list.push(a);
+        //   //   });
+        //   // }
+        //   this.ActInfo.push(qd);
+        // }
         if (Number(this.detailInfo.isOmsSample)) { // 调货
           this.ActListInfo.push('调货');
           const dh = {
@@ -434,7 +449,8 @@ export default {
               titleLe: '调货',
               name: lis.versionCode,
               time: lis.endDate,
-              num: lis.usableQty
+              num: lis.usableQty,
+              isCheck: false
             };
             dh.list.push(a);
           });
@@ -447,10 +463,47 @@ export default {
         item.list.forEach((item) => {
           item.kou = Number(item.kou).toFixed(2);
           item.time = item.time.split(' ')[0];
-          console.log(item.time)
-
+          console.log(item.time);
         });
       });
+    },
+    async getAllProductActivity() {
+      const { code, data } = await this.activityService.allProductActivity({
+        customerCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode,
+        productCode: this.productCode
+      });
+      if (code === '1') {
+        console.log('8888888888888', data.graborders);
+        this.flash = data;
+        console.log(this.flash);
+        if (this.detailInfo.flashSales && this.detailInfo.flashSales.length > 0) { // 抢单
+          this.ActListInfo.push('抢单');
+          const qd = {
+            title: '抢单',
+            // isMore: false,
+            isSe: true,
+            isT: false,
+            isC: true,
+            list: []
+          };
+          console.log('wwwwwwwwwwwwwwwww', this.flash);
+          if (this.flash.graborders && this.flash.graborders.length > 0) {
+            this.flash.graborders.forEach((lis) => {
+              lis.lastUpdateDate = lis.lastUpdateDate.split(' ')[0];
+              const a = {
+                titleLe: '抢单',
+                name: lis.promotionName,
+                time: lis.lastUpdateDate,
+                num: lis.availableQuantity
+              };
+              console.log(a);
+              qd.list.push(a);
+            });
+          }
+          this.ActInfo.push(qd);
+        }
+      }
     },
     async getHostLost() {
       const { code, data } = await this.productDetailService.productHostList(this.userInf.customerCode, this.defaultSendTo.customerCode);
@@ -545,9 +598,10 @@ export default {
     checkedAct(e, n) { // 活动选择的内容
       console.log('55555555555', n);
       this.CheckActivityInfo = n;
-      if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本')) {
+      if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本' || n.titleLe === '调货' || n.titleLe === '特价版本')) {
         this.footButtong.isSaleLe = true;
       }
+      this.detailInfo.product.invoicePrice = this.CheckActivityInfo.price;
       console.log(this.CheckActivityInfo);
       // debugger;
     },
@@ -560,30 +614,39 @@ export default {
       uni.pageScrollTo({
         scrollTop: 0
       });
-      uni.createSelectorQuery().select('#goods').boundingClientRect((res) => {
+      const query = uni.createSelectorQuery().in(this);
+      query.select('#goods').boundingClientRect((res) => {
+        console.log('aaaaa',res);
         this.goodsHight = res.top;
       }).exec();
-      uni.createSelectorQuery().select('#specs').boundingClientRect((res) => {
+      query.select('#specs').boundingClientRect((res) => {
+        console.log('bbbb',res);
         this.specsHight = res.top;
       }).exec();
-      uni.createSelectorQuery().select('#details').boundingClientRect((res) => {
+      query.select('#details').boundingClientRect((res) => {
+        console.log('ccccc',res);
         this.detailsHight = res.top;
       }).exec();
       if (e < 1) {
         console.log('tou');
+        uni.pageScrollTo({
+          scrollTop: this.goodsHight
+        });
         this.goodsCheck = true;
         this.detailsCheck = false;
         this.specsCheck = false;
       } else if (e > 1) {
+        console.log('222222222222222222',this.detailsHight);
         uni.pageScrollTo({
-          scrollTop: this.detailsHight - 60
+          scrollTop: this.detailsHight
         });
         this.goodsCheck = false;
         this.detailsCheck = true;
         this.specsCheck = false;
       } else {
+        console.log('11111111111111',this.specsHight);
         uni.pageScrollTo({
-          scrollTop: this.specsHight - 60
+          scrollTop: this.specsHight
         });
         this.goodsCheck = false;
         this.detailsCheck = false;
@@ -605,7 +668,11 @@ export default {
         } else if (this.CheckActivityInfo.titleLe === '样机版本') {
           let YJ = '';
           this.detailInfo.tjPrice.yj.map((item) => {
-            YJ = item.priceType;
+            // console.log('qqqqqqqqqq',this.CheckActivityInfo);
+            console.log('wwwwwwwwww', item);
+            if (this.CheckActivityInfo.name === item.versionCode) {
+              YJ = item.priceType.toUpperCase();
+            }
           });
           this.jiaGou1(YJ, 1);
         } else if (this.CheckActivityInfo.titleLe === '调货') {
@@ -632,6 +699,7 @@ export default {
       } else {
         stockV = '';
       }
+
       const product = [{ priceType: pt,
         priceVersion: this.CheckActivityInfo.name,
         stockVersion: stockV,
