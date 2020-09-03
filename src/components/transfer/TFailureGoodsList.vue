@@ -1,7 +1,7 @@
 <template>
   <view class="tFailureGoodsList">
     <view class="tFailureGoodsList-head">
-      <view class="tFailureGoodsList-head-left">失效宝贝{{list.data ? list[0].data.orderList.length : 0}}件</view>
+      <view class="tFailureGoodsList-head-left">失效宝贝{{list[0] ? list[0].data.orderList.length : 0}}件</view>
       <view class="tFailureGoodsList-head-opt" @tap="emptyDelete">清空失效宝贝</view>
     </view>
     <t-failure-goods-item v-for="(itemList,index) in list" :key="index"

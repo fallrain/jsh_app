@@ -5,15 +5,20 @@
         <view class="top-ship-title">{{titles}}</view>
         <view class="top-ship-but">X</view>
       </view>
-      <view class="sorrowC-ship">
-        <view @click="checkAct(index)" v-for="(ship,index) in info" :key="index">
-          <view class="uni-flex uni-row textSenRow-ship">
-            <view class="textTick-ship col-15 iconfont icontick" :class="ship.checked ? 'cheched' :''"></view>
-            <view class="textRow-ship col-80" :class="ship.checked ? 'cheched' :''">{{ship.name}}</view>
+      <scroll-view
+          :scroll-y="true"
+          class="filter-drawer-cnt-list"
+      >
+        <view class="sorrowC-ship">
+          <view @click="checkAct(index)" v-for="(ship,index) in info" :key="index">
+            <view class="uni-flex uni-row textSenRow-ship">
+              <view class="textTick-ship col-15 iconfont icontick" :class="ship.checked ? 'cheched' :''"></view>
+              <view class="textRow-ship col-80" :class="ship.checked ? 'cheched' :''">{{ship.name}}</view>
+            </view>
           </view>
+          <view class="line-ship"></view>
         </view>
-        <view class="line-ship"></view>
-      </view>
+      </scroll-view>
     </view>
   </uni-popup>
 </template>
@@ -119,4 +124,13 @@ export default {
   .cheched {
     color: #ED2856;
   }
+ .filter-drawer-cnt-list {
+   padding-left: 24px;
+   max-height: 888px;
+   overflow-y: auto;
+   padding-bottom: 60px;
+   &::-webkit-scrollbar {
+     display: none;
+   }
+};
 </style>
