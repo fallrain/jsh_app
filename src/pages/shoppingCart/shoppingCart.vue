@@ -183,7 +183,7 @@ export default {
           childrenType: 'short',
           isCanBeCheck: false,
           checked: false,
-          isExpand: true,
+          isExpand: false,
           children: []
         },
         {
@@ -459,49 +459,52 @@ export default {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
     },
-    sendCustomerListChange(list, detail, parent, isShow) {
+    sendCustomerListChange(list, detail, parent, isShow, type) {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
-      // 选中的送达仓库地址
-      this.choseSendAddress = detail || {};
-      if (parent) {
-        if (detail) {
-          // 异地云仓
-          if (detail.yunCangFlag) {
-            this.choseSendAddress = {
-              yunCangCode: detail.id,
-              yunCangFlag: detail.yunCangFlag,
-              name: detail.name,
-            };
+      // 非扩展操作
+      if (type !== 'expand') {
+        // 选中的送达仓库地址
+        this.choseSendAddress = detail || {};
+        if (parent) {
+          if (detail) {
+            // 异地云仓
+            if (detail.yunCangFlag) {
+              this.choseSendAddress = {
+                yunCangCode: detail.id,
+                yunCangFlag: detail.yunCangFlag,
+                name: detail.name,
+              };
+            } else {
+              // 送达方
+              this.choseSendAddress = {
+                sendtoCode: detail.id,
+                name: detail.name
+              };
+              // 更改默认的送达方
+              this.customerService.changeDefaultSendTo({
+                sendToCode: detail.customerCode
+              }).then(({ code }) => {
+                if (code === '1') {
+                  // 更改成功之后更新数据列表
+                  this.reloadPageInfo();
+                  // 更改成功之后更新store
+                  this[USER.UPDATE_DEFAULT_SEND_TO](detail);
+                }
+              });
+            }
           } else {
-            // 送达方
-            this.choseSendAddress = {
-              sendtoCode: detail.id,
-              name: detail.name
-            };
-            // 更改默认的送达方
-            this.customerService.changeDefaultSendTo({
-              sendToCode: detail.customerCode
-            }).then(({ code }) => {
-              if (code === '1') {
-                // 更改成功之后更新数据列表
-                this.reloadPageInfo();
-                // 更改成功之后更新store
-                this[USER.UPDATE_DEFAULT_SEND_TO](detail);
-              }
-            });
-          }
-        } else {
-          if (parent.flag === 'yc') {
-            // 普通云仓（只有一个）
-            this.choseSendAddress = {
-              yunCangCode: '',
-              yunCangFlag: 'yc',
-              name: '云仓',
-            };
-          } else {
-            this.choseSendAddress = {};
+            if (parent.flag === 'yc') {
+              // 普通云仓（只有一个）
+              this.choseSendAddress = {
+                yunCangCode: '',
+                yunCangFlag: 'yc',
+                name: '云仓',
+              };
+            } else {
+              this.choseSendAddress = {};
+            }
           }
         }
       }

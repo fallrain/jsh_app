@@ -34,7 +34,7 @@
             <view
               v-if="item.children"
               :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
-              @tap="toggleExpand(item)"
+              @tap="toggleExpand(item,index)"
             ></view>
           </view>
           <block
@@ -188,7 +188,7 @@ export default {
     toggleExpand(item) {
       /* 展开收起 */
       item.isExpand = !item.isExpand;
-      this.$emit('change', this.pickerList, null, null, true);
+      this.$emit('change', this.pickerList, null, item, true, 'expand');
     }
   }
 };
