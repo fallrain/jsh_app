@@ -524,8 +524,8 @@ export default {
         // 调货算普通
         if (!product.priceType) {
           product.priceType = 'PT';
+          isTransfer = true;
         }
-        isTransfer = true;
       }
       return this.cartService.addToCart({
         // 商品组合编码
