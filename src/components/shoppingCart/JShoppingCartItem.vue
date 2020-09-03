@@ -100,7 +100,7 @@
         </view>
         <view
           class="jShoppingCartItem-btm-switch-wrap"
-          v-if="isDirect || hasGCVersion"
+          v-if="isDirect"
         >
           <j-switch
             :active.sync="goods.isDirectMode"
@@ -264,6 +264,12 @@ export default {
       if (val === false) {
         this.goods.isCreditMode = false;
       }
+    },
+    isDirect(val) {
+      /* 如果不支持信用模式了，已经打开的则关闭 */
+      if (val === false) {
+        this.goods.isDirectMode = false;
+      }
     }
   },
   computed: {
@@ -279,7 +285,8 @@ export default {
         productGroup
       } = product;
       const inProductGroup = directProducts.find(v => v === productGroup);
-      return inProductGroup;
+      // 如果选中了工程版本，也会显示【直发】switch
+      return inProductGroup || !!this.choseVersions.find(v => v.priceType === 'GC');
     },
     isCreditModel() {
       /* 是否支持信用模式 */
@@ -363,11 +370,6 @@ export default {
     choseVersions() {
       /* 选择的所有版本信息 */
       return this.getPriceVersionData(this.goods);
-    },
-    hasGCVersion() {
-      /* 是否选择了工程版本 */
-      // 如果选中了工程版本，则会显示【直发】switch
-      return !!this.choseVersions.find(v => v.priceType === 'GC');
     },
     totalChosePrice() {
       /* 本产品的总价格 */
