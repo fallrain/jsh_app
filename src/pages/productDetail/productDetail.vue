@@ -16,7 +16,7 @@
     </uni-swiper-dot>
     <view class="uni-common-mt" id="goods">
       <view class="uni-flex uni-row padding-15">
-        <view class="text col-34 larger" style="color: #ED2856;margin: auto;">¥ {{detailInfo.price && detailInfo.price.invoicePrice || '暂无价格!'}}</view>
+        <view class="text col-34 larger" style="color: #ed2856;margin: auto;">¥ {{detailInfo.product.invoicePrice}}</view>
         <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
         <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"
               v-if="!ISGUANZHU"></view>
@@ -58,7 +58,7 @@
         </view>
       </view>
       <view v-show="ActListInfo.length>0" v-else class="uni-flex uni-row padding-8">
-        <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
+        <view class="col text smaller">活&nbsp;动：</view>
         <view class="col-70 text" @click="showAct">
           <view class="smaller product-detail-lei3">{{CheckActivityInfo.title}}</view>
         </view>
@@ -66,7 +66,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-      <pro-com-act :info="ActInfo" :show.sync="isShowAct" @isCheckAct="checkedAct"></pro-com-act>
+       <pro-com-act :info="ActInfo" :show.sync="isShowAct" @isCheckAct="checkedAct"></pro-com-act>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
@@ -245,8 +245,45 @@ export default {
       if (code === '1') {
         this.productNum = 1;
         console.log(data);
-        data.price.invoicePrice = data.price.invoicePrice.toFixed(2);
+        // data.price.invoicePrice = data.price.invoicePrice.toFixed(2);
+
+        // 价格 优先级
+        if (!data.product.isSale) {
+          if (data.composes.length > 0 && data.arbitrages.length > 0) {
+            data.product.invoicePrice = Number(data.composes[0].promotionPrice).toFixed(2);
+            console.log(1);
+          } else if (data.composes && data.composes.length > 0) { // 组合
+            data.product.invoicePrice = Number(data.composes[0].promotionPrice).toFixed(2);
+            console.log(2);
+          } else if (data.arbitrages && data.arbitrages.length > 0) { // 套餐
+            console.log(3);
+            data.product.invoicePrice = Number(data.arbitrages[0].promotionPrice).toFixed(2);
+          } else {
+            console.log(4);
+            data.product.invoicePrice = '营销活动进行中';
+          }
+        } else {
+          if (data.flashSales && data.flashSales.length > 0) { // 抢单
+            console.log(5);
+            data.product.invoicePrice = Number(data.flashSales[0].promotionPrice).toFixed(2);
+          } else if (data.composes && data.composes.length > 0) { // 组合
+            console.log(6);
+            console.log(data.composes[0].promotionPrice);
+            data.product.invoicePrice = Number(data.composes[0].promotionPrice).toFixed(2);
+          } else if (data.arbitrages && data.arbitrages.length > 0) { // 套餐
+            console.log(7);
+            data.product.invoicePrice = Number(data.arbitrages[0].promotionPrice).toFixed(2);
+          } else if (data.price.invoicePrice) {
+            console.log(8);
+            data.product.invoicePrice = Number(data.price.invoicePrice).toFixed(2);
+          } else {
+            console.log(9);
+            data.product.invoicePrice = '价格待公布';
+          }
+        }
+
         this.detailInfo = data;
+        console.log(this.detailInfo);
         this.footButtong.isSale = this.detailInfo.product.isSale;
         if (this.detailInfo.activities.length > 0) {
           this.detailInfo.activities.forEach((ee) => {
@@ -263,6 +300,7 @@ export default {
             title: '特价版本',
             isMore: true,
             isSe: true,
+            isT: false,
             list: []
           };
           this.detailInfo.tjPrice.tj.forEach((lis) => {
@@ -285,6 +323,7 @@ export default {
             title: '工程版本',
             isMore: true,
             isSe: true,
+            isT: true,
             list: []
           };
           this.detailInfo.tjPrice.gc.forEach((lis) => {
@@ -307,6 +346,7 @@ export default {
             title: '样机版本',
             isMore: true,
             isSe: true,
+            isT: true,
             list: []
           };
           this.detailInfo.tjPrice.yj.forEach((lis) => {
@@ -329,6 +369,7 @@ export default {
             title: '套餐',
             isMore: false,
             isSe: true,
+            isT: false,
             list: []
           };
           this.detailInfo.arbitrages.forEach((lis) => {
@@ -347,6 +388,7 @@ export default {
             title: '组合',
             isMore: false,
             isSe: true,
+            isT: false,
             list: []
           };
           this.detailInfo.composes.forEach((lis) => {
@@ -365,6 +407,7 @@ export default {
             title: '抢单',
             isMore: false,
             isSe: true,
+            isT: false,
             list: []
           };
           this.detailInfo.flashSales.forEach((lis) => {
@@ -377,11 +420,13 @@ export default {
           });
           this.ActInfo.push(qd);
         }
-        if (this.detailInfo.isOmsSample) {
+        if (Number(this.detailInfo.isOmsSample)) { // 调货
+          this.ActListInfo.push('调货');
           const dh = {
             title: '调货',
-            isMore: false,
+            isMore: true,
             isSe: true,
+            isT: false,
             list: []
           };
           this.detailInfo.omsSamples.forEach((lis) => {
@@ -398,11 +443,22 @@ export default {
       }
       console.log(data);
       console.log(this.ActInfo);
+      this.ActInfo.forEach((item) => {
+        item.list.forEach((item) => {
+          item.kou = Number(item.kou).toFixed(2);
+          item.time = item.time.split(' ')[0];
+          console.log(item.time)
+
+        });
+      });
     },
     async getHostLost() {
       const { code, data } = await this.productDetailService.productHostList(this.userInf.customerCode, this.defaultSendTo.customerCode);
       if (code === '1') {
         this.hostList = data;
+        this.hostList.forEach(item => {
+          item.price = Number(item.price).toFixed(2);
+        });
       }
       console.log(data);
     },
@@ -487,7 +543,7 @@ export default {
       this.productNum = e;
     },
     checkedAct(e, n) { // 活动选择的内容
-      console.log('55555555555',n);
+      console.log('55555555555', n);
       this.CheckActivityInfo = n;
       if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本')) {
         this.footButtong.isSaleLe = true;
@@ -546,6 +602,14 @@ export default {
           this.jiaGou1('TJ', 1);
         } else if (this.CheckActivityInfo.titleLe === '工程版本') {
           this.jiaGou1('GC', 1);
+        } else if (this.CheckActivityInfo.titleLe === '样机版本') {
+          let YJ = '';
+          this.detailInfo.tjPrice.yj.map((item) => {
+            YJ = item.priceType;
+          });
+          this.jiaGou1(YJ, 1);
+        } else if (this.CheckActivityInfo.titleLe === '调货') {
+          this.jiaGou1('PT', 1);
         }
       }
     },
@@ -561,9 +625,16 @@ export default {
       });
     },
     async jiaGou1(pt, num1) { // 提交验证码之后
+      // this.CheckActivityInfo
+      let stockV = '';
+      if (pt === 'PT') {
+        stockV = this.CheckActivityInfo.name;
+      } else {
+        stockV = '';
+      }
       const product = [{ priceType: pt,
-        priceVersion: '',
-        stockVersion: '',
+        priceVersion: this.CheckActivityInfo.name,
+        stockVersion: stockV,
         productCode: this.productCode,
         number: this.productNum }];
       const { code } = await this.cartService.addToCart({
@@ -576,11 +647,11 @@ export default {
       });
       if (code === '1') {
         uni.showToast({
-          title: '提交成功',
+          title: '加入购物车成功',
         });
       } else {
         uni.showToast({
-          title: '提交失败请重试',
+          title: '加入购物车成功失败请重试',
         });
       }
     },

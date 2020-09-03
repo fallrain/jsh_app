@@ -350,8 +350,8 @@ export default {
         if (tabs && tabs[0].children.length > 0) {
           console.log(2222222);
           tabs[0].children.forEach((ele) => {
-            console.log(33333333);
-            console.log(ele);
+            // console.log(33333333);
+            // console.log(ele);
             if (ele.checked) {
               // 根据库位判断库存数量
               let num = 0;
@@ -547,6 +547,7 @@ export default {
             v.amount = 1;
             v.$PtPrice = allPriceData[v.code].pt;
             v.$PtPrice.invoicePrice = Number(v.$PtPrice.invoicePrice).toFixed(2);
+            // console.log('111111111111111111111111111111111',v.$PtPrice.invoicePrice)
             v.$allPrice = allPriceData[v.code];
           });
         }
@@ -655,24 +656,39 @@ export default {
             brandGroup += (`${item.PROD}:${item.SWRH};`);
           });
           temp.data.data[0].brandGroup = brandGroup;
-          console.log(brandGroup);
+          console.log('44444444444444444444444444',brandGroup);
         }
         this.cargoSendWay = temp.data.data;
         if (this.cargoSendWay) {
           const tempArray = [];
-          this.cargoSendWay.map((item) => {
-            // console.log(item.sendWay)
-            const temp = {
-              name: item.sendWay,
-              checked: false,
-              type: item.brandGroup
-            };
-            tempArray.push(temp);
+          this.cargoSendWay.forEach(item => {
+            if (item.sendWay === '统仓统配') {
+              const temp = {
+                name: item.sendWay,
+                checked: false,
+                type: item.brandGroup
+              };
+              tempArray.push(temp);
+            }
+            if (item.sendWay === '客户自有仓') {
+              console.log(item);
+              let brandGroup = '';
+              item.PRODandSWRH.map(item => {
+                brandGroup += (`${item.PROD}:${item.SWRH};`);
+              });
+              console.log(brandGroup);
+              const temp = {
+                name: item.sendWay,
+                checked: false,
+                type: brandGroup
+              };
+              tempArray.push(temp);
+            }
           });
           this.popTabs[1].children = tempArray;
         }
       }
-      console.log(this.cargoSendWay);
+      console.log('sssssssssssssssssssssss', this.cargoSendWay);
       console.log(this.popTabs);
       this.popTabs[0].children[0].checked = true;
       this.popTabs[1].children[0].checked = true;

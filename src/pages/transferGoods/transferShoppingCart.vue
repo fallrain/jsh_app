@@ -608,7 +608,7 @@ export default {
                   a.isShow = true;
                   needPay += Number(v.SUMMONEY);
                   pays.push(a.payerCode);
-                  console.log(pays)
+                  console.log(pays);
                 }
               }
             });

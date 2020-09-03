@@ -85,7 +85,8 @@ export default {
       // 订单返回数据
       orderData: [],
       // 提交订单单号
-      seq: 0
+      seq: 0,
+      index: 0
 
     };
   },
@@ -217,33 +218,45 @@ export default {
       if (dispose.code === '1' && dispose.data.code === '200') {
         console.log(dispose.data.data[0]);
         const page = dispose.data.data[0];
+        const _this = this;
         console.log(page);
         if (page) {
           console.log(2222222);
-          page.orderList.forEach((item) => {
-            console.log(item.ISFLAG);
-            if (item.ISFLAG == '订单提交中') {
+
+          if (page.orderList.find(item => item.ISFLAG == '订单提交中')) {
+            if (this.index <= 20) {
               uni.showLoading({
                 title: '加载中'
               });
-            } else {
-              console.log(4444444444444);
+              setTimeout(() => {
+                _this.getCargoDispose();
+                _this.index += 1;
+              }, 1000);
+            } else { // todo
+              this.index = 0;
+              uni.showLoading({
+                title: '订单提交失败，请重试'
+              });
               uni.hideLoading();
-              this.allOrderList.forEach((ele, i) => {
-                if (this.seq == ele.data.IBR_SEQ) {
-                  this.allOrderList.splice(i, 1);
-                }
-              });
-              console.log(5555555555555555555555);
-              this.cancel();
-              this.orderData = JSON.stringify(dispose.data.data);
-              console.log(this.orderData);
-              uni.navigateTo({
-                url: `/pages/shoppingCart/orderConfirmAccept?seqList=${this.seq}&orderData=${this.orderData}`
-              });
-              console.log(111);
             }
-          });
+          } else {
+            this.index = 0;
+            console.log(4444444444444);
+            uni.hideLoading();
+            this.allOrderList.forEach((ele, i) => {
+              if (this.seq == ele.data.IBR_SEQ) {
+                this.allOrderList.splice(i, 1);
+              }
+            });
+            console.log(5555555555555555555555);
+            this.cancel();
+            this.orderData = JSON.stringify(dispose.data.data);
+            console.log(this.orderData);
+            uni.navigateTo({
+              url: `/pages/shoppingCart/orderConfirmAccept?seqList=${this.seq}&orderData=${this.orderData}`
+            });
+            console.log(111);
+          }
         }
       }
     },

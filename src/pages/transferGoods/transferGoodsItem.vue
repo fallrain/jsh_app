@@ -245,7 +245,7 @@ export default {
 }
 
 .jGoodsItem-cnt-goodsName {
-//   width:464px;
+   width:440px;
 //   height:68px;
   font-size: 24px;
   font-weight: 400;
@@ -257,7 +257,7 @@ export default {
   width: 40px;
   font-size: 30px;
   position: absolute;
-  right: 0px;
+  right: -10px;
   top: 36px;
   color: #ED2856;
 }
