@@ -32,12 +32,12 @@
         <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
           rebatePolicy}}
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney || 0}}
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ {{priceInf.invoicePrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice}}
+        <view class="jGoodsItem-cnt-price">{{priceInf.invoicePrice?'¥'+priceInf.invoicePrice: '价格即将公布敬请关注'}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice || '--'}}
         </view>
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
