@@ -11,10 +11,7 @@ export default {
   },
   getCustomer() {
     /* 获取售达方 */
-    return jGet(urls.getCustomer, {}, {
-      noLoading: true,
-      noToast: true
-    });
+    return jGet(urls.getCustomer);
   },
   getSendCustomer(params) {
     /* 获取送达方 */
