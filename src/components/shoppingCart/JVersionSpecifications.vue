@@ -42,7 +42,7 @@
               :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
               v-for="(version,vIndex) in item.list"
               :key="vIndex"
-              @tap="handleClick(version,item.list,index)"
+              @tap="handleClick(version,item.list,index,vIndex)"
             >
               <view
                 class="jVersionSpecifications-pop-detail-item-check"
@@ -127,10 +127,14 @@ export default {
       type: Array,
       default: () => []
     },
-    // 类型: radio(单选) checkbox（多选）
+    // 类型: radio(单选) checkbox（多选）custom（自定义）
     type: {
       type: String,
       default: 'checkbox'
+    },
+    // 自定义check函数
+    customCheckFun: {
+      type: Function
     },
     // 确认按钮文字
     confirmBtnText: {
@@ -164,26 +168,31 @@ export default {
       /* 关闭弹层 */
       this.$emit('update:show', false);
     },
-    handleClick(version, list, parIndex) {
+    handleClick(version, list, parIndex, vIndex) {
       /* 选择版本 */
-      const curChecked = version.checked;
-      // 除了当前版本，其他版本的选择都取消
-      this.versionData.forEach((v, index) => {
-        // checkbox模式下可在当前版本里多选
-        if (this.type === 'checkbox') {
-          if (parIndex !== index) {
+      if (this.type === 'custom') {
+        this.versionData = this.customCheckFun(this.versionData, list, parIndex, vIndex);
+      } else {
+        const curChecked = version.checked;
+        // 除了当前版本，其他版本的选择都取消
+        this.versionData.forEach((v, index) => {
+          // checkbox模式下可在当前版本里多选
+          if (this.type === 'checkbox') {
+            if (parIndex !== index) {
+              v.list.forEach((otherItem) => {
+                otherItem.checked = false;
+              });
+            }
+          } else {
+            // radio模式下，只能单选
             v.list.forEach((otherItem) => {
               otherItem.checked = false;
             });
           }
-        } else {
-          // radio模式下，只能单选
-          v.list.forEach((otherItem) => {
-            otherItem.checked = false;
-          });
-        }
-      });
-      version.checked = !curChecked;
+        });
+        version.checked = !curChecked;
+      }
+
       this.$emit('change', this.versionData);
     },
     toggleExpand(item) {

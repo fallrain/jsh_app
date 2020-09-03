@@ -144,7 +144,8 @@
     <j-version-specifications
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
-      type="radio"
+      :customCheckFun="specificationsCustomCheckFun"
+      type="custom"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
     >
@@ -562,6 +563,79 @@ export default {
         }
       }
       this.specificationsList = specificationsList;
+    },
+    specificationsCustomCheckFun(versionData, list, parIndex, curIndex) {
+      /* 版本价格自定义check fun */
+      const parent = versionData[parIndex];
+      const version = list[curIndex];
+      const curChecked = !version.checked;
+      // 如果取消的话,直接修改并返回
+      if (!curChecked) {
+        version.checked = false;
+        versionData[parIndex].list[curIndex] = version;
+        return versionData;
+      }
+      const checkedList = [];
+      versionData.forEach((vs) => {
+        vs.list.forEach((v, index) => {
+          if (v.checked) {
+            checkedList.push({
+              ...v,
+              $parentId: vs.id,
+              $choseIndex: index
+            });
+          }
+        });
+      });
+      const {
+        priceType
+      } = version;
+      // 工程、特价map
+      const map = {
+        GC: 1,
+        TJ: 1
+      };
+      function setCheck() {
+        version.checked = true;
+        versionData[parIndex].list[curIndex] = version;
+      }
+      const checkedListLen = checkedList.length;
+      if (!checkedListLen) {
+        setCheck();
+      } else {
+        for (let i = 0; i < checkedListLen; i++) {
+          const checkVersion = checkedList[0];
+          // 父元素一致直接设置
+          if (checkVersion.$parentId === parent.id) {
+            setCheck();
+            // 取消之前的
+            versionData.find(v => v.id === parent.id).list[checkVersion.$choseIndex].checked = false;
+          } else {
+            // 工程、特价可以和版本调货共存
+            if ((map[checkVersion.priceType] && !priceType) || (map[priceType] && !checkVersion.priceType)) {
+              version.checked = true;
+              versionData[parIndex].list[curIndex] = version;
+              if (checkedListLen > 1) {
+                const otherKey = i === 1 ? 0 : 1;
+                // 取消另一个
+                versionData.find(v => v.id === checkedList[otherKey].$parentId).list[checkedList[otherKey].$choseIndex].checked = false;
+              }
+            } else if (checkedListLen === 1) {
+              setCheck();
+              // 取消之前的
+              versionData.find(v => v.id === checkVersion.$parentId).list[checkVersion.$choseIndex].checked = false;
+            } else {
+              const str = getGoodsInCartPriceType()[checkVersion.priceType] || '调货';
+              const compareStr = getGoodsInCartPriceType()[priceType] || '调货';
+              uni.showModal({
+                title: '提示',
+                content: `${str}版本和${compareStr}版本不能共存`
+              });
+            }
+          }
+        }
+      }
+      return versionData;
     },
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */

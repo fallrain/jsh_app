@@ -644,6 +644,8 @@ export default {
             ...prdt,
             // 存在版本调货，则传版本调货提供的数量
             number: transferVersion ? transferVersionNumber : v.number,
+            // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
+            creditModel: v.isCreditMode === '0' ? '0' : prdt.creditModel,
             // 是否信用模式
             isCheckCreditModel: v.isCreditMode ? '1' : '0',
             // farWeek: prdt.weekPromise,
