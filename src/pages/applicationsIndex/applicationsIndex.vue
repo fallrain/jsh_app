@@ -536,9 +536,6 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
-      this[USER.UPDATE_SALE_ASYNC]();
-      this.getUserType(this.saleInfo.customerCode);
-
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
