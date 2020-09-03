@@ -331,7 +331,7 @@ export default {
         this.cartSubmit(verifyCo,verifyK);
       } else {
         uni.showToast({
-          title: '提交失败请重试',
+          title: data.message,
         });
       }
     },
