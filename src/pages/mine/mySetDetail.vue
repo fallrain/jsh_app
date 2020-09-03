@@ -17,13 +17,13 @@
             <view class="title" @click="alertPayPwdClick">更改支付密码</view>
         </view>
         <view class="middleLine"></view>
-        <view class="row">
+        <!-- <view class="row">
             <view class="title">评价</view>
         </view>
         <view class="line"></view>
         <view class="row">
             <view class="title">新消息提醒</view>
-        </view>
+        </view> -->
         <view class="line"></view>
         <view class="row">
             <view class="title">清除缓存</view>
@@ -32,9 +32,10 @@
 
         <view class="row">
             <view class="title">检查更新</view>
+             <view class="version">{{version}}</view>
         </view>
 
-		<button class="btnStyle">退出登录</button>
+		<button @click="loginOutAction" class="btnStyle">退出登录</button>
 
     </view>
 </template>
@@ -49,7 +50,7 @@ export default {
   data() {
     // 这里存放数据
     return {
-
+      version:''
     };
   },
   // 监听属性 类似于data概念
@@ -58,15 +59,22 @@ export default {
   watch: {},
   // 生命周期 - 创建完成（可以访问当前this实例）
   created() {
-
+    AlipayJSBridge.call('myApiAppVersion', {
+    }, (result) => {
+      this.version = result.version;
+    });
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {
-
+    
   },
   activated() { }, // 如果页面有keep-alive缓存功能，这个函数会触发
   // 方法集合
   methods: {
+    // 退出登录
+    loginOutAction(){
+      AlipayJSBridge.call('popWindow');
+    },
     //   个人资料
     personInforClick() {
       uni.navigateTo({
@@ -111,6 +119,13 @@ export default {
 .row {
     height: 96px;
     background:rgba(255,255,255,1);
+    display: flex;
+    justify-content: space-between;
+}
+.version {
+  line-height:96px;
+  font-size: 25px;
+  margin-right: 30px;
 }
 .line {
     margin-left: 24px;
