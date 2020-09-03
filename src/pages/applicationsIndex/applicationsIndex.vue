@@ -459,7 +459,7 @@ export default {
 	  AlipayJSBridge.call('myApiGetCode', {
 	    param1: 'JsParam1',
 	  }, (result) => {
-	      if (result.code.length > 1) {
+	      if (result.code && result.code.length > 1) {
 	          this.init(result.code);
 	      }
 	  });
@@ -536,13 +536,17 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
+      // 取token比较
+      if(this.tokenUserInf && (this.tokenUserInf.code == passCode)) {
+        return;
+      }
       const { code, data } = await this.authService.getTokenByCode({
         code: passCode
       });
       if (code === '1') {
+        token.code = passCode;
         const token = data.token;
         uni.setStorageSync('token', token);
-
         this[USER.UPDATE_SALE_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
       }
