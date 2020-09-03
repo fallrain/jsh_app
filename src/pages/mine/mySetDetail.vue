@@ -59,7 +59,7 @@ export default {
   watch: {},
   // 生命周期 - 创建完成（可以访问当前this实例）
   created() {
-    AlipayJSBridge.call('myApiCallCCB', {
+    AlipayJSBridge.call('myApiAppVersion', {
     }, (result) => {
       this.version = result;
     });
