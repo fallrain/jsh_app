@@ -635,7 +635,7 @@ export default {
       }
 
       // MDM冻结
-      if (data.status == 1) {
+      if (data.state == 1) {
         this.loadUserType = true;
         this.errorMsg = `${this.errorMsg}抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。`;
       }
