@@ -668,7 +668,14 @@ export default {
             number,
             productList
           } = v;
-            // 检查最大可购买数量，超出提示并返回
+          if (!number) {
+            this.showToast({
+              type: 'warn',
+              content: '请先选择数量'
+            });
+            return;
+          }
+          // 检查最大可购买数量，超出提示并返回
           const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
           if (number > maxNum) {
             uni.showModal({

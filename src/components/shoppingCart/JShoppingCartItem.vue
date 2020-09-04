@@ -54,7 +54,6 @@
             小计：¥{{totalChosePrice}}
           </view>
           <uni-number-box
-            :value="goods.number"
             :max="maxGoodsNumber"
             :min="1"
             @change="goodsNumChange"

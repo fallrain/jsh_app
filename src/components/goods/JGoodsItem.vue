@@ -43,6 +43,8 @@
       </view>
       <view class="jGoodsItem-cnt-opts">
         <uni-number-box
+          :max="maxGoodsNumber"
+          :min="1"
           @change="goodsNumChange"
         ></uni-number-box>
         <button
@@ -158,6 +160,7 @@ export default {
   },
   data() {
     return {
+      maxGoodsNumber: Number.MAX_VALUE,
       // 是否显示加入购物车按钮
       isShowAddCart: true,
       // 显示选择商品版本弹层
@@ -451,6 +454,11 @@ export default {
       /* 每个选择的版本都分别加入购物车 */
       // todo 此接口存在风险，调用次数过于多
       const productSpecificationsList = this.genProductSpecificationsList();
+      const noNumberObj = productSpecificationsList.find(v => !v.number);
+      if (noNumberObj) {
+        this.showCartToast('请先选择数量');
+        return;
+      }
       if (productSpecificationsList.length) {
         // 每个产品的版本都调用加购物车接口
         const addToCartPromise = productSpecificationsList.map(product => this.addToCart(product));
@@ -477,6 +485,14 @@ export default {
       this.$refs.toast.open({
         type: 'success',
         content: '加入购物车成功',
+        timeout: 2000,
+      });
+    },
+    showCartToast(content) {
+      /* 展示购物车错误提示 */
+      this.$refs.toast.open({
+        type: 'warn',
+        content,
         timeout: 2000,
       });
     },
@@ -516,6 +532,10 @@ export default {
       let isTransfer;
       // product不传则默认普通类型
       if (!product) {
+        if (!number) {
+          this.showCartToast('请先选择数量');
+          return Promise.reject();
+        }
         choseVersion = false;
         product = {
           priceType: 'PT',
