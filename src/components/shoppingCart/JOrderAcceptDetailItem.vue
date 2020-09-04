@@ -59,7 +59,7 @@
           <view class="text-333 fs20">预计到货时间：{{orderItem.planInDate}}</view>
           <view class="dis-flex">
             <view class="fs32 text-theme">
-              {{orderItem.productPrice}}
+              {{toFixedNum(orderItem.productPrice)}}
               <text class="fs24 text-333">*{{orderItem.num}}</text>
             </view>
           </view>
@@ -85,8 +85,8 @@
     <view
       :class="['item-bottom', status===2&&'bg-primary']">
       <view class="fs24">共计金额：</view>
-      <view v-if="status===2" class="">{{orderItem.IBL_SUMMONEY}}</view>
-      <view v-if="status===1" class="">{{orderItem.productTotalMoney}}</view>
+      <view v-if="status===2" class="">{{toFixedNum(orderItem.IBL_SUMMONEY)}}</view>
+      <view v-if="status===1" class="">{{toFixedNum(orderItem.productTotalMoney)}}</view>
     </view>
   </view>
 </template>
@@ -114,9 +114,14 @@ export default {
     };
   },
   created() {
-    console.log(this.orderItem)
+    console.log(this.orderItem);
   },
   computed: {
+    toFixedNum() {
+      return function (val) {
+        return (new Number(val)).toFixed(2);
+      };
+    }
   },
   methods: {
     orderDetail() {

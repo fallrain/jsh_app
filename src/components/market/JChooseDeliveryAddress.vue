@@ -37,7 +37,7 @@
                     class="iconfont icondui"
                   ></i>
                 </view>
-                <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.addressName}}</view>
+                <view class="jChooseDeliveryAddressDrawer-item-cnt">({{item.addressCode}}){{item.address}}</view>
               </view>
             </view>
           </view>

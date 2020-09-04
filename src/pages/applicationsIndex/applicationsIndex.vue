@@ -13,7 +13,7 @@
             class="app-nav-left-menu">
             <image src="@/assets/img/appIndex/liebiao.png"></image>
           </view>
-          <view class="fs24 text-333">王芬芬，您好！</view>
+          <view class="fs24 text-333">{{tokenUserInf.nickname}}，您好！</view>
 		  <!-- <view @click="callBBC">建行支付测试</view>
       <view @click="callABC">农行支付测试</view>
 		  <view @click="popAction">返回测试</view> -->
@@ -128,7 +128,7 @@
               <image src="@/assets/img/appIndex/4.png"></image>
             </view>
             <view class="drawer-header-info">
-              <view class="fs34 text-333 lh48">王芬芬，您好。</view>
+              <view class="fs34 text-333 lh48">{{tokenUserInf.nickname}}，您好。</view>
               <view class="fs24 text-666">职务：总经理</view>
             </view>
           </view>
@@ -551,6 +551,7 @@ export default {
         uni.setStorageSync('code', passCode);
         // alert('已经存储token'+this.saleInfo.customerCode)
         await this[USER.UPDATE_SALE_ASYNC]();
+        await this[USER.UPDATE_TOKEN_USER_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
       }
     },

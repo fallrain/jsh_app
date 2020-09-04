@@ -17,7 +17,7 @@
         整单：{{orderItem.groupingCode}}
       </view>
       <view class="item-content">
-        整单金额：{{orderItem.payAmount}}
+        整单金额：{{toFixedNum(orderItem.payAmount)}}
       </view>
       <view class="item-content">
         送达方：({{orderItem.saletoCode}}){{orderItem.sendtoAddress}}
@@ -37,7 +37,7 @@
         库位：{{orderItem.OUTWHNAME}}
       </view>
       <view class="item-content">
-        总计：{{orderItem.TOTALPRICES}}
+        总计：{{toFixedNum(orderItem.TOTALPRICES)}}
       </view>
     </view>
   </view>
@@ -84,6 +84,11 @@ export default {
   onLoad() {
   },
   computed: {
+    toFixedNum() {
+      return function (val) {
+        return (new Number(val)).toFixed(2);
+      };
+    }
   },
   methods: {
     orderDetail() {

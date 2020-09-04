@@ -38,7 +38,7 @@
     <view class="orderConfirm-btm j-flex-aic">
       <view class="dis-flex">
         <view class="orderConfirm-btm-text">实付总额：</view>
-        <view class="orderConfirm-btm-price">¥{{dataInfo.totalMoney}}</view>
+        <view class="orderConfirm-btm-price">¥{{toFixedNum(dataInfo.totalMoney)}}</view>
       </view>
       <view class="btn-style">
         <button
@@ -197,7 +197,12 @@ export default {
     ...mapGetters({
       saleInfo: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO
-    })
+    }),
+    toFixedNum() {
+      return function (val) {
+        return (new Number(val)).toFixed(2);
+      };
+    }
   },
   watch: {
     sendMessageStatus(val) {
@@ -353,9 +358,9 @@ export default {
         uni.showToast({
           title: '取消订单成功'
         });
-        this.setTimeout(() => {
+        setTimeout(() => {
           that.goIndex();
-        }, 2000);
+        }, 1000);
       }
     },
     // 返回首页
