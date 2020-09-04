@@ -75,11 +75,11 @@
     </view>
     <view class="mineBaseInfo">
       <view class="mineBaseInfo-group">
-        <j-cell :titleWrap="false" title="子账号">
+        <!-- <j-cell :titleWrap="false" title="子账号">
           <template #right>
             <view class="mineBaseInfo-right">{{baseList.subAccount}}<view @click="viewDetail" class="mineBaseInfo-detail">查看详情</view></view>
           </template>
-        </j-cell>
+        </j-cell> -->
         <j-cell :titleWrap="false" title="省/市/区/县">
           <template #right>
             <view class="mineBaseInfo-right">{{baseList.addressProvinceCityArea}}</view>
