@@ -319,7 +319,7 @@ export default {
             price: v.invoicePrice,
             time: v.endDate && v.endDate.substring(0, 10),
             num: v.usableQty,
-            priceType: v.priceType,
+            priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
             checked: false
           }));
           specificationsList.push(tjVersion);
@@ -338,7 +338,7 @@ export default {
           price: v.invoicePrice,
           time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
-          priceType: v.priceType,
+          priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
           checked: false
         }));
         specificationsList.push(version);
@@ -357,7 +357,7 @@ export default {
           price: v.invoicePrice,
           time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
-          priceType: v.priceType,
+          priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
           checked: false
         }));
         specificationsList.push(version);
