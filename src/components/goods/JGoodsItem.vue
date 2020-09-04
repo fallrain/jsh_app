@@ -32,12 +32,12 @@
         <view class="jGoodsItem-cnt-price-tips-item">返利：{{goods.$PtPrice && goods.$PtPrice.rebatePolicy |
           rebatePolicy}}
         </view>
-        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney || 0}}
+        <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
       <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">¥ {{priceInf.invoicePrice}}</view>
-        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice}}
+        <view class="jGoodsItem-cnt-price">{{priceInf.invoicePrice?'¥'+priceInf.invoicePrice: '价格即将公布敬请关注'}}</view>
+        <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice || '--'}}
         </view>
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
@@ -297,7 +297,9 @@ export default {
         tags
       } = this.allPrice;
       const {
-        isSale
+        isSale,
+        // oms版本调货
+        omsSamples
       } = this.goods;
         // 是否存在工程或则样机
       let isGcOrYj = false;
@@ -315,7 +317,7 @@ export default {
           tjVersion.list = tj.specialList.map(v => ({
             name: v.versionCode,
             price: v.invoicePrice,
-            time: v.endDate,
+            time: v.endDate && v.endDate.substring(0, 10),
             num: v.usableQty,
             priceType: v.priceType,
             checked: false
@@ -334,7 +336,7 @@ export default {
         version.list = gc.projectList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
-          time: v.endDate,
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType,
           checked: false
@@ -353,13 +355,31 @@ export default {
         version.list = yjList.map(v => ({
           name: v.versionCode,
           price: v.invoicePrice,
-          time: v.endDate,
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType,
           checked: false
         }));
         specificationsList.push(version);
         isGcOrYj = true;
+      }
+      // oms调货版本信息
+      if (omsSamples && omsSamples.length) {
+        const version = {
+          id: 'transfer',
+          title: 'OMS调货',
+          isExpand: true,
+          list: []
+        };
+        version.list = omsSamples.map(v => ({
+          ...v,
+          priceVersion: v.versionCode,
+          name: v.versionCode,
+          price: v.invoicePrice,
+          num: v.usableQty,
+          checked: false
+        }));
+        specificationsList.push(version);
       }
       this.specificationsList = specificationsList;
       // 当产品isSale为false，且没有工程或样机时，列表页不显示加入购物车按钮，显示查看详情按钮
@@ -414,13 +434,14 @@ export default {
       /* 组合选择的各个规格的产品 */
       const {
         productCode,
-        number
+        number,
+        priceType
       } = this.goods;
       return this.specificationsCheckList.map(v => ({
         priceType: v.priceType,
         priceVersion: v.name,
         productCode,
-        number,
+        number: priceType ? number : v.num,
       }));
     },
     addToCartForEveryVersion() {
@@ -488,6 +509,8 @@ export default {
       } = this;
       // 是否选择了版本
       let choseVersion = true;
+      // 是否是调货
+      let isTransfer;
       // product不传则默认普通类型
       if (!product) {
         choseVersion = false;
@@ -497,6 +520,12 @@ export default {
           productCode,
           number,
         };
+      } else {
+        // 调货算普通
+        if (!product.priceType) {
+          product.priceType = 'PT';
+          isTransfer = true;
+        }
       }
       return this.cartService.addToCart({
         // 商品组合编码
@@ -504,7 +533,7 @@ export default {
         // 组合类型(1单品2组合3抢购4套餐5成套)
         activityType: choseVersion ? 1 : (activityType || 1),
         // 购买的数量(组合就是组合的数量)
-        number,
+        number: isTransfer ? product.number : number,
         //  促销活动价格类型
         //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
         priceType,
@@ -518,7 +547,7 @@ export default {
         // 送达方编码
         sendtoCode,
         // 版本调货版本号
-        transferVersionCode: '',
+        transferVersionCode: isTransfer ? product.priceVersion : '',
         // 促销活动版本号
         versionCode: '',
       });

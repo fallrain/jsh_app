@@ -84,9 +84,9 @@ function getGoodsInCartPriceType() {
     YJCY: '样机',
     MFJK: '样机',
     MFYJ: '样机',
-    MFYJJS: '免费样机结算',
-    YPJ: '样品机',
-    CTYJ: '成套样机'
+    MFYJJS: '样机',
+    YPJ: '样机',
+    CTYJ: '样机'
   };
 }
 

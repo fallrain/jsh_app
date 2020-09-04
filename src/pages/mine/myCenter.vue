@@ -267,9 +267,9 @@ export default {
     },
     async getUserInfoByToken() {
       /* 获取token用户信息 */
-      if (!this[USER.GET_TOKEN_USER] || JSON.stringify(this[USER.GET_TOKEN_USER]) === '{}') {
-        await this[USER.UPDATE_TOKEN_USER_ASYNC]();
-      }
+      // if (!this[USER.GET_TOKEN_USER] || JSON.stringify(this[USER.GET_TOKEN_USER]) === '{}') {
+      await this[USER.UPDATE_TOKEN_USER_ASYNC]();
+      // }
       this.tokenUserInfo = this[USER.GET_TOKEN_USER] || {};
     },
     async getSaleInfo() {
