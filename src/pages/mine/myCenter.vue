@@ -11,10 +11,14 @@
       <!-- 头像栏 -->
       <view class="headerRow">
         <!-- 头像 -->
-        <view
+        <!-- <view
           @click="sdfClick"
           class="headerImage"
-        ></view>
+        > -->
+        <image class="headerImage" :mode="aspectFill" :src="headerImage"
+                        ></image>
+        <!-- <image :src="headerImage"></image> -->
+        <!-- </view> -->
         <view>
           <view class="nameAndPosion">
             <!-- 姓名职位 -->
@@ -136,6 +140,7 @@ export default {
   components: {},
   data() {
     return {
+      headerImage:require('./image/head.png'),
       // 用户信息
       tokenUserInfo: {},
       // 售达方信息
@@ -246,6 +251,9 @@ export default {
   },
   created() {
     this.setPageInfo();
+  },
+  mounted() {
+    this.headerImage = this.userInf.headImgUrl ? this.userInf.headImgUrl : require('./image/head.png') ;
   },
   computed: {
     ...mapGetters({
@@ -380,8 +388,8 @@ export default {
   .headerImage {
     width: 160px;
     height: 160px;
-    margin-left: 50px;
-    background-color: antiquewhite;
+    border-radius: 80px;
+    margin-left: 30px;
   }
 
   .nameAndPosion {
@@ -488,7 +496,7 @@ export default {
     line-height: 40px;
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: 440px;
+    margin-left: 420px;
   }
 
   .order-cataloglist {
