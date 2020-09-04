@@ -68,7 +68,7 @@
             <i class="iconfont iconyou sampleMachineList-drawer-filter-head-icon-right"></i>
           </view>
           <view class="sampleMachineList-drawer-filter-head-ads">
-            ({{curChoseDeliveryAddress.addressCode}}){{curChoseDeliveryAddress.addressName}} </view>
+            ({{curChoseDeliveryAddress.addressCode}}){{curChoseDeliveryAddress.address}} </view>
         </view>
       </template>
     </j-drawer>
@@ -213,7 +213,8 @@ export default {
       const { code, data } = await this.customerService.addressesList('1');
       if (code === '1') {
         data.forEach((item) => {
-          item.name = item.addressName;
+          item.id = item.customerCode;
+          item.name = `(${item.customerCode})${item.address}`;
           if (item.defaultFlag === 1) {
             item.checked = true;
             this.curChoseDeliveryAddress = item;
@@ -224,6 +225,7 @@ export default {
           data[0].checked = true;
         }
         this.deliveryAddressList = data;
+        console.log(this.deliveryAddressList);
       }
       console.log(this.curChoseDeliveryAddress);
       // this.filterForm.saletoCode = this.curChoseDeliveryAddress.customerCode;
@@ -254,7 +256,7 @@ export default {
         });
         this.filterList[0].data = dataObj.brand;
         this.filterList[1].data = dataObj.invsort;
-        console.log(dataObj);
+        console.log(this.filterList);
       }
     },
     silentReSearch() {
@@ -489,6 +491,7 @@ export default {
             id: v.customerCode,
             name: `(${v.customerCode})${v.address}`
           }));
+          console.log(this.deliveryAddressList)
           // 当前配送地址修改
           if (this.deliveryAddressList[0]) {
             this.deliveryAddressList[0].checked = true;
