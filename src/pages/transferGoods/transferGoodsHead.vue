@@ -40,27 +40,28 @@
         </view>
       </view>
     </view>
-    <j-head-tab-picker
+    <transfer-goods-head-tab-picker ref="transferGoodsHeadTabPicker"
       v-for="(pickerItem,pIndex) in popTabs"
       :key="pIndex"
       :index="pIndex"
+      :disable="pickerItem.disable"
       :show.sync="pickerItem.show"
       @showChange="tabPickerShowChange"
       v-model="pickerItem.children"
       @change="tabPickerChange"
       @confirm="confirm"
     >
-    </j-head-tab-picker>
+    </transfer-goods-head-tab-picker>
   </view>
 </template>
 
 <script>
-import JHeadTabPicker from '../../components/form/JHeadTabPicker';
+import transferGoodsHeadTabPicker from './transferGoodsHeadTabPicker';
 
 export default {
   name: 'transferGoodsHead',
   components: {
-    JHeadTabPicker
+    transferGoodsHeadTabPicker
   },
   props: {
     // 顶部tab配置信息

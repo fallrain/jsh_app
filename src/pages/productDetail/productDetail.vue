@@ -611,26 +611,13 @@ export default {
       this.getProductDetail();// 获取产品详情
     },
     checkCut(e) {
-      uni.pageScrollTo({
-        scrollTop: 0
-      });
-      const query = uni.createSelectorQuery().in(this);
-      query.select('#goods').boundingClientRect((res) => {
-        console.log('aaaaa',res);
-        this.goodsHight = res.top;
-      }).exec();
-      query.select('#specs').boundingClientRect((res) => {
-        console.log('bbbb',res);
-        this.specsHight = res.top;
-      }).exec();
-      query.select('#details').boundingClientRect((res) => {
-        console.log('ccccc',res);
-        this.detailsHight = res.top;
-      }).exec();
+      // uni.pageScrollTo({
+      //   scrollTop: 0
+      // });
       if (e < 1) {
         console.log('tou');
         uni.pageScrollTo({
-          scrollTop: this.goodsHight
+          scrollTop: 0
         });
         this.goodsCheck = true;
         this.detailsCheck = false;

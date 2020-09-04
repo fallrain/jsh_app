@@ -6,15 +6,15 @@
         </view>
         <view class="line"></view>
         <view class="row">
-            <view class="title" @click="alertTelClick">修改手机号</view>
+            <view class="title" @click="alertUrl">修改手机号</view>
         </view>
         <view class="line"></view>
         <view class="row">
-            <view class="title" @click="alertLoginPwdClick">修改登录密码</view>
+            <view class="title" @click="alertUrl">修改登录密码</view>
         </view>
         <view class="line"></view>
         <view class="row">
-            <view class="title" @click="alertPayPwdClick">更改支付密码</view>
+            <view class="title" @click="alertUrl">更改支付密码</view>
         </view>
         <view class="middleLine"></view>
         <!-- <view class="row">
@@ -98,8 +98,12 @@ export default {
       uni.navigateTo({
         url: '/pages/mine/myPayAlertPwd'
       });
+    },
+    alertUrl() {
+      uni.navigateTo({
+        url: '/pages/mine/myAlertUrl'
+      });
     }
-
   }
 };
 </script>

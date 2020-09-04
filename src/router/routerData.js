@@ -37,6 +37,7 @@ const data = [
   'pages/mine/myAlertLoginPwd',
   'pages/mine/myGuestView',
   'pages/mine/mySetDetail',
+  'pages/mine/myAlertUrl',
   'pages/sampleMachine/sampleMachineList',
   'pages/sampleMachine/sampleMachineConfirm',
   'pages/concernedProducts/concernedProductsList',
