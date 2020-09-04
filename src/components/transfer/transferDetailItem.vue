@@ -30,7 +30,7 @@
               ></i>
             </view>
             <view class="transferDetailItem-detail-cnt-price-inf">
-                <view class="transferDetailItem-detail-cnt-price">¥ {{good.ADVICEPRICE}}</view>
+                <view class="transferDetailItem-detail-cnt-price">¥ {{good.UNITPRICE}}</view>
             </view>
             <view class="transferDetailItem-detail-cnt-version">
               <view class="transferDetailItem-detail-cnt-inf-mrr">付款方</view>
@@ -75,7 +75,12 @@
         </view>
         <view class="transferDetailItem-detail-mark-item-name">
             <text class="transferDetailItem-detail-mark-item-name-star">直扣:{{(good.BATERATE*100)}}% </text>|
-            <view class="transferDetailItem-detail-mark-item-name-end">返利：{{good.IBL_ISFL}} </view>|
+            <view class="transferDetailItem-detail-mark-item-name-end">返利：
+              <span v-if="good.IBL_ISFL===0">COM</span>
+              <span v-else-if="good.IBL_ISFL===1">BF</span>
+              <span v-else-if="good.IBL_ISFL===2">FHQ</span>
+              <span v-else-if="good.IBL_ISFL===5">BZK</span>
+            </view>|
             <text class="transferDetailItem-detail-mark-item-name-star">台返:{{good.BATEMONEY}}</text>|
             <view class="transferDetailItem-detail-mark-item-name-end">供价:￥{{good.ACTPRICE}}</view>
         </view>
@@ -202,7 +207,7 @@ export default {
           // console.log('hahahhaha', this.goods);
           console.log(index);
           item.IBL_NUM = value;
-          item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
+          item.SUMMONEY = item.IBL_NUM * Number(item.UNITPRICE);
           let sum = 0;
           this.goods.orderList.forEach((ele) => {
             sum += Number(ele.SUMMONEY);
@@ -233,7 +238,7 @@ export default {
       const upDHPay = await this.transfergoodsService.upDHPayMoney({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.saleInfo.customerCode,
-        ACTPRICE: it.ADVICEPRICE, // 执行价格
+        ACTPRICE: it.ACTPRICE, // 执行价格
         BATERATE: item.BATERATE, // 扣率
         ISFL: item.IBL_ISFL, // 返利类型
         ISKPO: item.IBL_ISKPO, // 商空标志
@@ -244,7 +249,7 @@ export default {
         PROCODE: '', // 工程单号
         PROLOSSMONEY: '', // 工程单台损失
         RETAILPRICE: item.ADVICEPRICE, // 零售价
-        UNITPRICE: item.ADVICEPRICE, // 单价
+        UNITPRICE: item.UNITPRICE, // 单价
         RELOSERATE: '0.0000', // 折扣
         VERCODE: '', //  特价版本号
         VERMONEY: '', // 特价单台差额
