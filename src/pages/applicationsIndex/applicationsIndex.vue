@@ -513,9 +513,9 @@ export default {
         });
       } */
     },
-	  // 返回原生
+	  // 返回原生 处理账号锁定
 	  popAction() {
-		  // AlipayJSBridge.call('popWindow');
+		  AlipayJSBridge.call('popWindow');
 	  },
 	  // 打开建行支付
 	  callBBC() {
