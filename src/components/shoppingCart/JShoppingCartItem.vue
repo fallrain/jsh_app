@@ -360,7 +360,8 @@ export default {
       /* 选择的用来显示价格的版本信息 */
       const versions = this.getPriceVersionData(this.goods);
       // 非版本调货的才显示
-      const v = versions.find(vs => vs.priceType) || {};
+      let v = versions.find(vs => vs.priceType) || {};
+      v = JSON.parse(JSON.stringify(v));
       v.invoicePrice = this.jshUtil.formatNumber(v.invoicePrice, 2);
       v.supplyPrice = this.jshUtil.formatNumber(v.supplyPrice, 2);
       v.rebateMoney = this.jshUtil.formatNumber(v.rebateMoney, 2);
