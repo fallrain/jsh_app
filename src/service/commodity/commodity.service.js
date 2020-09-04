@@ -24,6 +24,6 @@ export default {
   },
   show(data) {
     /* 采购首页搜索栏显示数据 */
-    return jPostJson(urls.show, data);
+    return jPostJson(urls.show, data, { noLoading: true, noToast: true });
   }
 };

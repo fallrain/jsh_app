@@ -39,9 +39,11 @@ export default {
   onLoad(options) {
     if (options.orderGroup) {
       this.orderGroupInfo = JSON.parse(options.orderGroup);
-      this.dealPrice();
-      this.status = JSON.parse(options.status);
       console.log(this.orderGroupInfo);
+      this.status = JSON.parse(options.status);
+      if (this.status === 2) {
+        this.dealPrice();
+      }
     }
   },
   methods: {

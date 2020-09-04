@@ -282,7 +282,7 @@ export default {
             if (item.ISFLAG == '订单提交中') {
               const _this = this;
               uni.showLoading({
-                title: '加载中'
+                title: '订单提交中,请稍后。。。'
               });
               setTimeout(() => {
                 _this.getCargoDispose();
@@ -291,11 +291,9 @@ export default {
               uni.hideLoading();
               this.cancel();
               this.orderData = JSON.stringify(dispose.data.data);
-              console.log(this.orderData);
               uni.navigateTo({
-                url: `/pages/shoppingCart/orderConfirmAccept?seqList=${this.seq}&orderData=${this.orderData}`
+                url: `/pages/shoppingCart/orderConfirmAccept?totalMoney=${this.totalMoney}&orderData=${this.orderData}`
               });
-              console.log(111);
             }
           });
         }
