@@ -127,6 +127,12 @@ export default {
     pickerList: {
       type: Array,
       default: () => []
+    },
+    beforeCheckParent: {
+      type: Function
+    },
+    beforeCheck: {
+      type: Function
     }
   },
   data() {
@@ -155,6 +161,9 @@ export default {
       // @isCanBeCheck 能被点才能点击
       // @isSingle 是否没子元素
       if (item.isCanBeCheck === undefined || item.isCanBeCheck) {
+        if (this.beforeCheckParent && !this.beforeCheckParent(item, index)) {
+          return;
+        }
         this.reset(index);
         item.checked = true;
         this.$emit('change', this.pickerList, null, item, !item.isSingle);
@@ -174,6 +183,14 @@ export default {
     },
     checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
+      if (this.beforeCheck && !this.beforeCheck({
+        item,
+        list,
+        parent,
+        parIndex
+      })) {
+        return;
+      }
       list.forEach((v) => {
         v.checked = false;
       });

@@ -36,6 +36,7 @@
         :key="goods.id"
       >
         <j-shopping-cart-item
+          v-if="goods.isShow"
           :ref="'shoppingCartItem'+index"
           :beforeCreditModeChange="checkCreditQuota"
           :goods="goods"
@@ -45,7 +46,6 @@
           :warehouseFlag="choseSendAddress.yunCangFlag"
           @change="goodsChange"
           @del="singleDeleteCart"
-          v-if="goods.isShow"
         ></j-shopping-cart-item>
       </view>
       <view
@@ -75,12 +75,14 @@
       :total-price="totalGoodsPrice"
       @checkAll="checkAll"
       @del="deleteCart"
-      @follow="followGoods"
+      @follow="multiFollowGoods"
       @submit="submitOrder"
     ></j-shopping-cart-btm>
     <j-address-picker
       :show.sync="isShowAdsPicker"
       :pickerList="sendCustomerList"
+      :beforeCheck="adsPickerBeforeCheck"
+      :beforeCheckParent="adsPickerBeforeCheckParent"
       @change="sendCustomerListChange"
     ></j-address-picker>
     <m-toast
@@ -359,6 +361,7 @@ export default {
           data.forEach((v) => {
             if (v.composeEnable === 1) {
               shoppingList.push({
+                ...v,
                 isShow: true,
                 checked: false,
                 // 信用模式
@@ -368,7 +371,8 @@ export default {
                 $PriceInfo: v.productList[0].priceInfo,
                 // 在购物车里更换的其他版本数据，使得计算属性能监控到
                 choseOtherVersions: [],
-                ...v
+                // 关注状态
+                followState: false
               });
             } else {
               failureGoodsList.push({
@@ -459,14 +463,45 @@ export default {
       /* 地址选择展示 */
       this.isShowAdsPicker = true;
     },
+    checkHasCreditMode() {
+      /* 检查是否有开启了信用模式的商品 */
+      return !!this.shoppingList.find(v => v.isCreditMode);
+    },
+    adsPickerBeforeCheckParent(item) {
+      /* 云仓点击前置事件 */
+      let state = true;
+      if (!item.checked && this.checkHasCreditMode()) {
+        this.showToast({
+          type: 'warn',
+          content: '信用产品不支持云仓'
+        });
+        state = false;
+      }
+      return state;
+    },
+    adsPickerBeforeCheck({
+      item,
+      parent,
+    }) {
+      let state = true;
+      if (parent && item && item.yunCangFlag) {
+        // 异地云仓
+        if (this.checkHasCreditMode()) {
+          state = false;
+          this.showToast({
+            type: 'warn',
+            content: '信用产品不支持异地云仓'
+          });
+        }
+      }
+      return state;
+    },
     sendCustomerListChange(list, detail, parent, isShow, type) {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
       // 非扩展操作
       if (type !== 'expand') {
-        // 选中的送达仓库地址
-        this.choseSendAddress = detail || {};
         if (parent) {
           if (detail) {
             // 异地云仓
@@ -476,6 +511,10 @@ export default {
                 yunCangFlag: detail.yunCangFlag,
                 name: detail.name,
               };
+              this.showToast({
+                type: 'warn',
+                content: '海尔将收取一定托管费用'
+              });
             } else {
               // 送达方
               this.choseSendAddress = {
@@ -502,6 +541,10 @@ export default {
                 yunCangFlag: 'yc',
                 name: '云仓',
               };
+              this.showToast({
+                type: 'warn',
+                content: '海尔将收取一定托管费用'
+              });
             } else {
               this.choseSendAddress = {};
             }
@@ -572,16 +615,32 @@ export default {
       const ids = this.failureGoodsList.map(v => v.id);
       this.deleteCart(ids, true);
     },
-    async followGoods() {
+    multiFollowGoods() {
+      // 选出选中的商品的id集合
+      const ids = this.shoppingList.filter(v => v.checked);
+      if (!ids.length) {
+        this.showToast({
+          type: 'warn',
+          content: '请先选择商品'
+        });
+        return;
+      }
+      // todo 接口应该优化
+      for (let i = 0; i < ids.length; i++) {
+        this.followGoods(ids[i]);
+      }
+    },
+    async followGoods(obj) {
       /* 添加关注 */
       const {
         customerCode
       } = this.userInf;
-      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, this.goods.productList[0].productCode);
+      const { code } = await this.productDetailService.productAddInter(customerCode, customerCode, obj.productList[0].productCode);
       if (code === '200') {
-        this.goods.followState = true;
-        this.$emit('change', this.goods, this.index);
+        this.shoppingList.find(v => obj.id === v.id).followState = true;
+        return { code: '1' };
       }
+      return { code: '0' };
     },
     async unfollowGoods() {
       /* 取消关注 */
@@ -609,7 +668,7 @@ export default {
             number,
             productList
           } = v;
-          // 检查最大可购买数量，超出提示并返回
+            // 检查最大可购买数量，超出提示并返回
           const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
           if (number > maxNum) {
             uni.showModal({
@@ -625,7 +684,7 @@ export default {
             // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
             activityType: getOrdinaryCartActivityType()[v.activityType]
           });
-          // 判断产品的取值的字段名
+            // 判断产品的取值的字段名
           let productListName = 'productList';
           // 调货版本号
           let transferVersion;
@@ -648,7 +707,7 @@ export default {
             // 存在版本调货，则传版本调货提供的数量
             number: transferVersion ? transferVersionNumber : v.number,
             // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
-            creditModel: v.isCreditMode === '0' ? '0' : prdt.creditModel,
+            creditModel: !v.isCreditMode ? '0' : prdt.creditModel,
             // 是否信用模式
             isCheckCreditModel: v.isCreditMode ? '1' : '0',
             // farWeek: prdt.weekPromise,
@@ -676,12 +735,25 @@ export default {
         yunCangCode: this.choseSendAddress.yunCangCode,
         yunCangFlag: this.choseSendAddress.yunCangFlag
       };
-      const { code } = await this.orderService.validateProduct(form);
+      const { code, data, msg } = await this.orderService.validateProduct(form, {
+        noToast: true
+      });
       if (code === '1') {
         const args = JSON.stringify(form);
         // 产品校验成功
         uni.navigateTo({
           url: `/pages/shoppingCart/orderConfirm?formData=${args}`
+        });
+      } else {
+        let content;
+        if (data) {
+          content = data[0][0].msg || '请求失败';
+        } else {
+          content = msg || '请求失败';
+        }
+        uni.showModal({
+          title: '',
+          content
         });
       }
     }
