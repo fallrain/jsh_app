@@ -31,7 +31,10 @@
             'jPopPicker-pop-item-icon iconfont icontick',
           ]"
           ></view>
-          <view class="jPopPicker-pop-item-cnt">{{item.value}}</view>
+          <view class="jPopPicker-pop-item-cnt">
+            <text v-if="isShowValue">{{item.value}}</text>
+            <slot v-bind:data="item"></slot>
+          </view>
         </view>
       </scroll-view>
     </view>
@@ -60,6 +63,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 可否被点击
+    isCanBeCheck: {
+      type: Boolean,
+      default: true
+    },
     // picker 标题
     title: {
       type: [
@@ -82,6 +90,15 @@ export default {
     choseOptions: {
       type: Array,
       default: () => []
+    },
+    // 是否显示value
+    isShowValue: {
+      type: Boolean,
+      default: true
+    },
+    // 不能点击时候的回调
+    cantCheckedCallback: {
+      type: Function
     }
   },
   data() {
@@ -114,14 +131,14 @@ export default {
       this.$emit('update:show', show);
     },
     check(item) {
+      /* 选中 */
+      // 不能被选中的时候直接返回
       if (item.isCanChecked === false) {
-        uni.showToast({
-          title: '此账户为风险005账户，不支持付款',
-          icon: 'none'
-        });
+        if (this.cantCheckedCallback) {
+          this.cantCheckedCallback(item);
+        }
         return;
       }
-      /* 选中 */
       const {
         [this.keyName]: key
       } = item;

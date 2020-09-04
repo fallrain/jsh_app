@@ -85,7 +85,16 @@
           >异
           </view>
         </view>
-        <view class="jShoppingCartItem-btm-text">库存：{{goods.productList[0].productStock}}</view>
+        <view
+          @tap="showStockPicker"
+          class="jShoppingCartItem-btm-text"
+        >
+          库存：{{goods.productList[0].productStock}}
+          <view
+            class="iconfont iconxia"
+            v-if="stockOptions.length"
+          ></view>
+        </view>
         <view
           class="jShoppingCartItem-btm-switch-wrap"
           v-if="isCreditModel"
@@ -182,6 +191,30 @@
         </view>
       </template>
     </j-version-specifications>
+    <view class="jShoppingCartItem-stock-picker-par">
+      <j-pop-picker
+        :choseOptions.sync="choseStockOptions"
+        :isCanBeCheck="false"
+        :isShowValue="false"
+        :options="stockOptions"
+        :show.sync="isStockPickerShow"
+        keyName="stockTypeCode"
+        title="库存"
+      >
+        <template #default="slotProps">
+          <view class="jShoppingCartItem-stock-picker-wrap">
+            <view
+              class="jShoppingCartItem-stock-picker-l"
+            >
+              <view class="jShoppingCartItem-stock-picker-dot"></view>
+              {{slotProps.data.stockType}}{{slotProps.data.qty}}台</view>
+            <view
+              class="jShoppingCartItem-stock-picker-r"
+            >预计到货时间：{{slotProps.data.arrivalTime}}</view>
+          </view>
+        </template>
+      </j-pop-picker>
+    </view>
   </view>
 </template>
 
@@ -191,6 +224,7 @@ import {
 } from '@dcloudio/uni-ui';
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
+import JPopPicker from '../form/JPopPicker';
 import './css/JShoppingCartItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
@@ -201,6 +235,7 @@ import {
 export default {
   name: 'JShoppingCartItem',
   components: {
+    JPopPicker,
     JVersionSpecifications,
     JSwitch,
     uniNumberBox
@@ -249,6 +284,12 @@ export default {
       specificationsList: [],
       // 选择的版本
       specificationsCheckList: [],
+      // 库存展示
+      isStockPickerShow: false,
+      // 库存数据
+      stockOptions: [],
+      // 选中的库存数据
+      choseStockOptions: ['']
     };
   },
   created() {
@@ -273,6 +314,17 @@ export default {
     }
   },
   computed: {
+    stockNum() {
+      // inStock
+      const product = this.getProduct(this.goods);
+      if (!product) {
+        return 0;
+      }
+      const {
+        inStock
+      } = this.product;
+      return inStock;
+    },
     isDirect() {
       /* 直发 */
       const product = this.getProduct(this.goods);
@@ -412,7 +464,7 @@ export default {
   },
   methods: {
     setPageInf() {
-      this.genSpecificationsList();
+      this.genStockPickerOption();
     },
     choose() {
       /* 选中本商品 */
@@ -733,6 +785,31 @@ export default {
       choseItem.list[$choseIndex].checked = false;
       this.goods.choseOtherVersions = [];
       this.$emit('change', this.goods, this.index);
+    },
+    genStockPickerOption() {
+      /* 组合库存数据 */
+      // this.stockOptions
+      const product = this.getProduct(this.goods);
+      if (!product) {
+        return;
+      }
+      const {
+        stock
+      } = product;
+      if (stock) {
+        this.stockOptions = stock.storeInfo.map(v => ({
+          ...v,
+          value: v.stockType,
+          arrivalTime: v.arrivalTime.substring(0, 10)
+        }));
+      }
+    },
+    showStockPicker() {
+      /* 库存picker 展示 */
+      // 有库存类型才显示
+      if (this.stockOptions.length) {
+        this.isStockPickerShow = true;
+      }
     }
   }
 };
