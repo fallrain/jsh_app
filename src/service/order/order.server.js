@@ -10,6 +10,9 @@ export default {
   orderList(data) { // 订单列表
     return jPostJson(url.orderList, data);
   },
+  buttonLogicJudgment(data) { // 按钮显示：
+    return jPostJson(url.buttonLogicJudgment,data);
+  },
   paytoInfo(data) { // 付款方列表
     return jPostJson(urlNoApi.paytoInfo, data);
   },
