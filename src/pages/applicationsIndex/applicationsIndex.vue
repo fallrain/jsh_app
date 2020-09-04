@@ -604,7 +604,7 @@ export default {
         const element = data.marketCollusionGroup[index];
         for (let y = 0; y < marketCollusionGroupValue.length; y++) {
           const elementValue = marketCollusionGroupValue[y];
-          if (data.marketCollusionGroup[index] == element.value) {
+          if (element == elementValue.value) {
             marketErrorMsg += element.valueMeaning;
           }
         }
