@@ -435,13 +435,12 @@ export default {
       const {
         productCode,
         number,
-        priceType
       } = this.goods;
       return this.specificationsCheckList.map(v => ({
         priceType: v.priceType,
         priceVersion: v.name,
         productCode,
-        number: priceType ? number : v.num,
+        number: v.priceType ? number : v.num,
       }));
     },
     addToCartForEveryVersion() {
@@ -536,9 +535,9 @@ export default {
         number: isTransfer ? product.number : number,
         //  促销活动价格类型
         //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
-        priceType,
+        priceType: priceType ? priceType.toUpperCase() : priceType,
         // 价格版本号
-        priceVersion: '',
+        // priceVersion: '',
         // 产品编码
         productCode,
         productList: [product],
@@ -547,9 +546,9 @@ export default {
         // 送达方编码
         sendtoCode,
         // 版本调货版本号
-        transferVersionCode: isTransfer ? product.priceVersion : '',
+        transferVersionCode: isTransfer ? product.priceVersion : undefined,
         // 促销活动版本号
-        versionCode: '',
+        // versionCode: '',
       });
     },
     goodsNumChange(val) {

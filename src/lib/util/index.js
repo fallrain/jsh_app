@@ -53,8 +53,10 @@ const util = {
     const m = Math.pow(10, digit);
     return Math.round(f * m) / m;
   },
-  arithmetic(val1, val2, arithmetic = 1, floatNum = 2) {
+  arithmetic(oldVal1, oldVal2, arithmetic = 1, floatNum = 2) {
     /* 避免损失精度 */
+    let val1 = oldVal1;
+    let val2 = oldVal2;
     if (!val1) {
       val1 = 0;
     }
