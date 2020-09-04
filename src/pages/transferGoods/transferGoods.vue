@@ -152,6 +152,7 @@ export default {
   },
   data() {
     return {
+      disable: false,
       list: null,
       sortType: '',
       sortDirection: '',
@@ -230,13 +231,17 @@ export default {
       // 配送地址数据
       deliveryAddressList: [],
       // 当前选中的配送地址
-      curChoseDeliveryAddress: {},
+      curChoseDeliveryAddress: {
+        name: null
+      },
       // 配送地址完整数据
       addressesList: [],
       // 付款方数据
       payer: [],
       //  选购其他的大单号
       otherSEQ: '',
+      //选购其他返回数据
+      getOrder:[],
       popTabs: [
         {
           name: '调出库位',
@@ -252,11 +257,15 @@ export default {
     };
   },
   onLoad(option) {
+    this.disable = false;
     console.log(option);
     this.otherSEQ = option.IBR_SEQ;
     if (this.otherSEQ) {
       this.getOrderList();
     }
+  },
+  watch: {
+    $route: [],
   },
   created() {
     // this.getPageInfo();
@@ -375,7 +384,7 @@ export default {
               } else {
                 this.list.forEach((item) => {
                   item.stockList.map((v) => {
-                    console.log('dddddddddddd', v);
+                    // console.log('dddddddddddd', v);
                     v.subCodeList.map((e) => {
                       if (ele.type === v.whcode) {
                         num += Number(e.QTY);
@@ -695,8 +704,35 @@ export default {
       }
       console.log('sssssssssssssssssssssss', this.cargoSendWay);
       console.log(this.popTabs);
-      this.popTabs[0].children[0].checked = true;
-      this.popTabs[1].children[0].checked = true;
+      if (!this.disable) {
+        this.popTabs[0].children[0].checked = true;
+        this.popTabs[1].children[0].checked = true;
+      } else {
+        this.popTabs[0].disable = true;
+        this.popTabs[0].children.forEach(item => {
+          console.log(item);
+          item.checked = false;
+          if (item.name === this.getOrder.T5_OUTWHNAME) {
+            item.checked = true;
+            console.log(item);
+            console.log(this.cargoWareHome);
+            this.cargoSend = [{
+              OUTWHCODE: item.type,
+              OUTWHNAME: item.name
+            }];
+            console.log('111111111111', this.cargoSend);
+          }
+        });
+        this.popTabs[1].disable = true;
+        this.popTabs[1].children.forEach(item => {
+          console.log(item);
+          item.checked = false;
+          if (item.name === this.getOrder.IBR_ADDRESSTYPE) {
+            item.checked = true;
+          }
+        });
+
+      }
       this.popTabs[1].children.forEach((item) => {
         console.log('qqqqqqqqqqqqqqq', item);
         if (item.name === '统仓统配') item.ycFlag = 'JSHSW';
@@ -713,10 +749,14 @@ export default {
         longfeiUSERID: this.saleInfo.customerCode,
         DH_SEQ: this.otherSEQ
       });
+      console.log(1212121);
       if (code === '1' && data.code === '200') {
+        this.disable = true;
         console.log(data);
-        // this.curChoseDeliveryAddress.name = data[0].DH_SENDTO_ADDRESS;
-        // this.stock = data[0].
+        this.getOrder = data.data[0];
+        // if()
+        this.curChoseDeliveryAddress.name = temp1.DH_SENDTO_ADDRESS;
+        this.mescroll.resetUpScroll(true);
       }
     },
     async getShoppingCartNum() {
@@ -746,11 +786,10 @@ export default {
     // 获取当前配送地址
     getAddress() {
       console.log(111);
-
       this.addressesList.forEach((item) => {
         console.log(item);
         console.log(this.curChoseDeliveryAddress);
-        if (this.curChoseDeliveryAddress.id === `${item.customerCode}`) {
+        if ((this.curChoseDeliveryAddress.customerCode || this.curChoseDeliveryAddress.id) === `${item.customerCode}`) {
           console.log(item);
           this.address = item;
         }
@@ -890,6 +929,9 @@ export default {
 
     showDeliveryAddress() {
       /* 展示配送地址 */
+      if (this.disable) {
+        return;
+      }
       this.isShowAddressDrawer = true;
     },
     async getDeliveryAddress() {
