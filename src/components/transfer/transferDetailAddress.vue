@@ -7,17 +7,23 @@
           <text class="transferDetailAddress-transfer-info-text">调货信息</text>
         </view>
         <view class="transferDetailAddress-information">
+<!--          <view class="transferDetailAddress-for">-->
+            <view class="transferDetailAddress-information-text">
+              总装车体积：
+              <text class="transferDetailAddress-information-val">{{detailList.IBR_JSTIJI}}m3</text>
+            </view>
+            <view class="transferDetailAddress-information-text mla">
+              库位：
+              <text class="transferDetailAddress-information-val">{{detailList.T5_OUTWHNAME}}</text>
+            </view>
+<!--          </view>-->
           <view class="transferDetailAddress-information-text">
-            总装车体积：
-            <text class="transferDetailAddress-information-val">{{detailList.IBR_JSTIJI}}m3</text>
+            配送类型：
+            <text class="transferDetailAddress-information-val mlb">{{detailList.IBR_ADDRESSTYPE}}</text>
           </view>
           <view class="transferDetailAddress-information-text mla">
-            库位：
-            <text class="transferDetailAddress-information-val">{{detailList.T5_OUTWHNAME}}</text>
-          </view>   
-          <view class="transferDetailAddress-information-text mlb">
-            车型：
-            <text class="transferDetailAddress-information-val">X8.7K - 8.7厢式（高底盘）</text>
+            配送地址：
+            <text class="transferDetailAddress-information-val">{{detailList.DH_SENDTONAME}}</text>
           </view>
         </view>
       </view>
@@ -62,7 +68,7 @@ export default {
     };
   },
   methods: {
-    
+
   }
 };
 </script>

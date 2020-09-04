@@ -99,7 +99,7 @@
       <view class="uni-flex uni-row">
         <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
           <view v-for="ieen in hostList" :key="ieen.productCode" class="scroll-view-item_H">
-            <image :src="ieen.imageUrl[0]" style="height: 76px;width: 76px;"></image>
+            <image :src="ieen.imageUrl[0]" style="height: 76px;width: 76px;" @tap="goDetail(ieen)"></image>
             <view>
               <span class="product-detail-lei1">{{ieen.title}}</span>
               <br><span style="color: #ED2856;font-size: 8px;">￥{{ieen.price}}</span>
@@ -309,6 +309,7 @@ export default {
             isMore: true,
             isSe: true,
             isT: true,
+            isC: false,
             list: []
           };
           this.detailInfo.tjPrice.tj.forEach((lis) => {
@@ -332,6 +333,7 @@ export default {
             isMore: true,
             isSe: true,
             isT: true,
+            isC: false,
             list: []
           };
           this.detailInfo.tjPrice.gc.forEach((lis) => {
@@ -355,6 +357,7 @@ export default {
             isMore: true,
             isSe: true,
             isT: true,
+            isC: false,
             list: []
           };
           this.detailInfo.tjPrice.yj.forEach((lis) => {
@@ -378,6 +381,7 @@ export default {
             isMore: false,
             isSe: true,
             isT: false,
+            isC: false,
             list: []
           };
           this.detailInfo.arbitrages.forEach((lis) => {
@@ -397,6 +401,7 @@ export default {
             isMore: false,
             isSe: true,
             isT: false,
+            isC: false,
             list: []
           };
           this.detailInfo.composes.forEach((lis) => {
@@ -441,6 +446,7 @@ export default {
             title: '调货',
             isMore: true,
             isSe: true,
+            isC: false,
             isT: false,
             list: []
           };
@@ -481,7 +487,7 @@ export default {
           this.ActListInfo.push('抢单');
           const qd = {
             title: '抢单',
-            // isMore: false,
+            isMore: false,
             isSe: true,
             isT: false,
             isC: true,
@@ -534,6 +540,12 @@ export default {
         this.ISGUANZHU = true;
       }
     },
+    goDetail(ieen) {
+      console.log(ieen);
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${ieen.productCode}`
+      });
+    },
     async productStock() {
       const { code, data } = await this.productDetailService.productStock({
         productCodes: [this.productCode],
@@ -584,11 +596,18 @@ export default {
             name: `(${v.customerCode})${v.address}`,
             checked: false
           }));
-          // 当前配送地址修改
-          if (this.deliveryAddressList[0]) {
-            this.deliveryAddressList[0].checked = true;
-            this.ShipInfo = this.deliveryAddressList[0].name;
-          }
+          console.log(this.deliveryAddressList);
+          this.ShipInfo = `(${this.defaultSendTo.customerCode})${this.defaultSendTo.customerName}`;
+          this.deliveryAddressList.forEach(item => {
+            if (this.ShipInfo.indexOf(item.id) !== -1) {
+              item.checked = true;
+            }
+          });
+          // // 当前配送地址修改
+          // if (this.deliveryAddressList[0]) {
+          //   this.deliveryAddressList[0].checked = true;
+          //   this.ShipInfo = this.deliveryAddressList[0].name;
+          // }
         }
       });
     },

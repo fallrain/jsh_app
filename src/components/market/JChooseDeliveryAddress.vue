@@ -5,35 +5,43 @@
       mode="right"
       @change="drawerChange"
     >
-      <view class="jChooseDeliveryAddressDrawer">
-        <view class="jChooseDeliveryAddressDrawer-head">
-          <text>配送至</text>
-          <i
-            class="iconfont iconguanbi"
-            @tap="hide"
-          ></i>
-        </view>
-        <view class="jChooseDeliveryAddressDrawer-input">
-          <input v-model="searchVal" type="text" placeholder="请输入地址">
-        </view>
-        <view class="jChooseDeliveryAddressDrawer-list">
-          <view
-            :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
-            v-for="(item,index) in searchAddResult"
-            :key="index"
-            @tap="check(item)"
-          >
-            <view
-              class="jChooseDeliveryAddressDrawer-item-check"
-            >
+      <view
+        class="scroll-container"
+      >
+        <scroll-view
+          :scroll-y="true"
+        >
+          <view class="jChooseDeliveryAddressDrawer">
+            <view class="jChooseDeliveryAddressDrawer-head">
+              <text>配送至</text>
               <i
-                v-if="item.checked"
-                class="iconfont icondui"
+                class="iconfont iconguanbi"
+                @tap="hide"
               ></i>
             </view>
-            <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.addressName}}</view>
+            <view class="jChooseDeliveryAddressDrawer-input">
+              <input v-model="searchVal" type="text" placeholder="请输入地址">
+            </view>
+            <view class="jChooseDeliveryAddressDrawer-list">
+              <view
+                :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
+                v-for="(item,index) in searchAddResult"
+                :key="index"
+                @tap="check(item)"
+              >
+                <view
+                  class="jChooseDeliveryAddressDrawer-item-check"
+                >
+                  <i
+                    v-if="item.checked"
+                    class="iconfont icondui"
+                  ></i>
+                </view>
+                <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.addressName}}</view>
+              </view>
+            </view>
           </view>
-        </view>
+        </scroll-view>
       </view>
     </uni-drawer>
   </view>
@@ -126,6 +134,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .scroll-container{
+    height: 100vh !important;
+    overflow-y: auto;
+  }
   .jChooseDeliveryAddressDrawer {
     padding: 56px 24px;
     padding-right: 0;

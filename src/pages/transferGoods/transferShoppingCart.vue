@@ -248,7 +248,7 @@ export default {
           item.data.orderList.forEach((v) => {
             v.IBL_NUM = v.IBL_NUM ? Number(v.IBL_NUM) : 1;
             v.IBL_MAXNUM = v.IBL_MAXNUM ? Number(v.IBL_MAXNUM) : 0;
-            v.ADVICEPRICE = Number(v.ADVICEPRICE).toFixed(2);
+            v.UNITPRICE = Number(v.UNITPRICE).toFixed(2);
             v.SUMMONEY = Number(v.SUMMONEY).toFixed(2);
           });
 

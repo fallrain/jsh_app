@@ -101,7 +101,7 @@ export default {
     this.detailList = this.allList[0].list.data;
     this.detailList.orderList.forEach((item) => {
       item.BATERATE = Number(item.BATERATE).toFixed(2);
-      item.IBL_ISFL = Number(item.IBL_ISFL).toFixed(2);
+      item.IBL_ISFL = Number(item.IBL_ISFL);
       item.BATEMONEY = Number(item.BATEMONEY).toFixed(2);
       item.ACTPRICE = Number(item.ACTPRICE).toFixed(2);
     });
