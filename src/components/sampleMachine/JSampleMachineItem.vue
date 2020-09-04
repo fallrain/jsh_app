@@ -20,6 +20,7 @@
       </view>
       <view class="jSampleMachine-cnt-opts">
         <uni-number-box
+          :disabled="true"
           @change="goodsNumChange"
         ></uni-number-box>
         <button

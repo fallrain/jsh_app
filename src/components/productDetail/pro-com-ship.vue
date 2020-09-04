@@ -129,8 +129,8 @@ export default {
    max-height: 888px;
    overflow-y: auto;
    padding-bottom: 60px;
-   &::-webkit-scrollbar {
-     display: none;
-   }
-};
+  }
+  .filter-drawer-cnt-list::-webkit-scrollbar {
+    display: none;
+  }
 </style>
