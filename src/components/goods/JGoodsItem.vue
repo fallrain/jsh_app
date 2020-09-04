@@ -379,6 +379,7 @@ export default {
           priceVersion: v.versionCode,
           name: v.versionCode,
           price: this.jshUtil.formatNumber(pt.invoicePrice, 2),
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           checked: false
         }));

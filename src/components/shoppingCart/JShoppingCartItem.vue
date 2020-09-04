@@ -623,6 +623,7 @@ export default {
             priceVersion: v.versionCode,
             name: v.versionCode,
             price: this.jshUtil.formatNumber(priceInfo.commonPrice.invoicePrice, 2),
+            time: v.endDate && v.endDate.substring(0, 10),
             num: v.number,
             checked: false
           }));
