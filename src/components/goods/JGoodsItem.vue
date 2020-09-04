@@ -263,9 +263,11 @@ export default {
       if (priceInf.promotionPrice) {
         // 附加的数据字段,方便统一展示
         inf.invoicePrice = this.jshUtil.formatNumber(priceInf.promotionPrice, 2);
+      } else {
+        inf.invoicePrice = this.jshUtil.formatNumber(priceInf.invoicePrice, 2);
       }
       // fix 供价
-      inf.supplyPric = this.jshUtil.formatNumber(inf.supplyPric, 2);
+      inf.supplyPrice = this.jshUtil.formatNumber(inf.supplyPrice, 2);
       return inf;
     }
   },
@@ -294,7 +296,8 @@ export default {
         tj,
         gc,
         yjList,
-        tags
+        tags,
+        pt
       } = this.allPrice;
       const {
         isSale,
@@ -316,7 +319,7 @@ export default {
           };
           tjVersion.list = tj.specialList.map(v => ({
             name: v.versionCode,
-            price: v.invoicePrice,
+            price: this.jshUtil.formatNumber(v.invoicePrice, 2),
             time: v.endDate && v.endDate.substring(0, 10),
             num: v.usableQty,
             priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
@@ -335,7 +338,7 @@ export default {
         };
         version.list = gc.projectList.map(v => ({
           name: v.versionCode,
-          price: v.invoicePrice,
+          price: this.jshUtil.formatNumber(v.invoicePrice, 2),
           time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
@@ -354,7 +357,7 @@ export default {
         };
         version.list = yjList.map(v => ({
           name: v.versionCode,
-          price: v.invoicePrice,
+          price: this.jshUtil.formatNumber(v.invoicePrice, 2),
           time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
@@ -375,7 +378,8 @@ export default {
           ...v,
           priceVersion: v.versionCode,
           name: v.versionCode,
-          price: v.invoicePrice,
+          price: this.jshUtil.formatNumber(pt.invoicePrice, 2),
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           checked: false
         }));

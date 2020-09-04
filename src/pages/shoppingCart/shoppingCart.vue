@@ -90,12 +90,12 @@
       ref="toast"
     ></m-toast>
     <j-pop-picker
+      keyName="code"
+      title="产业"
       :choseOptions.sync="choseIndustryOptions"
       :options="industryGroupData"
       :show.sync="isIndustryPickerShow"
       @change="industryPickerChange"
-      keyName="code"
-      title="产业"
     ></j-pop-picker>
   </view>
 </template>
@@ -203,12 +203,12 @@ export default {
       creditQuotaList: [],
       // 版本价格对象
       versionPrice: {},
-      // 产业数据
+      // 产业展示
       isIndustryPickerShow: false,
       // 产业数据
       industryGroupData: [],
       // 选中的产业数据
-      choseIndustryOptions: ['']
+      choseIndustryOptions: [''],
     };
   },
   created() {

@@ -20,6 +20,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
   min-height: 96px;
   padding-top: 24px;
   padding-bottom: 24px;
@@ -66,6 +67,7 @@
   -webkit-line-clamp:2;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 100%;
   font-size: 28px;
   color: #666;
 }
