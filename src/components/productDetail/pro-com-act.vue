@@ -43,7 +43,7 @@
                 </view>
               </div>
             </view>
-            <view v-if="act.isSe&&!act.isMore">
+            <view v-if="act.isSe&&!act.isMore&&!act.isC">
               <div class="pro-act-pop-detail-item-one" v-for="(aac,indexC) in act.list" :key="indexC">
                 <view class="jVersionSpecifications-pop-detail-item-check" v-if="aac.isCheck">
                   <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
@@ -64,7 +64,7 @@
                 </view>
               </div>
             </view>
-            <view v-if="act.isC">
+            <view v-if="act.isC&&act.isSe&&!act.isMore">
               <div class="pro-act-pop-detail-item-one" v-for="(aac,indexD) in act.list" :key="indexD">
                 <view class="jVersionSpecifications-pop-detail-item-check" v-if="aac.isCheck">
                   <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>

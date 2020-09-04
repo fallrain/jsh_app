@@ -48,7 +48,7 @@
         <view class="pro-num-pop-wrap">
           <view class="pro-num-pop-wrap4">
             <view class="pro-num-pop-name">数&nbsp;&nbsp;&nbsp;量：</view>
-            <view class="number"><uni-number-box :value="numberValue" :disabled="Number(stock.BJ0VR00A8.stockTotalNum) === 0" @change="changeNum" /></view>
+            <view class="number"><uni-number-box :value="numberValue" :disabled="Number(stock[infos.product.productCode].stockTotalNum) === 0" @change="changeNum" /></view>
           </view>
         </view>
         <view class="pro-num-line"></view>
@@ -56,7 +56,7 @@
           <view class="pro-num-pop-wrap">
             <view class="pro-num-pop-wrap4">
               <view class="pro-num-pop-name">库&nbsp;&nbsp;&nbsp;存：</view>
-              <view class="pro-num-pop-val">{{stock.BJ0VR00A8.stockTotalNum}}</view>
+              <view class="pro-num-pop-val">{{stock[infos.product.productCode].stockTotalNum}}</view>
             </view>
           </view>
           <view class="pro-num-pop-wrap" v-for="(store,indexA) in sto.storeInfo" :key="indexA">
@@ -112,9 +112,8 @@ export default {
     };
   },
   created() {
-    console.log(this.stock.BJ0VR00A8.stockTotalNum);
-
-
+    console.log(this.infos.product.productCode);
+    console.log(this.stock[this.infos.product.productCode]);
   },
   watch: {
     show(val) {

@@ -41,7 +41,7 @@
         <view class="jShoppingCartItem-cnt-inf">
           <view class="tShoppingCartItem-cnt-inf-title">{{item.DH_INVSTD}}</view>
           <view class="tShoppingCartItem-cnt-price-inf">
-            <view class="tShoppingCartItem-cnt-price">¥ {{item.ADVICEPRICE}}</view>
+            <view class="tShoppingCartItem-cnt-price">¥ {{item.UNITPRICE}}</view>
             <view class="tShoppingCartItem-cnt-stock">库存：{{item.IBL_MAXNUM}}</view>
           </view>
            <view class="tShoppingCartItem-btm-version">
@@ -247,7 +247,7 @@ export default {
         if (result.code === '1') {
           // 价格修改
           item.IBL_NUM = value;
-          item.SUMMONEY = item.IBL_NUM * Number(item.ADVICEPRICE);
+          item.SUMMONEY = item.IBL_NUM * Number(item.UNITPRICE);
           let sum = 0;
           this.list.data.orderList.forEach((ele) => {
             sum += Number(ele.SUMMONEY);
@@ -282,7 +282,7 @@ export default {
       const upDHPay = await this.transfergoodsService.upDHPayMoney({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.saleInfo.customerCode,
-        ACTPRICE: item.ADVICEPRICE, // 执行价格
+        ACTPRICE: item.ACTPRICE, // 执行价格
         BATERATE: item.BATERATE, // 扣率
         ISFL: item.IBL_ISFL, // 返利类型
         ISKPO: item.IBL_ISKPO, // 商空标志
@@ -293,7 +293,7 @@ export default {
         PROCODE: '', // 工程单号
         PROLOSSMONEY: '', // 工程单台损失
         RETAILPRICE: item.ADVICEPRICE, // 零售价
-        UNITPRICE: item.ADVICEPRICE, // 单价
+        UNITPRICE: item.UNITPRICE, // 单价
         RELOSERATE: '0.0000', // 折扣
         VERCODE: '', //  特价版本号
         VERMONEY: '', // 特价单台差额
