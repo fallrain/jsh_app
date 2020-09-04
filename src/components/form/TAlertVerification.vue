@@ -225,7 +225,7 @@ export default {
 
           if (page.orderList.find(item => item.ISFLAG == '订单提交中')) {
             uni.showLoading({
-              title: '加载中'
+              title: '订单提交中,请稍后。。。'
             });
             setTimeout(() => {
               _this.getCargoDispose();

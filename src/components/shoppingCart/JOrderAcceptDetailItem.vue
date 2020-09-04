@@ -1,10 +1,10 @@
 <template>
   <view class="pos-r mb120">
     <view class="JOrderConfirmAcceptDetailItem">
-      <view v-if="status===1" class="item-head">
-        <view class="item-row">
+      <view v-if="status===1" class="item-head fs28">
+        <view class="item-row mb12">
           <view class="item-row-left">
-            订单号：<text class="text-999">{{orderItem.gvsOrderNo}}</text>
+            订单号：<text class="text-999">{{orderItem.orderType}}{{orderItem.orderNo}}</text>
           </view>
           <view
             class="item-row-right">
@@ -12,8 +12,25 @@
             <view v-else class="pay-fail">支付失败</view>
           </view>
         </view>
-        <view v-if="orderItem.status !== '9'" class="item-row">
-          失败原因：{{orderItem.errorMsg}}
+        <view class="dis-flex text-333 mb12">
+          付款方：
+          <view class="text-999">{{orderItem.paytoName}}</view>
+        </view>
+        <view class="dis-flex text-333 mb12">
+          下单日期：
+          <view class="text-999">{{orderItem.placeOrderDate}}</view>
+        </view>
+        <view class="dis-flex text-333 mb12">
+          满足方式：
+          <view class="text-999">{{orderItem.stockTypeName}}</view>
+        </view>
+        <view class="dis-flex text-333 mb12">
+          GVS单号：
+          <view class="text-999">{{orderItem.gvsOrderNo}}</view>
+        </view>
+        <view v-if="orderItem.status !== '9'" class="dis-flex text-333">
+          <view class="w360">失败原因：</view>
+          <view class="text-999">{{orderItem.errorMsg}}</view>
         </view>
       </view>
       <view v-if="status===2" class="item-head br-b-primary">
@@ -45,7 +62,6 @@
               {{orderItem.productPrice}}
               <text class="fs24 text-333">*{{orderItem.num}}</text>
             </view>
-            <!--<view class="fs32 text-theme">{{orderItem.productTotalMoney}}</view>-->
           </view>
         </view>
       </view>
@@ -69,7 +85,8 @@
     <view
       :class="['item-bottom', status===2&&'bg-primary']">
       <view class="fs24">共计金额：</view>
-      <view class="">{{orderItem.IBL_SUMMONEY}}</view>
+      <view v-if="status===2" class="">{{orderItem.IBL_SUMMONEY}}</view>
+      <view v-if="status===1" class="">{{orderItem.productTotalMoney}}</view>
     </view>
   </view>
 </template>
@@ -96,7 +113,8 @@ export default {
     return {
     };
   },
-  onLoad() {
+  created() {
+    console.log(this.orderItem)
   },
   computed: {
   },
@@ -235,5 +253,8 @@ export default {
 }
 .fs32{
   font-size: 32px;
+}
+.w360{
+  width: 360px;
 }
 </style>

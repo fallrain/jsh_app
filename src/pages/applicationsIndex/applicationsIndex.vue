@@ -536,11 +536,10 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
-
-      const tmpCode = uni.getStorageSync('code')
+      const tmpCode = uni.getStorageSync('code');
       // alert('tmp1'+tmpCode + 'passcode' + passCode)
       // code
-      if(tmpCode && (tmpCode == passCode) ) {
+      if (tmpCode && (tmpCode == passCode)) {
         return;
       }
       const { code, data } = await this.authService.getTokenByCode({
@@ -559,7 +558,7 @@ export default {
     async getUserType(customerCode) {
       // alert('customerCode'+customerCode)
       const { code, data } = await this.cocSeachService.cocSearch(customerCode);
-      if (code == '1') {
+      if (code === '1') {
         this.cocData = data;
       }
       this.manageData(data);
