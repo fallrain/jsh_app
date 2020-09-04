@@ -245,6 +245,13 @@
       }
     },
     {
+      "path": "pages/mine/myAlertUrl",
+      "style": {
+        "navigationBarTitleText": "修改信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/sampleMachine/sampleMachineList",
       "style": {
         "navigationBarTitleText": "样品机列表"

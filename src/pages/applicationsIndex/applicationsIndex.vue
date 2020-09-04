@@ -513,9 +513,9 @@ export default {
         });
       } */
     },
-	  // 返回原生
+	  // 返回原生 处理账号锁定
 	  popAction() {
-		  // AlipayJSBridge.call('popWindow');
+		  AlipayJSBridge.call('popWindow');
 	  },
 	  // 打开建行支付
 	  callBBC() {
@@ -604,7 +604,7 @@ export default {
         const element = data.marketCollusionGroup[index];
         for (let y = 0; y < marketCollusionGroupValue.length; y++) {
           const elementValue = marketCollusionGroupValue[y];
-          if (data.marketCollusionGroup[index] == element.value) {
+          if (element == elementValue.value) {
             marketErrorMsg += element.valueMeaning;
           }
         }
@@ -635,7 +635,7 @@ export default {
       }
 
       // MDM冻结
-      if (data.status == 1) {
+      if (data.state == 1) {
         this.loadUserType = true;
         this.errorMsg = `${this.errorMsg}抱歉，由于您的账户及子账户 在MDM系统被冻结，限制登录系统，如有疑问请联系交互师处理。`;
       }
