@@ -516,6 +516,7 @@ export default {
       const specificationsList = [];
       const {
         productCode,
+        priceInfo
       } = this.goods.productList[0];
       let {
         priceType
@@ -523,7 +524,7 @@ export default {
       const {
         TJ: tj,
         GC: gc,
-        YJCY: yjList
+        YJCY: yjList,
       } = this.versionPrice.activity[productCode];
         // priceType转为大写
       priceType && (priceType = priceType.toUpperCase());
@@ -552,7 +553,7 @@ export default {
               ...v,
               priceVersion: v.versionCode,
               name: v.versionCode,
-              price: v.invoicePrice,
+              price: this.jshUtil.formatNumber(v.invoicePrice, 2),
               time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
@@ -576,7 +577,7 @@ export default {
               ...v,
               priceVersion: v.versionCode,
               name: v.versionCode,
-              price: v.invoicePrice,
+              price: this.jshUtil.formatNumber(v.invoicePrice, 2),
               time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
@@ -596,7 +597,7 @@ export default {
               ...v,
               priceVersion: v.versionCode,
               name: v.versionCode,
-              price: v.invoicePrice,
+              price: this.jshUtil.formatNumber(v.invoicePrice, 2),
               time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
@@ -621,7 +622,7 @@ export default {
             ...v,
             priceVersion: v.versionCode,
             name: v.versionCode,
-            price: v.price,
+            price: this.jshUtil.formatNumber(priceInfo.commonPrice.invoicePrice, 2),
             num: v.number,
             checked: false
           }));
