@@ -1,19 +1,23 @@
 .jSearchInput-wrap {
-  width: 520px;
+  width: 100%;
   height: 56px;
   background: #fff;
   border-radius: 28px;
   border: 1px solid #BDBDBD;
   padding-left: 22px;
   padding-right: 26px;
+
+  .uni-input-input {
+    font-size: 24px;
+  }
 }
 
-.jSearchInput-icon{
+.jSearchInput-icon {
   color: #BDBDBD;
 
 }
 
-.jSearchInput{
+.jSearchInput {
   width: 100%;
   margin-left: 36px;
   font-size: 24px;

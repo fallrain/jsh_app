@@ -13,7 +13,7 @@ export default {
         auto: false,
         page: {
           num: 0,
-          size: 10
+          size: 15
         },
         textNoMore: '-- 加载完毕 --',
         toTop: {
