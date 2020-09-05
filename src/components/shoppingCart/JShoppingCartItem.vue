@@ -169,21 +169,21 @@
               <view class="mt16 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">建议零售价：</view>
                 <view class="jVersionSpecifications-pop-head-cnt-price">
-                  ¥{{chosePrice.invoicePrice}}
+                  ¥{{ptPrice.recommendsalePrice}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  供价：{{chosePrice.supplyPrice}}
+                  供价：{{ptPrice.supplyPrice}}
                 </view>
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">
-                  台返 ：{{chosePrice.rebateMoney || 0.00}}
+                  台返 ：{{ptPrice.rebateMoney || 0.00}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  返利：{{chosePrice.rebatePolicy | rebatePolicy}}
+                  返利：{{ptPrice.rebatePolicy | rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  直扣率：{{chosePrice.rebateRate}}%
+                  直扣率：{{ptPrice.rebateRate}}%
                 </view>
               </view>
             </view>
@@ -425,6 +425,18 @@ export default {
       v.rebateMoney = this.jshUtil.formatNumber(v.rebateMoney, 2);
       v.rebateRate = this.jshUtil.formatNumber(this.jshUtil.arithmetic(v.rebateRate, 100, 3), 2);
       return v;
+    },
+    ptPrice() {
+      /* 普通价格 */
+      const priceInfTemp = this.goods.$PriceInfo.commonPrice;
+      const priceInf = {};
+      const recommendsalePrice = this.goods.productList[0].recommendsalePrice;
+      priceInf.recommendsalePrice = this.jshUtil.formatNumber(recommendsalePrice, 2);
+      priceInf.invoicePrice = this.jshUtil.formatNumber(priceInfTemp.invoicePrice, 2);
+      priceInf.supplyPrice = this.jshUtil.formatNumber(priceInfTemp.supplyPrice, 2);
+      priceInf.rebateMoney = this.jshUtil.formatNumber(priceInfTemp.rebateMoney, 2);
+      priceInf.rebateRate = this.jshUtil.formatNumber(this.jshUtil.arithmetic(priceInfTemp.rebateRate, 100, 3), 2);
+      return priceInf;
     },
     choseVersions() {
       /* 选择的所有版本信息 */
