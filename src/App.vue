@@ -31,9 +31,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-    .content{
-        color: red;
-    }
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <view :class="['jGoodsItem',isEditMode && 'checked']">
+  <view :class="['jGoodsItem j-fix-u-numberBox',isEditMode && 'checked']">
     <view
       :class="['jGoodsItem-check iconfont', goods.isChecked ? 'iconradio active':'iconradio1']"
       @tap="handleCheck"
@@ -42,14 +42,17 @@
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
-        <uni-number-box
+        <u-number-box
+          :max="maxGoodsNumber"
+          :min="1"
           @change="goodsNumChange"
-        ></uni-number-box>
+        ></u-number-box>
         <button
           v-if="isShowAddCart"
-          class="jGoodsItem-cnt-opts-primary ml26"
+          :class="['jGoodsItem-cnt-opts-primary ml26',priceInf.disabled && 'disabled']"
           type="button"
           @tap="checkSpecifications"
+          :disabled="priceInf.disabled"
         >加入购物车
         </button>
         <button
@@ -98,9 +101,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
 import './css/jGoodsItem.scss';
@@ -117,7 +117,6 @@ export default {
   name: 'JGoodsItem',
   components: {
     JVersionSpecifications,
-    uniNumberBox,
     MToast
   },
   mixins: [
@@ -158,6 +157,7 @@ export default {
   },
   data() {
     return {
+      maxGoodsNumber: Number.MAX_VALUE,
       // 是否显示加入购物车按钮
       isShowAddCart: true,
       // 显示选择商品版本弹层
@@ -254,6 +254,7 @@ export default {
         priceInf = {};
         if (!isSale) {
           priceInf.invoicePrice = '营销活动进行中';
+          priceInf.disabled = true;
         }
       }
 
@@ -263,9 +264,14 @@ export default {
       if (priceInf.promotionPrice) {
         // 附加的数据字段,方便统一展示
         inf.invoicePrice = this.jshUtil.formatNumber(priceInf.promotionPrice, 2);
+      } else {
+        inf.invoicePrice = priceInf.invoicePrice === null ? null : this.jshUtil.formatNumber(priceInf.invoicePrice, 2);
       }
       // fix 供价
-      inf.supplyPric = this.jshUtil.formatNumber(inf.supplyPric, 2);
+      inf.supplyPrice = this.jshUtil.formatNumber(inf.supplyPrice, 2);
+      if (inf.invoicePrice === null) {
+        inf.disabled = true;
+      }
       return inf;
     }
   },
@@ -294,7 +300,8 @@ export default {
         tj,
         gc,
         yjList,
-        tags
+        tags,
+        pt
       } = this.allPrice;
       const {
         isSale,
@@ -316,7 +323,7 @@ export default {
           };
           tjVersion.list = tj.specialList.map(v => ({
             name: v.versionCode,
-            price: v.invoicePrice,
+            price: this.jshUtil.formatNumber(v.invoicePrice, 2),
             time: v.endDate && v.endDate.substring(0, 10),
             num: v.usableQty,
             priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
@@ -335,7 +342,7 @@ export default {
         };
         version.list = gc.projectList.map(v => ({
           name: v.versionCode,
-          price: v.invoicePrice,
+          price: this.jshUtil.formatNumber(v.invoicePrice, 2),
           time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
@@ -354,7 +361,7 @@ export default {
         };
         version.list = yjList.map(v => ({
           name: v.versionCode,
-          price: v.invoicePrice,
+          price: this.jshUtil.formatNumber(v.invoicePrice, 2),
           time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           priceType: v.priceType ? v.priceType.toUpperCase() : v.priceType,
@@ -375,7 +382,8 @@ export default {
           ...v,
           priceVersion: v.versionCode,
           name: v.versionCode,
-          price: v.invoicePrice,
+          price: this.jshUtil.formatNumber(pt.invoicePrice, 2),
+          time: v.endDate && v.endDate.substring(0, 10),
           num: v.usableQty,
           checked: false
         }));
@@ -447,6 +455,11 @@ export default {
       /* 每个选择的版本都分别加入购物车 */
       // todo 此接口存在风险，调用次数过于多
       const productSpecificationsList = this.genProductSpecificationsList();
+      const noNumberObj = productSpecificationsList.find(v => !v.number);
+      if (noNumberObj) {
+        this.showCartToast('请先选择数量');
+        return;
+      }
       if (productSpecificationsList.length) {
         // 每个产品的版本都调用加购物车接口
         const addToCartPromise = productSpecificationsList.map(product => this.addToCart(product));
@@ -473,6 +486,14 @@ export default {
       this.$refs.toast.open({
         type: 'success',
         content: '加入购物车成功',
+        timeout: 2000,
+      });
+    },
+    showCartToast(content) {
+      /* 展示购物车错误提示 */
+      this.$refs.toast.open({
+        type: 'warn',
+        content,
         timeout: 2000,
       });
     },
@@ -512,6 +533,10 @@ export default {
       let isTransfer;
       // product不传则默认普通类型
       if (!product) {
+        if (!number) {
+          this.showCartToast('请先选择数量');
+          return Promise.reject();
+        }
         choseVersion = false;
         product = {
           priceType: 'PT',
@@ -551,9 +576,9 @@ export default {
         // versionCode: '',
       });
     },
-    goodsNumChange(val) {
+    goodsNumChange({ value }) {
       /* 商品数量change */
-      this.goods.number = val;
+      this.goods.number = value;
       this.$emit('change', this.goods, this.index);
     },
     handleCheck() {

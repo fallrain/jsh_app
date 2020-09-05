@@ -105,7 +105,11 @@
         <view class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
-      <order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>
+      <order-list-item-more 
+        :isOrderMore="isOrderMore"
+        :invalidButton="invalidButton"
+        >
+      </order-list-item-more>
     </view>
   </view>
 </template>
@@ -130,7 +134,8 @@ export default {
   },
   data() {
     return {
-      isOrderMore: false
+      isOrderMore: false,
+      invalidButton:'0',
     };
   },
   methods: {
@@ -138,6 +143,32 @@ export default {
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
       console.log(this.isOrderMore);
+      // 获取按钮状态
+      this.buttonLogicJudgmentAction(this.info.info)
+    },
+    async buttonLogicJudgmentAction(param) {
+      const { code, data } = await this.orderService.buttonLogicJudgment(param);
+      if (code === '200') {
+        this.buttonLogicJudgment = data;
+        console.log('============')
+        console.log(this.buttonLogicJudgment)
+        this.invalidButton = this.buttonLogicJudgment.invalidButton;
+        console.log(this.invalidButton)
+        // console.log(this.invalidButton)
+    //     selfPayButton": "0",
+		// "tctpConfirmButton": "0",
+		// "orderNo": "2000426027",
+		// "invalidButton": "0",
+		// "estimateButton": "0",
+    // "signInButton": "0"
+//     tctpConfirmButton:统仓统配确认按钮
+// orderNo:订单号
+// invalidButton:订单作废按钮
+// estimateButton:
+// signInButton:"自主签收按钮
+
+      }
+      console.log(data);
     },
     goDetail() {
       this.$emit('goDetail', this.index);

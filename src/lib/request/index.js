@@ -39,7 +39,7 @@ function showModal(params, showCancel = false, confirmText = '关闭', cb) {
   });
 }
 
-function showError(msg, status,url,params) {
+function showError(msg, status, url, params) {
   /* 统一提示错误 */
   let message;
   if (msg) {
@@ -52,8 +52,25 @@ function showError(msg, status,url,params) {
     };
     message = errorMap[status] || '请求失败';
   }
-  let str = JSON.stringify(params)
+  const str = JSON.stringify(params);
   showModal(message + url + str);
+}
+
+const loadingAy = [];
+
+function hideLoading() {
+  // 关闭遮罩
+  if (loadingAy.length === 1) {
+    uni.hideLoading();
+  }
+  loadingAy.length--;
+}
+function showLoading() {
+  /* 打开遮罩 */
+  uni.showLoading({
+    mask: true
+  });
+  return new Date().getTime();
 }
 
 function jSend(option) {
@@ -80,7 +97,7 @@ function jSend(option) {
   };
   return new Promise((resolve) => {
     if (!cfg.noLoading) {
-      uni.showLoading();
+      loadingAy.push(showLoading());
     }
     const requestOptions = {
       ...selfOptions,
@@ -91,25 +108,25 @@ function jSend(option) {
           statusCode
         } = response;
         if (!cfg.noLoading) {
-          uni.hideLoading();
+          hideLoading();
         }
         resolve(data);
         if (cfg.noToast) {
           return;
         }
         if (data.code !== '1' && data.code !== '200') {
-          showError(data.msg, statusCode,selfOptions.url,header);
+          showError(data.msg, statusCode, selfOptions.url, header);
         }
       },
       fail(e) {
         if (!cfg.noLoading) {
-          uni.hideLoading();
+          hideLoading();
         }
         let msg = '请求失败';
         if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
           msg = '请求超时';
         }
-        showError(msg,'',selfOptions.url,header);
+        showError(msg, '', selfOptions.url, header);
         return resolve({
           code: '-1'
         });

@@ -54,7 +54,7 @@
   flex-wrap: wrap;
   color: #333;
   font-size: 16px;
-  padding-right: 36px;
+  padding-right: 40px;
 }
 
 .jShoppingCartItem-btn-primary {
@@ -192,11 +192,19 @@
 }
 
 .jShoppingCartItem-btm-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   width: 204px;
   overflow: hidden;
   text-overflow: ellipsis;
   color: #333;
   font-size: 24px;
+
+  .iconfont {
+    margin-left: 6px;
+    font-size: 14px;
+  }
 }
 
 .jShoppingCartItem-btm-switch-wrap {
@@ -300,4 +308,37 @@
     font-size: 18px;
     color: #fff;
   }
+}
+
+.jShoppingCartItem-stock-picker-par {
+  .jPopPicker-pop-item {
+    padding-left: 0;
+  }
+}
+
+.jShoppingCartItem-stock-picker-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jShoppingCartItem-stock-picker-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  margin-right: 16px;
+  background: $theme-color;
+}
+
+.jShoppingCartItem-stock-picker-l {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: $theme-color;
+  font-size: 32px;
+}
+
+.jShoppingCartItem-stock-picker-r {
+  color: #666;
+  font-size: 24px;
 }

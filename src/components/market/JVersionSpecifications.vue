@@ -1,0 +1,226 @@
+<template>
+  <uni-popup
+    ref="pop"
+    type="bottom"
+    @change="change"
+  >
+    <view class="jVersionSpecifications-pop">
+      <view class="jVersionSpecifications-head j-flex-aic">
+        <view class="jVersionSpecifications-head-title">{{title}}</view>
+        <view
+          class="jVersionSpecifications-head-title-icon"
+          @tap="close"
+        >X
+        </view>
+      </view>
+      <slot name="head"></slot>
+      <scroll-view
+        :scroll-y="true"
+        class="jVersionSpecifications-pop-detail-wrap"
+      >
+        <view
+          class="jVersionSpecifications-pop-detail"
+          v-for="(item,index) in versionData"
+          :key="index"
+        >
+          <view class="jVersionSpecifications-pop-detail-head">
+            <text class="jVersionSpecifications-pop-detail-head-title">{{item.title}}</text>
+            <view
+              :class="[
+                'jVersionSpecifications-pop-detail-head-title-arrow iconfont iconxia',
+                !item.isExpand && 'active'
+              ]"
+              @tap="toggleExpand(item)"
+            >
+            </view>
+          </view>
+          <view
+            v-if="item.isExpand"
+            class="jVersionSpecifications-pop-detail-list"
+          >
+            <div
+              :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
+              v-for="(version,vIndex) in item.list"
+              :key="vIndex"
+              @tap="handleClick(version,item.list,index,vIndex)"
+            >
+              <view
+                class="jVersionSpecifications-pop-detail-item-check"
+                v-if="version.checked"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+              </view>
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
+                v-if="version.name"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-name">名称：</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type1">{{version.name}}</view>
+              </view>
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
+                v-if="version.price"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-name">价格：</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.price}}</view>
+              </view>
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap"
+                v-if="version.time"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-name">有效期：</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.time}}</view>
+              </view>
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap"
+                v-if="version.num"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-name">数量：</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.num}}</view>
+              </view>
+            </div>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="jVersionSpecifications-btn-wrap">
+        <button
+          type="button"
+          class="goodsList-drawer-btn-confirm"
+          @tap="confirm"
+        >{{confirmBtnText}}
+        </button>
+        <button
+          type="button"
+          class="goodsList-drawer-btn-reset"
+          @tap="cancel"
+        >{{cancelBtnText}}
+        </button>
+      </view>
+    </view>
+  </uni-popup>
+</template>
+
+<script>
+import {
+  uniPopup
+} from '@dcloudio/uni-ui';
+import './css/jVersionSpecifications.scss';
+
+export default {
+  name: 'JVersionSpecifications',
+  components: {
+    uniPopup
+  },
+  props: {
+    // 显示隐藏
+    show: {
+      type: Boolean,
+      default: false
+    },
+    // 标题
+    title: {
+      type: String,
+      default: ''
+    },
+    // 版本数据
+    versionData: {
+      type: Array,
+      default: () => []
+    },
+    // 类型: radio(单选) checkbox（多选）custom（自定义）
+    type: {
+      type: String,
+      default: 'checkbox'
+    },
+    // 自定义check函数
+    customCheckFun: {
+      type: Function
+    },
+    // 确认按钮文字
+    confirmBtnText: {
+      type: String,
+      default: '确定'
+    },
+    // 取消按钮文字
+    cancelBtnText: {
+      type: String,
+      default: '取消'
+    }
+  },
+  data() {
+    return {};
+  },
+  watch: {
+    show(val) {
+      if (val) {
+        this.$refs.pop.open();
+      } else {
+        this.$refs.pop.close();
+        this.$emit('close');
+      }
+    }
+  },
+  methods: {
+    change({ show }) {
+      this.$emit('update:show', show);
+    },
+    close() {
+      /* 关闭弹层 */
+      this.$emit('update:show', false);
+    },
+    handleClick(version, list, parIndex, vIndex) {
+      /* 选择版本 */
+      if (this.type === 'custom') {
+        this.versionData = this.customCheckFun(this.versionData, list, parIndex, vIndex);
+      } else {
+        const curChecked = version.checked;
+        // 除了当前版本，其他版本的选择都取消
+        this.versionData.forEach((v, index) => {
+          // checkbox模式下可在当前版本里多选
+          if (this.type === 'checkbox') {
+            if (parIndex !== index) {
+              v.list.forEach((otherItem) => {
+                otherItem.checked = false;
+              });
+            }
+          } else {
+            // radio模式下，只能单选
+            v.list.forEach((otherItem) => {
+              otherItem.checked = false;
+            });
+          }
+        });
+        version.checked = !curChecked;
+      }
+
+      this.$emit('change', this.versionData);
+    },
+    toggleExpand(item) {
+      /* 选择规格展开or收起 */
+      item.isExpand = !item.isExpand;
+      this.$emit('change', this.versionData);
+    },
+    confirm() {
+      /* 确定 */
+      const checkedList = [];
+      this.versionData.forEach((version) => {
+        version.list.forEach((v, index) => {
+          if (v.checked) {
+            checkedList.push({
+              ...v,
+              $parentId: version.id,
+              $choseIndex: index
+            });
+          }
+        });
+      });
+      // 选中的版本列表数据
+      this.$emit('confirm', checkedList);
+      this.$emit('update:show', false);
+    },
+    cancel() {
+      this.$emit('cancel');
+    }
+  }
+};
+</script>

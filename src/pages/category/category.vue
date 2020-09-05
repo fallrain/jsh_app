@@ -454,6 +454,7 @@ export default {
     height: 104px;
     background: #fff;
     border-bottom: 1px solid #F5F5F5;
+    padding-left: 24px;
   }
   .isFixed{
     background-color:#Fff;

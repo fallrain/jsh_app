@@ -5,7 +5,6 @@
         :hasRightSlot="true"
         :tabs="tabs"
         @tabClick="tabClick"
-        activeItemName="item0"
       >
         <template #right>
           <view v-show="index === 'gwc'"
@@ -44,10 +43,12 @@
             :goods="goods"
             :index="index"
             :userInf="userInf"
+            :defaultSendTo="defaultSendTo"
             :versionPrice="versionPrice"
             :warehouseFlag="choseSendAddress.yunCangFlag"
             @change="goodsChange"
             @del="singleDeleteCart"
+            @updateNumber="refreshShoppingCartList"
           ></j-shopping-cart-item>
         </view>
         <view
@@ -92,12 +93,12 @@
         ref="toast"
       ></m-toast>
       <j-pop-picker
+        keyName="code"
+        title="产业"
         :choseOptions.sync="choseIndustryOptions"
         :options="industryGroupData"
         :show.sync="isIndustryPickerShow"
         @change="industryPickerChange"
-        keyName="code"
-        title="产业"
       ></j-pop-picker>
     </view>
     <vehicle-car-list v-show="index === 'zc'"></vehicle-car-list>
@@ -197,6 +198,9 @@ export default {
           isCanBeCheck: false,
           checked: false,
           isExpand: false,
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['name'],
           children: []
         },
         {
@@ -205,6 +209,9 @@ export default {
           checked: false,
           isExpand: true,
           childrenType: 'long',
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['address', 'addressCode'],
           children: []
         },
       ],
@@ -214,12 +221,12 @@ export default {
       creditQuotaList: [],
       // 版本价格对象
       versionPrice: {},
-      // 产业数据
+      // 产业展示
       isIndustryPickerShow: false,
       // 产业数据
       industryGroupData: [],
       // 选中的产业数据
-      choseIndustryOptions: ['']
+      choseIndustryOptions: [''],
     };
   },
   created() {
@@ -313,6 +320,8 @@ export default {
           }
         });
       }
+      // 更新底栏
+      this.updateTotal();
       this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
@@ -433,6 +442,10 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.shoppingList[index] = goods;
+      this.updateTotal();
+    },
+    updateTotal() {
+      /* 更新底栏统计 */
       // 更新选择的商品数目
       this.totalGoodsNum = this.countTotalNumber();
       // 更新选择的总商品价格
@@ -452,7 +465,7 @@ export default {
       /* 计算选择的商品的总价 */
       let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
-        if (v.checked) {
+        if (v.checked && v.isShow) {
           const num = v.number;
           // 获取应该计算的版本数据
           const version = this.getPriceVersionData(v).find(data => data.priceType);
@@ -465,7 +478,7 @@ export default {
     },
     countTotalNumber() {
       /* 计算选择的商品的总数 */
-      return this.shoppingList.filter(v => v.checked).length;
+      return this.shoppingList.filter(v => v.checked && v.isShow).length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -684,7 +697,14 @@ export default {
             number,
             productList
           } = v;
-            // 检查最大可购买数量，超出提示并返回
+          if (!number) {
+            this.showToast({
+              type: 'warn',
+              content: '请先选择数量'
+            });
+            return;
+          }
+          // 检查最大可购买数量，超出提示并返回
           const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
           if (number > maxNum) {
             uni.showModal({

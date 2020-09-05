@@ -37,7 +37,7 @@
                     class="iconfont icondui"
                   ></i>
                 </view>
-                <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.addressName}}</view>
+                <view class="jChooseDeliveryAddressDrawer-item-cnt">({{item.addressCode}}){{item.address}}</view>
               </view>
             </view>
           </view>
@@ -135,7 +135,7 @@ export default {
 
 <style lang="scss">
   .scroll-container{
-    height: 100vh !important;
+    /*height: 100% !important;*/
     overflow-y: auto;
   }
   .jChooseDeliveryAddressDrawer {

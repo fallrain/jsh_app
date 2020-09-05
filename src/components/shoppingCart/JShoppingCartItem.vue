@@ -1,5 +1,5 @@
 <template>
-  <view class="jShoppingCartItem">
+  <view class="jShoppingCartItem j-fix-u-numberBox">
     <view class="jShoppingCartItem-head">
       <!--组合类型(1单品2组合3抢购4套餐5成套)-->
       <block
@@ -53,12 +53,12 @@
           <view class="jShoppingCartItem-cnt-price-inf-item">
             小计：¥{{totalChosePrice}}
           </view>
-          <uni-number-box
-            :value="goods.number"
+          <u-number-box
             :max="maxGoodsNumber"
             :min="1"
+            v-model="goods.number"
             @change="goodsNumChange"
-          ></uni-number-box>
+          ></u-number-box>
         </view>
       </view>
       <view
@@ -85,7 +85,16 @@
           >异
           </view>
         </view>
-        <view class="jShoppingCartItem-btm-text">库存：{{goods.productList[0].productStock}}</view>
+        <view
+          @tap="showStockPicker"
+          class="jShoppingCartItem-btm-text"
+        >
+          库存：{{goods.productList[0].productStock}}
+          <view
+            class="iconfont iconxia"
+            v-if="stockOptions.length"
+          ></view>
+        </view>
         <view
           class="jShoppingCartItem-btm-switch-wrap"
           v-if="isCreditModel"
@@ -160,21 +169,21 @@
               <view class="mt16 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">建议零售价：</view>
                 <view class="jVersionSpecifications-pop-head-cnt-price">
-                  ¥{{chosePrice.invoicePrice}}
+                  ¥{{ptPrice.recommendsalePrice}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  供价：{{chosePrice.supplyPrice}}
+                  供价：{{ptPrice.supplyPrice}}
                 </view>
               </view>
               <view class="mt8 jVersionSpecifications-pop-head-cnt-item">
                 <view class="jVersionSpecifications-pop-head-cnt-text">
-                  台返 ：{{chosePrice.rebateMoney || 0.00}}
+                  台返 ：{{ptPrice.rebateMoney || 0.00}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  返利：{{chosePrice.rebatePolicy | rebatePolicy}}
+                  返利：{{ptPrice.rebatePolicy | rebatePolicy}}
                 </view>
                 <view class="jVersionSpecifications-pop-head-cnt-text ml20">
-                  直扣率：{{chosePrice.rebateRate}}%
+                  直扣率：{{ptPrice.rebateRate}}%
                 </view>
               </view>
             </view>
@@ -182,15 +191,39 @@
         </view>
       </template>
     </j-version-specifications>
+    <view class="jShoppingCartItem-stock-picker-par">
+      <j-pop-picker
+        :choseOptions.sync="choseStockOptions"
+        :isCanBeCheck="false"
+        :isShowValue="false"
+        :options="stockOptions"
+        :show.sync="isStockPickerShow"
+        keyName="stockTypeCode"
+        title="库存"
+      >
+        <template #default="slotProps">
+          <view class="jShoppingCartItem-stock-picker-wrap">
+            <view
+              class="jShoppingCartItem-stock-picker-l"
+            >
+              <view class="jShoppingCartItem-stock-picker-dot"></view>
+              {{slotProps.data.stockType}}{{slotProps.data.qty}}台
+            </view>
+            <view
+              class="jShoppingCartItem-stock-picker-r"
+            >预计到货时间：{{slotProps.data.arrivalTime}}
+            </view>
+          </view>
+        </template>
+      </j-pop-picker>
+    </view>
   </view>
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
+import JPopPicker from '../form/JPopPicker';
 import './css/JShoppingCartItem.scss';
 import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
@@ -198,12 +231,14 @@ import {
   getGoodsInCartPriceType,
 } from '@/lib/dataDictionary';
 
+import AddNumberForm from '@/model/AddNumberForm';
+
 export default {
   name: 'JShoppingCartItem',
   components: {
+    JPopPicker,
     JVersionSpecifications,
     JSwitch,
-    uniNumberBox
   },
   mixins: [
     followGoodsMixin,
@@ -239,7 +274,11 @@ export default {
     // 用户信息
     userInf: {
       type: Object
-    }
+    },
+    // 默认售达方信息
+    defaultSendTo: {
+      type: Object
+    },
   },
   data() {
     return {
@@ -249,6 +288,14 @@ export default {
       specificationsList: [],
       // 选择的版本
       specificationsCheckList: [],
+      // 库存展示
+      isStockPickerShow: false,
+      // 库存数据
+      stockOptions: [],
+      // 选中的库存数据
+      choseStockOptions: [''],
+      // 数组框是否初始化了
+      isNumberInit: false
     };
   },
   created() {
@@ -273,6 +320,17 @@ export default {
     }
   },
   computed: {
+    stockNum() {
+      // inStock
+      const product = this.getProduct(this.goods);
+      if (!product) {
+        return 0;
+      }
+      const {
+        inStock
+      } = this.product;
+      return inStock;
+    },
     isDirect() {
       /* 直发 */
       const product = this.getProduct(this.goods);
@@ -368,6 +426,18 @@ export default {
       v.rebateRate = this.jshUtil.formatNumber(this.jshUtil.arithmetic(v.rebateRate, 100, 3), 2);
       return v;
     },
+    ptPrice() {
+      /* 普通价格 */
+      const priceInfTemp = this.goods.$PriceInfo.commonPrice;
+      const priceInf = {};
+      const recommendsalePrice = this.goods.productList[0].recommendsalePrice;
+      priceInf.recommendsalePrice = this.jshUtil.formatNumber(recommendsalePrice, 2);
+      priceInf.invoicePrice = this.jshUtil.formatNumber(priceInfTemp.invoicePrice, 2);
+      priceInf.supplyPrice = this.jshUtil.formatNumber(priceInfTemp.supplyPrice, 2);
+      priceInf.rebateMoney = this.jshUtil.formatNumber(priceInfTemp.rebateMoney, 2);
+      priceInf.rebateRate = this.jshUtil.formatNumber(this.jshUtil.arithmetic(priceInfTemp.rebateRate, 100, 3), 2);
+      return priceInf;
+    },
     choseVersions() {
       /* 选择的所有版本信息 */
       return this.getPriceVersionData(this.goods);
@@ -412,7 +482,7 @@ export default {
   },
   methods: {
     setPageInf() {
-      this.genSpecificationsList();
+      this.genStockPickerOption();
     },
     choose() {
       /* 选中本商品 */
@@ -464,6 +534,7 @@ export default {
       const specificationsList = [];
       const {
         productCode,
+        priceInfo
       } = this.goods.productList[0];
       let {
         priceType
@@ -471,7 +542,7 @@ export default {
       const {
         TJ: tj,
         GC: gc,
-        YJCY: yjList
+        YJCY: yjList,
       } = this.versionPrice.activity[productCode];
         // priceType转为大写
       priceType && (priceType = priceType.toUpperCase());
@@ -500,7 +571,7 @@ export default {
               ...v,
               priceVersion: v.versionCode,
               name: v.versionCode,
-              price: v.invoicePrice,
+              price: this.jshUtil.formatNumber(v.invoicePrice, 2),
               time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
@@ -524,7 +595,7 @@ export default {
               ...v,
               priceVersion: v.versionCode,
               name: v.versionCode,
-              price: v.invoicePrice,
+              price: this.jshUtil.formatNumber(v.invoicePrice, 2),
               time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
@@ -544,7 +615,7 @@ export default {
               ...v,
               priceVersion: v.versionCode,
               name: v.versionCode,
-              price: v.invoicePrice,
+              price: this.jshUtil.formatNumber(v.invoicePrice, 2),
               time: v.endDate && v.endDate.substring(0, 10),
               num: v.usableQty,
               priceType: v.priceType,
@@ -556,7 +627,9 @@ export default {
       }
 
       // 调货 选的是普通、特价、工程的时候，还可选个调货
-      if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
+      // if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
+      // 改为即使有工程也加也不可选
+      if (!priceType || priceType === 'PT') {
         const transformVersionList = this.versionPrice.version.version[productCode];
         if (transformVersionList && transformVersionList.length) {
           const version = {
@@ -569,7 +642,8 @@ export default {
             ...v,
             priceVersion: v.versionCode,
             name: v.versionCode,
-            price: v.price,
+            price: this.jshUtil.formatNumber(priceInfo.commonPrice.invoicePrice, 2),
+            time: v.endDate && v.endDate.substring(0, 10),
             num: v.number,
             checked: false
           }));
@@ -604,15 +678,17 @@ export default {
       const {
         priceType
       } = version;
-      // 工程、特价map
+        // 工程、特价map
       const map = {
         GC: 1,
         TJ: 1
       };
+
       function setCheck() {
         version.checked = true;
         versionData[parIndex].list[curIndex] = version;
       }
+
       const checkedListLen = checkedList.length;
       if (!checkedListLen) {
         setCheck();
@@ -669,11 +745,39 @@ export default {
       /* 选中版本取消 */
       this.isShowSpecifications = false;
     },
-    goodsNumChange(val) {
+    goodsNumChange({ value }) {
       /* 商品数量change */
-      this.goods.number = val;
-      this.goods.productList[0].number = val;
+      this.updateCartProductNumber({
+        ...this.goods.productList[0],
+        oldValue: this.goods.productList[0].number,
+        newValue: value
+      });
+      this.goods.productList[0].number = value;
       this.$emit('change', this.goods, this.index);
+    },
+    updateCartProductNumber({
+      composeId,
+      id: productId,
+      newValue,
+      oldValue
+    }) {
+      /* 更新购物车里的数量 */
+      // 相同或者设置了0不请求接口
+      if (!newValue || newValue === oldValue) {
+        return;
+      }
+      const form = new AddNumberForm({
+        composeId,
+        number: newValue,
+        productId,
+        saletoCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode,
+      });
+      // 节流
+      this.$u.throttle(() => {
+        this.cartService.updateProductNumber(form);
+        this.$emit('updateNumber', newValue);
+      }, 500, false);
     },
     setFollowState() {
       /* 设置关注状态 */
@@ -733,6 +837,31 @@ export default {
       choseItem.list[$choseIndex].checked = false;
       this.goods.choseOtherVersions = [];
       this.$emit('change', this.goods, this.index);
+    },
+    genStockPickerOption() {
+      /* 组合库存数据 */
+      // this.stockOptions
+      const product = this.getProduct(this.goods);
+      if (!product) {
+        return;
+      }
+      const {
+        stock
+      } = product;
+      if (stock) {
+        this.stockOptions = stock.storeInfo.map(v => ({
+          ...v,
+          value: v.stockType,
+          arrivalTime: v.arrivalTime.substring(0, 10)
+        }));
+      }
+    },
+    showStockPicker() {
+      /* 库存picker 展示 */
+      // 有库存类型才显示
+      if (this.stockOptions.length) {
+        this.isStockPickerShow = true;
+      }
     }
   }
 };

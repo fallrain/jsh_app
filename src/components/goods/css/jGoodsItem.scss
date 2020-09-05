@@ -139,6 +139,14 @@
   align-items: center;
   flex-wrap: wrap;
   margin-top: 10px;
+
+  .uni-input-input {
+    width: 60px;
+  }
+
+  .uni-input-input {
+    font-size: 16px;
+  }
 }
 
 @mixin jGoodsItem-cnt-opts-btn {
@@ -149,6 +157,11 @@
   line-height: 40px;
   font-size: 24px;
   border-radius: 8px;
+
+  &.disabled {
+    background: #dcdcdc;
+    color: #fff;
+  }
 }
 
 .jGoodsItem-cnt-opts-primary {

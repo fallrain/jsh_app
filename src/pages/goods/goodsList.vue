@@ -151,7 +151,7 @@ export default {
     return {
       pageCfg: {
         page: {
-          pageSize: 10,
+          pageSize: 15,
           pageNum: 1
         }
       },

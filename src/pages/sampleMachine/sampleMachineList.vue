@@ -5,6 +5,7 @@
         <j-search-input
           v-model="filterForm.name"
           @search="silentReSearch"
+          placeholder="请输入搜索信息"
         ></j-search-input>
         <button
           type="button"

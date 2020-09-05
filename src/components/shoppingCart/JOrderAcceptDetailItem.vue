@@ -29,7 +29,7 @@
           <view class="text-999">{{orderItem.gvsOrderNo}}</view>
         </view>
         <view v-if="orderItem.status !== '9'" class="dis-flex text-333">
-          <view class="w360">失败原因：</view>
+          <view class="w380">失败原因：</view>
           <view class="text-999">{{orderItem.errorMsg}}</view>
         </view>
       </view>
@@ -59,7 +59,7 @@
           <view class="text-333 fs20">预计到货时间：{{orderItem.planInDate}}</view>
           <view class="dis-flex">
             <view class="fs32 text-theme">
-              {{orderItem.productPrice}}
+              {{toFixedNum(orderItem.productPrice)}}
               <text class="fs24 text-333">*{{orderItem.num}}</text>
             </view>
           </view>
@@ -85,8 +85,8 @@
     <view
       :class="['item-bottom', status===2&&'bg-primary']">
       <view class="fs24">共计金额：</view>
-      <view v-if="status===2" class="">{{orderItem.IBL_SUMMONEY}}</view>
-      <view v-if="status===1" class="">{{orderItem.productTotalMoney}}</view>
+      <view v-if="status===2" class="">{{toFixedNum(orderItem.IBL_SUMMONEY)}}</view>
+      <view v-if="status===1" class="">{{toFixedNum(orderItem.productTotalMoney)}}</view>
     </view>
   </view>
 </template>
@@ -114,9 +114,14 @@ export default {
     };
   },
   created() {
-    console.log(this.orderItem)
+    console.log(this.orderItem);
   },
   computed: {
+    toFixedNum() {
+      return function (val) {
+        return (new Number(val)).toFixed(2);
+      };
+    }
   },
   methods: {
     orderDetail() {
@@ -254,7 +259,7 @@ export default {
 .fs32{
   font-size: 32px;
 }
-.w360{
-  width: 360px;
+.w380{
+  width: 380px;
 }
 </style>

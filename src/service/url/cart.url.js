@@ -33,7 +33,9 @@ const urls = {
   // 从购物车里移除商品
   deleteCart: '/shoppingCart/delete/cart',
   // 查询产业
-  getIndustryList: '/shoppingCart/get/industryList'
+  getIndustryList: '/shoppingCart/get/industryList',
+  // 更新购物车数量
+  updateProductNumber: '/shoppingCart/add/cart/updateProductNumber'
 };
 util.addPrefix(baseURL, urls);
 export default urls;
