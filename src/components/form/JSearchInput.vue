@@ -1,15 +1,16 @@
 <template>
   <view class="jSearchInput-wrap j-flex-aic">
     <view class="jSearchInput-icon iconfont iconsousuo"></view>
-    <input
+    <u-input
       class="jSearchInput"
       type="text"
       confirm-type="search"
       :placeholder="placeholder"
       :placeholderClass="placeholderClass"
+      :placeholderStyle="placeholderStyle"
       v-model="selfValue"
       @confirm="search"
-    >
+    ></u-input>
   </view>
 </template>
 
@@ -31,6 +32,10 @@ export default {
       type: String,
       default: ''
     },
+    placeholderStyle: {
+      type: String,
+      default: 'font-size:12px'
+    }
   },
   data() {
     return {
@@ -40,10 +45,11 @@ export default {
   watch: {
     selfValue(val) {
       this.$emit('input', val);
+      this.$emit('change', val);
     }
   },
   methods: {
-    search({ detail: { value } }) {
+    search(value) {
       /* 键盘搜索事件 */
       this.$emit('search', value);
     }

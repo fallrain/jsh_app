@@ -1,5 +1,5 @@
 <template>
-  <view class="jShoppingCartItem">
+  <view class="jShoppingCartItem j-fix-u-numberBox">
     <view class="jShoppingCartItem-head">
       <!--组合类型(1单品2组合3抢购4套餐5成套)-->
       <block
@@ -53,11 +53,12 @@
           <view class="jShoppingCartItem-cnt-price-inf-item">
             小计：¥{{totalChosePrice}}
           </view>
-          <uni-number-box
+          <u-number-box
             :max="maxGoodsNumber"
             :min="1"
+            v-model="goods.number"
             @change="goodsNumChange"
-          ></uni-number-box>
+          ></u-number-box>
         </view>
       </view>
       <view
@@ -206,10 +207,12 @@
               class="jShoppingCartItem-stock-picker-l"
             >
               <view class="jShoppingCartItem-stock-picker-dot"></view>
-              {{slotProps.data.stockType}}{{slotProps.data.qty}}台</view>
+              {{slotProps.data.stockType}}{{slotProps.data.qty}}台
+            </view>
             <view
               class="jShoppingCartItem-stock-picker-r"
-            >预计到货时间：{{slotProps.data.arrivalTime}}</view>
+            >预计到货时间：{{slotProps.data.arrivalTime}}
+            </view>
           </view>
         </template>
       </j-pop-picker>
@@ -218,9 +221,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
 import JPopPicker from '../form/JPopPicker';
@@ -231,13 +231,14 @@ import {
   getGoodsInCartPriceType,
 } from '@/lib/dataDictionary';
 
+import AddNumberForm from '@/model/AddNumberForm';
+
 export default {
   name: 'JShoppingCartItem',
   components: {
     JPopPicker,
     JVersionSpecifications,
     JSwitch,
-    uniNumberBox
   },
   mixins: [
     followGoodsMixin,
@@ -273,7 +274,11 @@ export default {
     // 用户信息
     userInf: {
       type: Object
-    }
+    },
+    // 默认售达方信息
+    defaultSendTo: {
+      type: Object
+    },
   },
   data() {
     return {
@@ -288,7 +293,9 @@ export default {
       // 库存数据
       stockOptions: [],
       // 选中的库存数据
-      choseStockOptions: ['']
+      choseStockOptions: [''],
+      // 数组框是否初始化了
+      isNumberInit: false
     };
   },
   created() {
@@ -657,15 +664,17 @@ export default {
       const {
         priceType
       } = version;
-      // 工程、特价map
+        // 工程、特价map
       const map = {
         GC: 1,
         TJ: 1
       };
+
       function setCheck() {
         version.checked = true;
         versionData[parIndex].list[curIndex] = version;
       }
+
       const checkedListLen = checkedList.length;
       if (!checkedListLen) {
         setCheck();
@@ -722,11 +731,39 @@ export default {
       /* 选中版本取消 */
       this.isShowSpecifications = false;
     },
-    goodsNumChange(val) {
+    goodsNumChange({ value }) {
       /* 商品数量change */
-      this.goods.number = val;
-      this.goods.productList[0].number = val;
+      this.updateCartProductNumber({
+        ...this.goods.productList[0],
+        oldValue: this.goods.productList[0].number,
+        newValue: value
+      });
+      this.goods.productList[0].number = value;
       this.$emit('change', this.goods, this.index);
+    },
+    updateCartProductNumber({
+      composeId,
+      id: productId,
+      newValue,
+      oldValue
+    }) {
+      /* 更新购物车里的数量 */
+      // 相同或者设置了0不请求接口
+      if (!newValue || newValue === oldValue) {
+        return;
+      }
+      const form = new AddNumberForm({
+        composeId,
+        number: newValue,
+        productId,
+        saletoCode: this.userInf.customerCode,
+        sendtoCode: this.defaultSendTo.customerCode,
+      });
+      // 节流
+      this.$u.throttle(() => {
+        this.cartService.updateProductNumber(form);
+        this.$emit('updateNumber', newValue);
+      }, 500, false);
     },
     setFollowState() {
       /* 设置关注状态 */

@@ -42,10 +42,12 @@
           :goods="goods"
           :index="index"
           :userInf="userInf"
+          :defaultSendTo="defaultSendTo"
           :versionPrice="versionPrice"
           :warehouseFlag="choseSendAddress.yunCangFlag"
           @change="goodsChange"
           @del="singleDeleteCart"
+          @updateNumber="refreshShoppingCartList"
         ></j-shopping-cart-item>
       </view>
       <view
@@ -186,6 +188,9 @@ export default {
           isCanBeCheck: false,
           checked: false,
           isExpand: false,
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['name'],
           children: []
         },
         {
@@ -194,6 +199,9 @@ export default {
           checked: false,
           isExpand: true,
           childrenType: 'long',
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['address', 'addressCode'],
           children: []
         },
       ],

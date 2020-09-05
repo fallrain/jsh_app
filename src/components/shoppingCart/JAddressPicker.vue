@@ -40,27 +40,41 @@
           <block
             v-if="item.children && item.isExpand"
           >
+            <view class="jAddressPicker-search-wrap">
+              <j-search-input
+                @change="search(item,index)"
+                @search="search(item,index)"
+                placeholder="请输入搜索信息"
+                v-model="item.searchValue"
+              ></j-search-input>
+            </view>
             <view
               class="jAddressPicker-cnt-detail"
             >
-              <view
-                :class="[
+              <template
+                v-for="(detail,dIndex) in item.children"
+              >
+                <template v-if="!detail.isHide">
+                  <view
+                    :class="[
                   'jAddressPicker-cnt-detail-item',
                   detail.checked && 'active',
                   item.childrenType==='short' && 'short'
                 ]"
-                v-for="(detail,dIndex) in item.children"
-                :key="dIndex"
-                @tap.stop="checkDetail(detail,item.children,item,index)"
-              >
-                <view
-                  class="jVersionSpecifications-pop-detail-item-check"
-                  v-if="detail.checked"
-                >
-                  <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
-                </view>
-                <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
-              </view>
+                    :key="dIndex"
+                    @tap.stop="checkDetail(detail,item.children,item,index)"
+                  >
+
+                    <view
+                      class="jVersionSpecifications-pop-detail-item-check"
+                      v-if="detail.checked"
+                    >
+                      <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+                    </view>
+                    <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
+                  </view>
+                </template>
+              </template>
             </view>
           </block>
         </view>
@@ -74,10 +88,12 @@ import {
   uniPopup
 } from '@dcloudio/uni-ui';
 import './css/jAddressPicker.scss';
+import JSearchInput from '../form/JSearchInput';
 
 export default {
   name: 'JAddressPicker',
   components: {
+    JSearchInput,
     uniPopup
   },
   props: {
@@ -93,7 +109,11 @@ export default {
     //     name: '云仓',
     //     checked: false,
     //     // 是否无子元素
-    //     isSingle:true
+    //     isSingle:true,
+    //     // 是否支持搜索
+    //     isShowSearch: true,
+    //     搜索的值
+    //     searchValue:''
     //   },
     //   {
     //     name: '异地云仓',
@@ -102,6 +122,8 @@ export default {
     //     isCanBeCheck: false,
     //     checked: false,
     //     isExpand: true,
+    //     // 是否支持搜索
+    //     isShowSearch: true,
     //     children: [
     //       {
     //         id: 'ccc',
@@ -115,6 +137,8 @@ export default {
     //     checked: false,
     //     isExpand: true,
     //     childrenType: 'long',
+    //     // 是否支持搜索
+    //     isShowSearch: true,
     //     children: [
     //       {
     //         id: 'ccc',
@@ -136,9 +160,7 @@ export default {
     }
   },
   data() {
-    return {
-
-    };
+    return {};
   },
   watch: {
     show(val) {
@@ -206,6 +228,26 @@ export default {
       /* 展开收起 */
       item.isExpand = !item.isExpand;
       this.$emit('change', this.pickerList, null, item, true, 'expand');
+    },
+    search(item) {
+      /* 搜索功能 */
+      this.$u.throttle(() => {
+        const {
+          searchValue,
+          searchKeys,
+          children
+        } = item;
+        if (searchValue === '') {
+          children.forEach((v) => {
+            this.$set(v, 'isHide', false);
+          });
+          return;
+        }
+        children.forEach((v) => {
+          const isContain = !!searchKeys.find(key => v[key].includes(searchValue));
+          this.$set(v, 'isHide', !isContain);
+        });
+      }, 500, false);
     }
   }
 };

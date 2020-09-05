@@ -13,6 +13,14 @@
             @tap="hide"
           ></i>
         </view>
+        <view class="jChooseDeliveryAddressDrawer-search-wrap">
+          <j-search-input
+            @change="search"
+            @search="search"
+            placeholder="请输入搜索信息"
+            v-model="filterForm.name"
+          ></j-search-input>
+        </view>
         <scroll-view
           :scroll-into-view="activeItemName"
           :scroll-y="true"
@@ -20,7 +28,7 @@
         >
           <view
             :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
-            v-for="(item,index) in list"
+            v-for="(item,index) in listTemp"
             :id="'item'+item.customerCode"
             :key="index"
             @tap="check(item)"
@@ -45,10 +53,12 @@
 import {
   uniDrawer
 } from '@dcloudio/uni-ui';
+import JSearchInput from '../form/JSearchInput';
 
 export default {
   name: 'JChooseDeliveryAddress',
   components: {
+    JSearchInput,
     uniDrawer
   },
   props: {
@@ -75,6 +85,11 @@ export default {
   },
   data() {
     return {
+      filterForm: {
+        // 配送至的地址名
+        name: ''
+      },
+      listTemp: []
     };
   },
   watch: {
@@ -86,6 +101,9 @@ export default {
       } else {
         jChooseDeliveryAddressDrawer.close();
       }
+    },
+    list(val) {
+      this.listTemp = [...val];
     }
   },
   methods: {
@@ -103,6 +121,24 @@ export default {
     },
     hide() {
       this.$emit('update:show', false);
+    },
+    search(val) {
+      /* 搜索 */
+      this.$u.throttle(() => {
+        if (val === '') {
+          this.listTemp = this.list;
+          return;
+        }
+        this.listTemp = this.list.filter(({
+          address,
+          addressCode
+        }) => {
+          if (address.includes(val) || addressCode.includes(val)) {
+            return true;
+          }
+          return false;
+        });
+      }, 500, false);
     }
   }
 };
@@ -165,5 +201,11 @@ export default {
     .iconfont {
       font-size: 36px;
     }
+  }
+
+  .jChooseDeliveryAddressDrawer-search-wrap {
+    width: 100%;
+    margin-top: 40px;
+    padding-right: 44px;
   }
 </style>
