@@ -18,16 +18,16 @@
             <view class="jOveragePay-cnt-item-total-text">可用余额：</view>
             <view
               v-if="saleInfo.channelGroup === 'ZY'"
-              class="jOveragePay-cnt-item-total-price">¥ {{item.balance}}</view>
+              class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.balance)}}</view>
             <view
               v-if="saleInfo.channelGroup === 'CT'"
-              class="jOveragePay-cnt-item-total-price">¥ {{item.bookbalance}}</view>
+              class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.bookbalance)}}</view>
           </view>
           <view class="jOveragePay-cnt-item-total-item-line">
           </view>
           <view class="jOveragePay-cnt-item-total-item">
             <view class="jOveragePay-cnt-item-total-text">待支付余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ {{item.totalMoney}}</view>
+            <view class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.totalMoney)}}</view>
           </view>
           <button
             v-if="compareMoney(item.balance, item.totalMoney)&&saleInfo.channelGroup === 'ZY'"
@@ -77,6 +77,11 @@ export default {
     }),
     compareMoney() {
       return (val1, val2) => (parseFloat(val1) < parseFloat(val2));
+    },
+    toFixedNum() {
+      return function (val) {
+        return (new Number(val)).toFixed(2);
+      };
     }
   }
 };

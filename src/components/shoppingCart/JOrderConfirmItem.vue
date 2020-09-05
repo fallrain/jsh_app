@@ -22,7 +22,7 @@
             </view>
             <view class="jOrderConfirmItem-detail-cnt-price-wrap">
               <view class="jOrderConfirmItem-detail-cnt-price">
-                ¥{{goods.splitOrderProductList[0].price}}
+                ¥{{toFixedNum(goods.splitOrderProductList[0].price)}}
                 <view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">
                   *{{goods.splitOrderProductList[0].storeNum}}</view>
               </view>
@@ -56,6 +56,10 @@
               <input v-model="WDval" type="text" class="WD-input">
             </view>
           </view>
+        </view>
+        <view class="dis-flex">
+          <view v-if="orderItem.yunCangType==='yc'" class="yc-flag">云仓</view>
+          <view v-if="orderItem.yunCangType==='ydyc'" class="yc-flag">异地云仓</view>
         </view>
         <view class="jOrderConfirmItem-detail-mark-wrap mt24">
           <view class="jOrderConfirmItem-detail-mark-item">
@@ -103,7 +107,7 @@
       </view>
       <view class="dis-flex">
         <view class="jOrderConfirmItem-total-text">共计金额：</view>
-        <view class="jOrderConfirmItem-total-price ml20">¥ {{orderItem.totalMoney}}</view>
+        <view class="jOrderConfirmItem-total-price ml20">¥ {{toFixedNum(orderItem.totalMoney)}}</view>
       </view>
     </view>
     <j-pop-picker
@@ -212,6 +216,11 @@ export default {
     }
   },
   computed: {
+    toFixedNum() {
+      return function (val) {
+        return (new Number(val)).toFixed(2);
+      };
+    }
   },
   methods: {
     getPayerMoneyInfo() {

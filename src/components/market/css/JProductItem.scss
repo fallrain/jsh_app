@@ -88,6 +88,7 @@
   font-size: 28px;
   text-align: center;
   line-height: 42px;
+  z-index: 11;
 }
 
 .jProductItem-head-text {
@@ -179,6 +180,7 @@
 }
 
 .jProductItem-btm {
+  position: relative;
   padding: 28px 0px;
   line-height: 44px;
   display: flex;
@@ -279,4 +281,7 @@
 }
 .bg-999{
   background: #999;
+}
+.jucon-fend{
+  justify-content: flex-end;
 }

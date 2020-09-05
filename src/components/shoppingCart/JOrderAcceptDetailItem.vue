@@ -29,7 +29,7 @@
           <view class="text-999">{{orderItem.gvsOrderNo}}</view>
         </view>
         <view v-if="orderItem.status !== '9'" class="dis-flex text-333">
-          <view class="w360">失败原因：</view>
+          <view class="w380">失败原因：</view>
           <view class="text-999">{{orderItem.errorMsg}}</view>
         </view>
       </view>
@@ -259,7 +259,7 @@ export default {
 .fs32{
   font-size: 32px;
 }
-.w360{
-  width: 360px;
+.w380{
+  width: 380px;
 }
 </style>
