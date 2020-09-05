@@ -627,7 +627,9 @@ export default {
       }
 
       // 调货 选的是普通、特价、工程的时候，还可选个调货
-      if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
+      // if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
+      // 改为即使有工程也加也不可选
+      if (!priceType || priceType === 'PT') {
         const transformVersionList = this.versionPrice.version.version[productCode];
         if (transformVersionList && transformVersionList.length) {
           const version = {
