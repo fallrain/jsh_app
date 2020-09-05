@@ -31,7 +31,7 @@
         <view class="dis-flex mb12">
           <view class="jProductItem-cnt-price-tips-item">直扣{{formateNum(goods.priceDto.rebateRate)}}%</view>
           <view class="jProductItem-cnt-price-tips-item">返利：{{goods.priceDto.rebatePolicyStr}}</view>
-          <view class="jProductItem-cnt-price-tips-item">台返：{{formateNum(goods.priceDto.rebateMoney)}}</view>
+          <view class="jProductItem-cnt-price-tips-item">台返：{{toFixedNum(goods.priceDto.rebateMoney)}}</view>
         </view>
         <view v-if="goods.valid === false" class="jProductItem-cnt-price-inf">
           <view class="jProductItem-cnt-price"
@@ -39,17 +39,17 @@
         </view>
         <view v-else>
           <view v-if="!specialPrice" class="jProductItem-cnt-price-inf">
-            <view class="jProductItem-cnt-price">¥ {{goods.priceDto.invoicePrice}}</view>
-            <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量222：{{goods.promotionNum}}</view>
-            <view v-else class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
+            <view class="jProductItem-cnt-price">¥ {{toFixedNum(goods.priceDto.invoicePrice)}}</view>
+            <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：{{goods.promotionNum}}</view>
+            <view v-else class="fs20 text-666 mr12">供价：¥{{toFixedNum(goods.priceDto.supplyPrice)}}</view>
             <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
           </view>
           <!--特价产品-->
           <view v-if="specialPrice"
                 class="jProductItem-cnt-price-inf">
             <view class="jProductItem-cnt-price">¥ {{goods.choseOtherVersions[0].invoicePrice}}</view>
-            <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量111：{{goods.promotionNum}}</view>
-            <view v-else class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
+            <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：{{goods.promotionNum}}</view>
+            <view v-else class="fs20 text-666 mr12">供价：¥{{computedPrice(goods.priceDto.supplyPrice)}}</view>
             <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
           </view>
         </view>
@@ -75,6 +75,7 @@
           </view>
           <uni-number-box
             :min="0"
+            :max="100000"
             v-model="goods.choosedNum"
             @change="change"
           ></uni-number-box>
@@ -192,7 +193,7 @@ export default {
   },
   watch: {
     goods() {
-      debugger
+      debugger;
       if (this.goods.choseOtherVersions && this.goods.choseOtherVersions.length > 0) {
         this.specialPrice = true;
       } else {
@@ -208,10 +209,15 @@ export default {
       return this.goods.specialPrice === 'Y';
     },
     formateNum() {
-      return val => val;
+      return val => (Number(val) * 100).toFixed(2);
     },
     computedPrice() {
-      return (price, num) => Number((price * num).toFixed(2));
+      return (price, num) => Number(price * num).toFixed(2);
+    },
+    toFixedNum() {
+      return function (val) {
+        return (Number(val)).toFixed(2);
+      };
     }
   },
   methods: {
@@ -240,6 +246,7 @@ export default {
       console.log(this.specificationsList);
     },
     change(val) {
+      debugger;
       this.goods.choosedNum = val;
       this.isCreditModeChange();
     },

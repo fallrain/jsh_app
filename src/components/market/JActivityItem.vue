@@ -29,7 +29,7 @@
           组合失效
         </view>
         <view class="dis-flex">
-          <uni-number-box></uni-number-box>
+          <uni-number-box :max="Number(activity.upperLimit)"></uni-number-box>
           <button
             class="btn-default ml26"
             type="button"
@@ -45,11 +45,12 @@
       </view>
       <view @tap="goDetail()" class="mb12 dis-flex text-666">
         <view class="">活动结束时间：</view>
-        <view class="text-primary">{{activity.expTime}}</view>
+        <view v-if="activity.activityType === 'taocan'" class="">{{activity.endDate}}</view>
+        <view v-else class="">{{activity.expTime}}</view>
       </view>
       <view @tap="goDetail()" class="mb12 dis-flex text-666">
         <view class="">主产品剩余可购买：</view>
-        <view class="text-primary">{{activity.upperLimit}}</view>
+        <view class="">{{activity.upperLimit}}</view>
       </view>
       <view @tap="goDetail()" class="jActivity-pic">
         <view v-for="(item, index) in activity.products" class="pic-item" :key="index+'#-#'">
@@ -106,7 +107,7 @@
           </view>
           <view class="dis-flex">
             <uni-number-box
-
+              :max="Number(activity.upperLimit)"
             ></uni-number-box>
             <button
               @tap="goOrder"

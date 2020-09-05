@@ -229,6 +229,7 @@ export default {
       this.updateIndex++;
     },
     goodsChange(goods, index) {
+      debugger
       console.log(goods);
       if (goods.choseOtherVersions && goods.choseOtherVersions.length > 0) {
         this.specialPrice = true;
@@ -236,7 +237,8 @@ export default {
         this.specialPrice = false;
       }
       let totalMoney = 0;
-      if (this.groupType === 'taocan') {
+      console.log(this.groupType)
+      if (this.groupType === 0) {
         if (goods.productFlag === 'f') {
           this.currentDetail.products[index] = goods;
         } else if (goods.productFlag === 's') {
@@ -362,7 +364,6 @@ export default {
       console.log(this.currentDetail);
       let total = 0;
       this.currentDetail.products.forEach((item) => {
-        debugger;
         if (this.specialPrice === true) {
           total = ((parseFloat(item.choseOtherVersions[0].invoicePrice) * parseInt(item.promotionNum))
             + parseFloat(total)).toFixed(2);
