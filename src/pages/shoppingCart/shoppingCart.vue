@@ -310,6 +310,8 @@ export default {
           }
         });
       }
+      // 更新底栏
+      this.updateTotal();
       this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
@@ -430,6 +432,10 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.shoppingList[index] = goods;
+      this.updateTotal();
+    },
+    updateTotal() {
+      /* 更新底栏统计 */
       // 更新选择的商品数目
       this.totalGoodsNum = this.countTotalNumber();
       // 更新选择的总商品价格
@@ -449,7 +455,7 @@ export default {
       /* 计算选择的商品的总价 */
       let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
-        if (v.checked) {
+        if (v.checked && v.isShow) {
           const num = v.number;
           // 获取应该计算的版本数据
           const version = this.getPriceVersionData(v).find(data => data.priceType);
@@ -462,7 +468,7 @@ export default {
     },
     countTotalNumber() {
       /* 计算选择的商品的总数 */
-      return this.shoppingList.filter(v => v.checked).length;
+      return this.shoppingList.filter(v => v.checked && v.isShow).length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
