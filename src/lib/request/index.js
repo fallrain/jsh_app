@@ -67,7 +67,9 @@ function hideLoading() {
 }
 function showLoading() {
   /* 打开遮罩 */
-  uni.showLoading();
+  uni.showLoading({
+    mask: true
+  });
   return new Date().getTime();
 }
 
