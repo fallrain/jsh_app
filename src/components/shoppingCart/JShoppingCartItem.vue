@@ -759,8 +759,11 @@ export default {
         saletoCode: this.userInf.customerCode,
         sendtoCode: this.defaultSendTo.customerCode,
       });
-      this.cartService.updateProductNumber(form);
-      this.$emit('updateNumber', newValue);
+      // 节流
+      this.$u.throttle(() => {
+        this.cartService.updateProductNumber(form);
+        this.$emit('updateNumber', newValue);
+      }, 500, false);
     },
     setFollowState() {
       /* 设置关注状态 */
