@@ -85,6 +85,10 @@
   padding-right: 26px;
 }
 
+.jAddressPicker-cnt-detail-item-wrap{
+  width: 100%;
+}
+
 .jAddressPicker-cnt-detail-item {
   position: relative;
   width: 100%;
@@ -122,4 +126,12 @@
   -webkit-line-clamp: 4;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.jAddressPicker-search-wrap{
+  width: 100%;
+  margin-top: 24px;
+  margin-bottom: 30px;
+  padding-left: 82px;
+  padding-right: 40px;
 }

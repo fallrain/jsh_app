@@ -138,7 +138,7 @@ export default {
           }
           return false;
         });
-      });
+      }, 500, false);
     }
   }
 };

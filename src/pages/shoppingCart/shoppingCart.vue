@@ -188,6 +188,9 @@ export default {
           isCanBeCheck: false,
           checked: false,
           isExpand: false,
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['name'],
           children: []
         },
         {
@@ -196,6 +199,9 @@ export default {
           checked: false,
           isExpand: true,
           childrenType: 'long',
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['address', 'addressCode'],
           children: []
         },
       ],
