@@ -1,7 +1,7 @@
 <template>
   <view
     class="jActivityItem">
-    <view class="dis-flex mb16">
+    <view @tap="goDetail()" class="dis-flex mb16">
       <view class="dis-flex" v-if="activity.valid === false">
         <view v-if="activity.activityType === 'taocan'">
           <view class="tag-default mr20">失效套餐</view>
@@ -43,15 +43,15 @@
           套餐失效
         </view>
       </view>
-      <view class="mb12 dis-flex text-666">
+      <view @tap="goDetail()" class="mb12 dis-flex text-666">
         <view class="">活动结束时间：</view>
         <view class="text-primary">{{activity.expTime}}</view>
       </view>
-      <view class="mb12 dis-flex text-666">
+      <view @tap="goDetail()" class="mb12 dis-flex text-666">
         <view class="">主产品剩余可购买：</view>
         <view class="text-primary">{{activity.upperLimit}}</view>
       </view>
-      <view class="jActivity-pic">
+      <view @tap="goDetail()" class="jActivity-pic">
         <view v-for="(item, index) in activity.products" class="pic-item" :key="index+'#-#'">
           <view class="pic-style">
             <image :src="item.imageUrl"></image>
@@ -62,21 +62,21 @@
     </view>
     <view v-else>
       <view v-if="activity.activityType === 'taocan'" class="jActivity-content">
-        <view class="dis-flex flex-w text-666">
+        <view @tap="goDetail()" class="dis-flex flex-w text-666">
           <view class="w50p mb12 dis-flex">
             <view class="">活动结束时间：</view>
             <view class="text-primary">{{fomrmateDate(activity.endDate)}}</view>
           </view>
-          <view class="w50p mb12 dis-flex text-666">
+          <view @tap="goDetail()" class="w50p mb12 dis-flex text-666">
             <view class="">配比：</view>
             <view class="text-primary">{{activity.proportionMain}}:{{activity.proportion}}</view>
           </view>
-          <view class="w50p mb12 dis-flex text-666">
+          <view @tap="goDetail()" class="w50p mb12 dis-flex text-666">
             <view class="">主产品剩余可购买：</view>
             <view class="text-primary">{{activity.upperLimit}}</view>
           </view>
         </view>
-        <view class="jActivity-pic">
+        <view @tap="goDetail()" class="jActivity-pic">
           <!--主产品-->
           <view v-for="(item, index) in activity.products" class="pic-item" :key="index+'%%'">
             <view

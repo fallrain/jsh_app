@@ -51,14 +51,14 @@
         :index="index"
         @change="goodsChange"
       ></j-product-item>
-      <!--<j-product-item-->
-        <!--:groupType="currentDetail.activityType"-->
-        <!--v-for="(goods,index) in currentDetail.pbProducts"-->
-        <!--:key="index"-->
-        <!--:goods="goods"-->
-        <!--:index="index"-->
-        <!--@change="goodsChange"-->
-      <!--&gt;</j-product-item>-->
+      <j-product-item
+        :groupType="currentDetail.activityType"
+        v-for="(goods,index) in currentDetail.pbProducts"
+        :key="index"
+        :goods="goods"
+        :index="index"
+        @change="goodsChange"
+      ></j-product-item>
     </view>
     <j-product-btm
       :groupType="currentDetail.activityType"
@@ -97,7 +97,7 @@ export default {
   },
   data() {
     return {
-      specialPrice: true,
+      specialPrice: false,
       currentAdd: {}, // 当前选中地址
       addressList: [], // 地址列表
       // 送达方数据
@@ -236,25 +236,29 @@ export default {
         this.specialPrice = false;
       }
       let totalMoney = 0;
-      if (goods.productFlag === 'f') {
-        this.currentDetail.products[index] = goods;
-      } else if (goods.productFlag === 's') {
-        this.currentDetail.pbProducts[index] = goods;
+      if (this.groupType === 'taocan') {
+        if (goods.productFlag === 'f') {
+          this.currentDetail.products[index] = goods;
+        } else if (goods.productFlag === 's') {
+          this.currentDetail.pbProducts[index] = goods;
+        }
+        this.currentDetail = JSON.parse(JSON.stringify(this.currentDetail));
+        // 更新已选产品数量
+        this.limit1.choosedMainNum = 0;
+        this.limit1.choosedPBNum = 0;
+        this.currentDetail.products.forEach((item) => {
+          this.limit1.choosedMainNum += parseInt(item.choosedNum);
+          totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
+        });
+        this.currentDetail.pbProducts.forEach((item) => {
+          this.limit1.choosedPBNum += parseInt(item.choosedNum);
+          totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
+        });
+        this.conditionStatus = this.isUpToCondition();
+        this.totalMoney = totalMoney.toFixed(2);
+      } else {
+        this.getTotalMoney();
       }
-      this.currentDetail = JSON.parse(JSON.stringify(this.currentDetail));
-      // 更新已选产品数量
-      this.limit1.choosedMainNum = 0;
-      this.limit1.choosedPBNum = 0;
-      this.currentDetail.products.forEach((item) => {
-        this.limit1.choosedMainNum += parseInt(item.choosedNum);
-        totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
-      });
-      this.currentDetail.pbProducts.forEach((item) => {
-        this.limit1.choosedPBNum += parseInt(item.choosedNum);
-        totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
-      });
-      this.conditionStatus = this.isUpToCondition();
-      this.totalMoney = totalMoney.toFixed(2);
     },
     // 判断套餐条件是否已经满足
     isUpToCondition() {
@@ -355,10 +359,17 @@ export default {
       }
     },
     getTotalMoney() {
+      console.log(this.currentDetail);
       let total = 0;
       this.currentDetail.products.forEach((item) => {
-        total = ((parseFloat(item.priceDto.invoicePrice) * parseInt(item.promotionNum))
-          + parseFloat(total)).toFixed(2);
+        debugger;
+        if (this.specialPrice === true) {
+          total = ((parseFloat(item.choseOtherVersions[0].invoicePrice) * parseInt(item.promotionNum))
+            + parseFloat(total)).toFixed(2);
+        } else {
+          total = ((parseFloat(item.priceDto.invoicePrice) * parseInt(item.promotionNum))
+            + parseFloat(total)).toFixed(2);
+        }
       });
       this.totalMoney = this.jshUtil.formatFloat(total, 2);
     },
@@ -383,38 +394,7 @@ export default {
           {
             activityType: this.getActivityTypeCode(this.currentDetail.activityType),
             activityId: this.currentDetail.id,
-            productList: [
-              {
-                productCode: 'CBAGD4000',
-                number: 1,
-                isStock: '1',
-                farWeek: '0',
-                creditModel: '0',
-                isCheckFarWeek: '0',
-                isCheckCreditModel: '0',
-                farWeekDate: '',
-                transferVersion: '',
-                priceType: 'PT',
-                priceVersion: '',
-                productSeries: '',
-                kuanXian: '0',
-                isCheckKuanXian: '0'
-              }, {
-                productCode: 'FA08F000M',
-                number: 2,
-                isStock: '1',
-                farWeek: '0',
-                creditModel: '0',
-                isCheckFarWeek: '0',
-                isCheckCreditModel: '0',
-                farWeekDate: '',
-                transferVersion: '',
-                priceType: 'PT',
-                priceVersion: '',
-                productSeries: '',
-                kuanXian: '0',
-                isCheckKuanXian: '0'
-              }],
+            productList: [],
             number: this.groupProductNum
           }]
       };
@@ -434,8 +414,9 @@ export default {
       // 订单产品遍历组合
       const productArr = [];
       this.currentDetail.products.forEach((item) => {
+        let productItem = {};
         if (item.choosedNum !== 0) {
-          const productItem = {
+          productItem = {
             productCode: item.productCode,
             number: parseInt(item.choosedNum),
             isStock: '1',
@@ -451,9 +432,8 @@ export default {
             kuanXian: '0',
             isCheckKuanXian: '0'
           };
-          productArr.push(productItem);
         } else if (this.currentDetail.activityType === 'zuhe') {
-          const productItem = {
+          productItem = {
             productCode: item.productCode,
             number: item.promotionNum * this.groupProductNum,
             isStock: '1',
@@ -469,8 +449,12 @@ export default {
             kuanXian: '0',
             isCheckKuanXian: '0'
           };
-          productArr.push(productItem);
         }
+        if (item.choseOtherVersions && item.choseOtherVersions.length > 0) {
+          productItem.priceType = item.choseOtherVersions[0].priceType.toUpperCase();
+          productItem.priceVersion = item.choseOtherVersions[0].versionCode;
+        }
+        productArr.push(productItem);
       });
       if (this.currentDetail.pbProducts) {
         this.currentDetail.pbProducts.forEach((item) => {
