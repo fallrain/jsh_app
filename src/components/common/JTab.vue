@@ -65,6 +65,8 @@ export default {
   },
   methods: {
     tabClick(item, index) {
+      console.log(item);
+      console.log(index);
       /* tab 点击事件 */
       this.tabs.forEach((v) => {
         v.active = false;

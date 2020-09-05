@@ -63,6 +63,8 @@ const util = {
     if (!val2) {
       val2 = 0;
     }
+    val1 *= 1;
+    val2 *= 1;
     val1 += '';
     val2 += '';
     const val1Split = val1.split('.');
@@ -70,8 +72,8 @@ const util = {
     const val1Len = val1Split[1] ? val1Split[1].length : 0;
     const val2Len = val2Split[1] ? val2Split[1].length : 0;
     const multiple = Math.pow(10, val1Len > val2Len ? val1Len : val2Len);
-    val1 = val1.replace('.', '') * (val1Len ? 1 : multiple);
-    val2 = val2.replace('.', '') * (val2Len ? 1 : multiple);
+    val1 *= multiple;
+    val2 *= multiple;
     let returnValue;
     switch (arithmetic) {
       case 1:

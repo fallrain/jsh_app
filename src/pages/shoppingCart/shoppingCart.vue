@@ -7,7 +7,7 @@
         @tabClick="tabClick"
       >
         <template #right>
-          <view
+          <view v-show="index === 'gwc'"
             @tap="showIndustryPicker"
             class="shoppingCart-tab-picker"
           >
@@ -17,88 +17,92 @@
         </template>
       </j-tab>
     </view>
-    <view class="shoppingCart-ads">
-      <view class="shoppingCart-ads-total">共{{shoppingList.length}}件宝贝</view>
-      <view
-        @tap="showAdsPicker"
-        class="shoppingCart-ads-detail"
-      >
-        <view class="iconfont iconlocal"></view>
-        <text>配送至：{{choseSendAddress.name || ''}}</text>
+    <view v-show="index === 'gwc'">
+      <view class="shoppingCart-ads">
+        <view class="shoppingCart-ads-total">共{{shoppingList.length}}件宝贝</view>
+        <view
+          @tap="showAdsPicker"
+          class="shoppingCart-ads-detail"
+        >
+          <view class="iconfont iconlocal"></view>
+          <text>配送至：{{choseSendAddress.name || ''}}</text>
+        </view>
       </view>
-    </view>
-    <view
-      class="shoppingCart-list"
-      v-if="shoppingList.length"
-    >
       <view
-        v-for="(goods,index) in shoppingList"
-        :key="goods.id"
+        class="shoppingCart-list"
+        v-if="shoppingList.length"
       >
-        <j-shopping-cart-item
-          v-if="goods.isShow"
-          :ref="'shoppingCartItem'+index"
-          :beforeCreditModeChange="checkCreditQuota"
-          :goods="goods"
-          :index="index"
-          :userInf="userInf"
-          :defaultSendTo="defaultSendTo"
-          :versionPrice="versionPrice"
-          :warehouseFlag="choseSendAddress.yunCangFlag"
-          @change="goodsChange"
-          @del="singleDeleteCart"
-          @updateNumber="refreshShoppingCartList"
-        ></j-shopping-cart-item>
+        <view
+          v-for="(goods,index) in shoppingList"
+          :key="goods.id"
+        >
+          <j-shopping-cart-item
+            v-if="goods.isShow"
+            :ref="'shoppingCartItem'+index"
+            :beforeCreditModeChange="checkCreditQuota"
+            :goods="goods"
+            :index="index"
+            :userInf="userInf"
+            :defaultSendTo="defaultSendTo"
+            :versionPrice="versionPrice"
+            :warehouseFlag="choseSendAddress.yunCangFlag"
+            @change="goodsChange"
+            @del="singleDeleteCart"
+            @updateNumber="refreshShoppingCartList"
+          ></j-shopping-cart-item>
+        </view>
+        <view
+          class="shoppingCart-empty"
+          v-if="shoppingList.length && !shoppingList.filter(v=>v.isShow).length"
+        >
+          没有匹配的相关产品~
+        </view>
       </view>
       <view
         class="shoppingCart-empty"
-        v-if="shoppingList.length && !shoppingList.filter(v=>v.isShow).length"
+        v-else
       >
-        没有匹配的相关产品~
+        购物车空空如也~
       </view>
+      <block v-if="failureGoodsList.length">
+        <j-failure-goods-list
+          :list="failureGoodsList"
+          @change="failureGoodsListChange"
+          @clear="clearFailureGoods"
+        ></j-failure-goods-list>
+      </block>
+      <j-shopping-cart-btm
+        :isCheckedAll.sync="isCheckAll"
+        :isEdit.sync="isEdit"
+        :total="totalGoodsNum"
+        :total-price="totalGoodsPrice"
+        @checkAll="checkAll"
+        @del="deleteCart"
+        @follow="multiFollowGoods"
+        @submit="submitOrder"
+      ></j-shopping-cart-btm>
+      <j-address-picker
+        :show.sync="isShowAdsPicker"
+        :pickerList="sendCustomerList"
+        :beforeCheck="adsPickerBeforeCheck"
+        :beforeCheckParent="adsPickerBeforeCheckParent"
+        @change="sendCustomerListChange"
+      ></j-address-picker>
+      <m-toast
+        :isdistance="true"
+        ref="toast"
+      ></m-toast>
+      <j-pop-picker
+        keyName="code"
+        title="产业"
+        :choseOptions.sync="choseIndustryOptions"
+        :options="industryGroupData"
+        :show.sync="isIndustryPickerShow"
+        @change="industryPickerChange"
+      ></j-pop-picker>
     </view>
-    <view
-      class="shoppingCart-empty"
-      v-else
-    >
-      购物车空空如也~
-    </view>
-    <block v-if="failureGoodsList.length">
-      <j-failure-goods-list
-        :list="failureGoodsList"
-        @change="failureGoodsListChange"
-        @clear="clearFailureGoods"
-      ></j-failure-goods-list>
-    </block>
-    <j-shopping-cart-btm
-      :isCheckedAll.sync="isCheckAll"
-      :isEdit.sync="isEdit"
-      :total="totalGoodsNum"
-      :total-price="totalGoodsPrice"
-      @checkAll="checkAll"
-      @del="deleteCart"
-      @follow="multiFollowGoods"
-      @submit="submitOrder"
-    ></j-shopping-cart-btm>
-    <j-address-picker
-      :show.sync="isShowAdsPicker"
-      :pickerList="sendCustomerList"
-      :beforeCheck="adsPickerBeforeCheck"
-      :beforeCheckParent="adsPickerBeforeCheckParent"
-      @change="sendCustomerListChange"
-    ></j-address-picker>
-    <m-toast
-      :isdistance="true"
-      ref="toast"
-    ></m-toast>
-    <j-pop-picker
-      keyName="code"
-      title="产业"
-      :choseOptions.sync="choseIndustryOptions"
-      :options="industryGroupData"
-      :show.sync="isIndustryPickerShow"
-      @change="industryPickerChange"
-    ></j-pop-picker>
+    <vehicle-car-list v-show="index === 'zc'"></vehicle-car-list>
+    <transfer-shopping-cart v-show="index === 'zx'"></transfer-shopping-cart>
   </view>
 </template>
 <script>
@@ -109,6 +113,8 @@ import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import JTab from '../../components/common/JTab';
 import JPopPicker from '../../components/form/JPopPicker';
+import vehicleCarList from '@/pages/vehicleList/vehicleCarList';
+import transferShoppingCart from '@/pages/transferGoods/transferShoppingCart';
 import './css/shoppingCart.scss';
 import {
   mapGetters,
@@ -134,13 +140,17 @@ export default {
     JFailureGoodsList,
     JShoppingCartBtm,
     JShoppingCartItem,
-    MToast
+    MToast,
+    transferShoppingCart,
+    vehicleCarList
   },
   mixins: [
     shoppingCartMixin
   ],
   data() {
     return {
+      // 默认显示购物车
+      index: 'gwc',
       tabs: [
         {
           id: 'gwc',
@@ -310,6 +320,8 @@ export default {
           }
         });
       }
+      // 更新底栏
+      this.updateTotal();
       this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
@@ -430,6 +442,10 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.shoppingList[index] = goods;
+      this.updateTotal();
+    },
+    updateTotal() {
+      /* 更新底栏统计 */
       // 更新选择的商品数目
       this.totalGoodsNum = this.countTotalNumber();
       // 更新选择的总商品价格
@@ -449,7 +465,7 @@ export default {
       /* 计算选择的商品的总价 */
       let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
-        if (v.checked) {
+        if (v.checked && v.isShow) {
           const num = v.number;
           // 获取应该计算的版本数据
           const version = this.getPriceVersionData(v).find(data => data.priceType);
@@ -462,7 +478,7 @@ export default {
     },
     countTotalNumber() {
       /* 计算选择的商品的总数 */
-      return this.shoppingList.filter(v => v.checked).length;
+      return this.shoppingList.filter(v => v.checked && v.isShow).length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -564,6 +580,11 @@ export default {
     },
     tabClick(tabs) {
       this.tabs = tabs;
+      this.tabs.forEach(item => {
+        if (item.active) {
+          this.index = item.id;
+        }
+      });
     },
     deleteCart(idList, isFailure = false) {
       /* 删除购物车里的商品 */

@@ -49,9 +49,10 @@
         ></u-number-box>
         <button
           v-if="isShowAddCart"
-          class="jGoodsItem-cnt-opts-primary ml26"
+          :class="['jGoodsItem-cnt-opts-primary ml26',priceInf.disabled && 'disabled']"
           type="button"
           @tap="checkSpecifications"
+          :disabled="priceInf.disabled"
         >加入购物车
         </button>
         <button
@@ -253,6 +254,7 @@ export default {
         priceInf = {};
         if (!isSale) {
           priceInf.invoicePrice = '营销活动进行中';
+          priceInf.disabled = true;
         }
       }
 
@@ -263,10 +265,13 @@ export default {
         // 附加的数据字段,方便统一展示
         inf.invoicePrice = this.jshUtil.formatNumber(priceInf.promotionPrice, 2);
       } else {
-        inf.invoicePrice = this.jshUtil.formatNumber(priceInf.invoicePrice, 2);
+        inf.invoicePrice = priceInf.invoicePrice === null ? null : this.jshUtil.formatNumber(priceInf.invoicePrice, 2);
       }
       // fix 供价
       inf.supplyPrice = this.jshUtil.formatNumber(inf.supplyPrice, 2);
+      if (inf.invoicePrice === null) {
+        inf.disabled = true;
+      }
       return inf;
     }
   },

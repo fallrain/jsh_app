@@ -7,7 +7,7 @@
   padding: 24px 0px 24px 24px;
   margin-bottom: 24px;
 }
-  
+
 .transferDetailAddress-transfer {
   border-bottom: 2px solid #D8D8D8;
 }
@@ -23,13 +23,15 @@
   }
 }
 .transferDetailAddress-information{
-  display: flex;
-  align-items: center;
   font-size: 24px;
   color: #333;
   flex-wrap: wrap;
+  .transferDetailAddress-for {
+    display: flex;
+  }
   .transferDetailAddress-information-text{
     margin-bottom: 18px;
+    align-items: center;
   }
   .transferDetailAddress-information-text.mla{
     margin-left: 40px;
@@ -46,7 +48,7 @@
 }
 .transferDetailAddress-information.order{
   margin-bottom: 10px;
+  display: flex;
 }
 
 
-  

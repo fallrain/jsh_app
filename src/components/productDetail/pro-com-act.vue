@@ -6,8 +6,10 @@
         <view class="pro-act-head-but">X</view>
       </view>
       <scroll-view
-          :scroll-y="true"
+          scroll-y="true"
           class="filter-drawer-cnt-list"
+          show-scrollbar="true"
+          croll-with-animation="true"
       >
         <view class="pro-act-pop-detail-wrap">
           <view class="pro-act-pop-detail" v-for="(act,indexA) in info" :key="indexA">
@@ -71,24 +73,24 @@
                 </view>
                 <view class="pro-act-pop-detail-thr mb8">
                   <view class="marker"></view>
-                  <view class="pro-act-pop-detail-item-oneNam">名称：</view>
+                  <view class="pro-act-pop-detail-item-oneNam">活动名称：</view>
                 </view>
                 <view class="pro-act-pop-detail-for mb8">
                   <view class="pro-act-pop-detail-item-oneNam">{{aac.name}}</view>
                 </view>
                 <view class="pro-act-pop-detail-thr mb8">
                   <view class="marker"></view>
-                  <view class="pro-act-pop-detail-item-oneNam">有效期：</view>
-                </view>
-                <view class="pro-act-pop-detail-for mb8">
-                  <view class="pro-act-pop-detail-item-oneNam">{{aac.time}}</view>
-                </view>
-                <view class="pro-act-pop-detail-thr mb8">
-                  <view class="marker"></view>
-                  <view class="pro-act-pop-detail-item-oneNam">数量：</view>
+                  <view class="pro-act-pop-detail-item-oneNam">活动剩余数量：</view>
                 </view>
                 <view class="pro-act-pop-detail-for mb8">
                   <view class="pro-act-pop-detail-item-oneNam">{{aac.num}}</view>
+                </view>
+                <view class="pro-act-pop-detail-thr mb8">
+                  <view class="marker"></view>
+                  <view class="pro-act-pop-detail-item-oneNam">活动结束日期：</view>
+                </view>
+                <view class="pro-act-pop-detail-for mb8">
+                  <view class="pro-act-pop-detail-item-oneNam">{{aac.time}}</view>
                 </view>
               </div>
             </view>
