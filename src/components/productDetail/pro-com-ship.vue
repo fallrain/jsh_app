@@ -6,8 +6,10 @@
         <view class="top-ship-but">X</view>
       </view>
       <scroll-view
-          :scroll-y="true"
+          scroll-y="true"
           class="filter-drawer-cnt-list"
+          scroll-with-animation="true"
+          show-scrollbar="true"
       >
         <view class="sorrowC-ship">
           <view @click="checkAct(index)" v-for="(ship,index) in info" :key="index">

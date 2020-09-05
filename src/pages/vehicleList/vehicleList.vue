@@ -7,7 +7,7 @@
       </view>
       <view>
         <j-head-tab :popTabs="popTabs" :tabs="tabs" @tabClick="tabClick" @tabconfirmPup="tabconfirmPup"
-                    class="mb12"></j-head-tab>
+                    class="mb12" activeItemName="item1"></j-head-tab>
       </view>
     </view>
     <view>

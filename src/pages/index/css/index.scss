@@ -1,3 +1,8 @@
+.status_bar {
+  height: var(--status-bar-height);
+  width: 100%;
+  --window-top: 25px;
+}
 .uni-navbar {
   height: 80px;
   line-height: 80px;

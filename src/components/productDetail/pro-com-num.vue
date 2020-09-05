@@ -15,7 +15,7 @@
               {{infos.product.productName}}
             </view>
             <view class="uni-flex uni-row">
-              <view style="font-size: 20px;color: #ED2856;"> ¥ {{infos.price.invoicePrice}}</view>
+              <view style="font-size: 20px;color: #ED2856;"> ¥ {{infos.price.invoicePrice.toFixed(2)}}</view>
             </view>
           </view>
         </view>
@@ -48,7 +48,7 @@
         <view class="pro-num-pop-wrap">
           <view class="pro-num-pop-wrap4">
             <view class="pro-num-pop-name">数&nbsp;&nbsp;&nbsp;量：</view>
-            <view class="number"><uni-number-box :value="numberValue" :disabled="Number(stock[infos.product.productCode].stockTotalNum) === 0" @change="changeNum" /></view>
+            <view class="number"><uni-number-box :value="numberValue" :max="Number(stock[infos.product.productCode].stockTotalNum)" :disabled="Number(stock[infos.product.productCode].stockTotalNum) === 0" @change="changeNum" /></view>
           </view>
         </view>
         <view class="pro-num-line"></view>

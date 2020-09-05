@@ -348,9 +348,11 @@ export default {
       }
       console.log(this.SendWay);
       console.log(this.brand);
-      this.getTransferList();
+      console.log('1111dddddddddddddddddddddd');
       if (this.list && this.list.length > 0) {
         this.mescroll.resetUpScroll(true);
+      } else {
+        this.getTransferList();
       }
     },
     getStockNum() {
@@ -430,6 +432,7 @@ export default {
         this.mescroll.endBySize(10, 0);
         return;
       }
+      console.log('3333333dddddddddddddddddd');
       const scrollView = await this.getTransferList(pages);
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
@@ -890,6 +893,7 @@ export default {
         this[tab.handler]();
       }
       this.mescroll.resetUpScroll(true);
+      console.log('444444dddddddddddddddddd');
       this.getTransferList();
       this.getStockNum();
     },
@@ -909,7 +913,7 @@ export default {
       /* 抽屉筛选确认 */
       // 重新搜索
       console.log(this.filterList);
-
+      console.log('222222dddddddddddddddddd');
       this.getTransferList();
       this.getStockNum();
       this.mescroll.resetUpScroll(true);

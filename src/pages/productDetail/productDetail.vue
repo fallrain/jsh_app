@@ -1,20 +1,23 @@
 <template>
-  <view>
+  <view class="container">
     <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">
-      <view @click="checkCut(0)" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
-      <view @click="checkCut(1)" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
-      <view @click="checkCut(2)" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>
+      <view @click="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
+      <view @click="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
+      <view @click="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>
     </view>
-    <uni-swiper-dot :info="detailInfo.images" :current="current" :mode="mode" field="content">
-      <swiper class="swiper-box" @change="changePic">
-        <swiper-item v-for="(item, index) in detailInfo.images" :key="index">
-          <view class="swiper-item">
-            <image class="image" :src="item.masterImage" mode="aspectFill"></image>
-          </view>
-        </swiper-item>
-      </swiper>
-    </uni-swiper-dot>
-    <view class="uni-common-mt" id="goods">
+    <scroll-view class="scroller" style="height: 100vh;" :scroll-into-view="toView" scroll-y="true" scroll-with-animation="true">
+   <view  style="margin-top:40px;" id="goods">
+     <uni-swiper-dot :info="detailInfo.images" :current="current" :mode="mode" field="content">
+       <swiper class="swiper-box" @change="changePic" >
+         <swiper-item v-for="(item, index) in detailInfo.images" :key="index">
+           <view class="swiper-item">
+             <image class="image" :src="item.masterImage" mode="aspectFill"></image>
+           </view>
+         </swiper-item>
+       </swiper>
+     </uni-swiper-dot>
+   </view>
+    <view class="uni-common-mt">
       <view class="uni-flex uni-row padding-15">
         <view class="text col-34 larger" style="color: #ed2856;margin: auto;">¥ {{detailInfo.product.invoicePrice ? detailInfo.product.invoicePrice : ''}}</view>
         <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
@@ -97,17 +100,17 @@
         <view class="padding-30 col-40 modeller">热门推荐</view>
       </view>
       <view class="uni-flex uni-row">
-        <scroll-view class="scroll-view_H" scroll-x="true" @scroll="scroll" scroll-left="120">
+        <scroll-view class="scroll-view_H" style="min-height: 140px;" scroll-x="true" @scroll="scroll" scroll-left="120">
           <view v-for="ieen in hostList" :key="ieen.productCode" class="scroll-view-item_H">
             <image :src="ieen.imageUrl[0]" style="height: 76px;width: 76px;" @tap="goDetail(ieen)"></image>
             <view>
               <span class="product-detail-lei1">{{ieen.title}}</span>
-              <br><span style="color: #ED2856;font-size: 8px;">￥{{ieen.price}}</span>
+              <span style="color: #ED2856;font-size: 14px;">￥{{ieen.price}}</span>
             </view>
           </view>
         </scroll-view>
       </view>
-      <view class="lineHigt"></view>
+<!--      <view class="lineHigt"></view>-->
       <view class="uni-flex uni-row" id="specs">
         <view class="padding-30 col-40 modeller">规格参数</view>
       </view>
@@ -124,6 +127,7 @@
     <view class="product-detail-foot">
       <pro-com-foot :info.sync="footButtong" @putcar="putcar" @putplay="putplay" @goCarList="goCarList"></pro-com-foot>
     </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -162,6 +166,7 @@ export default {
   },
   data() {
     return {
+      toView: '',
       productCode: '', // 前页面传入产品编码
       titles: '配送至',
       stock: {}, // 库存
@@ -316,7 +321,7 @@ export default {
             const a = {
               titleLe: '特价版本',
               name: lis.versionCode,
-              price: lis.invoicePrice,
+              price: Number(lis.invoicePrice).toFixed(2),
               time: lis.endDate,
               kou: lis.rebateRateShow * 100,
               num: lis.usableQty,
@@ -340,7 +345,7 @@ export default {
             const a = {
               titleLe: '工程版本',
               name: lis.versionCode,
-              price: lis.invoicePrice,
+              price: Number(lis.invoicePrice).toFixed(2),
               time: lis.endDate,
               kou: lis.rebateRateShow * 100,
               num: lis.usableQty,
@@ -364,7 +369,7 @@ export default {
             const a = {
               titleLe: '样机版本',
               name: lis.versionCode,
-              price: lis.invoicePrice,
+              price: Number(lis.invoicePrice).toFixed(2),
               time: lis.endDate,
               kou: lis.rebateRateShow * 100,
               num: lis.usableQty,
@@ -620,7 +625,7 @@ export default {
       if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本' || n.titleLe === '调货' || n.titleLe === '特价版本')) {
         this.footButtong.isSaleLe = true;
       }
-      this.detailInfo.product.invoicePrice = this.CheckActivityInfo.price;
+      this.detailInfo.product.invoicePrice = Number(this.CheckActivityInfo.price).toFixed(2);
       console.log(this.CheckActivityInfo);
       // debugger;
     },
@@ -630,32 +635,18 @@ export default {
       this.getProductDetail();// 获取产品详情
     },
     checkCut(e) {
+      this.toView = e;
       // uni.pageScrollTo({
       //   scrollTop: 0
       // });
-      if (e < 1) {
-        console.log('tou');
-        uni.pageScrollTo({
-          scrollTop: 0
-        });
+      this.goodsCheck = false;
+      this.detailsCheck = false;
+      this.specsCheck = false;
+      if (e === 'goods') {
         this.goodsCheck = true;
-        this.detailsCheck = false;
-        this.specsCheck = false;
-      } else if (e > 1) {
-        console.log('222222222222222222',this.detailsHight);
-        uni.pageScrollTo({
-          scrollTop: this.detailsHight
-        });
-        this.goodsCheck = false;
+      } else if (e === 'details') {
         this.detailsCheck = true;
-        this.specsCheck = false;
       } else {
-        console.log('11111111111111',this.specsHight);
-        uni.pageScrollTo({
-          scrollTop: this.specsHight
-        });
-        this.goodsCheck = false;
-        this.detailsCheck = false;
         this.specsCheck = true;
       }
     },
@@ -733,3 +724,27 @@ export default {
 };
 
 </script>
+<style lang="scss">
+.container{
+  width: 100%;
+  display: flex;
+  scroll-view{
+    //height: 100vh;
+    .left{
+      font-size: 50rpx;
+      line-height: 150rpx;
+    }
+  }
+  > view{
+    width: 100%;
+    position: fixed;
+  }
+}
+.scroll-view_H {
+  min-height: 140px !important;
+}
+//.uni-scroll-view {
+//  min-height: 140px !important;
+//}
+
+</style>

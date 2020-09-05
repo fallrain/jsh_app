@@ -6,12 +6,13 @@
         :form="form"
         :allOrderList="allOrderList"
       ></t-alert-verification>
-      <j-tab
-        :tabs="tabs"
-        :hasRightSlot="true"
-        @tabClick="tabClick"
-      >
-      </j-tab>
+<!--      <j-tab-->
+<!--        :tabs="tabs"-->
+<!--        :hasRightSlot="true"-->
+<!--        @tabClick="tabClick"-->
+<!--        activeItemName="item3"-->
+<!--      >-->
+<!--      </j-tab>-->
       <view class="cumulative-shoppingCart">共{{transferNum}}件宝贝</view>
       <view class="shoppingCart-list">
         <t-shopping-cart-item

@@ -1,6 +1,9 @@
 <template>
   <view class="homepage">
 <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
+    <view class="status_bar">
+      <!-- 这里是状态栏 -->
+    </view>
     <view class="homepage-top">
       <view class="homepage-top-head">
         <view class='iconfont iconzuo homepage-top-head-iconl'  @tap="goBack"></view>
@@ -420,20 +423,20 @@ export default {
   },
   created() {
     this.getPageInf();
-    // (async() => {
-    //   await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-    //   await this[USER.UPDATE_SALE_ASYNC]();
-    //   await  this[USER.UPDATE_TOKEN_USER_ASYNC]();
-    // })().then(res =>{
-    //     // this.get()
-    // })
+    (async () => {
+      await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+      await this[USER.UPDATE_SALE_ASYNC]();
+      await this[USER.UPDATE_TOKEN_USER_ASYNC]();
+    })().then((res) => {
+      // this.get()
+      console.log(this.defaultSendToInf);
+      console.log(this.tokenUserInf);
+    });
 
     // this.recommend();
-    this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-    this[USER.UPDATE_SALE_ASYNC]();
-    this[USER.UPDATE_TOKEN_USER_ASYNC]();
-    console.log(this.defaultSendToInf);
-    console.log(this.tokenUserInf);
+    // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
+    // this[USER.UPDATE_SALE_ASYNC]();
+    // this[USER.UPDATE_TOKEN_USER_ASYNC]();
   },
   onLoad() {
     const _this = this;
