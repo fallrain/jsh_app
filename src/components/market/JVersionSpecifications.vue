@@ -1,10 +1,12 @@
-<template>
+<template
+>
   <uni-popup
     ref="pop"
     type="bottom"
     @change="change"
   >
-    <view class="jVersionSpecifications-pop">
+    <view
+      class="jVersionSpecifications-pop">
       <view class="jVersionSpecifications-head j-flex-aic">
         <view class="jVersionSpecifications-head-title">{{title}}</view>
         <view
@@ -13,36 +15,21 @@
         >X
         </view>
       </view>
-      <slot name="head"></slot>
       <scroll-view
         :scroll-y="true"
         class="jVersionSpecifications-pop-detail-wrap"
       >
         <view
           class="jVersionSpecifications-pop-detail"
-          v-for="(item,index) in versionData"
-          :key="index"
         >
-          <view class="jVersionSpecifications-pop-detail-head">
-            <text class="jVersionSpecifications-pop-detail-head-title">{{item.title}}</text>
-            <view
-              :class="[
-                'jVersionSpecifications-pop-detail-head-title-arrow iconfont iconxia',
-                !item.isExpand && 'active'
-              ]"
-              @tap="toggleExpand(item)"
-            >
-            </view>
-          </view>
           <view
-            v-if="item.isExpand"
             class="jVersionSpecifications-pop-detail-list"
           >
-            <div
+            <view
               :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
-              v-for="(version,vIndex) in item.list"
-              :key="vIndex"
-              @tap="handleClick(version,item.list,index,vIndex)"
+              v-for="(version,vIndex) in versionData"
+              :key="version.versionCode"
+              @tap="handleClick(version,vIndex)"
             >
               <view
                 class="jVersionSpecifications-pop-detail-item-check"
@@ -52,33 +39,35 @@
               </view>
               <view
                 class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
-                v-if="version.name"
+                v-if="version.versionCode"
               >
                 <view class="jVersionSpecifications-pop-detail-item-name">名称：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type1">{{version.name}}</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type1 fs20">
+                  {{version.priceTypeStr}}{{version.versionCode}}
+                </view>
               </view>
               <view
                 class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
                 v-if="version.price"
               >
                 <view class="jVersionSpecifications-pop-detail-item-name">价格：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.price}}</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.specialPrice}}</view>
               </view>
               <view
                 class="jVersionSpecifications-pop-detail-item-name-wrap"
-                v-if="version.time"
+                v-if="version.endDate"
               >
                 <view class="jVersionSpecifications-pop-detail-item-name">有效期：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.time}}</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.endDate}}</view>
               </view>
               <view
                 class="jVersionSpecifications-pop-detail-item-name-wrap"
-                v-if="version.num"
+                v-if="version.usableQty"
               >
                 <view class="jVersionSpecifications-pop-detail-item-name">数量：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.num}}</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.usableQty}}</view>
               </view>
-            </div>
+            </view>
           </view>
         </view>
       </scroll-view>
@@ -147,8 +136,12 @@ export default {
       default: '取消'
     }
   },
+  created() {
+  },
   data() {
-    return {};
+    return {
+      updataIndex: 0
+    };
   },
   watch: {
     show(val) {
@@ -168,51 +161,22 @@ export default {
       /* 关闭弹层 */
       this.$emit('update:show', false);
     },
-    handleClick(version, list, parIndex, vIndex) {
-      /* 选择版本 */
-      if (this.type === 'custom') {
-        this.versionData = this.customCheckFun(this.versionData, list, parIndex, vIndex);
-      } else {
-        const curChecked = version.checked;
-        // 除了当前版本，其他版本的选择都取消
-        this.versionData.forEach((v, index) => {
-          // checkbox模式下可在当前版本里多选
-          if (this.type === 'checkbox') {
-            if (parIndex !== index) {
-              v.list.forEach((otherItem) => {
-                otherItem.checked = false;
-              });
-            }
-          } else {
-            // radio模式下，只能单选
-            v.list.forEach((otherItem) => {
-              otherItem.checked = false;
-            });
-          }
-        });
-        version.checked = !curChecked;
-      }
-
-      this.$emit('change', this.versionData);
-    },
-    toggleExpand(item) {
-      /* 选择规格展开or收起 */
-      item.isExpand = !item.isExpand;
+    handleClick(v) {
+      v.checked = !v.checked;
+      console.log(this.versionData);
       this.$emit('change', this.versionData);
     },
     confirm() {
       /* 确定 */
       const checkedList = [];
-      this.versionData.forEach((version) => {
-        version.list.forEach((v, index) => {
-          if (v.checked) {
-            checkedList.push({
-              ...v,
-              $parentId: version.id,
-              $choseIndex: index
-            });
-          }
-        });
+      this.versionData.forEach((v, index) => {
+        if (v.checked) {
+          checkedList.push({
+            ...v,
+            $parentId: v.id,
+            $choseIndex: index
+          });
+        }
       });
       // 选中的版本列表数据
       this.$emit('confirm', checkedList);

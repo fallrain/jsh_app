@@ -37,11 +37,20 @@
           <view class="jProductItem-cnt-price"
                 style="color: #999;">{{goods.reason}}</view>
         </view>
-        <view v-else class="jProductItem-cnt-price-inf">
-          <view class="jProductItem-cnt-price">¥ {{goods.priceDto.invoicePrice}}</view>
-          <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：¥{{goods.promotionNum}}</view>
-          <view v-else class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
-          <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
+        <view v-else>
+          <view v-if="!specialPrice" class="jProductItem-cnt-price-inf">
+            <view class="jProductItem-cnt-price">¥ {{goods.priceDto.invoicePrice}}</view>
+            <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量111：¥{{goods.promotionNum}}</view>
+            <view v-else class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
+            <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
+          </view>
+          <!--特价产品-->
+          <view v-else class="jProductItem-cnt-price-inf">
+            <view class="jProductItem-cnt-price">¥ {{goods.priceDto.invoicePrice}}</view>
+            <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：¥{{goods.promotionNum}}</view>
+            <view v-else class="fs20 text-666 mr12">供价：¥{{goods.priceDto.invoicePrice}}</view>
+            <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
+          </view>
         </view>
       </view>
     </view>
@@ -54,7 +63,7 @@
         <text>版本规格</text>
         <i class="iconfont iconxia"></i>
       </view>
-      <view v-if="goods.valid !== false" class="dis-flex ">
+      <view v-if="goods.valid !== false" class="dis-flex ml-auto">
         <view class="fs20 text-999">共计：</view>
         <view class="jProductItem-cnt-price">
           ¥ {{computedPrice(goods.priceDto.invoicePrice, goods.choosedNum)}}
@@ -82,12 +91,20 @@
           @change="isCreditModeChange"
         ></j-switch>
       </view>
+      <view
+        v-if="isShowSpecificationsBtn"
+        class="jProductItem-btm-version-picker ml-auto"
+        @tap="showSpecifications"
+      >
+        <text>版本规格</text>
+        <i class="iconfont iconxia"></i>
+      </view>
     </view>
     <j-version-specifications
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
-      :customCheckFun="specificationsCustomCheckFun"
       type="custom"
+      @change="changeVersion"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
     >
@@ -121,21 +138,36 @@ export default {
       type: [String, Number]
     }
   },
+  created() {
+    console.log(this.goods);
+    this.genSpecificationsList();
+  },
   data() {
     return {
+      specialPrice: false,
+      updateIndex: 0,
       // 是否显示 版本规格
       isShowSpecifications: false,
+      specificationsList: [],
+      specificationsCheckList: []
     };
   },
   watch: {
-  },
-  created() {
-    console.log(this.goods);
+    goods() {
+      debugger
+      if (this.goods.choseOtherVersions && this.goods.choseOtherVersions.length > 0) {
+        this.specialPrice = true;
+      } else {
+        this.specialPrice = false;
+      }
+      this.genSpecificationsList();
+      // this.specificationsList = this.goods.tjPrice.specialList;
+    }
   },
   computed: {
     isShowSpecificationsBtn() {
       /* 是否显示【版本规格】按钮 */
-      return !!(this.goods.tjPrice.length);
+      return !!(this.goods.tjPrice.specialList.length);
     },
     formateNum() {
       return val => val;
@@ -145,6 +177,23 @@ export default {
     }
   },
   methods: {
+    genSpecificationsList() {
+      /* 组合版本规格信息 */
+      this.specificationsList = [];
+      let specificationsList = [];
+      if (this.goods.specialPrice === 'Y') {
+        if (this.goods.tjPrice && this.goods.tjPrice.specialList) {
+          // 版本规格为特价
+          specificationsList = this.goods.tjPrice.specialList;
+        }
+      }
+      specificationsList = JSON.parse(JSON.stringify(specificationsList));
+      specificationsList.forEach((item) => {
+        item.checked = false;
+      });
+      this.specificationsList = specificationsList;
+      console.log(this.specificationsList);
+    },
     change(val) {
       this.goods.choosedNum = val;
       this.isCreditModeChange();
@@ -157,17 +206,12 @@ export default {
       /* 显示版本规格 */
       this.isShowSpecifications = true;
     },
+    changeVersion(versionData) {
+      this.specificationsList = versionData;
+    },
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */
       this.specificationsCheckList = checkedList;
-      // 搜索调货版本
-      const transfer = checkedList.find(v => !v.priceType);
-      // 选了调货版本，则数量为调货的最大数量
-      // todo 还有库存的判断
-      if (transfer) {
-        this.goods.number = transfer.num;
-        this.goods.productList[0].number = transfer.num;
-      }
       this.goods.choseOtherVersions = checkedList;
       this.$emit('change', this.goods, this.index);
     },

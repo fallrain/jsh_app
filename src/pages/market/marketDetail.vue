@@ -46,19 +46,19 @@
       <j-product-item
         :groupType="currentDetail.activityType"
         v-for="(goods,index) in currentDetail.products"
-        :key="index+'^-^'"
+        :key="'MMM'+index"
         :goods="goods"
         :index="index"
         @change="goodsChange"
       ></j-product-item>
-      <j-product-item
-        :groupType="currentDetail.activityType"
-        v-for="(goods,index) in currentDetail.pbProducts"
-        :key="index"
-        :goods="goods"
-        :index="index"
-        @change="goodsChange"
-      ></j-product-item>
+      <!--<j-product-item-->
+        <!--:groupType="currentDetail.activityType"-->
+        <!--v-for="(goods,index) in currentDetail.pbProducts"-->
+        <!--:key="index"-->
+        <!--:goods="goods"-->
+        <!--:index="index"-->
+        <!--@change="goodsChange"-->
+      <!--&gt;</j-product-item>-->
     </view>
     <j-product-btm
       :groupType="currentDetail.activityType"
@@ -97,6 +97,7 @@ export default {
   },
   data() {
     return {
+      specialPrice: true,
       currentAdd: {}, // 当前选中地址
       addressList: [], // 地址列表
       // 送达方数据
@@ -199,10 +200,11 @@ export default {
     },
     // 获取所有产品的库存
     async getAllStock() {
-      const arr1 = this.currentDetail.products;
-      const arr2 = this.currentDetail.pbProducts;
+      const arr1 = this.currentDetail.products || [];
+      const arr2 = this.currentDetail.pbProducts || [];
       const arr = arr1.concat(arr2);
       const productCodes = [];
+      console.log(arr);
       arr.forEach((item) => {
         productCodes.push(item.productCode);
       });
@@ -212,17 +214,27 @@ export default {
         this.stockDate = data;
       }
       // 所有产品增加库存数量字段
-      this.currentDetail.products.forEach((item) => {
-        item.stockTotalNum = data[item.productCode].stockTotalNum;
-        item.choosedNum = 0; // 增加选择数量字段
-      });
-      this.currentDetail.pbProducts.forEach((item) => {
-        item.stockTotalNum = data[item.productCode].stockTotalNum;
-        item.choosedNum = 0; // 增加选择数量字段
-      });
+      if (this.currentDetail.products) {
+        this.currentDetail.products.forEach((item) => {
+          item.stockTotalNum = data[item.productCode].stockTotalNum;
+          item.choosedNum = 0; // 增加选择数量字段
+        });
+      }
+      if (this.currentDetail.pbProducts) {
+        this.currentDetail.pbProducts.forEach((item) => {
+          item.stockTotalNum = data[item.productCode].stockTotalNum;
+          item.choosedNum = 0; // 增加选择数量字段
+        });
+      }
       this.updateIndex++;
     },
     goodsChange(goods, index) {
+      console.log(goods);
+      if (goods.choseOtherVersions && goods.choseOtherVersions.length > 0) {
+        this.specialPrice = true;
+      } else {
+        this.specialPrice = false;
+      }
       let totalMoney = 0;
       if (goods.productFlag === 'f') {
         this.currentDetail.products[index] = goods;

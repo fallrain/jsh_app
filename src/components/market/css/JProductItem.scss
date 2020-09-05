@@ -184,7 +184,7 @@
   padding: 28px 0px;
   line-height: 44px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .jProductItem-btm-tags {
@@ -284,4 +284,7 @@
 }
 .jucon-fend{
   justify-content: flex-end;
+}
+.ml-auto{
+  margin-left: auto;
 }
