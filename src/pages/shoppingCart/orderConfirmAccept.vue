@@ -157,19 +157,15 @@ export default {
     computeOrderNum() {
       let successNum = 0;
       let failNum = 0;
-      let orderState = true;
       this.orderData.forEach((item) => {
         item.bigOrderDetailList.forEach((v) => {
           if (v.status !== '9') {
             // 失败订单
-            orderState = false;
+            failNum++;
+          } else {
+            successNum++;
           }
         });
-        if (!orderState) {
-          failNum++;
-        } else {
-          successNum++;
-        }
       });
       this.successNum = successNum;
       this.failNum = failNum;

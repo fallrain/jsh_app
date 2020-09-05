@@ -47,13 +47,14 @@
     </view>
     <view v-if="groupType === 'taocan'" class="jProductItem-btm">
       <view
+        v-if="isShowSpecificationsBtn"
         class="jProductItem-btm-version-picker"
         @tap="showSpecifications"
       >
         <text>版本规格</text>
         <i class="iconfont iconxia"></i>
       </view>
-      <view v-if="goods.valid !== false" class="dis-flex">
+      <view v-if="goods.valid !== false" class="dis-flex ">
         <view class="fs20 text-999">共计：</view>
         <view class="jProductItem-cnt-price">
           ¥ {{computedPrice(goods.priceDto.invoicePrice, goods.choosedNum)}}
@@ -82,11 +83,21 @@
         ></j-switch>
       </view>
     </view>
+    <j-version-specifications
+      :show.sync="isShowSpecifications"
+      :versionData="specificationsList"
+      :customCheckFun="specificationsCustomCheckFun"
+      type="custom"
+      @confirm="specificationsConfirm"
+      @cancel="specificationsCancel"
+    >
+    </j-version-specifications>
   </view>
 </template>
 
 <script>
 import JSwitch from '../form/JSwitch';
+import JVersionSpecifications from './JVersionSpecifications';
 import {
   uniNumberBox
 } from '@dcloudio/uni-ui';
@@ -96,6 +107,7 @@ export default {
   name: 'jProductItem',
   components: {
     uniNumberBox,
+    JVersionSpecifications,
     JSwitch
   },
   props: {
@@ -117,7 +129,14 @@ export default {
   },
   watch: {
   },
+  created() {
+    console.log(this.goods);
+  },
   computed: {
+    isShowSpecificationsBtn() {
+      /* 是否显示【版本规格】按钮 */
+      return !!(this.goods.tjPrice.length);
+    },
     formateNum() {
       return val => val;
     },
@@ -137,7 +156,25 @@ export default {
     showSpecifications() {
       /* 显示版本规格 */
       this.isShowSpecifications = true;
-    }
+    },
+    specificationsConfirm(checkedList) {
+      /* 选中版本确认 */
+      this.specificationsCheckList = checkedList;
+      // 搜索调货版本
+      const transfer = checkedList.find(v => !v.priceType);
+      // 选了调货版本，则数量为调货的最大数量
+      // todo 还有库存的判断
+      if (transfer) {
+        this.goods.number = transfer.num;
+        this.goods.productList[0].number = transfer.num;
+      }
+      this.goods.choseOtherVersions = checkedList;
+      this.$emit('change', this.goods, this.index);
+    },
+    specificationsCancel() {
+      /* 选中版本取消 */
+      this.isShowSpecifications = false;
+    },
   }
 };
 </script>

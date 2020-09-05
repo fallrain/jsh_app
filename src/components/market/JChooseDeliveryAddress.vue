@@ -135,7 +135,7 @@ export default {
 
 <style lang="scss">
   .scroll-container{
-    height: 100vh !important;
+    /*height: 100% !important;*/
     overflow-y: auto;
   }
   .jChooseDeliveryAddressDrawer {

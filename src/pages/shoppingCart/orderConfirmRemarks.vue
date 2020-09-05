@@ -1,6 +1,27 @@
 <template>
   <view class="orderConfirmRemarks">
-    <view class="orderConfirmRemarks-group">
+    <view class="orderConfirmRemarks-group p24 fs30">
+      <radio-group @change="radioChange">
+        <label class="radio mr20" v-for="(item, index) in showType" :key="index">
+          <radio color="#ED2856" :value="item.value" :checked="item.checked" />
+          {{item.name}}
+        </label>
+      </radio-group>
+    </view>
+    <view class="orderConfirmRemarks-group mt24">
+      <j-cell
+        title="备注地址"
+        class="br-b-n"
+      >
+        <template #right>
+          <view
+            class="orderConfirmRemarks-icon iconfont iconyou"
+          ></view>
+        </template>
+      </j-cell>
+      <view class="address-style">请选择地址</view>
+    </view>
+    <view class="orderConfirmRemarks-group mt24">
       <j-cell
         title="姓名"
       >
@@ -79,9 +100,29 @@
         </template>
       </j-cell>
     </view>
+    <view class="orderConfirmRemarks-group orderConfirmRemarks-group-crossRegion mt24">
+      <j-cell
+        title="收藏地址"
+        :titleWrap="false"
+      >
+        <template #right>
+          <j-switch
+            :active.sync="form.crossRegion"
+          ></j-switch>
+        </template>
+      </j-cell>
+    </view>
     <view
       @tap="sureRemark"
-      class="sure-btn">确定</view>
+      class="sure-btn">
+      确定
+    </view>
+    <j-pop-picker
+      title="备注地址"
+      :show.sync="addressPickerShow"
+      :options="addressOption"
+      :choseOptions.sync="currentAdd"
+    ></j-pop-picker>
   </view>
 </template>
 
@@ -101,6 +142,22 @@ export default {
   },
   data() {
     return {
+      status: 'zfyd',
+      showType: [
+        {
+          value: 'zfyd',
+          name: '直发异地',
+          checked: true
+        },
+        {
+          value: 'jdyd',
+          name: '京东异地',
+          checked: true
+        }
+      ],
+      addressPickerShow: false,
+      addressOption: [],
+      currentAdd: {},
       form: {
         orderIndex: '',
         productIndex: '',
@@ -118,18 +175,24 @@ export default {
     this.form.productIndex = option.productIndex;
   },
   methods: {
+    // 获取地址列表
     getLocation() {
-      uni.getLocation({
-        type: 'wgs84',
-        success(res) {
-          debugger;
-          console.log(res);
-        }
-      });
+
     },
     sureRemark() {
       uni.$emit('confirmremarks', JSON.stringify(this.form));
       uni.navigateBack();
+    },
+    radioChange(e) {
+      console.log(e.target.value);
+      this.showType.forEach((item) => {
+        if (item.value === e.target.value) {
+          item.checked = true;
+          this.status = item.value;
+        } else {
+          item.checked = false;
+        }
+      });
     }
   }
 };

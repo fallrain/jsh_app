@@ -27,7 +27,7 @@
           <view>还需配比产品</view>
         </view>
       </view>
-      <view v-if="currentDetail.proportionType === '0'" class="marketDetail-requirement fs20">
+      <view v-if="currentDetail.proportionType === '2'" class="marketDetail-requirement fs20">
         <view class="dis-flex mb24">
           <view class="w210 text-999">主产品起订金额限定</view>
           <view class="w200 text-333">{{limit2.choosedMainMoney}} / ¥{{currentDetail.spePrice}}</view>
@@ -156,6 +156,7 @@ export default {
   onLoad(option) {
     const { item, saletoCode, sendtoCode } = option;
     this.currentDetail = JSON.parse(item);
+    console.log(this.currentDetail);
     this.stockForm.saletoCode = saletoCode;
     this.stockForm.sendtoCode = sendtoCode;
     this.initpage();
