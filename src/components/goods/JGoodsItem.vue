@@ -1,5 +1,5 @@
 <template>
-  <view :class="['jGoodsItem',isEditMode && 'checked']">
+  <view :class="['jGoodsItem j-fix-u-numberBox',isEditMode && 'checked']">
     <view
       :class="['jGoodsItem-check iconfont', goods.isChecked ? 'iconradio active':'iconradio1']"
       @tap="handleCheck"
@@ -42,11 +42,11 @@
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
-        <uni-number-box
+        <u-number-box
           :max="maxGoodsNumber"
           :min="1"
           @change="goodsNumChange"
-        ></uni-number-box>
+        ></u-number-box>
         <button
           v-if="isShowAddCart"
           class="jGoodsItem-cnt-opts-primary ml26"
@@ -100,9 +100,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import JVersionSpecifications from '../shoppingCart/JVersionSpecifications';
 import './css/jGoodsItem.scss';
@@ -119,7 +116,6 @@ export default {
   name: 'JGoodsItem',
   components: {
     JVersionSpecifications,
-    uniNumberBox,
     MToast
   },
   mixins: [
@@ -575,9 +571,9 @@ export default {
         // versionCode: '',
       });
     },
-    goodsNumChange(val) {
+    goodsNumChange({ value }) {
       /* 商品数量change */
-      this.goods.number = val;
+      this.goods.number = value;
       this.$emit('change', this.goods, this.index);
     },
     handleCheck() {

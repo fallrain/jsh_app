@@ -18,7 +18,7 @@ text,
 label,
 image,
 input,
-scroll-view{
+scroll-view {
   box-sizing: border-box;
 }
 
@@ -91,3 +91,58 @@ button {
 
 
 /*fix uni-app end*/
+
+/*fix uview*/
+
+.j-fix-u-numberBox {
+  .u-numberbox {
+    .uni-input-input {
+      color: $theme-color;
+      font-size: 16px;
+    }
+
+    .u-icon-plus,
+    .u-icon-minus {
+      width: 34px;
+      height: 38px !important;
+      font-weight: 400;
+      border: 1px solid #ddd;
+      background: #fff !important;
+
+      .uicon-minus,
+      .uicon-plus, {
+        font-size: 20px !important;
+        background: #fff;
+      }
+
+      .uicon-minus {
+        color: #999;
+      }
+
+      .uicon-plus, {
+        color: $theme-color;
+      }
+    }
+
+    .u-icon-plus {
+      border-left: 1px solid #ddd;
+    }
+
+    .u-icon-minus {
+      border-right: 1px solid #ddd;
+    }
+
+    .u-number-input {
+      width: 60px !important;
+      height: 38px !important;
+      margin-left: 0;
+      margin-right: 0;
+      background: #fff !important;
+      border: 1px solid #ddd;
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+}
+
+/*fix uview end*/

@@ -63,5 +63,9 @@ export default {
   getIndustryList() {
     /* 获取产业 */
     return jGet(urls.getIndustryList);
+  },
+  updateProductNumber(data) {
+    /* 更新购物车数量 */
+    return jPostJson(urls.updateProductNumber, data);
   }
 };

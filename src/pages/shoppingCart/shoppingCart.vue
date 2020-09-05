@@ -42,10 +42,12 @@
           :goods="goods"
           :index="index"
           :userInf="userInf"
+          :defaultSendTo="defaultSendTo"
           :versionPrice="versionPrice"
           :warehouseFlag="choseSendAddress.yunCangFlag"
           @change="goodsChange"
           @del="singleDeleteCart"
+          @updateNumber="refreshShoppingCartList"
         ></j-shopping-cart-item>
       </view>
       <view
