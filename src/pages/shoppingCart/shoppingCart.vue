@@ -121,6 +121,7 @@ import {
   mapMutations
 } from 'vuex';
 import {
+  GOODS_LIST,
   USER
 } from '../../store/mutationsTypes';
 import OrderSplitCompose from '../../model/OrderSplitCompose';
@@ -232,6 +233,13 @@ export default {
   created() {
     this.setPageInfo();
   },
+  onShow() {
+    // 如果已经更新过购物车，则需要刷新下
+    if (this.isCartUpdate) {
+      this.reloadPageInfo();
+      this[GOODS_LIST.UPDATE_IS_CART_UPDATE](false);
+    }
+  },
   onPullDownRefresh() {
     /* 重置页面 */
     this.reloadPageInfo().then(() => {
@@ -246,11 +254,13 @@ export default {
     ...mapGetters({
       userInf: USER.GET_SALE,
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
+      isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
     }),
   },
   methods: {
     ...mapMutations([
-      USER.UPDATE_DEFAULT_SEND_TO
+      USER.UPDATE_DEFAULT_SEND_TO,
+      GOODS_LIST.UPDATE_IS_CART_UPDATE,
     ]),
     setPageInfo() {
       // 设置产业数据
@@ -580,7 +590,7 @@ export default {
     },
     tabClick(tabs) {
       this.tabs = tabs;
-      this.tabs.forEach(item => {
+      this.tabs.forEach((item) => {
         if (item.active) {
           this.index = item.id;
         }

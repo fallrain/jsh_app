@@ -40,6 +40,7 @@
           :sendtoCode="defaultSendToInf.customerCode"
           :allPrice="item.$allPrice"
           @change="goodsChange"
+          @addCartSuccess="addCartSuccess"
         ></j-goods-item>
       </view>
     </mescroll-body>
@@ -129,7 +130,8 @@ import {
 } from 'vuex';
 import {
   USER,
-  COMMODITY
+  COMMODITY,
+  GOODS_LIST
 } from '../../store/mutationsTypes';
 
 export default {
@@ -285,12 +287,13 @@ export default {
     ...mapGetters({
       userInf: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-      catalogList: COMMODITY.GET_CATALOG_LIST
+      catalogList: COMMODITY.GET_CATALOG_LIST,
     }),
   },
   methods: {
     ...mapMutations([
-      USER.UPDATE_DEFAULT_SEND_TO
+      USER.UPDATE_DEFAULT_SEND_TO,
+      GOODS_LIST.UPDATE_IS_CART_UPDATE,
     ]),
     getPageInf() {
       this.getSaleInfo();
@@ -499,6 +502,11 @@ export default {
       this.list[index] = goods;
       console.log(goods);
     },
+    addCartSuccess() {
+      /* 加购成功 */
+      // 更改是否已经加购了的状态
+      this[GOODS_LIST.UPDATE_IS_CART_UPDATE](true);
+    },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
       if (!tab.noActive) {
@@ -652,7 +660,7 @@ export default {
           this[USER.UPDATE_DEFAULT_SEND_TO](item);
         }
       });
-    }
+    },
   }
 };
 </script>
