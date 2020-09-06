@@ -497,7 +497,7 @@ export default {
         timeout: 2000,
       });
     },
-    addToCart(product) {
+    async addToCart(product) {
       /**
          ***添加到购物车
          *  product:Object
@@ -551,7 +551,7 @@ export default {
           isTransfer = true;
         }
       }
-      return this.cartService.addToCart({
+      const res = await this.cartService.addToCart({
         // 商品组合编码
         activityId,
         // 组合类型(1单品2组合3抢购4套餐5成套)
@@ -575,6 +575,10 @@ export default {
         // 促销活动版本号
         // versionCode: '',
       });
+      if (res.code === '1') {
+        this.$emit('addCartSuccess');
+      }
+      return res;
     },
     goodsNumChange({ value }) {
       /* 商品数量change */

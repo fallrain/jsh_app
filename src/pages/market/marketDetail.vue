@@ -46,7 +46,7 @@
       <j-product-item
         :groupType="currentDetail.activityType"
         v-for="(goods,index) in currentDetail.products"
-        :key="index+'^-^'"
+        :key="'MMM'+index"
         :goods="goods"
         :index="index"
         @change="goodsChange"
@@ -97,6 +97,7 @@ export default {
   },
   data() {
     return {
+      specialPrice: false,
       currentAdd: {}, // 当前选中地址
       addressList: [], // 地址列表
       // 送达方数据
@@ -199,10 +200,11 @@ export default {
     },
     // 获取所有产品的库存
     async getAllStock() {
-      const arr1 = this.currentDetail.products;
-      const arr2 = this.currentDetail.pbProducts;
+      const arr1 = this.currentDetail.products || [];
+      const arr2 = this.currentDetail.pbProducts || [];
       const arr = arr1.concat(arr2);
       const productCodes = [];
+      console.log(arr);
       arr.forEach((item) => {
         productCodes.push(item.productCode);
       });
@@ -212,37 +214,53 @@ export default {
         this.stockDate = data;
       }
       // 所有产品增加库存数量字段
-      this.currentDetail.products.forEach((item) => {
-        item.stockTotalNum = data[item.productCode].stockTotalNum;
-        item.choosedNum = 0; // 增加选择数量字段
-      });
-      this.currentDetail.pbProducts.forEach((item) => {
-        item.stockTotalNum = data[item.productCode].stockTotalNum;
-        item.choosedNum = 0; // 增加选择数量字段
-      });
+      if (this.currentDetail.products) {
+        this.currentDetail.products.forEach((item) => {
+          item.stockTotalNum = data[item.productCode].stockTotalNum;
+          item.choosedNum = 0; // 增加选择数量字段
+        });
+      }
+      if (this.currentDetail.pbProducts) {
+        this.currentDetail.pbProducts.forEach((item) => {
+          item.stockTotalNum = data[item.productCode].stockTotalNum;
+          item.choosedNum = 0; // 增加选择数量字段
+        });
+      }
       this.updateIndex++;
     },
     goodsChange(goods, index) {
-      let totalMoney = 0;
-      if (goods.productFlag === 'f') {
-        this.currentDetail.products[index] = goods;
-      } else if (goods.productFlag === 's') {
-        this.currentDetail.pbProducts[index] = goods;
+      debugger
+      console.log(goods);
+      if (goods.choseOtherVersions && goods.choseOtherVersions.length > 0) {
+        this.specialPrice = true;
+      } else {
+        this.specialPrice = false;
       }
-      this.currentDetail = JSON.parse(JSON.stringify(this.currentDetail));
-      // 更新已选产品数量
-      this.limit1.choosedMainNum = 0;
-      this.limit1.choosedPBNum = 0;
-      this.currentDetail.products.forEach((item) => {
-        this.limit1.choosedMainNum += parseInt(item.choosedNum);
-        totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
-      });
-      this.currentDetail.pbProducts.forEach((item) => {
-        this.limit1.choosedPBNum += parseInt(item.choosedNum);
-        totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
-      });
-      this.conditionStatus = this.isUpToCondition();
-      this.totalMoney = totalMoney.toFixed(2);
+      let totalMoney = 0;
+      console.log(this.groupType)
+      if (this.groupType === 0) {
+        if (goods.productFlag === 'f') {
+          this.currentDetail.products[index] = goods;
+        } else if (goods.productFlag === 's') {
+          this.currentDetail.pbProducts[index] = goods;
+        }
+        this.currentDetail = JSON.parse(JSON.stringify(this.currentDetail));
+        // 更新已选产品数量
+        this.limit1.choosedMainNum = 0;
+        this.limit1.choosedPBNum = 0;
+        this.currentDetail.products.forEach((item) => {
+          this.limit1.choosedMainNum += parseInt(item.choosedNum);
+          totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
+        });
+        this.currentDetail.pbProducts.forEach((item) => {
+          this.limit1.choosedPBNum += parseInt(item.choosedNum);
+          totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
+        });
+        this.conditionStatus = this.isUpToCondition();
+        this.totalMoney = totalMoney.toFixed(2);
+      } else {
+        this.getTotalMoney();
+      }
     },
     // 判断套餐条件是否已经满足
     isUpToCondition() {
@@ -343,10 +361,16 @@ export default {
       }
     },
     getTotalMoney() {
+      console.log(this.currentDetail);
       let total = 0;
       this.currentDetail.products.forEach((item) => {
-        total = ((parseFloat(item.priceDto.invoicePrice) * parseInt(item.promotionNum))
-          + parseFloat(total)).toFixed(2);
+        if (this.specialPrice === true) {
+          total = ((parseFloat(item.choseOtherVersions[0].invoicePrice) * parseInt(item.promotionNum))
+            + parseFloat(total)).toFixed(2);
+        } else {
+          total = ((parseFloat(item.priceDto.invoicePrice) * parseInt(item.promotionNum))
+            + parseFloat(total)).toFixed(2);
+        }
       });
       this.totalMoney = this.jshUtil.formatFloat(total, 2);
     },
@@ -371,38 +395,7 @@ export default {
           {
             activityType: this.getActivityTypeCode(this.currentDetail.activityType),
             activityId: this.currentDetail.id,
-            productList: [
-              {
-                productCode: 'CBAGD4000',
-                number: 1,
-                isStock: '1',
-                farWeek: '0',
-                creditModel: '0',
-                isCheckFarWeek: '0',
-                isCheckCreditModel: '0',
-                farWeekDate: '',
-                transferVersion: '',
-                priceType: 'PT',
-                priceVersion: '',
-                productSeries: '',
-                kuanXian: '0',
-                isCheckKuanXian: '0'
-              }, {
-                productCode: 'FA08F000M',
-                number: 2,
-                isStock: '1',
-                farWeek: '0',
-                creditModel: '0',
-                isCheckFarWeek: '0',
-                isCheckCreditModel: '0',
-                farWeekDate: '',
-                transferVersion: '',
-                priceType: 'PT',
-                priceVersion: '',
-                productSeries: '',
-                kuanXian: '0',
-                isCheckKuanXian: '0'
-              }],
+            productList: [],
             number: this.groupProductNum
           }]
       };
@@ -422,8 +415,9 @@ export default {
       // 订单产品遍历组合
       const productArr = [];
       this.currentDetail.products.forEach((item) => {
+        let productItem = {};
         if (item.choosedNum !== 0) {
-          const productItem = {
+          productItem = {
             productCode: item.productCode,
             number: parseInt(item.choosedNum),
             isStock: '1',
@@ -439,9 +433,8 @@ export default {
             kuanXian: '0',
             isCheckKuanXian: '0'
           };
-          productArr.push(productItem);
         } else if (this.currentDetail.activityType === 'zuhe') {
-          const productItem = {
+          productItem = {
             productCode: item.productCode,
             number: item.promotionNum * this.groupProductNum,
             isStock: '1',
@@ -457,8 +450,12 @@ export default {
             kuanXian: '0',
             isCheckKuanXian: '0'
           };
-          productArr.push(productItem);
         }
+        if (item.choseOtherVersions && item.choseOtherVersions.length > 0) {
+          productItem.priceType = item.choseOtherVersions[0].priceType.toUpperCase();
+          productItem.priceVersion = item.choseOtherVersions[0].versionCode;
+        }
+        productArr.push(productItem);
       });
       if (this.currentDetail.pbProducts) {
         this.currentDetail.pbProducts.forEach((item) => {

@@ -14,7 +14,7 @@
         </view>
         <view class="dis-flex text-333 mb12">
           付款方：
-          <view class="text-999">{{orderItem.paytoName}}</view>
+          <view class="text-999">({{orderItem.paytoCode}}){{orderItem.paytoName}}</view>
         </view>
         <view class="dis-flex text-333 mb12">
           下单日期：
@@ -29,7 +29,7 @@
           <view class="text-999">{{orderItem.gvsOrderNo}}</view>
         </view>
         <view v-if="orderItem.status !== '9'" class="dis-flex text-333">
-          <view class="w380">失败原因：</view>
+          <view class="w410">失败原因：</view>
           <view class="text-999">{{orderItem.errorMsg}}</view>
         </view>
       </view>
@@ -259,7 +259,7 @@ export default {
 .fs32{
   font-size: 32px;
 }
-.w380{
-  width: 380px;
+.w410{
+  width: 410px;
 }
 </style>
