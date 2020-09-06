@@ -200,7 +200,7 @@ export default {
     }),
     toFixedNum() {
       return function (val) {
-        return (new Number(val)).toFixed(2);
+        return (Number(val)).toFixed(2);
       };
     }
   },
@@ -256,7 +256,7 @@ export default {
         this.allPayer.forEach((v) => {
           if (v.customerCode === item.customerCode) {
             item.balance = v.payerBalance.balance;
-            item.bookbalance = v.payerBalance.bookbalance;
+            item.bookbalance = v.payerBalance.bookBalance;
             item.payerType = v.payerType;
           }
         });

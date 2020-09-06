@@ -11,7 +11,7 @@ export default {
     return jPostJson(url.orderList, data);
   },
   buttonLogicJudgment(data) { // 按钮显示：
-    return jPostJson(url.buttonLogicJudgment,data);
+    return jPostJson(url.buttonLogicJudgment, data);
   },
   paytoInfo(data) { // 付款方列表
     return jPostJson(urlNoApi.paytoInfo, data);
@@ -70,5 +70,14 @@ export default {
   },
   getOrderInfo(data) { // 获取订单信息
     return jPostJson(urlNoApi.getOrderInfo, data);
+  },
+  getProvince(data) { // 获取省份
+    return jGet(urlNoApi.getProvince, data);
+  },
+  getCity(code) { // 获取市
+    return jGet(urlNoApi.getCity, code);
+  },
+  getArea(code) { // 获取区
+    return jGet(urlNoApi.getArea, code);
   },
 };

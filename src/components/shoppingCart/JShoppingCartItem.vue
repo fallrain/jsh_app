@@ -96,8 +96,8 @@
           ></view>
         </view>
         <view
-          class="jShoppingCartItem-btm-switch-wrap"
           v-if="isCreditModel"
+          class="jShoppingCartItem-btm-switch-wrap"
         >
           <j-switch
             :active.sync="goods.isCreditMode"
@@ -109,7 +109,18 @@
         </view>
         <view
           class="jShoppingCartItem-btm-switch-wrap"
+          v-if="isFundsFirst"
+        >
+          <j-switch
+            :active.sync="goods.isFundsFirstMode"
+            @change="goodsChange"
+          >
+          </j-switch>
+          <text class="jShoppingCartItem-btm-switch-text mr32 ml8">款先</text>
+        </view>
+        <view
           v-if="isDirect"
+          class="jShoppingCartItem-btm-switch-wrap"
         >
           <j-switch
             :active.sync="goods.isDirectMode"
@@ -229,6 +240,7 @@ import followGoodsMixin from '@/mixins/goods/followGoods.mixin';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
 import {
   getGoodsInCartPriceType,
+  getYj
 } from '@/lib/dataDictionary';
 
 import AddNumberForm from '@/model/AddNumberForm';
@@ -310,12 +322,21 @@ export default {
       /* 如果不支持信用模式了，已经打开的则关闭 */
       if (val === false) {
         this.goods.isCreditMode = false;
+        this.goodsChange();
       }
     },
     isDirect(val) {
       /* 如果不支持信用模式了，已经打开的则关闭 */
       if (val === false) {
         this.goods.isDirectMode = false;
+        this.goodsChange();
+      }
+    },
+    isFundsFirst(val) {
+      /* 如果不支持款先模式了，已经打开的则关闭 */
+      if (val === false) {
+        this.goods.isFundsFirstMode = false;
+        this.goodsChange();
       }
     }
   },
@@ -348,6 +369,10 @@ export default {
     },
     isCreditModel() {
       /* 是否支持信用模式 */
+      // 传统渠道不支持信用模式
+      if (this.userInf.channelGroup === 'CT') {
+        return false;
+      }
       const {
         activityType,
         productList
@@ -365,6 +390,29 @@ export default {
           return !!(priceType && priceType.toUpperCase() !== 'PT');
         });
       }
+      return state;
+    },
+    isFundsFirst() {
+      /* 是否款先 */
+      let state = false;
+      if (Object.keys(this.versionPrice).length) {
+        const {
+          kuanXian
+        } = this.versionPrice;
+        if (kuanXian && Object.keys(kuanXian).length && kuanXian[this.goods.productList[0].productCode]) {
+          state = true;
+        }
+      }
+      // 传统渠道样机不支持选择款先，默认款先
+      if (this.userInf.channelGroup === 'CT' && this.chosePrice) {
+        const isContainYj = getYj()[this.chosePrice.priceType];
+        state = state && !isContainYj;
+      }
+      // 异地云仓不支持选择款先，默认款先
+      if (this.warehouseFlag === 'ydyc') {
+        state = false;
+      }
+
       return state;
     },
     isShowSpecificationsBtn() {
@@ -515,9 +563,13 @@ export default {
       const totalPrice = this.jshUtil.arithmetic(priceInfo.commonPrice.invoicePrice, number, 3);
       return this.beforeCreditModeChange && this.beforeCreditModeChange(productGroup, totalPrice);
     },
+    goodsChange() {
+      /* goods chang */
+      this.$emit('change', this.goods, this.index);
+    },
     isCreditModeChange() {
       /* 信用模式switch change */
-      this.$emit('change', this.goods, this.index);
+      this.goodsChange();
     },
     isDirectModeChange() {
       /* 直发模式switch change */

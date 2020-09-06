@@ -104,6 +104,17 @@ function getPriceKeyFromAllPrice() {
   };
 }
 
+function getYj() {
+  /* 获取样机 */
+  return {
+    YJCT: 'YJCY',
+    YJCY: 'YJCY',
+    MFJK: 'YJCY',
+    MFYJ: 'YJCY',
+    YJ: 'YJCY',
+  };
+}
+
 function getIndustryGroup() {
   /* 获取全部产品组 */
   return util.commonGet({
@@ -145,5 +156,6 @@ export {
   getIndustryGroup,
   getOrdinaryCartActivityType,
   getPriceKeyFromAllPrice,
-  getStockType
+  getStockType,
+  getYj
 };

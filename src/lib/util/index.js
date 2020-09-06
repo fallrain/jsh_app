@@ -38,6 +38,9 @@ const util = {
   },
   formatNumber(number, digit) {
     /* 把一个数字四舍五入为一个指定精度的数字 */
+    if (number === null || number === undefined) {
+      return '';
+    }
     const m = Math.pow(10, digit);
     const resetNum = `${Math.round(number * m) / m}`;
     const newNum = `${resetNum}.${new Array(digit).fill(0).join('')}`;
