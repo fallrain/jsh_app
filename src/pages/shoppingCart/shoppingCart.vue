@@ -594,16 +594,18 @@ export default {
       this.tabs.forEach(item => {
         if (item.active) {
           if (item.name === '整车直发') {
-            uni.redirectTo({
+            uni.navigateTo({
               url: '/pages/vehicleList/vehicleCarList'
             });
           }
           if (item.name === '中心调货') {
-            uni.redirectTo({
+            uni.navigateTo({
               url: '/pages/transferGoods/transferShoppingCart'
             });
           }
         }
+        item.active = false;
+        this.tabs[0].active = true;
       });
       console.log(tabs);
     },

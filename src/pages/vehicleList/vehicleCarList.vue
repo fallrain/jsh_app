@@ -134,7 +134,7 @@ export default {
             });
           }
           if (item.name === '中心调货') {
-            uni.redirectTo({
+            uni.navigateTo({
               url: '/pages/transferGoods/transferShoppingCart'
             });
           }
