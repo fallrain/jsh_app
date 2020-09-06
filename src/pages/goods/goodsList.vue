@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import Exception from '../../components/exception/Exception';
 import JGoodsItem from '../../components/goods/JGoodsItem';
 import JHeadTab from '../../components/form/JHeadTab';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
@@ -162,7 +161,7 @@ export default {
     JHeadTab,
     JGoodsItem,
     MescrollBody,
-    Exception
+
   },
   data() {
     return {
