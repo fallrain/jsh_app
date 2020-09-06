@@ -62,6 +62,7 @@
       >
         <input
           @tap="getLocation()"
+          disabled
           class="orderConfirmRemarks-ipt"
           placeholderClass="orderConfirmRemarks-placeholder"
           type="text"
@@ -117,20 +118,28 @@
       class="sure-btn">
       确定
     </view>
-    <j-pop-picker
-      title="备注地址"
+    <j-address-picker
+      indicatorStyle=""
+      :addressData="addressData"
       :show.sync="addressPickerShow"
-      :options="addressOption"
-      :choseOptions.sync="currentAdd"
-    ></j-pop-picker>
+      v-model="currentAdds"
+      @changeData="changeData"
+    ></j-address-picker>
   </view>
 </template>
 
 <script>
 import JCell from '../../components/form/JCell';
+import JAddressPicker from '../../components/form/JAddressPicker';
 import JTextarea from '../../components/form/JTextarea';
 import JSwitch from '../../components/form/JSwitch';
 import './css/orderConfirmRemarks.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 
 export default {
@@ -139,9 +148,16 @@ export default {
     JCell,
     JTextarea,
     JSwitch,
+    JAddressPicker
   },
   data() {
     return {
+      addressData: {
+        province: [],
+        city: [],
+        area: []
+      },
+      currentAdds: [0],
       status: 'zfyd',
       showType: [
         {
@@ -152,7 +168,7 @@ export default {
         {
           value: 'jdyd',
           name: '京东异地',
-          checked: true
+          checked: false
         }
       ],
       addressPickerShow: false,
@@ -173,11 +189,54 @@ export default {
   onLoad(option) {
     this.form.orderIndex = option.orderIndex;
     this.form.productIndex = option.productIndex;
+    this.getProvince();
+  },
+  computed: {
+    ...mapGetters({
+      sendToInf: USER.GET_DEFAULT_SEND_TO,
+      saleInf: USER.GET_SALE,
+    }),
+  },
+  watch: {
+    currentAdds(newVal, oldVal) {
+      console.log(newVal);
+      console.log(oldVal);
+      if (oldVal[0] !== newVal[0]) {
+        // 省发生变化，更新市数据
+        const codeData = this.addressData.province[newVal[0]].laid;
+        this.getCity(codeData);
+      } else if (oldVal[1] != newVal[1]) {
+        const codeData = this.addressData.city[newVal[1]].laid;
+        this.getArea(codeData);
+      }
+    }
   },
   methods: {
-    // 获取地址列表
+    changeData(val) {
+      this.currentAdds = val;
+    },
+    // 显示地址选择
     getLocation() {
-
+      this.addressPickerShow = true;
+    },
+    // 获取省市区
+    async getProvince() {
+      const { code, data } = await this.orderService.getProvince();
+      if (code === '1') {
+        this.addressData.province = data;
+      }
+    },
+    async getCity(codeData) {
+      const { code, data } = await this.orderService.getCity(codeData);
+      if (code === '1') {
+        this.addressData.city = data;
+      }
+    },
+    async getArea(codeData) {
+      const { code, data } = await this.orderService.getArea(codeData);
+      if (code === '1') {
+        this.addressData.area = data;
+      }
     },
     sureRemark() {
       uni.$emit('confirmremarks', JSON.stringify(this.form));
