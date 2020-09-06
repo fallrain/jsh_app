@@ -6,13 +6,12 @@
         :form="form"
         :allOrderList="allOrderList"
       ></t-alert-verification>
-<!--      <j-tab-->
-<!--        :tabs="tabs"-->
-<!--        :hasRightSlot="true"-->
-<!--        @tabClick="tabClick"-->
-<!--        activeItemName="item3"-->
-<!--      >-->
-<!--      </j-tab>-->
+      <j-tab
+        :tabs="tabs"
+        :hasRightSlot="true"
+        @tabClick="tabClick"
+      >
+      </j-tab>
       <view class="cumulative-shoppingCart">共{{transferNum}}件宝贝</view>
       <view class="shoppingCart-list">
         <t-shopping-cart-item
@@ -59,7 +58,6 @@ import JTab from '../../components/common/JTab';
 import TOveragePay from '../../components/transfer/TOveragePay';
 import TFailureGoodsList from '../../components/transfer/TFailureGoodsList';
 import TAlertVerification from '../../components/form/TAlertVerification';
-// import { mapState, mapActions, mapMutations } from "vuex"
 import {
   mapGetters, mapMutations
 } from 'vuex';
@@ -67,7 +65,6 @@ import {
   USER, TRANSFER
 } from '../../store/mutationsTypes';
 import './css/transferShoppingCart.scss';
-import sampleMachineListVue from '../sampleMachine/sampleMachineList.vue';
 
 export default {
   name: 'transferShoppingCart',
@@ -570,7 +567,7 @@ export default {
         console.log(code);
         const allInquire = await this.customerService.inquire(code);
         if (allInquire.code === '1') {
-        // 付款方余额信息
+          // 付款方余额信息
           console.log(allInquire.data);
           const payerBal = allInquire.data;
           console.log('555555555555555', payerBal);
@@ -662,10 +659,28 @@ export default {
     },
     tabClick(tabs) {
       this.tabs = tabs;
+      this.tabs.forEach(item => {
+        console.log(item);
+        if (item.active) {
+          if (item.name === '购物车') {
+            this.tabs[0].active = true;
+            uni.switchTab({
+              url: '/pages/shoppingCart/shoppingCart',
+            });
+            // this.tabs.forEach((v) => {
+            //   v.active = false;
+            // });
+            // this.tabs[0].active = true;
+          }
+          if (item.name === '整车直发') {
+            uni.redirectTo({
+              url: '/pages/vehicleList/vehicleCarList'
+            });
+          }
+        }
+      });
     }
   }
-
-
 };
 </script>
 <style lang="scss" scoped>

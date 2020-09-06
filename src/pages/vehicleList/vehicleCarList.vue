@@ -2,6 +2,12 @@
   <view class="vehicleCarList">
     <!-- 验证码弹窗 -->
     <t-alert-verification :show.sync="isShowVf" :form="form" :typpew="typpew" :zhengChe="zhengCheCode" @zhengCheUp="zhengCheUp"></t-alert-verification>
+    <j-tab
+        :tabs="tabs"
+        :hasRightSlot="true"
+        @tabClick="tabClick"
+    >
+    </j-tab>
     <view class="vehicleCar-rouHead">共{{NUM}}件宝贝</view>
     <view class="vehicleCar-invalid" v-if="puTongList.length>0">
       <vehicle-cart-item v-for="(goods,index) in puTongList" :key="index" @pullDetail="pullDetail"
@@ -33,6 +39,7 @@ import vehicleCartItem from '../../components/vehicleList/VehicleCartItem';
 import vehicleCartItemGD from '../../components/vehicleList/VehicleCartItem-gd';
 import vehicleCartItemPC from '../../components/vehicleList/VehicleCartItem-pc';
 import TAlertVerification from '../../components/form/TAlertVerification';
+import JTab from '../../components/common/JTab';
 import {
   mapGetters
 } from 'vuex';
@@ -48,7 +55,8 @@ export default {
     vehicleCartItem,
     vehicleCartItemGD,
     vehicleCartItemPC,
-    TAlertVerification
+    TAlertVerification,
+    JTab
   },
   computed: {
     ...mapGetters({
@@ -56,8 +64,28 @@ export default {
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
     }),
   },
+  onLoad(option) {
+    console.log(option);
+  },
   data() {
     return {
+      tabs: [
+        {
+          id: 'gwc',
+          name: '购物车',
+          active: false
+        },
+        {
+          id: 'zc',
+          name: '整车直发',
+          active: true
+        },
+        {
+          id: 'zx',
+          name: '中心调货',
+          active: false
+        }
+      ],
       zhengCheCode: '', // 提交的整车单号
       typpew: 'ZC', // 弹框页面类型
       isShowVf: false, // 验证码弹窗，判断是否展示
@@ -94,6 +122,24 @@ export default {
       this.checkNum = 0; // 选中的单子
       this.checkAllNum = 0; // 选中的单子的总金额
       this.checkSEQ = ''; // 选中的单子单号
+    },
+    tabClick(tabs) {
+      this.tabs = tabs;
+      console.log(this.tabs);
+      this.tabs.forEach(item => {
+        if (item.active) {
+          if (item.name === '购物车') {
+            uni.switchTab({
+              url: '/pages/shoppingCart/shoppingCart'
+            });
+          }
+          if (item.name === '中心调货') {
+            uni.redirectTo({
+              url: '/pages/transferGoods/transferShoppingCart'
+            });
+          }
+        }
+      });
     },
     async queryJDWarehouse() {
       const timetamp = new Date().valueOf();

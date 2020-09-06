@@ -626,6 +626,9 @@ export default {
         this.footButtong.isSaleLe = true;
       }
       this.detailInfo.product.invoicePrice = Number(this.CheckActivityInfo.price).toFixed(2);
+      if (this.detailInfo.product.invoicePrice === 'NaN') {
+        this.detailInfo.product.invoicePrice = '';
+      }
       console.log(this.CheckActivityInfo);
       // debugger;
     },
@@ -688,7 +691,7 @@ export default {
         url: '/pages/shoppingCart/shoppingCart'
       });
     },
-    async jiaGou1(pt, num1) { // 提交验证码之后
+    async jiaGou1(pt, num1) { // 加入购物车
       // this.CheckActivityInfo
       let stockV = '';
       if (pt === 'PT') {

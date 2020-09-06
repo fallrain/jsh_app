@@ -106,6 +106,7 @@
       :show.sync="isShowAddressDrawer"
       :list="deliveryAddressList"
       @change="deliveryAddressListChange"
+      :activeItemName="'item'+curChoseDeliveryAddress.customerCode"
     ></j-choose-delivery-address>
     <!-- 底部购物车栏 -->
     <transfer-goods-btm

@@ -72,7 +72,6 @@
     "usingComponents": true
   },
   "mp-alipay": {
-    "component2": true,
     "usingComponents": true
   },
   "mp-baidu": {

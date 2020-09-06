@@ -101,8 +101,8 @@
         @change="industryPickerChange"
       ></j-pop-picker>
     </view>
-    <vehicle-car-list v-show="index === 'zc'"></vehicle-car-list>
-    <transfer-shopping-cart v-show="index === 'zx'"></transfer-shopping-cart>
+<!--    <vehicle-car-list v-show="index === 'zc'"></vehicle-car-list>-->
+<!--    <transfer-shopping-cart v-show="index === 'zx'"></transfer-shopping-cart>-->
   </view>
 </template>
 <script>
@@ -113,8 +113,8 @@ import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import JTab from '../../components/common/JTab';
 import JPopPicker from '../../components/form/JPopPicker';
-import vehicleCarList from '@/pages/vehicleList/vehicleCarList';
-import transferShoppingCart from '@/pages/transferGoods/transferShoppingCart';
+// import vehicleCarList from '../vehicleList/vehicleCarList';
+// import transferShoppingCart from '../transferGoods/transferShoppingCart';
 import './css/shoppingCart.scss';
 import {
   mapGetters,
@@ -141,8 +141,8 @@ export default {
     JShoppingCartBtm,
     JShoppingCartItem,
     MToast,
-    transferShoppingCart,
-    vehicleCarList
+    // transferShoppingCart,
+    // vehicleCarList
   },
   mixins: [
     shoppingCartMixin
@@ -580,11 +580,22 @@ export default {
     },
     tabClick(tabs) {
       this.tabs = tabs;
+      console.log(this.tabs);
       this.tabs.forEach(item => {
         if (item.active) {
-          this.index = item.id;
+          if (item.name === '整车直发') {
+            uni.redirectTo({
+              url: '/pages/vehicleList/vehicleCarList'
+            });
+          }
+          if (item.name === '中心调货') {
+            uni.redirectTo({
+              url: '/pages/transferGoods/transferShoppingCart'
+            });
+          }
         }
       });
+      console.log(tabs);
     },
     deleteCart(idList, isFailure = false) {
       /* 删除购物车里的商品 */
