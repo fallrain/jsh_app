@@ -591,7 +591,7 @@ export default {
     tabClick(tabs) {
       this.tabs = tabs;
       console.log(this.tabs);
-      this.tabs.forEach(item => {
+      this.tabs.forEach((item) => {
         if (item.active) {
           if (item.name === '整车直发') {
             uni.navigateTo({
@@ -798,6 +798,8 @@ export default {
         noToast: true
       });
       if (code === '1') {
+        // 提交订单后也应该刷新购物车变更状态
+        this[GOODS_LIST.UPDATE_IS_CART_UPDATE](true);
         const args = JSON.stringify(form);
         // 产品校验成功
         uni.navigateTo({
