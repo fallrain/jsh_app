@@ -128,7 +128,8 @@ import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
 import {
   getIndustryGroup,
-  getOrdinaryCartActivityType
+  getOrdinaryCartActivityType,
+  getYj
 } from '@/lib/dataDictionary';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
 
@@ -402,7 +403,9 @@ export default {
                 // 在购物车里更换的其他版本数据，使得计算属性能监控到
                 choseOtherVersions: [],
                 // 关注状态
-                followState: false
+                followState: false,
+                // 款先模式
+                isFundsFirstMode: false
               });
             } else {
               failureGoodsList.push({
@@ -727,8 +730,9 @@ export default {
             });
             return;
           }
+          const shoppingCartItem = this.$refs[`shoppingCartItem${i}`][0];
           // 检查最大可购买数量，超出提示并返回
-          const maxNum = this.$refs[`shoppingCartItem${i}`][0].maxGoodsNumber;
+          const maxNum = shoppingCartItem.maxGoodsNumber;
           if (number > maxNum) {
             uni.showModal({
               title: '提示',
@@ -761,25 +765,54 @@ export default {
               productListName = 'choseOtherVersions';
             }
           }
-          form.productList = v[productListName].map(prdt => new OrderSplitComposeProduct({
-            ...prdt,
+          let orderSplitComposeProductData = {
             // 存在版本调货，则传版本调货提供的数量
             number: transferVersion ? transferVersionNumber : v.number,
-            // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
-            creditModel: !v.isCreditMode ? '0' : prdt.creditModel,
-            // 是否信用模式
-            isCheckCreditModel: v.isCreditMode ? '1' : '0',
-            // farWeek: prdt.weekPromise,
-            // isCheckFarWeek: '0',
             // 是否直发
             isStock: v.isDirectMode ? '0' : '1',
             // 版本调货版本号
-            transferVersion: transferVersion || undefined
-          }));
+            transferVersion: transferVersion || undefined,
+          };
+          const {
+            channelGroup
+          } = this.userInf;
+          form.productList = v[productListName].map((prdt) => {
+            orderSplitComposeProductData = {
+              ...prdt,
+              // farWeek: prdt.weekPromise,
+              // isCheckFarWeek: '0',
+              orderSplitComposeProductData
+            };
+            // 传统渠道没有信用模式
+            if (channelGroup === 'ZY') {
+              // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
+              orderSplitComposeProductData.creditModel = !v.isCreditMode ? '0' : prdt.creditModel;
+              // 是否信用模式
+              orderSplitComposeProductData.isCheckCreditModel = v.isCreditMode ? '1' : '0';
+            } else {
+              // 是否支持款先
+              orderSplitComposeProductData.isCheckKuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
+              // 是否打开款先
+              orderSplitComposeProductData.kuanXian = v.isFundsFirstMode ? '1' : '0';
+              // 传统渠道样机不支持选择款先，默认款先
+              if (this.userInf.channelGroup === 'CT') {
+                const isContainYj = getYj()[prdt.priceType];
+                if (isContainYj) {
+                  orderSplitComposeProductData.kuanXian = '1';
+                }
+              }
+              // 异地云仓不支持选择款先，默认款先
+              if (this.warehouseFlag && this.warehouseFlag.yunCangFlag === 'ydyc') {
+                orderSplitComposeProductData.kuanXian = '1';
+              }
+            }
+            return new OrderSplitComposeProduct(orderSplitComposeProductData);
+          });
 
           formList.push(form);
         }
       }
+
       if (!formList.length) {
         this.showToast({
           type: 'warn',
