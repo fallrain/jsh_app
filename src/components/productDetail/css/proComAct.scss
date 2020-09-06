@@ -1,3 +1,11 @@
+.filter-drawer-cnt-list {
+  padding-left: 24px;
+  //max-height: 766px;
+  overflow-y: auto;
+  padding-top: 18px;
+  height: calc(100% - 42px);
+}
+
 .pro-act-pop {
   position: relative;
   padding-top: 42px;
@@ -197,12 +205,4 @@
   height: 100px;
   background: #fff;
   padding-right: 32px;
-}
-.filter-drawer-cnt-list {
-  padding-left: 24px;
-  max-height: 766px;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }

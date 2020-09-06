@@ -49,7 +49,7 @@
         <view v-else class="">{{activity.expTime}}</view>
       </view>
       <view @tap="goDetail()" class="mb12 dis-flex text-666">
-        <view class="">主产品剩余可购买：</view>
+        <view class="">剩余可购买套数：</view>
         <view class="">{{activity.upperLimit}}</view>
       </view>
       <view @tap="goDetail()" class="jActivity-pic">
@@ -73,7 +73,7 @@
             <view class="text-primary">{{activity.proportionMain}}:{{activity.proportion}}</view>
           </view>
           <view @tap="goDetail()" class="w50p mb12 dis-flex text-666">
-            <view class="">主产品剩余可购买：</view>
+            <view class="">剩余可购买套数：</view>
             <view class="text-primary">{{activity.upperLimit}}</view>
           </view>
         </view>
@@ -121,7 +121,7 @@
           <view class="text-primary">{{fomrmateDate(activity.expTime)}}</view>
         </view>
         <view @tap="goDetail()" class="mb12 dis-flex text-666">
-          <view class="">主产品剩余可购买：</view>
+          <view class="">剩余可购买套数：</view>
           <view class="text-primary">{{activity.upperLimit}}</view>
         </view>
         <view @tap="goDetail()" class="jActivity-pic">

@@ -50,7 +50,16 @@
             ref="transferGoodsItem"
           ></transfer-goods-item>
         </view>
-        <view class="transferList-items-else" v-else>暂无数据</view>
+        <view v-else>
+          <image
+              src="../../assets/img/exception/error-none.png"
+              style="width:120px; height:120px;margin:28% 35% 5% 38%;"
+          />
+          <view class="else-title">
+            <view class="else-title-l">非常抱歉</view>
+            <text class="else-title-x">没有找到相关的宝贝</text>
+          </view>
+        </view>
       </mescroll-body>
       <!-- 抽屜 -->
     <t-drawer

@@ -22,10 +22,10 @@
       ></image>
     </view>
     <view class="jGoodsItem-cnt">
-      <view class="jGoodsItem-cnt-goodsName j-goods-title">
+      <view class="jGoodsItem-cnt-goodsName j-goods-title" @tap="goDetail">
         {{goods.productName | rmHtml}}
       </view>
-      <view class="jGoodsItem-cnt-price-tips">
+      <view class="jGoodsItem-cnt-price-tips"  @tap="goDetail">
         <view class="jGoodsItem-cnt-price-tips-item">
           直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
@@ -35,7 +35,7 @@
         <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
-      <view class="jGoodsItem-cnt-price-inf">
+      <view class="jGoodsItem-cnt-price-inf" @tap="goDetail">
         <view class="jGoodsItem-cnt-price">{{priceInf.invoicePrice?'¥'+priceInf.invoicePrice: '价格即将公布敬请关注'}}</view>
         <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice || '--'}}
         </view>
@@ -597,6 +597,7 @@ export default {
       const queryStr = this.jshUtil.genQueryStringByObj({
         productCode: this.goods.productCode
       });
+      console.log(this.goods);
       uni.navigateTo({
         url: `/pages/productDetail/productDetail${queryStr}`
       });
