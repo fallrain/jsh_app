@@ -405,11 +405,11 @@ export default {
       }
       // 传统渠道样机不支持选择款先，默认款先
       if (this.userInf.channelGroup === 'CT' && this.chosePrice) {
-        const isContainYj = getYj(this.chosePrice.priceType);
+        const isContainYj = getYj()[this.chosePrice.priceType];
         state = state && !isContainYj;
       }
       // 异地云仓不支持选择款先，默认款先
-      if (this.warehouseFlag && this.warehouseFlag.yunCangFlag === 'ydyc') {
+      if (this.warehouseFlag === 'ydyc') {
         state = false;
       }
 

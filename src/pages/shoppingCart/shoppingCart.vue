@@ -798,12 +798,12 @@ export default {
               if (this.userInf.channelGroup === 'CT') {
                 const isContainYj = getYj()[prdt.priceType];
                 if (isContainYj) {
-                  orderSplitComposeProductData.kuanXian = '1';
+                  orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
               }
               // 异地云仓不支持选择款先，默认款先
-              if (this.warehouseFlag && this.warehouseFlag.yunCangFlag === 'ydyc') {
-                orderSplitComposeProductData.kuanXian = '1';
+              if (this.choseSendAddress.yunCangFlag === 'ydyc') {
+                orderSplitComposeProductData.isCheckKuanXian = '1';
               }
             }
             return new OrderSplitComposeProduct(orderSplitComposeProductData);
