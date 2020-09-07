@@ -16,85 +16,84 @@
         :scroll-y="true"
         class="jAddressPicker-cnt"
       >
-        <view
-          :class="['jAddressPicker-cnt-item',item.checked && 'active']"
+        <template
           v-for="(item,index) in pickerList"
-          :key="index"
         >
           <view
-            class="jAddressPicker-cnt-item-head"
+            :class="['jAddressPicker-cnt-item',item.checked && 'active']"
+            :key="index"
+            v-if="!item.isHide"
           >
             <view
-              :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icontick']"
-            ></view>
-            <text
-              @tap="choose(item,index)"
-              class="jAddressPicker-cnt-item-text"
-            >{{item.name}}</text>
-            <view
-              v-if="item.children"
-              :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
-              @tap="toggleExpand(item,index)"
-            ></view>
-          </view>
-          <block
-            v-if="item.children && item.isExpand"
-          >
-            <view class="jAddressPicker-search-wrap">
-              <j-search-input
-                @change="search(item,index)"
-                @search="search(item,index)"
-                placeholder="请输入搜索信息"
-                v-model="item.searchValue"
-              ></j-search-input>
-            </view>
-            <view
-              class="jAddressPicker-cnt-detail"
+              class="jAddressPicker-cnt-item-head"
             >
-              <template
-                v-for="(detail,dIndex) in item.children"
-              >
-                <template v-if="!detail.isHide">
-                  <view
-                    :class="[
-                  'jAddressPicker-cnt-detail-item',
-                  detail.checked && 'active',
-                  item.childrenType==='short' && 'short'
-                ]"
-                    :key="dIndex"
-                    @tap.stop="checkDetail(detail,item.children,item,index)"
-                  >
-
-                    <view
-                      class="jVersionSpecifications-pop-detail-item-check"
-                      v-if="detail.checked"
-                    >
-                      <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
-                    </view>
-                    <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
-                  </view>
-                </template>
-              </template>
+              <view
+                :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icontick']"
+              ></view>
+              <text
+                @tap="choose(item,index)"
+                class="jAddressPicker-cnt-item-text"
+              >{{item.name}}</text>
+              <view
+                :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
+                @tap="toggleExpand(item,index)"
+                v-if="item.children"
+              ></view>
             </view>
-          </block>
-        </view>
+            <block
+              v-if="item.children && item.isExpand"
+            >
+              <view class="jAddressPicker-search-wrap">
+                <j-search-input
+                  @change="search(item,index)"
+                  @search="search(item,index)"
+                  placeholder="请输入搜索信息"
+                  v-model="item.searchValue"
+                ></j-search-input>
+              </view>
+              <view
+                class="jAddressPicker-cnt-detail"
+              >
+                <template
+                  v-for="(detail,dIndex) in item.children"
+                >
+                  <template v-if="!detail.isHide">
+                    <view
+                      :class="[
+                        'jAddressPicker-cnt-detail-item',
+                        detail.checked && 'active',
+                        item.childrenType==='short' && 'short'
+                      ]"
+                      :key="dIndex"
+                      @tap.stop="checkDetail(detail,item.children,item,index)"
+                    >
+                      <view
+                        class="jVersionSpecifications-pop-detail-item-check"
+                        v-if="detail.checked"
+                      >
+                        <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+                      </view>
+                      <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
+                    </view>
+                  </template>
+                </template>
+              </view>
+            </block>
+          </view>
+        </template>
       </scroll-view>
     </view>
   </uni-popup>
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
-import './css/jAddressPicker.scss';
 import JSearchInput from '../form/JSearchInput';
+import './css/jAddressPicker.scss';
 
 export default {
   name: 'JAddressPicker',
   components: {
     JSearchInput,
-    uniPopup
   },
   props: {
     // 显示隐藏

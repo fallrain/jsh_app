@@ -76,9 +76,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/vehicleCarItem-gd.scss';
 import vehicleMore from './VehicleMore';
 

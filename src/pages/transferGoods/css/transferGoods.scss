@@ -1,26 +1,46 @@
 .transferGoods{
-    min-height: 100vh;
-    background: #F5F5F5;
-    position: relative;
-    top: var(--window-top);
+    //min-height: 100vh;
+    //background: #F5F5F5;
+    //position: relative;
+    //top: var(--window-top);、
+  min-height: 100vh;
+  padding-top: 256px;
+  background: #F5F5F5;
+
     .transferGoods-head{
-      min-height: 140px;
+      position: fixed;
+      top: var(--window-top);
+      z-index: 99;
+      width: 100%;
+      padding-top: 104px;
+
+      //min-height: 140px;
     }
   .uni-drawer__content {
     width: 608px !important;
   }
   .transfer-search{
+    position: absolute;
+    top: 0;
     z-index: 101;
+    left: 0;
+    right: 0;
     height: 104px;
     background: #fff;
     padding-left: 24px;
     padding-right: 24px;
     border-bottom: 1px solid #F5F5F5;
-    display:flex;
-    position: fixed;
-    left: 0;
-    top: 84px;
-    width: 100%;
+    //z-index: 101;
+    //height: 104px;
+    //background: #fff;
+    //padding-left: 24px;
+    //padding-right: 24px;
+    //border-bottom: 1px solid #F5F5F5;
+    //display:flex;
+    //position: fixed;
+    //left: 0;
+    //top: 84px;
+    //width: 100%;
     .transfer-btn{
         width:160px;
         height:56px;

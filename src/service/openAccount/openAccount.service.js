@@ -3,6 +3,7 @@ import {
   jGet,
   jPostJson
 } from '@/lib/request';
+import urles from '@/service/url/mineCustomer.url';
 
 export default {
   getUserInfById(id) {

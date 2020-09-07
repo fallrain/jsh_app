@@ -76,16 +76,12 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/vehicleCarItem.scss';
 import vehicleMore from './VehicleMore';
 
 export default {
   name: 'VehicleCartItem',
   components: {
-    uniNumberBox,
     vehicleMore
   },
   props: {

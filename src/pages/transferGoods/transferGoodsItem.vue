@@ -43,9 +43,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 // import './css/jGoodsItem.scss';
 import {
   mapGetters
@@ -57,7 +54,6 @@ import {
 export default {
   name: 'transferGoodsItem',
   components: {
-    uniNumberBox
   },
   data() {
     return {

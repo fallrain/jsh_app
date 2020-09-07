@@ -24,14 +24,10 @@
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'proComShip',
   components: {
-    uniPopup
   },
   props: {// 父级传来的数据
     show: {
@@ -80,7 +76,7 @@ export default {
 <style scoped>
 .filter-drawer-cnt-list {
   padding-left: 24px;
-  /*max-height: 888px;*/
+  max-height: 888px;
   overflow-y: auto;
   padding-top: 18px;
   height: calc(100% - 42px);
@@ -112,7 +108,8 @@ export default {
   }
   .sorrowC-ship{
     padding-left: 24px;
-    max-height: 888px;
+    /*max-height: 888px;*/
+    height: calc(100% - 42px);
     overflow-y: auto;
   }
   .textSenRow-ship {

@@ -68,9 +68,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/vehicleDetailGood.scss';
 import './css/vehicleCarItem.scss';
 import '../shoppingCart/css/jOrderConfirmItem.scss';
@@ -78,7 +75,6 @@ import '../shoppingCart/css/jOrderConfirmItem.scss';
 export default {
   name: 'VehicleDetailGood',
   components: {
-    uniNumberBox
   },
   props: {
     goodsList: {// 商品列表

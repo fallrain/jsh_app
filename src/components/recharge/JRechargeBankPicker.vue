@@ -40,14 +40,10 @@
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'JRechargeBankPicker',
   components: {
-    uniPopup
   },
   props: {
     // 显示隐藏

@@ -39,6 +39,7 @@
           :saletoCode="userInf.customerCode"
           :sendtoCode="defaultSendToInf.customerCode"
           :allPrice="item.$allPrice"
+          :userInf="userInf"
           @change="goodsChange"
           @addCartSuccess="addCartSuccess"
         ></j-goods-item>
@@ -393,6 +394,7 @@ export default {
         popTabs.push(tab);
       });
       this.popTabs = popTabs;
+      console.log(this.popTabs);
     },
     genFilterDataOfStock(categoryCode) {
       /* 组合有货商品，并选中 */
