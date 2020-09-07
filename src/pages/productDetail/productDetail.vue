@@ -132,9 +132,6 @@
 </template>
 
 <script>
-import {
-  uniSwiperDot
-} from '@dcloudio/uni-ui';
 import proComNum from '../../components/productDetail/pro-com-num';
 import proComAct from '../../components/productDetail/pro-com-act';
 import proComShip from '../../components/productDetail/pro-com-ship';
@@ -151,7 +148,6 @@ import {
 export default {
   name: 'ProductDetail',
   components: {
-    uniSwiperDot,
     proComNum,
     proComAct,
     proComShip,

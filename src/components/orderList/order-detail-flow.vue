@@ -133,14 +133,10 @@
 </template>
 
 <script>
-import {
-  uniIcons
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'orderDetailFlow',
   components: {
-    uniIcons
   },
   props: {
     processJudgement: {

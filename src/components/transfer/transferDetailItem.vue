@@ -95,9 +95,6 @@
 
 <script>
 import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
-import {
   mapGetters
 } from 'vuex';
 import {
@@ -108,7 +105,6 @@ import './css/transferDetailItem.scss';
 export default {
   name: 'transferDetailItem',
   components: {
-    uniNumberBox
   },
   props: {
     // 商品列表

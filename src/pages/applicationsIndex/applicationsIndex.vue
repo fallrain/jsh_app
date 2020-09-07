@@ -185,10 +185,6 @@
 </template>
 <script>
 import {
-  uniDrawer,
-  uniSwiperDot
-} from '@dcloudio/uni-ui';
-import {
   mapActions,
   mapGetters
 } from 'vuex';
@@ -204,8 +200,6 @@ import {
 export default {
   name: 'applicationsIndex',
   components: {
-    uniDrawer,
-    uniSwiperDot,
     JCell
   },
   data() {

@@ -26,14 +26,10 @@
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'proComShip',
   components: {
-    uniPopup
   },
   props: {// 父级传来的数据
     show: {

@@ -138,15 +138,11 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/JActivityItem.scss';
 
 export default {
   name: 'JActivityItem',
   components: {
-    uniNumberBox
   },
   props: {
     // 活动对象

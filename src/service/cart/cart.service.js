@@ -56,7 +56,8 @@ export default {
   deleteCart(ids) {
     /* 从购物车里删除一个商品 */
     /**
-     *@ids(Array)：商品在购物车里的id集合
+     * 商品在购物车里的id集合
+     * @ids:array
      * */
     return jPostJson(urls.deleteCart, ids);
   },
@@ -67,5 +68,13 @@ export default {
   updateProductNumber(data) {
     /* 更新购物车数量 */
     return jPostJson(urls.updateProductNumber, data);
+  },
+  getCloudStockState(customerCode) {
+    /* 获取云仓权限 */
+    /**
+     * 售达方编码
+     * @customerCode:string
+     * */
+    return jGet(urls.getCloudStockState(customerCode));
   }
 };

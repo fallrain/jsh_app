@@ -78,17 +78,11 @@
 </template>
 
 <script>
-import {
-  uniPopup,
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/proComNum.scss';
 
 export default {
   name: 'proComNum',
   components: {
-    uniPopup,
-    uniNumberBox
   },
   props: {
     // 显示隐藏

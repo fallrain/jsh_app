@@ -191,7 +191,8 @@ export default {
           name: '云仓',
           checked: false,
           // 没有子元素
-          isSingle: true
+          isSingle: true,
+          isHide: true
         },
         {
           flag: 'ydyc',
@@ -203,9 +204,11 @@ export default {
           isShowSearch: true,
           searchValue: '',
           searchKeys: ['name'],
-          children: []
+          children: [],
+          isHide: true
         },
         {
+          flag: 'sale',
           name: '配送至',
           isCanBeCheck: false,
           checked: false,
@@ -214,9 +217,12 @@ export default {
           isShowSearch: true,
           searchValue: '',
           searchKeys: ['address', 'addressCode'],
-          children: []
+          children: [],
+          isHide: false
         },
       ],
+      // 异地云仓数据
+      offSiteData: [],
       // 选中的送达方cy
       choseSendAddress: {},
       // 信用额度列表（以产品大类为维度）
@@ -229,6 +235,8 @@ export default {
       industryGroupData: [],
       // 选中的产业数据
       choseIndustryOptions: [''],
+      // 云仓、异地云仓权限对象
+      cloudStockStatus: {}
     };
   },
   created() {
@@ -264,10 +272,10 @@ export default {
       GOODS_LIST.UPDATE_IS_CART_UPDATE,
     ]),
     setPageInfo() {
+      // 云仓权限
+      this.getCloudStockStateAndGen();
       // 设置产业数据
       this.setIndustry();
-      // 异地云仓
-      this.getWarehouse();
       // 送达方
       this.getSendCustomer();
       // 刷新购物车列表缓存
@@ -281,6 +289,8 @@ export default {
     },
     reloadPageInfo() {
       /* 重载页面信息 */
+      // 云仓权限
+      const getCloudStockState = this.getCloudStockStateAndGen();
       // 刷新购物车列表缓存
       const getRefreshShoppingCartList = this.refreshShoppingCartList();
       // 购物车列表
@@ -291,7 +301,39 @@ export default {
       this.resetBtmInf();
       //  重置产业
       this.resetIndustry();
-      return Promise.all([getRefreshShoppingCartList, getShoppingCartList, getSpecialPrice]).then(() => true);
+      return Promise.all([
+        getRefreshShoppingCartList,
+        getShoppingCartList,
+        getSpecialPrice,
+        getCloudStockState
+      ]).then(() => true);
+    },
+    async getCloudStockStateAndGen() {
+      /* 获取云仓权限 */
+      const { code, data } = await this.cartService.getCloudStockState(this.userInf.customerCode);
+      if (code === '1') {
+        this.cloudStockStatus = data;
+        // 如果有云仓权限，再查云仓
+        if (data.ydzfFlag === 'Y') {
+          // 异地云仓
+          await this.getWarehouse();
+        } else {
+          const offSiteCloudStock = this.sendCustomerList.find(v => v.flag === 'ydyc');
+          // 显示异地云仓
+          offSiteCloudStock.isHide = true;
+          // 异地云仓数据
+          offSiteCloudStock.children = [];
+        }
+        // 云仓权限
+        const cloudStock = this.sendCustomerList.find(v => v.flag === 'yc');
+        if (data.signStatus === 'Y') {
+          cloudStock.isHide = false;
+        } else {
+          cloudStock.isHide = true;
+        }
+        return data;
+      }
+      return false;
     },
     setIndustry() {
       // 获取产业并设置数据
@@ -349,7 +391,13 @@ export default {
         warehouseFlag: 'YD'
       });
       if (code === '1') {
-        this.sendCustomerList[1].children = data.map(v => ({
+        // 存于云仓数据
+        this.offSiteData = data;
+        const offSite = this.sendCustomerList.find(v => v.flag === 'ydyc');
+        // 显示异地云仓
+        offSite.isHide = false;
+        // 异地云仓数据
+        offSite.children = data.map(v => ({
           id: v.code,
           name: v.codeName,
           checked: false,

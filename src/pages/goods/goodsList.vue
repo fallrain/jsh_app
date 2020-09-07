@@ -39,6 +39,7 @@
           :saletoCode="userInf.customerCode"
           :sendtoCode="defaultSendToInf.customerCode"
           :allPrice="item.$allPrice"
+          :userInf="userInf"
           @change="goodsChange"
           @addCartSuccess="addCartSuccess"
         ></j-goods-item>

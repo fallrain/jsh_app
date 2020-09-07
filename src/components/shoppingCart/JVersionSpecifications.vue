@@ -101,15 +101,11 @@
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
 import './css/jVersionSpecifications.scss';
 
 export default {
   name: 'JVersionSpecifications',
   components: {
-    uniPopup
   },
   props: {
     // 显示隐藏

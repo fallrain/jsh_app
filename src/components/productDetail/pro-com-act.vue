@@ -106,15 +106,11 @@
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
 import './css/proComAct.scss';
 
 export default {
   name: 'proComAct',
   components: {
-    uniPopup
   },
   props: {
     // 显示隐藏

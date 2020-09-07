@@ -48,14 +48,10 @@
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'JChooseDeliveryAddress',
   components: {
-    uniDrawer
   },
   props: {
     show: Boolean,

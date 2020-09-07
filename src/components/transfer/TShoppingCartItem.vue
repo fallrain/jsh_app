@@ -122,9 +122,6 @@
 </template>
 
 <script>
-import {
-  uniNumberBox, uniPopup
-} from '@dcloudio/uni-ui';
 import TShoppingCartMore from './TShoppingCartMore';
 import './css/TShoppingCartItem.scss';
 import {
@@ -137,8 +134,6 @@ import {
 export default {
   name: 'TShoppingCartItem',
   components: {
-    uniNumberBox,
-    uniPopup,
     TShoppingCartMore
   },
   props: {

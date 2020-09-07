@@ -94,10 +94,6 @@ import JGoodsItem from '../../components/goods/JGoodsItem';
 import JDrawerFilterItem from '../../components/form/JDrawerFilterItem';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
-import {
-  uniPopup,
-  uniPopupDialog
-} from '@dcloudio/uni-ui';
 import './css/concernedProductsList.scss';
 import {
   USER
@@ -118,8 +114,6 @@ export default {
     JGoodsItem,
     JOptionHead,
     JSearchInput,
-    uniPopup,
-    uniPopupDialog
   },
   data() {
     return {

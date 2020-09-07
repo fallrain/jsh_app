@@ -677,31 +677,34 @@ export default {
           }
         }
       }
-
-      // 调货 选的是普通、特价、工程的时候，还可选个调货
-      // if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
-      // 改为即使有工程也加也不可选
-      if (!priceType || priceType === 'PT') {
-        const transformVersionList = this.versionPrice.version.version[productCode];
-        if (transformVersionList && transformVersionList.length) {
-          const version = {
-            id: 'transfer',
-            title: '调货版本',
-            isExpand: true,
-            list: []
-          };
-          version.list = transformVersionList.map(v => ({
-            ...v,
-            priceVersion: v.versionCode,
-            name: v.versionCode,
-            price: this.jshUtil.formatNumber(priceInfo.commonPrice.invoicePrice, 2),
-            time: v.endDate && v.endDate.substring(0, 10),
-            num: v.number,
-            checked: false
-          }));
-          specificationsList.push(version);
+      // 自有渠道才有版本调货
+      if (this.userInf.channelGroup === 'ZY') {
+        // 调货 选的是普通、特价、工程的时候，还可选个调货
+        // if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
+        // 改为即使有工程也加也不可选
+        if (!priceType || priceType === 'PT') {
+          const transformVersionList = this.versionPrice.version.version[productCode];
+          if (transformVersionList && transformVersionList.length) {
+            const version = {
+              id: 'transfer',
+              title: '调货版本',
+              isExpand: true,
+              list: []
+            };
+            version.list = transformVersionList.map(v => ({
+              ...v,
+              priceVersion: v.versionCode,
+              name: v.versionCode,
+              price: this.jshUtil.formatNumber(priceInfo.commonPrice.invoicePrice, 2),
+              time: v.endDate && v.endDate.substring(0, 10),
+              num: v.number,
+              checked: false
+            }));
+            specificationsList.push(version);
+          }
         }
       }
+
       this.specificationsList = specificationsList;
     },
     specificationsCustomCheckFun(versionData, list, parIndex, curIndex) {

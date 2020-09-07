@@ -149,6 +149,12 @@ export default {
       default: () => {
       }
     },
+    // 用户信息
+    userInf: {
+      type: Object,
+      default: () => {
+      }
+    },
     // 是否编辑模式
     isEditMode: {
       type: Boolean,
@@ -375,25 +381,29 @@ export default {
         specificationsList.push(version);
         isGcOrYj = true;
       }
-      // oms调货版本信息
-      if (omsSamples && omsSamples.length) {
-        const version = {
-          id: 'transfer',
-          title: 'OMS调货',
-          isExpand: true,
-          list: []
-        };
-        version.list = omsSamples.map(v => ({
-          ...v,
-          priceVersion: v.versionCode,
-          name: v.versionCode,
-          price: this.jshUtil.formatNumber(pt.invoicePrice, 2),
-          time: v.endDate && v.endDate.substring(0, 10),
-          num: v.usableQty,
-          checked: false
-        }));
-        specificationsList.push(version);
+      // 自有渠道才有版本调货
+      if (this.userInf.channelGroup === 'ZY') {
+        // oms调货版本信息
+        if (omsSamples && omsSamples.length) {
+          const version = {
+            id: 'transfer',
+            title: 'OMS调货',
+            isExpand: true,
+            list: []
+          };
+          version.list = omsSamples.map(v => ({
+            ...v,
+            priceVersion: v.versionCode,
+            name: v.versionCode,
+            price: this.jshUtil.formatNumber(pt.invoicePrice, 2),
+            time: v.endDate && v.endDate.substring(0, 10),
+            num: v.usableQty,
+            checked: false
+          }));
+          specificationsList.push(version);
+        }
       }
+
       this.specificationsList = specificationsList;
       // 当产品isSale为false，且没有工程或样机时，列表页不显示加入购物车按钮，显示查看详情按钮
       if (!isGcOrYj && isSale === false) {

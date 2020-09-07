@@ -50,16 +50,12 @@
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
 import JSearchInput from '../form/JSearchInput';
 
 export default {
   name: 'JChooseDeliveryAddress',
   components: {
     JSearchInput,
-    uniDrawer
   },
   props: {
     show: {

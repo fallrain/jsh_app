@@ -35,7 +35,9 @@ const urls = {
   // 查询产业
   getIndustryList: '/shoppingCart/get/industryList',
   // 更新购物车数量
-  updateProductNumber: '/shoppingCart/add/cart/updateProductNumber'
+  updateProductNumber: '/shoppingCart/add/cart/updateProductNumber',
+  // 获取云仓权限信息
+  getCloudStockState: customerCode => `/shoppingCart/get/agreement/status/${customerCode}`
 };
 util.addPrefix(baseURL, urls);
 export default urls;
