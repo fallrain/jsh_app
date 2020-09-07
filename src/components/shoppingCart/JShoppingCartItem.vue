@@ -45,7 +45,9 @@
         <image :src="goods.productList && goods.productList[0].productImageUrl" @tap="goDetail(goods)"></image>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
-        <view class="jShoppingCartItem-cnt-inf-title" @tap="goDetail(goods)">{{goods.productList && goods.productList[0].productName}}</view>
+        <view @tap="goDetail(goods)" class="jShoppingCartItem-cnt-inf-title">{{goods.productList &&
+          goods.productList[0].productName}}
+        </view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
             ¥{{chosePrice.invoicePrice}}
@@ -57,7 +59,9 @@
             :max="maxGoodsNumber"
             :min="1"
             v-model="goods.number"
-            @change="goodsNumChange"
+            @blur="goodsNumChange"
+            @minus="goodsNumChange"
+            @plus="goodsNumChange"
           ></u-number-box>
         </view>
       </view>
@@ -806,15 +810,18 @@ export default {
       /* 选中版本取消 */
       this.isShowSpecifications = false;
     },
-    goodsNumChange({ value }) {
+    goodsNumChange() {
       /* 商品数量change */
-      this.updateCartProductNumber({
-        ...this.goods.productList[0],
-        oldValue: this.goods.productList[0].number,
-        newValue: value
-      });
-      this.goods.productList[0].number = value;
-      this.$emit('change', this.goods, this.index);
+      // 防抖
+      this.$u.debounce(() => {
+        this.updateCartProductNumber({
+          ...this.goods.productList[0],
+          oldValue: this.goods.productList[0].number,
+          newValue: this.goods.number
+        });
+        this.goods.productList[0].number = this.goods.number;
+        this.$emit('change', this.goods, this.index);
+      }, 500, false);
     },
     updateCartProductNumber({
       composeId,
@@ -834,11 +841,10 @@ export default {
         saletoCode: this.userInf.customerCode,
         sendtoCode: this.defaultSendTo.customerCode,
       });
-      // 节流
-      this.$u.throttle(() => {
-        this.cartService.updateProductNumber(form);
-        this.$emit('updateNumber', newValue);
-      }, 500, false);
+
+      this.cartService.updateProductNumber(form);
+      // 不需要等待，否则会太慢
+      this.$emit('updateNumber', newValue);
     },
     setFollowState() {
       /* 设置关注状态 */
