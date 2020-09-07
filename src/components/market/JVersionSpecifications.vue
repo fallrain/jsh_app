@@ -48,10 +48,18 @@
               </view>
               <view
                 class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
-                v-if="version.price"
+                v-if="version.specialPrice"
               >
                 <view class="jVersionSpecifications-pop-detail-item-name">价格：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.specialPrice}}</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{toFixedNum(version.specialPrice)}}</view>
+              </view>
+              <view
+                class="jVersionSpecifications-pop-detail-item-name-wrap"
+                v-if="version.rebateRateShow"
+              >
+                <view class="jVersionSpecifications-pop-detail-item-name">直扣：</view>
+                <view class="jVersionSpecifications-pop-detail-item-val-type3">
+                  {{percentNum(version.rebateRateShow)}}%</view>
               </view>
               <view
                 class="jVersionSpecifications-pop-detail-item-name-wrap"
@@ -138,6 +146,14 @@ export default {
     return {
       updataIndex: 0
     };
+  },
+  computed: {
+    toFixedNum() {
+      return val => (Number(val).toFixed(2));
+    },
+    percentNum() {
+      return val => (Number(val) * 100).toFixed(2);
+    }
   },
   watch: {
     show(val) {

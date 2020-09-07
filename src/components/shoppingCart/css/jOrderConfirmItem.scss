@@ -136,6 +136,7 @@
   align-items: center;
   font-size: 24px;
   color: #333;
+  width: 200px;
 }
 
 .jOrderConfirmItem-detail-mark-item-name-star {
@@ -229,4 +230,7 @@
   border: 2px solid $theme-color;
   padding: 5px 20px;
   border-radius: 10px;
+}
+.text-theme{
+  color: $theme-color;
 }

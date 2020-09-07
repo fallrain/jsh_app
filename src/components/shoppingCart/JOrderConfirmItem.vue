@@ -57,6 +57,9 @@
             </view>
           </view>
         </view>
+        <view v-if="goods.splitOrderProductList[0].priceType === 'TJ'" class="text-theme">
+          特价版本号：{{goods.splitOrderProductList[0].priceVersion}}
+        </view>
         <view class="dis-flex">
           <view v-if="orderItem.yunCangType==='yc'" class="yc-flag">云仓</view>
           <view v-if="orderItem.yunCangType==='ydyc'" class="yc-flag">异地云仓</view>
