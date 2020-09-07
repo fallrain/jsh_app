@@ -218,7 +218,7 @@ export default {
   computed: {
     toFixedNum() {
       return function (val) {
-        return (new Number(val)).toFixed(2);
+        return (Number(val)).toFixed(2);
       };
     }
   },
