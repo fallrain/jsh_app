@@ -73,6 +73,13 @@ export default {
   methods: {
     // 退出登录
     loginOutAction(){
+      // 先重新定位到首页
+      uni.reLaunch({
+        url: '/pages/applicationsIndex/applicationsIndex'
+      });
+      // 清理code token
+      uni.setStorageSync('token', '');
+      uni.setStorageSync('code', '');
       AlipayJSBridge.call('popWindow');
     },
     //   个人资料
