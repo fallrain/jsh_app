@@ -20,8 +20,10 @@
           v-for="(item,index) in list"
           :key="index+'^-^'"
           :activity="item"
+          :calue="calue"
           @activityDetail ="activityDetail"
           @goOrder ="goOrder"
+          @getNum="getNum"
         ></j-activity-item>
         <!--<view v-if="list.length === 0" class="">暂无数据</view>-->
       </view>
@@ -141,6 +143,8 @@ export default {
   data() {
     return {
       form: {
+        calue: 1, // 套餐数量
+        allNum: 15, // 总套餐数量
         activityId: '',
         activityName: '',
         activityType: '',
@@ -452,7 +456,7 @@ export default {
       // 设置产品状态初始化
       this.filterList[1].data[0].isChecked = true;
       // 重新搜索
-      this.mescroll.resetUpScroll(true);
+      // this.mescroll.resetUpScroll(true);
     },
     filterConfirm() {
       /* 确定 */
@@ -520,10 +524,17 @@ export default {
     async goOrder(currentInfo) {
       console.log(this.currentAdd);
       const detail = await this.getAllStock(currentInfo);
+      console.log(detail);
       await this.validateProduct(detail);
+    },
+    //数据改变
+    getNum(item) {
+      console.log(item);
+      this.calue = item;
     },
     // 产品校验
     async validateProduct(currentInfo) {
+      console.log(currentInfo);
       const form = {
         saletoCode: this.form.saletoCode,
         sendtoCode: this.currentAdd.addressCode,
@@ -533,11 +544,11 @@ export default {
           {
             activityType: this.getActivityTypeCode(currentInfo.activityType),
             activityId: currentInfo.id,
-            number: 1,
+            number: this.calue,
             productList: [
               {
                 productCode: 'CBAGD4000',
-                number: 1,
+                number: this.allNum,
                 isStock: '1',
                 farWeek: '0',
                 creditModel: '0',
@@ -550,7 +561,7 @@ export default {
                 productSeries: '',
                 kuanXian: '0',
                 isCheckKuanXian: '0'
-              }]
+              }],
           }
         ]
       };
@@ -570,9 +581,11 @@ export default {
       // 订单产品遍历组合
       const productArr = [];
       currentInfo.products.forEach((item) => {
+        console.log(item);
+        this.allNum = Number(item.promotionNum) * Number(this.calue);
         const productItem = {
           productCode: item.productCode,
-          number: item.promotionNum,
+          number: this.allNum,
           isStock: '1',
           farWeek: '0',
           creditModel: '0',

@@ -107,7 +107,9 @@
           </view>
           <view class="dis-flex">
             <uni-number-box
+              :value="calue"
               :max="Number(activity.upperLimit)"
+              @change="changeNum($event, item)"
             ></uni-number-box>
             <button
               @tap="goOrder"
@@ -149,8 +151,18 @@ export default {
     activity: {
       type: Object,
       default: () => {}
+    },
+    calue: {
+      type: Number,
+      default: 1
     }
   },
+  data() {
+    return {
+
+    };
+  },
+
   computed: {
     totalPrice() {
       return function (val) {
@@ -175,6 +187,11 @@ export default {
     },
     goOrder() {
       this.$emit('goOrder', this.activity);
+    },
+    changeNum(value) {
+      this.calue = value;
+      console.log(this.calue);
+      this.$emit('getNum', this.calue);
     }
   }
 };

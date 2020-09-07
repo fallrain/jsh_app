@@ -134,7 +134,7 @@
           </view>
           <view class="drawer-menu">
             <j-cell
-              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
+              @cellClick="cellClick('/pages/mine/myBaseInfo?index=0')"
               class="border-b"
               title="个人资料"
             >
@@ -167,7 +167,7 @@
               </template>
             </j-cell>
             <j-cell
-              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
+              @cellClick="cellClick('/pages/messageInfoList/messageInfoList?index=0')"
               class="border-b pos-r"
               title="待办任务"
             >
