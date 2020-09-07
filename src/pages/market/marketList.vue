@@ -440,7 +440,11 @@ export default {
     },
     filterReset() {
       /* 抽屉筛选重置 */
+      this.filterInputs.forEach(ele => {
+        ele.value = '';
+      });
       this.filterList.forEach((item) => {
+        console.log(item);
         item.data.forEach((v) => {
           v.isChecked = false;
         });

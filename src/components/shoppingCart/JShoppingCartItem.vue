@@ -42,10 +42,10 @@
         <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
       </view>
       <view class="jShoppingCartItem-cnt-img-wrap">
-        <image :src="goods.productList && goods.productList[0].productImageUrl"></image>
+        <image :src="goods.productList && goods.productList[0].productImageUrl" @tap="goDetail(goods)"></image>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
-        <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList && goods.productList[0].productName}}</view>
+        <view class="jShoppingCartItem-cnt-inf-title" @tap="goDetail(goods)">{{goods.productList && goods.productList[0].productName}}</view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
             ¥{{chosePrice.invoicePrice}}
@@ -529,6 +529,12 @@ export default {
     },
   },
   methods: {
+    goDetail(goods) {
+      console.log(goods.productList[0].productCode);
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${goods.productList[0].productCode}`
+      });
+    },
     setPageInf() {
       this.genStockPickerOption();
     },
