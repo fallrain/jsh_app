@@ -673,7 +673,7 @@ export default {
             // this.tabs[0].active = true;
           }
           if (item.name === '整车直发') {
-            uni.redirectTo({
+            uni.navigateTo({
               url: '/pages/vehicleList/vehicleCarList'
             });
           }

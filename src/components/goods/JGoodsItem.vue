@@ -22,10 +22,10 @@
       ></image>
     </view>
     <view class="jGoodsItem-cnt">
-      <view class="jGoodsItem-cnt-goodsName j-goods-title">
+      <view class="jGoodsItem-cnt-goodsName j-goods-title" @tap="goDetail">
         {{goods.productName | rmHtml}}
       </view>
-      <view class="jGoodsItem-cnt-price-tips">
+      <view class="jGoodsItem-cnt-price-tips"  @tap="goDetail">
         <view class="jGoodsItem-cnt-price-tips-item">
           直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
@@ -35,8 +35,8 @@
         <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
-      <view class="jGoodsItem-cnt-price-inf">
-        <view class="jGoodsItem-cnt-price">{{priceInf.invoicePrice?'¥'+priceInf.invoicePrice: '价格即将公布敬请关注'}}</view>
+      <view class="jGoodsItem-cnt-price-inf" @tap="goDetail">
+        <view class="jGoodsItem-cnt-price">{{priceInf.invoicePrice? priceInf.invoicePrice: '价格即将公布敬请关注'}}</view>
         <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice || '--'}}
         </view>
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
@@ -254,6 +254,8 @@ export default {
         priceInf = {};
         if (!isSale) {
           priceInf.invoicePrice = '营销活动进行中';
+          // 是否是文字描述
+          priceInf.isText = true;
           priceInf.disabled = true;
         }
       }
@@ -265,7 +267,10 @@ export default {
         // 附加的数据字段,方便统一展示
         inf.invoicePrice = this.jshUtil.formatNumber(priceInf.promotionPrice, 2);
       } else {
-        inf.invoicePrice = priceInf.invoicePrice === null ? null : this.jshUtil.formatNumber(priceInf.invoicePrice, 2);
+        // 非文字描述才转换
+        if (!priceInf.isText) {
+          inf.invoicePrice = priceInf.invoicePrice === null ? null : `￥${this.jshUtil.formatNumber(priceInf.invoicePrice, 2)}`;
+        }
       }
       // fix 供价
       inf.supplyPrice = this.jshUtil.formatNumber(inf.supplyPrice, 2);
@@ -527,7 +532,7 @@ export default {
         saletoCode,
         sendtoCode
       } = this;
-      // 是否选择了版本
+        // 是否选择了版本
       let choseVersion = true;
       // 是否是调货
       let isTransfer;

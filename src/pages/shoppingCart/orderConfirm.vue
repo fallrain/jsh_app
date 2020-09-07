@@ -200,7 +200,7 @@ export default {
     }),
     toFixedNum() {
       return function (val) {
-        return (new Number(val)).toFixed(2);
+        return (Number(val)).toFixed(2);
       };
     }
   },
@@ -256,7 +256,7 @@ export default {
         this.allPayer.forEach((v) => {
           if (v.customerCode === item.customerCode) {
             item.balance = v.payerBalance.balance;
-            item.bookbalance = v.payerBalance.bookbalance;
+            item.bookbalance = v.payerBalance.bookBalance;
             item.payerType = v.payerType;
           }
         });
@@ -427,6 +427,21 @@ export default {
         const groupings = JSON.stringify(groupingArr);
         uni.navigateTo({
           url: `/pages/shoppingCart/orderConfirmAccept?groupings=${groupings}`
+        });
+      } else if (code === '69') {
+        const _this = this;
+        // confirm("确认要删除选中订单")
+        uni.showModal({
+          title: '',
+          content: '确认支付失败,原因为:该订单已超时未支付',
+          success(res) {
+            if (res.confirm) {
+              console.log(res);
+              _this.goIndex();
+            } else if (res.cancel) {
+              console.log('用户点击取消');
+            }
+          }
         });
       }
     },

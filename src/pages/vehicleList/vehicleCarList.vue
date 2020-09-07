@@ -134,7 +134,7 @@ export default {
             });
           }
           if (item.name === '中心调货') {
-            uni.redirectTo({
+            uni.navigateTo({
               url: '/pages/transferGoods/transferShoppingCart'
             });
           }
@@ -473,6 +473,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .jTab-item.active {
+  font-size: 36px;
+  color: #2283E2;
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #2283E2;
+  }
+}
   .vehicleCarList{
     min-height: 100vh;
     background: #F5F5F5;

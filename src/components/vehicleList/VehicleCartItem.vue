@@ -28,10 +28,10 @@
     <view class="v-c-i-list" v-for="(item,index) in goods.orderList" :key="index">
       <view class="v-c-i-cnt">
         <view class="v-c-i-cnt-img-wrap">
-          <image :src="item.THUMBNAIL"></image>
+          <image :src="item.THUMBNAIL" @tap="goDetail(item)"></image>
         </view>
         <view class="">
-          <view class="v-c-i-cnt-inf-title">{{item.PRODUCTNAME}}</view>
+          <view class="v-c-i-cnt-inf-title" @tap="goDetail(item)">{{item.PRODUCTNAME}}</view>
           <view class="v-c-i-btm-version">
             <view class="v-c-i-cnt-price v-c-i-flox3">¥ {{item.UNITPRICE}}</view>
             <view class="v-c-i-cnt-inf-picker v-c-i-flox6" @tap="getPayer(item)">
@@ -109,6 +109,12 @@ export default {
     };
   },
   methods: {
+    goDetail(item) {
+      console.log(item);
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${item.GBID}`
+      });
+    },
     getPayer(item) { // 显示付款方
       item.payCheck = !item.payCheck;
       console.log(this.index);
