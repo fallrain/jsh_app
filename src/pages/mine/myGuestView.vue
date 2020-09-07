@@ -424,8 +424,8 @@ export default {
           this.customersFun();
           break;
         // 付款方列表
-        case '4':
-          this.auxiliaryFun(2110, 1);
+        case '4': 
+          this.auxiliaryFun(this.userInf.customerCode, 1);
           break;
         default:
           break;
