@@ -18,12 +18,12 @@
      </uni-swiper-dot>
    </view>
     <view class="uni-common-mt">
-      <view class="uni-flex uni-row padding-15">
-        <view class="text col-34 larger" style="color: #ed2856;margin: auto;">¥ {{detailInfo.product.invoicePrice ? detailInfo.product.invoicePrice : ''}}</view>
-        <view class="text col smaller" style="margin: auto;">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
-        <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="margin: auto;color: #ED2856"
+      <view class="uni-flex uni-row padding-15" style="display: flex; justify-content: space-between; align-items: center">
+        <view class="larger" style="color: #ed2856">¥ {{detailInfo.product.invoicePrice ? detailInfo.product.invoicePrice : ''}}</view>
+        <view class="smaller" style="">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
+        <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="color: #ED2856"
               v-if="!ISGUANZHU"></view>
-        <view @click="guanZhu" class="col-10 smaller iconfont iconicon3" style="margin: auto;color: #ED2856"
+        <view @click="guanZhu" class="col-10 smaller iconfont iconicon3" style="color: #ED2856"
               v-else></view>
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
@@ -287,7 +287,7 @@ export default {
             data.product.invoicePrice = Number(data.price.invoicePrice).toFixed(2);
           } else {
             console.log(9);
-            data.product.invoicePrice = '价格待公布';
+            data.product.invoicePrice = '价格即将公布敬请关注!';
           }
         }
 

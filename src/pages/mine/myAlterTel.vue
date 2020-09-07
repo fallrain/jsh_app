@@ -151,9 +151,11 @@ export default {
     },
     async getUserInfById() {
       /* 获取原来的手机号 */
-      const data = await this.openAccountService.getUserInfById(this[USER.GET_TOKEN_USER].id);
+      // const data = await this.openAccountService.getUserInfById(this[USER.GET_TOKEN_USER].id);
+      const data = await this.apiVService.getUserPhone();
       if (data) {
         this.form.oldPhone = data.phoneNumber;
+        console.log(this.form.oldPhone);
       }
     },
     async getCaptcha() {

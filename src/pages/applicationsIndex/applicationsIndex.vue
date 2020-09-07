@@ -134,7 +134,7 @@
           </view>
           <view class="drawer-menu">
             <j-cell
-              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
+              @cellClick="cellClick('/pages/mine/myBaseInfo?index=0')"
               class="border-b"
               title="个人资料"
             >
@@ -167,7 +167,7 @@
               </template>
             </j-cell>
             <j-cell
-              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
+              @cellClick="cellClick('/pages/messageInfoList/messageInfoList?index=0')"
               class="border-b pos-r"
               title="待办任务"
             >
@@ -601,10 +601,15 @@ export default {
         for (let y = 0; y < marketCollusionGroupValue.length; y++) {
           const elementValue = marketCollusionGroupValue[y];
           if (element == elementValue.value) {
-            marketErrorMsg += element.valueMeaning;
+            if(index == data.marketCollusionGroup.length-1) {
+              marketErrorMsg += elementValue.valueMeaning;
+            } else {
+              marketErrorMsg += elementValue.valueMeaning + '、';
+            }
           }
         }
       }
+
 
       if (marketErrorMsg.length > 0) {
         errorAlertMsg += `您好，市场运营管理限制，您${marketErrorMsg}产品组相关产品限制交易，如有疑问请联系交互师或业务人员处理。`;

@@ -1,7 +1,7 @@
 <template>
     <view class="transferGoods">
       <view class= "transferGoods-head">
-        <view class="transfer-search">
+        <view class="transfer-search j-flex-aic">
           <j-search-input
             v-model="filterForm.name"
             @search="silentReSearch"
@@ -35,7 +35,7 @@
         @up="upCallback"
       >
         <!-- 产品列表 -->
-        <view class="transferList-items-wrap" v-if="list">
+        <view class="transferList-items-wrap" v-if="list.length !== 0">
           <transfer-goods-item
             v-for="(item,index) in list"
             :key="index"

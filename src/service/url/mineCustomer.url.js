@@ -35,7 +35,7 @@ const urls = {
   },
   // 付款方列表
   auxiliary(salesGroupCode, status) {
-    return `/customers/auxiliary/payer/all?salesGroupCode=${salesGroupCode}&status=${status}`;
+    return `/customers/${salesGroupCode}/payer/all?sales&status=${status}`;
   },
   // 付款方余额
   payerBalanceList() {
