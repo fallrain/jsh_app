@@ -119,7 +119,6 @@ export default {
       }
     },
     choseOptions(val) {
-      console.log(val);
     }
   },
   methods: {
