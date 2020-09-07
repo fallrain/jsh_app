@@ -215,14 +215,26 @@ export default {
     console.log(this.userInf);
     console.log(this.sendToInf);
     console.log(this.saleInf);
-    this.queryBaseCode(); // 基地
-    this.queryCarNum(); // 整车购物车数量查询
+    if (this.userInf.channelGroup != 'CT') {
+      this.queryBaseCode(); // 基地
+      this.queryCarNum(); // 整车购物车数量查询
+    }
+  },
+  mounted() {
+    // 判断是否传统渠道
+    if(this.userInf.channelGroup == 'CT') {
+       uni.showModal({
+          title: '提示',
+          content: '当前客户无整车权限',
+          showCancel:false,
+        });
+    }
   },
   methods: {
     ...mapMutations([
       USER.UPDATE_DEFAULT_SEND_TO
     ]),
-    async queSeq() {
+    async queSeq() { 
       const timetamp = new Date().valueOf();
       const typee = this.userInf.channelGroup;
       const { code, data } = await this.vehicleService.queryNewSeq(timetamp, typee);
