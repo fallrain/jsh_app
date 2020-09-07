@@ -208,7 +208,8 @@ export default {
         address: '',
         addressName: '',
         isCollectionAddress: false,
-        deliveryYd: false
+        deliveryYd: false,
+        jdWarehouseId: ''
       }
     };
   },
@@ -307,6 +308,17 @@ export default {
         this.addressOption = data;
       }
     },
+    // 京东异地地址列表
+    async getAddListJDYD() {
+      const { code, data } = await this.orderService.queryJDAddr();
+      if (code === '1') {
+        data.forEach((item) => {
+          item.key = item.id;
+          item.value = item.province + item.city + item.area + item.address;
+        });
+        this.addressOption = data;
+      }
+    },
     chooseAdd() {
       this.addressListShow = true;
     },
@@ -362,13 +374,43 @@ export default {
       }
     },
     sureRemark() {
-      console.log(this.form);
-      return;
-      uni.$emit('confirmremarks', JSON.stringify(this.form));
+      if (this.form.userName || this.form.iphoneNo || this.form.idcardNo
+        || this.form.area || this.form.address
+      ) {
+        if (!this.form.userName || !this.form.iphoneNo || !this.form.idcardNo
+          || !this.form.area || !this.form.address) {
+          uni.showToast({
+            title: '信息不全，请补全信息提交！',
+            icon: 'none'
+          });
+        }
+      }
+
+      const obj = JSON.parse(JSON.stringify(this.form));
+      if (obj.deliveryYd === true) {
+        obj.deliveryYd = '1';
+      } else {
+        obj.deliveryYd = '0';
+      }
+      if (obj.isCollectionAddress === true) {
+        obj.isCollectionAddress = '2';
+      } else {
+        obj.isCollectionAddress = '1';
+      }
+      console.log(obj);
+      uni.$emit('confirmremarks', JSON.stringify(obj));
       uni.navigateBack();
     },
     radioChange(e) {
       console.log(e.target.value);
+      if (e.target.value === 'jdyd') {
+        this.form.jdWarehouseId = 1;
+        this.getAddListJDYD();
+      } else {
+        this.form.jdWarehouseId = '';
+        this.getAddListZFYD();
+      }
+
       this.showType.forEach((item) => {
         if (item.value === e.target.value) {
           item.checked = true;

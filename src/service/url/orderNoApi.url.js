@@ -25,6 +25,7 @@ const urls = {
     return `/address/get/area/${code}`;
   },
   getCollectRemarkAddr: '/address/post/getCollectRemarkAddr', // 直发异地地址列表
+  queryJDAddr: '/yd-warehouse/query', // 直发异地地址列表
 };
 util.addPrefix(baseURL, urls);
 export default urls;
