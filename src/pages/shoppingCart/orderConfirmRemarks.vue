@@ -8,7 +8,9 @@
         </label>
       </radio-group>
     </view>
-    <view class="orderConfirmRemarks-group mt24">
+    <view
+      @tap="chooseAdd"
+      class="orderConfirmRemarks-group mt24">
       <j-cell
         title="备注地址"
         class="br-b-n"
@@ -19,7 +21,11 @@
           ></view>
         </template>
       </j-cell>
-      <view class="address-style">请选择地址</view>
+      <view v-if="JSON.stringify(choosedAdd)=== '{}'" class="address-style">请选择地址</view>
+      <view v-else class="address-style">
+        {{choosedAdd.province}}{{choosedAdd.city}}{{choosedAdd.area}} &nbsp;&nbsp;
+        {{choosedAdd.userName}}&nbsp;&nbsp;{{choosedAdd.iphoneNo}}
+      </view>
     </view>
     <view class="orderConfirmRemarks-group mt24">
       <j-cell
@@ -30,7 +36,7 @@
           placeholderClass="orderConfirmRemarks-placeholder"
           type="text"
           placeholder="请输入联系人姓名"
-          v-model="form.name"
+          v-model="form.userName"
         >
       </j-cell>
       <j-cell
@@ -41,7 +47,7 @@
           placeholderClass="orderConfirmRemarks-placeholder"
           type="text"
           placeholder="请输入联系人电话"
-          v-model="form.mobile"
+          v-model="form.iphoneNo"
         >
       </j-cell>
       <j-cell
@@ -52,7 +58,7 @@
           placeholderClass="orderConfirmRemarks-placeholder"
           type="text"
           placeholder="请输入身份证号"
-          v-model="form.idCard"
+          v-model="form.idcardNo"
         >
       </j-cell>
     </view>
@@ -67,7 +73,7 @@
           placeholderClass="orderConfirmRemarks-placeholder"
           type="text"
           placeholder="请选择所在地区"
-          v-model="form.address"
+          v-model="form.addressName"
         >
         <template #right>
           <view
@@ -83,7 +89,7 @@
             <j-textarea
               placeholderClass="orderConfirmRemarks-placeholder"
               placeholder="请输入详细地址时，请具体到门牌号"
-              v-model="form.addressDetail"
+              v-model="form.address"
             ></j-textarea>
           </view>
         </j-cell>
@@ -96,7 +102,8 @@
       >
         <template #right>
           <j-switch
-            :active.sync="form.crossRegion"
+            @change="changeSwitchYD"
+            :active.sync="form.deliveryYd"
           ></j-switch>
         </template>
       </j-cell>
@@ -108,7 +115,8 @@
       >
         <template #right>
           <j-switch
-            :active.sync="form.crossRegion"
+            @change="changeSwitchSC"
+            :active.sync="form.isCollectionAddress"
           ></j-switch>
         </template>
       </j-cell>
@@ -124,7 +132,14 @@
       :show.sync="addressPickerShow"
       v-model="currentAdds"
       @changeData="changeData"
+      @sureVal="sureVal"
     ></j-address-picker>
+    <j-pop-picker
+      title="地址列表"
+      :show.sync="addressListShow"
+      :options="addressOption"
+      :choseOptions.sync="choosedAddressOption"
+    ></j-pop-picker>
   </view>
 </template>
 
@@ -133,6 +148,7 @@ import JCell from '../../components/form/JCell';
 import JAddressPicker from '../../components/form/JAddressPicker';
 import JTextarea from '../../components/form/JTextarea';
 import JSwitch from '../../components/form/JSwitch';
+import JPopPicker from '../../components/form/JPopPicker';
 import './css/orderConfirmRemarks.scss';
 import {
   mapGetters
@@ -148,7 +164,8 @@ export default {
     JCell,
     JTextarea,
     JSwitch,
-    JAddressPicker
+    JAddressPicker,
+    JPopPicker
   },
   data() {
     return {
@@ -157,7 +174,8 @@ export default {
         city: [],
         area: []
       },
-      currentAdds: [0],
+      currentAdds: [0, 0, 0],
+      resultAdds: [0, 0, 0],
       status: 'zfyd',
       showType: [
         {
@@ -172,24 +190,34 @@ export default {
         }
       ],
       addressPickerShow: false,
-      addressOption: [],
+      addressListShow: false,
+      addressOption: [], // 地址列表
+      choosedAddressOption: [], // 选中的地址
+      choosedAdd: {},
       currentAdd: {},
       form: {
         orderIndex: '',
         productIndex: '',
-        name: '',
-        mobile: '',
-        idCard: '',
+        userName: '',
+        iphoneNo: '',
+        idcardNo: '',
+        province: '',
+        city: '',
+        area: '',
+        areaCode: '',
         address: '',
-        addressDetail: '',
-        crossRegion: false
+        addressName: '',
+        isCollectionAddress: false,
+        deliveryYd: false,
+        jdWarehouseId: ''
       }
     };
   },
   onLoad(option) {
     this.form.orderIndex = option.orderIndex;
     this.form.productIndex = option.productIndex;
-    this.getProvince();
+    this.initAddress();
+    this.getAddListZFYD();
   },
   computed: {
     ...mapGetters({
@@ -201,19 +229,126 @@ export default {
     currentAdds(newVal, oldVal) {
       console.log(newVal);
       console.log(oldVal);
+      if (!newVal) {
+        this.resultAdds = [0, 0, 0];
+        return;
+      } if (!newVal[0]) {
+        this.resultAdds[0] = 0;
+        if (!newVal[1]) {
+          // 只改变区
+          this.resultAdds[1] = 0;
+          this.resultAdds[2] = newVal[2];
+          return;
+        }
+      }
       if (oldVal[0] !== newVal[0]) {
+        this.resultAdds[0] = newVal[0];
+        this.resultAdds[1] = 0;
+        this.resultAdds[2] = 0;
         // 省发生变化，更新市数据
         const codeData = this.addressData.province[newVal[0]].laid;
-        this.getCity(codeData);
+        (async () => {
+          await this.getCity(codeData);
+          await this.getArea(this.addressData.city[0].laid);
+        })();
       } else if (oldVal[1] != newVal[1]) {
+        this.resultAdds[0] = newVal[0];
+        this.resultAdds[1] = newVal[1];
+        this.resultAdds[2] = 0;
+        // 市发生了变化
         const codeData = this.addressData.city[newVal[1]].laid;
         this.getArea(codeData);
+      } else {
+        this.resultAdds = newVal;
       }
+    },
+    choosedAddressOption(val) {
+      this.addressOption.forEach((item) => {
+        if (item.id === val[0]) {
+          this.choosedAdd = item;
+        }
+      });
+      console.log(this.choosedAdd);
+      this.form.userName = this.choosedAdd.userName;
+      this.form.province = this.choosedAdd.province;
+      this.form.city = this.choosedAdd.city;
+      this.form.area = this.choosedAdd.area;
+      this.form.areaCode = this.choosedAdd.areaCode;
+      this.form.address = this.choosedAdd.address;
+      this.form.idcardNo = this.choosedAdd.idcardNo;
+      this.form.iphoneNo = this.choosedAdd.iphoneNo;
+      this.form.addressName = `${this.choosedAdd.province}${this.choosedAdd.city}${this.choosedAdd.area}`;
     }
   },
   methods: {
+    changeSwitchSC(val) {
+      console.log(val);
+    },
+    changeSwitchYD(val) {
+      console.log(val);
+    },
+    // 直发异地地址列表
+    async getAddListZFYD() {
+      const { code, data } = await this.orderService.getCollectRemarkAddr({
+        address: '',
+        area: '',
+        areaCode: '',
+        city: '',
+        idCardNo: '',
+        iphoneNo: '',
+        province: '',
+        saletoCode: this.saleInf.customerCode,
+        userName: ''
+      });
+      if (code === '1') {
+        data.forEach((item) => {
+          item.key = item.id;
+          item.value = item.province + item.city + item.area + item.address;
+        });
+        this.addressOption = data;
+      }
+    },
+    // 京东异地地址列表
+    async getAddListJDYD() {
+      const { code, data } = await this.orderService.queryJDAddr();
+      if (code === '1') {
+        data.forEach((item) => {
+          item.key = item.id;
+          item.value = item.province + item.city + item.area + item.address;
+        });
+        this.addressOption = data;
+      }
+    },
+    chooseAdd() {
+      this.addressListShow = true;
+    },
+    async initAddress() {
+      await this.getProvince();
+      await this.getCity(this.addressData.province[0].laid);
+      await this.getArea(this.addressData.city[0].laid);
+    },
     changeData(val) {
       this.currentAdds = val;
+    },
+    sureVal() {
+      if (!this.resultAdds[0]) {
+        this.resultAdds[0] = 0;
+      } else if (!this.resultAdds[1]) {
+        this.resultAdds[1] = 0;
+      } else if (!this.resultAdds[2]) {
+        this.resultAdds[2] = 0;
+      }
+      this.currentAdd = {
+        province: this.addressData.province[this.resultAdds[0]],
+        city: this.addressData.city[this.resultAdds[1]],
+        area: this.addressData.area[this.resultAdds[2]]
+      };
+      console.log(this.currentAdd);
+      this.form.province = this.choosedAdd.province.laname;
+      this.form.city = this.choosedAdd.city.laname;
+      this.form.area = this.choosedAdd.area.laname;
+      this.form.areaCode = this.choosedAdd.area.lacountyid;
+      this.form.addressName = `${this.currentAdd.province.laname}${this.currentAdd.city.laname}${this.currentAdd.area.laname}`;
     },
     // 显示地址选择
     getLocation() {
@@ -239,11 +374,43 @@ export default {
       }
     },
     sureRemark() {
-      uni.$emit('confirmremarks', JSON.stringify(this.form));
+      if (this.form.userName || this.form.iphoneNo || this.form.idcardNo
+        || this.form.area || this.form.address
+      ) {
+        if (!this.form.userName || !this.form.iphoneNo || !this.form.idcardNo
+          || !this.form.area || !this.form.address) {
+          uni.showToast({
+            title: '信息不全，请补全信息提交！',
+            icon: 'none'
+          });
+        }
+      }
+
+      const obj = JSON.parse(JSON.stringify(this.form));
+      if (obj.deliveryYd === true) {
+        obj.deliveryYd = '1';
+      } else {
+        obj.deliveryYd = '0';
+      }
+      if (obj.isCollectionAddress === true) {
+        obj.isCollectionAddress = '2';
+      } else {
+        obj.isCollectionAddress = '1';
+      }
+      console.log(obj);
+      uni.$emit('confirmremarks', JSON.stringify(obj));
       uni.navigateBack();
     },
     radioChange(e) {
       console.log(e.target.value);
+      if (e.target.value === 'jdyd') {
+        this.form.jdWarehouseId = 1;
+        this.getAddListJDYD();
+      } else {
+        this.form.jdWarehouseId = '';
+        this.getAddListZFYD();
+      }
+
       this.showType.forEach((item) => {
         if (item.value === e.target.value) {
           item.checked = true;

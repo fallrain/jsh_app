@@ -832,7 +832,7 @@ export default {
               ...prdt,
               // farWeek: prdt.weekPromise,
               // isCheckFarWeek: '0',
-              orderSplitComposeProductData
+              ...orderSplitComposeProductData
             };
             // 传统渠道没有信用模式
             if (channelGroup === 'ZY') {

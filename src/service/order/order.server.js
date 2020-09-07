@@ -75,9 +75,15 @@ export default {
     return jGet(urlNoApi.getProvince, data);
   },
   getCity(code) { // 获取市
-    return jGet(urlNoApi.getCity, code);
+    return jGet(urlNoApi.getCity(code));
   },
   getArea(code) { // 获取区
-    return jGet(urlNoApi.getArea, code);
+    return jGet(urlNoApi.getArea(code));
+  },
+  getCollectRemarkAddr(data) { // 直发异地地址列表
+    return jPostJson(urlNoApi.getCollectRemarkAddr, data);
+  },
+  queryJDAddr() { // 直发异地地址列表
+    return jPostJson(urlNoApi.queryJDAddr);
   },
 };

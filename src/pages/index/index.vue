@@ -439,7 +439,7 @@ export default {
     setInterval(() => {
       // console.log(1111);
       _this.mendli = _this.mend[index];
-      console.log(_this.mendli);
+      // console.log(_this.mendli);
       index += 1;
       if (index >= _this.mend.length) {
         index = 0;

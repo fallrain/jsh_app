@@ -33,8 +33,7 @@ export default {
   name: 'JSwitch',
   props: {
     active: {
-      type: Boolean,
-      default: true
+      type: Boolean
     },
     inf: {
       type: [Number, String]

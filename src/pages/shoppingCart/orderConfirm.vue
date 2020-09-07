@@ -189,7 +189,17 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].spareAddress = remarksData;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].address = remarksData.address;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].area = remarksData.area;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].areaCode = remarksData.areaCode;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].city = remarksData.city;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].deliveryYd = remarksData.deliveryYd;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].idCardNo = remarksData.idcardNo;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].iphoneNo = remarksData.iphoneNo;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].isCollectionAddress = remarksData.isCollectionAddress;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].province = remarksData.province;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].userName = remarksData.userName;
+      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].jdWarehouseId = remarksData.jdWarehouseId;
       console.log(this.dataInfo);
     });
   },
@@ -410,7 +420,8 @@ export default {
             address: v.splitOrderProductList[0].address,
             isBbOrProject: v.splitOrderProductList[0].isBbOrProject,
             priceType: v.splitOrderProductList[0].priceType,
-            isCollectionAddress: '1',
+            isCollectionAddress: v.splitOrderProductList[0].isCollectionAddress,
+            idCardNo: v.splitOrderProductList[0].idCardNo,
             deliveryYd: v.splitOrderProductList[0].deliveryYd,
             isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
             paytoCode: this.totalPayerMoneyInfo[v.orderNo].customerCode,

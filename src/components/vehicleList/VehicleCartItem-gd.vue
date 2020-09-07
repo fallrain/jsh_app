@@ -82,7 +82,6 @@ import vehicleMore from './VehicleMore';
 export default {
   name: 'VehicleCartItemGD',
   components: {
-    uniNumberBox,
     vehicleMore
   },
   props: {

@@ -18,13 +18,14 @@ const urls = {
   getProvince: '/address/get/province', // 获取省份
   // 获取市
   getCity(code) {
-    return `/address/get/city${code}`;
+    return `/address/get/city/${code}`;
   },
   // 获取区
   getArea(code) {
-    return `/address/get/area${code}`;
+    return `/address/get/area/${code}`;
   },
-
+  getCollectRemarkAddr: '/address/post/getCollectRemarkAddr', // 直发异地地址列表
+  queryJDAddr: '/yd-warehouse/query', // 直发异地地址列表
 };
 util.addPrefix(baseURL, urls);
 export default urls;

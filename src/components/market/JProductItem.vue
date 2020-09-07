@@ -41,8 +41,8 @@
           <view v-if="!specialPrice" class="jProductItem-cnt-price-inf">
             <view class="jProductItem-cnt-price">¥ {{toFixedNum(goods.priceDto.invoicePrice)}}</view>
             <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：{{goods.promotionNum}}</view>
-            <view v-else class="fs20 text-666 mr12">供价：¥{{toFixedNum(goods.priceDto.supplyPrice)}}</view>
-            <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
+            <view class="fs20 text-666 mr12">供价：¥{{toFixedNum(goods.priceDto.supplyPrice)}}</view>
+            <view v-if="groupType === 'taocan'" class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
           </view>
           <!--特价产品-->
           <view v-if="specialPrice"
@@ -50,7 +50,7 @@
             <view class="jProductItem-cnt-price">¥ {{goods.choseOtherVersions[0].invoicePrice}}</view>
             <view v-if="goods.promotionNum" class="fs20 text-666 mr12">数量：{{goods.promotionNum}}</view>
             <view v-else class="fs20 text-666 mr12">供价：¥{{computedPrice(goods.priceDto.supplyPrice)}}</view>
-            <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
+            <view v-if="groupType === 'taocan'" class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
           </view>
         </view>
       </view>
@@ -107,13 +107,14 @@
           </view>
           <!--<view class="fs20 text-666 mr12">库存：456</view>-->
         </view>
-        <view class="">
+        <view class="mr12">
           <j-switch
             :active.sync="goods.isSend"
             inf="直发"
             @change="isCreditModeChange"
           ></j-switch>
         </view>
+        <view class="fs20 text-666 mr12">库存：{{goods.stockTotalNum}}</view>
         <view
           v-if="isShowSpecificationsBtn"
           class="jProductItem-btm-version-picker ml-auto"
