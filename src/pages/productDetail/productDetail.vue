@@ -303,7 +303,7 @@ export default {
         }
         this.ActListInfo = [];
         this.ActInfo = [];
-        if (this.detailInfo.tjPrice.tj.length > 0) { // 特价
+        if (this.detailInfo.product.isSale && this.detailInfo.tjPrice.tj.length > 0) { // 特价
           this.ActListInfo.push('特价');
           const tj = {
             title: '特价版本',
@@ -516,7 +516,7 @@ export default {
       const { code, data } = await this.productDetailService.productHostList(this.userInf.customerCode, this.defaultSendTo.customerCode);
       if (code === '1') {
         this.hostList = data;
-        this.hostList.forEach(item => {
+        this.hostList.forEach((item) => {
           item.price = Number(item.price).toFixed(2);
         });
       }
@@ -599,7 +599,7 @@ export default {
           }));
           console.log(this.deliveryAddressList);
           this.ShipInfo = `(${this.defaultSendTo.customerCode})${this.defaultSendTo.customerName}`;
-          this.deliveryAddressList.forEach(item => {
+          this.deliveryAddressList.forEach((item) => {
             if (this.ShipInfo.indexOf(item.id) !== -1) {
               item.checked = true;
             }
@@ -618,8 +618,12 @@ export default {
     checkedAct(e, n) { // 活动选择的内容
       console.log('55555555555', n);
       this.CheckActivityInfo = n;
-      if (n.length > 0 && (n.titleLe === '工程版本' || n.titleLe === '样机版本' || n.titleLe === '调货' || n.titleLe === '特价版本')) {
+      console.log(this.CheckActivityInfo);
+      if (this.CheckActivityInfo && (this.CheckActivityInfo.titleLe === '工程版本' || this.CheckActivityInfo.titleLe === '样机版本')) {
+        console.log(1111111111111111111111111);
         this.footButtong.isSaleLe = true;
+      } else {
+        this.footButtong.isSaleLe = false;
       }
       this.detailInfo.product.invoicePrice = Number(this.CheckActivityInfo.price).toFixed(2);
       console.log(this.CheckActivityInfo);

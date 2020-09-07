@@ -45,7 +45,7 @@
         <image :src="goods.productList && goods.productList[0].productImageUrl" @tap="goDetail(goods)"></image>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
-        <view @tap="goDetail(goods)" class="jShoppingCartItem-cnt-inf-title">{{goods.productList &&
+        <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList &&
           goods.productList[0].productName}}
         </view>
         <view class="jShoppingCartItem-cnt-price-inf">
