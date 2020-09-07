@@ -6,10 +6,8 @@
         <view class="top-ship-but">X</view>
       </view>
       <scroll-view
-          scroll-y="true"
+          :scroll-y="true"
           class="filter-drawer-cnt-list"
-          scroll-with-animation="true"
-          show-scrollbar="true"
       >
         <view class="sorrowC-ship">
           <view @click="checkAct(index)" v-for="(ship,index) in info" :key="index">
@@ -75,7 +73,18 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.filter-drawer-cnt-list {
+  padding-left: 24px;
+  /*max-height: 888px;*/
+  overflow-y: auto;
+  padding-top: 18px;
+  height: calc(100% - 42px);
+  padding-bottom: 40px;
+}
+/*.filter-drawer-cnt-list::-webkit-scrollbar {*/
+/*  display: none;*/
+/*}*/
   .mask-ship {
     position: relative;
     padding-top: 10px;
@@ -122,13 +131,5 @@ export default {
   .cheched {
     color: #ED2856;
   }
- .filter-drawer-cnt-list {
-   padding-left: 24px;
-   max-height: 888px;
-   overflow-y: auto;
-   padding-bottom: 60px;
-  }
-  .filter-drawer-cnt-list::-webkit-scrollbar {
-    display: none;
-  }
+
 </style>

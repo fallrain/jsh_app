@@ -8,7 +8,7 @@
         </view>
         <view class="v-c-i-cnt">
           <view class="v-c-i-cnt-img-wrap">
-            <image :src="goods.THUMBNAIL"></image>
+            <image :src="goods.THUMBNAIL" @tap="goDetail(goods)"></image>
           </view>
           <view class="">
             <view class="v-c-i-cnt-inf-title">{{goods.PRODUCTNAME}}</view>
@@ -88,6 +88,12 @@ export default {
     };
   },
   methods: {
+    goDetail(item) {
+      console.log(item);
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${item.GBID}`
+      });
+    },
     getPayer(item, index) { // 显示付款方
       item.payCheck = !item.payCheck;
       console.log(item.payCheck);

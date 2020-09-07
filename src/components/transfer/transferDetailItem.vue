@@ -17,6 +17,7 @@
           <view class="transferDetailItem-detail-cnt-img-wrap">
             <image
               :src="good.THUMBNAIL"
+              @tap="goDetail(good)"
             >
           </view>
           <view class="transferDetailItem-detail-cnt-inf">
@@ -135,6 +136,12 @@ export default {
     }),
   },
   methods: {
+    goDetail(item) {
+      console.log(item);
+      uni.navigateTo({
+        url: `/pages/productDetail/productDetail?productCode=${item.GBID}`
+      });
+    },
     addFavorite(good) {
       console.log(good);
       if (good.$favorite) {

@@ -72,7 +72,7 @@
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
-       <pro-com-act :info="ActInfo" :show.sync="isShowAct" @isCheckAct="checkedAct"></pro-com-act>
+       <pro-com-act :info="ActInfo" :show.sync="isShowAct" @getNum="getProductDetail" @isCheckAct="checkedAct"></pro-com-act>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
         <view class="col text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
@@ -497,11 +497,11 @@ export default {
           console.log('wwwwwwwwwwwwwwwww', this.flash);
           if (this.flash.graborders && this.flash.graborders.length > 0) {
             this.flash.graborders.forEach((lis) => {
-              lis.lastUpdateDate = lis.lastUpdateDate.split(' ')[0];
+              lis.endTime = lis.endTime.split(' ')[0];
               const a = {
                 titleLe: '抢单',
                 name: lis.promotionName,
-                time: lis.lastUpdateDate,
+                time: lis.endTime,
                 num: lis.availableQuantity
               };
               console.log(a);
@@ -622,9 +622,6 @@ export default {
         this.footButtong.isSaleLe = true;
       }
       this.detailInfo.product.invoicePrice = Number(this.CheckActivityInfo.price).toFixed(2);
-      if (this.detailInfo.product.invoicePrice === 'NaN') {
-        this.detailInfo.product.invoicePrice = '';
-      }
       console.log(this.CheckActivityInfo);
       // debugger;
     },

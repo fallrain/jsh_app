@@ -446,7 +446,7 @@ export default {
   },
   created() {
     // 支持由前端 H5 页面禁止
-    // AlipayJSBridge.call('setGestureBack', { val: false });
+    AlipayJSBridge.call('setGestureBack', { val: false });
   },
   mounted() {
     // 适配安卓客户端
@@ -571,7 +571,7 @@ export default {
       return [];
     },
     // 解析用户权限类型数据
-    manageData(data) {
+    async manageData(data) {
       this.errorMsg = '';
       this.loadUserType = false;
       const tags = data.tags;
@@ -589,8 +589,9 @@ export default {
 
       let marketCollusionGroupValue = [];
 
+
       if (data.marketCollusionGroup.length > 0) {
-        marketCollusionGroupValue = this.getvaluesync();
+        marketCollusionGroupValue = await this.getvaluesync();
       }
 
       let marketErrorMsg = '';

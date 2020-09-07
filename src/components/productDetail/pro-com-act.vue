@@ -5,11 +5,9 @@
         <view class="pro-act-head-title">营销活动</view>
         <view class="pro-act-head-but">X</view>
       </view>
-      <scroll-view
-          scroll-y="true"
+        <scroll-view
+          :scroll-y="true"
           class="filter-drawer-cnt-list"
-          show-scrollbar="true"
-          croll-with-animation="true"
       >
         <view class="pro-act-pop-detail-wrap">
           <view class="pro-act-pop-detail" v-for="(act,indexA) in info" :key="indexA">
@@ -130,7 +128,8 @@ export default {
   },
   data() {
     return {
-      checkedInfo: []
+      checkedInfo: [],
+      isClick: false
     };
   },
   watch: {
@@ -166,6 +165,10 @@ export default {
     putAct() { // 确认
       this.$emit('update:show', false);
       this.$emit('isCheckAct', this.info, this.checkedInfo);
+      if (this.isclick) {
+        this.$emit('getNum');
+        this.isclick = false;
+      }
     },
     refresh() { // 重置
       for (let i = 0; i < this.info.length; i++) {
@@ -174,6 +177,7 @@ export default {
         }
       }
       this.checkedInfo = [];
+      this.isclick = true;
     }
   }
 };

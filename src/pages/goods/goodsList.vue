@@ -30,7 +30,7 @@
       @down="jMescrollDownCallback"
       @up="upCallback"
     >
-      <view class="goodsList-items-wrap">
+      <view class="goodsList-items-wrap" v-if="list.length !== 0">
         <j-goods-item
           v-for="(item,index) in list"
           :key="item.productCode"
@@ -43,6 +43,19 @@
           @change="goodsChange"
           @addCartSuccess="addCartSuccess"
         ></j-goods-item>
+      </view>
+<!--      <Exception v-else>-->
+<!--        <slot name="ExcPagTitle2"></slot>-->
+<!--      </Exception>-->
+      <view v-else>
+        <image
+          src="../../assets/img/exception/error-none.png"
+          style="width:120px; height:120px;margin:28% 35% 5% 38%;"
+        />
+        <view class="else-title">
+          <view class="else-title-l">非常抱歉</view>
+          <text class="else-title-x">没有找到相关的宝贝</text>
+        </view>
       </view>
     </mescroll-body>
 
@@ -148,7 +161,8 @@ export default {
     JChooseDeliveryAddress,
     JHeadTab,
     JGoodsItem,
-    MescrollBody
+    MescrollBody,
+
   },
   data() {
     return {
@@ -480,7 +494,9 @@ export default {
             // 添加库存
             const stockData = stockRes.data;
             curList.forEach((v) => {
-              v.$stock = stockData[v.productCode];
+              if (stockData[v.productCode].invCode === v.productCode) {
+                v.$stock = stockData[v.productCode];
+              }
             });
           }
         });

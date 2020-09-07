@@ -133,19 +133,18 @@ export default {
    padding-left: 30px;
    text-align: center;
  }
-
 .jHeadTab-wrap {
   position: absolute;
   background: #fff;
   height: 130px;
   width: 100%;
-  top: 100px;
+  top: 4px;
   z-index: 100;
 }
 
 
 .jHeadTab-list-wrap{
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   z-index: 99;

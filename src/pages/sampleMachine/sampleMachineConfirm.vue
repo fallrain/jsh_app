@@ -62,10 +62,18 @@
           ></j-switch>
         </view>
       </view>
-      <!--<view class="dis-flex">
-        <view class="">验证码：</view>
-        <view class="">青岛鸿程永泰商贸有限公司</view>
-      </view>-->
+      <view class="dis-flex">
+        <view style="margin-top: 8px;">验证码：</view>
+        <input
+            style="width:100px;height:30px;border-bottom:1px solid #000;"
+            v-model="verCode"
+            name="verCode"
+            id="verCode"
+        />
+        <view class="canvas-img-code" @click="refresh()">
+          <canvas :style="{width:width+'px',height:height+'px'}" canvas-id="imgcanvas" @error="canvasIdErrorCallback"></canvas>
+        </view>
+      </view>
     </view>
   </view>
   <view class="payfor-info-bottom">
@@ -117,6 +125,14 @@ export default {
   data() {
     return {
       isShowVf: false,
+      //图片验证码的值
+      verCode: '', //验证码,
+      width: 120,
+      height: 45,
+      // // 验证码初始值
+      // identifyCode: '1234',
+      // // 验证码的随机取值范围
+      // identifyCodes: '1234567890',
       form: {
         // 手机号
         phone: '',
@@ -145,6 +161,12 @@ export default {
     this.getUserInfById();
     console.log(this.confirmInfo);
   },
+  onShow() {
+    const _this = this;
+    setTimeout(function() {
+      _this.init();
+    }, 1000)
+  },
   computed: {
     ...mapGetters({
       userInf: USER.GET_USER,
@@ -162,6 +184,61 @@ export default {
     }
   },
   methods: {
+    // 初始化验证码
+    init() {
+      console.log('start');
+      var context = uni.createCanvasContext('imgcanvas', this),
+          w = this.width,
+          h = this.height;
+      context.setFillStyle("white");
+      context.setLineWidth(5);
+      context.fillRect(0, 0, w, h);
+      var pool = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "I", "M", "N", "O", "P", "Q", "R", "S",
+            "T", "U", "V", "W", "S", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
+          ],
+          str = '';
+      for (var i = 0; i < 4; i++) {
+        var c = pool[this.rn(0, pool.length - 1)];
+        var deg = this.rn(-30, 30);
+        context.setFontSize(18);
+        context.setTextBaseline("top");
+        context.setFillStyle(this.rc(80, 150));
+        context.save();
+        context.translate(30 * i + 15, parseInt(h / 1.5));
+        context.rotate(deg * Math.PI / 180);
+        context.fillText(c, -15 + 5, -15);
+        context.restore();
+        str += c;
+      }
+      uni.setStorage({
+        key: 'imgcode',
+        data: str,
+      });
+      for (var i = 0; i < 40; i++) {
+        context.beginPath();
+        context.arc(this.rn(0, w), this.rn(0, h), 1, 0, 2 * Math.PI);
+        context.closePath();
+        context.setFillStyle(this.rc(150, 200));
+        context.fill();
+      }
+      context.draw();
+      console.log('end');
+    },
+    rc(min, max) {
+      var r = this.rn(min, max);
+      var g = this.rn(min, max);
+      var b = this.rn(min, max);
+      return "rgb(" + r + "," + g + "," + b + ")";
+    },
+    rn(max, min) {
+      return parseInt(Math.random() * (max - min)) + min;
+    },
+    refresh() {
+      this.init();
+    },
+    canvasIdErrorCallback(e) {
+      console.error(e.detail.errMsg)
+    },
     sureOrder() {
       const money = this.currentPayer.balance || this.currentPayer.bookBalance;
       /* if (parseFloat(money) < parseFloat(this.totalMoney)) {
@@ -170,8 +247,25 @@ export default {
         });
         return;
       } */
-      this.isShowVf = true;
       console.log(this.currentPayer);
+      if (this.verCode.length != 4) {
+        uni.showToast({
+          icon: 'none',
+          position: 'bottom',
+          title: '验证码不正确'
+        });
+        return false;
+      }
+      if (this.verCode.toLowerCase() != uni.getStorageSync('imgcode').toLowerCase()) {
+        uni.showToast({
+          icon: 'none',
+          position: 'bottom',
+          title: '验证码不正确'
+        });
+        return false;
+      }
+      this.isShowVf = true;
+      console.log(this.verCode);
     },
     changePayer(payerInfo) {
       this.currentPayer = this.payerList.find(v => v.payerCode === payerInfo[0]);
@@ -250,3 +344,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.canvas-img-code {
+  display: inline-block;
+}
+</style>
