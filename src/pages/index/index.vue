@@ -181,9 +181,6 @@
 
 <script>
 import {
-  uniSwiperDot, uniNavBar
-} from '@dcloudio/uni-ui';
-import {
   mapActions,
   mapGetters
 } from 'vuex';
@@ -208,8 +205,6 @@ import './css/index.scss';
 export default {
   name: 'index',
   components: {
-    uniSwiperDot,
-    uniNavBar
   },
 
   data() {

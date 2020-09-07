@@ -154,15 +154,11 @@
 <script>
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/JProductItem.scss';
 
 export default {
   name: 'jProductItem',
   components: {
-    uniNumberBox,
     JVersionSpecifications,
     JSwitch
   },

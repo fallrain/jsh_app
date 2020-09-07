@@ -42,15 +42,11 @@
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
 import './css/jPopPicker.scss';
 
 export default {
   name: 'JPopPicker',
   components: {
-    uniPopup
   },
   props: {
     // 类型：radio/checkbox
@@ -119,7 +115,6 @@ export default {
       }
     },
     choseOptions(val) {
-      console.log(val);
     }
   },
   methods: {

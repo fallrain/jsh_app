@@ -134,7 +134,7 @@
           </view>
           <view class="drawer-menu">
             <j-cell
-              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
+              @cellClick="cellClick('/pages/mine/myBaseInfo?index=0')"
               class="border-b"
               title="个人资料"
             >
@@ -167,7 +167,7 @@
               </template>
             </j-cell>
             <j-cell
-              @cellClick="cellClick('/pages/mine/myGuestView?index=0')"
+              @cellClick="cellClick('/pages/messageInfoList/messageInfoList?index=0')"
               class="border-b pos-r"
               title="待办任务"
             >
@@ -185,10 +185,6 @@
 </template>
 <script>
 import {
-  uniDrawer,
-  uniSwiperDot
-} from '@dcloudio/uni-ui';
-import {
   mapActions,
   mapGetters
 } from 'vuex';
@@ -204,8 +200,6 @@ import {
 export default {
   name: 'applicationsIndex',
   components: {
-    uniDrawer,
-    uniSwiperDot,
     JCell
   },
   data() {

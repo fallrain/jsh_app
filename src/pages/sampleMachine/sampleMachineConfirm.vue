@@ -106,9 +106,6 @@
 import JSwitch from '../../components/form/JSwitch';
 import JPopPicker from '../../components/form/JPopPicker';
 import JSamplemachineAlert from '../../components/sampleMachine/JSamplemachineAlert';
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/sampleMachineConfirm.scss';
 import {
   mapGetters
@@ -123,7 +120,6 @@ export default {
   components: {
     JSwitch,
     JPopPicker,
-    uniNumberBox,
     JSamplemachineAlert
   },
   data() {

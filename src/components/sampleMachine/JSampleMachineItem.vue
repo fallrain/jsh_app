@@ -51,16 +51,12 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import './css/JSampleMachineItem.scss';
 
 export default {
   name: 'jSampleMachine',
   components: {
-    uniNumberBox,
     MToast
   },
   props: {

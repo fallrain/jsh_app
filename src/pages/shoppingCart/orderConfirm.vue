@@ -230,6 +230,7 @@ export default {
       const { code, data } = await this.orderService.splitOrder(this.formData);
       if (code === '1') {
         this.dataInfo = data;
+        console.log(this.dataInfo);
       }
     },
     dealPayerMoneyInfo(payerMoneyInfoItem) {

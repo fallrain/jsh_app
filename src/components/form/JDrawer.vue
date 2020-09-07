@@ -34,14 +34,10 @@
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'JDrawer',
   components: {
-    uniDrawer
   },
   props: {
     show: Boolean

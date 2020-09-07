@@ -29,15 +29,11 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/vehicleItem.scss';
 
 export default {
   name: 'VehicleItem',
   components: {
-    uniNumberBox
   },
   props: {
     goods: {// 商品对象

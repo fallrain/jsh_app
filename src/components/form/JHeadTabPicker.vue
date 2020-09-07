@@ -95,6 +95,7 @@ export default {
       this.value.forEach((v) => {
         v.checked = false;
       });
+      this.$emit('confirm', this.index, this.value);
       if (this.value[0].type === 'ZCJD') {
         this.value[4].checked = true; // 发货基地重置为黄岛
       } else if (this.value[0].type === 'ZCPC') {

@@ -36,15 +36,11 @@
 </template>
 
 <script>
-import {
-  uniNumberBox
-} from '@dcloudio/uni-ui';
 import './css/JProductBtm.scss';
 
 export default {
   name: 'jProductBtm',
   components: {
-    uniNumberBox
   },
   props: {
     // 全选

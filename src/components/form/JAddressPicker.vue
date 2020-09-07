@@ -6,7 +6,7 @@
     <scroll-view
       :scroll-y="true"
     >
-      <view class="picker-view-sure">确定</view>
+      <view @tap="sureVal" class="picker-view-sure">确定</view>
       <picker-view class="picker-view-style" :indicator-style="indicatorStyle" @change="bindChange">
 
         <picker-view-column>
@@ -67,6 +67,10 @@ export default {
     bindChange(e) {
       const val = e.detail.value;
       this.$emit('changeData', val);
+    },
+    sureVal() {
+      this.$emit('sureVal');
+      this.$emit('update:show', false);
     }
   }
 };

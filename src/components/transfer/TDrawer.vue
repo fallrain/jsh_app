@@ -27,14 +27,10 @@
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
 
 export default {
   name: 'TDrawer',
   components: {
-    uniDrawer
   },
   props: {
     show: Boolean
@@ -75,7 +71,7 @@ export default {
   .filter-drawer {
     position: relative;
     height: 100%;
-       
+
   }
   .filter-drawer-cnt-list {
     height: calc(100vh - 160px);

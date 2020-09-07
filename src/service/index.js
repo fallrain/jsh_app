@@ -18,7 +18,7 @@ import cocSeachService from './cocSearch/cocSearch.service';
 import openAccountService from './openAccount/openAccount.service';
 import activityService from './activity/activity.service';
 import udeskService from './udesk/udesk.service';
-
+import apiVService from './apiV/apiV.service';
 
 export default {
   install(Vue) {
@@ -63,5 +63,7 @@ export default {
     Vue.prototype.udeskService = udeskService;
     // 用户类型
     Vue.prototype.cocSeachService = cocSeachService;
+    //  我的-修改手机号apiVService
+    Vue.prototype.apiVService = apiVService;
   }
 };
