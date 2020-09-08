@@ -255,7 +255,9 @@ export default {
       // 当前选中的配送地址
       curChoseDeliveryAddress: {},
       // 上一组搜索对象数据
-      preSearchCondition: {}
+      preSearchCondition: {},
+      //  当前选中的tab
+      navigate: [],
     };
   },
   onLoad(options) {
@@ -437,6 +439,8 @@ export default {
       this.preSearchCondition = condition;
       const scrollView = {};
       if (code === '1') {
+        console.log(data);
+        this.navigate = data;
         const {
           // 商品数据
           page,
@@ -551,17 +555,22 @@ export default {
     },
     popTabsChange(tabs) {
       /* popTabs change */
+      console.log(tabs);
       this.popTabs = tabs;
     },
     tabConditionConfirm(tabs, index, choseItem) {
       /* 顶部双层tab栏目，第二层点了条件点确认按钮事件 */
       // 组合tabConditions
+      console.log(tabs);
       const choseTab = tabs[index];
       const conditions = {};
       // todo 显然，通过名字来判断不合理，但是pc端也是如此，待提bug
       if (choseTab.name === '类目') {
         conditions.categoryCode = choseItem.code;
+        console.log(conditions);
       } else {
+        console.log(choseTab);
+        console.log(conditions);
         conditions.attributeName = choseItem.code;
         conditions.attributeValue = choseItem.show;
       }
@@ -569,6 +578,7 @@ export default {
         ...this.tabConditions,
         ...conditions
       };
+      console.log(this.tabConditions);
       this.silentReSearch();
     },
     showFilter() {

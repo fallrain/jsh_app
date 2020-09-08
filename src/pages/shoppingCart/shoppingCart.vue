@@ -266,6 +266,9 @@ export default {
       isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
     }),
   },
+  // activated() {
+  //   this.setPageInfo();
+  // },
   methods: {
     ...mapMutations([
       USER.UPDATE_DEFAULT_SEND_TO,

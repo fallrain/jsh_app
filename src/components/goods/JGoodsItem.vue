@@ -261,8 +261,11 @@ export default {
         if (!isSale) {
           priceInf.invoicePrice = '营销活动进行中';
           // 是否是文字描述
-          priceInf.isText = true;
-          priceInf.disabled = true;
+          if (priceInf.invoicePrice === '营销活动进行中') {
+            priceInf.disabled = true;
+            priceInf.isText = true;
+            this.isShowAddCart = true;
+          }
         }
       }
 
