@@ -53,7 +53,11 @@ function showError(msg, status, url, params) {
     message = errorMap[status] || '请求失败';
   }
   const str = JSON.stringify(params);
-  showModal(message + url + str);
+  if (VUE_APP_MODE === 'prod') {
+    showModal(message);
+  } else {
+    showModal(message + url + str);
+  }
 }
 
 const loadingAy = [];
