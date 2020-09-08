@@ -167,12 +167,10 @@
 
 .jOrderConfirmItem-total {
   position: absolute;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
+  bottom: -130px;
   align-items: center;
   width: 100%;
-  height: 96px;
+  height: 200px;
   color: #fff;
   padding-left: 24px;
   padding-right: 24px;
@@ -185,8 +183,16 @@
     margin-right: 10px;
 
   }
+  .input-style{
+    color: #fff !important;
+    width: 382px;
+    border-bottom: 2px solid #fff;
+    font-size: 24px;
+  }
 }
-
+.placeholderClass{
+  color: #fff;
+}
 .jOrderConfirmItem-total-text {
 }
 
@@ -233,4 +239,16 @@
 }
 .text-theme{
   color: $theme-color;
+}
+.pb200{
+  padding-bottom: 200px !important;
+}
+.bottom-20{
+  bottom: -20px !important;
+}
+.mt12{
+  margin-top: 12px;
+}
+.lh66{
+  line-height: 66px;
 }

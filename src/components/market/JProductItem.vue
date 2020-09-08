@@ -242,7 +242,6 @@ export default {
       console.log(this.specificationsList);
     },
     change(val) {
-      debugger;
       this.goods.choosedNum = val;
       this.isCreditModeChange();
     },

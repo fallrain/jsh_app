@@ -1,10 +1,10 @@
 <template>
   <view class="container">
-    <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">
-      <view @click="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
-      <view @click="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
-      <view @click="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>
-    </view>
+<!--    <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">-->
+<!--      <view @click="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>-->
+<!--      <view @click="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>-->
+<!--      <view @click="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>-->
+<!--    </view>-->
     <scroll-view class="scroller" style="height: 100vh;" :scroll-into-view="toView" scroll-y="true" scroll-with-animation="true">
    <view  style="margin-top:40px;" id="goods">
      <uni-swiper-dot :info="detailInfo.images" :current="current" :mode="mode" field="content">
@@ -139,10 +139,10 @@ import proSpecs from '../../components/productDetail/pro-specs';
 import proComFoot from '../../components/productDetail/pro-com-foot';
 import './css/productDetail.scss';
 import {
-  mapGetters
+  mapGetters,mapMutations
 } from 'vuex';
 import {
-  USER
+  USER, GOODS_LIST
 } from '../../store/mutationsTypes';
 
 export default {
@@ -242,6 +242,9 @@ export default {
     this.getDeliveryAddress();// 获取配送地址列表
   },
   methods: {
+    ...mapMutations([
+      GOODS_LIST.UPDATE_IS_CART_UPDATE,
+    ]),
     move() {
       this.isF = true;
     },
@@ -714,12 +717,27 @@ export default {
         uni.showToast({
           title: '加入购物车成功',
         });
+        this.getShoppingCartList();
+
+
+
       } else {
         uni.showToast({
           title: '加入购物车成功失败请重试',
         });
       }
     },
+    //  调用购物车列表接口
+    async getShoppingCartList() {
+      /* 获取购物车数据 */
+      const { code, data } = await this.cartService.getShoppingCartListFromCache({
+        code: this.userInf.customerCode
+      });
+      if (code === '1') {
+        this[GOODS_LIST.UPDATE_IS_CART_UPDATE](true);
+        console.log(1111111);
+      }
+    }
   }
 };
 

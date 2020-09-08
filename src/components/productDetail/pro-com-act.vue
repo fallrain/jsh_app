@@ -97,7 +97,7 @@
       </scroll-view>
       <view class="pro-act-btn-wrap">
         <button type="button" class="goodsList-drawer-btn-confirm" @click="putAct">确定</button>
-        <button type="button" class="goodsList-drawer-btn-reset" @click="refresh">重制</button>
+        <button type="button" class="goodsList-drawer-btn-reset" @click="refresh">重置</button>
       </view>
     </view>
   </uni-popup>

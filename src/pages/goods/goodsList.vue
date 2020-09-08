@@ -561,7 +561,7 @@ export default {
     tabConditionConfirm(tabs, index, choseItem) {
       /* 顶部双层tab栏目，第二层点了条件点确认按钮事件 */
       // 组合tabConditions
-      console.log(tabs);
+      // console.log(tabs);
       const choseTab = tabs[index];
       const conditions = {};
       // todo 显然，通过名字来判断不合理，但是pc端也是如此，待提bug

@@ -209,7 +209,6 @@ export default {
       // 配比产品比例
       const proportion = this.currentDetail.proportion;
       let PBnum = 0;
-      debugger;
       if (this.currentDetail.proportionType === '2') {
         // 金额配比
         PBnum = Math.ceil((proportion / this.currentDetail.proportionMain * this.limit1.choosedMainMoney - this.limit1.choosedPBMoney) / this.lowestPBMoney)
@@ -442,7 +441,7 @@ export default {
         if (item.choosedNum !== 0) {
           productItem = {
             productCode: item.productCode,
-            number: parseInt(item.choosedNum),
+            number: Number(item.choosedNum),
             isStock: '1',
             farWeek: '0',
             creditModel: '0',
@@ -478,14 +477,16 @@ export default {
           productItem.priceType = item.choseOtherVersions[0].priceType.toUpperCase();
           productItem.priceVersion = item.choseOtherVersions[0].versionCode;
         }
-        productArr.push(productItem);
+        if (JSON.stringify(productItem) !== '{}') {
+          productArr.push(productItem);
+        }
       });
       if (this.currentDetail.pbProducts) {
         this.currentDetail.pbProducts.forEach((item) => {
           if (item.choosedNum !== 0) {
             const productItem = {
               productCode: item.productCode,
-              number: parseInt(item.choosedNum),
+              number: Number(item.choosedNum),
               isStock: '1',
               farWeek: '0',
               creditModel: '0',
@@ -507,7 +508,6 @@ export default {
       const { code, data, msg } = await this.orderService.validateProduct(form, {
         noToast: true
       });
-      debugger;
       if (code === '1') {
         const formData = JSON.stringify(form);
         // 产品校验成功

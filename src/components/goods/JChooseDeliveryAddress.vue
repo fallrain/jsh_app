@@ -85,7 +85,7 @@ export default {
         // 配送至的地址名
         name: ''
       },
-      listTemp: []
+      listTemp: [...this.list]
     };
   },
   watch: {
