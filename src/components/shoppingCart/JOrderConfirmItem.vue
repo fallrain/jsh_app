@@ -115,7 +115,7 @@
           <view class="jOrderConfirmItem-total-price ml20">¥ {{toFixedNum(orderItem.totalMoney)}}</view>
         </view>
       </view>
-      <view v-if="isCT" class="dis-flex mt12">
+      <view @tap="chooseInvoice" v-if="isCT" class="dis-flex mt12">
         <view class="">开票方：</view>
         <view class=""></view>
         <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
@@ -173,6 +173,10 @@ export default {
     index: {
       type: Number
     },
+    // 索引
+    billInfoList: {
+      type: Array
+    },
     // 付款方信息
     payInfoData: {
       type: Object,
@@ -184,6 +188,7 @@ export default {
       invoicePickerShow: true,
       invoiceOptions: [],
       currentinvoiceOption: [],
+      currentinvoice: {},
       selfValue: '',
       isCT: false,
       Bbaddress: {},
@@ -225,7 +230,6 @@ export default {
     } else {
       this.isCT = false;
     }
-    console.log(this.isCT);
   },
   watch: {
     payInfoData() {
@@ -263,6 +267,20 @@ export default {
       const currentPayer = this.payerOptions[this.currentOrderNo].find(v => v.customerCode === val[0]);
       this.$set(this.currentPayer, this.currentOrderNo, currentPayer);
       this.getPayerMoneyInfo();
+    },
+    billInfoList() {
+      this.currentinvoiceOption = [];
+      this.invoiceOptions = this.billInfoList;
+      this.currentinvoiceOption[0] = this.invoiceOptions[0].key;
+      this.currentinvoice = this.invoiceOptions[0];
+    },
+    currentinvoiceOption(val) {
+      console.log(val);
+      this.invoiceOptions.forEach((item) => {
+        if (item.key === val[0]) {
+          this.currentinvoice = item;
+        }
+      });
     }
   },
   computed: {
@@ -277,6 +295,13 @@ export default {
     }
   },
   methods: {
+    // 选择开票方
+    chooseInvoice() {
+      this.currentinvoiceOption = [];
+      this.invoiceOptions = this.billInfoList;
+      this.invoicePickerShow = true;
+      this.currentinvoiceOption[0] = this.invoiceOptions[0].key;
+    },
     getPayerMoneyInfo() {
       const currentPayerMoneyInfo = {
       };

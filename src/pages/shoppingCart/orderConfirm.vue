@@ -20,6 +20,7 @@
         @payerMoneyInfo="dealPayerMoneyInfo"
         :orderItem="orderItem"
         :payInfoData.sync="payInfoData"
+        :billInfoList.sync="billInfoList"
       ></j-order-confirm-item>
     </view>
     <view v-if="dataInfo.disableComposeProductList.length > 0" class="mt24">
@@ -123,6 +124,8 @@ export default {
   },
   data() {
     return {
+      productGroups: [],
+      billInfoList: [],
       show: false,
       modalShow: false,
       formData: {},
@@ -200,7 +203,6 @@ export default {
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].province = remarksData.province;
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].userName = remarksData.userName;
       this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].jdWarehouseId = remarksData.jdWarehouseId;
-      console.log(this.dataInfo);
     });
   },
   computed: {
@@ -234,6 +236,30 @@ export default {
       await this.splitOrder();
       await this.getPayInfo();
       await this.getUserInfById();
+      this.billInfoList = [];
+      this.productGroups.forEach((item) => {
+        this.getBillInfo(item);
+      });
+      console.log(this.productGroups);
+    },
+    // 传统渠道查询开票方
+    async getBillInfo(productCode) {
+      let arrs = [];
+      const sendtoCode = this.formData.sendtoCode;
+      const { code, data } = this.orderService.getBillInfo(sendtoCode, productCode);
+      if (code === '1') {
+        arrs = JSON.parse(JSON.stringify(this.billInfoList.concat(data)));
+      }
+      arrs = this.unique(arrs);
+      this.billInfoList = arrs;
+      this.billInfoList.forEach((item) => {
+        item.key = item.customerCode;
+        item.value = `(${item.customerCode})${item.customerCode}`;
+      });
+    },
+    // 数组去重
+    unique(arr) {
+      return Array.from(new Set(arr));
     },
     // 拆单
     async splitOrder() {
@@ -281,6 +307,7 @@ export default {
     },
     getPayForm() {
       const payFormArr = [];
+      const productGroups = [];
       this.dataInfo.composeProductList.forEach((item) => {
         item.splitOrderDetailList.forEach((v) => {
           const conditionItem = {
@@ -294,13 +321,15 @@ export default {
             sendtoCode: this.dataInfo.sendtoCode,
             yunCangFlag: '',
           };
+          productGroups.push(v.splitOrderProductList[0].productGroup);
           if (v.isTCTP) {
             conditionItem.yunCangFlag = 'TCTP';
           }
           payFormArr.push(conditionItem);
         });
       });
-      console.log(payFormArr);
+      this.productGroups = productGroups;
+      console.log(this.productGroups);
       return payFormArr;
     },
     async getPayInfo() {
