@@ -411,6 +411,7 @@ export default {
           value: v.stockType,
           isChecked: false
         }));
+        console.log(data);
         // 如果之前有选中的有货商品，设置选中
         const checkedObj = this.filterList[2].data.find(v => v.isChecked);
         if (checkedObj) {
@@ -421,6 +422,7 @@ export default {
         }
         // 修改有货商品
         this.filterList[2].data = data;
+        console.log(this.filterList)
       }
     },
     async getGoodsList(pages) {

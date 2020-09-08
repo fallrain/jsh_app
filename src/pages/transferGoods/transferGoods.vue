@@ -264,6 +264,12 @@ export default {
           children: []
         },
       ],
+      // 选购其他时query入参
+      cond: {
+        dst: '',
+        brand: '',
+        center: '',
+      }
     };
   },
   onLoad(option) {
@@ -292,7 +298,11 @@ export default {
     } else {
       this.getPageInfo();
       if (this.otherSEQ) {
-        this.getOrderList();
+        (async () => {
+          await this.getOrderList();
+        })().then((res) => {
+          this.mescroll.resetUpScroll(true);
+        });
       }
     }
   },
@@ -522,7 +532,16 @@ export default {
       const condition = this.getSearchCondition(pages);
       console.log(condition);
       const scrollView = {};
-
+      if (this.disable) {
+        this.addressesList.forEach((item) => {
+          if (item.addressName === this.getOrder.DH_SENDTO_ADDRESS) {
+            console.log(item);
+            condition.center = item.tradeCode;
+            condition.dstCode = this.getOrder.DH_SENDTO;
+            condition.brandName = '';
+          }
+        });
+      }
       const { code, data } = await this.transfergoodsService.transferList({
         timestamp: Date.parse(new Date()),
         // categoryCode: "",
@@ -603,12 +622,12 @@ export default {
         this.getStockNum();
       } else {
         this.list = [];
-        scrollView.total = 0;
         this.mescroll.endErr();
         // 暂无数据
         uni.showToast({
           title: '暂无数据',
         });
+        scrollView.total = 0;
       }
       // debugger
       return scrollView;
@@ -644,10 +663,12 @@ export default {
       if (code === '1') {
         const home = data.data;
         console.log('w 时候   是哦', home);
+        // if (home) {
         home.unshift({
           OUTWHCODE: '',
           OUTWHNAME: '全部'
         });
+        // }
         this.cargoWareHome = home;
         console.log('sossososososoos', this.cargoWareHome);
         if (this.cargoWareHome) {
@@ -755,6 +776,9 @@ export default {
             item.checked = true;
           }
         });
+        // debugger
+        // this.getTransferList();
+        this.mescroll.resetUpScroll(true);
       }
       this.popTabs[1].children.forEach((item) => {
         console.log('qqqqqqqqqqqqqqq', item);
@@ -764,10 +788,9 @@ export default {
       // this.popTabs[1].children[0].ycFlag = 'JSHSW';
       // this.popTabs[1].children[1].ycFlag = '';
       console.log('zzzzzzzzzzzzzzzzzz', this.popTabs[1].children);
-      this.mescroll.resetUpScroll(true);
     },
     // 点击选购其他 返回列表页
-    async getOrderList() {
+    async getOrderList(pages) {
       const { code, data } = await this.transfergoodsService.allOrderList({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.saleInfo.customerCode,
@@ -782,14 +805,18 @@ export default {
         console.log(this.addressesList);
         this.addressesList.forEach((item) => {
           if (item.addressName === this.getOrder.DH_SENDTO_ADDRESS) {
-            this.curChoseDeliveryAddress.id = item.customerCode;
+            console.log(item);
+            this.curChoseDeliveryAddress = item;
+            // this.curChoseDeliveryAddress.id = item.customerCode;
             this.curChoseDeliveryAddress.name = `(${item.customerCode})${item.addressName}`;
-            this.curChoseDeliveryAddress.tradeCode = item.tradeCode;
-            console.log(this.curChoseDeliveryAddress);
-            // debugger
+            // this.curChoseDeliveryAddress.tradeCode = item.tradeCode;
+            // console.log(this.curChoseDeliveryAddress);
+            this.stock = this.getOrder.DH_OUTWHCODE;
           }
         });
-        this.mescroll.resetUpScroll(true);
+        // debugger
+        this.getCargoQuery();
+        this.getTransferList();
         console.log(this.curChoseDeliveryAddress);
       }
     },
