@@ -84,6 +84,12 @@ export default {
           id2: '7',
           name: '退货订单',
           active: false
+        },
+         {
+          id: 9,
+          id2: '8',
+          name: '待结算',
+          active: false
         }
       ]
     };
@@ -118,10 +124,15 @@ export default {
         pageSize: 10
       };
 
+      if(e == 8) {
+        param.yjPay = "MFYJ";
+      }
+
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
         this.orderListInfo = data.dataList;
       }
+      console.log('===========orderList==========='+e);
       console.log(data);
     },
     goDetail(e) {

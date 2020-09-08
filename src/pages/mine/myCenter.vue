@@ -156,7 +156,7 @@ export default {
           src: require('./image/jiesuan.png'),
           title: '待结算',
           url: '/pages/orderList/orderList',
-          sex: 0
+          sex: 9
         },
         {
           id: 2,
