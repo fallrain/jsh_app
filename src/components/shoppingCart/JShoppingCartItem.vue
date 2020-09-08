@@ -317,33 +317,6 @@ export default {
   created() {
     this.setPageInf();
   },
-  watch: {
-    versionPrice() {
-      this.genSpecificationsList();
-      this.setFollowState();
-    },
-    isCreditModel(val) {
-      /* 如果不支持信用模式了，已经打开的则关闭 */
-      if (val === false) {
-        this.goods.isCreditMode = false;
-        this.goodsChange();
-      }
-    },
-    isDirect(val) {
-      /* 如果不支持信用模式了，已经打开的则关闭 */
-      if (val === false) {
-        this.goods.isDirectMode = false;
-        this.goodsChange();
-      }
-    },
-    isFundsFirst(val) {
-      /* 如果不支持款先模式了，已经打开的则关闭 */
-      if (val === false) {
-        this.goods.isFundsFirstMode = false;
-        this.goodsChange();
-      }
-    }
-  },
   computed: {
     stockNum() {
       // inStock
@@ -541,6 +514,41 @@ export default {
       return maxNum === undefined || maxNum === null ? Number.MAX_VALUE : maxNum;
     },
   },
+  watch: {
+    versionPrice() {
+      this.genSpecificationsList();
+      this.setFollowState();
+    },
+    isCreditModel(val) {
+      /* 如果不支持信用模式了，已经打开的则关闭 */
+      if (val === false) {
+        this.goods.isCreditMode = false;
+        this.goodsChange();
+      }
+    },
+    isDirect(val) {
+      /* 如果不支持信用模式了，已经打开的则关闭 */
+      if (val === false) {
+        this.goods.isDirectMode = false;
+        this.goodsChange();
+      }
+    },
+    isFundsFirst(val) {
+      /* 如果不支持款先模式了，已经打开的则关闭 */
+      if (val === false) {
+        this.goods.isFundsFirstMode = false;
+        this.goodsChange();
+      }
+    },
+    maxGoodsNum(val) {
+      /* 最大数量如果小于已选的数量，则修改已选数量之 */
+      if (this.goods.number > val) {
+        this.goods.number = val;
+        this.goods.productList[0].number = val;
+        this.$emit('change', this.goods, this.index);
+      }
+    }
+  },
   methods: {
     goDetail(goods) {
       console.log(goods.productList[0].productCode);
@@ -704,7 +712,7 @@ export default {
       // 自有渠道才有版本调货
       if (this.userInf.channelGroup === 'ZY') {
         // 调货 选的是普通、特价、工程的时候，还可选个调货
-        if (!stockVersion && ['TJ', 'GC'].find(v => v === priceType)) {
+        if (!stockVersion && ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
           const transformVersionList = this.versionPrice.version.version[productCode];
           if (transformVersionList && transformVersionList.length) {
             const version = {
@@ -915,7 +923,9 @@ export default {
         // 重置选中状态
       const choseItem = this.specificationsList.find(v => v.id === $parentId);
       choseItem.list[$choseIndex].checked = false;
-      this.goods.choseOtherVersions = [];
+      // 删除已选版本里的数据
+      const delIndex = this.goods.choseOtherVersions.find(v => v.$parentId === $parentId && v.$choseIndex === $choseIndex);
+      this.goods.choseOtherVersions.splice(delIndex, 1);
       this.$emit('change', this.goods, this.index);
     },
     genStockPickerOption() {
