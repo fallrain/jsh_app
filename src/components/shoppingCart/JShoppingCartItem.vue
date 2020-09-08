@@ -391,7 +391,7 @@ export default {
         // 查找是否有非普通版本，非普通版本也没有信用模式
         state = state && !this.choseVersions.find((v) => {
           const priceType = v.priceType;
-          return !!(priceType && priceType.toUpperCase() !== 'PT');
+          return !!((priceType && priceType.toUpperCase() !== 'PT') || v.$isTransfer);
         });
       }
       return state;
@@ -423,18 +423,23 @@ export default {
       /* 是否显示【版本规格】按钮 */
       return !!(this.specificationsList.length) && !this.goods.isCreditMode;
     },
+    choseVersions() {
+      /* 选择的所有版本信息 */
+      return this.getPriceVersionData(this.goods);
+    },
     choseVersionInf() {
       /* 选择的版本信息 */
-      const curVersions = this.getPriceVersionData(this.goods);
+      const curVersions = this.choseVersions;
       // !!(product && product.priceType === 'PT');
       return curVersions.map((curVersion) => {
         // 普通价格不额外显示
         const {
           // 版本类型
           priceType,
-          $origin
+          $origin,
+          $isTransfer
         } = curVersion;
-        if (JSON.stringify(curVersion) === '{}' || priceType === 'PT') {
+        if (JSON.stringify(curVersion) === '{}' || (priceType === 'PT' && !$isTransfer)) {
           return '';
         }
         const {
@@ -447,7 +452,7 @@ export default {
           // 版本可用数量
           usableQty,
           // 版本调货可用数量
-          num,
+          number,
           // 更新的版本的picker父id
           $parentId,
           // 更新的版本在picker里的index
@@ -461,16 +466,24 @@ export default {
         if (priceType) {
           inf.content = `${getGoodsInCartPriceType()[priceType.toUpperCase()]}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
         } else {
-          inf.content = `版本调货：${versionCode} 数量：${num}`;
+          inf.content = `版本调货：${versionCode} 数量：${number}`;
         }
         return inf;
       });
     },
     chosePrice() {
       /* 选择的用来显示价格的版本信息 */
-      const versions = this.getPriceVersionData(this.goods);
+      const versions = this.choseVersions;
       // 非版本调货的才显示
-      let v = versions.find(vs => vs.priceType) || {};
+      let v = versions.find(vs => vs.priceType);
+      if (!v) {
+        if (versions.length) {
+          // 说明有版本调货,版本调货无价格，需要取普通价
+          v = this.goods.$PriceInfo.commonPrice;
+        } else {
+          v = {};
+        }
+      }
       v = JSON.parse(JSON.stringify(v));
       v.invoicePrice = this.jshUtil.formatNumber(v.invoicePrice, 2);
       v.supplyPrice = this.jshUtil.formatNumber(v.supplyPrice, 2);
@@ -489,10 +502,6 @@ export default {
       priceInf.rebateMoney = this.jshUtil.formatNumber(priceInfTemp.rebateMoney, 2);
       priceInf.rebateRate = this.jshUtil.formatNumber(this.jshUtil.arithmetic(priceInfTemp.rebateRate, 100, 3), 2);
       return priceInf;
-    },
-    choseVersions() {
-      /* 选择的所有版本信息 */
-      return this.getPriceVersionData(this.goods);
     },
     totalChosePrice() {
       /* 本产品的总价格 */
@@ -577,6 +586,7 @@ export default {
     },
     isDirectModeChange() {
       /* 直发模式switch change */
+      // goods.isDirectMode
       this.$emit('change', this.goods, this.index);
     },
     showSpecifications() {
@@ -594,13 +604,16 @@ export default {
         return;
       }
       const specificationsList = [];
+      const product = this.goods.productList[0];
       const {
         productCode,
-        priceInfo
-      } = this.goods.productList[0];
+        priceInfo,
+        // 版本调货号，以此来判断是否有版本调货
+        stockVersion
+      } = product;
       let {
         priceType
-      } = this.goods.productList[0];
+      } = product;
       const {
         TJ: tj,
         GC: gc,
@@ -613,7 +626,7 @@ export default {
         productList
       } = this.goods;
         // (priceType)特价版本信息，已经有非普通版本价格的不可选择（调货除外）
-      if (!priceType || priceType === 'PT') {
+      if (stockVersion || priceType === 'PT') {
         // 是否有特价
         let hasTj = true;
         // 如果是抢单或者反向定制，则specialPrice需要为Y才行
@@ -666,7 +679,8 @@ export default {
             specificationsList.push(version);
           }
           // 样机版本信息
-          if (yjList && yjList.length) {
+          // 已有版本调货不可选样机
+          if (!stockVersion && yjList && yjList.length) {
             const version = {
               id: 'example',
               title: '样机版本',
@@ -690,9 +704,7 @@ export default {
       // 自有渠道才有版本调货
       if (this.userInf.channelGroup === 'ZY') {
         // 调货 选的是普通、特价、工程的时候，还可选个调货
-        // if (!priceType || ['PT', 'TJ', 'GC'].find(v => v === priceType)) {
-        // 改为即使有工程也加也不可选
-        if (!priceType || priceType === 'PT') {
+        if (!stockVersion && ['TJ', 'GC'].find(v => v === priceType)) {
           const transformVersionList = this.versionPrice.version.version[productCode];
           if (transformVersionList && transformVersionList.length) {
             const version = {
@@ -767,6 +779,7 @@ export default {
             versionData.find(v => v.id === parent.id).list[checkVersion.$choseIndex].checked = false;
           } else {
             // 工程、特价可以和版本调货共存
+            // 此处用!priceType来判断是否是版本调货
             if ((map[checkVersion.priceType] && !priceType) || (map[priceType] && !checkVersion.priceType)) {
               version.checked = true;
               versionData[parIndex].list[curIndex] = version;

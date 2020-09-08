@@ -466,6 +466,7 @@ export default {
         priceType: v.priceType,
         priceVersion: v.name,
         productCode,
+        // 此处用无priceType来
         number: v.priceType ? number : v.num,
       }));
     },
@@ -565,8 +566,11 @@ export default {
       } else {
         // 调货算普通
         if (!product.priceType) {
-          product.priceType = 'PT';
           isTransfer = true;
+          product.priceType = 'PT';
+          product.stockVersion = product.priceVersion;
+          // 不传priceVersion？todo
+          product.priceVersion = undefined;
         }
       }
       const res = await this.cartService.addToCart({
@@ -589,7 +593,7 @@ export default {
         // 送达方编码
         sendtoCode,
         // 版本调货版本号
-        transferVersionCode: isTransfer ? product.priceVersion : undefined,
+        transferVersionCode: isTransfer ? product.stockVersion : undefined,
         // 促销活动版本号
         // versionCode: '',
       });
