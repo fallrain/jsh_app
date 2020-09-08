@@ -131,8 +131,40 @@ export default {
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
         this.orderListInfo = data.dataList;
+        // 遍历循环
+        for (let index = 0; index < this.orderListInfo.length; index++) {
+          const element = this.orderListInfo[index];
+          this.buttonLogicJudgmentAction(element.info,index)
+        }
       }
       console.log('===========orderList==========='+e);
+      console.log(data);
+    },
+    // 获取按钮显示的数据
+    async buttonLogicJudgmentAction(param,index) {
+      const { code, data } = await this.orderService.buttonLogicJudgment(param);
+      if (code === '200') {
+        var element = this.orderListInfo[index];
+        element.btnsInfo = data
+        this.orderListInfo[index] = element;
+        console.log(this.orderListInfo)
+        // this.buttonLogicJudgment = data;
+        console.log('============')
+        // console.log(this.buttonLogicJudgment)
+        // console.log(this.invalidButton)
+        // console.log(this.invalidButton)
+    //     selfPayButton": "0",
+		// "tctpConfirmButton": "0",
+		// "orderNo": "2000426027",
+		// "invalidButton": "0",
+		// "estimateButton": "0",
+    // "signInButton": "0"
+//     tctpConfirmButton:统仓统配确认按钮
+// orderNo:订单号
+// invalidButton:订单作废按钮
+// estimateButton:
+// signInButton:"自主签收按
+      }
       console.log(data);
     },
     goDetail(e) {

@@ -2,9 +2,9 @@
   <view v-show="isOrderMore" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view v-if="invalidButton == 1" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>自助作废</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>自助作废</view>
       <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>更改付款方</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>统舱统配确认</view>
+      <view v-if="tctpConfirmButton == 1" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>统舱统配确认</view>
       <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>前往结算</view>
     </view>
   </view>
@@ -18,7 +18,7 @@ export default {
       type: Boolean,
       default: false
     },
-    invalidButton:{
+    tctpConfirmButton:{
       type:String,
       default:'1',
     }
