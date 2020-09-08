@@ -266,9 +266,6 @@ export default {
       isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
     }),
   },
-  // activated() {
-  //   this.setPageInfo();
-  // },
   methods: {
     ...mapMutations([
       USER.UPDATE_DEFAULT_SEND_TO,
@@ -300,6 +297,8 @@ export default {
       const getShoppingCartList = this.getShoppingCartList();
       // 获取特价版本
       const getSpecialPrice = this.getSpecialPrice();
+      // 重置购物车
+      this.resetShoppingCartList();
       // 重置结算底栏信息
       this.resetBtmInf();
       //  重置产业
@@ -428,6 +427,11 @@ export default {
           ...this.defaultSendTo
         };
       }
+    },
+    resetShoppingCartList() {
+      /* 重置购物车列表 */
+      this.shoppingList = [];
+      this.failureGoodsList = [];
     },
     async getShoppingCartList() {
       /* 获取购物车数据 */

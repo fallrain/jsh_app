@@ -9,7 +9,7 @@
         <text>配送至：{{currentAdd.name}}</text>
         <view class="iconfont iconyou right-style"></view>
       </view>
-      <view v-if="currentDetail.proportionType === '1'" class="marketDetail-orders br-b-grey">
+      <view class="marketDetail-orders br-b-grey">
         <view>
           <view><span class="text-theme fs36">{{limit1.choosedMainNum}}</span>件</view>
           <view>已选主产品</view>
@@ -28,17 +28,17 @@
         </view>
       </view>
       <view v-if="currentDetail.proportionType === '2'" class="marketDetail-requirement fs20">
-        <view class="dis-flex mb24">
-          <view class="w210 text-999">主产品起订金额限定</view>
-          <view class="w200 text-333">{{limit2.choosedMainMoney}} / ¥{{currentDetail.spePrice}}</view>
-          <view class="w210 text-999">主产品起订数量限定</view>
-          <view class="text-333">{{limit2.choosedMainNum}} / {{currentDetail.speNum}}件</view>
+        <view class="condition-item">
+          <view class="key-style">主产品起订金额限定</view> ¥{{currentDetail.spePrice}}
         </view>
-        <view class="dis-flex">
-          <view class="w210 text-999">配比产品起订金额限定</view>
-          <view class="w200 text-333">{{limit2.choosedPBMoney}} / ¥{{currentDetail.bundlePrice}}</view>
-          <view class="w210 text-999">配比产品起订数量限定</view>
-          <view class="text-333">{{limit2.choosedPBNum}} / {{currentDetail.bundleNum}}件</view>
+        <view class="condition-item">
+          主产品起订数量限定 {{currentDetail.speNum}}件
+        </view>
+        <view class="condition-item">
+          配比产品起订金额限定 {{currentDetail.bundlePrice}}件
+        </view>
+        <view class="condition-item">
+          配比产品起订数量限定 {{currentDetail.bundleNum}}件
         </view>
       </view>
     </view>
@@ -229,7 +229,7 @@ export default {
       this.updateIndex++;
     },
     goodsChange(goods, index) {
-      debugger
+      debugger;
       console.log(goods);
       if (goods.choseOtherVersions && goods.choseOtherVersions.length > 0) {
         this.specialPrice = true;
@@ -237,7 +237,7 @@ export default {
         this.specialPrice = false;
       }
       let totalMoney = 0;
-      console.log(this.groupType)
+      console.log(this.groupType);
       if (this.groupType === 0) {
         if (goods.productFlag === 'f') {
           this.currentDetail.products[index] = goods;
