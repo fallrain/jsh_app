@@ -1,10 +1,10 @@
 <template>
   <view class="container">
-    <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">
-      <view @click="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>
-      <view @click="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>
-      <view @click="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>
-    </view>
+<!--    <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">-->
+<!--      <view @click="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>-->
+<!--      <view @click="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>-->
+<!--      <view @click="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>-->
+<!--    </view>-->
     <scroll-view class="scroller" style="height: 100vh;" :scroll-into-view="toView" scroll-y="true" scroll-with-animation="true">
    <view  style="margin-top:40px;" id="goods">
      <uni-swiper-dot :info="detailInfo.images" :current="current" :mode="mode" field="content">
