@@ -27,18 +27,21 @@
           <view>还需配比产品</view>
         </view>
       </view>
-      <view v-if="currentDetail.proportionType === '2'" class="marketDetail-requirement fs20">
-        <view class="condition-item">
+      <view class="marketDetail-requirement fs20">
+        <view v-if="currentDetail.spePrice" class="condition-item">
           <view class="key-style">主产品起订金额限定</view> ¥{{currentDetail.spePrice}}
         </view>
-        <view class="condition-item">
-          主产品起订数量限定 {{currentDetail.speNum}}件
+        <view v-if="currentDetail.speNum" class="condition-item">
+          <view class="key-style">主产品起订数量限定</view>{{currentDetail.speNum}}件
         </view>
-        <view class="condition-item">
-          配比产品起订金额限定 {{currentDetail.bundlePrice}}件
+        <view v-if="currentDetail.bundlePrice" class="condition-item">
+          <view class="key-style">配比产品起订金额限定</view>{{currentDetail.bundlePrice}}件
         </view>
-        <view class="condition-item">
-          配比产品起订数量限定 {{currentDetail.bundleNum}}件
+        <view v-if="currentDetail.bundleNum" class="condition-item">
+          <view class="key-style">配比产品起订数量限定</view> {{currentDetail.bundleNum}}件
+        </view>
+        <view v-if="currentDetail.sumNum" class="condition-item">
+          <view class="key-style">套餐起订数量限定</view> {{currentDetail.sumNum}}件
         </view>
       </view>
     </view>
@@ -132,9 +135,12 @@ export default {
         productCodes: []
       },
       stockDate: {},
+      lowestPBMoney: 0, // 配比产品中最低的价格用来计算金额配比时候 还需要选择的配比产品数量
       limit1: {
         choosedMainNum: 0, // 选择主产品的数量
+        choosedMainMoney: 0, // 选择主产品的金额
         choosedPBNum: 0, // 选择配比的数量
+        choosedPBMoney: 0 // 选择配比的金额
       },
       limit2: {
         choosedMainNum: 0, // 选择主产品的数量
@@ -163,6 +169,16 @@ export default {
     this.initpage();
     if (this.currentDetail.activityType === 'zuhe') {
       this.getTotalMoney();
+    } else {
+      if (this.currentDetail.pbProducts) {
+        let money = 0;
+        this.currentDetail.pbProducts.forEach((v) => {
+          if (money > v.priceDto.invoicePrice || money === 0) {
+            money = v.priceDto.invoicePrice;
+          }
+        });
+        this.lowestPBMoney = money;
+      }
     }
     this.getAllStock();
   },
@@ -174,7 +190,11 @@ export default {
     }),
     computeMain() {
       // 主产品比例
-      const proportionMain = this.currentDetail.proportionMain;
+      let proportionMain = this.currentDetail.proportionMain;
+      if (proportionMain < this.currentDetail.speNum) {
+        proportionMain = this.currentDetail.speNum;
+      }
+      console.log(proportionMain);
       if (proportionMain > this.limit1.choosedMainNum) {
         return (proportionMain - this.limit1.choosedMainNum);
       }
@@ -182,11 +202,23 @@ export default {
     },
     computePB() {
       // 主产品比例
-      const proportionMain = this.currentDetail.proportionMain;
+      let proportionMain = this.currentDetail.proportionMain;
+      if (proportionMain < this.currentDetail.speNum) {
+        proportionMain = this.currentDetail.speNum;
+      }
       // 配比产品比例
       const proportion = this.currentDetail.proportion;
-      let PBnum = Math.ceil(proportion / proportionMain * this.limit1.choosedMainNum)
-        - this.limit1.choosedPBNum;
+      let PBnum = 0;
+      debugger;
+      if (this.currentDetail.proportionType === '2') {
+        // 金额配比
+        PBnum = Math.ceil((proportion / this.currentDetail.proportionMain * this.limit1.choosedMainMoney - this.limit1.choosedPBMoney) / this.lowestPBMoney)
+          - this.limit1.choosedPBNum;
+      } else {
+        // 数量配比
+        PBnum = Math.ceil(proportion / proportionMain * this.limit1.choosedMainNum)
+          - this.limit1.choosedPBNum;
+      }
       if (PBnum < 0) {
         PBnum = 0;
       }
@@ -229,7 +261,6 @@ export default {
       this.updateIndex++;
     },
     goodsChange(goods, index) {
-      debugger;
       console.log(goods);
       if (goods.choseOtherVersions && goods.choseOtherVersions.length > 0) {
         this.specialPrice = true;
@@ -237,8 +268,8 @@ export default {
         this.specialPrice = false;
       }
       let totalMoney = 0;
-      console.log(this.groupType);
       if (this.groupType === 0) {
+        // 套餐活动
         if (goods.productFlag === 'f') {
           this.currentDetail.products[index] = goods;
         } else if (goods.productFlag === 's') {
@@ -248,13 +279,17 @@ export default {
         // 更新已选产品数量
         this.limit1.choosedMainNum = 0;
         this.limit1.choosedPBNum = 0;
+        this.limit1.choosedMainMoney = 0;
+        this.limit1.choosedPBMoney = 0;
         this.currentDetail.products.forEach((item) => {
-          this.limit1.choosedMainNum += parseInt(item.choosedNum);
-          totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
+          this.limit1.choosedMainNum += Number(item.choosedNum);
+          this.limit1.choosedMainMoney += (Number(item.choosedNum) * item.priceDto.invoicePrice);
+          totalMoney += (Number(item.choosedNum) * item.priceDto.invoicePrice);
         });
         this.currentDetail.pbProducts.forEach((item) => {
-          this.limit1.choosedPBNum += parseInt(item.choosedNum);
-          totalMoney += (parseInt(item.choosedNum) * item.priceDto.invoicePrice);
+          this.limit1.choosedPBNum += Number(item.choosedNum);
+          this.limit1.choosedPBMoney += (Number(item.choosedNum) * item.priceDto.invoicePrice);
+          totalMoney += (Number(item.choosedNum) * item.priceDto.invoicePrice);
         });
         this.conditionStatus = this.isUpToCondition();
         this.totalMoney = totalMoney.toFixed(2);
@@ -264,20 +299,8 @@ export default {
     },
     // 判断套餐条件是否已经满足
     isUpToCondition() {
-      // 数量配比
-      if (this.currentDetail.proportionType === '1') {
-        if (this.computeMain === 0 && this.computePB === 0) {
-          return true;
-        }
-      } else {
-        // 金额配比
-        if (this.limit2.choosedMainMoney > this.currentDetail.spePrice
-          && this.limit2.choosedMainNum > this.currentDetail.sepNum
-          && this.limit2.choosedPBMoney > this.currentDetail.bundlePrice
-          && this.limit2.choosedPBNum > this.currentDetail.bundleNum
-        ) {
-          return true;
-        }
+      if (this.computeMain === 0 && this.computePB === 0) {
+        return true;
       }
     },
     async getWarehouse() {

@@ -190,7 +190,6 @@ export default {
   },
   watch: {
     goods() {
-      debugger;
       if (this.goods.choseOtherVersions && this.goods.choseOtherVersions.length > 0) {
         this.specialPrice = true;
       } else {
