@@ -536,8 +536,16 @@ export default {
         if (v.checked && v.isShow) {
           const num = v.number;
           // 获取应该计算的版本数据
-          const version = this.getPriceVersionData(v).find(data => data.priceType);
-          const curTotal = this.jshUtil.arithmetic(version.invoicePrice, num, 3);
+          let invoicePrice;
+          const versions = this.getPriceVersionData(v);
+          const version = versions.find(data => data.priceType);
+          // 找不到，但是还有选择的版本，则是版本调货,版本掉货无价格，需要从普通价取
+          if (!version && versions.length) {
+            invoicePrice = v.$PriceInfo.commonPrice.invoicePrice;
+          } else {
+            invoicePrice = version.invoicePrice;
+          }
+          const curTotal = this.jshUtil.arithmetic(invoicePrice, num, 3);
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
         }
       });
@@ -772,12 +780,13 @@ export default {
       const formList = [];
       const len = this.shoppingList.length;
       for (let i = 0; i < len; i++) {
-        const v = this.shoppingList[i];
-        if (v.checked) {
+        const product = this.shoppingList[i];
+        if (product.checked) {
           const {
             number,
-            productList
-          } = v;
+            productList,
+            stockVersion
+          } = product;
           if (!number) {
             this.showToast({
               type: 'warn',
@@ -797,10 +806,10 @@ export default {
             return;
           }
           const form = new OrderSplitCompose({
-            ...v,
-            composeId: v.id,
+            ...product,
+            composeId: product.id,
             // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
-            activityType: getOrdinaryCartActivityType()[v.activityType]
+            activityType: getOrdinaryCartActivityType()[product.activityType]
           });
             // 判断产品的取值的字段名
           let productListName = 'productList';
@@ -809,61 +818,79 @@ export default {
           // 调货数量
           let transferVersionNumber;
           // 如果选择了版本，则从choseOtherVersions字段取商品
-          if (v.choseOtherVersions && v.choseOtherVersions.length) {
+          if (product.choseOtherVersions && product.choseOtherVersions.length) {
             // 是否存在版本调货
-            const transfer = v.choseOtherVersions.find(vs => !vs.priceType);
+            const transfer = product.choseOtherVersions.find(vs => !vs.priceType);
             // 版本调货本质不算版本，只需要在已选的版本里添加调货字段
             if (transfer) {
               transferVersion = transfer.versionCode;
               transferVersionNumber = transfer.num;
+              // 如果选择的就版本调货一个，则还是从productList取,多余一个则从choseOtherVersions取
+              if (product.choseOtherVersions.length > 1) {
+                productListName = 'choseOtherVersions';
+              }
             } else {
               productListName = 'choseOtherVersions';
             }
           }
+          // 如果stockVersion有值，代表加购的时候有版本调货
+          if (stockVersion) {
+            transferVersion = stockVersion;
+          }
           let orderSplitComposeProductData = {
             // 存在版本调货，则传版本调货提供的数量
-            number: transferVersion ? transferVersionNumber : v.number,
+            number: transferVersion ? transferVersionNumber : product.number,
             // 是否直发
-            isStock: v.isDirectMode ? '0' : '1',
-            // 版本调货版本号
-            transferVersion: transferVersion || undefined,
+            isStock: product.isDirectMode ? '0' : '1',
           };
           const {
             channelGroup
           } = this.userInf;
-          form.productList = v[productListName].map((prdt) => {
-            orderSplitComposeProductData = {
-              ...prdt,
-              // farWeek: prdt.weekPromise,
-              // isCheckFarWeek: '0',
-              ...orderSplitComposeProductData
-            };
-            // 传统渠道没有信用模式
-            if (channelGroup === 'ZY') {
-              // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
-              orderSplitComposeProductData.creditModel = !v.isCreditMode ? '0' : prdt.creditModel;
-              // 是否信用模式
-              orderSplitComposeProductData.isCheckCreditModel = v.isCreditMode ? '1' : '0';
-            } else {
-              // 是否支持款先
-              orderSplitComposeProductData.isCheckKuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
-              // 是否打开款先
-              orderSplitComposeProductData.kuanXian = v.isFundsFirstMode ? '1' : '0';
-              // 传统渠道样机不支持选择款先，默认款先
-              if (this.userInf.channelGroup === 'CT') {
-                const isContainYj = getYj()[prdt.priceType];
-                if (isContainYj) {
+          const formProductList = [];
+          product[productListName].forEach((prdt) => {
+            // 版本调货不算版本
+            if (!prdt.$isTransfer) {
+              orderSplitComposeProductData = {
+                ...prdt,
+                // farWeek: prdt.weekPromise,
+                // isCheckFarWeek: '0',
+                ...orderSplitComposeProductData,
+              };
+              // 版本调货版本号
+              if (prdt.stockVersion) {
+                // 传来的时候如果有版本调货号，则用传来的，因为选了版本调货不可更改
+                orderSplitComposeProductData.transferVersion = prdt.stockVersion;
+              } else if (transferVersion) {
+                // transferVersion代表后来选了版本调货
+                orderSplitComposeProductData.transferVersion = transferVersion;
+              }
+              // 传统渠道没有信用模式
+              if (channelGroup === 'ZY') {
+                // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
+                orderSplitComposeProductData.creditModel = !product.isCreditMode ? '0' : prdt.creditModel;
+                // 是否信用模式
+                orderSplitComposeProductData.isCheckCreditModel = product.isCreditMode ? '1' : '0';
+              } else {
+                // 是否支持款先
+                orderSplitComposeProductData.isCheckKuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
+                // 是否打开款先
+                orderSplitComposeProductData.kuanXian = product.isFundsFirstMode ? '1' : '0';
+                // 传统渠道样机不支持选择款先，默认款先
+                if (this.userInf.channelGroup === 'CT') {
+                  const isContainYj = getYj()[prdt.priceType];
+                  if (isContainYj) {
+                    orderSplitComposeProductData.isCheckKuanXian = '1';
+                  }
+                }
+                // 异地云仓不支持选择款先，默认款先
+                if (this.choseSendAddress.yunCangFlag === 'ydyc') {
                   orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
               }
-              // 异地云仓不支持选择款先，默认款先
-              if (this.choseSendAddress.yunCangFlag === 'ydyc') {
-                orderSplitComposeProductData.isCheckKuanXian = '1';
-              }
+              formProductList.push(new OrderSplitComposeProduct(orderSplitComposeProductData));
             }
-            return new OrderSplitComposeProduct(orderSplitComposeProductData);
           });
-
+          form.productList = formProductList;
           formList.push(form);
         }
       }
