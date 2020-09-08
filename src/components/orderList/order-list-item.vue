@@ -42,7 +42,7 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="invalidButton == 1" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
@@ -135,7 +135,8 @@ export default {
   data() {
     return {
       isOrderMore: false,
-      invalidButton:'0',
+      tctpConfirmButton:'',
+      invalidButton:'',
     };
   },
   methods: {
@@ -143,7 +144,10 @@ export default {
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
       console.log(this.isOrderMore);
-      this.tctpConfirmButton = this.btnsInfo.tctpConfirmButton;
+      this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton;
+      this.invalidButton = this.info.btnsInfo.invalidButton;
+      console.log(this);
+      console.log('==========='+this.invalidButton);
     },
     goDetail() {
       this.$emit('goDetail', this.index);

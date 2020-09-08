@@ -574,15 +574,15 @@ export default {
           this.payer.forEach((item) => {
             // console.log(item);
             item.CodeName = `(${item.payerCode})${item.payerName}`;
-            console.log(item.CodeName);
+            // console.log(item.CodeName);
             const same = payerBal.find(ele => item.payerCode === ele.payerCode);
-            console.log(same);
+            // console.log(same);
             if (same) {
               item.balance = same.balance ? same.balance : 0;
             }
           });
           // console.log(a)
-          console.log(this.payer);
+          // console.log(this.payer);
         }
       }
     },

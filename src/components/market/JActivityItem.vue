@@ -153,7 +153,7 @@ export default {
       default: () => {}
     },
     calue: {
-      type: Number,
+      type: [Number, String],
       default: 1
     }
   },
