@@ -29,16 +29,43 @@
         </view>
       </view>
       <view
+        class="shoppingCart-list-filter"
+        v-if="choseIndustryOptions[0]!=='*'"
+      >
+        <view class="shoppingCart-list-filter-text">共找到{{shoppingList.length - notInFilterLength}}件产品</view>
+        <view
+          :key="goods.id"
+          v-for="(goods,index) in shoppingList"
+        >
+          <!--筛选出来的产业才显示-->
+          <j-shopping-cart-item
+            :beforeCreditModeChange="checkCreditQuota"
+            :defaultSendTo="defaultSendTo"
+            :goods="goods"
+            :index="index"
+            :ref="'shoppingCartItem'+goods.id"
+            :userInf="userInf"
+            :versionPrice="versionPrice"
+            :warehouseFlag="choseSendAddress.yunCangFlag"
+            @change="goodsChange"
+            @del="singleDeleteCart"
+            @updateNumber="refreshShoppingCartList"
+            v-if="goods.$filterIndustryKey === choseIndustryOptions[0]"
+          ></j-shopping-cart-item>
+        </view>
+        <view class="shoppingCart-list-filter-text">购物车其他产品</view>
+      </view>
+      <view
         class="shoppingCart-list"
-        v-if="shoppingList.length"
+        v-if="notInFilterLength"
       >
         <view
           v-for="(goods,index) in shoppingList"
           :key="goods.id"
         >
           <j-shopping-cart-item
-            v-if="goods.isShow"
-            :ref="'shoppingCartItem'+index"
+            :ref="'shoppingCartItem'+goods.id"
+            v-if="goods.$filterIndustryKey === '*'"
             :beforeCreditModeChange="checkCreditQuota"
             :goods="goods"
             :index="index"
@@ -95,14 +122,12 @@
       <j-pop-picker
         keyName="code"
         title="产业"
-        :choseOptions.sync="choseIndustryOptions"
         :options="industryGroupData"
         :show.sync="isIndustryPickerShow"
+        :choseOptions.sync="choseIndustryOptions"
         @change="industryPickerChange"
       ></j-pop-picker>
     </view>
-<!--    <vehicle-car-list v-show="index === 'zc'"></vehicle-car-list>-->
-<!--    <transfer-shopping-cart v-show="index === 'zx'"></transfer-shopping-cart>-->
   </view>
 </template>
 <script>
@@ -113,8 +138,6 @@ import JFailureGoodsList from '../../components/shoppingCart/JFailureGoodsList';
 import JAddressPicker from '../../components/shoppingCart/JAddressPicker';
 import JTab from '../../components/common/JTab';
 import JPopPicker from '../../components/form/JPopPicker';
-// import vehicleCarList from '../vehicleList/vehicleCarList';
-// import transferShoppingCart from '../transferGoods/transferShoppingCart';
 import './css/shoppingCart.scss';
 import {
   mapGetters,
@@ -172,6 +195,8 @@ export default {
       ],
       // 购物车列表
       shoppingList: [],
+      // 筛选的购物车列表
+      filterShoppingList: [],
       // 失效产品列表
       failureGoodsList: [],
       // 是否全选
@@ -234,7 +259,7 @@ export default {
       // 产业数据
       industryGroupData: [],
       // 选中的产业数据
-      choseIndustryOptions: [''],
+      choseIndustryOptions: ['*'],
       // 云仓、异地云仓权限对象
       cloudStockStatus: {}
     };
@@ -265,6 +290,10 @@ export default {
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
       isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
     }),
+    notInFilterLength() {
+      /* 不在筛选里的数据的长度 */
+      return this.shoppingList.filter(v => v.$filterIndustryKey === '*').length;
+    }
   },
   methods: {
     ...mapMutations([
@@ -345,7 +374,7 @@ export default {
           value: v.codeName
         }));
         industryGroupData.unshift({
-          code: '',
+          code: '*',
           value: '全部'
         });
         this.industryGroupData = industryGroupData;
@@ -353,7 +382,7 @@ export default {
     },
     resetIndustry() {
       /* 重置产业 */
-      this.choseIndustryOptions = [''];
+      this.choseIndustryOptions = ['*'];
     },
     showIndustryPicker() {
       /* 展示产业picker */
@@ -361,17 +390,25 @@ export default {
     },
     industryPickerChange(data) {
       /* 产品组picker change */
+      // 先回到顶部
+      uni.pageScrollTo({
+        scrollTop: 0,
+        duration: 100
+      });
       const industryCode = data[0];
-      if (industryCode === '') {
+      if (industryCode === '*') {
         this.shoppingList.forEach((v) => {
           v.isShow = true;
+          v.$filterIndustryKey = '*';
         });
       } else {
         this.shoppingList.forEach((v) => {
           if (v.productList[0].industryCode === industryCode) {
             v.isShow = true;
+            v.$filterIndustryKey = industryCode;
           } else {
             v.isShow = false;
+            v.$filterIndustryKey = '*';
           }
         });
       }
@@ -430,6 +467,7 @@ export default {
     },
     resetShoppingCartList() {
       /* 重置购物车列表 */
+      this.filterShoppingList = [];
       this.shoppingList = [];
       this.failureGoodsList = [];
     },
@@ -460,7 +498,9 @@ export default {
                 // 关注状态
                 followState: false,
                 // 款先模式
-                isFundsFirstMode: false
+                isFundsFirstMode: false,
+                // 筛选的产业key
+                $filterIndustryKey: '*'
               });
             } else {
               failureGoodsList.push({
@@ -533,7 +573,7 @@ export default {
       /* 计算选择的商品的总价 */
       let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
-        if (v.checked && v.isShow) {
+        if (v.checked && v.$filterIndustryKey === '*') {
           const num = v.number;
           // 获取应该计算的版本数据
           let invoicePrice;
@@ -554,7 +594,7 @@ export default {
     },
     countTotalNumber() {
       /* 计算选择的商品的总数 */
-      return this.shoppingList.filter(v => v.checked && v.isShow).length;
+      return this.shoppingList.filter(v => v.checked && v.$filterIndustryKey === '*').length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -783,6 +823,7 @@ export default {
         const product = this.shoppingList[i];
         if (product.checked) {
           const {
+            id,
             number,
             productList,
             stockVersion
@@ -794,7 +835,7 @@ export default {
             });
             return;
           }
-          const shoppingCartItem = this.$refs[`shoppingCartItem${i}`][0];
+          const shoppingCartItem = this.$refs[`shoppingCartItem${id}`][0];
           // 检查最大可购买数量，超出提示并返回
           const maxNum = shoppingCartItem.maxGoodsNumber;
           if (number > maxNum) {

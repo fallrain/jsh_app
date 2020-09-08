@@ -422,7 +422,7 @@ export default {
       if (this.goods.isSale === false) {
         const index = tags.findIndex(v => v === '特价');
         if (index > -1) {
-          tags.splice(index, 1);
+          tagsTemp.splice(index, 1);
         }
       }
       this.tags = tagsTemp;
