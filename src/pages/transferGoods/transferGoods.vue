@@ -35,7 +35,7 @@
         @up="upCallback"
       >
         <!-- 产品列表 -->
-        <view class="transferList-items-wrap" v-if="list.length !== 0">
+        <view class="transferList-items-wrap" v-if="list.length > 0">
           <transfer-goods-item
             v-for="(item,index) in list"
             :key="index"
@@ -250,8 +250,8 @@ export default {
       payer: [],
       //  选购其他的大单号
       otherSEQ: '',
-      //选购其他返回数据
-      getOrder:[],
+      // 选购其他返回数据
+      getOrder: [],
       popTabs: [
         {
           name: '调出库位',
@@ -283,7 +283,7 @@ export default {
   },
   mounted() {
     if (this.saleInfo.channelGroup === 'CT') {
-      console.log(555555555555)
+      console.log(555555555555);
       uni.showToast({
         title: `当前客户${this.saleInfo.customerCode}无调货权限`,
         duration: 5000,
@@ -590,7 +590,7 @@ export default {
             this.list = [];
           }
           this.list = this.list.concat(curList);
-          console.log(this.list);
+          // console.log(this.list);
         }
         // 获取当前送达方地址
         this.getAddress();
@@ -599,7 +599,7 @@ export default {
         this.getStockNum();
       } else {
         this.list = [];
-        this.mescroll.endErr();
+        // this.mescroll.endErr();
         // 暂无数据
         uni.showToast({
           title: '暂无数据',
@@ -658,6 +658,7 @@ export default {
           console.log(this.popTabs[0]);
           this.popTabs[0].children = tempArray;
           console.log(this.popTabs[0]);
+          debugger
         }
         console.log(this.cargoWareHome);
         this.cargoWareHome.forEach((item) => {
@@ -670,10 +671,10 @@ export default {
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.saleInfo.customerCode,
-        sendtoCode: condition.dstCode,
-        sendtoMktid: condition.center
+        sendtoCode: this.curChoseDeliveryAddress.customerCode,
+        sendtoMktid: this.curChoseDeliveryAddress.tradeCode
       });
-      if (temp.code === '1') {
+      if (temp.code === '1' && temp.data.code === '200') {
         console.log(temp.data);
         let brandGroup = '';
         if (temp.data.data[0].PRODandSWRH) {
@@ -681,12 +682,14 @@ export default {
             brandGroup += (`${item.PROD}:${item.SWRH};`);
           });
           temp.data.data[0].brandGroup = brandGroup;
-          console.log('44444444444444444444444444',brandGroup);
+          console.log('44444444444444444444444444', brandGroup);
         }
         this.cargoSendWay = temp.data.data;
+        console.log(this.cargoSendWay);
+        debugger
         if (this.cargoSendWay) {
           const tempArray = [];
-          this.cargoSendWay.forEach(item => {
+          this.cargoSendWay.forEach((item) => {
             if (item.sendWay === '统仓统配') {
               const temp = {
                 name: item.sendWay,
@@ -697,19 +700,18 @@ export default {
             }
             if (item.sendWay === '客户自有仓') {
               console.log(item);
-              let brandGroup = '';
-              if (item.PRODandSWRH && item.PRODandSWRH) {
-                item.PRODandSWRH.map(item => {
+              if (item.PRODandSWRH && item.PRODandSWRH.length > 0) {
+                item.PRODandSWRH.map((item) => {
                   brandGroup += (`${item.PROD}:${item.SWRH};`);
                 });
               }
               console.log(brandGroup);
-              const temp = {
+              const temp3 = {
                 name: item.sendWay,
                 checked: false,
                 type: brandGroup
               };
-              tempArray.push(temp);
+              tempArray.push(temp3);
             }
           });
           this.popTabs[1].children = tempArray;
@@ -722,29 +724,31 @@ export default {
         this.popTabs[1].children[0].checked = true;
       } else {
         this.popTabs[0].disable = true;
-        this.popTabs[0].children.forEach(item => {
+        this.popTabs[0].children.forEach((item) => {
           console.log(item);
+          debugger
           item.checked = false;
           if (item.name === this.getOrder.T5_OUTWHNAME) {
             item.checked = true;
             console.log(item);
             console.log(this.cargoWareHome);
+            debugger
             this.cargoSend = [{
               OUTWHCODE: item.type,
               OUTWHNAME: item.name
             }];
             console.log('111111111111', this.cargoSend);
+            debugger
           }
         });
         this.popTabs[1].disable = true;
-        this.popTabs[1].children.forEach(item => {
+        this.popTabs[1].children.forEach((item) => {
           console.log(item);
           item.checked = false;
           if (item.name === this.getOrder.IBR_ADDRESSTYPE) {
             item.checked = true;
           }
         });
-
       }
       this.popTabs[1].children.forEach((item) => {
         console.log('qqqqqqqqqqqqqqq', item);
@@ -755,7 +759,7 @@ export default {
       // this.popTabs[1].children[1].ycFlag = '';
       console.log('zzzzzzzzzzzzzzzzzz', this.popTabs[1].children);
     },
-    //点击选购其他 返回列表页
+    // 点击选购其他 返回列表页
     async getOrderList() {
       const { code, data } = await this.transfergoodsService.allOrderList({
         timestamp: Date.parse(new Date()),
@@ -768,7 +772,8 @@ export default {
         console.log(data);
         this.getOrder = data.data[0];
         // if()
-        this.curChoseDeliveryAddress.name = temp1.DH_SENDTO_ADDRESS;
+        this.curChoseDeliveryAddress.name = this.getOrder.DH_SENDTO_ADDRESS;
+
         this.mescroll.resetUpScroll(true);
       }
     },
@@ -800,8 +805,8 @@ export default {
     getAddress() {
       console.log(111);
       this.addressesList.forEach((item) => {
-        console.log(item);
-        console.log(this.curChoseDeliveryAddress);
+        // console.log(item);
+        // console.log(this.curChoseDeliveryAddress);
         if ((this.curChoseDeliveryAddress.customerCode || this.curChoseDeliveryAddress.id) === `${item.customerCode}`) {
           console.log(item);
           this.address = item;
@@ -855,7 +860,7 @@ export default {
           DH_SUB_CHANNEL_CODE: this.address.subChannel, // 小渠道     customer接口  配送接口address.subChannel
         }]);
         if (insertTransfer.code === '1' && insertTransfer.data.code === '200') {
-          console.log(111);
+          // console.log(111);
           this.getShoppingCartNum();
           uni.showToast({
             title: insertTransfer.data.message,
@@ -878,8 +883,6 @@ export default {
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
       console.log(tabs);
-      console.log(tab);
-      console.log(tab);
       this.tabs = tabs;
       if (tab.condition) {
         this.sortType = tab.condition.sortType;
@@ -922,8 +925,6 @@ export default {
     filterConfirm() {
       /* 抽屉筛选确认 */
       // 重新搜索
-      console.log(this.filterList);
-      console.log('222222dddddddddddddddddd');
       this.getTransferList();
       this.getStockNum();
       this.mescroll.resetUpScroll(true);
@@ -953,13 +954,13 @@ export default {
       await this.customerService.addressesList(1).then(({ code, data }) => {
         if (code === '1') {
           this.addressesList = data;
+          console.log(3333333333333333333333333333333);
           console.log(data);
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
             id: v.customerCode,
             name: `(${v.customerCode})${v.addressName}`,
             tradeCode: v.tradeCode
-
           }));
           console.log(this.deliveryAddressList);
           // 当前配送地址修改(选出默认地址)
@@ -969,6 +970,7 @@ export default {
             console.log(data[defaultIndex]);
             const curChoseDeliveryAddress = data[defaultIndex];
             curChoseDeliveryAddress.name = `${curChoseDeliveryAddress.customerCode}${curChoseDeliveryAddress.addressName}`;
+            console.log(curChoseDeliveryAddress);
             // 更新默认送达方store
             this[USER.UPDATE_DEFAULT_SEND_TO](curChoseDeliveryAddress);
             this.deliveryAddressList[defaultIndex].checked = true;
@@ -981,6 +983,15 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+      // // 更改默认的送达方
+      // this.customerService.changeDefaultSendTo({
+      //   sendToCode: item.customerCode
+      // }).then(({ code }) => {
+      //   if (code === '1') {
+      //     // 更改成功之后更新store
+      //     this[USER.UPDATE_DEFAULT_SEND_TO](item);
+      //   }
+      // });
       this.getCargoQuery();
     }
   }
