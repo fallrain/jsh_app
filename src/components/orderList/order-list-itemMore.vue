@@ -20,9 +20,8 @@ export default {
     },
     tctpConfirmButton:{
       type:String,
-      default:'1',
     }
-  }
+  },
 };
 </script>
 
