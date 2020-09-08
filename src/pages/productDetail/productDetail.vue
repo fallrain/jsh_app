@@ -139,10 +139,10 @@ import proSpecs from '../../components/productDetail/pro-specs';
 import proComFoot from '../../components/productDetail/pro-com-foot';
 import './css/productDetail.scss';
 import {
-  mapGetters
+  mapGetters,mapMutations
 } from 'vuex';
 import {
-  USER
+  USER, GOODS_LIST
 } from '../../store/mutationsTypes';
 
 export default {
@@ -242,6 +242,9 @@ export default {
     this.getDeliveryAddress();// 获取配送地址列表
   },
   methods: {
+    ...mapMutations([
+      GOODS_LIST.UPDATE_IS_CART_UPDATE,
+    ]),
     move() {
       this.isF = true;
     },
@@ -714,12 +717,27 @@ export default {
         uni.showToast({
           title: '加入购物车成功',
         });
+        this.getShoppingCartList();
+
+
+
       } else {
         uni.showToast({
           title: '加入购物车成功失败请重试',
         });
       }
     },
+    //  调用购物车列表接口
+    async getShoppingCartList() {
+      /* 获取购物车数据 */
+      const { code, data } = await this.cartService.getShoppingCartListFromCache({
+        code: this.userInf.customerCode
+      });
+      if (code === '1') {
+        this[GOODS_LIST.UPDATE_IS_CART_UPDATE](true);
+        console.log(1111111);
+      }
+    }
   }
 };
 

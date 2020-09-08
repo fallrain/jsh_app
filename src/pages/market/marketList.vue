@@ -25,7 +25,7 @@
           @goOrder ="goOrder"
           @getNum="getNum"
         ></j-activity-item>
-        <!--<view v-if="list.length === 0" class="">暂无数据</view>-->
+        <!--<view v-if="list.length === 0"F class="">暂无数据</view>-->
       </view>
     </mescroll-body>
     <j-drawer
@@ -142,9 +142,9 @@ export default {
   },
   data() {
     return {
+      calue: 1, // 套餐数量
+      allNum: 15, // 总套餐数量
       form: {
-        calue: 1, // 套餐数量
-        allNum: 15, // 总套餐数量
         activityId: '',
         activityName: '',
         activityType: '',
