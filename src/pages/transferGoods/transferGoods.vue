@@ -270,9 +270,10 @@ export default {
     this.disable = false;
     console.log(option);
     this.otherSEQ = option.IBR_SEQ;
-    if (this.otherSEQ) {
-      this.getOrderList();
-    }
+    // this.otherSEQ = option.IBR_SEQ;
+    // if (this.otherSEQ) {
+    //   this.getOrderList();
+    // }
   },
   watch: {
     $route: [],
@@ -290,6 +291,9 @@ export default {
       });
     } else {
       this.getPageInfo();
+      if (this.otherSEQ) {
+        this.getOrderList();
+      }
     }
   },
   computed: {
@@ -599,12 +603,12 @@ export default {
         this.getStockNum();
       } else {
         this.list = [];
-        // this.mescroll.endErr();
+        scrollView.total = 0;
+        this.mescroll.endErr();
         // 暂无数据
         uni.showToast({
           title: '暂无数据',
         });
-        scrollView.total = 0;
       }
       // debugger
       return scrollView;
@@ -632,9 +636,11 @@ export default {
       // 调出库位数据
       const { code, data } = await this.transfergoodsService.cargoWareHome({
         timestamp: Date.parse(new Date()),
-        sendToCode: condition.dstCode,
-        sendToMktid: condition.center
+        sendToCode: this.curChoseDeliveryAddress.id ? this.curChoseDeliveryAddress.id : this.curChoseDeliveryAddress.customerCode,
+        sendToMktid: this.curChoseDeliveryAddress.tradeCode
       });
+      console.log(this.curChoseDeliveryAddress);
+      // debugger
       if (code === '1') {
         const home = data.data;
         console.log('w 时候   是哦', home);
@@ -658,7 +664,7 @@ export default {
           console.log(this.popTabs[0]);
           this.popTabs[0].children = tempArray;
           console.log(this.popTabs[0]);
-          debugger
+          // debugger
         }
         console.log(this.cargoWareHome);
         this.cargoWareHome.forEach((item) => {
@@ -671,9 +677,11 @@ export default {
       const temp = await this.transfergoodsService.cargoSendWay({
         timestamp: Date.parse(new Date()),
         longfeiUSERID: this.saleInfo.customerCode,
-        sendtoCode: this.curChoseDeliveryAddress.customerCode,
+        sendtoCode: this.curChoseDeliveryAddress.id ? this.curChoseDeliveryAddress.id : this.curChoseDeliveryAddress.customerCode,
         sendtoMktid: this.curChoseDeliveryAddress.tradeCode
       });
+      console.log(this.curChoseDeliveryAddress);
+      // debugger
       if (temp.code === '1' && temp.data.code === '200') {
         console.log(temp.data);
         let brandGroup = '';
@@ -686,7 +694,7 @@ export default {
         }
         this.cargoSendWay = temp.data.data;
         console.log(this.cargoSendWay);
-        debugger
+        // debugger
         if (this.cargoSendWay) {
           const tempArray = [];
           this.cargoSendWay.forEach((item) => {
@@ -724,25 +732,23 @@ export default {
         this.popTabs[1].children[0].checked = true;
       } else {
         this.popTabs[0].disable = true;
-        this.popTabs[0].children.forEach((item) => {
+        this.popTabs[0].children.forEach(item => {
           console.log(item);
-          debugger
           item.checked = false;
           if (item.name === this.getOrder.T5_OUTWHNAME) {
             item.checked = true;
             console.log(item);
             console.log(this.cargoWareHome);
-            debugger
             this.cargoSend = [{
               OUTWHCODE: item.type,
               OUTWHNAME: item.name
             }];
             console.log('111111111111', this.cargoSend);
-            debugger
+            // debugger
           }
         });
         this.popTabs[1].disable = true;
-        this.popTabs[1].children.forEach((item) => {
+        this.popTabs[1].children.forEach(item => {
           console.log(item);
           item.checked = false;
           if (item.name === this.getOrder.IBR_ADDRESSTYPE) {
@@ -758,6 +764,7 @@ export default {
       // this.popTabs[1].children[0].ycFlag = 'JSHSW';
       // this.popTabs[1].children[1].ycFlag = '';
       console.log('zzzzzzzzzzzzzzzzzz', this.popTabs[1].children);
+      this.mescroll.resetUpScroll(true);
     },
     // 点击选购其他 返回列表页
     async getOrderList() {
@@ -769,12 +776,21 @@ export default {
       console.log(1212121);
       if (code === '1' && data.code === '200') {
         this.disable = true;
-        console.log(data);
         this.getOrder = data.data[0];
         // if()
-        this.curChoseDeliveryAddress.name = this.getOrder.DH_SENDTO_ADDRESS;
-
+        console.log(this.getOrder);
+        console.log(this.addressesList);
+        this.addressesList.forEach((item) => {
+          if (item.addressName === this.getOrder.DH_SENDTO_ADDRESS) {
+            this.curChoseDeliveryAddress.id = item.customerCode;
+            this.curChoseDeliveryAddress.name = `(${item.customerCode})${item.addressName}`;
+            this.curChoseDeliveryAddress.tradeCode = item.tradeCode;
+            console.log(this.curChoseDeliveryAddress);
+            // debugger
+          }
+        });
         this.mescroll.resetUpScroll(true);
+        console.log(this.curChoseDeliveryAddress);
       }
     },
     async getShoppingCartNum() {
