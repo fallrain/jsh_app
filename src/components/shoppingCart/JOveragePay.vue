@@ -80,7 +80,7 @@ export default {
     },
     toFixedNum() {
       return function (val) {
-        return (new Number(val)).toFixed(2);
+        return (Number(val)).toFixed(2);
       };
     }
   }

@@ -1,5 +1,6 @@
 <template>
-  <view :key="updateIndex" class="JOrderConfirmItem-par">
+  <view :key="updateIndex"
+        :class="['JOrderConfirmItem-par',isCT&&'pb200']">
     <view
       class="jOrderConfirmItem-wrap"
     >
@@ -103,14 +104,31 @@
         </view>
       </view>
     </view>
-    <view class="jOrderConfirmItem-total">
-      <view class="flex-grow-1 dis-flex">
-        <view class="type-flag">{{activityTypeList[orderItem.activityType]}}</view>
-        <view class="jOrderConfirmItem-total-text">{{orderItem.composeOrderNo}}</view>
+    <view :class="['jOrderConfirmItem-total', isCT&&'bottom-20']">
+      <view class="dis-flex justify-sb">
+        <view class="flex-grow-1 dis-flex">
+          <view class="type-flag">{{activityTypeList[orderItem.activityType]}}</view>
+          <view class="jOrderConfirmItem-total-text">{{orderItem.composeOrderNo}}</view>
+        </view>
+        <view class="dis-flex">
+          <view class="jOrderConfirmItem-total-text">共计金额：</view>
+          <view class="jOrderConfirmItem-total-price ml20">¥ {{toFixedNum(orderItem.totalMoney)}}</view>
+        </view>
       </view>
-      <view class="dis-flex">
-        <view class="jOrderConfirmItem-total-text">共计金额：</view>
-        <view class="jOrderConfirmItem-total-price ml20">¥ {{toFixedNum(orderItem.totalMoney)}}</view>
+      <view v-if="isCT" class="dis-flex mt12">
+        <view class="">开票方：</view>
+        <view class=""></view>
+        <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
+      </view>
+      <view v-if="isCT" class="dis-flex">
+        <view class="lh66">采购订单号：</view>
+        <u-input
+          class="input-style"
+          type="text"
+          placeholder="请输入采购订单号"
+          :placeholderStyle="{color:'#fff'}"
+          v-model="selfValue"
+        ></u-input>
       </view>
     </view>
     <j-pop-picker
@@ -119,6 +137,12 @@
       :options="payerOptions[currentOrderNo]"
       :choseOptions.sync="currentchosePayerOption"
     ></j-pop-picker>
+    <j-pop-picker
+      title="开票方"
+      :show.sync="invoicePickerShow"
+      :options="invoiceOptions"
+      :choseOptions.sync="currentinvoiceOption"
+    ></j-pop-picker>
   </view>
 </template>
 
@@ -126,6 +150,12 @@
 import JSwitch from '../form/JSwitch';
 import JPopPicker from '../form/JPopPicker';
 import './css/jOrderConfirmItem.scss';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'JOrderConfirmItem',
@@ -151,6 +181,11 @@ export default {
   },
   data() {
     return {
+      invoicePickerShow: true,
+      invoiceOptions: [],
+      currentinvoiceOption: [],
+      selfValue: '',
+      isCT: false,
       Bbaddress: {},
       activityTypeList: {
         1: '单品',
@@ -184,26 +219,38 @@ export default {
       currentOrderNo: ''
     };
   },
-  onLoad() {
+  created() {
+    if (this.saleInfo.channelGroup === 'CT') {
+      this.isCT = true;
+    } else {
+      this.isCT = false;
+    }
+    console.log(this.isCT);
   },
   watch: {
-    payInfoData(val) {
+    payInfoData() {
       // 初始化地址信息
       for (const key in this.payInfoData) {
         let initcustomerCode = '';
+        let offset = 0;
         this.payInfoData[key].forEach((item, index) => {
-          if (index === 0) {
+          if (item.defaultFlag === '1') {
             initcustomerCode = item.customerCode;
+            offset = index;
           }
           item.balance = item.payerBalance.balance;
           item.key = item.customerCode;
           item.value = `(${item.payerCode}) ${item.payerName}`;
         });
+        if (initcustomerCode === '') {
+          // 没有默认付款方选择第一条
+          initcustomerCode = this.payInfoData[key][0].customerCode;
+        }
         // 设置付款列表
         this.$set(this.payerOptions, key, this.payInfoData[key]);
         // 设置初始化选中地址
         this.currentchosePayerOption[0] = initcustomerCode;
-        this.$set(this.currentPayer, key, this.payInfoData[key][0]);
+        this.$set(this.currentPayer, key, this.payInfoData[key][offset]);
       }
       this.getPayerMoneyInfo();
       console.log(this.payerOptions);
@@ -219,6 +266,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+    }),
     toFixedNum() {
       return function (val) {
         return (Number(val)).toFixed(2);

@@ -26,6 +26,10 @@ const urls = {
   },
   getCollectRemarkAddr: '/address/post/getCollectRemarkAddr', // 直发异地地址列表
   queryJDAddr: '/yd-warehouse/query', // 直发异地地址列表
+  getBillInfo(sendtoCode, productGroup) {
+    // 获取开票方信息
+    return `/billInfo/get/billInfo/${sendtoCode}/${productGroup}`;
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;
