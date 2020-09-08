@@ -68,7 +68,13 @@
   padding: 24px 0px;
 }
 .marketDetail-requirement{
+  display: flex;
+  flex-wrap: wrap;
   padding: 24px;
+  .condition-item{
+    display: flex;
+    width: 50%;
+  }
 }
 .marketDetail-list {
   padding: 0 24px;
