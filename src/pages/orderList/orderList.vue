@@ -1,15 +1,37 @@
 <template>
   <view class="orList">
     <view class="padding-15">
-      <view><j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick"></j-tab></view>
+      <view style="display:flex">
+        <view style="width:320px">
+        <j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
+          <template #right>
+            <!-- <view @click="moreAction" class="jtabRight">
+              MORE
+            </view> -->
+            <view  @click="moreAction" class="iconfont iconshaixuan"></view>
+          </template>
+        </j-tab>
+        </view>
+      </view>
       <order-list-item v-for="(iten,index) in orderListInfo" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
     </view>
+    <j-drawer
+      :show.sync="isShowGoodsFilterDrawer"
+      @filterConfirm="filterConfirm"
+      @filterReset="filterReset"
+    >
+      <template>
+        <view>222{{isShowGoodsFilterDrawer}}</view>
+      </template>
+    </j-drawer>
   </view>
 </template>
 
 <script>
 import orderListItem from '../../components/orderList/order-list-item';
 import JTab from '../../components/common/JTab';
+import JDrawer from '../../components/form/JDrawer';
+
 import {
   ORDER,
   USER
@@ -23,10 +45,12 @@ export default {
   name: 'orderList',
   components: {
     orderListItem,
-    JTab
+    JTab,
+    JDrawer
   },
   data() {
     return {
+      isShowGoodsFilterDrawer:false,
       orderListInfo: [],
       total: 0,
       pageNo: 1,
@@ -115,6 +139,17 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
+    filterConfirm() {
+
+    },
+    filterReset() {
+
+    },
+    // 过滤条件
+    moreAction() {
+      console.log('==============')
+      this.isShowGoodsFilterDrawer = true;
+    },
     async orderList(e, pgNo) {
       const param = {
         jshi_order_channel: this.userInf.channelGroup,
@@ -192,5 +227,13 @@ export default {
 <style scoped>
   .orList{
     background: #F5F5F5;
+  }
+  .iconfont iconshaixuan{
+    width: 116px;
+    height: 74px;
+    background: red;
+    position: relative;
+    display: flex;
+    align-items: center;
   }
 </style>
