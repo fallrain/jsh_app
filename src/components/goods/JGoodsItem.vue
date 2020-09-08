@@ -419,7 +419,7 @@ export default {
       ];
         // isSale为false时代表此商品有活动且不可版本外销售
         // 如果产品isSale为false，即使存在特价标签也不展示
-      if (this.isSale === false) {
+      if (this.goods.isSale === false) {
         const index = tags.findIndex(v => v === '特价');
         if (index > -1) {
           tags.splice(index, 1);
