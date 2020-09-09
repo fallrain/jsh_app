@@ -19,7 +19,7 @@
     </view>
     <view v-show="index === 'gwc'">
       <view class="shoppingCart-ads">
-        <view class="shoppingCart-ads-total">共{{shoppingList.length}}件宝贝</view>
+        <view class="shoppingCart-ads-total">共{{dataLength.validLength}}件宝贝</view>
         <view
           @tap="showAdsPicker"
           class="shoppingCart-ads-detail"
@@ -33,7 +33,7 @@
         v-if="choseIndustryOptions[0]!=='*'"
       >
         <view class="shoppingCart-list-filter-text">
-          {{choseIndustryData[0].value}}产业，共找到{{shoppingList.length - notInFilterLength}}件产品
+          {{choseIndustryData[0].value}}产业，共找到{{dataLength.filterLength}}件产品
         </view>
         <view
           :key="goods.id"
@@ -59,7 +59,7 @@
       </view>
       <view
         class="shoppingCart-list"
-        v-if="notInFilterLength"
+        v-if="dataLength.notInFilterLength"
       >
         <view
           v-for="(goods,index) in shoppingList"
@@ -294,9 +294,24 @@ export default {
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
       isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
     }),
-    notInFilterLength() {
-      /* 不在筛选里的数据的长度 */
-      return this.shoppingList.filter(v => v.$filterIndustryKey === '*').length;
+    validList() {
+      /* 有效的商品列表 */
+      return this.shoppingList.filter(v => v.isValid);
+    },
+    dataLength() {
+      /* 数据的长度 */
+      const validList = this.validList;
+      const validLength = validList.length;
+      const notInFilterLength = this.validList.filter(v => v.$filterIndustryKey === '*').length;
+      const filterLength = validLength - notInFilterLength;
+      return {
+        // 有效商品的长度
+        validLength,
+        // 有效商品的筛选出的长度
+        filterLength,
+        // 有效商品的排除筛选出的长度
+        notInFilterLength
+      };
     }
   },
   methods: {
@@ -403,16 +418,13 @@ export default {
       const industryCode = data[0];
       if (industryCode === '*') {
         this.shoppingList.forEach((v) => {
-          v.isShow = true;
           v.$filterIndustryKey = '*';
         });
       } else {
         this.shoppingList.forEach((v) => {
           if (v.productList[0].industryCode === industryCode) {
-            v.isShow = true;
             v.$filterIndustryKey = industryCode;
           } else {
-            v.isShow = false;
             v.$filterIndustryKey = '*';
           }
         });
@@ -491,7 +503,8 @@ export default {
             if (v.composeEnable === 1) {
               shoppingList.push({
                 ...v,
-                isShow: true,
+                // 有效商品
+                isValid: true,
                 checked: false,
                 // 信用模式
                 isCreditMode: false,

@@ -44,11 +44,14 @@
         <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
       </view>
       <view class="jShoppingCartItem-cnt-img-wrap">
-        <image :src="goods.productList && goods.productList[0].productImageUrl" @tap="goDetail(goods)"></image>
+        <image
+          :src="goods.productList && goods.productList[0].productImageUrl"
+          @tap="goDetail(goods)"
+        ></image>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
-        <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList &&
-          goods.productList[0].productName}}
+        <view class="jShoppingCartItem-cnt-inf-title">
+          {{goods.productList && goods.productList[0].productName}}
         </view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
@@ -76,18 +79,18 @@
       <view class="jShoppingCartItem-btm-options-wrap">
         <view class="jShoppingCartItem-btm-tags mr34">
           <view
-            class="jShoppingCartItem-btm-tag"
             v-if="goods.productList[0].swrhFlag==='Y'"
+            class="jShoppingCartItem-btm-tag"
           >统
           </view>
           <view
-            class="jShoppingCartItem-btm-tag"
             v-if="goods.productList[0].signStatus==='Y'"
+            class="jShoppingCartItem-btm-tag"
           >云
           </view>
           <view
-            class="jShoppingCartItem-btm-tag"
             v-if="goods.productList[0].ydzfFlag==='Y'"
+            class="jShoppingCartItem-btm-tag"
           >异
           </view>
         </view>
@@ -97,8 +100,8 @@
         >
           库存：{{goods.productList[0].productStock}}
           <view
-            class="iconfont iconxia"
             v-if="stockOptions.length"
+            class="iconfont iconxia"
           ></view>
         </view>
         <view
@@ -114,8 +117,8 @@
           <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
         </view>
         <view
-          class="jShoppingCartItem-btm-switch-wrap"
           v-if="isFundsFirst"
+          class="jShoppingCartItem-btm-switch-wrap"
         >
           <j-switch
             :active.sync="goods.isFundsFirstMode"
@@ -151,13 +154,13 @@
           :key="index"
         >
           <view
-            class="jShoppingCartItem-btm-inf-wrap"
             v-if="inf"
+            class="jShoppingCartItem-btm-inf-wrap"
           >
             <view
+              v-if="inf.origin==='update'"
               @tap="handleDelVersion(inf)"
               class="jShoppingCartItem-btm-inf-close iconfont iconcross"
-              v-if="inf.origin==='update'"
             ></view>
             <view class="jShoppingCartItem-btm-inf-icon">
               <view class="iconfont iconi"></view>
