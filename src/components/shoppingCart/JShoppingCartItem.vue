@@ -744,13 +744,29 @@ export default {
     },
     specificationsCustomCheckFun(versionData, list, parIndex, curIndex) {
       /* 版本价格自定义check fun */
+      const {
+        // 不支持的版本价格类型
+        notSupportPriceTypes
+      } = this.goods;
       const parent = versionData[parIndex];
       const version = list[curIndex];
+      const {
+        priceType
+      } = version;
       const curChecked = !version.checked;
       // 如果取消的话,直接修改并返回
       if (!curChecked) {
         version.checked = false;
         versionData[parIndex].list[curIndex] = version;
+        return versionData;
+      }
+      // 遇到不支持的版本，直接提示并返回
+      const notSupportPriceType = notSupportPriceTypes.find(v => v.type === priceType);
+      if (notSupportPriceType) {
+        uni.showModal({
+          title: '提示',
+          content: notSupportPriceType.msg
+        });
         return versionData;
       }
       const checkedList = [];
@@ -765,10 +781,7 @@ export default {
           }
         });
       });
-      const {
-        priceType
-      } = version;
-        // 工程、特价map
+      // 工程、特价map
       const map = {
         GC: 1,
         TJ: 1
@@ -947,7 +960,7 @@ export default {
         this.stockOptions = stock.storeInfo.map(v => ({
           ...v,
           value: v.stockType,
-          arrivalTime: v.arrivalTime.substring(0, 10)
+          arrivalTime: v.arrivalTime ? v.arrivalTime.substring(0, 10) : '--'
         }));
       }
     },

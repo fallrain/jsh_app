@@ -12,7 +12,7 @@
       v-for="(item,index) in list"
       :goods="item"
       :showCheck="false"
-      :key="index"
+      :key="item.id"
       :index="index"
       :checked.sync="item.checked"
       @change="goodsChange"
