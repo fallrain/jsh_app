@@ -149,6 +149,19 @@ export default {
     moreAction() {
       console.log('==============')
       this.isShowGoodsFilterDrawer = true;
+      this.getDictionaryByWhereFun();
+    },
+    async getDictionaryByWhereFun() {
+      let param = {
+        dictionaryType: "INDUSTRIAL"//产业筛选
+        // 品牌筛选 {"dictionaryType":"PRODUCT_BRAND"}
+      }
+      const { code, data } = await this.productService.getDictionaryByWhere(param);
+      if (code === '200') {
+        console.log(data)
+      }
+      console.log('===========getDictionaryByWhereFun===========');
+      console.log(data);
     },
     async orderList(e, pgNo) {
       const param = {
