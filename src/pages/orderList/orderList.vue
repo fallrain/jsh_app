@@ -195,6 +195,7 @@
                     :name="item.name"
             >{{item.name}}</u-checkbox>
           </u-checkbox-group>
+
         </view>
         <view class="">
           <view class="timeFont">
