@@ -20,7 +20,7 @@
         <view
           :class="[
             'jPopPicker-pop-item',
-            choseOptions.find(v=>v===item[keyName]) && 'active'
+            choseKeys.find(v=>v===item[keyName]) && 'active'
           ]"
           v-for="(item) in options"
           :key="item[keyName]"
@@ -82,8 +82,8 @@ export default {
       type: Array,
       default: () => []
     },
-    // 选中的选项
-    choseOptions: {
+    // 选中的key
+    choseKeys: {
       type: Array,
       default: () => []
     },
@@ -99,15 +99,14 @@ export default {
   },
   data() {
     return {
-      data: [
-        {}
-      ]
+      // 选中的选项
+      choseOptions: [],
     };
+  },
+  created() {
   },
   watch: {
     show(val) {
-      console.log(this.choseOptions);
-      console.log(this.options);
       if (val) {
         this.$refs.pop.open();
       } else {
@@ -137,20 +136,28 @@ export default {
       const {
         [this.keyName]: key
       } = item;
-      let choseOptionsAy;
+
+      let choseKeysAy;
       if (this.type === 'radio') {
-        choseOptionsAy = [key];
+        choseKeysAy = [key];
       } else {
-        const index = this.choseOptions.findIndex(v => v === key);
+        const index = this.choseKeys.findIndex(v => v === key);
         if (index > -1) {
-          this.choseOptions.splice(index, 1);
+          this.choseKeys.splice(index, 1);
         } else {
-          this.choseOptions.push(key);
+          this.choseKeys.push(key);
         }
-        choseOptionsAy = [...this.choseOptions];
+        choseKeysAy = [...this.choseKeys];
       }
-      this.$emit('update:choseOptions', choseOptionsAy);
-      this.$emit('change', choseOptionsAy,);
+      // choseOptions只有在check之后才组合数据，减少watch
+      if (choseKeysAy.length) {
+        this.choseOptions = this.options.filter(option => choseKeysAy.find(v => v === option[this.keyName]));
+      } else {
+        this.choseOptions = [];
+      }
+
+      this.$emit('update:choseKeys', choseKeysAy);
+      this.$emit('change', choseKeysAy, this.choseOptions);
     },
     handleClick(version, list) {
       /* 选择版本 */

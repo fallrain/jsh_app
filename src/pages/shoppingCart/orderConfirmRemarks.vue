@@ -24,7 +24,7 @@
       <view v-if="JSON.stringify(choosedAdd)=== '{}'" class="address-style">请选择地址</view>
       <view v-else class="address-style">
         {{choosedAdd.province}}{{choosedAdd.city}}{{choosedAdd.area}} &nbsp;&nbsp;
-        {{choosedAdd.userName}}&nbsp;&nbsp;{{choosedAdd.iphoneNo}}
+        {{choosedAdd.address}}
       </view>
     </view>
     <view class="orderConfirmRemarks-group mt24">
@@ -62,7 +62,7 @@
         >
       </j-cell>
     </view>
-    <view class="orderConfirmRemarks-group mt24">
+    <view v-if="status === 'zfyd'" class="orderConfirmRemarks-group mt24">
       <j-cell
         title="所在地区"
       >
@@ -108,7 +108,7 @@
         </template>
       </j-cell>
     </view>
-    <view class="orderConfirmRemarks-group orderConfirmRemarks-group-crossRegion mt24">
+    <view v-if="status === 'zfyd'" class="orderConfirmRemarks-group orderConfirmRemarks-group-crossRegion mt24">
       <j-cell
         title="收藏地址"
         :titleWrap="false"
@@ -138,7 +138,7 @@
       title="地址列表"
       :show.sync="addressListShow"
       :options="addressOption"
-      :choseOptions.sync="choosedAddressOption"
+      :choseKeys.sync="choosedAddressOption"
     ></j-pop-picker>
   </view>
 </template>
@@ -402,7 +402,6 @@ export default {
       uni.navigateBack();
     },
     radioChange(e) {
-      console.log(e.target.value);
       if (e.target.value === 'jdyd') {
         this.form.jdWarehouseId = 1;
         this.getAddListJDYD();
@@ -410,11 +409,10 @@ export default {
         this.form.jdWarehouseId = '';
         this.getAddListZFYD();
       }
-
+      this.status = e.target.value;
       this.showType.forEach((item) => {
         if (item.value === e.target.value) {
           item.checked = true;
-          this.status = item.value;
         } else {
           item.checked = false;
         }

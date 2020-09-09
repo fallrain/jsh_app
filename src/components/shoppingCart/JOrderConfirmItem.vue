@@ -61,6 +61,12 @@
         <view v-if="goods.splitOrderProductList[0].priceType === 'TJ'" class="text-theme">
           特价版本号：{{goods.splitOrderProductList[0].priceVersion}}
         </view>
+        <view v-if="goods.splitOrderProductList[0].priceType === 'GC'" class="text-theme">
+          工程版本号：{{goods.splitOrderProductList[0].priceVersion}}
+        </view>
+        <view v-if="isYJ(goods.splitOrderProductList[0].priceType)" class="text-theme">
+          样机版本号：{{goods.splitOrderProductList[0].priceVersion}}
+        </view>
         <view class="dis-flex">
           <view v-if="orderItem.yunCangType==='yc'" class="yc-flag">云仓</view>
           <view v-if="orderItem.yunCangType==='ydyc'" class="yc-flag">异地云仓</view>
@@ -76,7 +82,7 @@
               <text v-else>请选择付款方</text>
             </view>
           </view>
-          <view v-if="goods.splitOrderProductList[0].isBbOrProject" class="jOrderConfirmItem-detail-mark-item">
+          <view v-if="goods.splitOrderProductList[0].isBbOrProject&&orderItem.yunCangType!=='yc'&&orderItem.yunCangType!=='ydyc'" class="jOrderConfirmItem-detail-mark-item">
             <view class="jOrderConfirmItem-detail-mark-item-name">
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>备注信息
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
@@ -116,8 +122,8 @@
         </view>
       </view>
       <view @tap="chooseInvoice" v-if="isCT" class="dis-flex mt12">
-        <view class="">开票方：</view>
-        <view class=""></view>
+        <view class="w150">开票方：</view>
+        <view class="">({{currentinvoice.invoicerCode}}){{currentinvoice.invoicerName}}</view>
         <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
       </view>
       <view v-if="isCT" class="dis-flex">
@@ -126,7 +132,7 @@
           class="input-style"
           type="text"
           placeholder="请输入采购订单号"
-          :placeholderStyle="{color:'#fff'}"
+          placeholderStyle="color:#fff;font-size:12px"
           v-model="selfValue"
         ></u-input>
       </view>
@@ -135,13 +141,13 @@
       title="付款方"
       :show.sync="payerPickerShow"
       :options="payerOptions[currentOrderNo]"
-      :choseOptions.sync="currentchosePayerOption"
+      :choseKeys.sync="currentchosePayerOption"
     ></j-pop-picker>
     <j-pop-picker
       title="开票方"
       :show.sync="invoicePickerShow"
       :options="invoiceOptions"
-      :choseOptions.sync="currentinvoiceOption"
+      :choseKeys.sync="currentinvoiceOption"
     ></j-pop-picker>
   </view>
 </template>
@@ -185,7 +191,7 @@ export default {
   },
   data() {
     return {
-      invoicePickerShow: true,
+      invoicePickerShow: false,
       invoiceOptions: [],
       currentinvoiceOption: [],
       currentinvoice: {},
@@ -269,6 +275,10 @@ export default {
       this.getPayerMoneyInfo();
     },
     billInfoList() {
+      if (this.billInfoList.length === 0) {
+        return;
+      }
+      console.log(this.billInfoList);
       this.currentinvoiceOption = [];
       this.invoiceOptions = this.billInfoList;
       this.currentinvoiceOption[0] = this.invoiceOptions[0].key;
@@ -292,11 +302,20 @@ export default {
       return function (val) {
         return (Number(val)).toFixed(2);
       };
+    },
+    isYJ() {
+      return function (val) {
+        if (val === 'YJCT' || val === 'YJCY' || val === 'MFJK'
+          || val === 'MFYJ' || val === 'YJ') {
+          return true;
+        }
+      };
     }
   },
   methods: {
     // 选择开票方
     chooseInvoice() {
+      console.log(1);
       this.currentinvoiceOption = [];
       this.invoiceOptions = this.billInfoList;
       this.invoicePickerShow = true;

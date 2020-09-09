@@ -32,7 +32,9 @@
         class="shoppingCart-list-filter"
         v-if="choseIndustryOptions[0]!=='*'"
       >
-        <view class="shoppingCart-list-filter-text">共找到{{shoppingList.length - notInFilterLength}}件产品</view>
+        <view class="shoppingCart-list-filter-text">
+          {{choseIndustryData[0].value}}产业，共找到{{shoppingList.length - notInFilterLength}}件产品
+        </view>
         <view
           :key="goods.id"
           v-for="(goods,index) in shoppingList"
@@ -124,7 +126,7 @@
         title="产业"
         :options="industryGroupData"
         :show.sync="isIndustryPickerShow"
-        :choseOptions.sync="choseIndustryOptions"
+        :choseKeys.sync="choseIndustryOptions"
         @change="industryPickerChange"
       ></j-pop-picker>
     </view>
@@ -258,8 +260,10 @@ export default {
       isIndustryPickerShow: false,
       // 产业数据
       industryGroupData: [],
-      // 选中的产业数据
+      // 选中的产业数据key
       choseIndustryOptions: ['*'],
+      // 选中的产业数据
+      choseIndustryData: [],
       // 云仓、异地云仓权限对象
       cloudStockStatus: {}
     };
@@ -388,13 +392,14 @@ export default {
       /* 展示产业picker */
       this.isIndustryPickerShow = true;
     },
-    industryPickerChange(data) {
+    industryPickerChange(data, checkedIndustryOptions) {
       /* 产品组picker change */
       // 先回到顶部
       uni.pageScrollTo({
         scrollTop: 0,
         duration: 100
       });
+      this.choseIndustryData = checkedIndustryOptions;
       const industryCode = data[0];
       if (industryCode === '*') {
         this.shoppingList.forEach((v) => {
