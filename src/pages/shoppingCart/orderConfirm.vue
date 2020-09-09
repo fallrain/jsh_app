@@ -246,15 +246,15 @@ export default {
     async getBillInfo(productCode) {
       let arrs = [];
       const sendtoCode = this.formData.sendtoCode;
-      const { code, data } = this.orderService.getBillInfo(sendtoCode, productCode);
+      const { code, data } = await this.orderService.getBillInfo(sendtoCode, productCode);
       if (code === '1') {
         arrs = JSON.parse(JSON.stringify(this.billInfoList.concat(data)));
       }
       arrs = this.unique(arrs);
-      this.billInfoList = arrs;
+      this.billInfoList = JSON.parse(JSON.stringify(arrs));
       this.billInfoList.forEach((item) => {
-        item.key = item.customerCode;
-        item.value = `(${item.customerCode})${item.customerCode}`;
+        item.key = item.invoicerCode;
+        item.value = `(${item.invoicerCode})${item.invoicerName}`;
       });
     },
     // 数组去重
