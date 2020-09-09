@@ -21,6 +21,6 @@ export default {
     [ORDER.GET_ORDER](state) {
       /* 订单详情信息 */
       return state.orderDetail;
-    },
+    }
   }
 };
