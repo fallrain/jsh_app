@@ -138,7 +138,7 @@
       title="地址列表"
       :show.sync="addressListShow"
       :options="addressOption"
-      :choseOptions.sync="choosedAddressOption"
+      :choseKeys.sync="choosedAddressOption"
     ></j-pop-picker>
   </view>
 </template>

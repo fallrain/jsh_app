@@ -25,9 +25,11 @@
         </button>
         <text class="jShoppingCartItem-head-text">活动到期日：{{goods.expTime}}</text>
         <view class="jShoppingCartItem-head-line"></view>
-        <text class="jShoppingCartItem-head-text">预定金比例：{{goods.intentionMoney}}%</text>
-        <view class="jShoppingCartItem-head-line"></view>
-        <text class="jShoppingCartItem-head-text">直发订单</text>
+        <template v-if="goods.intentionMoney">
+          <text class="jShoppingCartItem-head-text">预定金比例：{{goods.intentionMoney}}%</text>
+          <view class="jShoppingCartItem-head-line"></view>
+          <text class="jShoppingCartItem-head-text">直发订单</text>
+        </template>
       </block>
       <view
         @tap="handleDel"
@@ -208,7 +210,7 @@
     </j-version-specifications>
     <view class="jShoppingCartItem-stock-picker-par">
       <j-pop-picker
-        :choseOptions.sync="choseStockOptions"
+        :choseKeys.sync="choseStockOptions"
         :isCanBeCheck="false"
         :isShowValue="false"
         :options="stockOptions"
