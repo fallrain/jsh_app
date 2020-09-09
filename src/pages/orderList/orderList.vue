@@ -59,9 +59,10 @@
               <input
                 class="orderList-drawer-filter-down-input"
                 type="text"
+                v-model="producntBandValue"
                 :placeholder="`请选择`"
               >
-              <i class="iconfont iconxia left-10"></i>
+              <i @click="productBandAction" class="iconfont iconxia left-10"></i>
             </view>
           </view>
         </view>
@@ -217,9 +218,15 @@
           <u-tabs ref="tabs" :list="list" current="2"></u-tabs>
         </view> -->
       </template>
-
-
     </j-drawer>
+    <j-pop-picker
+        keyName="key"
+        title="品牌"
+        :options="productBandList"
+        :show.sync="isProductBandShow"
+        :choseKeys.sync="choseProductBandKeys"
+        @change="productBandChange"
+      ></j-pop-picker>
   </view>
 </template>
 
@@ -227,6 +234,8 @@
 import orderListItem from '../../components/orderList/order-list-item';
 import JTab from '../../components/common/JTab';
 import JDrawer from '../../components/form/JDrawer';
+import JPopPicker from '../../components/form/JPopPicker';
+
 import './css/orderlist.scss';
 import {
   ORDER,
@@ -242,7 +251,8 @@ export default {
   components: {
     orderListItem,
     JTab,
-    JDrawer
+    JDrawer,
+    JPopPicker
   },
   data() {
     return {
@@ -403,7 +413,10 @@ export default {
       // 产业
       industryList:[],
       // 品牌
-      productBandList:[]
+      productBandList:[],
+      isProductBandShow:false,
+      choseProductBandKeys:[],
+      producntBandValue:''
     };
   },
   computed: {
@@ -433,6 +446,25 @@ export default {
     filterReset() {
 
     },
+    productBandChange(data, productBandOptions) {
+      console.log('=======productBandChange========')
+      console.log(data)
+      console.log(productBandOptions)
+      
+      this.producntBandValue = productBandOptions[0].value;
+      this.isProductBandShow = false;
+      this.isShowGoodsFilterDrawer = true;
+    },
+    async productBandAction() {
+      this.isShowGoodsFilterDrawer = false;
+      await this.getDictionaryByWhereFun({
+        dictionaryType: "INDUSTRIAL"//产业筛选
+      });
+      await this.getDictionaryByWhereFun({
+        dictionaryType:"PRODUCT_BRAND"
+      });
+      this.isProductBandShow = true;
+    },
     // 产业
     industryAction() {
 
@@ -441,21 +473,24 @@ export default {
     async moreAction() {
       console.log('==============');
       this.isShowGoodsFilterDrawer = true;
-
-      await this.getDictionaryByWhereFun({
-        dictionaryType: "INDUSTRIAL"//产业筛选
-      });
-      await this.getDictionaryByWhereFun({
-        dictionaryType:"PRODUCT_BRAND"
-      });
+      console.log(this.productBandList)
     },
     async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
-      if (code === '200') {
+      if (code === '1') {
         if(param.dictionaryType == 'INDUSTRIAL') {
           this.industryList = data;
         } else {
-          this.productBandList = data;
+        console.log(`===========getDictionaryByWhereFun===========`);
+          // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
+          for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            const pb = {
+              key:element.code,
+              value:element.codeName
+            }
+            this.productBandList.push(pb);
+          }
         }
         console.log(data)
       }
