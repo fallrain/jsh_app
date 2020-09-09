@@ -931,9 +931,9 @@ export default {
                 orderSplitComposeProductData.isCheckCreditModel = product.isCreditMode ? '1' : '0';
               } else {
                 // 是否支持款先
-                orderSplitComposeProductData.isCheckKuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
+                orderSplitComposeProductData.kuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
                 // 是否打开款先
-                orderSplitComposeProductData.kuanXian = product.isFundsFirstMode ? '1' : '0';
+                orderSplitComposeProductData.isCheckKuanXian = product.isFundsFirstMode ? '1' : '0';
                 // 传统渠道样机不支持选择款先，默认款先
                 if (this.userInf.channelGroup === 'CT') {
                   const isContainYj = getYj()[prdt.priceType];
