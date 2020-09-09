@@ -135,13 +135,13 @@
       title="付款方"
       :show.sync="payerPickerShow"
       :options="payerOptions[currentOrderNo]"
-      :choseOptions.sync="currentchosePayerOption"
+      :choseKeys.sync="currentchosePayerOption"
     ></j-pop-picker>
     <j-pop-picker
       title="开票方"
       :show.sync="invoicePickerShow"
       :options="invoiceOptions"
-      :choseOptions.sync="currentinvoiceOption"
+      :choseKeys.sync="currentinvoiceOption"
     ></j-pop-picker>
   </view>
 </template>

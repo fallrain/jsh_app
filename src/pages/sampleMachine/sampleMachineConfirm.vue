@@ -88,7 +88,7 @@
     title="付款方"
     :show.sync="payerPickerShow"
     :options="payerList"
-    :choseOptions.sync="currentChoosePayer"
+    :choseKeys.sync="currentChoosePayer"
     @change="changePayer"
   ></j-pop-picker>
   <!-- 验证码弹窗 -->
