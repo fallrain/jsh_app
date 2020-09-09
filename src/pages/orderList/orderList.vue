@@ -24,10 +24,11 @@
         <view>
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
-              <text>订单号<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia left-10"></i></text>
             </view>
           </view>
-            <view
+          <order-list-type :is-order-type="orderNoshow"></order-list-type>
+          <view
             class="orderList-drawer-filter-list"
             >
             <input
@@ -37,6 +38,7 @@
             >
           </view>
         </view>
+
         <view class="industry-brand">
           <view class="industry-brand-child">
             <view >
@@ -85,9 +87,10 @@
         <view>
           <view class="addressee">
             <view>
-              <text>产品型号<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getModel">{{orderModelStr}}}<i class="iconfont iconxia left-10"></i></text>
             </view>
           </view>
+          <order-list-model :is-order-model="orderModelshow"></order-list-model>
           <view
             class="orderList-drawer-filter-list"
           >
@@ -196,6 +199,7 @@
                     :name="item.name"
             >{{item.name}}</u-checkbox>
           </u-checkbox-group>
+
         </view>
         <view class="">
           <view class="timeFont">
@@ -234,9 +238,12 @@
 import orderListItem from '../../components/orderList/order-list-item';
 import JTab from '../../components/common/JTab';
 import JDrawer from '../../components/form/JDrawer';
+import OrderListType from '../../components/orderList/order-list-type';
+import OrderListModel from '../../components/orderList/order-list-model';
 import JPopPicker from '../../components/form/JPopPicker';
-
 import './css/orderlist.scss';
+
+
 import {
   ORDER,
   USER
@@ -252,10 +259,16 @@ export default {
     orderListItem,
     JTab,
     JDrawer,
-    JPopPicker
+    JPopPicker,
+    OrderListType,
+    OrderListModel
   },
   data() {
     return {
+      orderNoshow: false,
+      orderModelshow: false,
+      orderTypeStr:'订单号',
+      orderModelStr:'产品型号',
       isShowGoodsFilterDrawer: false,
       orderListInfo: [],
       total: 0,
@@ -446,29 +459,6 @@ export default {
     filterReset() {
 
     },
-    productBandChange(data, productBandOptions) {
-      console.log('=======productBandChange========')
-      console.log(data)
-      console.log(productBandOptions)
-      
-      this.producntBandValue = productBandOptions[0].value;
-      this.isProductBandShow = false;
-      this.isShowGoodsFilterDrawer = true;
-    },
-    async productBandAction() {
-      this.isShowGoodsFilterDrawer = false;
-      await this.getDictionaryByWhereFun({
-        dictionaryType: "INDUSTRIAL"//产业筛选
-      });
-      await this.getDictionaryByWhereFun({
-        dictionaryType:"PRODUCT_BRAND"
-      });
-      this.isProductBandShow = true;
-    },
-    // 产业
-    industryAction() {
-
-    },
     // 过滤条件
     async moreAction() {
       console.log('==============');
@@ -565,7 +555,17 @@ export default {
           this.orderList(each.id2, this.pageNo);
         }
       });
-    }
+    },
+    getType() {
+      this.orderNoshow= !this.orderNoshow;
+      console.log(this.orderNoshow);
+
+    },
+    getModel() {
+      this.orderModelshow= !this.orderModelshow;
+      console.log(this.orderModelshow);
+
+    },
   }
 };
 </script>

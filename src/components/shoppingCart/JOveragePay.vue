@@ -33,12 +33,12 @@
             v-if="compareMoney(item.balance, item.totalMoney)&&saleInfo.channelGroup === 'ZY'"
             type="button"
             class="jOveragePay-cnt-item-total-btn"
-          >余额不足，去支付</button>
+          >余额不足，去充值</button>
           <button
             v-if="compareMoney(item.bookbalance, item.totalMoney)&&saleInfo.channelGroup === 'CT'"
             type="button"
             class="jOveragePay-cnt-item-total-btn"
-          >余额不足，去支付</button>
+          >余额不足，去充值</button>
         </view>
       </view>
     </view>
@@ -83,7 +83,9 @@ export default {
         return (Number(val)).toFixed(2);
       };
     }
-  }
+  },
+  methods: {
+  },
 };
 </script>
 
