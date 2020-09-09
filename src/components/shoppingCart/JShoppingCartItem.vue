@@ -60,14 +60,14 @@
           <view class="jShoppingCartItem-cnt-price-inf-item">
             小计：¥{{totalChosePrice}}
           </view>
-          <u-number-box
+          <j-number-box
             :max="maxGoodsNumber"
             :min="1"
             v-model="goods.number"
             @blur="goodsNumChange"
             @minus="goodsNumChange"
             @plus="goodsNumChange"
-          ></u-number-box>
+          ></j-number-box>
         </view>
       </view>
       <view
@@ -253,10 +253,12 @@ import {
 } from '@/lib/dataDictionary';
 
 import AddNumberForm from '@/model/AddNumberForm';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'JShoppingCartItem',
   components: {
+    JNumberBox,
     JPopPicker,
     JVersionSpecifications,
     JSwitch,
@@ -491,7 +493,7 @@ export default {
     },
     maxGoodsNumber() {
       /* 计算最大可购买数量 */
-      let maxNum = Number.MAX_VALUE;
+      let maxNum = Number.MAX_SAFE_INTEGER;
       const {
         activityType,
         // 可购买的数量
@@ -506,17 +508,17 @@ export default {
         // 设置各个版本的最低数量
         this.choseVersions.forEach((v) => {
           let curNum;
-          if (v.priceType) {
-            curNum = v.usableQty;
+          if (v.$isTransfer) {
+            curNum = v.number;
           } else {
-            curNum = v.num;
+            curNum = v.usableQty;
           }
           if (curNum < maxNum) {
             maxNum = curNum;
           }
         });
       }
-      return maxNum === undefined || maxNum === null ? Number.MAX_VALUE : maxNum;
+      return maxNum === undefined || maxNum === null ? Number.MAX_SAFE_INTEGER : maxNum;
     },
   },
   watch: {
@@ -545,7 +547,7 @@ export default {
         this.goodsChange();
       }
     },
-    maxGoodsNum(val) {
+    maxGoodsNumber(val) {
       /* 最大数量如果小于已选的数量，则修改已选数量之 */
       if (this.goods.number > val) {
         this.goods.number = val;
