@@ -347,7 +347,7 @@ export default {
       } = product;
       const inProductGroup = directProducts.find(v => v === productGroup);
       // 如果选中了工程版本，也会显示【直发】switch
-      return inProductGroup || !!this.choseVersions.find(v => v.priceType === 'GC');
+      return inProductGroup || !!(this.choseVersions.find(v => v.priceType === 'GC') && !this.choseVersions.find(v => v.$isTransfer));
     },
     isCreditModel() {
       /* 是否支持信用模式 */

@@ -1021,7 +1021,7 @@ export default {
             // 存在版本调货，则传版本调货提供的数量
             number: transferVersion ? transferVersionNumber : product.number,
             // 是否直发
-            isStock: product.isDirectMode ? '0' : '1',
+            isStock: shoppingCartItem.isDirect && product.isDirectMode ? '0' : '1',
           };
           const {
             channelGroup
