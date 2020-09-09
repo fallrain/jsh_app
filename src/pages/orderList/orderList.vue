@@ -48,7 +48,7 @@
                 type="text"
                 :placeholder="`请选择`"
               >
-              <i class="iconfont iconxia left-10"></i>
+              <i @click="industryAction" class="iconfont iconxia left-10"></i>
             </view>
           </view>
           <view   class="industry-brand-child">
@@ -213,9 +213,9 @@
             </u-radio>
           </u-radio-group>
         </view>
-        <view style="width: 100px;">
+        <!-- <view style="width: 100px;">
           <u-tabs ref="tabs" :list="list" current="2"></u-tabs>
-        </view>
+        </view> -->
       </template>
 
 
@@ -400,6 +400,10 @@ export default {
         }
       ],
       lableValue: 'orange',
+      // 产业
+      industryList:[],
+      // 品牌
+      productBandList:[]
     };
   },
   computed: {
@@ -429,23 +433,33 @@ export default {
     filterReset() {
 
     },
+    // 产业
+    industryAction() {
+
+    },
     // 过滤条件
-    moreAction() {
+    async moreAction() {
       console.log('==============');
       this.isShowGoodsFilterDrawer = true;
-      this.getDictionaryByWhereFun();
-    },
-    async getDictionaryByWhereFun() {
-      let param = {
+
+      await this.getDictionaryByWhereFun({
         dictionaryType: "INDUSTRIAL"//产业筛选
-        // 品牌筛选 {"dictionaryType":"PRODUCT_BRAND"}
-      }
+      });
+      await this.getDictionaryByWhereFun({
+        dictionaryType:"PRODUCT_BRAND"
+      });
+    },
+    async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '200') {
+        if(param.dictionaryType == 'INDUSTRIAL') {
+          this.industryList = data;
+        } else {
+          this.productBandList = data;
+        }
         console.log(data)
       }
       console.log('===========getDictionaryByWhereFun===========');
-      console.log(data);
     },
     async orderList(e, pgNo) {
       const param = {
