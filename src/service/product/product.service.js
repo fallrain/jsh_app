@@ -6,7 +6,6 @@ import {
 
 export default {
   getDictionaryByWhere(dictionaryType) {
-    debugger
     console.log(url.getDictionaryByWhere)
     return jPostJson(url.getDictionaryByWhere, dictionaryType);
   },
