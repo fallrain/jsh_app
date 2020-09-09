@@ -19,11 +19,11 @@
           <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.pk,item)">
             <view class="uni-flex uni-row" >
                 <view class="message-littleTitle">{{item.typeNameShow}}</view>
-                <view class="message-title">{{item.typeName}}</view>
+                <view class="message-title">{{item.title}}</view>
                 <view class="message-time">{{item.createTime}}</view>
             </view>
             <view class="uni-flex uni-row">
-                <view class="message-info">{{item.title}}</view>
+                <view class="message-info">{{item.description}}</view>
                 <view class="message-spot isNew" v-show="item.isNew"></view>
             </view>
           </view>
@@ -32,7 +32,8 @@
 </template>
 <script>
 import messageInfoListTab from './messageInfoListTab';
-import jPost from '../../lib/request';
+import { mapGetters } from 'vuex';
+import { USER } from '@/store/mutationsTypes';
 
 export default {
   name: 'messageInfoList',
@@ -61,17 +62,23 @@ export default {
       messageactive: 0
     };
   },
-
+  created() {
+    this.getNotReadMessageCount();
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+    })
+  },
   methods: {
     async tabClick(item, index) {
       console.log(index);
       // this.tabs = e
       this.tabIndex = index;
-      this.unread = 2;
       const param = {
         pageNum: 1,
         pageSize: 10,
-        unitId: '8700014608_admin',
+        unitId: `${this.saleInfo.customerCode}_admin`,
         typeName: '',
         createDateStr: ''
       };
@@ -92,8 +99,38 @@ export default {
         url: `/pages/messageInfoList/messageInfoListDetail?id=${id}&item=${JSON.stringify(item)}`
       });
     },
+    // 全部已读
     readAll() {
+      const _this = this;
+      uni.showModal({
+        title: '',
+        content: '确认全部已读吗',
+        success(res) {
+          if (res.confirm) {
+            console.log(res);
+            _this.updateAllMessageRead();
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        }
+      });
+    },
+    async  updateAllMessageRead() {
+      const { code, data } = await this.messageService.updateAllMessageRead({
+        unitId: `${this.saleInfo.customerCode}_admin`
+      });
+    },
+    // 未读
+    async getNotReadMessageCount() {
+      const { code, data } = await this.messageService.getNotReadMessageCount({
+        unitId: `${this.saleInfo.customerCode}_admin`
+      });
+      if (code === '1') {
+        // console.log('未读   1111');
+        this.unread = data;
+      }
     }
+
 
 
   },
@@ -188,6 +225,9 @@ export default {
             color:rgba(51,51,51,1);
             line-height:48px;
             margin-right:44px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow:ellipsis;
           }
           .message-time{
             width:238px;

@@ -1,9 +1,9 @@
 <template>
   <view
     class="jActivityItem">
-    <view @tap="goDetail()" class="dis-flex mb16">
+    <view class="dis-flex mb16">
       <view class="dis-flex" v-if="activity.valid === false">
-        <view v-if="activity.activityType === 'taocan'">
+        <view @tap="goDetail()" v-if="activity.activityType === 'taocan'">
           <view class="tag-default mr20">失效套餐</view>
           <view class="active-title text-999">{{activity.name}}</view>
         </view>
@@ -45,8 +45,8 @@
       </view>
       <view @tap="goDetail()" class="mb12 dis-flex text-666">
         <view class="">活动结束时间：</view>
-        <view v-if="activity.activityType === 'taocan'" class="">{{activity.endDate}}</view>
-        <view v-else class="">{{activity.expTime}}</view>
+        <view v-if="activity.activityType === 'taocan'" class="">{{fomrmateDate(activity.endDate)}}</view>
+        <view v-else class="">{{fomrmateDate(activity.expTime)}}</view>
       </view>
       <view @tap="goDetail()" class="mb12 dis-flex text-666">
         <view class="">剩余可购买套数：</view>
@@ -175,14 +175,11 @@ export default {
       };
     },
     fomrmateDate() {
-      // return val => this.jshUtil.formatDate(val);
       return val => val.split(' ')[0];
     }
   },
   methods: {
     goDetail() {
-      // console.log(e);
-      // console.log(e.currentTarget.getAttributeNode('class'));
       this.$emit('activityDetail', this.activity);
     },
     goOrder() {

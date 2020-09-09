@@ -121,7 +121,7 @@ export default {
       this.$emit('change', this.goods, this.index);
     },
     goNext() {
-      uni.navigateTo({
+      uni.redirectTo({
         url: `/pages/productDetail/productDetail?productCode=${this.goods.code}`
       });
     },

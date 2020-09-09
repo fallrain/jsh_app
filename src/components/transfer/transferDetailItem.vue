@@ -226,7 +226,19 @@ export default {
     // 删除单个产品
     deleteProduct(item, index) {
       console.log('******123');
-      this.$emit('delete', item, index);
+      const _this = this;
+      uni.showModal({
+        title: '',
+        content: '确认要删除此产品吗',
+        success(res) {
+          if (res.confirm) {
+            console.log(res);
+            _this.$emit('delete', item, index);
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        }
+      });
     },
     showPayer(item, index) {
       // 显示付款方

@@ -26,7 +26,7 @@
           <view class="jOveragePay-cnt-item-total-item-line">
           </view>
           <view class="jOveragePay-cnt-item-total-item">
-            <view class="jOveragePay-cnt-item-total-text">待支付余额：</view>
+            <view class="jOveragePay-cnt-item-total-text">待支付金额：</view>
             <view class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.totalMoney)}}</view>
           </view>
           <button
