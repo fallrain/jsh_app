@@ -817,6 +817,7 @@ export default {
         // debugger
         this.getCargoQuery();
         this.getTransferList();
+        this.getStockNum();
         console.log(this.curChoseDeliveryAddress);
       }
     },

@@ -2,8 +2,14 @@ import util from '../util/index';
 
 const baseURL = 'message/api';
 const urls = {
-  // 商品列表
+  // 消息列表
   messageList: '/message/page',
+  // 消息全部已读
+  updateAllMessageRead: '/message/updateAllMessageRead',
+  // 未读消息
+  getNotReadMessageCount: '/message/getNotReadMessageCount',
+  // 删除此消息
+  deleteMessage: '/message/deleteMessage',
   // 首页新闻资讯
   indexList: '/notice/indexList',
   // 首页新闻资讯详情
