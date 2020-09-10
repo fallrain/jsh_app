@@ -41,8 +41,8 @@ export default {
         console.log(v.active);
       })
       item.active = true;
-      console.log(item.active)
-      this.$emit('tabClick', index);
+      console.log(item.active);
+      this.$emit('tabClick', item, index);
       // console.log(this.messageactive)
     }
   }

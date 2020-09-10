@@ -3,7 +3,7 @@
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background" >
       <view v-for="(item,index) in list">
-        <view class="v_More_text" @click="goVehicle(index)">{{item}}</view>
+        <view class="v_More_text" @click="goMessage(item,index)">{{item.typeNameShow}}</view>
       </view>
     </view>
   </view>
@@ -31,12 +31,27 @@ export default {
   },
   data() {
     return {
-      list: ['其他', '扣款提醒', '经营分析', '到货提醒', '样机管理', '订单详情', '建店押金', '订单作废', '返利兑现', '发票签收', '短消息', '整车提醒', '电子签章']
+      list: [
+        { typeNameShow: '全部消息' },
+        { typeName: 'typeName', typeNameShow: '其他' },
+        { typeName: '扣款成功提醒', typeNameShow: '扣款提醒' },
+        { typeName: '经营分析报告', typeNameShow: '经营分析' },
+        { typeName: '到货提醒', typeNameShow: '到货提醒' },
+        { typeName: '样机管理样机到期可销售通知', typeNameShow: '样机管理' },
+        { typeName: '订单详情', typeNameShow: '订单详情' },
+        { typeName: '建店押金缴纳', typeNameShow: '建店押金' },
+        { typeName: '订单作废', typeNameShow: '订单作废' },
+        { typeName: '返利不良品', typeNameShow: '返利兑现' },
+        { typeName: '发票签收', typeNameShow: '发票签收' },
+        { typeName: '短消息', typeNameShow: '短消息' },
+        { typeName: '整车订单提醒', typeNameShow: '整车提醒' },
+        { typeName: '电子签章', typeNameShow: '电子签章' }
+      ]
     };
   },
   methods: {
-    goVehicle(zind) {
-      this.$emit('anNiuVehicle', !this.isVehicleMore, zind);
+    goMessage(item, index) {
+      this.$emit('messageName', item, index);
     },
   }
 };

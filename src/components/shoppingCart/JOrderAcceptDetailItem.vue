@@ -29,8 +29,8 @@
           <view class="text-999">{{orderItem.gvsOrderNo}}</view>
         </view>
         <view v-if="orderItem.status !== '9'" class="dis-flex text-333">
-          <view class="w410">失败原因：</view>
-          <view class="text-999">{{orderItem.errorMsg}}</view>
+          <view class="w140">失败原因：</view>
+          <view class="text-999 flex-grow-1 minW0">{{orderItem.errorMsg}}</view>
         </view>
       </view>
       <view v-if="status===2" class="item-head br-b-primary">
@@ -259,7 +259,11 @@ export default {
 .fs32{
   font-size: 32px;
 }
-.w410{
-  width: 410px;
+.w140{
+  width: 140px;
+  min-width: 140px;
 }
+  .minW0{
+    min-width: 0;
+  }
 </style>

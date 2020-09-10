@@ -294,9 +294,9 @@
             </view>
             <view @click="calentVerifyAction" class="calentVerify">确定</view>
           </view>
-          <uni-calendar 
+          <uni-calendar
           :insert="true"
-          :lunar="false" 
+          :lunar="false"
           :showMonth='false'
           :start-date="'2000-3-2'"
           :end-date="'2100-5-20'"
@@ -712,35 +712,7 @@ export default {
       this.orderMarketing= !this.orderMarketing;
       this.orderMarkStr = data; // 改变了父组件的值
     }
-    ,
-    selectInfoOrderBuy(data) { // 点击子组件按钮时触发事件
-      this.orderBuy= !this.orderBuy;
-      this.orderBuyStr = data; // 改变了父组件的值
-    },
-    selectInfoOrderDistribution(data) { // 点击子组件按钮时触发事件
-      this.orderDistribution= !this.orderDistribution;
-      this.orderDistributionStr = data; // 改变了父组件的值
-    },
-    // 选中某个复选框时，由checkbox时触发
-    checkboxChange(e) {
-      console.log(e);
-    },
-    radioChange(e) {
-      console.log(e);
-    },
-    // 时间取消
-    calentCancleAction() {
-      this.$refs.popCalendar.close();
-    },
-    // 时间确定
-    calentVerifyAction() {
-      this.$refs.popCalendar.close();
-    },
-    // 选中的时间
-    calendarChange(e) {
-      console.log(e)
-      this.selectData = e.fulldate;
-    }
+
   }
 };
 </script>

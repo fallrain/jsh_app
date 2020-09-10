@@ -227,7 +227,9 @@
               class="jShoppingCartItem-stock-picker-l"
             >
               <view class="jShoppingCartItem-stock-picker-dot"></view>
-              {{slotProps.data.stockType}}{{slotProps.data.qty}}台
+              <text style="color:#666; font-size:13px; margin-right:6px;">{{slotProps.data.stockType}}</text>
+              <text>{{slotProps.data.qty}}</text>
+              台
             </view>
             <view
               class="jShoppingCartItem-stock-picker-r"

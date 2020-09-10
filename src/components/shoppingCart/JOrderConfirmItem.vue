@@ -88,11 +88,11 @@
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
             </view>
             <view
-              @tap="goRemarks(index)"
+              @tap="goRemarks(index,goods.splitOrderProductList[0])"
               class="jOrderConfirmItem-detail-mark-item-val">
-              <view v-if="JSON.stringify(Bbaddress)!=='{}'">
+              <view v-if="goods.splitOrderProductList[0].address&&JSON.stringify(goods.splitOrderProductList[0].address)!=='{}'">
                 <text>
-                  {{goods.splitOrderProductList[0].spareAddress.address}} {{goods.splitOrderProductList[0].spareAddress.addressDetail}} {{goods.splitOrderProductList[0].spareAddress.name}} {{goods.splitOrderProductList[0].spareAddress.mobile}}
+                  {{goods.splitOrderProductList[0].addressName}}
                 </text>
                 <text class="detailAddress">
                   查看详情
@@ -361,9 +361,10 @@ export default {
       /* 展示付款地址 */
       this.payerPickerShow = true;
     },
-    goRemarks(index) {
+    goRemarks(index, goodsInfo) {
+      const goodInfo = JSON.stringify(goodsInfo)
       uni.navigateTo({
-        url: `/pages/shoppingCart/orderConfirmRemarks?orderIndex=${this.index}&productIndex=${index}`
+        url: `/pages/shoppingCart/orderConfirmRemarks?orderIndex=${this.index}&productIndex=${index}&goodInfo=${goodInfo}`
       });
     },
     isCreditModeChange() {
