@@ -57,11 +57,16 @@ export default {
       return Vue.prototype.customerService.addressesList(1).then(({ code, data }) => {
         if (code === '1') {
           // 当前配送地址修改(选出默认地址)
-          const defaultIndex = data.findIndex(v => v.defaultFlag === 1);
+          let defaultIndex = data.findIndex(v => v.defaultFlag === 1);
           if (defaultIndex > -1) {
-            // 更新默认送达方store
-            commit(USER.UPDATE_DEFAULT_SEND_TO, data[defaultIndex]);
+            defaultIndex = 0;
           }
+          // 更新默认送达方store
+          commit(USER.UPDATE_DEFAULT_SEND_TO, data[defaultIndex]);
+          return {
+            code,
+            data
+          };
         }
       });
     }

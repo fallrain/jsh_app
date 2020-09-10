@@ -151,7 +151,8 @@ import JPopPicker from '../../components/form/JPopPicker';
 import './css/shoppingCart.scss';
 import {
   mapGetters,
-  mapMutations
+  mapMutations,
+  mapActions
 } from 'vuex';
 import {
   GOODS_LIST,
@@ -220,42 +221,7 @@ export default {
       // 是否显示配送地址选择
       isShowAdsPicker: false,
       // 送达方数据
-      sendCustomerList: [
-        {
-          flag: 'yc',
-          name: '云仓',
-          checked: false,
-          // 没有子元素
-          isSingle: true,
-          isHide: true
-        },
-        {
-          flag: 'ydyc',
-          name: '异地云仓',
-          childrenType: 'short',
-          isCanBeCheck: false,
-          checked: false,
-          isExpand: false,
-          isShowSearch: true,
-          searchValue: '',
-          searchKeys: ['name'],
-          children: [],
-          isHide: true
-        },
-        {
-          flag: 'sale',
-          name: '配送至',
-          isCanBeCheck: false,
-          checked: false,
-          isExpand: true,
-          childrenType: 'long',
-          isShowSearch: true,
-          searchValue: '',
-          searchKeys: ['address', 'addressCode'],
-          children: [],
-          isHide: false
-        },
-      ],
+      sendCustomerList: [],
       // 异地云仓数据
       offSiteData: [],
       // 选中的送达方cy
@@ -337,7 +303,12 @@ export default {
       USER.UPDATE_DEFAULT_SEND_TO,
       GOODS_LIST.UPDATE_IS_CART_UPDATE,
     ]),
+    ...mapActions([
+      USER.UPDATE_DEFAULT_SEND_TO_ASYNC,
+    ]),
     setPageInfo() {
+      // 送达方数据初始化
+      this.resetSendCustomerList();
       // 云仓权限
       this.getCloudStockStateAndGen();
       // 设置产业数据
@@ -355,6 +326,17 @@ export default {
     },
     reloadPageInfo() {
       /* 重载页面信息 */
+      // 回到顶部
+      uni.pageScrollTo({
+        scrollTop: 0,
+        duration: 100
+      });
+      // 送达方数据重置
+      this.resetSendCustomerList();
+      // 重置送达方
+      this.resetSendAddress();
+      // 送达方
+      this.getSendCustomer();
       // 云仓权限
       const getCloudStockState = this.getCloudStockStateAndGen();
       // 刷新购物车列表缓存
@@ -375,6 +357,45 @@ export default {
         getSpecialPrice,
         getCloudStockState
       ]).then(() => true);
+    },
+    resetSendCustomerList() {
+      /* 先重置送达方数据 */
+      this.sendCustomerList = [
+        {
+          flag: 'yc',
+          name: '云仓',
+          checked: false,
+          // 没有子元素
+          isSingle: true,
+          isHide: true
+        },
+        {
+          flag: 'ydyc',
+          name: '异地云仓',
+          childrenType: 'short',
+          isCanBeCheck: false,
+          checked: false,
+          isExpand: false,
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['name'],
+          children: [],
+          isHide: true
+        },
+        {
+          flag: 'sale',
+          name: '配送至',
+          isCanBeCheck: false,
+          checked: false,
+          isExpand: true,
+          childrenType: 'long',
+          isShowSearch: true,
+          searchValue: '',
+          searchKeys: ['address', 'addressCode'],
+          children: [],
+          isHide: false
+        },
+      ];
     },
     async getCloudStockStateAndGen() {
       /* 获取云仓权限 */
@@ -417,6 +438,10 @@ export default {
         this.industryGroupData = industryGroupData;
       });
     },
+    resetSendAddress() {
+      /* 重置送发方 */
+      this.choseSendAddress = {};
+    },
     resetIndustry() {
       /* 重置产业 */
       this.choseIndustryOptions = ['*'];
@@ -428,7 +453,6 @@ export default {
     industryPickerChange(data, checkedIndustryOptions) {
       /* 产品组picker change */
       // 先回到顶部
-      console.log(data);
       uni.pageScrollTo({
         scrollTop: 0,
         duration: 100
@@ -482,9 +506,7 @@ export default {
     },
     async getSendCustomer() {
       /* 获取售达方信息 */
-      const { code, data } = await this.customerService.getSendCustomer({
-        status: 1
-      });
+      const { code, data } = await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       if (code === '1') {
         const detail = data.map(v => ({
           id: v.addressCode,
