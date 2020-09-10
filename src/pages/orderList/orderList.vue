@@ -21,7 +21,7 @@
       @filterReset="filterReset"
     >
       <template>
-        <view>
+        <view >
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
               <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia left-10"></i></text>
@@ -488,6 +488,29 @@ export default {
     filterReset() {
 
     },
+        productBandChange(data, productBandOptions) {
+      console.log('=======productBandChange========')
+      console.log(data)
+      console.log(productBandOptions)
+      
+      this.producntBandValue = productBandOptions[0].value;
+      this.isProductBandShow = false;
+      this.isShowGoodsFilterDrawer = true;
+    },
+    async productBandAction() {
+      this.isShowGoodsFilterDrawer = false;
+      await this.getDictionaryByWhereFun({
+        dictionaryType: "INDUSTRIAL"//产业筛选
+      });
+      await this.getDictionaryByWhereFun({
+        dictionaryType:"PRODUCT_BRAND"
+      });
+      this.isProductBandShow = true;
+    },
+    // 产业
+    industryAction() {
+
+    },
     // 过滤条件
     async moreAction() {
       console.log('==============');
@@ -644,9 +667,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .orList{
     background: #F5F5F5;
+
   }
   .iconfont iconshaixuan{
     width: 116px;
