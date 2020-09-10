@@ -478,7 +478,6 @@ export default {
         };
         groupingArr.push(groupingNoItem);
         item.splitOrderDetailList.forEach((v) => {
-          debugger;
           const singleItem = {
             productType,
             isTCTP: v.isTCTP,
