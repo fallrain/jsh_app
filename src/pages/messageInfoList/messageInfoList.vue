@@ -1,24 +1,28 @@
 <template>
     <view class="message">
-        <messageInfoListTab
-            @tabClick="tabClick"
-            @tabmsg="tabmsg"
-        >
-        </messageInfoListTab>
-
-        <view class="message-concent">
-          <view class="uni-flex uni-info" >
-            <view class=" message-unread">共{{unread}}条消息未读</view>
-            <view class=" message-read" @click="readAll">全部已读</view>
-            <view class=" message-vertical-line"></view>
-            <view class=" message-category" @tap="getIsMessage">
-              消息类别
-            </view>
-            <i class="iconfont iconxia message-icon" @tap="getIsMessage"></i>
-            <view class="message-list">
-              <message-info-list-more :isMessage="isMessage"></message-info-list-more>
-            </view>
+      <messageInfoListTab
+          @tabClick="tabClick"
+          @tabmsg="tabmsg"
+      >
+      </messageInfoListTab>
+      <view class="message-concent" v-if="tabIndex === 0">
+        <view class="uni-flex uni-info" >
+          <view class=" message-unread">共{{unread}}条消息未读</view>
+          <view class=" message-read" @click="readAll">全部已读</view>
+          <view class=" message-vertical-line"></view>
+          <view class=" message-category" @tap="getIsMessage">
+            {{ tips }}
           </view>
+          <i class="iconfont iconxia message-icon" @tap="getIsMessage"></i>
+          <view class="message-list">
+            <message-info-list-more :isMessage="isMessage" @messageName="messageName"></message-info-list-more>
+          </view>
+        </view>
+        <mescroll-body
+          ref="mescrollRef"
+          @init="mescrollInit"
+          @up="upCallback"
+        >
           <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.pk,item)">
             <view class="message-circular" v-if="isExpand"></view>
             <view class="uni-flex uni-row" >
@@ -31,49 +35,60 @@
                 <view class="message-spot isNew" v-show="item.isNew"></view>
             </view>
           </view>
-        </view>
+        </mescroll-body>
+      </view>
+      <view>
+        <message-task></message-task>
+      </view>
     </view>
 </template>
 <script>
 import messageInfoListTab from './messageInfoListTab';
+import messageTask from './messageTask';
 import messageInfoListMore from './messageInfoListMore';
-import { mapGetters } from 'vuex';
-import { USER } from '@/store/mutationsTypes';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '@/store/mutationsTypes';
 
 export default {
   name: 'messageInfoList',
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
     messageInfoListTab,
-    messageInfoListMore
+    messageInfoListMore,
+    MescrollBody,
+    messageTask
   },
 
   data() {
     return {
-      // tabs: [
-      //   {
-      //     id: '1',
-      //     name: '消息',
-      //     active: true
-      //   },
-      //   {
-      //     id: '2',
-      //     name: '任务',
-      //     active: false
-      //   }
-      // ],
       isMessage: false,
       // 未读
       isExpand: true,
-      tabIndex: 1,
+      flag: false,
+      tabIndex: 0,
       unread: 0,
       messageList: [],
       messageactive: 0,
       filter: {},
-      complete: 0
+      complete: 0,
+      tips: '消息提示',
+      typeName: '',
+
     };
   },
   created() {
     // this.getNotReadMessageCount();
+    console.log(this.tabIndex);
 
   },
   watch: {
@@ -89,10 +104,28 @@ export default {
       console.log(index);
       // this.tabs = e
       this.tabIndex = index;
-      this.getmessageList();
+      this.getMessageList();
+    },
+    messageName(item) {
+      console.log(item);
+      this.isMessage = false;
+      this.tips = item.typeNameShow;
+      if (item.typeNameShow === '全部消息') {
+        this.filter = {};
+      }
+      this.typeName = item.typeName;
+      console.log(this.typeName);
+      this.flag = false;
+      this.getMessageList();
     },
     getIsMessage() {
       this.isMessage = !this.isMessage;
+    },
+    async upCallback(pages) {
+      /* 上推加载 */
+      console.log('3333333dddddddddddddddddd');
+      const scrollView = await this.getMessageList();
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     getSearch() {
     //  获取不同条件下的传参
@@ -101,17 +134,23 @@ export default {
         pageSize: 10,
         unitId: `${this.saleInfo.customerCode}_admin`,
       };
-      if (!this.isExpand) {
+      if (!this.isExpand && this.flag) {
         this.filter.complete = 1;
         this.filter.createDateStr = '';
       }
+      const massTypeName = {};
+      if (this.typeName) {
+        massTypeName.typeName = this.typeName;
+      }
       param = {
         ...param,
-        ...this.filter
+        ...this.filter,
+        ...massTypeName
       };
       return param;
     },
-    async getmessageList() {
+    async getMessageList() {
+      const scrollView = {};
       const param = this.getSearch();
       console.log(param);
       const { code, data } = await this.messageService.messageList(param);
@@ -119,19 +158,25 @@ export default {
         const {
           list
         } = data;
+        scrollView.pageSize = data.pageSize;
+        scrollView.total = data.total;
         // console.log(page.result);
         this.messageList = list;
         // this.complete =
         console.log(this.messageList);
-        this.messageList.map(item => {
-          console.log(item);
+        this.messageList.map((item) => {
+          // console.log(item);
+          let num = 0;
           if (item.complete === 1) {
             this.isExpand = false;
           } else {
             this.isExpand = true;
+            num += 1;
           }
+          this.unread = num;
         });
       }
+      return scrollView
     },
     showDetail(id, item) {
       console.log(id, JSON.stringify(item));
@@ -161,7 +206,9 @@ export default {
       });
       if (code === '1') {
         this.isExpand = false;
-        this.getmessageList();
+        this.flag = true;
+        this.unread = 0;
+        this.getMessageList();
       }
     },
     // 未读
@@ -174,7 +221,6 @@ export default {
     //     this.unread = data;
     //   }
     // }
-
 
 
   },

@@ -610,6 +610,12 @@ export default {
 </script>
 
 <style scoped>
+  /deep/ .uni-drawer__content{
+    width:608px;
+  }
+  /deep/ .scroll-container{
+    width:608px;
+  }
   .orList{
     background: #F5F5F5;
   }
