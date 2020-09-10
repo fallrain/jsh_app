@@ -647,6 +647,16 @@ export default {
           }
           const curTotal = this.jshUtil.arithmetic(invoicePrice, num, 3);
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
+          // 查找正品样机
+          const realExampleProduct = versions.find(vs => vs.$isRealProduct);
+          if (realExampleProduct) {
+            const {
+              invoicePrice: realInvoicePrice,
+              usableQty
+            } = realExampleProduct;
+            const curRealTotal = this.jshUtil.arithmetic(realInvoicePrice, usableQty, 3);
+            totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curRealTotal);
+          }
         }
       });
       totalGoodsPrice = this.jshUtil.formatNumber(totalGoodsPrice, 2);

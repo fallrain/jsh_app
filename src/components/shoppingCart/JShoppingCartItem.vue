@@ -158,7 +158,7 @@
             class="jShoppingCartItem-btm-inf-wrap"
           >
             <view
-              v-if="inf.origin==='update'"
+              v-if="inf.$origin==='update'"
               @tap="handleDelVersion(inf)"
               class="jShoppingCartItem-btm-inf-close iconfont iconcross"
             ></view>
@@ -169,6 +169,42 @@
           </view>
         </view>
       </block>
+      <view>
+        <template
+          v-for="(item,index) in choseVersions"
+        >
+          <view
+            :key="index"
+            class="jShoppingCartItem-btm-inf-real-wrap"
+            v-if="item.$isRealProduct"
+          >
+            <view
+              class="jShoppingCartItem-btm-inf-real-icon mr10"
+            >
+              <view class="iconfont iconcalculator"></view>
+            </view>
+            <view class="jShoppingCartItem-btm-inf-real-cnt">
+              <view class="jShoppingCartItem-btm-inf-real-title j-text-ellipsis">
+                样机版本：{{item.versionCode}}
+              </view>
+              <view class="jShoppingCartItem-btm-inf-real-text-wrap">
+                <text class="mr20">价格：¥{{item.invoicePrice}}</text>
+                <text class="mr20">数量：{{item.usableQty}}</text>
+                <text class="mr20">小计：¥{{item.$realProductTotalPrice}}</text>
+              </view>
+            </view>
+            <view
+              class="jShoppingCartItem-btm-inf-real-close-wrap"
+              v-if="item.$origin==='update'"
+            >
+              <view
+                @tap="handleDelVersion(item)"
+                class="jShoppingCartItem-btm-inf-real-close iconfont iconcross"
+              ></view>
+            </view>
+          </view>
+        </template>
+      </view>
     </view>
     <j-version-specifications
       :show.sync="isShowSpecifications"
@@ -421,7 +457,7 @@ export default {
           $origin,
           $isTransfer
         } = curVersion;
-        if (JSON.stringify(curVersion) === '{}' || (priceType === 'PT' && !$isTransfer)) {
+        if (JSON.stringify(curVersion) === '{}' || (priceType === 'PT' && !$isTransfer) || curVersion.$isRealProduct) {
           return '';
         }
         const {
@@ -443,7 +479,7 @@ export default {
         const inf = {
           $parentId,
           $choseIndex,
-          origin: $origin
+          $origin
         };
         if (priceType) {
           inf.content = `${getGoodsInCartPriceType()[priceType.toUpperCase()]}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
