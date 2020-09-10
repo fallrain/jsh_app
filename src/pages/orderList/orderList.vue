@@ -238,6 +238,24 @@
         :choseKeys.sync="choseProductBandKeys"
         @change="productBandChange"
       ></j-pop-picker>
+    <uni-popup
+      ref="popCalendar"
+      type="bottom"
+      @change="change"
+      >
+      <template>
+        <view class="calentdarContent">
+          <uni-calendar 
+          :insert="true"
+          :lunar="false" 
+          :showMonth='false'
+          :start-date="'2019-3-2'"
+          :end-date="'2019-5-20'"
+          @change="change"
+          />
+        </view>
+      </template>
+    </uni-popup>
   </view>
 </template>
 
@@ -448,7 +466,8 @@ export default {
       productBandList: [],
       isProductBandShow: false,
       choseProductBandKeys: [],
-      producntBandValue: ''
+      producntBandValue: '',
+      isShowCalendarDrawer:true,
     };
   },
   computed: {
@@ -478,11 +497,9 @@ export default {
     filterReset() {
 
     },
-        productBandChange(data, productBandOptions) {
+    // 选择品牌后
+    productBandChange(data, productBandOptions) {
       console.log('=======productBandChange========')
-      console.log(data)
-      console.log(productBandOptions)
-      
       this.producntBandValue = productBandOptions[0].value;
       this.isProductBandShow = false;
       this.isShowGoodsFilterDrawer = true;

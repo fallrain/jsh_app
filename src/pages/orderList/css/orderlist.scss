@@ -129,6 +129,16 @@
   }
 
 }
+// .uni-calendar-item__weeks-box-text {
+//   background-color: #ED2856;
+// }
+.uni-calendar-item--isDay[data-v-7425cf4a]{
+  background-color: #ED2856;
+  opacity: 1;
+  color: #fff;
+  border-radius: 25px;
+}
+
 .inputs{
   display: flex;
   align-items: center;
