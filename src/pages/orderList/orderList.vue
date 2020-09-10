@@ -287,13 +287,20 @@
       >
       <template>
         <view class="calentdarContent">
+          <view style="display:flex">
+            <view @click="calentCancleAction" class="calentCancle">取消</view>
+            <view class="calentdarTitle">
+                选择时间
+            </view>
+            <view @click="calentVerifyAction" class="calentVerify">确定</view>
+          </view>
           <uni-calendar 
           :insert="true"
           :lunar="false" 
           :showMonth='false'
-          :start-date="'2019-3-2'"
-          :end-date="'2019-5-20'"
-          @change="change"
+          :start-date="'2000-3-2'"
+          :end-date="'2100-5-20'"
+          @change="calendarChange"
           />
         </view>
       </template>
@@ -514,6 +521,9 @@ export default {
       choseProductBandKeys: [],
       producntBandValue: '',
       isShowCalendarDrawer:true,
+      // 用户选中的日期
+      selectData:'',
+      // 用户确定
     };
   },
   computed: {
@@ -718,6 +728,19 @@ export default {
     radioChange(e) {
       console.log(e);
     },
+    // 时间取消
+    calentCancleAction() {
+      this.$refs.popCalendar.close();
+    },
+    // 时间确定
+    calentVerifyAction() {
+      this.$refs.popCalendar.close();
+    },
+    // 选中的时间
+    calendarChange(e) {
+      console.log(e)
+      this.selectData = e.fulldate;
+    }
   }
 };
 </script>
