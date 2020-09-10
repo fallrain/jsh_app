@@ -714,13 +714,11 @@ export default {
         sendtoCode: this.defaultSendTo.customerCode, // 送达方编码
       });
       if (code === '1') {
+        this.getShoppingCartList();
         uni.showToast({
           title: '加入购物车成功',
+          duration: 3000
         });
-        this.getShoppingCartList();
-
-
-
       } else {
         uni.showToast({
           title: '加入购物车成功失败请重试',

@@ -17,7 +17,6 @@
           <view class="transferDetailItem-detail-cnt-img-wrap">
             <image
               :src="good.THUMBNAIL"
-              @tap="goDetail(good)"
             >
           </view>
           <view class="transferDetailItem-detail-cnt-inf">
