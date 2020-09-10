@@ -28,27 +28,27 @@ export default {
     orderNoClick(val) {
       if (val === '1') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '单品');
+        this.$emit('selectInfoOrderMarketing', val, '单品');
       }
       if (val === '2') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '抢单');
+        this.$emit('selectInfoOrderMarketing', val, '抢单');
       }
       if (val === '3') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '套餐');
+        this.$emit('selectInfoOrderMarketing', val, '套餐');
       }
       if (val === '4') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '成套');
+        this.$emit('selectInfoOrderMarketing', val, '成套');
       }
       if (val === '5') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '组合');
+        this.$emit('selectInfoOrderMarketing', val, '组合');
       }
       if (val === '6') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '反向定制');
+        this.$emit('selectInfoOrderMarketing', val, '反向定制');
       }
     },
   }
