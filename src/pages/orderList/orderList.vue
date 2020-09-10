@@ -27,7 +27,10 @@
               <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia left-10"></i></text>
             </view>
           </view>
-          <order-list-type :is-order-type="orderNoshow"></order-list-type>
+          <order-list-type
+            :is-order-type="orderNoshow"
+            @selectInfoOrderNo="selectInfoOrderNo"
+          ></order-list-type>
           <view
             class="orderList-drawer-filter-list"
             >
@@ -87,7 +90,7 @@
         <view>
           <view class="addressee">
             <view>
-              <text @click="getModel">{{orderModelStr}}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia left-10"></i></text>
             </view>
           </view>
           <order-list-model :is-order-model="orderModelshow"></order-list-model>
@@ -138,12 +141,13 @@
                   type="text"
                   :placeholder="`请选择`"
                   >
-                  <i class="iconfont iconxia"></i>
+                  <i class="iconfont iconxia"  @click="getReview"></i>
                   </view>
+                <order-list-review :is-orderreview="orderReviewshow"></order-list-review>
               </view>
               <view class="industry-brand-child">
                 <view >
-                  <text>营销活动</text>
+                  <text >营销活动</text>
                 </view>
                   <view class="inputs">
                   <input
@@ -151,8 +155,9 @@
                   type="text"
                   :placeholder="`请选择`"
                   >
-                  <i class="iconfont iconxia"></i>
+                  <i class="iconfont iconxia" @click="getMarketing"></i>
                   </view>
+                <order-list-marketing :is-orderremarketing="orderMarketing"></order-list-marketing>
             </view>
           </view>
         </view>
@@ -168,8 +173,9 @@
                             type="text"
                             :placeholder="`请选择`"
                     >
-                    <i class="iconfont iconxia"></i>
+                    <i class="iconfont iconxia" @click="getBuy"></i>
                 </view>
+              <order-list-buy :is-order-buy="orderBuy"></order-list-buy>
             </view>
             <view class="industry-brand-child">
               <view >
@@ -181,8 +187,9 @@
                     type="text"
                     :placeholder="`请选择`"
                     >
-                    <i class="iconfont iconxia"></i>
+                    <i class="iconfont iconxia" @click="getDistribution"></i>
                 </view>
+              <order-list-distribution :is-order-distribution="orderDistribution"></order-list-distribution>
             </view>
           </view>
         </view>
@@ -240,6 +247,10 @@ import JTab from '../../components/common/JTab';
 import JDrawer from '../../components/form/JDrawer';
 import OrderListType from '../../components/orderList/order-list-type';
 import OrderListModel from '../../components/orderList/order-list-model';
+import OrderListReview from '../../components/orderList/order-list-review';
+import OrderListMarketing from '../../components/orderList/order-list-marketing';
+import OrderListBuy from '../../components/orderList/order-list-purchasemethod';
+import OrderListDistribution from '../../components/orderList/order-list-distribution';
 import JPopPicker from '../../components/form/JPopPicker';
 import './css/orderlist.scss';
 
@@ -261,14 +272,22 @@ export default {
     JDrawer,
     JPopPicker,
     OrderListType,
-    OrderListModel
+    OrderListModel,
+    OrderListReview,
+    OrderListMarketing,
+    OrderListBuy,
+    OrderListDistribution
   },
   data() {
     return {
       orderNoshow: false,
       orderModelshow: false,
-      orderTypeStr:'订单号',
-      orderModelStr:'产品型号',
+      orderReviewshow: false,
+      orderMarketing: false,
+      orderBuy: false,
+      orderDistribution: false,
+      orderTypeStr: '订单号',
+      orderModelStr: '产品型号',
       isShowGoodsFilterDrawer: false,
       orderListInfo: [],
       total: 0,
@@ -424,12 +443,12 @@ export default {
       ],
       lableValue: 'orange',
       // 产业
-      industryList:[],
+      industryList: [],
       // 品牌
-      productBandList:[],
-      isProductBandShow:false,
-      choseProductBandKeys:[],
-      producntBandValue:''
+      productBandList: [],
+      isProductBandShow: false,
+      choseProductBandKeys: [],
+      producntBandValue: ''
     };
   },
   computed: {
@@ -463,26 +482,26 @@ export default {
     async moreAction() {
       console.log('==============');
       this.isShowGoodsFilterDrawer = true;
-      console.log(this.productBandList)
+      console.log(this.productBandList);
     },
     async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '1') {
-        if(param.dictionaryType == 'INDUSTRIAL') {
+        if (param.dictionaryType == 'INDUSTRIAL') {
           this.industryList = data;
         } else {
-        console.log(`===========getDictionaryByWhereFun===========`);
+          console.log('===========getDictionaryByWhereFun===========');
           // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
           for (let index = 0; index < data.length; index++) {
             const element = data[index];
             const pb = {
-              key:element.code,
-              value:element.codeName
-            }
+              key: element.code,
+              value: element.codeName
+            };
             this.productBandList.push(pb);
           }
         }
-        console.log(data)
+        console.log(data);
       }
       console.log('===========getDictionaryByWhereFun===========');
     },
@@ -557,15 +576,35 @@ export default {
       });
     },
     getType() {
-      this.orderNoshow= !this.orderNoshow;
+      this.orderNoshow = !this.orderNoshow;
       console.log(this.orderNoshow);
-
     },
     getModel() {
-      this.orderModelshow= !this.orderModelshow;
+      this.orderModelshow = !this.orderModelshow;
       console.log(this.orderModelshow);
-
     },
+    getReview() {
+      this.orderReviewshow = !this.orderReviewshow;
+      console.log(this.orderReviewshow);
+    },
+    getMarketing() {
+      this.orderMarketing = !this.orderMarketing;
+      console.log(this.orderMarketing);
+    },
+    getBuy() {
+      this.orderBuy = !this.orderBuy;
+      console.log(this.orderBuy);
+    },
+    getDistribution() {
+      this.orderDistribution = !this.orderDistribution;
+      console.log(this.orderDistribution);
+    },
+    selectInfoOrderNo(data) { // 点击子组件按钮时触发事件
+      console.log(data);
+      this.orderNoshow = !this.orderNoshow;
+      this.orderTypeStr = data; // 改变了父组件的值
+    }
+
   }
 };
 </script>

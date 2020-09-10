@@ -24,8 +24,8 @@
 }
 .orderList-drawer-filter-input {
   font-size: 12px;
-  height: 40px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 50px;
   border-radius: 30px;
   border:2px solid rgba(219,219,219,1);
   padding: 0 16px;
@@ -34,7 +34,8 @@
 .orderList-drawer-filter-down-input {
   font-size: 12px;
   padding: 0 16px;
-
+  height: 50px;
+  line-height: 50px;
 }
 .industry-brand{
   overflow: hidden;
@@ -47,6 +48,7 @@
   height: 100px;
   width: calc(50% - 20px);
   margin-right: 20px;
+
 }
 .addressee {
   display: flex;

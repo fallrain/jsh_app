@@ -2,10 +2,10 @@
   <view v-show="isOrderType" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>订单号</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>
+      <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>订单号</view>
+      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>
+      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>
+      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>
     </view>
   </view>
 </template>
@@ -14,15 +14,35 @@
 export default {
   name: 'orderListItemType',
   props: {
-
+    orderNo: String,
     isOrderType: {
       type: Boolean,
       default: false
     },
-    tctpConfirmButton:{
-      type:String,
+    tctpConfirmButton: {
+      type: String,
     }
   },
+  methods: {
+    orderNoClick(val) {
+      if (val === '1'){
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderNo', '订单号');
+      }
+      if (val === '2'){
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderNo', '整单号');
+      }
+      if (val === '3'){
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderNo', 'GVC单号');
+      }
+      if (val === '4'){
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderNo', '物流单号');
+      }
+    },
+  }
 };
 </script>
 
