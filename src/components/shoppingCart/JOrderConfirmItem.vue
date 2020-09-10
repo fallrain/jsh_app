@@ -118,7 +118,12 @@
         </view>
         <view class="dis-flex">
           <view class="jOrderConfirmItem-total-text">共计金额：</view>
-          <view class="jOrderConfirmItem-total-price ml20">¥ {{toFixedNum(orderItem.totalMoney)}}</view>
+          <view v-if="!orderItem.totalPreState" class="jOrderConfirmItem-total-price ml20">
+            ¥ {{toFixedNum(orderItem.totalMoney)}}
+          </view>
+          <view v-else class="jOrderConfirmItem-total-price ml20">
+            ¥ {{toFixedNum(orderItem.totalPreAmount)}}
+          </view>
         </view>
       </view>
       <view @tap="chooseInvoice" v-if="isCT" class="dis-flex mt12">
@@ -238,6 +243,9 @@ export default {
     }
   },
   watch: {
+    selfValue(val) {
+      this.orderItem.conCode = val;
+    },
     payInfoData() {
       // 初始化地址信息
       for (const key in this.payInfoData) {
@@ -283,6 +291,9 @@ export default {
       this.invoiceOptions = this.billInfoList;
       this.currentinvoiceOption[0] = this.invoiceOptions[0].key;
       this.currentinvoice = this.invoiceOptions[0];
+      this.orderItem.billNo = this.currentinvoice.invoicerCode;
+      this.orderItem.billName = this.currentinvoice.invoicerName;
+      console.log(this.orderItem);
     },
     currentinvoiceOption(val) {
       console.log(val);
@@ -324,7 +335,9 @@ export default {
     getPayerMoneyInfo() {
       const currentPayerMoneyInfo = {
       };
+      console.log(this.orderItem);
       this.orderItem.splitOrderDetailList.forEach((item) => {
+        console.log(item)
         const itemObj = {
           totalMoney: item.totalMoney,
           customerCode: this.currentPayer[item.orderNo].customerCode,
@@ -333,6 +346,9 @@ export default {
           bookbalance: this.currentPayer[item.orderNo].payerBalance.bookbalance,
           payerType: this.currentPayer[item.orderNo].payerType
         };
+        if (this.orderItem.totalPreState === true) {
+          itemObj.totalMoney = this.orderItem.totalPreAmount;
+        }
         currentPayerMoneyInfo[item.orderNo] = itemObj;
       });
       this.$emit('payerMoneyInfo', currentPayerMoneyInfo);

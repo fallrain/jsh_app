@@ -44,11 +44,14 @@
         <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
       </view>
       <view class="jShoppingCartItem-cnt-img-wrap">
-        <image :src="goods.productList && goods.productList[0].productImageUrl" @tap="goDetail(goods)"></image>
+        <image
+          :src="goods.productList && goods.productList[0].productImageUrl"
+          @tap="goDetail(goods)"
+        ></image>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
-        <view class="jShoppingCartItem-cnt-inf-title">{{goods.productList &&
-          goods.productList[0].productName}}
+        <view class="jShoppingCartItem-cnt-inf-title">
+          {{goods.productList && goods.productList[0].productName}}
         </view>
         <view class="jShoppingCartItem-cnt-price-inf">
           <view class="jShoppingCartItem-cnt-price">
@@ -57,14 +60,14 @@
           <view class="jShoppingCartItem-cnt-price-inf-item">
             小计：¥{{totalChosePrice}}
           </view>
-          <u-number-box
+          <j-number-box
             :max="maxGoodsNumber"
             :min="1"
             v-model="goods.number"
             @blur="goodsNumChange"
             @minus="goodsNumChange"
             @plus="goodsNumChange"
-          ></u-number-box>
+          ></j-number-box>
         </view>
       </view>
       <view
@@ -76,18 +79,18 @@
       <view class="jShoppingCartItem-btm-options-wrap">
         <view class="jShoppingCartItem-btm-tags mr34">
           <view
-            class="jShoppingCartItem-btm-tag"
             v-if="goods.productList[0].swrhFlag==='Y'"
+            class="jShoppingCartItem-btm-tag"
           >统
           </view>
           <view
-            class="jShoppingCartItem-btm-tag"
             v-if="goods.productList[0].signStatus==='Y'"
+            class="jShoppingCartItem-btm-tag"
           >云
           </view>
           <view
-            class="jShoppingCartItem-btm-tag"
             v-if="goods.productList[0].ydzfFlag==='Y'"
+            class="jShoppingCartItem-btm-tag"
           >异
           </view>
         </view>
@@ -97,8 +100,8 @@
         >
           库存：{{goods.productList[0].productStock}}
           <view
-            class="iconfont iconxia"
             v-if="stockOptions.length"
+            class="iconfont iconxia"
           ></view>
         </view>
         <view
@@ -114,8 +117,8 @@
           <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
         </view>
         <view
-          class="jShoppingCartItem-btm-switch-wrap"
           v-if="isFundsFirst"
+          class="jShoppingCartItem-btm-switch-wrap"
         >
           <j-switch
             :active.sync="goods.isFundsFirstMode"
@@ -151,13 +154,13 @@
           :key="index"
         >
           <view
-            class="jShoppingCartItem-btm-inf-wrap"
             v-if="inf"
+            class="jShoppingCartItem-btm-inf-wrap"
           >
             <view
+              v-if="inf.origin==='update'"
               @tap="handleDelVersion(inf)"
               class="jShoppingCartItem-btm-inf-close iconfont iconcross"
-              v-if="inf.origin==='update'"
             ></view>
             <view class="jShoppingCartItem-btm-inf-icon">
               <view class="iconfont iconi"></view>
@@ -250,10 +253,12 @@ import {
 } from '@/lib/dataDictionary';
 
 import AddNumberForm from '@/model/AddNumberForm';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'JShoppingCartItem',
   components: {
+    JNumberBox,
     JPopPicker,
     JVersionSpecifications,
     JSwitch,
@@ -344,7 +349,7 @@ export default {
       } = product;
       const inProductGroup = directProducts.find(v => v === productGroup);
       // 如果选中了工程版本，也会显示【直发】switch
-      return inProductGroup || !!this.choseVersions.find(v => v.priceType === 'GC');
+      return inProductGroup || !!(this.choseVersions.find(v => v.priceType === 'GC') && !this.choseVersions.find(v => v.$isTransfer));
     },
     isCreditModel() {
       /* 是否支持信用模式 */
@@ -488,7 +493,7 @@ export default {
     },
     maxGoodsNumber() {
       /* 计算最大可购买数量 */
-      let maxNum = Number.MAX_VALUE;
+      let maxNum = Number.MAX_SAFE_INTEGER;
       const {
         activityType,
         // 可购买的数量
@@ -503,17 +508,17 @@ export default {
         // 设置各个版本的最低数量
         this.choseVersions.forEach((v) => {
           let curNum;
-          if (v.priceType) {
-            curNum = v.usableQty;
+          if (v.$isTransfer) {
+            curNum = v.number;
           } else {
-            curNum = v.num;
+            curNum = v.usableQty;
           }
           if (curNum < maxNum) {
             maxNum = curNum;
           }
         });
       }
-      return maxNum === undefined || maxNum === null ? Number.MAX_VALUE : maxNum;
+      return maxNum === undefined || maxNum === null ? Number.MAX_SAFE_INTEGER : maxNum;
     },
   },
   watch: {
@@ -542,7 +547,7 @@ export default {
         this.goodsChange();
       }
     },
-    maxGoodsNum(val) {
+    maxGoodsNumber(val) {
       /* 最大数量如果小于已选的数量，则修改已选数量之 */
       if (this.goods.number > val) {
         this.goods.number = val;
@@ -741,13 +746,29 @@ export default {
     },
     specificationsCustomCheckFun(versionData, list, parIndex, curIndex) {
       /* 版本价格自定义check fun */
+      const {
+        // 不支持的版本价格类型
+        notSupportPriceTypes
+      } = this.goods;
       const parent = versionData[parIndex];
       const version = list[curIndex];
+      const {
+        priceType
+      } = version;
       const curChecked = !version.checked;
       // 如果取消的话,直接修改并返回
       if (!curChecked) {
         version.checked = false;
         versionData[parIndex].list[curIndex] = version;
+        return versionData;
+      }
+      // 遇到不支持的版本，直接提示并返回
+      const notSupportPriceType = notSupportPriceTypes.find(v => v.type === priceType);
+      if (notSupportPriceType) {
+        uni.showModal({
+          title: '提示',
+          content: notSupportPriceType.msg
+        });
         return versionData;
       }
       const checkedList = [];
@@ -762,10 +783,7 @@ export default {
           }
         });
       });
-      const {
-        priceType
-      } = version;
-        // 工程、特价map
+      // 工程、特价map
       const map = {
         GC: 1,
         TJ: 1
@@ -944,7 +962,7 @@ export default {
         this.stockOptions = stock.storeInfo.map(v => ({
           ...v,
           value: v.stockType,
-          arrivalTime: v.arrivalTime.substring(0, 10)
+          arrivalTime: v.arrivalTime ? v.arrivalTime.substring(0, 10) : '--'
         }));
       }
     },

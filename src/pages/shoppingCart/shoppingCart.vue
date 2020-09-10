@@ -7,7 +7,8 @@
         @tabClick="tabClick"
       >
         <template #right>
-          <view v-show="index === 'gwc'"
+          <view
+            v-show="index === 'gwc'"
             @tap="showIndustryPicker"
             class="shoppingCart-tab-picker"
           >
@@ -19,7 +20,7 @@
     </view>
     <view v-show="index === 'gwc'">
       <view class="shoppingCart-ads">
-        <view class="shoppingCart-ads-total">共{{shoppingList.length}}件宝贝</view>
+        <view class="shoppingCart-ads-total">共{{dataLength.validLength}}件宝贝</view>
         <view
           @tap="showAdsPicker"
           class="shoppingCart-ads-detail"
@@ -29,45 +30,52 @@
         </view>
       </view>
       <view
-        class="shoppingCart-list-filter"
-        v-if="choseIndustryOptions[0]!=='*'"
+        class="shoppingCart-list-filter-text"
+        v-if="choseIndustryOptions[0]!=='*' || choseSendAddress.yunCangFlag"
       >
-        <view class="shoppingCart-list-filter-text">
-          {{choseIndustryData[0].value}}产业，共找到{{shoppingList.length - notInFilterLength}}件产品
-        </view>
+        <!-- {{choseIndustryData[0].value}}产业，-->
+        共找到{{dataLength.filterLength}}件产品
+      </view>
+      <view
+        v-if="dataLength.filterLength"
+        class="shoppingCart-list-filter"
+      >
         <view
-          :key="goods.id"
           v-for="(goods,index) in shoppingList"
+          :key="goods.id"
         >
           <!--筛选出来的产业才显示-->
           <j-shopping-cart-item
+            :ref="'shoppingCartItem'+goods.id"
+            v-if="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]"
             :beforeCreditModeChange="checkCreditQuota"
             :defaultSendTo="defaultSendTo"
             :goods="goods"
             :index="index"
-            :ref="'shoppingCartItem'+goods.id"
             :userInf="userInf"
             :versionPrice="versionPrice"
             :warehouseFlag="choseSendAddress.yunCangFlag"
             @change="goodsChange"
             @del="singleDeleteCart"
             @updateNumber="refreshShoppingCartList"
-            v-if="goods.$filterIndustryKey === choseIndustryOptions[0]"
           ></j-shopping-cart-item>
         </view>
-        <view class="shoppingCart-list-filter-text">购物车其他产品</view>
       </view>
       <view
+        class="shoppingCart-list-filter-text"
+        v-if="choseIndustryOptions[0]!=='*' || choseSendAddress.yunCangFlag"
+      >购物车其他产品</view>
+      <view
         class="shoppingCart-list"
-        v-if="notInFilterLength"
+        v-if="dataLength.notInFilterLength"
       >
         <view
           v-for="(goods,index) in shoppingList"
           :key="goods.id"
         >
           <j-shopping-cart-item
+            v-if="goods.isValid && goods.$filterIndustryKey === '*'"
             :ref="'shoppingCartItem'+goods.id"
-            v-if="goods.$filterIndustryKey === '*'"
             :beforeCreditModeChange="checkCreditQuota"
             :goods="goods"
             :index="index"
@@ -81,15 +89,15 @@
           ></j-shopping-cart-item>
         </view>
         <view
+          v-if="shoppingList.length && !shoppingList.filter(v=>v.isValid).length"
           class="shoppingCart-empty"
-          v-if="shoppingList.length && !shoppingList.filter(v=>v.isShow).length"
         >
           没有匹配的相关产品~
         </view>
       </view>
       <view
+        v-if="!shoppingList.length"
         class="shoppingCart-empty"
-        v-else
       >
         购物车空空如也~
       </view>
@@ -297,9 +305,31 @@ export default {
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
       isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
     }),
-    notInFilterLength() {
-      /* 不在筛选里的数据的长度 */
-      return this.shoppingList.filter(v => v.$filterIndustryKey === '*').length;
+    validList() {
+      /* 有效的商品列表 */
+      return this.shoppingList.filter(v => v.isValid);
+    },
+    dataLength() {
+      /* 数据的长度 */
+      const validList = this.validList;
+      const validLength = validList.length;
+      // 选择的产业的code
+      const choseIndustryCode = this.choseIndustryOptions[0];
+      const filterLength = this.validList.filter((v) => {
+        if (v.$filterIndustryKey === choseIndustryCode) {
+          return true;
+        }
+        return false;
+      }).length;
+      const notInFilterLength = validLength - filterLength;
+      return {
+        // 有效商品的长度
+        validLength,
+        // 有效商品的筛选出的长度
+        filterLength,
+        // 有效商品的排除筛选出的长度
+        notInFilterLength
+      };
     }
   },
   methods: {
@@ -407,16 +437,13 @@ export default {
       const industryCode = data[0];
       if (industryCode === '*') {
         this.shoppingList.forEach((v) => {
-          v.isShow = true;
           v.$filterIndustryKey = '*';
         });
       } else {
         this.shoppingList.forEach((v) => {
           if (v.productList[0].industryCode === industryCode) {
-            v.isShow = true;
             v.$filterIndustryKey = industryCode;
           } else {
-            v.isShow = false;
             v.$filterIndustryKey = '*';
           }
         });
@@ -495,7 +522,12 @@ export default {
             if (v.composeEnable === 1) {
               shoppingList.push({
                 ...v,
-                isShow: true,
+                // 有效商品
+                isValid: true,
+                // 无效时候的错误信息
+                $errorMsg: [],
+                // 不支持的的版本价格类型（在价格版本选择的时候有用）
+                notSupportPriceTypes: [],
                 checked: false,
                 // 信用模式
                 isCreditMode: false,
@@ -573,16 +605,13 @@ export default {
       this.shoppingList.forEach((v) => {
         v.checked = checked;
       });
-      // 更新选择的总商品数
-      this.totalGoodsNum = checked ? this.shoppingList.length : 0;
-      // 更新选择的总商品价格
-      this.totalGoodsPrice = this.countTotalPrice();
+      this.updateTotal();
     },
     countTotalPrice() {
       /* 计算选择的商品的总价 */
       let totalGoodsPrice = 0;
       this.shoppingList.forEach((v) => {
-        if (v.checked && v.$filterIndustryKey === '*') {
+        if (v.checked && v.isValid) {
           const num = v.number;
           // 获取应该计算的版本数据
           let invoicePrice;
@@ -603,7 +632,7 @@ export default {
     },
     countTotalNumber() {
       /* 计算选择的商品的总数 */
-      return this.shoppingList.filter(v => v.checked && v.$filterIndustryKey === '*').length;
+      return this.shoppingList.filter(v => v.checked && v.isValid).length;
     },
     failureGoodsListChange(list) {
       this.failureGoodsList = list;
@@ -649,6 +678,7 @@ export default {
       /* 地址列表change */
       // changeDefaultSendTo
       this.sendCustomerList = list;
+      const choseSendAddressTemp = JSON.parse(JSON.stringify(this.choseSendAddress));
       // 非扩展操作
       if (type !== 'expand') {
         if (parent) {
@@ -700,8 +730,114 @@ export default {
           }
         }
       }
+      // 如果送达方改变了，包括云仓
+      if (choseSendAddressTemp.yunCangFlag !== this.choseSendAddress.yunCangFlag) {
+        this.filterValid();
+      }
       // 选中之后关闭弹窗
       this.isShowAdsPicker = isShow || false;
+    },
+    filterValid() {
+      /* 筛选有效的商品 */
+      const {
+        yunCangFlag
+      } = this.choseSendAddress;
+      if (yunCangFlag) {
+        // 如果商品是不支持相关云仓条件的，移入失效产品，原商品列表设置属性isValid为false
+        this.shoppingList.forEach((goods) => {
+          const {
+            activityType,
+            productList,
+            choseOtherVersions
+          } = goods;
+          const product = productList[0];
+          const {
+            stockVersion,
+            priceType
+          } = product;
+          let isValid = true;
+          const $errorMsg = [];
+          // 云仓、异地云仓不支持版本调货
+          if (
+            (yunCangFlag === 'yc' || yunCangFlag === 'ydyc')
+              && (stockVersion || choseOtherVersions.find(v => v.$isTransfer))
+          ) {
+            isValid = false;
+            $errorMsg.push('云仓、异地云仓不支持版本调货');
+          }
+          // 异地云仓也不支持折扣样机（样机出样）、反向定制
+          if (yunCangFlag === 'ydyc') {
+            if (priceType === 'YJCY' || choseOtherVersions.find(v => v.priceType === 'YJCY') || activityType === 5) {
+              isValid = false;
+              if (activityType === 5) {
+                $errorMsg.push('异地云仓不支持反向定制');
+              } else {
+                $errorMsg.push('异地云仓不支持折扣样机');
+              }
+            }
+          }
+          goods.$errorMsg = $errorMsg;
+
+          if (isValid) {
+            if (!goods.isValid) {
+              // 删除失效产品里的数据
+              this.spliceFailureGoodsList(goods.id);
+            }
+            // 如果云仓或者异地云仓且是有效产品，则需要对已有的版本规格做选择上的处理
+            const notSupportPriceTypes = [];
+            if (yunCangFlag === 'ydyc') {
+              // 如果版本规格里还有折扣样机或者版本调货，那折扣样机、版本调货不可选
+              // 折扣样机（样机出样）
+              notSupportPriceTypes.push({
+                type: 'YJCY',
+                msg: '异地云仓不可选择折扣样机'
+              });
+            }
+            if (yunCangFlag === 'yc' || yunCangFlag === 'ydyc') {
+              // 下面俩皆代表版本调货
+              notSupportPriceTypes.push({
+                type: '',
+                msg: '云仓或者异地云仓不可选择版本调货'
+              },
+              {
+                type: undefined,
+                msg: '云仓或者异地云仓不可选择版本调货'
+              });
+            }
+            // 重置不可选的版本
+            goods.notSupportPriceTypes = notSupportPriceTypes;
+          } else {
+            if (goods.isValid) {
+              // 失效产品增加数据
+              this.addFailureGoodsList(goods);
+            }
+          }
+          goods.isValid = isValid;
+        });
+      } else {
+        // 非云仓、非异地云仓的时候，
+        // 1.需要把shoppingList里的相关isValid为false产品重置为true，
+        // 2.删除 failureGoodsList 里的数据
+        this.shoppingList.forEach((goods) => {
+          if (!goods.isValid) {
+            this.spliceFailureGoodsList(goods.id);
+            goods.isValid = true;
+          }
+        });
+      }
+      // 更新底栏
+      this.updateTotal();
+    },
+    addFailureGoodsList(goods) {
+      /* 失效产品增加数据 */
+      this.failureGoodsList.unshift(goods);
+    },
+    spliceFailureGoodsList(id) {
+      /* 删除失效列表里的数据 */
+      const delIndex = this.failureGoodsList.findIndex(v => v.id === id);
+      if (delIndex > -1) {
+        this.failureGoodsList.splice(delIndex, 1);
+      }
     },
     tabClick(tabs) {
       this.tabs = tabs;
@@ -724,20 +860,18 @@ export default {
       });
       console.log(tabs);
     },
-    deleteCart(idList, isFailure = false) {
+    deleteCart(idList) {
       /* 删除购物车里的商品 */
       /**
          * @idList（Array）id的集合，如果传入则使用传入的id
-         * @isFailure?:boolean 是否是失效列表
          * */
-      const listName = isFailure ? 'failureGoodsList' : 'shoppingList';
       let ids;
       if (idList && idList.length) {
         ids = idList;
       } else {
         // 选出选中的商品的id集合
         ids = [];
-        this[listName].forEach((v) => {
+        this.shoppingList.forEach((v) => {
           if (v.checked) {
             ids.push(v.id);
           }
@@ -761,12 +895,12 @@ export default {
                 type: 'success',
                 content: '删除成功'
               });
-              const listTemp = JSON.parse(JSON.stringify(this[listName]));
               ids.forEach((id) => {
-                const index = listTemp.findIndex(v => v.id === id);
-                listTemp.splice(index, 1);
+                const index = this.shoppingList.findIndex(v => v.id === id);
+                this.shoppingList.splice(index, 1);
+                const failureIndex = this.failureGoodsList.findIndex(v => v.id === id);
+                this.failureGoodsList.splice(failureIndex, 1);
               });
-              this[listName] = listTemp;
             }
           }
         }
@@ -891,7 +1025,7 @@ export default {
             // 存在版本调货，则传版本调货提供的数量
             number: transferVersion ? transferVersionNumber : product.number,
             // 是否直发
-            isStock: product.isDirectMode ? '0' : '1',
+            isStock: shoppingCartItem.isDirect && product.isDirectMode ? '0' : '1',
           };
           const {
             channelGroup
@@ -922,9 +1056,9 @@ export default {
                 orderSplitComposeProductData.isCheckCreditModel = product.isCreditMode ? '1' : '0';
               } else {
                 // 是否支持款先
-                orderSplitComposeProductData.isCheckKuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
+                orderSplitComposeProductData.kuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
                 // 是否打开款先
-                orderSplitComposeProductData.kuanXian = product.isFundsFirstMode ? '1' : '0';
+                orderSplitComposeProductData.isCheckKuanXian = product.isFundsFirstMode ? '1' : '0';
                 // 传统渠道样机不支持选择款先，默认款先
                 if (this.userInf.channelGroup === 'CT') {
                   const isContainYj = getYj()[prdt.priceType];

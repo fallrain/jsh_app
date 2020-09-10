@@ -39,7 +39,7 @@
     <view class="orderConfirm-btm j-flex-aic">
       <view class="dis-flex">
         <view class="orderConfirm-btm-text">实付总额：</view>
-        <view class="orderConfirm-btm-price">¥{{toFixedNum(dataInfo.totalMoney)}}</view>
+        <view class="orderConfirm-btm-price">¥{{totalMoney}}</view>
       </view>
       <view class="btn-style">
         <button
@@ -112,7 +112,6 @@ import {
   USER
 } from '../../store/mutationsTypes';
 
-
 export default {
   name: 'orderConfirm',
   components: {
@@ -124,6 +123,7 @@ export default {
   },
   data() {
     return {
+      totalMoney: 0,
       productGroups: [],
       billInfoList: [],
       show: false,
@@ -232,6 +232,18 @@ export default {
     }
   },
   methods: {
+    getTotal(data) {
+      let money = 0;
+      data.composeProductList.forEach((item) => {
+        const state = item.totalPreState;
+        if (!state) {
+          money += item.totalMoney;
+        } else {
+          money += item.totalPreAmount;
+        }
+      });
+      this.totalMoney = Number(money).toFixed(2);
+    },
     async onLoadInit() {
       await this.splitOrder();
       await this.getPayInfo();
@@ -267,6 +279,16 @@ export default {
       if (code === '1') {
         this.dataInfo = data;
         console.log(this.dataInfo);
+        // 如果有款先权限，且没有选中款先 金额为0
+        this.dataInfo.composeProductList.forEach((item) => {
+          const product = item.splitOrderDetailList[0].splitOrderProductList[0];
+          if (product.kuanXian === '1' && product.isCheckKuanXian === '0') {
+            item.totalPreState = true;
+          } else {
+            item.totalPreState = false;
+          }
+        });
+        this.getTotal(this.dataInfo);
       }
     },
     dealPayerMoneyInfo(payerMoneyInfoItem) {
@@ -329,7 +351,7 @@ export default {
         });
       });
       this.productGroups = productGroups;
-      console.log(this.productGroups);
+      console.log(payFormArr);
       return payFormArr;
     },
     async getPayInfo() {
@@ -421,6 +443,22 @@ export default {
     },
     // 提交订单
     async submitOrder() {
+      console.log(this.payerMoneyList);
+      let state = true;
+      this.payerMoneyList.forEach((item) => {
+        if (Number(item.balance) < Number(item.totalMoney)
+          || Number(item.balance) < Number(item.totalMoney)
+        ) {
+          uni.showToast({
+            title: '余额不足请先充值',
+            icon: 'none'
+          });
+          state = false;
+        }
+      });
+      if (!state) {
+        return;
+      }
       console.log(this.dataInfo);
       console.log(this.totalPayerMoneyInfo);
       // 根据拆单结果组合订单提交信息
@@ -428,6 +466,9 @@ export default {
       const groupingArr = [];
       const productType = this.formData.splitComposeList[0].activityType;
       this.dataInfo.composeProductList.forEach((item) => {
+        const billNo = item.billNo;
+        const billName = item.billName;
+        const conCode = item.conCode;
         const orderItem = {
           groupingNo: item.composeOrderNo,
           orderDetailList: []
@@ -440,6 +481,9 @@ export default {
           const singleItem = {
             productType,
             isTCTP: v.isTCTP,
+            billNo,
+            billName,
+            conCode,
             orderNo: v.orderNo,
             stockType: v.stockType,
             province: v.splitOrderProductList[0].province,

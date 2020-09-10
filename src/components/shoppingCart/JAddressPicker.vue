@@ -113,6 +113,8 @@ export default {
     //     isShowSearch: true,
     //     搜索的值
     //     searchValue:''
+    //     用来搜索的key
+    //     searchKeys: ['keyName1', 'keyName2'],
     //   },
     //   {
     //     name: '异地云仓',
