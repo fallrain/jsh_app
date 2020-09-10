@@ -202,17 +202,23 @@ export default {
     },
     computePB() {
       // 主产品比例
-      let proportionMain = this.currentDetail.proportionMain;
-      if (proportionMain < this.currentDetail.speNum) {
+      const proportionMain = this.currentDetail.proportionMain;
+      // 配比产品起订数量
+      const bundleNum = this.currentDetail.bundleNum;
+      /* if (proportionMain < this.currentDetail.speNum) {
         proportionMain = this.currentDetail.speNum;
-      }
+      } */
       // 配比产品比例
       const proportion = this.currentDetail.proportion;
       let PBnum = 0;
       if (this.currentDetail.proportionType === '2') {
         // 金额配比
-        PBnum = Math.ceil((proportion / this.currentDetail.proportionMain * this.limit1.choosedMainMoney - this.limit1.choosedPBMoney) / this.lowestPBMoney)
-          - this.limit1.choosedPBNum;
+        // 需要选择的配比数量
+        let needPB = Math.ceil((proportion / this.currentDetail.proportionMain * this.limit1.choosedMainMoney - this.limit1.choosedPBMoney) / this.lowestPBMoney);
+        if (needPB < bundleNum) {
+          needPB = bundleNum;
+        }
+        PBnum = needPB - this.limit1.choosedPBNum;
       } else {
         // 数量配比
         PBnum = Math.ceil(proportion / proportionMain * this.limit1.choosedMainNum)

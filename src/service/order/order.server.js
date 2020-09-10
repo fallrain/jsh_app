@@ -84,7 +84,7 @@ export default {
     return jPostJson(urlNoApi.getCollectRemarkAddr, data);
   },
   queryJDAddr() { // 直发异地地址列表
-    return jPostJson(urlNoApi.queryJDAddr);
+    return jGet(urlNoApi.queryJDAddr);
   },
   getBillInfo(sendtoCode, productGroup) { // 查询开票方列表
     return jGet(urlNoApi.getBillInfo(sendtoCode, productGroup));

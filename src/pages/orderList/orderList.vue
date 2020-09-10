@@ -294,9 +294,9 @@
             </view>
             <view @click="calentVerifyAction" class="calentVerify">确定</view>
           </view>
-          <uni-calendar 
+          <uni-calendar
           :insert="true"
-          :lunar="false" 
+          :lunar="false"
           :showMonth='false'
           :start-date="'2000-3-2'"
           :end-date="'2100-5-20'"

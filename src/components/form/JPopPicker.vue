@@ -104,6 +104,7 @@ export default {
     };
   },
   created() {
+    console.log(this.options);
   },
   watch: {
     show(val) {
@@ -127,6 +128,7 @@ export default {
     check(item) {
       /* 选中 */
       // 不能被选中的时候直接返回
+      console.log(item);
       if (item.isCanChecked === false) {
         if (this.cantCheckedCallback) {
           this.cantCheckedCallback(item);

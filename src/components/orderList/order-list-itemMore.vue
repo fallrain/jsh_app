@@ -18,8 +18,8 @@ export default {
       type: Boolean,
       default: false
     },
-    tctpConfirmButton:{
-      type:String,
+    tctpConfirmButton: {
+      type: String,
     }
   },
 };

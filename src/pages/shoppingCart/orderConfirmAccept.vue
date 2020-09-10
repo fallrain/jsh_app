@@ -148,6 +148,15 @@ export default {
       ]; */
       const { code, data } = await this.orderService.getOrderInfo(this.form);
       if (code === '1') {
+        data.forEach((item) => {
+          item.bigOrderDetailList.forEach((v) => {
+            if (v.errorMsg.indexOf('org.spring') > -1) {
+              const index = v.errorMsg.indexOf('org.spring');
+              v.errorMsg = v.errorMsg.slice(0, index);
+            }
+          });
+        });
+        debugger;
         this.orderData = data;
         // 处理成功失败数量
         this.computeOrderNum();
@@ -190,6 +199,7 @@ export default {
     },
     // 订单详情
     orderDetail(orderGroup) {
+      console.log(orderGroup);
       const data = JSON.stringify(orderGroup);
       uni.navigateTo({
         url: `/pages/shoppingCart/orderConfirmAcceptDetail?orderGroup=${data}&status=${this.status}`
