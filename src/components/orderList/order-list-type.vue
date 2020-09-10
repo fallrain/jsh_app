@@ -23,26 +23,33 @@ export default {
       type: String,
     }
   },
+
+  orderType:{
+   name :String,
+    value:String
+
+},
   methods: {
     orderNoClick(val) {
       if (val === '1'){
+
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', '订单号');
+        this.$emit('selectInfoOrderNo', val , '订单号');
       }
       if (val === '2'){
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', '整单号');
+        this.$emit('selectInfoOrderNo', val ,'整单号');
       }
       if (val === '3'){
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', 'GVC单号');
+        this.$emit('selectInfoOrderNo', val ,'GVC单号');
       }
       if (val === '4'){
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', '物流单号');
+        this.$emit('selectInfoOrderNo',val , '物流单号');
       }
     },
-  }
+  },
 };
 </script>
 
