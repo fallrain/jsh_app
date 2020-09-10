@@ -107,13 +107,9 @@
           </view>
         </view>
         <view>
-          <view
-            v-for="(item,index) in timeInputs"
-            :key="index+'b'"
-          >
             <view class="addressee">
               <view >
-                <text>{{item.name}}</text>
+                <text>下单时间</text>
               </view>
             </view>
             <view
@@ -129,8 +125,48 @@
                 <text>结束时间</text>
               </view>
             </view>
+        </view>
+        <view>
+          <view class="addressee">
+            <view >
+              <text>扣款时间</text>
+            </view>
+          </view>
+          <view
+           class="timeParent"
+          >
+            <view class="box1">
+              <text>开始时间</text>
+            </view>
+            <view class="box2">
+              <text>至</text>
+            </view>
+            <view class="box3">
+              <text>结束时间</text>
+            </view>
           </view>
         </view>
+        <view>
+          <view class="addressee">
+            <view >
+              <text>系统开票时间</text>
+            </view>
+          </view>
+          <view
+            class="timeParent"
+          >
+            <view class="box1">
+              <text>开始时间</text>
+            </view>
+            <view class="box2">
+              <text>至</text>
+            </view>
+            <view class="box3">
+              <text>结束时间</text>
+            </view>
+          </view>
+        </view>
+
         <view>
             <view class="industry-brand">
               <view class="industry-brand-child">
@@ -203,7 +239,7 @@
           <view class="timeFont">
             <text>筛选</text>
           </view>
-          <u-checkbox-group max="3" size="16" @change="checkboxGroupChange">
+          <u-checkbox-group max="3" size="18">
             <u-checkbox
                     label-size="10"
                     @change="checkboxChange"
@@ -218,7 +254,7 @@
           <view class="timeFont">
             <text>标签</text>
           </view>
-          <u-radio-group v-model="lableValue"  @change="radioGroupChange" >
+          <u-radio-group>
             <u-radio
                     icon-size="10"
                     label-size="10"
@@ -419,7 +455,7 @@ export default {
       screenlist: [
         {
           name: '样品机',
-          checked: true,
+          checked: false,
           disabled: false
         },
         {
@@ -451,7 +487,7 @@ export default {
           disabled: false
         }
       ],
-      lableValue: 'orange',
+      // lableValue: '工程',
       // 产业
       industryList: [],
       // 品牌
@@ -657,7 +693,14 @@ export default {
     selectInfoOrderDistribution(data) { // 点击子组件按钮时触发事件
       this.orderDistribution= !this.orderDistribution;
       this.orderDistributionStr = data; // 改变了父组件的值
-    }
+    },
+    // 选中某个复选框时，由checkbox时触发
+    checkboxChange(e) {
+      console.log(e);
+    },
+    radioChange(e) {
+      console.log(e);
+    },
   }
 };
 </script>
