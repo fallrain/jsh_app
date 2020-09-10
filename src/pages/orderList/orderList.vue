@@ -638,28 +638,23 @@ export default {
       this.orderTypeStr = data; // 改变了父组件的值
     },
     selectInfoOrderModel(data) { // 点击子组件按钮时触发事件
-      console.log(data);
       this.orderModelshow = !this.orderModelshow;
       this.orderModelStr = data; // 改变了父组件的值
     },
     selectInfoOrderReview(data) { // 点击子组件按钮时触发事件
-      console.log(data);
       this.orderReviewshow= !this.orderReviewshow;
       this.orderReviewStr = data; // 改变了父组件的值
     },
     selectInfoOrderMarketing(data) { // 点击子组件按钮时触发事件
-      console.log(data);
       this.orderMarketing= !this.orderMarketing;
       this.orderMarkStr = data; // 改变了父组件的值
     }
     ,
     selectInfoOrderBuy(data) { // 点击子组件按钮时触发事件
-      console.log(data);
       this.orderBuy= !this.orderBuy;
       this.orderBuyStr = data; // 改变了父组件的值
     },
     selectInfoOrderDistribution(data) { // 点击子组件按钮时触发事件
-      console.log(data);
       this.orderDistribution= !this.orderDistribution;
       this.orderDistributionStr = data; // 改变了父组件的值
     }
