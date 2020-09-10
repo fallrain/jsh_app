@@ -1,23 +1,24 @@
 <template>
-  <view v-show="isOrderModel" class="order_more">
+  <view v-show="isOrderBuy" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>产品型号</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>产品编号</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>信用模式</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>版本调货</view>
+      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>融资订单</view>
     </view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'orderListModel',
+  name: 'isOrderBuy',
   props: {
-    isOrderModel: {
+    isOrderBuy: {
       type: Boolean,
       default: false
     },
-    tctpConfirmButton: {
-      type: String,
+    tctpConfirmButton:{
+      type:String,
     }
   },
 };
