@@ -1080,13 +1080,16 @@ export default {
                 // 是否支持款先
                 orderSplitComposeProductData.kuanXian = shoppingCartItem.isFundsFirst ? '1' : '0';
                 // 是否打开款先
-                orderSplitComposeProductData.isCheckKuanXian = product.isFundsFirstMode ? '1' : '0';
+                if (shoppingCartItem.isFundsFirst) {
+                  orderSplitComposeProductData.isCheckKuanXian = product.isFundsFirstMode ? '1' : '0';
+                } else {
+                  orderSplitComposeProductData.isCheckKuanXian = '1';
+                }
+
                 // 传统渠道样机不支持选择款先，默认款先
-                if (this.userInf.channelGroup === 'CT') {
-                  const isContainYj = getYj()[prdt.priceType];
-                  if (isContainYj) {
-                    orderSplitComposeProductData.isCheckKuanXian = '1';
-                  }
+                const isContainYj = getYj()[prdt.priceType];
+                if (isContainYj) {
+                  orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
                 // 异地云仓不支持选择款先，默认款先
                 if (this.choseSendAddress.yunCangFlag === 'ydyc') {
