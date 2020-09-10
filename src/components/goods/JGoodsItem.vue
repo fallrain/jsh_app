@@ -223,8 +223,10 @@ export default {
       // 优先级二：
       // isSale为true：
       // 抢单价>组合价>套餐价>普通价
+      // 反向定制也算抢单，当是反向定制的时候，优先取反向定制
       let inf = {};
       const {
+        activityType,
         isSale,
       } = this.goods;
       let priceKeyOrder;
@@ -239,6 +241,10 @@ export default {
           // 普通价
           '$PtPrice'
         ];
+        // 反向定制得加 bigorders(反向定制)
+        if (activityType === 5) {
+          priceKeyOrder.unshift('bigorders');
+        }
       } else {
         priceKeyOrder = [
           // 组合
