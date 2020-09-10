@@ -271,6 +271,9 @@ export default {
   created() {
     this.setPageInfo();
   },
+  watch: {
+    $route: ['getShoppingCartList']
+  },
   onShow() {
     // 如果已经更新过购物车，则需要刷新下
     if (this.isCartUpdate) {
@@ -395,6 +398,7 @@ export default {
     industryPickerChange(data, checkedIndustryOptions) {
       /* 产品组picker change */
       // 先回到顶部
+      console.log(data);
       uni.pageScrollTo({
         scrollTop: 0,
         duration: 100
