@@ -116,13 +116,13 @@
              class="timeParent"
             >
               <view class="box1">
-                <text>开始时间</text>
+                <text @click="orderBegainTimeAction" >{{orderBegainTime.length>0?orderBegainTime:'开始时间'}}</text>
               </view>
               <view class="box2">
                 <text>至</text>
               </view>
               <view class="box3">
-                <text>结束时间</text>
+                <text @click="orderEndTimeAction">{{orderEndTime.length>0?orderEndTime:'结束时间'}}</text>
               </view>
             </view>
         </view>
@@ -136,10 +136,10 @@
            class="timeParent"
           >
             <view class="box1">
-              <text>开始时间</text>
+              <text @click="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
-              <text>至</text>
+              <text @click="deductioEndTimeAction">至</text>
             </view>
             <view class="box3">
               <text>结束时间</text>
@@ -523,7 +523,15 @@ export default {
       isShowCalendarDrawer:true,
       // 用户选中的日期
       selectData:'',
-      // 用户确定
+      // 下单开始时间
+      orderBegainTime:'',
+      orderBegainTimeBool:false,
+      // 下单结束时间
+      orderEndTime:'',
+      orderEndTimeBool:false,
+      // 扣款开始时间
+      deductionBegainTime:'',
+      deductionEndTime:'',
     };
   },
   computed: {
@@ -734,12 +742,44 @@ export default {
     },
     // 时间确定
     calentVerifyAction() {
+      if(this.orderBegainTimeBool) {
+        this.orderBegainTime = this.selectData;
+      }
+      if(this.orderEndTimeBool) {
+        this.orderEndTime = this.selectData;
+      }
+      if(this.deductionBegainTimeBool) {
+        this.deductionBegainTime = this.selectData;
+      }
+      this.orderBegainTimeBool = false;
+      this.orderEndTimeBool = false;
+      this.deductionBegainTimeBool = false;
       this.$refs.popCalendar.close();
+      this.isShowGoodsFilterDrawer = true;
     },
     // 选中的时间
     calendarChange(e) {
       console.log(e)
       this.selectData = e.fulldate;
+      
+    },
+    // 下单开始时间
+    orderBegainTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.orderBegainTimeBool = true;
+    } ,
+     // 下单开始时间
+    orderEndTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.orderEndTimeBool = true;
+    },
+    // 扣款开始时间
+    deductionBegainTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.deductionBegainTimeBool = true;
     }
   }
 };
