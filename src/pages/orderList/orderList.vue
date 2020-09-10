@@ -37,7 +37,7 @@
             <input
               class="orderList-drawer-filter-input"
               type="text"
-              :placeholder="`请输入订单号`"
+              :placeholder="`请输入${orderTypeStr}`"
             >
           </view>
         </view>
@@ -93,25 +93,23 @@
               <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia left-10"></i></text>
             </view>
           </view>
-          <order-list-model :is-order-model="orderModelshow"></order-list-model>
+          <order-list-model :is-order-model="orderModelshow"
+           @selectInfoOrderModel="selectInfoOrderModel"
+          ></order-list-model>
           <view
             class="orderList-drawer-filter-list"
           >
             <input
             class="orderList-drawer-filter-input"
             type="text"
-            :placeholder="`请输入产品型号`"
+            :placeholder="`请输入${orderModelStr}`"
             >
           </view>
         </view>
         <view>
-          <view
-            v-for="(item,index) in timeInputs"
-            :key="index+'b'"
-          >
             <view class="addressee">
               <view >
-                <text>{{item.name}}</text>
+                <text>下单时间</text>
               </view>
             </view>
             <view
@@ -127,8 +125,48 @@
                 <text>结束时间</text>
               </view>
             </view>
+        </view>
+        <view>
+          <view class="addressee">
+            <view >
+              <text>扣款时间</text>
+            </view>
+          </view>
+          <view
+           class="timeParent"
+          >
+            <view class="box1">
+              <text>开始时间</text>
+            </view>
+            <view class="box2">
+              <text>至</text>
+            </view>
+            <view class="box3">
+              <text>结束时间</text>
+            </view>
           </view>
         </view>
+        <view>
+          <view class="addressee">
+            <view >
+              <text>系统开票时间</text>
+            </view>
+          </view>
+          <view
+            class="timeParent"
+          >
+            <view class="box1">
+              <text>开始时间</text>
+            </view>
+            <view class="box2">
+              <text>至</text>
+            </view>
+            <view class="box3">
+              <text>结束时间</text>
+            </view>
+          </view>
+        </view>
+
         <view>
             <view class="industry-brand">
               <view class="industry-brand-child">
@@ -140,10 +178,11 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  v-model="orderReviewStr"
                   >
                   <i class="iconfont iconxia"  @click="getReview"></i>
                   </view>
-                <order-list-review :is-orderreview="orderReviewshow"></order-list-review>
+                <order-list-review :is-orderreview="orderReviewshow" @selectInfoOrderReview="selectInfoOrderReview"></order-list-review>
               </view>
               <view class="industry-brand-child">
                 <view >
@@ -154,10 +193,11 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  v-model="orderMarkStr"
                   >
                   <i class="iconfont iconxia" @click="getMarketing"></i>
                   </view>
-                <order-list-marketing :is-orderremarketing="orderMarketing"></order-list-marketing>
+                <order-list-marketing :is-orderremarketing="orderMarketing" @selectInfoOrderMarketing="selectInfoOrderMarketing"></order-list-marketing>
             </view>
           </view>
         </view>
@@ -172,10 +212,11 @@
                             class="orderList-drawer-filter-down-input"
                             type="text"
                             :placeholder="`请选择`"
+                            v-model="orderBuyStr"
                     >
                     <i class="iconfont iconxia" @click="getBuy"></i>
                 </view>
-              <order-list-buy :is-order-buy="orderBuy"></order-list-buy>
+              <order-list-buy :is-order-buy="orderBuy" @selectInfoOrderBuy="selectInfoOrderBuy"></order-list-buy>
             </view>
             <view class="industry-brand-child">
               <view >
@@ -186,10 +227,11 @@
                     class="orderList-drawer-filter-down-input"
                     type="text"
                     :placeholder="`请选择`"
+                    v-model="orderDistributionStr"
                     >
                     <i class="iconfont iconxia" @click="getDistribution"></i>
                 </view>
-              <order-list-distribution :is-order-distribution="orderDistribution"></order-list-distribution>
+              <order-list-distribution :is-order-distribution="orderDistribution" @selectInfoOrderDistribution="selectInfoOrderDistribution"></order-list-distribution>
             </view>
           </view>
         </view>
@@ -197,7 +239,7 @@
           <view class="timeFont">
             <text>筛选</text>
           </view>
-          <u-checkbox-group max="3" size="16" @change="checkboxGroupChange">
+          <u-checkbox-group max="3" size="18">
             <u-checkbox
                     label-size="10"
                     @change="checkboxChange"
@@ -212,7 +254,7 @@
           <view class="timeFont">
             <text>标签</text>
           </view>
-          <u-radio-group v-model="lableValue"  @change="radioGroupChange" >
+          <u-radio-group>
             <u-radio
                     icon-size="10"
                     label-size="10"
@@ -306,6 +348,10 @@ export default {
       orderDistribution: false,
       orderTypeStr: '订单号',
       orderModelStr: '产品型号',
+      orderReviewStr: '',
+      orderMarkStr: '',
+      orderBuyStr: '',
+      orderDistributionStr: '',
       isShowGoodsFilterDrawer: false,
       orderListInfo: [],
       total: 0,
@@ -427,7 +473,7 @@ export default {
       screenlist: [
         {
           name: '样品机',
-          checked: true,
+          checked: false,
           disabled: false
         },
         {
@@ -459,7 +505,7 @@ export default {
           disabled: false
         }
       ],
-      lableValue: 'orange',
+      // lableValue: '工程',
       // 产业
       industryList: [],
       // 品牌
@@ -643,8 +689,35 @@ export default {
       console.log(data);
       this.orderNoshow = !this.orderNoshow;
       this.orderTypeStr = data; // 改变了父组件的值
+    },
+    selectInfoOrderModel(data) { // 点击子组件按钮时触发事件
+      this.orderModelshow = !this.orderModelshow;
+      this.orderModelStr = data; // 改变了父组件的值
+    },
+    selectInfoOrderReview(data) { // 点击子组件按钮时触发事件
+      this.orderReviewshow= !this.orderReviewshow;
+      this.orderReviewStr = data; // 改变了父组件的值
+    },
+    selectInfoOrderMarketing(data) { // 点击子组件按钮时触发事件
+      this.orderMarketing= !this.orderMarketing;
+      this.orderMarkStr = data; // 改变了父组件的值
     }
-
+    ,
+    selectInfoOrderBuy(data) { // 点击子组件按钮时触发事件
+      this.orderBuy= !this.orderBuy;
+      this.orderBuyStr = data; // 改变了父组件的值
+    },
+    selectInfoOrderDistribution(data) { // 点击子组件按钮时触发事件
+      this.orderDistribution= !this.orderDistribution;
+      this.orderDistributionStr = data; // 改变了父组件的值
+    },
+    // 选中某个复选框时，由checkbox时触发
+    checkboxChange(e) {
+      console.log(e);
+    },
+    radioChange(e) {
+      console.log(e);
+    },
   }
 };
 </script>

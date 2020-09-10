@@ -2,9 +2,9 @@
   <view v-show="isOrderBuy" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>信用模式</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>版本调货</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>融资订单</view>
+      <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>信用模式</view>
+      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>版本调货</view>
+      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>融资订单</view>
     </view>
   </view>
 </template>
@@ -20,6 +20,22 @@ export default {
     tctpConfirmButton:{
       type:String,
     }
+  },
+  methods: {
+    orderNoClick(val) {
+      if (val === '1') {
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderBuy', '信用模式');
+      }
+      if (val === '2') {
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderBuy', '版本调货');
+      }
+      if (val === '3') {
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderBuy', '融资订单');
+      }
+    },
   },
 };
 </script>
