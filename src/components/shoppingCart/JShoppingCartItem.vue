@@ -556,7 +556,7 @@ export default {
     isFundsFirst(val) {
       /* 如果不支持款先模式了，已经打开的则关闭 */
       if (val === false) {
-        this.goods.isFundsFirstMode = false;
+        this.goods.isFundsFirstMode = true;
         this.goodsChange();
       }
     },
