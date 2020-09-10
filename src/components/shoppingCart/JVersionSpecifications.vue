@@ -18,69 +18,71 @@
         :scroll-y="true"
         class="jVersionSpecifications-pop-detail-wrap"
       >
-        <view
-          class="jVersionSpecifications-pop-detail"
-          v-for="(item,index) in versionData"
-          :key="index"
-        >
-          <view class="jVersionSpecifications-pop-detail-head">
-            <text class="jVersionSpecifications-pop-detail-head-title">{{item.title}}</text>
-            <view
-              :class="[
+        <template v-for="(item,index) in versionData">
+          <view
+            :key="index"
+            class="jVersionSpecifications-pop-detail"
+            v-if="!item.isHide"
+          >
+            <view class="jVersionSpecifications-pop-detail-head">
+              <text class="jVersionSpecifications-pop-detail-head-title">{{item.title}}</text>
+              <view
+                :class="[
                 'jVersionSpecifications-pop-detail-head-title-arrow iconfont iconxia',
                 !item.isExpand && 'active'
               ]"
-              @tap="toggleExpand(item)"
+                @tap="toggleExpand(item)"
+              >
+              </view>
+            </view>
+            <view
+              class="jVersionSpecifications-pop-detail-list"
+              v-if="item.isExpand"
             >
+              <div
+                :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
+                :key="vIndex"
+                @tap="handleClick(version,item.list,index,vIndex)"
+                v-for="(version,vIndex) in item.list"
+              >
+                <view
+                  class="jVersionSpecifications-pop-detail-item-check"
+                  v-if="version.checked"
+                >
+                  <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+                </view>
+                <view
+                  class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
+                  v-if="version.name"
+                >
+                  <view class="jVersionSpecifications-pop-detail-item-name">名称：</view>
+                  <view class="jVersionSpecifications-pop-detail-item-val-type1">{{version.name}}</view>
+                </view>
+                <view
+                  class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
+                  v-if="version.price"
+                >
+                  <view class="jVersionSpecifications-pop-detail-item-name">价格：</view>
+                  <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.price}}</view>
+                </view>
+                <view
+                  class="jVersionSpecifications-pop-detail-item-name-wrap"
+                  v-if="version.time"
+                >
+                  <view class="jVersionSpecifications-pop-detail-item-name">有效期：</view>
+                  <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.time}}</view>
+                </view>
+                <view
+                  class="jVersionSpecifications-pop-detail-item-name-wrap"
+                  v-if="version.num"
+                >
+                  <view class="jVersionSpecifications-pop-detail-item-name">数量：</view>
+                  <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.num}}</view>
+                </view>
+              </div>
             </view>
           </view>
-          <view
-            v-if="item.isExpand"
-            class="jVersionSpecifications-pop-detail-list"
-          >
-            <div
-              :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
-              v-for="(version,vIndex) in item.list"
-              :key="vIndex"
-              @tap="handleClick(version,item.list,index,vIndex)"
-            >
-              <view
-                class="jVersionSpecifications-pop-detail-item-check"
-                v-if="version.checked"
-              >
-                <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
-              </view>
-              <view
-                class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
-                v-if="version.name"
-              >
-                <view class="jVersionSpecifications-pop-detail-item-name">名称：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type1">{{version.name}}</view>
-              </view>
-              <view
-                class="jVersionSpecifications-pop-detail-item-name-wrap mb8"
-                v-if="version.price"
-              >
-                <view class="jVersionSpecifications-pop-detail-item-name">价格：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type2">¥ {{version.price}}</view>
-              </view>
-              <view
-                class="jVersionSpecifications-pop-detail-item-name-wrap"
-                v-if="version.time"
-              >
-                <view class="jVersionSpecifications-pop-detail-item-name">有效期：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.time}}</view>
-              </view>
-              <view
-                class="jVersionSpecifications-pop-detail-item-name-wrap"
-                v-if="version.num"
-              >
-                <view class="jVersionSpecifications-pop-detail-item-name">数量：</view>
-                <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.num}}</view>
-              </view>
-            </div>
-          </view>
-        </view>
+        </template>
       </scroll-view>
       <view class="jVersionSpecifications-btn-wrap">
         <button

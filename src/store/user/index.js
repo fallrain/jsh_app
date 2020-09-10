@@ -58,7 +58,7 @@ export default {
         if (code === '1') {
           // 当前配送地址修改(选出默认地址)
           let defaultIndex = data.findIndex(v => v.defaultFlag === 1);
-          if (defaultIndex > -1) {
+          if (defaultIndex === -1) {
             defaultIndex = 0;
           }
           // 更新默认送达方store

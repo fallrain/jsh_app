@@ -401,7 +401,7 @@ export default {
     },
     isShowSpecificationsBtn() {
       /* 是否显示【版本规格】按钮 */
-      return !!(this.specificationsList.length) && !this.goods.isCreditMode;
+      return !!(this.specificationsList.filter(v => !v.isHide).length) && !this.goods.isCreditMode;
     },
     choseVersions() {
       /* 选择的所有版本信息 */
@@ -534,10 +534,23 @@ export default {
       }
     },
     isDirect(val) {
-      /* 如果不支持信用模式了，已经打开的则关闭 */
+      /* 如果不支持直发模式了，已经打开的则关闭 */
       if (val === false) {
         this.goods.isDirectMode = false;
         this.goodsChange();
+        const transfer = this.specificationsList.find(v => v.id === 'transfer');
+        if (transfer) {
+          transfer.isHide = false;
+        }
+      }
+    },
+    'goods.isDirectMode': function (val) {
+      // 直发不支持版本调货,如果是先打开的直发，则隐藏版本选择里的版本调货
+      const transfer = this.specificationsList.find(v => v.id === 'transfer');
+      if (this.isDirect) {
+        if (transfer) {
+          transfer.isHide = val;
+        }
       }
     },
     isFundsFirst(val) {
@@ -655,6 +668,7 @@ export default {
               id: 'special',
               title: '特价版本',
               isExpand: true,
+              isHide: false,
               list: []
             };
             tjVersion.list = tjList.map(v => ({
@@ -679,6 +693,7 @@ export default {
               id: 'project',
               title: '工程版本',
               isExpand: true,
+              isHide: false,
               list: []
             };
             version.list = gc.map(v => ({
@@ -700,6 +715,7 @@ export default {
               id: 'example',
               title: '样机版本',
               isExpand: true,
+              isHide: false,
               list: []
             };
             version.list = yjList.map(v => ({
@@ -726,6 +742,7 @@ export default {
               id: 'transfer',
               title: '调货版本',
               isExpand: true,
+              isHide: false,
               list: []
             };
             version.list = transformVersionList.map(v => ({

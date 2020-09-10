@@ -727,10 +727,10 @@ export default {
                 sendToCode: detail.customerCode
               }).then(({ code }) => {
                 if (code === '1') {
-                  // 更改成功之后更新数据列表
-                  this.reloadPageInfo();
                   // 更改成功之后更新store
                   this[USER.UPDATE_DEFAULT_SEND_TO](detail);
+                  // 更改成功之后更新数据列表
+                  this.reloadPageInfo();
                 }
               });
             }
