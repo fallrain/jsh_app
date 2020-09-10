@@ -169,6 +169,7 @@ export default {
   },
   data() {
     return {
+      goodInfo: {},
       addressData: {
         province: [],
         city: [],
@@ -214,6 +215,11 @@ export default {
     };
   },
   onLoad(option) {
+    this.goodInfo = JSON.parse(option.goodInfo);
+    if (this.goodInfo.address && JSON.stringify(this.goodInfo.address) != '{}') {
+      this.initCurrentAdd();
+    }
+    console.log(this.goodInfo);
     this.form.orderIndex = option.orderIndex;
     this.form.productIndex = option.productIndex;
     this.initAddress();
@@ -281,6 +287,29 @@ export default {
     }
   },
   methods: {
+    initCurrentAdd() {
+      this.choosedAdd.address = this.goodInfo.address;
+      this.choosedAdd.addressName = this.goodInfo.addressName;
+      this.choosedAdd.area = this.goodInfo.area;
+      this.choosedAdd.areaCode = this.goodInfo.areaCode;
+      this.choosedAdd.city = this.goodInfo.city;
+      this.choosedAdd.province = this.goodInfo.province;
+      this.choosedAdd.idcardNo = this.goodInfo.idCardNo;
+      this.choosedAdd.iphoneNo = this.goodInfo.iphoneNo;
+      this.choosedAdd.userName = this.goodInfo.userName;
+      this.choosedAdd.jdWarehouseId = this.goodInfo.jdWarehouseId;
+
+      this.form = {
+        ...this.choosedAdd,
+        isCollectionAddress: false,
+        deliveryYd: false
+      };
+      if (this.goodInfo.deliveryYd === '0') {
+        this.form.deliveryYd = false;
+      } else {
+        this.form.deliveryYd = true;
+      }
+    },
     changeSwitchSC(val) {
       console.log(val);
     },

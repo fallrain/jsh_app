@@ -223,8 +223,10 @@ export default {
       // 优先级二：
       // isSale为true：
       // 抢单价>组合价>套餐价>普通价
+      // 反向定制也算抢单，当是反向定制的时候，优先取反向定制
       let inf = {};
       const {
+        activityType,
         isSale,
       } = this.goods;
       let priceKeyOrder;
@@ -239,6 +241,10 @@ export default {
           // 普通价
           '$PtPrice'
         ];
+        // 反向定制得加 bigorders(反向定制)
+        if (activityType === 5) {
+          priceKeyOrder.unshift('bigorders');
+        }
       } else {
         priceKeyOrder = [
           // 组合
@@ -583,6 +589,7 @@ export default {
         //  促销活动价格类型
         //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
         priceType: priceType ? priceType.toUpperCase() : priceType,
+        // dataFrom: "flashSale",
         // 价格版本号
         // priceVersion: '',
         // 产品编码

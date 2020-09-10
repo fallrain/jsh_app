@@ -192,17 +192,21 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].address = remarksData.address;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].area = remarksData.area;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].areaCode = remarksData.areaCode;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].city = remarksData.city;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].deliveryYd = remarksData.deliveryYd;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].idCardNo = remarksData.idcardNo;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].iphoneNo = remarksData.iphoneNo;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].isCollectionAddress = remarksData.isCollectionAddress;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].province = remarksData.province;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].userName = remarksData.userName;
-      this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0].jdWarehouseId = remarksData.jdWarehouseId;
+      const obj = this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0];
+      obj.address = remarksData.address;
+      obj.area = remarksData.area;
+      obj.areaCode = remarksData.areaCode;
+      obj.city = remarksData.city;
+      obj.deliveryYd = remarksData.deliveryYd;
+      obj.idCardNo = remarksData.idcardNo;
+      obj.iphoneNo = remarksData.iphoneNo;
+      obj.isCollectionAddress = remarksData.isCollectionAddress;
+      obj.province = remarksData.province;
+      obj.userName = remarksData.userName;
+      obj.jdWarehouseId = remarksData.jdWarehouseId;
+      obj.addressName = remarksData.addressName + remarksData.address;
+      console.log(remarksData);
+      console.log(this.dataInfo);
     });
   },
   computed: {

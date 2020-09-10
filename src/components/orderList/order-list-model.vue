@@ -2,8 +2,8 @@
   <view v-show="isOrderModel" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>产品型号</view>
-      <view class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>产品编号</view>
+      <view class="order_more_text" @click="orderModelClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>产品型号</view>
+      <view class="order_more_text" @click="orderModelClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>产品编号</view>
     </view>
   </view>
 </template>
@@ -20,6 +20,18 @@ export default {
       type: String,
     }
   },
+  methods: {
+    orderModelClick(val) {
+      if (val === '1'){
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderModel', '产品型号');
+      }
+      if (val === '2'){
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderModel', '产品编号');
+      }
+    },
+  }
 };
 </script>
 
