@@ -69,7 +69,8 @@
             <view class="text-primary">{{fomrmateDate(activity.endDate)}}</view>
           </view>
           <view @tap="goDetail()" class="w50p mb12 dis-flex text-666">
-            <view class="">配比：</view>
+            <view v-if="activity.proportionType === '1'" class="">数量配比：</view>
+            <view v-if="activity.proportionType === '2'" class="">金额配比：</view>
             <view class="text-primary">{{activity.proportionMain}}:{{activity.proportion}}</view>
           </view>
           <view @tap="goDetail()" class="w50p mb12 dis-flex text-666">
