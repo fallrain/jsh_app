@@ -383,7 +383,7 @@ export default {
         const {
           kuanXian
         } = this.versionPrice;
-        if (kuanXian && Object.keys(kuanXian).length && kuanXian[this.goods.productList[0].productCode]) {
+        if (kuanXian && Object.keys(kuanXian).length && kuanXian[this.goods.productList[0].productCode] === '1') {
           state = true;
         }
       }
