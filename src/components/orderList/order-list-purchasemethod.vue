@@ -1,18 +1,19 @@
 <template>
-  <view v-show="isOrderreview" class="order_more">
+  <view v-show="isOrderBuy" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>通过</view>
-      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>失败</view>
+      <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>信用模式</view>
+      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>版本调货</view>
+      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>融资订单</view>
     </view>
   </view>
 </template>
 
 <script>
 export default {
-  name: 'orderListReview',
+  name: 'isOrderBuy',
   props: {
-    isOrderreview: {
+    isOrderBuy: {
       type: Boolean,
       default: false
     },
@@ -22,16 +23,20 @@ export default {
   },
   methods: {
     orderNoClick(val) {
-      if (val === '1'){
+      if (val === '1') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderReview', '通过');
+        this.$emit('selectInfoOrderBuy', '信用模式');
       }
-      if (val === '2'){
+      if (val === '2') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderReview', '失败');
+        this.$emit('selectInfoOrderBuy', '版本调货');
+      }
+      if (val === '3') {
+        /* 回馈抽屉值，修改props.show */
+        this.$emit('selectInfoOrderBuy', '融资订单');
       }
     },
-  }
+  },
 };
 </script>
 

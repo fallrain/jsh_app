@@ -36,10 +36,10 @@
     >
       <view class="tShoppingCartItem-cnt">
         <view class="tShoppingCartItem-cnt-img-wrap">
-            <image :src="item.THUMBNAIL" @tap="goDetail(item)"></image>
+            <image :src="item.THUMBNAIL"></image>
         </view>
         <view class="jShoppingCartItem-cnt-inf">
-          <view class="tShoppingCartItem-cnt-inf-title" @tap="goDetail(item)">{{item.DH_INVSTD}}</view>
+          <view class="tShoppingCartItem-cnt-inf-title">{{item.DH_INVSTD}}</view>
           <view class="tShoppingCartItem-cnt-price-inf">
             <view class="tShoppingCartItem-cnt-price">¥ {{item.UNITPRICE}}</view>
             <view class="tShoppingCartItem-cnt-stock">库存：{{item.IBL_MAXNUM}}</view>

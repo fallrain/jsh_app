@@ -444,7 +444,7 @@ export default {
     },
     filterReset() {
       /* 抽屉筛选重置 */
-      this.filterInputs.forEach(ele => {
+      this.filterInputs.forEach((ele) => {
         ele.value = '';
       });
       this.filterList.forEach((item) => {
@@ -527,7 +527,7 @@ export default {
       console.log(detail);
       await this.validateProduct(detail);
     },
-    //数据改变
+    // 数据改变
     getNum(item) {
       console.log(item);
       this.calue = item;

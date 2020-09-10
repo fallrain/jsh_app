@@ -11,12 +11,16 @@
             <view class=" message-unread">共{{unread}}条消息未读</view>
             <view class=" message-read" @click="readAll">全部已读</view>
             <view class=" message-vertical-line"></view>
-            <view class=" message-category">
+            <view class=" message-category" @tap="getIsMessage">
               消息类别
             </view>
-            <i class="iconfont iconxia message-icon"> </i>
+            <i class="iconfont iconxia message-icon" @tap="getIsMessage"></i>
+            <view class="message-list">
+              <message-info-list-more :isMessage="isMessage"></message-info-list-more>
+            </view>
           </view>
           <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.pk,item)">
+            <view class="message-circular" v-if="isExpand"></view>
             <view class="uni-flex uni-row" >
                 <view class="message-littleTitle">{{item.typeNameShow}}</view>
                 <view class="message-title">{{item.title}}</view>
@@ -32,13 +36,15 @@
 </template>
 <script>
 import messageInfoListTab from './messageInfoListTab';
+import messageInfoListMore from './messageInfoListMore';
 import { mapGetters } from 'vuex';
 import { USER } from '@/store/mutationsTypes';
 
 export default {
   name: 'messageInfoList',
   components: {
-    messageInfoListTab
+    messageInfoListTab,
+    messageInfoListMore
   },
 
   data() {
@@ -55,15 +61,23 @@ export default {
       //     active: false
       //   }
       // ],
-
+      isMessage: false,
+      // 未读
+      isExpand: true,
       tabIndex: 1,
       unread: 0,
       messageList: [],
-      messageactive: 0
+      messageactive: 0,
+      filter: {},
+      complete: 0
     };
   },
   created() {
-    this.getNotReadMessageCount();
+    // this.getNotReadMessageCount();
+
+  },
+  watch: {
+    $route: ['tabClick']
   },
   computed: {
     ...mapGetters({
@@ -71,17 +85,35 @@ export default {
     })
   },
   methods: {
-    async tabClick(item, index) {
+    tabClick(item, index) {
       console.log(index);
       // this.tabs = e
       this.tabIndex = index;
-      const param = {
+      this.getmessageList();
+    },
+    getIsMessage() {
+      this.isMessage = !this.isMessage;
+    },
+    getSearch() {
+    //  获取不同条件下的传参
+      let param = {
         pageNum: 1,
         pageSize: 10,
         unitId: `${this.saleInfo.customerCode}_admin`,
-        typeName: '',
-        createDateStr: ''
       };
+      if (!this.isExpand) {
+        this.filter.complete = 1;
+        this.filter.createDateStr = '';
+      }
+      param = {
+        ...param,
+        ...this.filter
+      };
+      return param;
+    },
+    async getmessageList() {
+      const param = this.getSearch();
+      console.log(param);
       const { code, data } = await this.messageService.messageList(param);
       if (code === '1') {
         const {
@@ -89,10 +121,18 @@ export default {
         } = data;
         // console.log(page.result);
         this.messageList = list;
+        // this.complete =
         console.log(this.messageList);
+        this.messageList.map(item => {
+          console.log(item);
+          if (item.complete === 1) {
+            this.isExpand = false;
+          } else {
+            this.isExpand = true;
+          }
+        });
       }
     },
-
     showDetail(id, item) {
       console.log(id, JSON.stringify(item));
       uni.navigateTo({
@@ -116,20 +156,24 @@ export default {
       });
     },
     async  updateAllMessageRead() {
-      const { code, data } = await this.messageService.updateAllMessageRead({
-        unitId: `${this.saleInfo.customerCode}_admin`
-      });
-    },
-    // 未读
-    async getNotReadMessageCount() {
-      const { code, data } = await this.messageService.getNotReadMessageCount({
+      const { code } = await this.messageService.updateAllMessageRead({
         unitId: `${this.saleInfo.customerCode}_admin`
       });
       if (code === '1') {
-        // console.log('未读   1111');
-        this.unread = data;
+        this.isExpand = false;
+        this.getmessageList();
       }
-    }
+    },
+    // 未读
+    // async getNotReadMessageCount() {
+    //   const { code, data } = await this.messageService.getNotReadMessageCount({
+    //     unitId: `${this.saleInfo.customerCode}_admin`
+    //   });
+    //   if (code === '1') {
+    //     // console.log('未读   1111');
+    //     this.unread = data;
+    //   }
+    // }
 
 
 
@@ -162,7 +206,6 @@ export default {
           margin:0px 200px 24px 16px;
       }
       .message-read{
-        width:96px;
         height:34px;
         font-size:24px;
         font-family:PingFangSC-Regular,PingFang SC;
@@ -178,7 +221,6 @@ export default {
         margin-top:4px;
       }
       .message-category{
-        width:96px;
         height:34px;
         font-size:24px;
         font-family:PingFangSC-Regular,PingFang SC;
@@ -187,10 +229,17 @@ export default {
         line-height:34px;
         margin:0px 8px 24px 34px;
       }
+      .message-list{
+        position: absolute;
+        z-index: 200;
+        right: 0px;
+        top: 180px;
+      }
       .message-icon{
         font-size:10px;
         color:rgba(237,40,86,1);
         margin-top:10px;
+        //position: reletive;
       }
     }
 
@@ -201,6 +250,16 @@ export default {
       border-radius:20px;
       padding:24px;
       margin-bottom:24px;
+      position:relative;
+        .message-circular {
+          width:15px;
+          height:15px;
+          border-radius: 10px;
+          background: red;
+          position: absolute;
+          right:20px;
+          top:90px;
+        }
         .uni-flex{
           text-align:center;
           .message-littleTitle{

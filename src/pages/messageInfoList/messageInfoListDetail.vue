@@ -1,16 +1,19 @@
 <template>
-    <view class="massageDetail" >
-      <view class="massageDetail-infotitle">
-        <text class="massageDetail-littleTitle">{{detail.typeNameShow}}</text>
-        <text class="massageDetail-title">{{detail.title}}</text>
-      </view>
-      <view class="massageDetail-info">
-        <view class="massageDetail-border">{{detail.description}}</view>
-        <view class="massageDetail-alltime">
-          <text class="massageDetail-time">{{detail.createTime}}</text>
-          <text class="massageDetail-time massageDetail-delete" @tap="deleteMessageOne">X 删除此消息</text>
+    <view class="massageDetail">
+      <view v-if="isShow">
+        <view class="massageDetail-infotitle">
+          <text class="massageDetail-littleTitle">{{detail.typeNameShow}}</text>
+          <text class="massageDetail-title">{{detail.title}}</text>
+        </view>
+        <view class="massageDetail-info">
+          <view class="massageDetail-border">{{detail.description}}</view>
+          <view class="massageDetail-alltime">
+            <text class="massageDetail-time">{{detail.createTime}}</text>
+            <text class="massageDetail-time massageDetail-delete" @tap="deleteMessageOne">X 删除此消息</text>
+          </view>
         </view>
       </view>
+      <view v-else style="width:100%; margin: 30% 35%; font-size: 20px;">~~~暂无数据~~~</view>
     </view>
 </template>
 <script>
@@ -27,6 +30,7 @@ export default {
     return {
       detail: {},
       id: 0,
+      isShow: true
       // message: {}
     };
   },
@@ -73,20 +77,31 @@ export default {
         id: this.id
       });
       if (code === '1') {
-        // this.detail.splice(0, 1);
-        console.log(this.detail)
+        this.detail = {};
+        this.isShow = false;
+        this.getPage();
+        console.log(this.detail);
         uni.showToast({
           title: '删除成功',
         });
         console.log(this.detail);
-        const param = {
-          pageNum: 1,
-          pageSize: 10,
-          unitId: `${this.saleInfo.customerCode}_admin`,
-          typeName: '',
-          createDateStr: ''
-        };
-        const { code, data } = await this.messageService.messageList(param);
+      }
+    },
+    async getPage() {
+      const param = {
+        pageNum: 1,
+        pageSize: 10,
+        unitId: `${this.saleInfo.customerCode}_admin`,
+        typeName: '',
+        createDateStr: ''
+      };
+      const { code, data } = await this.messageService.messageList(param);
+      if (code === '1') {
+        data.list.forEach((item, index) => {
+          if (item.pk === this.id) {
+            data.list.splice(index, 1);
+          }
+        });
       }
     }
   },
