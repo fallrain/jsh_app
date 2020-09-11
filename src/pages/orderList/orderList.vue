@@ -637,7 +637,8 @@ export default {
       if (this.orderModelValue === '2') {
         bianhao = this.addresseeInput;
       }
-      const param = {
+      
+      var param = {
 
         industry: this.industry,
         product_brand_all: this.product_brand_all,
@@ -661,9 +662,12 @@ export default {
         pageNo: pgNo,
         pageSize: 10
       };
-      // if (e == 8) {
-      //   param.yjPay = 'MFYJ';
-      // }
+
+
+      if (e == 8) {
+        param.yjPay = 'MFYJ';
+        param.orderStatusSelf = 7;
+      }
 
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
