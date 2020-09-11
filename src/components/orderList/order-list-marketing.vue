@@ -3,10 +3,10 @@
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
       <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>单品</view>
-      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>抢单</view>
-      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>套餐</view>
-      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>成套</view>
-      <view class="order_more_text" @click="orderNoClick('5')"><view class="iconfont iconcancel order_more_iconStyle"></view>组合</view>
+      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>组合</view>
+      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>抢单</view>
+      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>套餐</view>
+      <view class="order_more_text" @click="orderNoClick('5')"><view class="iconfont iconcancel order_more_iconStyle"></view>成套</view>
       <view class="order_more_text" @click="orderNoClick('6')"><view class="iconfont iconcancel order_more_iconStyle"></view>反向定制</view>
     </view>
   </view>
@@ -28,27 +28,27 @@ export default {
     orderNoClick(val) {
       if (val === '1') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '单品');
+        this.$emit('selectInfoOrderMarketing', val, '单品');
       }
       if (val === '2') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '抢单');
+        this.$emit('selectInfoOrderMarketing', val, '组合');
       }
       if (val === '3') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '套餐');
+        this.$emit('selectInfoOrderMarketing', val, '抢单');
       }
       if (val === '4') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '成套');
+        this.$emit('selectInfoOrderMarketing', val, '套餐');
       }
       if (val === '5') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '组合');
+        this.$emit('selectInfoOrderMarketing', val, '成套');
       }
       if (val === '6') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderMarketing', '反向定制');
+        this.$emit('selectInfoOrderMarketing', val, '反向定制');
       }
     },
   }

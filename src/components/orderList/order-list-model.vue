@@ -22,13 +22,13 @@ export default {
   },
   methods: {
     orderModelClick(val) {
-      if (val === '1'){
+      if (val === '1') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderModel', '产品型号');
+        this.$emit('selectInfoOrderModel', val, '产品型号');
       }
-      if (val === '2'){
+      if (val === '2') {
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderModel', '产品编号');
+        this.$emit('selectInfoOrderModel', val, '产品编号');
       }
     },
   }

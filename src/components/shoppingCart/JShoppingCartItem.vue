@@ -62,7 +62,7 @@
           </view>
           <j-number-box
             :max="maxGoodsNumber"
-            :min="1"
+            :min="minGoodsNumber"
             v-model="goods.number"
             @blur="goodsNumChange"
             @minus="goodsNumChange"
@@ -158,7 +158,7 @@
             class="jShoppingCartItem-btm-inf-wrap"
           >
             <view
-              v-if="inf.origin==='update'"
+              v-if="inf.$origin==='update'"
               @tap="handleDelVersion(inf)"
               class="jShoppingCartItem-btm-inf-close iconfont iconcross"
             ></view>
@@ -169,6 +169,42 @@
           </view>
         </view>
       </block>
+      <view>
+        <template
+          v-for="(item,index) in choseVersions"
+        >
+          <view
+            :key="index"
+            class="jShoppingCartItem-btm-inf-real-wrap"
+            v-if="item.$isRealProduct"
+          >
+            <view
+              class="jShoppingCartItem-btm-inf-real-icon mr10"
+            >
+              <view class="iconfont iconcalculator"></view>
+            </view>
+            <view class="jShoppingCartItem-btm-inf-real-cnt">
+              <view class="jShoppingCartItem-btm-inf-real-title j-text-ellipsis">
+                样机版本：{{item.versionCode}}
+              </view>
+              <view class="jShoppingCartItem-btm-inf-real-text-wrap">
+                <text class="mr20">价格：¥{{item.invoicePrice}}</text>
+                <text class="mr20">数量：{{item.usableQty}}</text>
+                <text class="mr20">小计：¥{{item.$realProductTotalPrice}}</text>
+              </view>
+            </view>
+            <view
+              class="jShoppingCartItem-btm-inf-real-close-wrap"
+              v-if="item.$origin==='update'"
+            >
+              <view
+                @tap="handleDelVersion(item)"
+                class="jShoppingCartItem-btm-inf-real-close iconfont iconcross"
+              ></view>
+            </view>
+          </view>
+        </template>
+      </view>
     </view>
     <j-version-specifications
       :show.sync="isShowSpecifications"
@@ -421,7 +457,7 @@ export default {
           $origin,
           $isTransfer
         } = curVersion;
-        if (JSON.stringify(curVersion) === '{}' || (priceType === 'PT' && !$isTransfer)) {
+        if (JSON.stringify(curVersion) === '{}' || (priceType === 'PT' && !$isTransfer) || curVersion.$isRealProduct) {
           return '';
         }
         const {
@@ -443,7 +479,7 @@ export default {
         const inf = {
           $parentId,
           $choseIndex,
-          origin: $origin
+          $origin
         };
         if (priceType) {
           inf.content = `${getGoodsInCartPriceType()[priceType.toUpperCase()]}版本：${versionCode} ￥${invoicePrice} 数量：${usableQty}`;
@@ -522,6 +558,19 @@ export default {
       }
       return maxNum === undefined || maxNum === null ? Number.MAX_SAFE_INTEGER : maxNum;
     },
+    minGoodsNumber() {
+      /* 最小数量 */
+      let minNum = 1;
+      // 看是否选择了版本;
+      if (this.choseVersions && this.choseVersions.length) {
+        const realExample = this.choseVersions.find(vs => vs.$isRealProduct);
+        // 正品样机有最小购买数量
+        if (realExample) {
+          minNum = realExample.realQty;
+        }
+      }
+      return minNum;
+    }
   },
   watch: {
     versionPrice() {
@@ -558,12 +607,20 @@ export default {
     isFundsFirst(val) {
       /* 如果不支持款先模式了，已经打开的则关闭 */
       if (val === false) {
-        this.goods.isFundsFirstMode = false;
+        this.goods.isFundsFirstMode = true;
         this.goodsChange();
       }
     },
     maxGoodsNumber(val) {
       /* 最大数量如果小于已选的数量，则修改已选数量之 */
+      if (this.goods.number > val) {
+        this.goods.number = val;
+        this.goods.productList[0].number = val;
+        this.$emit('change', this.goods, this.index);
+      }
+    },
+    minGoodsNumber(val) {
+      /* 最小数量如果大于已选的数量，则修改已选数量之 */
       if (this.goods.number > val) {
         this.goods.number = val;
         this.goods.productList[0].number = val;

@@ -342,3 +342,64 @@
   color: #666;
   font-size: 24px;
 }
+
+.jShoppingCartItem-btm-inf-real-wrap {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+  // border-top: 1px solid #EDE9E9;
+  padding: 20px 20px 0 0;
+}
+
+.jShoppingCartItem-btm-inf-real-icon {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  line-height: 70px;
+  text-align: center;
+  border-radius: 100%;
+  background: #FFECF0;
+
+  .iconfont {
+    font-size: 36px;
+    color: $theme-color;
+  }
+}
+
+.jShoppingCartItem-btm-inf-real-cnt {
+  flex-grow: 1;
+}
+
+.jShoppingCartItem-btm-inf-real-title {
+  width: 520px;
+  color: $theme-color;
+  line-height: 40px;
+  font-size: 29px;
+}
+
+.jShoppingCartItem-btm-inf-real-text-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  color: #999;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.jShoppingCartItem-btm-inf-real-close-wrap {
+  flex-shrink: 0;
+  position: relative;
+  width: 30px;
+  height: 100%;
+}
+
+.jShoppingCartItem-btm-inf-real-close {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $theme-color;
+  z-index: 10;
+  font-size: 30px;
+}

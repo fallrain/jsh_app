@@ -8,7 +8,7 @@
             <!-- <view @click="moreAction" class="jtabRight">
               MORE
             </view> -->
-            <view  @click="moreAction" class="iconfont iconshaixuan"></view>
+            <view  @click="moreAction" class="iconfont iconshaixuan1"></view>
           </template>
         </j-tab>
         </view>
@@ -38,6 +38,7 @@
               class="orderList-drawer-filter-input"
               type="text"
               :placeholder="`请输入${orderTypeStr}`"
+              v-model="serviNO"
             >
           </view>
         </view>
@@ -84,6 +85,7 @@
           class="orderList-drawer-filter-input"
           type="text"
           :placeholder="`请输入送达方`"
+          v-model="songda"
           >
           </view>
         </view>
@@ -103,6 +105,7 @@
             class="orderList-drawer-filter-input"
             type="text"
             :placeholder="`请输入${orderModelStr}`"
+            v-model="addresseeInput"
             >
           </view>
         </view>
@@ -116,13 +119,13 @@
              class="timeParent"
             >
               <view class="box1">
-                <text>开始时间</text>
+                <text @click="orderBegainTimeAction" >{{orderBegainTime.length>0?orderBegainTime:'开始时间'}}</text>
               </view>
               <view class="box2">
                 <text>至</text>
               </view>
               <view class="box3">
-                <text>结束时间</text>
+                <text @click="orderEndTimeAction">{{orderEndTime.length>0?orderEndTime:'结束时间'}}</text>
               </view>
             </view>
         </view>
@@ -136,10 +139,10 @@
            class="timeParent"
           >
             <view class="box1">
-              <text>开始时间</text>
+              <text @click="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
-              <text>至</text>
+              <text @click="deductioEndTimeAction">至</text>
             </view>
             <view class="box3">
               <text>结束时间</text>
@@ -166,7 +169,26 @@
             </view>
           </view>
         </view>
-
+        <view>
+          <view class="addressee">
+            <view >
+              <text>金税开票时间</text>
+            </view>
+          </view>
+          <view
+            class="timeParent"
+          >
+            <view class="box1">
+              <text>开始时间</text>
+            </view>
+            <view class="box2">
+              <text>至</text>
+            </view>
+            <view class="box3">
+              <text>结束时间</text>
+            </view>
+          </view>
+        </view>
         <view>
             <view class="industry-brand">
               <view class="industry-brand-child">
@@ -179,6 +201,7 @@
                   type="text"
                   :placeholder="`请选择`"
                   v-model="orderReviewStr"
+                  disabled="false"
                   >
                   <i class="iconfont iconxia"  @click="getReview"></i>
                   </view>
@@ -194,6 +217,7 @@
                   type="text"
                   :placeholder="`请选择`"
                   v-model="orderMarkStr"
+                  disabled="false"
                   >
                   <i class="iconfont iconxia" @click="getMarketing"></i>
                   </view>
@@ -209,10 +233,11 @@
               </view>
                 <view class="inputs">
                     <input
-                            class="orderList-drawer-filter-down-input"
-                            type="text"
-                            :placeholder="`请选择`"
-                            v-model="orderBuyStr"
+                      class="orderList-drawer-filter-down-input"
+                      type="text"
+                      :placeholder="`请选择`"
+                      v-model="orderBuyStr"
+                      disabled="false"
                     >
                     <i class="iconfont iconxia" @click="getBuy"></i>
                 </view>
@@ -228,6 +253,7 @@
                     type="text"
                     :placeholder="`请选择`"
                     v-model="orderDistributionStr"
+                    disabled="false"
                     >
                     <i class="iconfont iconxia" @click="getDistribution"></i>
                 </view>
@@ -254,14 +280,13 @@
           <view class="timeFont">
             <text>标签</text>
           </view>
-          <u-radio-group>
+          <u-radio-group @change="radioChange">
             <u-radio
-                    icon-size="10"
-                    label-size="10"
-                    @change="radioChange"
-                    v-for="(item, index) in labellist" :key="index"
-                    :name="item.name"
-                    :disabled="item.disabled"
+              icon-size="10"
+              label-size="10"
+              v-for="(item, index) in labellist" :key="index"
+              :name="item.name"
+              :disabled="item.disabled"
             >
               {{item.name}}
             </u-radio>
@@ -347,6 +372,7 @@ export default {
   },
   data() {
     return {
+      formDataJson: {},
       orderNoshow: false,
       orderModelshow: false,
       orderReviewshow: false,
@@ -354,11 +380,35 @@ export default {
       orderBuy: false,
       orderDistribution: false,
       orderTypeStr: '订单号',
+      orderTypeVue: '1',
+      serviNO: '',
+      bstnk: '',
+      brand: '',
+      brandInput: '',
+      jshi_grouping_no: '',
+      sap_dn5: '',
+      industry: '',
+      product_brand_all: '',
+      product_model_all: '',
+      product_code_all: '',
+      addresseeInput: '',
+      songda:'',
+      modelInput: '',
       orderModelStr: '产品型号',
+      orderModelValue: '1',
       orderReviewStr: '',
+      orderReviewValue: '',
       orderMarkStr: '',
+      orderMarkValue: '',
       orderBuyStr: '',
+      orderBuyValue: '',
       orderDistributionStr: '',
+      orderDistributionValue: '',
+      pricetypeall: false, // 样品机
+      jshiordersource: false, // 整车
+      farweeklyall: false, // 运周次
+      priceTypeJudgment: '',
+      yjPay: '',
       isShowGoodsFilterDrawer: false,
       orderListInfo: [],
       total: 0,
@@ -425,58 +475,7 @@ export default {
           active: false
         }
       ],
-      filterInputs: [
 
-        {
-          key: 'Addressee',
-          name: '送达方',
-          value: ''
-        },
-        {
-          key: 'model',
-          name: '产品型号',
-          value: ''
-        }
-      ],
-      timeInputs: [
-        {
-          key: 'ordertime',
-          name: '下单时间',
-          value: ''
-        },
-        {
-          key: 'deductiontime',
-          name: '扣款时间',
-          value: ''
-        },
-        {
-          key: 'billingtime',
-          name: '系统开票时间',
-          value: ''
-        }
-      ],
-      inputs: [
-        {
-          key: 'reviewstatus',
-          name: '评审状态',
-          value: ''
-        },
-        {
-          key: 'marketingactivities',
-          name: '营销活动',
-          value: ''
-        },
-        {
-          key: 'purchasemethod',
-          name: '购买方式',
-          value: ''
-        },
-        {
-          key: 'distributionmode',
-          name: '配送方式',
-          value: ''
-        }
-      ],
       screenlist: [
         {
           name: '样品机',
@@ -520,10 +519,18 @@ export default {
       isProductBandShow: false,
       choseProductBandKeys: [],
       producntBandValue: '',
-      isShowCalendarDrawer:true,
+      isShowCalendarDrawer: true,
       // 用户选中的日期
-      selectData:'',
-      // 用户确定
+      selectData: '',
+      // 下单开始时间
+      orderBegainTime: '',
+      orderBegainTimeBool: false,
+      // 下单结束时间
+      orderEndTime: '',
+      orderEndTimeBool: false,
+      // 扣款开始时间
+      deductionBegainTime: '',
+      deductionEndTime: '',
     };
   },
   computed: {
@@ -537,6 +544,7 @@ export default {
     console.log(this.tabs[this.sexID]);
   },
   created() {
+    console.log(this.sexID);
     this.orderList(this.tabs[this.sexID].id2, this.pageNo);
     this.tabs.forEach((each) => {
       each.active = false;
@@ -548,14 +556,21 @@ export default {
       ORDER.UPDATE_ORDER
     ]),
     filterConfirm() {
-
+      this.orderList(this.tabs[this.sexID].id2, this.pageNo);
+      this.tabs.forEach((each) => {
+        each.active = false;
+      });
+      this.tabs[this.sexID].active = true;
     },
     filterReset() {
-
+      this.orderTypeStr='订单号';
+      this.orderTypeVue= '1';
+      this.serviNO='';
+      this.songda='';
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
-      console.log('=======productBandChange========')
+      console.log('=======productBandChange========');
       this.producntBandValue = productBandOptions[0].value;
       this.isProductBandShow = false;
       this.isShowGoodsFilterDrawer = true;
@@ -563,10 +578,10 @@ export default {
     async productBandAction() {
       this.isShowGoodsFilterDrawer = false;
       await this.getDictionaryByWhereFun({
-        dictionaryType: "INDUSTRIAL"//产业筛选
+        dictionaryType: 'INDUSTRIAL'// 产业筛选
       });
       await this.getDictionaryByWhereFun({
-        dictionaryType:"PRODUCT_BRAND"
+        dictionaryType: 'PRODUCT_BRAND'
       });
       this.isProductBandShow = true;
     },
@@ -602,17 +617,53 @@ export default {
       console.log('===========getDictionaryByWhereFun===========');
     },
     async orderList(e, pgNo) {
+      let dingdan;
+      let zhengdan;
+      let wuliu;
+      let xinghao;
+      let bianhao;
+      if (this.orderTypeVue === '1') {
+        dingdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '2') {
+        zhengdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '4') {
+        wuliu = this.serviNO;
+      }
+      if (this.orderModelValue === '1') {
+        xinghao = this.addresseeInput;
+      }
+      if (this.orderModelValue === '2') {
+        bianhao = this.addresseeInput;
+      }
       const param = {
+
+        industry: this.industry,
+        product_brand_all: this.product_brand_all,
+        product_model_all: xinghao,
+        product_code_all: bianhao,
+        sap_judge_status: this.orderReviewValue,
+        product_type_all: this.orderMarkValue,
+        waysOfPurchasing: this.orderBuyValue,
+        bstnk: dingdan,
+        jshi_grouping_no: zhengdan,
+        sap_dn5: wuliu,
+        jshi_delivery_type: this.orderDistributionValue,
+        price_type_all: this.pricetypeall,
+        jshi_order_source: this.jshiordersource,
+        far_weekly_all: this.farweeklyall,
+        priceTypeJudgment: this.priceTypeJudgment,
+        yjPay: this.yjPay,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
         pageNo: pgNo,
         pageSize: 10
       };
-
-      if (e == 8) {
-        param.yjPay = 'MFYJ';
-      }
+      // if (e == 8) {
+      //   param.yjPay = 'MFYJ';
+      // }
 
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
@@ -695,24 +746,138 @@ export default {
       this.orderDistribution = !this.orderDistribution;
       console.log(this.orderDistribution);
     },
-    selectInfoOrderNo(data) { // 点击子组件按钮时触发事件
-      console.log(data);
+    selectInfoOrderNo(value, data) {
+      this.orderTypeVue = value;
       this.orderNoshow = !this.orderNoshow;
-      this.orderTypeStr = data; // 改变了父组件的值
+      this.orderTypeStr = data;
+      if (value === '1') {
+        console.log(value);
+        this.jshi_sendto_code = '';
+        this.sap_dn5 = '';
+        this.bstnk = this.serviNO;
+      }
+      if (value === '2') {
+        console.log(value);
+        this.jshi_sendto_code = this.serviNO;
+        this.sap_dn5 = '';
+        this.bstnk = '';
+      }
+      if (value === '4') {
+        console.log(value);
+        this.jshi_sendto_code = '';
+        this.sap_dn5 = this.serviNO;
+        this.bstnk = '';
+      }
     },
-    selectInfoOrderModel(data) { // 点击子组件按钮时触发事件
+    selectInfoOrderModel(value, data) {
+      this.orderModelValue = value;
       this.orderModelshow = !this.orderModelshow;
-      this.orderModelStr = data; // 改变了父组件的值
+      this.orderModelStr = data;
+      if (value === '1') {
+        this.product_model_all = this.addresseeInput;
+        this.product_code_all = '';
+      }
+      if (value === '2') {
+        this.product_model_all = '';
+        this.product_code_all = this.addresseeInput;
+      }
     },
-    selectInfoOrderReview(data) { // 点击子组件按钮时触发事件
-      this.orderReviewshow= !this.orderReviewshow;
-      this.orderReviewStr = data; // 改变了父组件的值
+    selectInfoOrderReview(value, data) {
+      this.orderReviewValue = value;
+      this.orderReviewshow = !this.orderReviewshow;
+      this.orderReviewStr = data;
     },
-    selectInfoOrderMarketing(data) { // 点击子组件按钮时触发事件
-      this.orderMarketing= !this.orderMarketing;
-      this.orderMarkStr = data; // 改变了父组件的值
+    selectInfoOrderMarketing(value, data) {
+      this.orderMarkValue = value;
+      this.orderMarketing = !this.orderMarketing;
+      this.orderMarkStr = data;
+    },
+    selectInfoOrderBuy(value, data) {
+      this.orderBuyValue = value;
+      this.orderBuy = !this.orderBuy;
+      this.orderBuyStr = data;
+    },
+    selectInfoOrderDistribution(value, data) { // 点击子组件按钮时触发事件
+      this.orderDistributionValue = value;
+      this.orderDistribution = !this.orderDistribution;
+      this.orderDistributionStr = data; // 改变了父组件的值
+    },
+    // 选中某个复选框时，由checkbox时触发
+    checkboxChange(e) {
+      console.log(e.name);
+      if (!e.value && e.name === '样品机') {
+        this.pricetypeall = !e.value;
+      }
+      if (!e.value && e.name === '整车') {
+        this.jshiordersource = !e.value;
+      }
+      if (!e.value && e.name === '远周次') {
+        this.farweeklyall = !e.value;
+      }
+    },
+    radioChange(e) {
+      console.log(e);
+      if (e === '工程') {
+        this.priceTypeJudgment = 'GC';
+        this.yjPay = '';
+      }
+      if (e === '特价') {
+        this.priceTypeJudgment = 'TJ';
+        this.yjPay = '';
+      }
+      if (e === '样机') {
+        this.priceTypeJudgment = 'YJ';
+        this.yjPay = '';
+      }
+      if (e === '周转样机带结算') {
+        this.priceTypeJudgment = '';
+        this.yjPay = 'MFYJ';
+      }
+    },
+    // 时间取消
+    calentCancleAction() {
+      this.$refs.popCalendar.close();
+    },
+    // 时间确定
+    calentVerifyAction() {
+      if (this.orderBegainTimeBool) {
+        this.orderBegainTime = this.selectData;
+      }
+      if (this.orderEndTimeBool) {
+        this.orderEndTime = this.selectData;
+      }
+      if (this.deductionBegainTimeBool) {
+        this.deductionBegainTime = this.selectData;
+      }
+      this.orderBegainTimeBool = false;
+      this.orderEndTimeBool = false;
+      this.deductionBegainTimeBool = false;
+      this.$refs.popCalendar.close();
+      this.isShowGoodsFilterDrawer = true;
+    },
+    // 选中的时间
+    calendarChange(e) {
+      console.log(e);
+      this.selectData = e.fulldate;
+    },
+    // 下单开始时间
+    orderBegainTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.orderBegainTimeBool = true;
+    },
+    // 下单开始时间
+    orderEndTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.orderEndTimeBool = true;
+    },
+    // 扣款开始时间
+    deductionBegainTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.deductionBegainTimeBool = true;
     }
-
   }
 };
 </script>

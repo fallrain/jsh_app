@@ -1,3 +1,6 @@
+import {
+  getYj
+} from '@/lib/dataDictionary';
 
 export default {
   methods: {
@@ -115,6 +118,35 @@ export default {
           }
         }
       }
+      // 设置是否是正品样机的标记 $isRealProduct
+      choseVersions.forEach((version) => {
+        const {
+          priceType: type
+        } = version;
+        if (type) {
+          const typeUpper = type.toUpperCase();
+          if (getYj()[typeUpper]) {
+            const curAllVersion = this.versionPrice.activity[productCode];
+            if (!curAllVersion) {
+              return;
+            }
+            const choseVersion = curAllVersion.YJCY.find(v => v.versionCode === version.versionCode);
+            const {
+              realQty
+            } = choseVersion;
+            // 如果存在正品样机，则设置正品样机标记，并设置数量，此数量为最小购买数量
+            if (choseVersion && (realQty || realQty === 0)) {
+              version.$isRealProduct = true;
+              version.realQty = realQty;
+              const {
+                invoicePrice,
+                usableQty
+              } = version;
+              version.$realProductTotalPrice = this.jshUtil.formatNumber(this.jshUtil.arithmetic(invoicePrice, usableQty, 3), 2);
+            }
+          }
+        }
+      });
       return choseVersions;
     },
   }
