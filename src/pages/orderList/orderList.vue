@@ -66,7 +66,7 @@
               <input
                 class="orderList-drawer-filter-down-input"
                 type="text"
-                v-model="producntBandValue"
+                v-model="producntBandName"
                 :placeholder="`请选择`"
               >
               <i @click="productBandAction" class="iconfont iconxia left-10"></i>
@@ -521,6 +521,7 @@ export default {
       isProductBandShow: false,
       choseProductBandKeys: [],
       producntBandValue: '',
+      producntBandName: '',
       isShowCalendarDrawer: true,
       // 用户选中的日期
       selectData: '',
@@ -585,6 +586,7 @@ export default {
       this.serviNO = '';
       this.songda = '';
       this.translateInput = '';
+      this.producntBandName='';
       this.producntBandValue = '';
       this.addresseeInput = '';
       this.orderModelStr = '产品型号';
@@ -608,7 +610,8 @@ export default {
     // 选择品牌后
     productBandChange(data, productBandOptions) {
       console.log('=======productBandChange========');
-      this.producntBandValue = productBandOptions[0].value;
+      this.producntBandName = productBandOptions[0].value;
+      this.producntBandValue = productBandOptions[0].key;
       this.isProductBandShow = false;
       this.isShowGoodsFilterDrawer = true;
     },
@@ -636,7 +639,7 @@ export default {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '1') {
         if (param.dictionaryType == 'INDUSTRIAL') {
-          this.industryList = data;
+
         } else {
           console.log('===========getDictionaryByWhereFun===========');
           // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
@@ -701,6 +704,7 @@ export default {
         sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
+        product_brand_all:this.producntBandValue,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
