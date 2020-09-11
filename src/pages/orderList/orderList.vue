@@ -8,7 +8,7 @@
             <!-- <view @click="moreAction" class="jtabRight">
               MORE
             </view> -->
-            <view  @click="moreAction" class="iconfont iconshaixuan"></view>
+            <view  @click="moreAction" class="iconfont iconshaixuan1"></view>
           </template>
         </j-tab>
         </view>
@@ -38,7 +38,7 @@
               class="orderList-drawer-filter-input"
               type="text"
               :placeholder="`请输入${orderTypeStr}`"
-              v-model="orderNoInput"
+              v-model="serviNO"
             >
           </view>
         </view>
@@ -85,6 +85,7 @@
           class="orderList-drawer-filter-input"
           type="text"
           :placeholder="`请输入送达方`"
+          v-model="songda"
           >
           </view>
         </view>
@@ -104,6 +105,7 @@
             class="orderList-drawer-filter-input"
             type="text"
             :placeholder="`请输入${orderModelStr}`"
+            v-model="addresseeInput"
             >
           </view>
         </view>
@@ -199,6 +201,7 @@
                   type="text"
                   :placeholder="`请选择`"
                   v-model="orderReviewStr"
+                  disabled="false"
                   >
                   <i class="iconfont iconxia"  @click="getReview"></i>
                   </view>
@@ -214,6 +217,7 @@
                   type="text"
                   :placeholder="`请选择`"
                   v-model="orderMarkStr"
+                  disabled="false"
                   >
                   <i class="iconfont iconxia" @click="getMarketing"></i>
                   </view>
@@ -249,6 +253,7 @@
                     type="text"
                     :placeholder="`请选择`"
                     v-model="orderDistributionStr"
+                    disabled="false"
                     >
                     <i class="iconfont iconxia" @click="getDistribution"></i>
                 </view>
@@ -375,9 +380,11 @@ export default {
       orderBuy: false,
       orderDistribution: false,
       orderTypeStr: '订单号',
-      orderTypeVue: '',
-      orderNoInput: '',
+      orderTypeVue: '1',
+      serviNO: '',
       bstnk: '',
+      brand: '',
+      brandInput: '',
       jshi_grouping_no: '',
       sap_dn5: '',
       industry: '',
@@ -385,9 +392,10 @@ export default {
       product_model_all: '',
       product_code_all: '',
       addresseeInput: '',
+      songda:'',
       modelInput: '',
       orderModelStr: '产品型号',
-      orderModelValue: '',
+      orderModelValue: '1',
       orderReviewStr: '',
       orderReviewValue: '',
       orderMarkStr: '',
@@ -511,18 +519,18 @@ export default {
       isProductBandShow: false,
       choseProductBandKeys: [],
       producntBandValue: '',
-      isShowCalendarDrawer:true,
+      isShowCalendarDrawer: true,
       // 用户选中的日期
-      selectData:'',
+      selectData: '',
       // 下单开始时间
-      orderBegainTime:'',
-      orderBegainTimeBool:false,
+      orderBegainTime: '',
+      orderBegainTimeBool: false,
       // 下单结束时间
-      orderEndTime:'',
-      orderEndTimeBool:false,
+      orderEndTime: '',
+      orderEndTimeBool: false,
       // 扣款开始时间
-      deductionBegainTime:'',
-      deductionEndTime:'',
+      deductionBegainTime: '',
+      deductionEndTime: '',
     };
   },
   computed: {
@@ -536,6 +544,7 @@ export default {
     console.log(this.tabs[this.sexID]);
   },
   created() {
+    console.log(this.sexID);
     this.orderList(this.tabs[this.sexID].id2, this.pageNo);
     this.tabs.forEach((each) => {
       each.active = false;
@@ -554,11 +563,14 @@ export default {
       this.tabs[this.sexID].active = true;
     },
     filterReset() {
-
+      this.orderTypeStr='订单号';
+      this.orderTypeVue= '1';
+      this.serviNO='';
+      this.songda='';
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
-      console.log('=======productBandChange========')
+      console.log('=======productBandChange========');
       this.producntBandValue = productBandOptions[0].value;
       this.isProductBandShow = false;
       this.isShowGoodsFilterDrawer = true;
@@ -605,17 +617,38 @@ export default {
       console.log('===========getDictionaryByWhereFun===========');
     },
     async orderList(e, pgNo) {
+      let dingdan;
+      let zhengdan;
+      let wuliu;
+      let xinghao;
+      let bianhao;
+      if (this.orderTypeVue === '1') {
+        dingdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '2') {
+        zhengdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '4') {
+        wuliu = this.serviNO;
+      }
+      if (this.orderModelValue === '1') {
+        xinghao = this.addresseeInput;
+      }
+      if (this.orderModelValue === '2') {
+        bianhao = this.addresseeInput;
+      }
       const param = {
-        bstnk: this.bstnk,
-        jshi_grouping_no: this.jshi_grouping_no,
-        sap_dn5: this.sap_dn5,
+
         industry: this.industry,
         product_brand_all: this.product_brand_all,
-        product_model_all: this.product_model_all,
-        product_code_all: this.product_code_all,
+        product_model_all: xinghao,
+        product_code_all: bianhao,
         sap_judge_status: this.orderReviewValue,
         product_type_all: this.orderMarkValue,
         waysOfPurchasing: this.orderBuyValue,
+        bstnk: dingdan,
+        jshi_grouping_no: zhengdan,
+        sap_dn5: wuliu,
         jshi_delivery_type: this.orderDistributionValue,
         price_type_all: this.pricetypeall,
         jshi_order_source: this.jshiordersource,
@@ -714,23 +747,25 @@ export default {
       console.log(this.orderDistribution);
     },
     selectInfoOrderNo(value, data) {
-      console.log(value);
       this.orderTypeVue = value;
       this.orderNoshow = !this.orderNoshow;
       this.orderTypeStr = data;
       if (value === '1') {
+        console.log(value);
         this.jshi_sendto_code = '';
         this.sap_dn5 = '';
-        this.bstnk = this.orderNoInput;
+        this.bstnk = this.serviNO;
       }
       if (value === '2') {
-        this.jshi_sendto_code = this.orderNoInput;
+        console.log(value);
+        this.jshi_sendto_code = this.serviNO;
         this.sap_dn5 = '';
         this.bstnk = '';
       }
       if (value === '4') {
+        console.log(value);
         this.jshi_sendto_code = '';
-        this.sap_dn5 = this.orderNoInput;
+        this.sap_dn5 = this.serviNO;
         this.bstnk = '';
       }
     },
@@ -805,13 +840,13 @@ export default {
     },
     // 时间确定
     calentVerifyAction() {
-      if(this.orderBegainTimeBool) {
+      if (this.orderBegainTimeBool) {
         this.orderBegainTime = this.selectData;
       }
-      if(this.orderEndTimeBool) {
+      if (this.orderEndTimeBool) {
         this.orderEndTime = this.selectData;
       }
-      if(this.deductionBegainTimeBool) {
+      if (this.deductionBegainTimeBool) {
         this.deductionBegainTime = this.selectData;
       }
       this.orderBegainTimeBool = false;
@@ -822,17 +857,16 @@ export default {
     },
     // 选中的时间
     calendarChange(e) {
-      console.log(e)
+      console.log(e);
       this.selectData = e.fulldate;
-
     },
     // 下单开始时间
     orderBegainTimeAction() {
       this.isShowGoodsFilterDrawer = false;
       this.$refs.popCalendar.open();
       this.orderBegainTimeBool = true;
-    } ,
-     // 下单开始时间
+    },
+    // 下单开始时间
     orderEndTimeAction() {
       this.isShowGoodsFilterDrawer = false;
       this.$refs.popCalendar.open();
