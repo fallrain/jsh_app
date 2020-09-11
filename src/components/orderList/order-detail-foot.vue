@@ -50,7 +50,9 @@ export default {
       } else if(item.name == '签收') {
         this.orderSelfSignedFun()
       } else if(item.name == '订单节点') {
-
+        uni.navigateTo({
+          url: `/pages/orderList/orderNode`
+        });
       }
     },
     async orderSelfSignedFun() {

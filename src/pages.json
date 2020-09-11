@@ -149,6 +149,12 @@
       }
     },
     {
+      "path": "pages/orderList/orderNode",
+      "style": {
+        "navigationBarTitleText": "订单节点"
+      }
+    },
+    {
       "path": "pages/orderList/orderWL",
       "style": {
         "navigationBarTitleText": "物流"
