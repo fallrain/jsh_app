@@ -795,16 +795,16 @@ export default {
               && (stockVersion || choseOtherVersions.find(v => v.$isTransfer))
           ) {
             isValid = false;
-            $errorMsg.push('云仓、异地云仓不支持版本调货');
+            $errorMsg.push('版本调货不支持云仓、异地云仓');
           }
           // 异地云仓也不支持折扣样机（样机出样）、反向定制
           if (yunCangFlag === 'ydyc') {
             if (priceType === 'YJCY' || choseOtherVersions.find(v => v.priceType === 'YJCY') || activityType === 5) {
               isValid = false;
               if (activityType === 5) {
-                $errorMsg.push('异地云仓不支持反向定制');
+                $errorMsg.push('反向定制不支持异地云仓');
               } else {
-                $errorMsg.push('异地云仓不支持折扣样机');
+                $errorMsg.push('折扣样机不支持异地云仓');
               }
             }
           }
@@ -1027,7 +1027,8 @@ export default {
             // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
             activityType: getOrdinaryCartActivityType()[product.activityType]
           });
-            // 判断产品的取值的字段名
+          // todo 以后应该改成直接从 shoppingCartItem 组件里面取 choseVersions
+          // 判断产品的取值的字段名
           let productListName = 'productList';
           // 调货版本号
           let transferVersion;
@@ -1080,6 +1081,18 @@ export default {
                 // transferVersion代表后来选了版本调货
                 orderSplitComposeProductData.transferVersion = transferVersion;
               }
+              // 是否包含样机
+              const isContainYj = getYj()[prdt.priceType];
+              if (isContainYj) {
+                // 查找正品样机
+                const realProduct = shoppingCartItem.choseVersions.find(v => v.versionCode === prdt.priceVersion);
+                if (realProduct && realProduct.$isRealProduct) {
+                  // 正品样机的数量需要修改，数量为样机最大数量和实际输入的数量的和
+                  const realNumber = realProduct.usableQty + realProduct.realQty;
+                  form.number = realNumber;
+                  orderSplitComposeProductData.number = realNumber;
+                }
+              }
               // 传统渠道没有信用模式
               if (channelGroup === 'ZY') {
                 // creditModel 如果没信用模式，creditModel字段也得修改，todo 存疑？
@@ -1097,7 +1110,6 @@ export default {
                 }
 
                 // 传统渠道样机不支持选择款先，默认款先
-                const isContainYj = getYj()[prdt.priceType];
                 if (isContainYj) {
                   orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
