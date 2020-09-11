@@ -166,12 +166,12 @@
         "navigationBarTitleText": "消息详情列表"
       }
     },
-    {
-      "path": "pages/messageInfoList/messageTaskDetail",
-      "style": {
-        "navigationBarTitleText": "任务详情"
-      }
-    },
+//    {
+//      "path": "pages/messageInfoList/messageTaskDetail",
+//      "style": {
+//        "navigationBarTitleText": "任务详情"
+//      }
+//    },
     {
       "path": "pages/transferGoods/transferGoods",
       "style": {

@@ -22,7 +22,7 @@ const data = [
   'pages/orderList/orderList',
   'pages/orderList/orderWL',
   'pages/messageInfoList/messageInfoList',
-  'pages/messageInfoList/messageTaskDetail',
+  // 'pages/messageInfoList/messageTaskDetail',
   'pages/transferGoods/transferGoods',
   'pages/transferGoods/transferShoppingCart',
   'pages/transferGoods/transferDetail',

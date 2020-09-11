@@ -53,6 +53,7 @@
                 class="orderList-drawer-filter-down-input"
                 type="text"
                 :placeholder="`请选择`"
+                v-model="translateInput"
               >
               <i @click="industryAction" class="iconfont iconxia left-10"></i>
             </view>
@@ -65,7 +66,7 @@
               <input
                 class="orderList-drawer-filter-down-input"
                 type="text"
-                v-model="producntBandValue"
+                v-model="producntBandName"
                 :placeholder="`请选择`"
               >
               <i @click="productBandAction" class="iconfont iconxia left-10"></i>
@@ -142,10 +143,10 @@
               <text @click="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
-              <text @click="deductioEndTimeAction">至</text>
+              <text>至</text>
             </view>
             <view class="box3">
-              <text>结束时间</text>
+              <text @click="deductionEndTimeAction">{{deductionEndTime.length>0?deductionEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -159,13 +160,13 @@
             class="timeParent"
           >
             <view class="box1">
-              <text>开始时间</text>
+              <text @click="invoiceTimeAction">{{invoiceBegainTime.length>0?invoiceBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text>结束时间</text>
+              <text @click="invoiceEndTimeAction">{{invoiceEndTime.length>0?invoiceEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -179,13 +180,13 @@
             class="timeParent"
           >
             <view class="box1">
-              <text>开始时间</text>
+              <text @click="goldTaxinvoiceTimeAction">{{goldTaxInvoiceBegainTime.length>0?goldTaxInvoiceBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text>结束时间</text>
+              <text @click="goldTaxinvoiceEndTimeAction">{{goldTaxInvoiceEndTime.length>0?goldTaxInvoiceEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -392,7 +393,8 @@ export default {
       product_model_all: '',
       product_code_all: '',
       addresseeInput: '',
-      songda:'',
+      translateInput: '',
+      songda: '',
       modelInput: '',
       orderModelStr: '产品型号',
       orderModelValue: '1',
@@ -519,6 +521,7 @@ export default {
       isProductBandShow: false,
       choseProductBandKeys: [],
       producntBandValue: '',
+      producntBandName: '',
       isShowCalendarDrawer: true,
       // 用户选中的日期
       selectData: '',
@@ -530,7 +533,22 @@ export default {
       orderEndTimeBool: false,
       // 扣款开始时间
       deductionBegainTime: '',
+      deductionBegainTimeBool: false,
+      // 扣款结束
       deductionEndTime: '',
+      deductionEndTimeBool: false,
+      // 开票开始
+      invoiceBegainTime: '',
+      invoiceBegainTimeBool: false,
+      // 开票结束
+      invoiceEndTime: '',
+      invoiceEndTimeBool: false,
+      // 金税开票开始
+      goldTaxInvoiceBegainTime: '',
+      goldTaxInvoiceBegainTimeBool: false,
+      // 金税开票结束
+      goldTaxInvoiceEndTime: '',
+      goldTaxInvoiceEndTimeBool: false,
     };
   },
   computed: {
@@ -563,15 +581,37 @@ export default {
       this.tabs[this.sexID].active = true;
     },
     filterReset() {
-      this.orderTypeStr='订单号';
-      this.orderTypeVue= '1';
-      this.serviNO='';
-      this.songda='';
+      this.orderTypeStr = '订单号';
+      this.orderTypeVue = '1';
+      this.serviNO = '';
+      this.songda = '';
+      this.translateInput = '';
+      this.producntBandName='';
+      this.producntBandValue = '';
+      this.addresseeInput = '';
+      this.orderModelStr = '产品型号';
+      this.orderModelValue = '1';
+      this.orderBegainTime = '';
+      this.orderEndTime = '';
+      this.deductionBegainTime = '';
+      this.deductionEndTime = '';
+      this.invoiceBegainTime = '';
+      this.invoiceEndTime = '';
+      this.goldTaxInvoiceBegainTime = '';
+      this.goldTaxInvoiceEndTime = '';
+      this.orderReviewStr = '';
+      this.orderMarkStr = '';
+      this.orderBuyStr = '';
+      this.orderDistributionStr = '';
+      this.screenlist.map((val) => {
+        val.checked = false;
+      });
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
       console.log('=======productBandChange========');
-      this.producntBandValue = productBandOptions[0].value;
+      this.producntBandName = productBandOptions[0].value;
+      this.producntBandValue = productBandOptions[0].key;
       this.isProductBandShow = false;
       this.isShowGoodsFilterDrawer = true;
     },
@@ -599,7 +639,7 @@ export default {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '1') {
         if (param.dictionaryType == 'INDUSTRIAL') {
-          this.industryList = data;
+
         } else {
           console.log('===========getDictionaryByWhereFun===========');
           // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
@@ -637,8 +677,8 @@ export default {
       if (this.orderModelValue === '2') {
         bianhao = this.addresseeInput;
       }
-      
-      var param = {
+
+      const param = {
 
         industry: this.industry,
         product_brand_all: this.product_brand_all,
@@ -656,6 +696,15 @@ export default {
         far_weekly_all: this.farweeklyall,
         priceTypeJudgment: this.priceTypeJudgment,
         yjPay: this.yjPay,
+        jshi_created_start_time: `${this.orderBegainTime} 00:00:00`,
+        jshi_created_end_time: `${this.orderEndTime} 00:00:00`,
+        jshi_pay_start_time: `${this.deductionBegainTime} 00:00:00`,
+        jshi_pay_end_time: `${this.deductionEndTime} 00:00:00`,
+        sap_sys_invoice_start_time: `${this.invoiceBegainTime} 00:00:00`,
+        sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
+        sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
+        sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
+        product_brand_all:this.producntBandValue,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
@@ -853,9 +902,30 @@ export default {
       if (this.deductionBegainTimeBool) {
         this.deductionBegainTime = this.selectData;
       }
+      if (this.deductionEndTimeBool) {
+        this.deductionEndTime = this.selectData;
+      }
+      if (this.invoiceBegainTimeBool) {
+        this.invoiceBegainTime = this.selectData;
+      }
+      if (this.invoiceEndTimeBool) {
+        this.invoiceEndTime = this.selectData;
+      }
+      if (this.goldTaxInvoiceBegainTimeBool) {
+        this.goldTaxInvoiceBegainTime = this.selectData;
+      }
+      if (this.goldTaxInvoiceEndTimeBool) {
+        this.goldTaxInvoiceEndTime = this.selectData;
+      }
+
       this.orderBegainTimeBool = false;
       this.orderEndTimeBool = false;
       this.deductionBegainTimeBool = false;
+      this.deductionEndTimeBool = false;
+      this.invoiceBegainTimeBool = false;
+      this.invoiceEndTimeBool = false;
+      this.goldTaxInvoiceBegainTimeBool = false;
+      this.goldTaxInvoiceEndTimeBool = false;
       this.$refs.popCalendar.close();
       this.isShowGoodsFilterDrawer = true;
     },
@@ -881,7 +951,38 @@ export default {
       this.isShowGoodsFilterDrawer = false;
       this.$refs.popCalendar.open();
       this.deductionBegainTimeBool = true;
-    }
+    },
+    // 扣款结束时间
+    deductionEndTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.deductionEndTimeBool = true;
+    },
+    // 开票开始时间
+    invoiceTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.invoiceBegainTimeBool = true;
+    },
+    // 开票结束时间
+    invoiceEndTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.invoiceEndTimeBool = true;
+    },
+    // 金税开票开始时间
+    goldTaxinvoiceTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.goldTaxInvoiceBegainTimeBool = true;
+    },
+    // 金税开票结束时间
+    goldTaxinvoiceEndTimeAction() {
+      this.isShowGoodsFilterDrawer = false;
+      this.$refs.popCalendar.open();
+      this.goldTaxInvoiceEndTimeBool = true;
+    },
+
   }
 };
 </script>

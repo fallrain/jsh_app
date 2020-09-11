@@ -97,7 +97,6 @@ export default {
   methods: {
     tabClick(item, index) {
       console.log(index);
-      // this.tabs = e
       if (index !== undefined) {
         this.tabIndex = index;
       }
