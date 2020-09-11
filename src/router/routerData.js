@@ -21,7 +21,7 @@ const data = [
   'pages/market/marketDetail',
   'pages/orderList/orderList',
   'pages/messageInfoList/messageInfoList',
-  'pages/messageInfoList/messageTaskDetail',
+  // 'pages/messageInfoList/messageTaskDetail',
   'pages/transferGoods/transferGoods',
   'pages/transferGoods/transferShoppingCart',
   'pages/transferGoods/transferDetail',

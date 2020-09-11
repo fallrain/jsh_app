@@ -26,7 +26,7 @@
           </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="(childed,index2) in child.subCats" :key="childed.title" class="nav-right-item">
-<!--              <image :src="child.images[index2].image"/>-->
+              <image :src="child.images[index2].image"/>
               <view @click="checkCat(childed)">{{childed.title}}</view>
             </view>
           </view>
@@ -46,325 +46,325 @@ export default {
   data() {
     return {
       categoryList: [],
-      // imgs: [
-      //   {
-      //     title: '冰箱',
-      //     sub: [
-      //       { image: require('@/assets/img/category/冰洗空冷/冰箱/1单门冰箱.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冰箱/2两面冰箱.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冰箱/3三门冰箱.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冰箱/4多门冰箱.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冰箱/对开门冰箱.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '冷柜',
-      //     sub: [
-      //       { image: require('@/assets/img/category/冰洗空冷/冷柜/5冰吧.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冷柜/6酒柜.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冷柜/7冷柜.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/冷柜/8展示柜.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '家用空调',
-      //     sub: [
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/9柜式空调.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/10挂壁式空调.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/11室内机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/12室外机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/13机壳.png')},
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/14空气净化器.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/14新风机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/15除湿机.png')},
-      //       { image: require('@/assets/img/category/冰洗空冷/家用空调/16移动式空调.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '中央空调',
-      //     sub: [
-      //       { image: require('@/assets/img/category/冰洗空冷/中央空调/17单元机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/中央空调/18多联机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/中央空调/19水机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/中央空调/20水机末端.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/中央空调/21精密空调.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/中央空调/22全热交换.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '洗衣机',
-      //     sub: [
-      //       { image: require('@/assets/img/category/冰洗空冷/洗衣机/23波轮.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/洗衣机/24滚筒.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/洗衣机/25干衣机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/洗衣机/26智能晾衣机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/洗衣机/27智能干鞋机.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '家电配套产品',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '商用空调',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/商用空调/33小风管.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/商用空调/30家中机.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/商用空调/34控制器.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '商用柜嵌',
-      //     sub: [
-      //       { image: require('@/assets/img/category/冰洗空冷/商用柜嵌/31柜嵌.png') },
-      //       { image: require('@/assets/img/category/冰洗空冷/商用柜嵌/32基站空调.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '电视',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/电脑电视/电视/36阿里平板电视.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/电脑电视/电视/36模卡电视.png') },
-      //       { image: require('@/assets/img/category/电脑电视/电视/37统帅平板电视.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '电脑',
-      //     sub: [
-      //       { image: require('@/assets/img/category/电脑电视/电脑/38笔记本电脑.png') },
-      //       { image: require('@/assets/img/category/电脑电视/电脑/38笔记本电脑.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '厨房电器',
-      //     sub: [
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/39烟机.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/40燃气灶.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/41洗碗机.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/42消毒柜.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/42中式洗碗机.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/43水槽洗碗机.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/44电烤箱.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/厨房电器/45蒸箱.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '热水器',
-      //     sub: [
-      //       { image: require('@/assets/img/category/厨房卫浴/热水器/46电热水器.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/热水器/47燃气热水器.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/热水器/48太阳能一体机.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/热水器/49太阳能分体机.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/热水器/50空气源热水器.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/厨房卫浴/热水器/51采暖炉.png') },
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '卫浴电器',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '其他生活家电',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '手机',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '数码',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '小帅影院',
-      //     sub: []
-      //   },
-      //   {
-      //     title: '电子教育',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '生活小家电',
-      //     sub: [
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/53挂烫机.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/56电暖器.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/54吸尘器.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/55电风扇.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/57扫地机器人.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/58搅拌机.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/59生活电器烤箱.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/60环境电器.png') },
-      //       { image: require('@/assets/img/category/生活家电/生活小家电/61灯具.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '厨房小家电',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '个人护理',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/生活家电/个人护理/70KKC智能牙刷.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/生活家电/个人护理/71健康称.png') },
-      //       { image: require('@/assets/img/category/生活家电/个人护理/73智能睡眠.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '家居',
-      //     sub: [
-      //       { image: require('@/assets/img/category/生活家电/家居/74LED台灯.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/生活家电/家居/75衣物护理柜.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '母婴家电',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/生活家电/家居/75衣物护理柜.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '智饮机',
-      //     sub: [
-      //       { image: require('@/assets/img/category/生活家电/智饮机/80台式.png') },
-      //       { image: require('@/assets/img/category/生活家电/智饮机/81立式.png') },
-      //       { image: require('@/assets/img/category/生活家电/智饮机/79厨下式.png') },
-      //       { image: require('@/assets/img/category/生活家电/智饮机/82滤芯.png') },                { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   },
-      //   {
-      //     title: '净水机',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '饮水机',
-      //     sub: []
-      //   },
-      //   {
-      //     title: 'BWT净水',
-      //     sub: []
-      //   },
-      //   {
-      //     title: '智能门锁',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //     ]
-      //   },
-      //   {
-      //     title: '智慧家居',
-      //     sub: [
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') },
-      //       { image: require('@/assets/img/category/默认图.png') }
-      //     ]
-      //   }
-      // ],
+      imgs: [
+        {
+          title: '冰箱',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B0%E7%AE%B1/1%E5%8D%95%E9%97%A8%E5%86%B0%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B0%E7%AE%B1/2%E4%B8%A4%E9%9D%A2%E5%86%B0%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B0%E7%AE%B1/3%E4%B8%89%E9%97%A8%E5%86%B0%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B0%E7%AE%B1/4%E5%A4%9A%E9%97%A8%E5%86%B0%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B0%E7%AE%B1/%E5%AF%B9%E5%BC%80%E9%97%A8%E5%86%B0%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '冷柜',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B7%E6%9F%9C/5%E5%86%B0%E5%90%A7.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B7%E6%9F%9C/6%E9%85%92%E6%9F%9C.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B7%E6%9F%9C/7%E5%86%B7%E6%9F%9C.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%86%B7%E6%9F%9C/8%E5%B1%95%E7%A4%BA%E6%9F%9C.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '家用空调',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/9%E6%9F%9C%E5%BC%8F%E7%A9%BA%E8%B0%83.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/10%E6%8C%82%E5%A3%81%E5%BC%8F%E7%A9%BA%E8%B0%83.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/11%E5%AE%A4%E5%86%85%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/12%E5%AE%A4%E5%A4%96%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/13%E6%9C%BA%E5%A3%B3.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/14%E7%A9%BA%E6%B0%94%E5%87%80%E5%8C%96%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/14%E6%96%B0%E9%A3%8E%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/15%E9%99%A4%E6%B9%BF%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%AE%B6%E7%94%A8%E7%A9%BA%E8%B0%83/16%E7%A7%BB%E5%8A%A8%E5%BC%8F%E7%A9%BA%E8%B0%83.png' },
+          ]
+        },
+        {
+          title: '中央空调',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E4%B8%AD%E5%A4%AE%E7%A9%BA%E8%B0%83/17%E5%8D%95%E5%85%83%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E4%B8%AD%E5%A4%AE%E7%A9%BA%E8%B0%83/18%E5%A4%9A%E8%81%94%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E4%B8%AD%E5%A4%AE%E7%A9%BA%E8%B0%83/19%E6%B0%B4%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E4%B8%AD%E5%A4%AE%E7%A9%BA%E8%B0%83/20%E6%B0%B4%E6%9C%BA%E6%9C%AB%E7%AB%AF.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E4%B8%AD%E5%A4%AE%E7%A9%BA%E8%B0%83/21%E7%B2%BE%E5%AF%86%E7%A9%BA%E8%B0%83.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E4%B8%AD%E5%A4%AE%E7%A9%BA%E8%B0%83/22%E5%85%A8%E7%83%AD%E4%BA%A4%E6%8D%A2.png' },
+          ]
+        },
+        {
+          title: '洗衣机',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E6%B4%97%E8%A1%A3%E6%9C%BA/23%E6%B3%A2%E8%BD%AE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E6%B4%97%E8%A1%A3%E6%9C%BA/24%E6%BB%9A%E7%AD%92.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E6%B4%97%E8%A1%A3%E6%9C%BA/25%E5%B9%B2%E8%A1%A3%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E6%B4%97%E8%A1%A3%E6%9C%BA/25%E5%B9%B2%E8%A1%A3%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E6%B4%97%E8%A1%A3%E6%9C%BA/27%E6%99%BA%E8%83%BD%E5%B9%B2%E9%9E%8B%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '家电配套产品',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        },
+        {
+          title: '商用空调',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%95%86%E7%94%A8%E7%A9%BA%E8%B0%83/33%E5%B0%8F%E9%A3%8E%E7%AE%A1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%95%86%E7%94%A8%E7%A9%BA%E8%B0%83/30%E5%AE%B6%E4%B8%AD%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%95%86%E7%94%A8%E7%A9%BA%E8%B0%83/34%E6%8E%A7%E5%88%B6%E5%99%A8.png' },
+          ]
+        },
+        {
+          title: '商用柜嵌',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%95%86%E7%94%A8%E6%9F%9C%E5%B5%8C/31%E6%9F%9C%E5%B5%8C.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%86%B0%E6%B4%97%E7%A9%BA%E5%86%B7/%E5%95%86%E7%94%A8%E6%9F%9C%E5%B5%8C/32%E5%9F%BA%E7%AB%99%E7%A9%BA%E8%B0%83.png' }
+          ]
+        },
+        {
+          title: '电视',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%B5%E8%84%91%E7%94%B5%E8%A7%86/%E7%94%B5%E8%A7%86/36%E9%98%BF%E9%87%8C%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%A7%86.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%B5%E8%84%91%E7%94%B5%E8%A7%86/%E7%94%B5%E8%A7%86/36%E6%A8%A1%E5%8D%A1%E7%94%B5%E8%A7%86.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%B5%E8%84%91%E7%94%B5%E8%A7%86/%E7%94%B5%E8%A7%86/37%E7%BB%9F%E5%B8%85%E5%B9%B3%E6%9D%BF%E7%94%B5%E8%A7%86.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '电脑',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%B5%E8%84%91%E7%94%B5%E8%A7%86/%E7%94%B5%E8%84%91/38%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%B5%E8%84%91%E7%94%B5%E8%A7%86/%E7%94%B5%E8%84%91/38%E7%AC%94%E8%AE%B0%E6%9C%AC%E7%94%B5%E8%84%91.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '厨房电器',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/39%E7%83%9F%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/40%E7%87%83%E6%B0%94%E7%81%B6.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/41%E6%B4%97%E7%A2%97%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/42%E6%B6%88%E6%AF%92%E6%9F%9C.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/42%E4%B8%AD%E5%BC%8F%E6%B4%97%E7%A2%97%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/43%E6%B0%B4%E6%A7%BD%E6%B4%97%E7%A2%97%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/44%E7%94%B5%E7%83%A4%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/45%E8%92%B8%E7%AE%B1.png' },
+          ]
+        },
+        {
+          title: '热水器',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/46%E7%94%B5%E7%83%AD%E6%B0%B4%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/47%E7%87%83%E6%B0%94%E7%83%AD%E6%B0%B4%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/48%E5%A4%AA%E9%98%B3%E8%83%BD%E4%B8%80%E4%BD%93%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/49%E5%A4%AA%E9%98%B3%E8%83%BD%E5%88%86%E4%BD%93%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/50%E7%A9%BA%E6%B0%94%E6%BA%90%E7%83%AD%E6%B0%B4%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/51%E9%87%87%E6%9A%96%E7%82%89.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        },
+        {
+          title: '卫浴电器',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '其他生活家电',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        },
+        {
+          title: '手机',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        },
+        {
+          title: '数码',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '小帅影院',
+          sub: []
+        },
+        {
+          title: '电子教育',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        },
+        {
+          title: '生活小家电',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/53%E6%8C%82%E7%83%AB%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/56%E7%94%B5%E6%9A%96%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/54%E5%90%B8%E5%B0%98%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/55%E7%94%B5%E9%A3%8E%E6%89%87.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/57%E6%89%AB%E5%9C%B0%E6%9C%BA%E5%99%A8%E4%BA%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/58%E6%90%85%E6%8B%8C%E6%9C%BA.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/59%E7%94%9F%E6%B4%BB%E7%94%B5%E5%99%A8%E7%83%A4%E7%AE%B1.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/60%E7%8E%AF%E5%A2%83%E7%94%B5%E5%99%A8.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E7%94%9F%E6%B4%BB%E5%B0%8F%E5%AE%B6%E7%94%B5/61%E7%81%AF%E5%85%B7.png' },
+          ]
+        },
+        {
+          title: '厨房小家电',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '个人护理',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86/70KKC%E6%99%BA%E8%83%BD%E7%89%99%E5%88%B7.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86/71%E5%81%A5%E5%BA%B7%E7%A7%B0.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86/73%E6%99%BA%E8%83%BD%E7%9D%A1%E7%9C%A0.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '家居',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E5%AE%B6%E5%B1%85/74LED%E5%8F%B0%E7%81%AF.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E5%AE%B6%E5%B1%85/75%E8%A1%A3%E7%89%A9%E6%8A%A4%E7%90%86%E6%9F%9C.png' },
+          ]
+        },
+        {
+          title: '母婴家电',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E6%AF%8D%E5%A9%B4%E5%AE%B6%E7%94%B5/77%E5%84%BF%E7%AB%A5%E9%A5%AE%E5%93%81%E6%90%85%E6%8B%8C%E6%9C%BA.png' },
+          ]
+        },
+        {
+          title: '智饮机',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E6%99%BA%E9%A5%AE%E6%9C%BA/80%E5%8F%B0%E5%BC%8F.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E6%99%BA%E9%A5%AE%E6%9C%BA/81%E7%AB%8B%E5%BC%8F.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E6%99%BA%E9%A5%AE%E6%9C%BA/79%E5%8E%A8%E4%B8%8B%E5%BC%8F.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E7%94%9F%E6%B4%BB%E5%AE%B6%E7%94%B5/%E6%99%BA%E9%A5%AE%E6%9C%BA/82%E6%BB%A4%E8%8A%AF.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        },
+        {
+          title: '净水机',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '饮水机',
+          sub: []
+        },
+        {
+          title: 'BWT净水',
+          sub: []
+        },
+        {
+          title: '智能门锁',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+          ]
+        },
+        {
+          title: '智慧家居',
+          sub: [
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' },
+            { image: 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E9%BB%98%E8%AE%A4%E5%9B%BE.png' }
+          ]
+        }
+      ],
       subCategoryList: [],
       searchVal: '',
       categoryActive: 0
@@ -380,17 +380,16 @@ export default {
         this.categoryList = data;
         console.log(this.categoryList[0]);
         this.subCategoryList = this.categoryList[0];
-        // this.categoryList.forEach(item => {
-        //   console.log(item);
-        //   item.subCats.forEach(v => {
-        //     // this.imgs.forEach(ele => {
-        //     //   if (v.title === ele.title) {
-        //     //     // item.subCats
-        //     //     v.images = ele.sub;
-        //     //   }
-        //     // });
-        //   });
-        // });
+        this.categoryList.forEach(item => {
+          console.log(item);
+          item.subCats.forEach(v => {
+            this.imgs.forEach(ele => {
+              if (v.title === ele.title) {
+                v.images = ele.sub;
+              }
+            });
+          });
+        });
         console.log(this.categoryList);
         this.categoryActive = 0;
       }
