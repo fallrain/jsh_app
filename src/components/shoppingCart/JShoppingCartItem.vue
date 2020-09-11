@@ -62,7 +62,7 @@
           </view>
           <j-number-box
             :max="maxGoodsNumber"
-            :min="1"
+            :min="minGoodsNumber"
             v-model="goods.number"
             @blur="goodsNumChange"
             @minus="goodsNumChange"
@@ -558,6 +558,19 @@ export default {
       }
       return maxNum === undefined || maxNum === null ? Number.MAX_SAFE_INTEGER : maxNum;
     },
+    minGoodsNumber() {
+      /* 最小数量 */
+      let minNum = 1;
+      // 看是否选择了版本;
+      if (this.choseVersions && this.choseVersions.length) {
+        const realExample = this.choseVersions.find(vs => vs.$isRealProduct);
+        // 正品样机有最小购买数量
+        if (realExample) {
+          minNum = realExample.realQty;
+        }
+      }
+      return minNum;
+    }
   },
   watch: {
     versionPrice() {
@@ -600,6 +613,14 @@ export default {
     },
     maxGoodsNumber(val) {
       /* 最大数量如果小于已选的数量，则修改已选数量之 */
+      if (this.goods.number > val) {
+        this.goods.number = val;
+        this.goods.productList[0].number = val;
+        this.$emit('change', this.goods, this.index);
+      }
+    },
+    minGoodsNumber(val) {
+      /* 最小数量如果大于已选的数量，则修改已选数量之 */
       if (this.goods.number > val) {
         this.goods.number = val;
         this.goods.productList[0].number = val;
