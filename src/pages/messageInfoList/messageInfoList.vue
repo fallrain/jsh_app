@@ -2,10 +2,9 @@
     <view class="message">
       <messageInfoListTab
           @tabClick="tabClick"
-          @tabmsg="tabmsg"
       >
       </messageInfoListTab>
-      <view class="message-concent" v-if="tabIndex === 0">
+      <view class="message-concent" v-show="tabIndex === 0">
         <view class="uni-flex uni-info" >
           <view class=" message-unread">共{{unread}}条消息未读</view>
           <view class=" message-read" @click="readAll">全部已读</view>
@@ -37,7 +36,7 @@
           </view>
         </mescroll-body>
       </view>
-      <view>
+      <view v-show="tabIndex === 1">
         <message-task></message-task>
       </view>
     </view>
@@ -68,7 +67,6 @@ export default {
     MescrollBody,
     messageTask
   },
-
   data() {
     return {
       isMessage: false,
@@ -83,13 +81,10 @@ export default {
       complete: 0,
       tips: '消息提示',
       typeName: '',
-
     };
   },
   created() {
-    // this.getNotReadMessageCount();
     console.log(this.tabIndex);
-
   },
   watch: {
     $route: ['tabClick']
@@ -103,7 +98,9 @@ export default {
     tabClick(item, index) {
       console.log(index);
       // this.tabs = e
-      this.tabIndex = index;
+      if (index !== undefined) {
+        this.tabIndex = index;
+      }
       this.getMessageList();
     },
     messageName(item) {
@@ -176,7 +173,7 @@ export default {
           this.unread = num;
         });
       }
-      return scrollView
+      return scrollView;
     },
     showDetail(id, item) {
       console.log(id, JSON.stringify(item));

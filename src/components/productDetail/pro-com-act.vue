@@ -76,11 +76,11 @@
                 <view class="pro-act-pop-detail-for mb8">
                   <view class="pro-act-pop-detail-item-oneNam">{{aac.name}}</view>
                 </view>
-                <view class="pro-act-pop-detail-thr mb8">
+                <view class="pro-act-pop-detail-thr mb8" v-if="!aac.isD">
                   <view class="marker"></view>
                   <view class="pro-act-pop-detail-item-oneNam">活动剩余数量：</view>
                 </view>
-                <view class="pro-act-pop-detail-for mb8">
+                <view class="pro-act-pop-detail-for mb8" v-if="!aac.isD">
                   <view class="pro-act-pop-detail-item-oneNam">{{aac.num}}</view>
                 </view>
                 <view class="pro-act-pop-detail-thr mb8">
@@ -89,6 +89,13 @@
                 </view>
                 <view class="pro-act-pop-detail-for mb8">
                   <view class="pro-act-pop-detail-item-oneNam">{{aac.time}}</view>
+                </view>
+                <view class="pro-act-pop-detail-thr mb8" v-if="aac.isD">
+                  <view class="marker"></view>
+                  <view class="pro-act-pop-detail-item-oneNam">直发预定金比例：</view>
+                </view>
+                <view class="pro-act-pop-detail-for mb8">
+                  <view class="pro-act-pop-detail-item-oneNam"></view>
                 </view>
               </div>
             </view>

@@ -1,8 +1,35 @@
 <template>
   <view class="messageTask">
     <view class="messageTask-screen">
-      <view>筛选</view>
-      <i class="iconfont iconshaixuan"></i>
+      <view @tap="showFilter">筛选</view>
+      <i @tap="showFilter" class="iconfont iconshaixuan"></i>
+      <t-drawer
+          :show.sync="isShowGoodsFilterDrawer"
+          @filterConfirm="filterConfirm"
+          @filterReset="filterReset"
+      >
+        <template>
+          <view class="messageTask-drawer-filter-head-ads-wrap">
+            <view class="messageTask-drawer-filter-head">
+              <view>
+                <text>任务时间</text>
+              </view>
+            </view>
+            <view class="messageTask-drawer-filter-price-range">
+              <input
+                  class="messageTask-drawer-filter-price-ipt inl"
+                  placeholder="开始时间"
+                  placeholderStyle=""
+              >
+              <view class="messageTask-drawer-filter-price-line">至</view>
+              <input
+                  class="messageTask-drawer-filter-price-ipt int"
+                  placeholder="结束时间"
+              >
+            </view>
+          </view>
+        </template>
+      </t-drawer>
     </view>
     <view class="messageTask-task">
       <button class="messageTask-task-completed mla" :class="show && 'active1'" @tap="getActive">已完成任务</button>
@@ -46,73 +73,53 @@
 </template>
 
 <script>
+import TDrawer from '../../components/transfer/TDrawer';
+import './css/messageTask.scss';
+
 export default {
-  name: "massageTask",
+  name: 'massageTask',
+  components: {
+    TDrawer
+  },
   data() {
     return {
-      show: true
+      show: true,
+      // 筛选
+      isShowGoodsFilterDrawer: false
     };
   },
   methods: {
+    goDetail() {
+      uni.navigateTo({
+        url: '/pages/messageInfoList/messageTaskDetail'
+      });
+    },
+    // 未完成 已完成切换
     getActive() {
       this.show = !this.show;
-    }
+    },
+    showFilter() {
+      /* 展示filter */
+      this.isShowGoodsFilterDrawer = true;
+    },
+    filterConfirm() {
+      /* 抽屉筛选确认 */
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
+    },
+    filterReset() {
+      /* 抽屉筛选重置 */
+      // 重新搜索
+      this.mescroll.resetUpScroll(true);
+    },
   }
 
-}
+};
 </script>
-
 <style lang="scss" scoped>
-.messageTask-screen {
-  display: flex;
-  margin-left: 82%;
-  font-size: 24px;
-  color: #ED2856;
-  margin-top: 24px;
-}
-.messageTask-task{
-  display: flex;
-  margin-left: 50px;
-  margin-top: 24px;
-  .messageTask-task-completed{
-    width:325px;
-    height: 64px;
-    line-height: 64px;
-    text-align: center;
-    background: #FFFEFE;
-    border: 2px solid #ED2856;
-    color: #ED2856;
-    font-size: 30px;
-  }
-  .mla {
-    border-radius: 12px 0px 0px 12px;
-  }
-  .mlb {
-    border-radius: 0px 12px 12px 0px;
-  }
-  .active1 {
-    color: #fff;
-    background: #ED2856;
-    border-radius: 12px 0px 0px 12px;
-  }
-  .active2 {
-    color: #fff;
-    background: #ED2856;
-    border-radius: 0px 12px 12px 0px;
-  }
-}
-.messageTask-content {
-  margin-top: 58px;
-}
-.messageTask-content-info {
-  margin-bottom: 50px;
-  display: flex;
-}
-.messageTask-content-car {
-  margin-left: 74px;
-  width: 20px;
-  height: 20px;
-  background: #DCDEE0;
-  border-radius: 20px;
-}
+//::v-deep .filter-drawer-btn-wrap {
+//  position: absolute;
+//  top: 28%;
+//}
+
 </style>

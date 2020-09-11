@@ -39,7 +39,7 @@ export default {
       this.tabs.forEach((v, i) => {
         v.active = false;
         console.log(v.active);
-      })
+      });
       item.active = true;
       console.log(item.active);
       this.$emit('tabClick', item, index);

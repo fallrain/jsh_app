@@ -518,28 +518,29 @@ export default {
         }
         if (this.detailInfo.bigorders && this.detailInfo.bigorders.length > 0) {
           this.ActListInfo.push('反向定制');
-          // const fx = {
-          //   title: '反向定制',
-          //   isMore: false,
-          //   isSe: true,
-          //   isT: false,
-          //   isC: true,
-          //   list: []
-          // };
-          // if (this.flash.graborders && this.flash.graborders.length > 0) {
-          //   this.flash.graborders.forEach((lis) => {
-          //     lis.endTime = lis.endTime.split(' ')[0];
-          //     const a = {
-          //       titleLe: '抢单',
-          //       name: lis.promotionName,
-          //       time: lis.endTime,
-          //       num: lis.availableQuantity
-          //     };
-          //     console.log(a);
-          //     qd.list.push(a);
-          //   });
-          // }
-          // this.ActInfo.push(qd);
+          const fx = {
+            title: '反向定制',
+            isMore: false,
+            isSe: true,
+            isT: false,
+            isC: true,
+            list: []
+          };
+          if (this.flash.graborders && this.flash.graborders.length > 0) {
+            this.flash.graborders.forEach((lis) => {
+              lis.endTime = lis.endTime.split(' ')[0];
+              const a = {
+                titleLe: '抢单',
+                name: lis.description,
+                time: lis.endTime,
+                num: lis.availableQuantity,
+                isD: true,
+              };
+              console.log(a);
+              fx.list.push(a);
+            });
+          }
+          this.ActInfo.push(fx);
         }
       }
     },
