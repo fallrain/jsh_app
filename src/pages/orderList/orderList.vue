@@ -393,8 +393,8 @@ export default {
       product_model_all: '',
       product_code_all: '',
       addresseeInput: '',
-      translateInput:'',
-      songda:'',
+      translateInput: '',
+      songda: '',
       modelInput: '',
       orderModelStr: '产品型号',
       orderModelValue: '1',
@@ -533,21 +533,21 @@ export default {
       // 扣款开始时间
       deductionBegainTime: '',
       deductionBegainTimeBool: false,
-      //扣款结束
+      // 扣款结束
       deductionEndTime: '',
       deductionEndTimeBool: false,
-      //开票开始
-      invoiceBegainTime:'',
-      invoiceBegainTimeBool:false,
-      //开票结束
-      invoiceEndTime:'',
-      invoiceEndTimeBool:false,
-      //金税开票开始
-      goldTaxInvoiceBegainTime:'',
-      goldTaxInvoiceBegainTimeBool:false,
-      //金税开票结束
-      goldTaxInvoiceEndTime:'',
-      goldTaxInvoiceEndTimeBool:false,
+      // 开票开始
+      invoiceBegainTime: '',
+      invoiceBegainTimeBool: false,
+      // 开票结束
+      invoiceEndTime: '',
+      invoiceEndTimeBool: false,
+      // 金税开票开始
+      goldTaxInvoiceBegainTime: '',
+      goldTaxInvoiceBegainTimeBool: false,
+      // 金税开票结束
+      goldTaxInvoiceEndTime: '',
+      goldTaxInvoiceEndTimeBool: false,
     };
   },
   computed: {
@@ -580,28 +580,30 @@ export default {
       this.tabs[this.sexID].active = true;
     },
     filterReset() {
-      this.orderTypeStr='订单号';
-      this.orderTypeVue= '1';
-      this.serviNO='';
-      this.songda='';
-      this.translateInput='';
-      this.producntBandValue='';
-      this.addresseeInput='';
-      this.orderModelStr='产品型号';
-      this.orderModelValue='1';
-      this.orderBegainTime='';
-      this.orderEndTime='';
-      this.deductionBegainTime='';
-      this.deductionEndTime='';
-      this.invoiceBegainTime='';
-      this.invoiceEndTime='';
-      this.goldTaxInvoiceBegainTime='';
-      this.goldTaxInvoiceEndTime='';
-      this.orderReviewStr='';
-      this.orderMarkStr='';
-      this.orderBuyStr='';
-      this.orderDistributionStr='';
-
+      this.orderTypeStr = '订单号';
+      this.orderTypeVue = '1';
+      this.serviNO = '';
+      this.songda = '';
+      this.translateInput = '';
+      this.producntBandValue = '';
+      this.addresseeInput = '';
+      this.orderModelStr = '产品型号';
+      this.orderModelValue = '1';
+      this.orderBegainTime = '';
+      this.orderEndTime = '';
+      this.deductionBegainTime = '';
+      this.deductionEndTime = '';
+      this.invoiceBegainTime = '';
+      this.invoiceEndTime = '';
+      this.goldTaxInvoiceBegainTime = '';
+      this.goldTaxInvoiceEndTime = '';
+      this.orderReviewStr = '';
+      this.orderMarkStr = '';
+      this.orderBuyStr = '';
+      this.orderDistributionStr = '';
+      this.screenlist.map((val) => {
+        val.checked = false;
+      });
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
@@ -672,8 +674,8 @@ export default {
       if (this.orderModelValue === '2') {
         bianhao = this.addresseeInput;
       }
-      
-      var param = {
+
+      const param = {
 
         industry: this.industry,
         product_brand_all: this.product_brand_all,
@@ -691,6 +693,14 @@ export default {
         far_weekly_all: this.farweeklyall,
         priceTypeJudgment: this.priceTypeJudgment,
         yjPay: this.yjPay,
+        jshi_created_start_time: `${this.orderBegainTime} 00:00:00`,
+        jshi_created_end_time: `${this.orderEndTime} 00:00:00`,
+        jshi_pay_start_time: `${this.deductionBegainTime} 00:00:00`,
+        jshi_pay_end_time: `${this.deductionEndTime} 00:00:00`,
+        sap_sys_invoice_start_time: `${this.invoiceBegainTime} 00:00:00`,
+        sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
+        sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
+        sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
@@ -907,11 +917,11 @@ export default {
       this.orderBegainTimeBool = false;
       this.orderEndTimeBool = false;
       this.deductionBegainTimeBool = false;
-      this.deductionEndTimeBool=false;
-      this.invoiceBegainTimeBool=false;
-      this.invoiceEndTimeBool=false;
-      this.goldTaxInvoiceBegainTimeBool=false;
-      this.goldTaxInvoiceEndTimeBool=false;
+      this.deductionEndTimeBool = false;
+      this.invoiceBegainTimeBool = false;
+      this.invoiceEndTimeBool = false;
+      this.goldTaxInvoiceBegainTimeBool = false;
+      this.goldTaxInvoiceEndTimeBool = false;
       this.$refs.popCalendar.close();
       this.isShowGoodsFilterDrawer = true;
     },
