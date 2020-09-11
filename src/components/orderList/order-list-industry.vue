@@ -3,7 +3,7 @@
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
       <view v-for="(item,index) in industryList" :key="item.key">
-        <view class="order_more_text" @click="orderNoClick(key)"><view class="iconfont iconcancel order_more_iconStyle"></view>{{item.value}}</view>
+        <view class="order_more_text" @click="orderNoClick(item.key,item.value)"><view class="iconfont iconcancel order_more_iconStyle"></view>{{item.value}}</view>
       </view>
 <!--      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>-->
 <!--      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>-->
@@ -21,28 +21,14 @@ export default {
       type: Boolean,
       default: false
     },
-    industryList:{
+    industryList: {
       type: Array,
     }
   },
   methods: {
-    orderNoClick(val) {
-      if (val === '1'){
-        /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', val , '订单号');
-      }
-      if (val === '2'){
-        /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', val ,'整单号');
-      }
-      if (val === '3'){
-        /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', val ,'GVS单号');
-      }
-      if (val === '4'){
-        /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo',val , '物流单号');
-      }
+    orderNoClick(val, name) {
+      /* 回馈抽屉值，修改props.show */
+      this.$emit('selectInfoIndustry', val, name);
     },
   },
 };
