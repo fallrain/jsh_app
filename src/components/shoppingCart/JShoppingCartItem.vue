@@ -493,7 +493,7 @@ export default {
       /* 选择的用来显示价格的版本信息 */
       const versions = this.choseVersions;
       // 非版本调货的才显示
-      let v = versions.find(vs => vs.priceType);
+      let v = versions.find(vs => vs.priceType && !vs.$isRealProduct);
       if (!v) {
         if (versions.length) {
           // 说明有版本调货,版本调货无价格，需要取普通价
@@ -545,6 +545,10 @@ export default {
       if (this.choseVersions && this.choseVersions.length) {
         // 设置各个版本的最低数量
         this.choseVersions.forEach((v) => {
+          // 正品样机不计算最大数量
+          if (v.$isRealProduct) {
+            return;
+          }
           let curNum;
           if (v.$isTransfer) {
             curNum = v.number;
@@ -621,7 +625,7 @@ export default {
     },
     minGoodsNumber(val) {
       /* 最小数量如果大于已选的数量，则修改已选数量之 */
-      if (this.goods.number > val) {
+      if (this.goods.number < val) {
         this.goods.number = val;
         this.goods.productList[0].number = val;
         this.$emit('change', this.goods, this.index);
