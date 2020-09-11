@@ -14,8 +14,8 @@
     {
       "path": "pages/index/index",
       "style": {
-      //  "navigationBarTitleText": "采购首页"
-          "navigationStyle" :"custom"
+        //  "navigationBarTitleText": "采购首页"
+        "navigationStyle": "custom"
       }
     },
     {
@@ -295,6 +295,162 @@
       "path": "pages/concernedProducts/concernedProductsList",
       "style": {
         "navigationBarTitleText": "我的关注"
+      }
+    },
+    {
+      "path": "pages/aftersale/JAfterSale",
+      "style": {
+        "navigationBarTitleText": "售后服务"
+      }
+    },
+    {
+      "path": "pages/aftersale/JWarrantyOfDefectiveProducts",
+      "style": {
+        "navigationBarTitleText": "不良产品保修"
+      }
+    },
+    {
+      "path": "pages/aftersale/JTallyConfirmed",
+      "style": {
+        "navigationBarTitleText": "理货商确认"
+      }
+    },
+    {
+      "path": "pages/aftersale/JReturnGoodsQuery",
+      "style": {
+        "navigationBarTitleText": "退货进度查询"
+      }
+    },
+    {
+      "path": "pages/aftersale/JReturnDetails",
+      "style": {
+        "navigationBarTitleText": "退货进度详情"
+      }
+    },
+    {
+      "path": "pages/aftersale/JWhereBuyReturn",
+      "style": {
+        "navigationBarTitleText": "哪买哪退查询"
+      }
+    },
+    {
+      "path": "pages/aftersale/JWhereBuyReturnDetails",
+      "style": {
+        "navigationBarTitleText": "哪买哪退详情"
+      }
+    },
+    {
+      "path": "pages/aftersale/JWhereBuyReturnConfirm",
+      "style": {
+        "navigationBarTitleText": "哪买哪退确认"
+      }
+    },
+    {
+      "path": "pages/aftersale/JWhereBuyReturnTwo",
+      "style": {
+        "navigationBarTitleText": "哪买哪退确认2"
+      }
+    },
+    {
+      "path": "pages/aftersale/JExtendedIdentification",
+      "style": {
+        "navigationBarTitleText": "超期鉴定"
+      }
+    },
+    {
+      "path": "pages/aftersale/JExtendedIdentificationDetails",
+      "style": {
+        "navigationBarTitleText": "超期鉴定详情"
+      }
+    },
+    {
+      "path": "pages/aftersale/JOverdueReturn",
+      "style": {
+        "navigationBarTitleText": "返厂超期"
+      }
+    },
+    {
+      "path": "pages/aftersale/JOverdueReturnDetails",
+      "style": {
+        "navigationBarTitleText": "返厂超期详情"
+      }
+    },
+    {
+      "path": "pages/aftersale/JNewBranch",
+      "style": {
+        "navigationBarTitleText": "网点新建"
+      }
+    },
+    {
+      "path": "pages/aftersale/JProgressNewOutlets",
+      "style": {
+        "navigationBarTitleText": "新建网点进度"
+      }
+    },
+    {
+      "path": "components/exception/JException",
+      "style": {
+        "navigationBarTitleText": "异常页"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JProofOfEntry",
+      "style": {
+        "navigationBarTitleText": "银行承兑入账证明"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JDiscountConfirmation",
+      "style": {
+        "navigationBarTitleText": "银行承兑"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JNewConfirmationLetter",
+      "style": {
+        "navigationBarTitleText": "银行承兑"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JProofOfEntryNew",
+      "style": {
+        "navigationBarTitleText": "J银行承兑入账证明"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JTerminalPOSApplication",
+      "style": {
+        "navigationBarTitleText": "pos申请"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JTerminalPOSDetails",
+      "style": {
+        "navigationBarTitleText": "pos详情"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JNewTerminalPOS",
+      "style": {
+        "navigationBarTitleText": "pos新建"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JTerminalPOSAnnualFee",
+      "style": {
+        "navigationBarTitleText": "pos费用"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JPosHandlingFee",
+      "style": {
+        "navigationBarTitleText": "pos手续费"
+      }
+    },
+    {
+      "path": "pages/bankacceptance/JConfirmationOfFeeDeduction",
+      "style": {
+        "navigationBarTitleText": "pos手续费扣除确认"
       }
     }
   ],
