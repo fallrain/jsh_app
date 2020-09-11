@@ -89,4 +89,7 @@ export default {
   getBillInfo(sendtoCode, productGroup) { // 查询开票方列表
     return jGet(urlNoApi.getBillInfo(sendtoCode, productGroup));
   },
+  orderSelfSigned(bstnk) { //自主签收
+    return jGet(url.orderSelfSigned,bstnk);
+  }
 };

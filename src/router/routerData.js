@@ -20,6 +20,7 @@ const data = [
   'pages/market/marketList',
   'pages/market/marketDetail',
   'pages/orderList/orderList',
+  'pages/orderList/orderWL',
   'pages/messageInfoList/messageInfoList',
   'pages/messageInfoList/messageTaskDetail',
   'pages/transferGoods/transferGoods',
