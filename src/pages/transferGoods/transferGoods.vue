@@ -35,7 +35,7 @@
         @up="upCallback"
       >
         <!-- 产品列表 -->
-        <view class="transferList-items-wrap" v-if="list.length > 0">
+        <view class="transferList-items-wrap" v-if="list && list.length > 0">
           <transfer-goods-item
             v-for="(item,index) in list"
             :key="index"

@@ -149,6 +149,12 @@
       }
     },
     {
+      "path": "pages/orderList/orderWL",
+      "style": {
+        "navigationBarTitleText": "物流"
+      }
+    },
+    {
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
         "navigationBarTitleText": "消息列表"
@@ -160,12 +166,12 @@
         "navigationBarTitleText": "消息详情列表"
       }
     },
-    {
-      "path": "pages/messageInfoList/messageTaskDetail",
-      "style": {
-        "navigationBarTitleText": "任务详情"
-      }
-    },
+//    {
+//      "path": "pages/messageInfoList/messageTaskDetail",
+//      "style": {
+//        "navigationBarTitleText": "任务详情"
+//      }
+//    },
     {
       "path": "pages/transferGoods/transferGoods",
       "style": {
