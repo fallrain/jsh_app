@@ -616,7 +616,7 @@ export default {
       this.screenlist.map((val) => {
         val.checked = false;
       });
-      this.industry='';
+      this.industry = '';
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
@@ -648,7 +648,7 @@ export default {
     },
     unique(newarr) {
       const res = new Map();
-      this.industryList = newarr.filter((newarr) => !res.has(newarr.key) && res.set(newarr.key, 1));
+      this.industryList = newarr.filter(newarr => !res.has(newarr.key) && res.set(newarr.key, 1));
     },
     async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
@@ -662,7 +662,7 @@ export default {
               key: element.code,
               value: element.codeName
             };
-           industryLists.push(indus);
+            industryLists.push(indus);
           }
           this.unique(industryLists);
         } else {
@@ -899,7 +899,7 @@ export default {
       this.orderDistributionStr = data; // 改变了父组件的值
     },
     selectInfoIndustry(value, data) { // 点击子组件按钮时触发事件
-      console.log('-------'+value);
+      console.log(`-------${value}`);
       this.industry = value;
       this.orderIndustry = !this.orderIndustry;
       this.translateInput = data; // 改变了父组件的值
