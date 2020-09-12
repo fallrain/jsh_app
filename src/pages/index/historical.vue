@@ -4,6 +4,8 @@
       <j-search-input
           v-model="name"
           @search="silentReSearch"
+          :placeholder="mendli"
+          placeholder-class="col_c"
       ></j-search-input>
       <button
           type="button"
@@ -46,16 +48,20 @@ export default {
       name: '',
       val: '',
       history: [],
-      allMendli: {}
+      // 轮播搜索词
+      allMendli: {},
+      mend: [],
+      mendli: '',
+      mendOrder: {}
     };
   },
   onLoad(option) {
-    const aaa = option.name;
-    console.log(aaa);
+    const aaa = option.allMendli;
     this.allMendli = JSON.parse(aaa);
-    console.log(this.allMendli);
+    // this.name = this.allMendli.recoWord;
   },
   created() {
+    this.getShow();
     console.log(localStorage.getItem('history'));
     if (localStorage.getItem('history')) {
       console.log(1111);
@@ -67,6 +73,29 @@ export default {
     console.log(this.history);
   },
   methods: {
+    getShow() {
+      let word = '';
+      this.allMendli.records.forEach((item) => {
+        word = item.recoWord;
+        this.mend.push(word);
+      });
+      console.log(this.mend);
+      this.mendli = this.mend[0];
+      const _this = this;
+      let index = 0;
+      setInterval(() => {
+        // console.log(1111);
+        _this.mendli = _this.mend[index];
+        // console.log(_this.mendli);
+        index += 1;
+        if (index >= _this.mend.length) {
+          index = 0;
+        }
+      }, 5000);
+    },
+    resetName() {
+
+    },
     silentReSearch() {
       /* 静默搜索 */
       // this.mescroll.resetUpScroll(true);
@@ -96,9 +125,22 @@ export default {
         //   data: JSON.stringify(this.history),
         // });
       } else {
-        uni.navigateTo({
-          url: '/pages/goods/goodsList'
+        let liM = {};
+        this.allMendli.records.forEach((item) => {
+          if (this.mendli === item.recoWord) {
+            liM = item;
+          }
         });
+        console.log(liM);
+        if (liM.openWay === '1') {
+          uni.navigateTo({
+            url: `/pages/index/searchTerms?url=${liM.url}`
+          });
+        } else {
+          uni.navigateTo({
+            url: `/pages/goods/goodsList?name=${liM.recoWord}`
+          });
+        }
       }
     },
     goGoods(item) {
@@ -117,6 +159,12 @@ export default {
 </script>
 
 <style scoped>
+.col_c{
+  color: #ccc;
+  font-size: 28px;
+  font-family: PingFangSC-Light, PingFang SC;
+  font-weight: 300;
+}
 /deep/ .jSearchInput-wrap{
   margin:24px 22px 24px 24px;
   z-index:100;
