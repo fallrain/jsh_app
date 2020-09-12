@@ -53,6 +53,7 @@
               class="orderList-drawer-filter-input"
               type="text"
               :placeholder="`请输入${orderTypeStr}`"
+              placeholder-style="color:#DBDBDB"
               v-model="serviNO"
             >
           </view>
@@ -68,6 +69,7 @@
                 class="orderList-drawer-filter-down-input"
                 type="text"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
                 v-model="translateInput"
               >
               <i @click="industryAction" class="iconfont iconxia left-10"></i>
@@ -83,6 +85,7 @@
                 type="text"
                 v-model="producntBandValue"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
               >
               <i @click="productBandAction" class="iconfont iconxia left-10"></i>
             </view>
@@ -101,6 +104,7 @@
           class="orderList-drawer-filter-input"
           type="text"
           :placeholder="`请输入送达方`"
+          placeholder-style="color:#DBDBDB"
           v-model="songda"
           >
           </view>
@@ -121,6 +125,7 @@
             class="orderList-drawer-filter-input"
             type="text"
             :placeholder="`请输入${orderModelStr}`"
+            placeholder-style="color:#DBDBDB"
             v-model="addresseeInput"
             >
           </view>
@@ -216,6 +221,7 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderReviewStr"
                   disabled="false"
                   >
@@ -232,6 +238,7 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderMarkStr"
                   disabled="false"
                   >
@@ -252,6 +259,7 @@
                       class="orderList-drawer-filter-down-input"
                       type="text"
                       :placeholder="`请选择`"
+                      placeholder-style="color:#DBDBDB"
                       v-model="orderBuyStr"
                       disabled="false"
                     >
@@ -268,6 +276,7 @@
                     class="orderList-drawer-filter-down-input"
                     type="text"
                     :placeholder="`请选择`"
+                    placeholder-style="color:#DBDBDB"
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
@@ -720,7 +729,6 @@ export default {
       const param = {
 
         industry: this.industry,
-        product_brand_all: this.product_brand_all,
         product_model_all: xinghao,
         product_code_all: bianhao,
         sap_judge_status: this.orderReviewValue,
