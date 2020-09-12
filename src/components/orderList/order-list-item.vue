@@ -119,7 +119,7 @@
         <view v-if="selfPayButton" class="col-25 produceDetailItem-btm">
           <view  class="iconfont iconcancel iconStyle"></view>前往结算
         </view>
-        <view v-if="invalidButton"  class="col-25 produceDetailItem-btm">
+        <view v-if="invalidButton" @click="orderCancle" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>订单作废
         </view>
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm">
