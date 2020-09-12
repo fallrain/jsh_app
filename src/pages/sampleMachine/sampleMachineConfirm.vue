@@ -15,7 +15,9 @@
               ¥ {{confirmInfo.$allPrice.UnitPrice}}
             </view>
             <uni-number-box
+              v-if="confirmInfo.detailList"
               :min="0"
+              :max="confirmInfo.detailList[0].YGS_KYKCL"
               v-model="choosedNum"
               @change="change"
             ></uni-number-box>
@@ -25,14 +27,14 @@
       <view class="product-info-bottom">
         <view>
           <text class="mr20">直扣：{{toPercent(confirmInfo.$allPrice.ReLossRate)}}%</text>
-          <text>供价：￥{{confirmInfo.$allPrice.ActPrice }}</text>
+          <text class="mr20">供价：￥{{confirmInfo.$allPrice.ActPrice }}</text>
           <text>开票价：￥{{confirmInfo.$allPrice.UnitPrice }}</text>
         </view>
         <view v-if="confirmInfo.detailList">
           库存：{{confirmInfo.detailList[0].YGS_KYKCL}}
         </view>
         <view>
-          库位：{{confirmInfo.detailList[0].YGS_LGOBE}}
+          库位：({{confirmInfo.detailList[0].YGS_LGORT}}){{confirmInfo.detailList[0].YGS_LGOBE}}
         </view>
       </view>
     </view>
