@@ -13,7 +13,22 @@
         </j-tab>
         </view>
       </view>
-      <order-list-item v-for="(iten,index) in orderListInfo" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
+      <mescroll-body
+        ref="mescrollRef"
+        @init="mescrollInit"
+        :up="jMescrollUpOptions"
+        :down="jMescrollDownOptions"
+        @down="jMescrollDownCallback"
+        @up="upCallback"
+      >
+        <order-list-item
+          v-for="(iten,index) in orderListInfo"
+          :key="index"
+          :info="iten"
+          :index="index"
+          @goDetail="goDetail">
+        </order-list-item>
+      </mescroll-body>
     </view>
     <j-drawer
       :show.sync="isShowGoodsFilterDrawer"
@@ -38,6 +53,7 @@
               class="orderList-drawer-filter-input"
               type="text"
               :placeholder="`请输入${orderTypeStr}`"
+              placeholder-style="color:#DBDBDB"
               v-model="serviNO"
             >
           </view>
@@ -53,6 +69,7 @@
                 class="orderList-drawer-filter-down-input"
                 type="text"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
                 v-model="translateInput"
               >
               <i @click="industryAction" class="iconfont iconxia left-10"></i>
@@ -73,6 +90,7 @@
                 type="text"
                 v-model="producntBandName"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
               >
               <i @click="productBandAction" class="iconfont iconxia left-10"></i>
             </view>
@@ -91,6 +109,7 @@
           class="orderList-drawer-filter-input"
           type="text"
           :placeholder="`请输入送达方`"
+          placeholder-style="color:#DBDBDB"
           v-model="songda"
           >
           </view>
@@ -111,6 +130,7 @@
             class="orderList-drawer-filter-input"
             type="text"
             :placeholder="`请输入${orderModelStr}`"
+            placeholder-style="color:#DBDBDB"
             v-model="addresseeInput"
             >
           </view>
@@ -206,6 +226,7 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderReviewStr"
                   disabled="false"
                   >
@@ -222,6 +243,7 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderMarkStr"
                   disabled="false"
                   >
@@ -242,6 +264,7 @@
                       class="orderList-drawer-filter-down-input"
                       type="text"
                       :placeholder="`请选择`"
+                      placeholder-style="color:#DBDBDB"
                       v-model="orderBuyStr"
                       disabled="false"
                     >
@@ -258,6 +281,7 @@
                     class="orderList-drawer-filter-down-input"
                     type="text"
                     :placeholder="`请选择`"
+                    placeholder-style="color:#DBDBDB"
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
@@ -393,6 +417,7 @@ export default {
       serviNO: '',
       bstnk: '',
       brand: '',
+      jshi_sendto_code: '',
       brandInput: '',
       jshi_grouping_no: '',
       jshi_gvs_so_order_no: '',
@@ -583,6 +608,11 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
+    async upCallback(pages) {
+      /* 上推加载 */
+      const scrollView = await this.getActivityList(pages);
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+    },
     filterConfirm() {
       this.orderList(this.tabs[this.sexID].id2, this.pageNo);
       this.tabs.forEach((each) => {
@@ -710,7 +740,6 @@ export default {
       const param = {
 
         industry: this.industry,
-        product_brand_all: this.product_brand_all,
         product_model_all: xinghao,
         product_code_all: bianhao,
         sap_judge_status: this.orderReviewValue,
@@ -735,6 +764,7 @@ export default {
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
         product_brand_all: this.producntBandValue,
+        jshi_sendto_code: this.songda,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,

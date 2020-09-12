@@ -1,0 +1,101 @@
+.ovedueret-bg {
+  width: 750px;
+  height: 1496px;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 24px 24px;
+}
+.ovedueret-box1 {
+  width: 702px;
+  height: 518px;
+  background: #ffffff;
+  border-radius: 10px;
+  border-top: 4px solid #2283e2;
+  display: flex;
+  flex-direction: column;
+}
+.ovedueret-box2 {
+  margin-top: 28px;
+  width: 702px;
+  height: 518px;
+  background: #ffffff;
+  border-radius: 10px;
+  border-top: 4px solid #2283e2;
+  display: flex;
+  flex-direction: column;
+}
+.ovedueret-box1-row1 {
+  margin-top: 24px;
+  margin-left: 24px;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #2283e2;
+  line-height: 40px;
+}
+.ovedueret-box1-row2 {
+  margin-top: 18px;
+  margin-left: 24px;
+  display: flex;
+}
+.ovedueret-box1-row3 {
+  margin-top: 20px;
+  margin-left: 24px;
+  display: flex;
+}
+.ovedueret-button {
+  margin-left: 480px;
+  margin-top: 22px;
+  width: 198px;
+  height: 58px;
+  background: #2283e2;
+  border-radius: 29px;
+  display: flex;
+}
+.ovedueret-button-title {
+  margin-top: 10px;
+  margin-left: 72px;
+  width: 56px;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 40px;
+}
+.ovedueret-row2-left {
+  width: 140px;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 40px;
+}
+.ovedueret-row2-right {
+  margin-right: 24px;
+  margin-left: auto;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  line-height: 40px;
+}
+.ovedueret-text-color {
+  color: #ed2856;
+}
+.ovedueret-line {
+  margin-top: 24px;
+  margin-left: 24px;
+  margin-right: 26px;
+  border-top: 2px dashed #c3c3c3;
+}
+.ovedueret-line2 {
+  margin-top: 24px;
+  margin-left: 24px;
+  margin-right: 26px;
+  border-top: 2px solid #c3c3c3;
+}
