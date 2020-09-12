@@ -105,7 +105,7 @@
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
-      <order-list-item-more 
+      <order-list-item-more
         :isOrderMore="isOrderMore"
         :tctpConfirmButton="tctpConfirmButton"
         >
@@ -142,9 +142,9 @@ export default {
   data() {
     return {
       isOrderMore: false,
-      tctpConfirmButton:'',
-      invalidButton:'',
-      showNode:false,
+      tctpConfirmButton: '',
+      invalidButton: '',
+      showNode: false,
     };
   },
   computed: {
@@ -158,8 +158,8 @@ export default {
     const details = this[ORDER.GET_ORDER].orderDetail.details;
 
     // 判断订单节点是否存在
-    if(details.jshd_tags == 'CROWD_FUNDING' 
-    && details.jshd_product_type == '3' 
+    if (details.jshd_tags == 'CROWD_FUNDING'
+    && details.jshd_product_type == '3'
     && details.jshi_order_gvs_status == '1'
     && details.jshi_stock_type == 'ZCN'
     && details.jshi_stock_type == 'KXZF') {
@@ -178,23 +178,23 @@ export default {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton;
       this.invalidButton = this.info.btnsInfo.invalidButton;
       console.log(this);
-      console.log('==========='+this.invalidButton);
+      console.log(`===========${this.invalidButton}`);
     },
     goDetail() {
       this.$emit('goDetail', this.index);
     },
     nodeClick() {
       uni.navigateTo({
-          url: `/pages/orderList/orderNode`
+        url: '/pages/orderList/orderNode'
       });
     },
     // 查看物流
     checkWL() {
       uni.navigateTo({
-          url: `/pages/orderList/orderWL`
+        url: '/pages/orderList/orderWL'
       });
     },
-    orderCancle(){
+    async  orderCancle() {
       const { code } = await this.orderService.cancelOrder(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
       if (code === '1') {
         const that = this;

@@ -39,7 +39,7 @@
         <view >
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
-              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-type
@@ -72,7 +72,7 @@
                 placeholder-style="color:#DBDBDB"
                 v-model="translateInput"
               >
-              <i @click="industryAction" class="iconfont iconxia left-10"></i>
+              <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
             <order-list-industry
                     :is-order-industry="orderIndustry"
@@ -92,7 +92,7 @@
                 :placeholder="`请选择`"
                 placeholder-style="color:#DBDBDB"
               >
-              <i @click="productBandAction" class="iconfont iconxia left-10"></i>
+              <i @click="productBandAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
           </view>
         </view>
@@ -117,7 +117,7 @@
         <view>
           <view class="addressee">
             <view>
-              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-model :is-order-model="orderModelshow"
@@ -230,7 +230,7 @@
                   v-model="orderReviewStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia"  @click="getReview"></i>
+                  <i class="iconfont iconxia dropdownstyle"  @click="getReview"></i>
                   </view>
                 <order-list-review :is-orderreview="orderReviewshow" @selectInfoOrderReview="selectInfoOrderReview"></order-list-review>
               </view>
@@ -247,7 +247,7 @@
                   v-model="orderMarkStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia" @click="getMarketing"></i>
+                  <i class="iconfont iconxia dropdownstyle" @click="getMarketing"></i>
                   </view>
                 <order-list-marketing :is-orderremarketing="orderMarketing" @selectInfoOrderMarketing="selectInfoOrderMarketing"></order-list-marketing>
             </view>
@@ -268,7 +268,7 @@
                       v-model="orderBuyStr"
                       disabled="false"
                     >
-                    <i class="iconfont iconxia" @click="getBuy"></i>
+                    <i class="iconfont iconxia dropdownstyle" @click="getBuy"></i>
                 </view>
               <order-list-buy :is-order-buy="orderBuy" @selectInfoOrderBuy="selectInfoOrderBuy"></order-list-buy>
             </view>
@@ -285,7 +285,7 @@
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
-                    <i class="iconfont iconxia" @click="getDistribution"></i>
+                    <i class="iconfont iconxia dropdownstyle" @click="getDistribution"></i>
                 </view>
               <order-list-distribution :is-order-distribution="orderDistribution" @selectInfoOrderDistribution="selectInfoOrderDistribution"></order-list-distribution>
             </view>

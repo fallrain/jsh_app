@@ -117,8 +117,9 @@
   display: flex;
   justify-content: space-between;
 }
-.left-10{
-  margin-left: 10px;
+.dropdownstyle{
+  margin-left: 5px;
+  margin-right: 20px;
   .iconxia {
     font-size: 20px;
   }
@@ -214,7 +215,6 @@
   .iconxia {
     font-size: 20px;
   }
-
   .reverse {
     display: inline-block;
     transform: rotateX(180deg);
