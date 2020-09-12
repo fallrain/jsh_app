@@ -33,6 +33,7 @@ const data = [
   'pages/vehicleList/vehicleList',
   'pages/vehicleList/vehicleCarList',
   'pages/vehicleList/vehicleCarDetail',
+  'pages/vehicleList/abnormal',
   'pages/mine/myCenter',
   'pages/mine/myAlterTel',
   'pages/mine/myPayAlertPwd',

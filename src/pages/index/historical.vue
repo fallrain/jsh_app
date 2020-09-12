@@ -54,11 +54,12 @@ export default {
       allMendli: {},
       mend: [],
       mendli: '',
-      mendOrder: {}
+      mendOrder: {},
+      index: 0
     };
   },
   onLoad(option) {
-    // const aaa = option.allMendli;
+    this.mendli = option.name;
     // this.allMendli = JSON.parse(aaa);
     // this.name = this.allMendli.recoWord;
   },
@@ -107,19 +108,24 @@ export default {
           this.mend.push(word);
         });
         console.log(this.mend);
-        this.mendli = this.mend[0];
+        this.mend.map((item, index) => {
+          if (this.mendli === item) {
+            this.index = index;
+          }
+        });
+        // this.mendli = this.mend[0];
       }
     },
     getShowTwo() {
       const _this = this;
-      let index = 0;
+      // let index = 0;
       setInterval(() => {
         // console.log(1111);
-        _this.mendli = _this.mend[index];
+        _this.mendli = _this.mend[this.index];
         // console.log(_this.mendli);
-        index += 1;
-        if (index >= _this.mend.length) {
-          index = 0;
+        this.index += 1;
+        if (this.index >= _this.mend.length) {
+          this.index = 0;
         }
       }, 5000);
     },
