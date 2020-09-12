@@ -8,7 +8,7 @@
             <!-- <view @click="moreAction" class="jtabRight">
               MORE
             </view> -->
-            <view  @click="moreAction" class="iconfont iconshaixuan1"></view>
+            <i  @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
           </template>
         </j-tab>
         </view>
@@ -74,6 +74,11 @@
               >
               <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
+            <order-list-industry
+                    :is-order-industry="orderIndustry"
+                    :industry-list="industryList"
+                    @selectInfoIndustry="selectInfoIndustry"
+            ></order-list-industry>
           </view>
           <view   class="industry-brand-child">
             <view >
@@ -83,7 +88,7 @@
               <input
                 class="orderList-drawer-filter-down-input"
                 type="text"
-                v-model="producntBandValue"
+                v-model="producntBandName"
                 :placeholder="`请选择`"
                 placeholder-style="color:#DBDBDB"
               >
@@ -290,9 +295,10 @@
           <view class="timeFont">
             <text>筛选</text>
           </view>
-          <u-checkbox-group max="3" size="18">
+          <u-checkbox-group max="3">
             <u-checkbox
-                    label-size="10"
+                    label-size="12"
+                    icon-size="12"
                     @change="checkboxChange"
                     v-model="item.checked"
                     v-for="(item, index) in screenlist" :key="index"
@@ -368,6 +374,7 @@ import OrderListReview from '../../components/orderList/order-list-review';
 import OrderListMarketing from '../../components/orderList/order-list-marketing';
 import OrderListBuy from '../../components/orderList/order-list-purchasemethod';
 import OrderListDistribution from '../../components/orderList/order-list-distribution';
+import OrderListIndustry from '../../components/orderList/order-list-industry';
 import JPopPicker from '../../components/form/JPopPicker';
 import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
 import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
@@ -401,6 +408,7 @@ export default {
     OrderListMarketing,
     OrderListBuy,
     OrderListDistribution,
+    OrderListIndustry,
     MescrollBody
   },
   data() {
@@ -408,6 +416,7 @@ export default {
       formDataJson: {},
       orderNoshow: false,
       orderModelshow: false,
+      orderIndustry: false,
       orderReviewshow: false,
       orderMarketing: false,
       orderBuy: false,
