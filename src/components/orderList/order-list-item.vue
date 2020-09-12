@@ -42,12 +42,12 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="invalidButton == 1" type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="invalidButton == 1" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
+        <view @click="orderCancle" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
@@ -84,7 +84,7 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row2" v-if="index < info.details.length-1">
@@ -101,7 +101,7 @@
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row" v-if="index === info.details.length-1">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
+        <view @click="orderCancle" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
@@ -193,6 +193,18 @@ export default {
       uni.navigateTo({
           url: `/pages/orderList/orderWL`
       });
+    },
+    orderCancle(){
+      const { code } = await this.orderService.cancelOrder(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
+      if (code === '1') {
+        const that = this;
+        uni.showToast({
+          title: '取消订单成功'
+        });
+        setTimeout(() => {
+          that.goIndex();
+        }, 1000);
+      }
     }
   }
 };
