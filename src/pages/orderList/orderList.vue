@@ -739,7 +739,6 @@ export default {
       const param = {
 
         industry: this.industry,
-        product_brand_all: this.product_brand_all,
         product_model_all: xinghao,
         product_code_all: bianhao,
         sap_judge_status: this.orderReviewValue,
