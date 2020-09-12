@@ -68,6 +68,9 @@ export default {
   cancelOrder(data) { // 取消订单
     return jPostJson(urlNoApi.cancelOrder, data);
   },
+  cancelOrderBybstnk(bstnk) {
+    return jGet(url.cancelOrderBybstnk(bstnk));
+  },
   getOrderInfo(data) { // 获取订单信息
     return jPostJson(urlNoApi.getOrderInfo, data);
   },
@@ -92,4 +95,5 @@ export default {
   orderSelfSigned(bstnk) { //自主签收
     return jGet(url.orderSelfSigned,bstnk);
   }
+
 };

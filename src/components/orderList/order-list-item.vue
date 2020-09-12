@@ -42,12 +42,12 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="invalidButton == 1" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="invalidButton == 1" @click="orderCancleFun" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view @click="orderCancle" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
+        <view @click="orderCancleFun" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
@@ -101,7 +101,7 @@
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row" v-if="index === info.details.length-1">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view @click="orderCancle" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
+        <view @click="orderCancleFun" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
@@ -194,8 +194,8 @@ export default {
         url: '/pages/orderList/orderWL'
       });
     },
-    async  orderCancle() {
-      const { code } = await this.orderService.cancelOrder(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
+    async  orderCancleFun() {
+      const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
       if (code === '1') {
         const that = this;
         uni.showToast({
