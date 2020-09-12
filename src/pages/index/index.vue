@@ -532,9 +532,9 @@ export default {
     confirm() {
       console.log(this.name);
       // console.log(this.allMendli);
-      this.allMendli = JSON.stringify(this.allMendli);
+      // this.allMendli = JSON.stringify(this.allMendli);
       uni.navigateTo({
-        url: '/pages/index/historical'
+        url: `/pages/index/historical?name=${this.mendli}`
       });
     },
     async getShow() {
