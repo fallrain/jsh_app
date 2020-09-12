@@ -74,11 +74,6 @@
               >
               <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
-            <order-list-industry
-                    :is-order-industry="orderIndustry"
-                    :industry-list="industryList"
-                    @selectInfoIndustry="selectInfoIndustry"
-            ></order-list-industry>
           </view>
           <view   class="industry-brand-child">
             <view >
@@ -88,7 +83,7 @@
               <input
                 class="orderList-drawer-filter-down-input"
                 type="text"
-                v-model="producntBandName"
+                v-model="producntBandValue"
                 :placeholder="`请选择`"
                 placeholder-style="color:#DBDBDB"
               >
@@ -373,8 +368,10 @@ import OrderListReview from '../../components/orderList/order-list-review';
 import OrderListMarketing from '../../components/orderList/order-list-marketing';
 import OrderListBuy from '../../components/orderList/order-list-purchasemethod';
 import OrderListDistribution from '../../components/orderList/order-list-distribution';
-import OrderListIndustry from '../../components/orderList/order-list-industry';
 import JPopPicker from '../../components/form/JPopPicker';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import './css/orderlist.scss';
 
 
@@ -389,6 +386,10 @@ import {
 
 export default {
   name: 'orderList',
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
     orderListItem,
     JTab,
@@ -400,13 +401,12 @@ export default {
     OrderListMarketing,
     OrderListBuy,
     OrderListDistribution,
-    OrderListIndustry
+    MescrollBody
   },
   data() {
     return {
       formDataJson: {},
       orderNoshow: false,
-      orderIndustry: false,
       orderModelshow: false,
       orderReviewshow: false,
       orderMarketing: false,
@@ -550,13 +550,11 @@ export default {
       // lableValue: '工程',
       // 产业
       industryList: [],
-
       // 品牌
       productBandList: [],
       isProductBandShow: false,
       choseProductBandKeys: [],
       producntBandValue: '',
-      producntBandName: '',
       isShowCalendarDrawer: true,
       // 用户选中的日期
       selectData: '',
@@ -598,7 +596,7 @@ export default {
   },
   created() {
     console.log(this.sexID);
-    this.orderList(this.tabs[this.sexID].id2, this.pageNo);
+    // this.orderList(this.tabs[this.sexID].id2, this.pageNo);
     this.tabs.forEach((each) => {
       each.active = false;
     });
@@ -610,7 +608,7 @@ export default {
     ]),
     async upCallback(pages) {
       /* 上推加载 */
-      const scrollView = await this.getActivityList(pages);
+      const scrollView = await this.orderList(this.tabs[this.sexID].id2, pages.num);
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     filterConfirm() {
@@ -712,6 +710,7 @@ export default {
       console.log('===========getDictionaryByWhereFun===========');
     },
     async orderList(e, pgNo) {
+      console.log(pgNo)
       let dingdan;
       let zhengdan;
       let gvs;
@@ -738,7 +737,6 @@ export default {
       }
 
       const param = {
-
         industry: this.industry,
         product_model_all: xinghao,
         product_code_all: bianhao,
@@ -772,7 +770,6 @@ export default {
         pageSize: 10
       };
 
-
       if (e == 8) {
         param.yjPay = 'MFYJ';
         param.orderStatusSelf = 7;
@@ -780,15 +777,28 @@ export default {
 
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
-        this.orderListInfo = data.dataList;
+        if (pgNo === 1) {
+          this.orderListInfo = data.dataList;
+        } else {
+          this.orderListInfo = this.orderListInfo.concat(data.dataList);
+        }
+        if (this.orderListInfo.length === 0) {
+          uni.showToast({
+            title: '暂无数据！',
+            icon: 'none'
+          });
+        }
         // 遍历循环
         for (let index = 0; index < this.orderListInfo.length; index++) {
           const element = this.orderListInfo[index];
           this.buttonLogicJudgmentAction(element.info, index);
         }
       }
-      console.log(`===========orderList===========${e}`);
-      console.log(data);
+      // 当前页码的数据
+      const scrollView = {};
+      scrollView.pageSize = 15;
+      scrollView.total = data.totalNums;
+      return scrollView;
     },
     // 获取按钮显示的数据
     async buttonLogicJudgmentAction(param, index) {

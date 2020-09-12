@@ -83,10 +83,10 @@ export default {
   }
 
   .filter-drawer-cnt-list {
-    height: calc(100vh - 160px);
+    height: calc(100% - 160px);
     overflow-y: auto;
     padding-left: 32px;
-    padding-bottom: 60px;
+    /*padding-bottom: 60px;*/
 
     &::-webkit-scrollbar {
       display: none;
