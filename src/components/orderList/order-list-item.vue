@@ -211,10 +211,13 @@ export default {
     this.isOrderMore = !this.isOrderMore;
     console.log(this.index);
     console.log(this.isOrderMore);
-    debugger
-    this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
-    this.invalidButton = this.info.btnsInfo.invalidButton  == '1';
-    this.selfPayButton = this.info.btnsInfo.selfPayButton  == '1';
+    // debugger
+    if(this.info.btnsInfo) {
+      this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
+      this.invalidButton = this.info.btnsInfo.invalidButton  == '1';
+     this.selfPayButton = this.info.btnsInfo.selfPayButton  == '1';
+    }
+    
     const info = this.info.info
     // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
     if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
