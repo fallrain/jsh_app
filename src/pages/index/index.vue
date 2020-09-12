@@ -124,41 +124,40 @@
         </view>
 <!--   资讯测试版     -->
         <!-- 资讯 -->
-        <view class="homepage-info">
-          <view class="homepage-info-name">
-            <text class="homepage-info-title">热门资讯</text>
-            <text class="homepage-info-more">MORE</text>
-          </view>
-          <view>
-            <view
-                class="homepage-info-list"
-                v-for="item in infoList"
-                :key="item.id"
-                @click="goCatalog(item.url)"
-            >
-              <view class="homepage-info-list-hot">{{item.hot}}</view>
-              <view class="homepage-info-list-title">{{item.info}}</view>
-            </view>
-          </view>
-
-        </view>
-        <!-- 资讯正式版 -->
-<!--         <view class="homepage-info">-->
+<!--        <view class="homepage-info">-->
 <!--          <view class="homepage-info-name">-->
 <!--            <text class="homepage-info-title">热门资讯</text>-->
-<!--            <text class="homepage-info-more" @tap="goAnnouncement">MORE</text>-->
+<!--            <text class="homepage-info-more">MORE</text>-->
 <!--          </view>-->
 <!--          <view>-->
 <!--            <view-->
-<!--            class="homepage-info-list"-->
-<!--            v-for="item in infoList"-->
-<!--            :key="item.id"-->
-<!--          >-->
-<!--            <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>-->
-<!--            <view class="homepage-info-list-title">{{item.info}}</view>-->
+<!--                class="homepage-info-list"-->
+<!--                v-for="item in infoList"-->
+<!--                :key="item.id"-->
+<!--                @click="goCatalog(item.url)"-->
+<!--            >-->
+<!--              <view class="homepage-info-list-hot">{{item.hot}}</view>-->
+<!--              <view class="homepage-info-list-title">{{item.info}}</view>-->
+<!--            </view>-->
 <!--          </view>-->
-<!--          </view>-->
+
 <!--        </view>-->
+<!--         资讯正式版 -->
+         <view class="homepage-info">
+          <view class="homepage-info-name">
+            <text class="homepage-info-title">热门资讯</text>
+            <text class="homepage-info-more" @tap="goAnnouncement">MORE</text>
+          </view>
+          <view>
+            <view
+            class="homepage-info-list"
+            v-for="item in infoList"
+            :key="item.id"
+          >
+            <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>
+          </view>
+          </view>
+        </view>
       </view>
     <!-- tabber -->
     <!-- <view
@@ -468,7 +467,7 @@ export default {
     ]),
     getPageInf() {
       this.getbannerList();
-      // this.getIndexList();
+      this.getIndexList();
       this.getList();
       this.getXinPin();
       this.getBaoKuan();
@@ -600,30 +599,30 @@ export default {
         url: `/pages/index/liveBroadcast?userId=${this.saleInfo.customerCode}`
       });
     },
-    // // 新闻资讯
-    // async getIndexList() {
-    //   const list = await this.messageService.indexList({
-    //     customerCode: this.saleInfo.customerCode,
-    //     unitId: this.tokenUserInf.name
-    //   });
-    //   if (list.code === '1') {
-    //     console.log(list.data);
-    //     this.infoList = list.data.slice(0, 4);
-    //   }
-    // },
+    // 新闻资讯
+    async getIndexList() {
+      const list = await this.messageService.indexList({
+        customerCode: this.saleInfo.customerCode,
+        unitId: this.tokenUserInf.name
+      });
+      if (list.code === '1') {
+        console.log(list.data);
+        this.infoList = list.data.slice(0, 4);
+      }
+    },
     // 新闻资讯公告
     goAnnouncement() {
       uni.navigateTo({
         url: '/pages/index/announcement'
       });
     },
-    // // 新闻资讯详情
-    // goInfoDetail(item) {
-    //   console.log(item);
-    //   uni.navigateTo({
-    //     url: `/pages/index/information?id=${item.id}`
-    //   });
-    // },
+    // 新闻资讯详情
+    goInfoDetail(item) {
+      console.log(item);
+      uni.navigateTo({
+        url: `/pages/index/information?id=${item.id}`
+      });
+    },
 
     // 推荐跳转详情
     goDetail(v) {
