@@ -2,15 +2,12 @@
   <view class="orList">
     <view class="padding-15">
       <view style="display:flex">
-        <view style="width:320px">
-        <j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
+        <view style="width:330px">
+        <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
           <template #right>
-            <!-- <view @click="moreAction" class="jtabRight">
-              MORE
-            </view> -->
             <i  @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
           </template>
-        </j-tab>
+        </order-j-tab>
         </view>
       </view>
       <mescroll-body
@@ -366,7 +363,7 @@
 
 <script>
 import orderListItem from '../../components/orderList/order-list-item';
-import JTab from '../../components/common/JTab';
+import OrderJTab from '../../components/orderList/OrderJTab';
 import JDrawer from '../../components/form/JDrawer';
 import OrderListType from '../../components/orderList/order-list-type';
 import OrderListModel from '../../components/orderList/order-list-model';
@@ -399,7 +396,7 @@ export default {
   ],
   components: {
     orderListItem,
-    JTab,
+    OrderJTab,
     JDrawer,
     JPopPicker,
     OrderListType,
