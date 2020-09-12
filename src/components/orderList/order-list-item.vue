@@ -8,7 +8,7 @@
     <view v-if="info.details.length<2">
       <view class="produceDetailItem-cnt" @click="goDetail">
         <view class="produceDetailItem-cnt-img">
-          <!-- <image :src="info.details[0].jshd_product_img"></image> -->
+           <image :src="info.details[0].jshd_product_img"></image>
         </view>
         <view class="">
           <view class="produceDetailItem-cnt-text">{{info.details[0].jshd_product_name}}</view>
