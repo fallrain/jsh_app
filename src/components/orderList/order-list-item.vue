@@ -8,7 +8,7 @@
     <view v-if="info.details.length<2">
       <view class="produceDetailItem-cnt" @click="goDetail">
         <view class="produceDetailItem-cnt-img">
-          <!-- <image :src="info.details[0].jshd_product_img"></image> -->
+           <image :src="info.details[0].jshd_product_img"></image>
         </view>
         <view class="">
           <view class="produceDetailItem-cnt-text">{{info.details[0].jshd_product_name}}</view>
@@ -42,16 +42,34 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="invalidButton == 1" @click="orderCancleFun" type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="invalidButton == 1" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
-        <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view @click="orderCancleFun" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
-        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
-        <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
+        <!--<view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>-->
+        <view class="produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>自助作废
+        </view>
+        <view class="produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>更改付款方
+        </view>
+        <view class="produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
+        </view>
+        <view class="produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>前往结算
+        </view>
+        <view @click="orderCancle" class="produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>订单作废
+        </view>
+        <view v-if="showNode" @click="nodeClick" class="produceDetailItem-btm">
+          <view class="iconfont icontree iconStyle"></view>订单节点
+        </view>
+        <view @click="checkWL" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
+        </view>
       </view>
-      <order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>
+      <!--<order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>-->
     </view>
     <view v-else-if="info.details.length>0" v-for="(item,index) in info.details" :key="index">
       <view class="produceDetailItem-cnt" @click="goDetail">
@@ -88,10 +106,28 @@
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row2" v-if="index < info.details.length-1">
-        <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
-        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
-        <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
+        <!--<view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>-->
+        <view class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>自助作废
+        </view>
+        <view class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>更改付款方
+        </view>
+        <view class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
+        </view>
+        <view class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>前往结算
+        </view>
+        <view class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcancel iconStyle"></view>订单作废
+        </view>
+        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm">
+          <view class="iconfont icontree iconStyle"></view>订单节点
+        </view>
+        <view @click="checkWL" class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
+        </view>
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
           <view class="jOrderConfirmItem-semicircle"></view>
         </view>
@@ -101,15 +137,15 @@
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row" v-if="index === info.details.length-1">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view @click="orderCancleFun" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
+        <view @click="orderCancle" class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view @click="checkWL" class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
-      <order-list-item-more
+      <!--<order-list-item-more
         :isOrderMore="isOrderMore"
         :tctpConfirmButton="tctpConfirmButton"
         >
-      </order-list-item-more>
+      </order-list-item-more>-->
     </view>
   </view>
 </template>
@@ -194,8 +230,8 @@ export default {
         url: '/pages/orderList/orderWL'
       });
     },
-    async  orderCancleFun() {
-      const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
+    async  orderCancle() {
+      const { code } = await this.orderService.cancelOrder(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
       if (code === '1') {
         const that = this;
         uni.showToast({

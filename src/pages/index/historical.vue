@@ -37,6 +37,8 @@
 </template>
 <script>
 import JSearchInput from '../../components/form/JSearchInput';
+import { USER } from '@/store/mutationsTypes';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'historical',
@@ -56,12 +58,21 @@ export default {
     };
   },
   onLoad(option) {
-    const aaa = option.allMendli;
-    this.allMendli = JSON.parse(aaa);
+    // const aaa = option.allMendli;
+    // this.allMendli = JSON.parse(aaa);
     // this.name = this.allMendli.recoWord;
   },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      tokenUserInf: USER.GET_TOKEN_USER,
+    })
+  },
   created() {
-    this.getShow();
+    (async () => {
+      await this.getShow();
+    })();
+    this.getShowTwo();
     console.log(localStorage.getItem('history'));
     if (localStorage.getItem('history')) {
       console.log(1111);
@@ -73,14 +84,33 @@ export default {
     console.log(this.history);
   },
   methods: {
-    getShow() {
-      let word = '';
-      this.allMendli.records.forEach((item) => {
-        word = item.recoWord;
-        this.mend.push(word);
+    async getShow() {
+      const params = {
+        bigChannel: [this.saleInfo.channel],
+        centerCode: [this.saleInfo.tradeCode],
+        custCode: [this.saleInfo.customerCode],
+        smallChannel: [this.saleInfo.subChannel],
+        type: 1,
+        userId: this.tokenUserInf.name,
+        userName: this.tokenUserInf.nickname
+      };
+      const { code, data } = await this.commodityService.show({
+        pageNum: 1,
+        pageSize: 4,
+        params
       });
-      console.log(this.mend);
-      this.mendli = this.mend[0];
+      if (code === '10000') {
+        this.allMendli = data;
+        let word = '';
+        data.records.forEach((item) => {
+          word = item.recoWord;
+          this.mend.push(word);
+        });
+        console.log(this.mend);
+        this.mendli = this.mend[0];
+      }
+    },
+    getShowTwo() {
       const _this = this;
       let index = 0;
       setInterval(() => {
@@ -92,9 +122,6 @@ export default {
           index = 0;
         }
       }, 5000);
-    },
-    resetName() {
-
     },
     silentReSearch() {
       /* 静默搜索 */
