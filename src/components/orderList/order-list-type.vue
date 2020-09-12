@@ -4,12 +4,11 @@
     <view class="background">
       <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>订单号</view>
       <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>
-      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>
+      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVS单号</view>
       <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>
     </view>
   </view>
 </template>
-
 <script>
 export default {
   name: 'orderListItemType',
@@ -23,12 +22,6 @@ export default {
       type: String,
     }
   },
-
-  orderType:{
-   name :String,
-    value:String
-
-},
   methods: {
     orderNoClick(val) {
       if (val === '1'){
@@ -42,7 +35,7 @@ export default {
       }
       if (val === '3'){
         /* 回馈抽屉值，修改props.show */
-        this.$emit('selectInfoOrderNo', val ,'GVC单号');
+        this.$emit('selectInfoOrderNo', val ,'GVS单号');
       }
       if (val === '4'){
         /* 回馈抽屉值，修改props.show */

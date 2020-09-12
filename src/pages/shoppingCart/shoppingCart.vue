@@ -555,6 +555,8 @@ export default {
                 isCreditMode: false,
                 // 直发模式
                 isDirectMode: false,
+                // 远周次模式
+                isWeekMode: false,
                 $PriceInfo: v.productList[0].priceInfo,
                 // 在购物车里更换的其他版本数据，使得计算属性能监控到
                 choseOtherVersions: [],
@@ -1060,6 +1062,27 @@ export default {
             // 是否直发
             isStock: shoppingCartItem.isDirect && product.isDirectMode ? '0' : '1',
           };
+          // 远周次参数修改
+          const choseWeek = shoppingCartItem.choseWeekKeys.join('');
+          if (shoppingCartItem.isWeek) {
+            orderSplitComposeProductData.farWeek = '1';
+            if (product.isWeekMode) {
+              orderSplitComposeProductData.isCheckFarWeek = product.isWeekMode ? '1' : '0';
+              if (choseWeek) {
+                orderSplitComposeProductData.farWeekDate = choseWeek;
+              } else {
+                uni.showModal({
+                  title: '提示',
+                  showCancel: false,
+                  content: `商品：${productList[0].productName},未选择远周次日期`
+                });
+                return;
+              }
+            } else {
+              orderSplitComposeProductData.isCheckFarWeek = '0';
+            }
+          }
+
           const {
             channelGroup
           } = this.userInf;
@@ -1106,15 +1129,18 @@ export default {
                 if (shoppingCartItem.isFundsFirst) {
                   orderSplitComposeProductData.isCheckKuanXian = product.isFundsFirstMode ? '1' : '0';
                 } else {
+                  orderSplitComposeProductData.kuanXian = '1';
                   orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
 
                 // 传统渠道样机不支持选择款先，默认款先
                 if (isContainYj) {
+                  orderSplitComposeProductData.kuanXian = '1';
                   orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
                 // 异地云仓不支持选择款先，默认款先
                 if (this.choseSendAddress.yunCangFlag === 'ydyc') {
+                  orderSplitComposeProductData.kuanXian = '1';
                   orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
               }

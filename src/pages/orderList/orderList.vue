@@ -57,6 +57,11 @@
               >
               <i @click="industryAction" class="iconfont iconxia left-10"></i>
             </view>
+            <order-list-industry
+                    :is-order-industry="orderIndustry"
+                    :industry-list="industryList"
+                    @selectInfoIndustry="selectInfoIndustry"
+            ></order-list-industry>
           </view>
           <view   class="industry-brand-child">
             <view >
@@ -344,6 +349,7 @@ import OrderListReview from '../../components/orderList/order-list-review';
 import OrderListMarketing from '../../components/orderList/order-list-marketing';
 import OrderListBuy from '../../components/orderList/order-list-purchasemethod';
 import OrderListDistribution from '../../components/orderList/order-list-distribution';
+import OrderListIndustry from '../../components/orderList/order-list-industry';
 import JPopPicker from '../../components/form/JPopPicker';
 import './css/orderlist.scss';
 
@@ -369,12 +375,14 @@ export default {
     OrderListReview,
     OrderListMarketing,
     OrderListBuy,
-    OrderListDistribution
+    OrderListDistribution,
+    OrderListIndustry
   },
   data() {
     return {
       formDataJson: {},
       orderNoshow: false,
+      orderIndustry: false,
       orderModelshow: false,
       orderReviewshow: false,
       orderMarketing: false,
@@ -387,6 +395,7 @@ export default {
       brand: '',
       brandInput: '',
       jshi_grouping_no: '',
+      jshi_gvs_so_order_no: '',
       sap_dn5: '',
       industry: '',
       product_brand_all: '',
@@ -516,6 +525,7 @@ export default {
       // lableValue: '工程',
       // 产业
       industryList: [],
+
       // 品牌
       productBandList: [],
       isProductBandShow: false,
@@ -586,7 +596,7 @@ export default {
       this.serviNO = '';
       this.songda = '';
       this.translateInput = '';
-      this.producntBandName='';
+      this.producntBandName = '';
       this.producntBandValue = '';
       this.addresseeInput = '';
       this.orderModelStr = '产品型号';
@@ -606,6 +616,7 @@ export default {
       this.screenlist.map((val) => {
         val.checked = false;
       });
+      this.industry = '';
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
@@ -618,16 +629,16 @@ export default {
     async productBandAction() {
       this.isShowGoodsFilterDrawer = false;
       await this.getDictionaryByWhereFun({
-        dictionaryType: 'INDUSTRIAL'// 产业筛选
-      });
-      await this.getDictionaryByWhereFun({
         dictionaryType: 'PRODUCT_BRAND'
       });
       this.isProductBandShow = true;
     },
     // 产业
-    industryAction() {
-
+    async industryAction() {
+      this.getIndustry();
+      await this.getDictionaryByWhereFun({
+        dictionaryType: 'INDUSTRIAL'// 产业筛选
+      });
     },
     // 过滤条件
     async moreAction() {
@@ -635,11 +646,25 @@ export default {
       this.isShowGoodsFilterDrawer = true;
       console.log(this.productBandList);
     },
+    unique(newarr) {
+      const res = new Map();
+      this.industryList = newarr.filter(newarr => !res.has(newarr.key) && res.set(newarr.key, 1));
+    },
     async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '1') {
         if (param.dictionaryType == 'INDUSTRIAL') {
-
+          const industryLists = [];
+          // this.industryList = data;
+          for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            const indus = {
+              key: element.code,
+              value: element.codeName
+            };
+            industryLists.push(indus);
+          }
+          this.unique(industryLists);
         } else {
           console.log('===========getDictionaryByWhereFun===========');
           // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
@@ -659,6 +684,7 @@ export default {
     async orderList(e, pgNo) {
       let dingdan;
       let zhengdan;
+      let gvs;
       let wuliu;
       let xinghao;
       let bianhao;
@@ -667,6 +693,9 @@ export default {
       }
       if (this.orderTypeVue === '2') {
         zhengdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '3') {
+        gvs = this.serviNO;
       }
       if (this.orderTypeVue === '4') {
         wuliu = this.serviNO;
@@ -689,6 +718,7 @@ export default {
         waysOfPurchasing: this.orderBuyValue,
         bstnk: dingdan,
         jshi_grouping_no: zhengdan,
+        jshi_gvs_so_order_no: gvs,
         sap_dn5: wuliu,
         jshi_delivery_type: this.orderDistributionValue,
         price_type_all: this.pricetypeall,
@@ -704,7 +734,7 @@ export default {
         sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
-        product_brand_all:this.producntBandValue,
+        product_brand_all: this.producntBandValue,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
@@ -775,9 +805,14 @@ export default {
         }
       });
     },
+
     getType() {
       this.orderNoshow = !this.orderNoshow;
       console.log(this.orderNoshow);
+    },
+    getIndustry() {
+      this.orderIndustry = !this.orderIndustry;
+      console.log(this.orderIndustry);
     },
     getModel() {
       this.orderModelshow = !this.orderModelshow;
@@ -804,20 +839,28 @@ export default {
       this.orderNoshow = !this.orderNoshow;
       this.orderTypeStr = data;
       if (value === '1') {
-        console.log(value);
         this.jshi_sendto_code = '';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
         this.bstnk = this.serviNO;
       }
       if (value === '2') {
+        this.jshi_grouping_no = this.serviNO;
+        this.jshi_gvs_so_order_no = '';
+        this.sap_dn5 = '';
+        this.bstnk = '';
+      }
+      if (value === '3') {
         console.log(value);
-        this.jshi_sendto_code = this.serviNO;
+        this.jshi_grouping_no = '';
+        this.jshi_gvs_so_order_no = this.serviNO;
         this.sap_dn5 = '';
         this.bstnk = '';
       }
       if (value === '4') {
         console.log(value);
-        this.jshi_sendto_code = '';
+        this.jshi_grouping_no = '';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = this.serviNO;
         this.bstnk = '';
       }
@@ -855,6 +898,13 @@ export default {
       this.orderDistribution = !this.orderDistribution;
       this.orderDistributionStr = data; // 改变了父组件的值
     },
+    selectInfoIndustry(value, data) { // 点击子组件按钮时触发事件
+      console.log(`-------${value}`);
+      this.industry = value;
+      this.orderIndustry = !this.orderIndustry;
+      this.translateInput = data; // 改变了父组件的值
+    },
+
     // 选中某个复选框时，由checkbox时触发
     checkboxChange(e) {
       console.log(e.name);
