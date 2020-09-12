@@ -33,16 +33,18 @@
   border:2px solid rgba(219,219,219,1);
   padding: 0 16px;
   width: 90%;
+
 }
 .orderList-drawer-filter-down-input {
   font-size: 24px;
   padding: 0 16px;
   height: 60px;
   line-height: 60px;
+  font-family: PingFangSC-Regular, PingFang SC;
 }
 .industry-brand{
   overflow: hidden;
-  margin-right: -20px;
+  margin-right: 10px;
   margin-top: 20px;
   font-size: 30px;
 }
@@ -115,8 +117,9 @@
   display: flex;
   justify-content: space-between;
 }
-.left-10{
-  margin-left: 10px;
+.dropdownstyle{
+  margin-left: 5px;
+  margin-right: 20px;
   .iconxia {
     font-size: 20px;
   }
@@ -212,7 +215,6 @@
   .iconxia {
     font-size: 20px;
   }
-
   .reverse {
     display: inline-block;
     transform: rotateX(180deg);

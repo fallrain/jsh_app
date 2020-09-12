@@ -39,7 +39,7 @@
         <view >
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
-              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-type
@@ -53,6 +53,7 @@
               class="orderList-drawer-filter-input"
               type="text"
               :placeholder="`请输入${orderTypeStr}`"
+              placeholder-style="color:#DBDBDB"
               v-model="serviNO"
             >
           </view>
@@ -68,9 +69,10 @@
                 class="orderList-drawer-filter-down-input"
                 type="text"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
                 v-model="translateInput"
               >
-              <i @click="industryAction" class="iconfont iconxia left-10"></i>
+              <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
             <order-list-industry
                     :is-order-industry="orderIndustry"
@@ -88,8 +90,9 @@
                 type="text"
                 v-model="producntBandName"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
               >
-              <i @click="productBandAction" class="iconfont iconxia left-10"></i>
+              <i @click="productBandAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
           </view>
         </view>
@@ -106,6 +109,7 @@
           class="orderList-drawer-filter-input"
           type="text"
           :placeholder="`请输入送达方`"
+          placeholder-style="color:#DBDBDB"
           v-model="songda"
           >
           </view>
@@ -113,7 +117,7 @@
         <view>
           <view class="addressee">
             <view>
-              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-model :is-order-model="orderModelshow"
@@ -126,6 +130,7 @@
             class="orderList-drawer-filter-input"
             type="text"
             :placeholder="`请输入${orderModelStr}`"
+            placeholder-style="color:#DBDBDB"
             v-model="addresseeInput"
             >
           </view>
@@ -221,10 +226,11 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderReviewStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia"  @click="getReview"></i>
+                  <i class="iconfont iconxia dropdownstyle"  @click="getReview"></i>
                   </view>
                 <order-list-review :is-orderreview="orderReviewshow" @selectInfoOrderReview="selectInfoOrderReview"></order-list-review>
               </view>
@@ -237,10 +243,11 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderMarkStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia" @click="getMarketing"></i>
+                  <i class="iconfont iconxia dropdownstyle" @click="getMarketing"></i>
                   </view>
                 <order-list-marketing :is-orderremarketing="orderMarketing" @selectInfoOrderMarketing="selectInfoOrderMarketing"></order-list-marketing>
             </view>
@@ -257,10 +264,11 @@
                       class="orderList-drawer-filter-down-input"
                       type="text"
                       :placeholder="`请选择`"
+                      placeholder-style="color:#DBDBDB"
                       v-model="orderBuyStr"
                       disabled="false"
                     >
-                    <i class="iconfont iconxia" @click="getBuy"></i>
+                    <i class="iconfont iconxia dropdownstyle" @click="getBuy"></i>
                 </view>
               <order-list-buy :is-order-buy="orderBuy" @selectInfoOrderBuy="selectInfoOrderBuy"></order-list-buy>
             </view>
@@ -273,10 +281,11 @@
                     class="orderList-drawer-filter-down-input"
                     type="text"
                     :placeholder="`请选择`"
+                    placeholder-style="color:#DBDBDB"
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
-                    <i class="iconfont iconxia" @click="getDistribution"></i>
+                    <i class="iconfont iconxia dropdownstyle" @click="getDistribution"></i>
                 </view>
               <order-list-distribution :is-order-distribution="orderDistribution" @selectInfoOrderDistribution="selectInfoOrderDistribution"></order-list-distribution>
             </view>
@@ -408,6 +417,7 @@ export default {
       serviNO: '',
       bstnk: '',
       brand: '',
+      jshi_sendto_code: '',
       brandInput: '',
       jshi_grouping_no: '',
       jshi_gvs_so_order_no: '',
@@ -730,7 +740,6 @@ export default {
       const param = {
 
         industry: this.industry,
-        product_brand_all: this.product_brand_all,
         product_model_all: xinghao,
         product_code_all: bianhao,
         sap_judge_status: this.orderReviewValue,
@@ -755,6 +764,7 @@ export default {
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
         product_brand_all: this.producntBandValue,
+        jshi_sendto_code: this.songda,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
