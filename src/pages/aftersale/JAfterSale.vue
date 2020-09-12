@@ -29,7 +29,7 @@
           <view class="color1">3</view>条
         </view>
       </view>
-
+下·
       <view class="person-information-bottom2">
         <view class="person-information-bottoml">
           <view class="title-three">哪买哪退</view>

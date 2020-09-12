@@ -9,7 +9,10 @@ const urls = {
   // 按钮显示：
   buttonLogicJudgment: '/myorder/buttonLogicJudgment',
   // 自主签收：
-  orderSelfSigned: '/myorder/orderSelfSigned'
+  orderSelfSigned: '/myorder/orderSelfSigned',
+  cancelOrderBybstnk(bstnk) {
+    return `/myorder/cancelOrder?bstnk=${bstnk}`;
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;
