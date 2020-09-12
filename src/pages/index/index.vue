@@ -475,6 +475,9 @@ export default {
       this.getZiYuanJi();
       this.getShow();
     },
+    // watch: {
+    //   $route: ['getShow']
+    // },
     // 导航栏返回
     goBack() {
       // uni.navigateBack({
@@ -528,10 +531,10 @@ export default {
     // 历史记录
     confirm() {
       console.log(this.name);
-      console.log(this.allMendli);
+      // console.log(this.allMendli);
       this.allMendli = JSON.stringify(this.allMendli);
       uni.navigateTo({
-        url: `/pages/index/historical?allMendli=${this.allMendli}`
+        url: '/pages/index/historical'
       });
     },
     async getShow() {
