@@ -4,15 +4,25 @@
   <!-- 左边 -->
   <view>
     <view style="margin-top: 16px;"></view>
-    <view class="img"></view>
+    <view class="img">
+      <i class="iconfont icondingdanchuangjian"></i>
+    </view>
     <view class="upLine"></view>
-    <view class="img"></view>
+    <view class="img">
+      <i class="iconfont icondingdanpingshen"></i>
+    </view>
     <view class="middleLine"></view>
-    <view class="img"></view>
+    <view class="img">
+      <i class="iconfont icongongchangfahuo"></i>
+    </view>
     <view class="thirdLine"></view>
-    <view class="img"></view>
+    <view class="img">
+      <i class="iconfont iconzhongxinruku"></i>
+    </view>
     <view class="forthLine"></view>
-    <view class="img"></view>
+    <view class="img">
+      <i class="iconfont iconzhongxinruku"></i>
+    </view>
   </view>
   <!-- 右边 -->
   <view >
@@ -142,7 +152,6 @@ export default {
   width: 64px;
   height: 64px;
   margin-left: 38px;
-  background-color:red;
 }
 .upLine {
   width: 2px;
@@ -192,7 +201,10 @@ export default {
   color: #999999;
   line-height: 40px;
   margin-left: 56px;
-  margin-top: 26px;
+  margin-top: 32px;
   /* background: yellowgreen; */
+}
+.iconfont {
+  font-size: 60px;
 }
 </style>
