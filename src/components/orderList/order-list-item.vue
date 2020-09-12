@@ -8,7 +8,7 @@
     <view v-if="info.details.length<2">
       <view class="produceDetailItem-cnt" @click="goDetail">
         <view class="produceDetailItem-cnt-img">
-          <image :src="info.details[0].jshd_product_img"></image>
+          <!-- <image :src="info.details[0].jshd_product_img"></image> -->
         </view>
         <view class="">
           <view class="produceDetailItem-cnt-text">{{info.details[0].jshd_product_name}}</view>
@@ -48,7 +48,7 @@
       <view class="uni-flex uni-row produceDetailItem-btm-row">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
-        <view class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
+        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
       <order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>
@@ -90,7 +90,7 @@
       <view class="uni-flex uni-row produceDetailItem-btm-row2" v-if="index < info.details.length-1">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
-        <view class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
+        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
           <view class="jOrderConfirmItem-semicircle"></view>
@@ -102,7 +102,7 @@
       <view class="uni-flex uni-row produceDetailItem-btm-row" v-if="index === info.details.length-1">
         <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcancel iconStyle"></view>订单作废</view>
-        <view class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
+        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm"><view class="iconfont icontree iconStyle"></view>订单节点</view>
         <view class="col-25 produceDetailItem-btm"><view class="iconfont iconcar iconStyle iconTransform"></view>查看物流</view>
       </view>
       <order-list-item-more 
@@ -118,6 +118,13 @@
 import './css/orderListItem.scss';
 import '../shoppingCart/css/jOrderConfirmItem.scss';
 import orderListItemMore from './order-list-itemMore';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  ORDER
+} from '../../store/mutationsTypes';
+
 
 export default {
   name: 'orderListItem',
@@ -137,7 +144,31 @@ export default {
       isOrderMore: false,
       tctpConfirmButton:'',
       invalidButton:'',
+      showNode:false,
     };
+  },
+  computed: {
+    ...mapGetters([
+      ORDER.GET_ORDER
+    ]),
+  },
+  created() {
+    console.log('11111111');
+
+    const details = this[ORDER.GET_ORDER].orderDetail.details;
+
+    // 判断订单节点是否存在
+    if(details.jshd_tags == 'CROWD_FUNDING' 
+    && details.jshd_product_type == '3' 
+    && details.jshi_order_gvs_status == '1'
+    && details.jshi_stock_type == 'ZCN'
+    && details.jshi_stock_type == 'KXZF') {
+      this.showNode = true;
+    } else {
+      this.showNode = false;
+    }
+    // jshd_tags=CROWD_FUNDING&jshd_product_type=3
+    // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
   methods: {
     getMore() {
@@ -151,6 +182,11 @@ export default {
     },
     goDetail() {
       this.$emit('goDetail', this.index);
+    },
+    nodeClick() {
+      uni.navigateTo({
+          url: `/pages/orderList/orderNode`
+      });
     }
   }
 };
