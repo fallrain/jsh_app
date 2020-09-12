@@ -530,11 +530,14 @@ export default {
     confirm() {
       console.log(this.name);
       // this.mescroll.resetUpScroll(true);
-      console.log(this.mendli);
+      console.log(this.allMendli);
+      let liM = {};
       if (!this.name) {
-        this.allMendli.forEach(item => {
-
-        })
+        this.allMendli.records.forEach(item => {
+          if (this.mendli === item.recoWord) {
+            liM = item;
+          }
+        });
         this.allMendli = JSON.stringify(this.allMendli);
         uni.navigateTo({
           url: `/pages/index/historical?name=${this.allMendli}`
