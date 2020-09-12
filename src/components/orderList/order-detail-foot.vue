@@ -12,10 +12,28 @@
 </template>
 
 <script>
+import {
+  mapGetters
+} from 'vuex';
+import {
+  ORDER
+} from '../../store/mutationsTypes';
+
 export default {
   name: 'orderDetailFoot',
+  computed: {
+    ...mapGetters([
+      ORDER.GET_ORDER
+    ]),
+  },
+  created() {
+    console.log('11111111');
+    this.infoList = this[ORDER.GET_ORDER].orderDetail;
+    console.log(this.infoList);
+  },
   data() {
     return {
+      infoList:{},
       buttonList: [
         { name: '查看物流', ischeck: false },
         { name: '订单节点', ischeck: false },
@@ -24,11 +42,25 @@ export default {
     };
   },
   methods: {
-    ckickBot() {
-      // this.buttonList.forEach((v) => {
-      //   v.ischeck = false;
-      // });
-      // e.ischeck = !e.ischeck;
+    ckickBot(item) {
+      if(item.name == '查看物流') {
+        uni.navigateTo({
+          url: `/pages/orderList/orderWL`
+        });
+      } else if(item.name == '签收') {
+        this.orderSelfSignedFun()
+      } else if(item.name == '订单节点') {
+        uni.navigateTo({
+          url: `/pages/orderList/orderNode`
+        });
+      }
+    },
+    async orderSelfSignedFun() {
+      const { code, data } = await this.orderService.orderSelfSigned(this.infoList.info.bstnk);
+      if (code === '1') {
+        debugger
+        console.log(data)
+      }
     }
   }
 };

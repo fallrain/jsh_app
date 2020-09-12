@@ -1,0 +1,127 @@
+.posfeescr-bg {
+  width: 608px;
+  height: 1496px;
+  background: #ffffff;
+  padding-top: 96px;
+}
+.posfeescr-top {
+  margin-left: 32px;
+  width: 90px;
+  height: 42px;
+  font-size: 30px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 42px;
+}
+.posfeescr-topinput {
+  margin-top: 24px;
+  margin-left: 28px;
+  width: 532px;
+  height: 60px;
+  background: #ffffff;
+  border-radius: 30px;
+  border: 2px solid #dbdbdb;
+  display: flex;
+}
+.posfeescr-input {
+  margin-left: 32px;
+  margin-top: 12px;
+  height: 34px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  line-height: 34px;
+}
+.posfeescr-buttom {
+  margin-top: 60px;
+  margin-left: 28px;
+  height: 42px;
+  font-size: 30px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 42px;
+}
+.posfeescr-plahodsty {
+  color: #dbdbdb;
+}
+.posfeescr-timepicker {
+  margin-top: 24px;
+  margin-left: 28px;
+  width: 532px;
+  height: 60px;
+  background: #ffffff;
+  border-radius: 30px;
+  border: 2px solid #dbdbdb;
+  display: flex;
+}
+.posfeescr-timeleft {
+  margin-left: 32px;
+  margin-top: 12px;
+  height: 34px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #dbdbdb;
+  line-height: 34px;
+}
+.posfeescr-timecenter {
+  position: absolute;
+  margin-left: 252px;
+  margin-top: 6px;
+  height: 42px;
+  font-size: 30px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 42px;
+}
+.posfeescr-timeright {
+  position: absolute;
+  margin-left: 314px;
+  margin-top: 12px;
+  height: 34px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #dbdbdb;
+  line-height: 34px;
+}
+.posfeescr-row {
+  margin-top: 60px;
+  display: flex;
+}
+.posfeescr-buttonleft {
+  margin-left: 210px;
+  width: 184px;
+  height: 66px;
+  background: #2283e2;
+  border-radius: 33px 0px 0px 33px;
+}
+.posfeescr-buttonlefttitle {
+  margin-left: 68px;
+  margin-top: 16px;
+  height: 34px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 34px;
+}
+.posfeescr-buttonright {
+  width: 182px;
+  height: 66px;
+  background: #f7f7f8;
+  border-radius: 0px 33px 33px 0px;
+}
+.posfeescr-buttonrighttitle {
+  margin-left: 70px;
+  margin-top: 16px;
+  height: 34px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  line-height: 34px;
+}

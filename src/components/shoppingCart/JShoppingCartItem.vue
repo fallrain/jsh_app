@@ -104,39 +104,66 @@
             class="iconfont iconxia"
           ></view>
         </view>
-        <view
-          v-if="isCreditModel"
-          class="jShoppingCartItem-btm-switch-wrap"
-        >
-          <j-switch
-            :active.sync="goods.isCreditMode"
-            :beforeChange="handleBeforeCreditModeChange"
-            @change="isCreditModeChange"
+        <view class="j-flex-aic">
+          <view
+            class="jShoppingCartItem-btm-switch-wrap"
+            v-if="isCreditModel"
           >
-          </j-switch>
-          <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
-        </view>
-        <view
-          v-if="isFundsFirst"
-          class="jShoppingCartItem-btm-switch-wrap"
-        >
-          <j-switch
-            :active.sync="goods.isFundsFirstMode"
-            @change="goodsChange"
+            <j-switch
+              :active.sync="goods.isCreditMode"
+              :beforeChange="handleBeforeCreditModeChange"
+              @change="isCreditModeChange"
+            >
+            </j-switch>
+            <text class="jShoppingCartItem-btm-switch-text mr32 ml8">信用模式</text>
+          </view>
+          <view
+            class="jShoppingCartItem-btm-switch-wrap"
+            v-if="isFundsFirst"
           >
-          </j-switch>
-          <text class="jShoppingCartItem-btm-switch-text mr32 ml8">款先</text>
-        </view>
-        <view
-          v-if="isDirect"
-          class="jShoppingCartItem-btm-switch-wrap"
-        >
-          <j-switch
-            :active.sync="goods.isDirectMode"
-            @change="isDirectModeChange"
+            <j-switch
+              :active.sync="goods.isFundsFirstMode"
+              @change="goodsChange"
+            >
+            </j-switch>
+            <text class="jShoppingCartItem-btm-switch-text mr32 ml8">款先</text>
+          </view>
+          <view
+            class="jShoppingCartItem-btm-switch-wrap"
+            v-if="isDirect"
           >
-          </j-switch>
-          <text class="jShoppingCartItem-btm-switch-text mr32 ml8">直发</text>
+            <j-switch
+              :active.sync="goods.isDirectMode"
+              @change="isDirectModeChange"
+            >
+            </j-switch>
+            <text class="jShoppingCartItem-btm-switch-text mr32 ml8">直发</text>
+          </view>
+          <view
+            class="jShoppingCartItem-btm-switch-wrap"
+            v-if="isWeek"
+          >
+            <j-switch
+              :active.sync="goods.isWeekMode"
+              @change="isWeekModeChange"
+            >
+            </j-switch>
+            <text
+              class="jShoppingCartItem-btm-switch-text ml8"
+            >远周次</text>
+            <template
+              v-if="goods.isWeekMode"
+            >
+              <text
+                @tap="showWeekPicker"
+                class="jShoppingCartItem-btm-week-text mr4 ml8"
+              >{{choseWeekKeys.join('') || '请选择时间'}}</text>
+              <view
+                @tap="showWeekPicker"
+                class="iconfont iconxia mr32"
+              ></view>
+            </template>
+          </view>
         </view>
         <!--v-if="goods.productList[0].specialPrice==='Y'"-->
         <view
@@ -275,6 +302,13 @@
         </template>
       </j-pop-picker>
     </view>
+    <j-pop-picker
+      :choseKeys.sync="choseWeekKeys"
+      :options="weekOptions"
+      :show.sync="isWeekPickerShow"
+      @change="weekPickerChange"
+      title="远周次"
+    ></j-pop-picker>
   </view>
 </template>
 
@@ -356,7 +390,13 @@ export default {
       // 选中的库存数据
       choseStockOptions: [''],
       // 数组框是否初始化了
-      isNumberInit: false
+      isNumberInit: false,
+      // 远周次picker show
+      isWeekPickerShow: false,
+      // 远周次数据
+      weekOptions: [],
+      // 选择的远周次key
+      choseWeekKeys: ['']
     };
   },
   created() {
@@ -436,6 +476,10 @@ export default {
       }
 
       return state;
+    },
+    isWeek() {
+      /* 是否显示远周次 */
+      return !!this.weekOptions.length && !this.choseVersions.find(v => v.$isTransfer);
     },
     isShowSpecificationsBtn() {
       /* 是否显示【版本规格】按钮 */
@@ -580,6 +624,7 @@ export default {
     versionPrice() {
       this.genSpecificationsList();
       this.setFollowState();
+      this.genWeekOptions();
     },
     isCreditModel(val) {
       /* 如果不支持信用模式了，已经打开的则关闭 */
@@ -603,6 +648,15 @@ export default {
       // 直发不支持版本调货,如果是先打开的直发，则隐藏版本选择里的版本调货
       const transfer = this.specificationsList.find(v => v.id === 'transfer');
       if (this.isDirect) {
+        if (transfer) {
+          transfer.isHide = val;
+        }
+      }
+    },
+    'goods.isWeekMode': function (val) {
+      // 远周次不支持版本调货,如果是先打开的远周次，则隐藏版本选择里的版本调货
+      const transfer = this.specificationsList.find(v => v.id === 'transfer');
+      if (this.isWeek) {
         if (transfer) {
           transfer.isHide = val;
         }
@@ -641,6 +695,9 @@ export default {
     },
     setPageInf() {
       this.genStockPickerOption();
+      this.genSpecificationsList();
+      this.setFollowState();
+      this.genWeekOptions();
     },
     choose() {
       /* 选中本商品 */
@@ -677,7 +734,10 @@ export default {
     },
     isDirectModeChange() {
       /* 直发模式switch change */
-      // goods.isDirectMode
+      this.$emit('change', this.goods, this.index);
+    },
+    isWeekModeChange() {
+      /* 远周次模式switch change */
       this.$emit('change', this.goods, this.index);
     },
     showSpecifications() {
@@ -687,6 +747,32 @@ export default {
     getVersionPriceState() {
       /* versionPrice是否有值 */
       return !(!this.versionPrice || JSON.stringify(this.versionPrice) === '{}');
+    },
+    genWeekOptions() {
+      /* 组合远周次数据 */
+      this.weekOptions = [];
+      if (!this.getVersionPriceState()) {
+        return;
+      }
+      const productCode = this.goods.productList[0].productCode;
+      if (this.versionPrice && this.versionPrice.week) {
+        const productWeeks = this.versionPrice.week[productCode];
+        if (productWeeks) {
+          // 远周次数据
+          productWeeks.forEach((v) => {
+            // fix ios time bug
+            const fixTime = v.replace('-', '/');
+            const curDate = new Date();
+            // 调用getTime也是fix ios bug
+            if (curDate.getTime() < new Date(fixTime).getTime()) {
+              this.weekOptions.push({
+                key: v,
+                value: v,
+              });
+            }
+          });
+        }
+      }
     },
     genSpecificationsList() {
       /* 组合版本规格信息 */
@@ -1052,6 +1138,13 @@ export default {
       if (this.stockOptions.length) {
         this.isStockPickerShow = true;
       }
+    },
+    weekPickerChange() {
+      /* 远周次change */
+    },
+    showWeekPicker() {
+      /* 展示远周次picker */
+      this.isWeekPickerShow = true;
     }
   }
 };

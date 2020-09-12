@@ -13,10 +13,22 @@
         </j-tab>
         </view>
       </view>
-      <order-list-item
-        v-for="(iten,index) in orderListInfo"
-        :key="index" :info="iten" :index="index" @goDetail="goDetail">
-      </order-list-item>
+      <mescroll-body
+        ref="mescrollRef"
+        @init="mescrollInit"
+        :up="jMescrollUpOptions"
+        :down="jMescrollDownOptions"
+        @down="jMescrollDownCallback"
+        @up="upCallback"
+      >
+        <order-list-item
+          v-for="(iten,index) in orderListInfo"
+          :key="index"
+          :info="iten"
+          :index="index"
+          @goDetail="goDetail">
+        </order-list-item>
+      </mescroll-body>
     </view>
     <j-drawer
       :show.sync="isShowGoodsFilterDrawer"
@@ -390,14 +402,15 @@ export default {
       brand: '',
       brandInput: '',
       jshi_grouping_no: '',
+      jshi_gvs_so_order_no: '',
       sap_dn5: '',
       industry: '',
       product_brand_all: '',
       product_model_all: '',
       product_code_all: '',
       addresseeInput: '',
-      translateInput:'',
-      songda:'',
+      translateInput: '',
+      songda: '',
       modelInput: '',
       orderModelStr: '产品型号',
       orderModelValue: '1',
@@ -536,21 +549,21 @@ export default {
       // 扣款开始时间
       deductionBegainTime: '',
       deductionBegainTimeBool: false,
-      //扣款结束
+      // 扣款结束
       deductionEndTime: '',
       deductionEndTimeBool: false,
-      //开票开始
-      invoiceBegainTime:'',
-      invoiceBegainTimeBool:false,
-      //开票结束
-      invoiceEndTime:'',
-      invoiceEndTimeBool:false,
-      //金税开票开始
-      goldTaxInvoiceBegainTime:'',
-      goldTaxInvoiceBegainTimeBool:false,
-      //金税开票结束
-      goldTaxInvoiceEndTime:'',
-      goldTaxInvoiceEndTimeBool:false,
+      // 开票开始
+      invoiceBegainTime: '',
+      invoiceBegainTimeBool: false,
+      // 开票结束
+      invoiceEndTime: '',
+      invoiceEndTimeBool: false,
+      // 金税开票开始
+      goldTaxInvoiceBegainTime: '',
+      goldTaxInvoiceBegainTimeBool: false,
+      // 金税开票结束
+      goldTaxInvoiceEndTime: '',
+      goldTaxInvoiceEndTimeBool: false,
     };
   },
   computed: {
@@ -575,6 +588,11 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
+    async upCallback(pages) {
+      /* 上推加载 */
+      const scrollView = await this.getActivityList(pages);
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+    },
     filterConfirm() {
       this.orderList(this.tabs[this.sexID].id2, this.pageNo);
       this.tabs.forEach((each) => {
@@ -583,49 +601,54 @@ export default {
       this.tabs[this.sexID].active = true;
     },
     filterReset() {
-      this.orderTypeStr='订单号';
-      this.orderTypeVue= '1';
-      this.serviNO='';
-      this.songda='';
-      this.translateInput='';
-      this.producntBandValue='';
-      this.addresseeInput='';
-      this.orderModelStr='产品型号';
-      this.orderModelValue='1';
-      this.orderBegainTime='';
-      this.orderEndTime='';
-      this.deductionBegainTime='';
-      this.deductionEndTime='';
-      this.invoiceBegainTime='';
-      this.invoiceEndTime='';
-      this.goldTaxInvoiceBegainTime='';
-      this.goldTaxInvoiceEndTime='';
-      this.orderReviewStr='';
-      this.orderMarkStr='';
-      this.orderBuyStr='';
-      this.orderDistributionStr='';
-
+      this.orderTypeStr = '订单号';
+      this.orderTypeVue = '1';
+      this.serviNO = '';
+      this.songda = '';
+      this.translateInput = '';
+      this.producntBandName = '';
+      this.producntBandValue = '';
+      this.addresseeInput = '';
+      this.orderModelStr = '产品型号';
+      this.orderModelValue = '1';
+      this.orderBegainTime = '';
+      this.orderEndTime = '';
+      this.deductionBegainTime = '';
+      this.deductionEndTime = '';
+      this.invoiceBegainTime = '';
+      this.invoiceEndTime = '';
+      this.goldTaxInvoiceBegainTime = '';
+      this.goldTaxInvoiceEndTime = '';
+      this.orderReviewStr = '';
+      this.orderMarkStr = '';
+      this.orderBuyStr = '';
+      this.orderDistributionStr = '';
+      this.screenlist.map((val) => {
+        val.checked = false;
+      });
+      this.industry = '';
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
       console.log('=======productBandChange========');
-      this.producntBandValue = productBandOptions[0].value;
+      this.producntBandName = productBandOptions[0].value;
+      this.producntBandValue = productBandOptions[0].key;
       this.isProductBandShow = false;
       this.isShowGoodsFilterDrawer = true;
     },
     async productBandAction() {
       this.isShowGoodsFilterDrawer = false;
       await this.getDictionaryByWhereFun({
-        dictionaryType: 'INDUSTRIAL'// 产业筛选
-      });
-      await this.getDictionaryByWhereFun({
         dictionaryType: 'PRODUCT_BRAND'
       });
       this.isProductBandShow = true;
     },
     // 产业
-    industryAction() {
-
+    async industryAction() {
+      this.getIndustry();
+      await this.getDictionaryByWhereFun({
+        dictionaryType: 'INDUSTRIAL'// 产业筛选
+      });
     },
     // 过滤条件
     async moreAction() {
@@ -633,11 +656,25 @@ export default {
       this.isShowGoodsFilterDrawer = true;
       console.log(this.productBandList);
     },
+    unique(newarr) {
+      const res = new Map();
+      this.industryList = newarr.filter(newarr => !res.has(newarr.key) && res.set(newarr.key, 1));
+    },
     async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '1') {
         if (param.dictionaryType == 'INDUSTRIAL') {
-          this.industryList = data;
+          const industryLists = [];
+          // this.industryList = data;
+          for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            const indus = {
+              key: element.code,
+              value: element.codeName
+            };
+            industryLists.push(indus);
+          }
+          this.unique(industryLists);
         } else {
           console.log('===========getDictionaryByWhereFun===========');
           // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
@@ -657,6 +694,7 @@ export default {
     async orderList(e, pgNo) {
       let dingdan;
       let zhengdan;
+      let gvs;
       let wuliu;
       let xinghao;
       let bianhao;
@@ -665,6 +703,9 @@ export default {
       }
       if (this.orderTypeVue === '2') {
         zhengdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '3') {
+        gvs = this.serviNO;
       }
       if (this.orderTypeVue === '4') {
         wuliu = this.serviNO;
@@ -676,7 +717,7 @@ export default {
         bianhao = this.addresseeInput;
       }
 
-      var param = {
+      const param = {
 
         industry: this.industry,
         product_brand_all: this.product_brand_all,
@@ -687,6 +728,7 @@ export default {
         waysOfPurchasing: this.orderBuyValue,
         bstnk: dingdan,
         jshi_grouping_no: zhengdan,
+        jshi_gvs_so_order_no: gvs,
         sap_dn5: wuliu,
         jshi_delivery_type: this.orderDistributionValue,
         price_type_all: this.pricetypeall,
@@ -694,6 +736,15 @@ export default {
         far_weekly_all: this.farweeklyall,
         priceTypeJudgment: this.priceTypeJudgment,
         yjPay: this.yjPay,
+        jshi_created_start_time: `${this.orderBegainTime} 00:00:00`,
+        jshi_created_end_time: `${this.orderEndTime} 00:00:00`,
+        jshi_pay_start_time: `${this.deductionBegainTime} 00:00:00`,
+        jshi_pay_end_time: `${this.deductionEndTime} 00:00:00`,
+        sap_sys_invoice_start_time: `${this.invoiceBegainTime} 00:00:00`,
+        sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
+        sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
+        sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
+        product_brand_all: this.producntBandValue,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
@@ -764,9 +815,14 @@ export default {
         }
       });
     },
+
     getType() {
       this.orderNoshow = !this.orderNoshow;
       console.log(this.orderNoshow);
+    },
+    getIndustry() {
+      this.orderIndustry = !this.orderIndustry;
+      console.log(this.orderIndustry);
     },
     getModel() {
       this.orderModelshow = !this.orderModelshow;
@@ -793,20 +849,28 @@ export default {
       this.orderNoshow = !this.orderNoshow;
       this.orderTypeStr = data;
       if (value === '1') {
-        console.log(value);
         this.jshi_sendto_code = '';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
         this.bstnk = this.serviNO;
       }
       if (value === '2') {
+        this.jshi_grouping_no = this.serviNO;
+        this.jshi_gvs_so_order_no = '';
+        this.sap_dn5 = '';
+        this.bstnk = '';
+      }
+      if (value === '3') {
         console.log(value);
-        this.jshi_sendto_code = this.serviNO;
+        this.jshi_grouping_no = '';
+        this.jshi_gvs_so_order_no = this.serviNO;
         this.sap_dn5 = '';
         this.bstnk = '';
       }
       if (value === '4') {
         console.log(value);
-        this.jshi_sendto_code = '';
+        this.jshi_grouping_no = '';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = this.serviNO;
         this.bstnk = '';
       }
@@ -844,6 +908,13 @@ export default {
       this.orderDistribution = !this.orderDistribution;
       this.orderDistributionStr = data; // 改变了父组件的值
     },
+    selectInfoIndustry(value, data) { // 点击子组件按钮时触发事件
+      console.log(`-------${value}`);
+      this.industry = value;
+      this.orderIndustry = !this.orderIndustry;
+      this.translateInput = data; // 改变了父组件的值
+    },
+
     // 选中某个复选框时，由checkbox时触发
     checkboxChange(e) {
       console.log(e.name);
@@ -910,11 +981,11 @@ export default {
       this.orderBegainTimeBool = false;
       this.orderEndTimeBool = false;
       this.deductionBegainTimeBool = false;
-      this.deductionEndTimeBool=false;
-      this.invoiceBegainTimeBool=false;
-      this.invoiceEndTimeBool=false;
-      this.goldTaxInvoiceBegainTimeBool=false;
-      this.goldTaxInvoiceEndTimeBool=false;
+      this.deductionEndTimeBool = false;
+      this.invoiceBegainTimeBool = false;
+      this.invoiceEndTimeBool = false;
+      this.goldTaxInvoiceBegainTimeBool = false;
+      this.goldTaxInvoiceEndTimeBool = false;
       this.$refs.popCalendar.close();
       this.isShowGoodsFilterDrawer = true;
     },

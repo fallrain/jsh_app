@@ -33,6 +33,9 @@ const urls = {
   changeDefaultSendTo(sendToCode) {
     /* 切换默认送达方信息 */
     return `/customers/auxiliary/relations/${sendToCode}/default`;
+  },
+  getAccountMsg() {
+
   }
 };
 util.addPrefix(baseURL, urls);
