@@ -5,7 +5,7 @@
         <view class="">
           <view class="orderDetail-head-one">{{infoList.info.selfUseOrderStatus}}</view>
           <view class="orderDetail-head-two">发货时间：{{infoList.info.sap_dn5date}}</view>
-          <view class="orderDetail-head-two">预计到货日期：{{infoList.info.sap_reorder_date}}</view>
+          <view class="orderDetail-head-two">预计到货日期：{{infoList.info.jshi_plan_in_date}}</view>
         </view>
         <view class="orderDetail-head-img">
           <image src="@/assets/img/orderDetail/car.png" style="width: 100%;height: 100%;margin-top: 5px;"></image>
