@@ -5,7 +5,7 @@
         <view style="width:330px">
         <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
           <template #right>
-            <i  @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
+            <i @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
           </template>
         </order-j-tab>
         </view>
@@ -954,13 +954,14 @@ export default {
     // 选中某个复选框时，由checkbox时触发
     checkboxChange(e) {
       console.log(e.name);
-      if (!e.value && e.name === '样品机') {
+      if (e.name === '样品机') {
         this.pricetypeall = !e.value;
       }
-      if (!e.value && e.name === '整车') {
+      if (e.name === '整车') {
         this.jshiordersource = !e.value;
+
       }
-      if (!e.value && e.name === '远周次') {
+      if (e.name === '远周次') {
         this.farweeklyall = !e.value;
       }
     },
