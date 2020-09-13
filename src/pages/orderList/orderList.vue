@@ -76,7 +76,6 @@
                     :is-order-industry="orderIndustry"
                     :industry-list="industryList"
                     @selectInfoIndustry="selectInfoIndustry"
-                    class="left-20"
             ></order-list-industry>
           </view>
           <view   class="industry-brand-child">
