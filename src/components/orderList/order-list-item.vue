@@ -231,10 +231,10 @@ export default {
       this.jshi_order_gvs_status = false;
     }
 
-    console.log('jshi_order_gvs_status'+this.jshi_order_gvs_status)
-    console.log('this.jshi_grouping_no'+this.jshi_grouping_no)
+    // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
 
-    this.titleAndNo = this.info.details.jshd_order_type == 'MFYJ'?('版本号'+this.info.details.jshd_budget_code):('整单订单：'+this.info.info.jshi_grouping_no);
+    // debugger
+    this.titleAndNo = this.info.details[0].jshd_price_type == 'MFYJ'?('版本号:'+this.info.details[0].jshd_price_version):('整单订单：'+this.info.info.jshi_grouping_no);
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
@@ -242,6 +242,7 @@ export default {
     getMore() {
       const info = this[ORDER.GET_ORDER].orderDetail.info;
       console.log('=====getMore=======')
+
       console.log(this.info)
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
