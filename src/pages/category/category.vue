@@ -26,7 +26,7 @@
           </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="(childed,index2) in child.subCats" :key="childed.title" class="nav-right-item">
-              <image :src="child.images[index2].image"/>
+              <image :src="(child.images[index2] && child.images[index2].image) || ''"/>
               <view @click="checkCat(childed)">{{childed.title}}</view>
             </view>
           </view>
@@ -380,10 +380,10 @@ export default {
         this.categoryList = data;
         console.log(this.categoryList[0]);
         this.subCategoryList = this.categoryList[0];
-        this.categoryList.forEach(item => {
+        this.categoryList.forEach((item) => {
           console.log(item);
-          item.subCats.forEach(v => {
-            this.imgs.forEach(ele => {
+          item.subCats.forEach((v) => {
+            this.imgs.forEach((ele) => {
               if (v.title === ele.title) {
                 v.images = ele.sub;
               }
