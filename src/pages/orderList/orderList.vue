@@ -588,6 +588,7 @@ export default {
       // 金税开票结束
       goldTaxInvoiceEndTime: '',
       goldTaxInvoiceEndTimeBool: false,
+      producntBandName:'',
     };
   },
   computed: {
@@ -612,6 +613,23 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
+    async jMescrollDownCallback() {
+      
+      var id222;
+      this.tabs.forEach((each) => {
+        if (each.active) {
+          // this.orderList(each.id2, this.pageNo);
+          id222 = each.id2;
+        }
+      });
+    console.log('========='+id222)  
+    console.log(this.tabs)
+      /* 下拉刷新 */
+      const scrollView = await this.orderList(this.tabs[this.sexID].id2, 1);
+      if(scrollView) {
+        this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+      }
+    },
     async upCallback(pages) {
       /* 上推加载 */
       const scrollView = await this.orderList(this.tabs[this.sexID].id2, pages.num);
@@ -799,12 +817,15 @@ export default {
           const element = this.orderListInfo[index];
           this.buttonLogicJudgmentAction(element.info, index);
         }
+        // 当前页码的数据
+        const scrollView = {};
+        scrollView.pageSize = 15;
+        scrollView.total = data.totalNums;
+        return scrollView;
+      } else {
+        return null;
       }
-      // 当前页码的数据
-      const scrollView = {};
-      scrollView.pageSize = 15;
-      scrollView.total = data.totalNums;
-      return scrollView;
+      
     },
     // 获取按钮显示的数据
     async buttonLogicJudgmentAction(param, index) {
