@@ -15,10 +15,16 @@ export default {
       saletoCode,
       sendtoCode
     } = data;
-    return jGet(urls.getShoppingCartList({
-      saletoCode,
-      sendtoCode
-    }));
+    return jGet(
+      urls.getShoppingCartList({
+        saletoCode,
+        sendtoCode
+      }),
+      null,
+      {
+        noLoading: true
+      }
+    );
   },
   getShoppingCartListFromCache(data) {
     /* 从缓存获取购物车数据 */
@@ -67,7 +73,7 @@ export default {
   },
   updateProductNumber(data) {
     /* 更新购物车数量 */
-    return jPostJson(urls.updateProductNumber, data);
+    return jPostJson(urls.updateProductNumber, data, { noLoading: true });
   },
   getCloudStockState(customerCode) {
     /* 获取云仓权限 */

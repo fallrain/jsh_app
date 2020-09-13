@@ -55,6 +55,7 @@
         <view class="else-title">
           <view class="else-title-l">非常抱歉</view>
           <text class="else-title-x">没有找到相关的宝贝</text>
+<!--          <button v-show="isReset" @tap="resetAll" class="else-title-reset">重置</button>-->
         </view>
       </view>
     </mescroll-body>
@@ -173,6 +174,8 @@ export default {
         }
       },
       list: [],
+      // 是否重置
+      isReset: false,
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
       tabs: [
@@ -312,6 +315,9 @@ export default {
       USER.UPDATE_DEFAULT_SEND_TO,
       GOODS_LIST.UPDATE_IS_CART_UPDATE,
     ]),
+    resetAll() {
+      this.tabConditions = {};
+    },
     getPageInf() {
       this.getSaleInfo();
       this.setFilterData();
@@ -422,7 +428,7 @@ export default {
         }
         // 修改有货商品
         this.filterList[2].data = data;
-        console.log(this.filterList)
+        console.log(this.filterList);
       }
     },
     async getGoodsList(pages) {
@@ -516,6 +522,20 @@ export default {
             });
           }
         });
+        // 未筛选出数据，重置页面
+        console.log(data.condition);
+        if (data.condition.length === 0) {
+          uni.showModal({
+            title: '',
+            content: '当前未找到符合筛选条件的数据，请重新选择',
+            success: (res) => {
+              this.tabConditions = {};
+              this.filterReset();
+              this.mescroll.resetUpScroll(true);
+              this.getGoodsList();
+            }
+          });
+        }
       } else {
         this.mescroll.endErr();
       }
