@@ -63,11 +63,11 @@ export default {
           }
           // 更新默认送达方store
           commit(USER.UPDATE_DEFAULT_SEND_TO, data[defaultIndex]);
-          return {
-            code,
-            data
-          };
         }
+        return {
+          code,
+          data
+        };
       });
     }
   },
