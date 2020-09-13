@@ -227,7 +227,12 @@ export default {
     }
     if(info.jshi_order_gvs_status == '1') {
       this.jshi_order_gvs_status = true;
+    } else {
+      this.jshi_order_gvs_status = false;
     }
+
+    console.log('jshi_order_gvs_status'+this.jshi_order_gvs_status)
+    console.log('this.jshi_grouping_no'+this.jshi_grouping_no)
 
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
@@ -251,6 +256,8 @@ export default {
       }
       if(info.jshi_order_gvs_status == '1') {
         this.jshi_order_gvs_status = true;
+      } else {
+        this.jshi_order_gvs_status = false;
       }
 
       console.log(this);
