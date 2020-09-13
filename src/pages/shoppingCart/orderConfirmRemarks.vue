@@ -456,6 +456,7 @@ export default {
       uni.navigateBack();
     },
     radioChange(e) {
+      this.choosedAdd = {};
       this.form = {
         orderIndex: this.orderIndex,
         productIndex: this.productIndex,

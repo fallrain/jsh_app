@@ -192,7 +192,7 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
-      debugger
+      debugger;
       const obj = this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0];
       obj.address = remarksData.address;
       obj.area = remarksData.area;
@@ -469,6 +469,13 @@ export default {
       debugger;
       console.log(this.payerMoneyList);
       let state = true;
+      if (this.payerMoneyList.length === 0) {
+        uni.showToast({
+          title: '未查询到余额信息，请重新下单',
+          icon: 'none'
+        });
+        return;
+      }
       this.payerMoneyList.forEach((item) => {
         if (Number(item.balance) < Number(item.totalMoney)
           && Number(item.bookbalance) < Number(item.totalMoney)
@@ -552,9 +559,15 @@ export default {
               console.log(res);
               _this.goIndex();
             } else if (res.cancel) {
+              _this.goIndex();
               console.log('用户点击取消');
             }
           }
+        });
+      } else {
+        uni.showToast({
+          title: data.msg,
+          icon: 'none'
         });
       }
     },
