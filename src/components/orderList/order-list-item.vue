@@ -3,7 +3,7 @@
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
       <text class="produceDetailItem-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
-      <text class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
+      <text @click="orderFailsAction" class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
     <view v-if="info.details.length<2">
       <view class="produceDetailItem-cnt" @click="goDetail">
@@ -269,6 +269,15 @@ export default {
       uni.navigateTo({
         url: '/pages/orderList/orderWL'
       });
+    },
+    orderFailsAction() {
+      if(this.info.info.selfUseOrderStatus == '下单失败') {
+        uni.showModal({
+          title: '提示',
+          content: this.info.info.jshi_error_msg,
+          showCancel:false
+        });
+      }
     },
     async  orderCancle() {
       const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
