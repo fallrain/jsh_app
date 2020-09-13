@@ -148,7 +148,15 @@ function getStockType() {
   };
 }
 
+function getBigOrderSignInf() {
+  /* 反向定制协议类型 */
+  // bigOrder遵循后端命名规则
+  return ``;
+
+}
+
 export {
+  getBigOrderSignInf,
   getGoodsPriceType,
   getGoodsInCartPriceType,
   getGoodsTag,

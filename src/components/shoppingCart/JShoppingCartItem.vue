@@ -19,16 +19,34 @@
         v-else-if="goods.activityType===5"
       >
         <button
-          class="jShoppingCartItem-btn-primary mr12"
+          :class="['jShoppingCartItem-btn-primary mr12',goods.signed !== true && 'disabled']"
           type="button"
         >反向定制
         </button>
-        <text class="jShoppingCartItem-head-text">活动到期日：{{goods.expTime}}</text>
-        <view class="jShoppingCartItem-head-line"></view>
-        <template v-if="goods.intentionMoney">
-          <text class="jShoppingCartItem-head-text">预定金比例：{{goods.intentionMoney}}%</text>
+        <template v-if="goods.signed !== true">
+          <view class="j-flex-aic">
+            <view class="jShoppingCartItem-head-text">
+              未签约不能购买活动
+            </view>
+            <view
+              @tap="handleSign"
+              class="j-flex-aic ml20 jShoppingCartItem-head-to-sign"
+            >
+              <view
+                class="iconfont icongoahead jShoppingCartItem-head-to-sign-icon mr6"
+              ></view>前往签约
+            </view>
+          </view>
+
+        </template>
+        <template v-else>
+          <text class="jShoppingCartItem-head-text">活动到期日：{{goods.expTime}}</text>
           <view class="jShoppingCartItem-head-line"></view>
-          <text class="jShoppingCartItem-head-text">直发订单</text>
+          <template v-if="goods.intentionMoney">
+            <text class="jShoppingCartItem-head-text">预定金比例：{{goods.intentionMoney}}%</text>
+            <view class="jShoppingCartItem-head-line"></view>
+            <text class="jShoppingCartItem-head-text">直发订单</text>
+          </template>
         </template>
       </block>
       <view
@@ -41,7 +59,14 @@
         class="jShoppingCartItem-cnt-check"
         @tap="choose"
       >
-        <i :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"></i>
+        <i
+          :class="['iconfont', goods.checked ? 'iconradio active':'iconradio1']"
+          v-if="!disabledCheck"
+        ></i>
+        <i
+          :class="['iconfont icontabledisable disabled']"
+          v-else
+        ></i>
       </view>
       <view class="jShoppingCartItem-cnt-img-wrap">
         <image
@@ -618,6 +643,14 @@ export default {
         }
       }
       return minNum;
+    },
+    disabledCheck() {
+      /* 禁止选中 */
+      let state = false;
+      if (this.goods.activityType === 5 && this.goods.signed !== true) {
+        state = true;
+      }
+      return state;
     }
   },
   watch: {
@@ -701,6 +734,9 @@ export default {
     },
     choose() {
       /* 选中本商品 */
+      if (this.disabledCheck) {
+        return;
+      }
       const {
         checked
       } = this.goods;
@@ -1145,6 +1181,10 @@ export default {
     showWeekPicker() {
       /* 展示远周次picker */
       this.isWeekPickerShow = true;
+    },
+    handleSign() {
+      /* 反向定制签约 */
+      this.$emit('sign');
     }
   }
 };
