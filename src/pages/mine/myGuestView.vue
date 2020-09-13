@@ -161,7 +161,9 @@ status: "正常" -->
           v-for="(item,index) in customerSigned.contractMessageDtoList"
           :key="index"
         >
-          <view class="secondPageTitle">{{item.contractname}}</view>
+          <view class="secondPageTitleContent">
+            <view class="secondPageTitle">{{item.contractname}}</view>
+          </view>
           <view class="breakLine"></view>
           <view class="firstItem">
             <view class="firstPageLeft">区协议编码域</view>
@@ -202,7 +204,9 @@ status: "正常" -->
           v-for="(item,storeIndex) in branchInformation.branchInformationDtoList"
         >
           <view>
-            <view class="secondPageTitle">{{item.sbrName}}</view>
+            <view class="secondPageTitleContent">
+                <view class="secondPageTitle">{{item.sbrName}}</view>
+            </view>
             <view class="breakLine"></view>
 
             <view class="firstItem">
@@ -239,7 +243,9 @@ status: "正常" -->
           :key="customerIndex"
           v-for="(item,customerIndex) in customers"
         >
-          <view class="secondPageTitle">{{item.customerName}}</view>
+          <view class="secondPageTitleConten">
+            <view class="secondPageTitle">{{item.customerName}}</view>
+          </view>
           <view class="breakLine"></view>
 
           <view class="firstItem">
@@ -725,14 +731,20 @@ export default {
     margin-top: 20px;
   }
 
+  .secondPageTitleContent {
+    padding-top: 30px;
+    // margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
   .secondPageTitle {
     display: flex;
     align-items: center;
-    height: 96px;
+    // height: 96px;
     font-size: 32px;
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
-    line-height: 96px;
+    // line-height: 76px;
     margin-left: 24px;
   }
 
