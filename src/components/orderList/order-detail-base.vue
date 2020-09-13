@@ -4,10 +4,12 @@
     <view class="order-base-line"></view>
     <view class="order-base-inf">订单号：{{baseInfo.bstnk}}</view>
     <view class="order-base-inf">物流单号：{{baseInfo.dnLogistics == '-0' ?'':baseInfo.dnLogistics}}</view>
+    <view v-if="details.jshd_price_type" class="order-base-inf">版本号：{{details.jshd_price_version}}</view>
     <view class="order-base-inf">GVS单号：{{baseInfo.jshi_gvs_so_order_no}}</view>
     <view class="order-base-inf">满足方式：{{baseInfo.stockTypeShow}}</view>
     <view class="order-base-inf">版本调货：{{baseInfo.credit_model_all == '0' ? '否' : '是'}}</view>
     <view class="order-base-inf">信用模式：{{baseInfo.credit_model_all==='0' ? '否' : '是'}}</view>
+    <view class="order-base-inf">远周次：{{baseInfo.far_weekly_all==='0' ? '否' : '是'}}</view>
   </view>
 </template>
 
@@ -20,8 +22,14 @@ export default {
       default() {
         return {};
       }
+    },
+    details: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
-  }
+  },
 };
 </script>
 
