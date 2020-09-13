@@ -21,7 +21,7 @@
         <order-detail-info :products="infoList.details"></order-detail-info>
       </view>
       <view>
-        <order-detail-base :baseInfo="infoList.info"></order-detail-base>
+        <order-detail-base :baseInfo="infoList.info" :details="infoList.details[0]" ></order-detail-base>
       </view>
       <view>
         <order-detail-flow :processJudgement="processJudgement"></order-detail-flow>
