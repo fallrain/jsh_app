@@ -211,7 +211,9 @@ export default {
         isCollectionAddress: false,
         deliveryYd: false,
         jdWarehouseId: ''
-      }
+      },
+      orderIndex: 0,
+      productIndex: 0
     };
   },
   onLoad(option) {
@@ -220,6 +222,8 @@ export default {
       this.initCurrentAdd();
     }
     console.log(this.goodInfo);
+    this.orderIndex = option.orderIndex;
+    this.productIndex = option.productIndex;
     this.form.orderIndex = option.orderIndex;
     this.form.productIndex = option.productIndex;
     if (this.goodInfo.isCollectionAddress === '2') {
@@ -232,8 +236,18 @@ export default {
     } else {
       this.form.deliveryYd = false;
     }
+    if (this.goodInfo.jdWarehouseId === 1) {
+      // 京东异地
+      this.showType[0].checked = false;
+      this.showType[1].checked = true;
+      this.getAddListJDYD();
+    } else {
+      // 直发异地
+      this.showType[0].checked = true;
+      this.showType[1].checked = false;
+      this.getAddListZFYD();
+    }
     this.initAddress();
-    this.getAddListZFYD();
   },
   computed: {
     ...mapGetters({
@@ -443,8 +457,8 @@ export default {
     },
     radioChange(e) {
       this.form = {
-        orderIndex: '',
-        productIndex: '',
+        orderIndex: this.orderIndex,
+        productIndex: this.productIndex,
         userName: '',
         iphoneNo: '',
         idcardNo: '',

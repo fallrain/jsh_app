@@ -58,13 +58,15 @@
             @change="goodsChange"
             @del="singleDeleteCart"
             @updateNumber="refreshShoppingCartList"
+            @sign="toSign"
           ></j-shopping-cart-item>
         </view>
       </view>
       <view
         class="shoppingCart-list-filter-text"
         v-if="choseIndustryOptions[0]!=='*' || choseSendAddress.yunCangFlag"
-      >购物车其他产品</view>
+      >购物车其他产品
+      </view>
       <view
         class="shoppingCart-list"
         v-if="dataLength.notInFilterLength"
@@ -86,6 +88,7 @@
             @change="goodsChange"
             @del="singleDeleteCart"
             @updateNumber="refreshShoppingCartList"
+            @sign="toSign"
           ></j-shopping-cart-item>
         </view>
         <view
@@ -138,6 +141,25 @@
         @change="industryPickerChange"
       ></j-pop-picker>
     </view>
+    <u-modal
+      title="海尔产品反向定制协议"
+      v-model="isShowSignModel"
+    >
+      <scroll-view
+        class="shoppingCart-protocol"
+        scroll-y
+      >
+        <view class="shoppingCart-protocol-strong">合同编号：{{signedInf.code}}</view>
+        <view class="shoppingCart-protocol-strong">签约时间：{{signedInf.signDate}}</view>
+        <view class="shoppingCart-protocol-strong">签约地点：{{signedInf.code}}</view>
+        <view class="shoppingCart-protocol-strong">甲方：{{signedInf.jia}}</view>
+        <view class="shoppingCart-protocol-strong">乙方：{{signedInf.yi}}</view>
+        <view class="shoppingCart-protocol-strong">协议起止日期：{{signedInf.signDate}}至 {{signedInf.signEndDate}}</view>
+        <view class="shoppingCart-protocol-cnt">
+          <j-big-order-protocol></j-big-order-protocol>
+        </view>
+      </scroll-view>
+    </u-modal>
   </view>
 </template>
 <script>
@@ -150,9 +172,9 @@ import JTab from '../../components/common/JTab';
 import JPopPicker from '../../components/form/JPopPicker';
 import './css/shoppingCart.scss';
 import {
+  mapActions,
   mapGetters,
-  mapMutations,
-  mapActions
+  mapMutations
 } from 'vuex';
 import {
   GOODS_LIST,
@@ -161,15 +183,18 @@ import {
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
 import {
+  getBigOrderSignInf,
   getIndustryGroup,
   getOrdinaryCartActivityType,
   getYj
 } from '@/lib/dataDictionary';
 import shoppingCartMixin from '@/mixins/shoppingCart/shoppingCart.mixin';
+import JBigOrderProtocol from '../../components/shoppingCart/JBigOrderProtocol';
 
 export default {
   name: 'shoppingCart',
   components: {
+    JBigOrderProtocol,
     JPopPicker,
     JTab,
     JAddressPicker,
@@ -239,11 +264,17 @@ export default {
       // 选中的产业数据
       choseIndustryData: [],
       // 云仓、异地云仓权限对象
-      cloudStockStatus: {}
+      cloudStockStatus: {},
+      // 是否显示反向定制签约协议
+      isShowSignModel: false,
+      // 反向定制签约信息
+      signedInf: {}
     };
   },
   created() {
     this.setPageInfo();
+    // 不加入get set
+    this.getBigOrderSignInf = getBigOrderSignInf;
   },
   watch: {
     $route: ['getShoppingCartList']
@@ -1029,8 +1060,8 @@ export default {
             // activityType需要额外处理，具体参加数据字典：getOrdinaryCartActivityType
             activityType: getOrdinaryCartActivityType()[product.activityType]
           });
-          // todo 以后应该改成直接从 shoppingCartItem 组件里面取 choseVersions
-          // 判断产品的取值的字段名
+            // todo 以后应该改成直接从 shoppingCartItem 组件里面取 choseVersions
+            // 判断产品的取值的字段名
           let productListName = 'productList';
           // 调货版本号
           let transferVersion;
@@ -1062,7 +1093,7 @@ export default {
             // 是否直发
             isStock: shoppingCartItem.isDirect && product.isDirectMode ? '0' : '1',
           };
-          // 远周次参数修改
+            // 远周次参数修改
           const choseWeek = shoppingCartItem.choseWeekKeys.join('');
           if (shoppingCartItem.isWeek) {
             orderSplitComposeProductData.farWeek = '1';
@@ -1189,6 +1220,26 @@ export default {
           content
         });
       }
+    },
+    toSign() {
+      /* 反向定制签约 */
+      this.isShowSignModel = true;
+      // 获取签约信息
+      this.signedInf = {};
+      this.customerService.signedInf({
+        sendtoCode: this.userInf.customerCode
+      }).then(({ code, data }) => {
+        if (code === '1') {
+          const inf = data || {};
+          const curDate = new Date();
+          inf.signDate = this.jshUtil.formatDate(curDate, 'yyyy年MM月dd日');
+          inf.signEndDate = `${curDate.getFullYear()}年12月31日`;
+          this.signedInf = inf;
+        }
+      });
+      this.customerService.sign({
+        sendtoCode: this.userInf.customerCode
+      });
     }
   }
 };

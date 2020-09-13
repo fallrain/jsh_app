@@ -192,6 +192,7 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
+      debugger
       const obj = this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0];
       obj.address = remarksData.address;
       obj.area = remarksData.area;
@@ -303,9 +304,25 @@ export default {
         ...payerMoneyInfoItem
       };
       console.log(this.totalPayerMoneyInfo);
+      console.log(this.dataInfo);
       const payerList = [];
       const payerObj = {};
       for (const k in this.totalPayerMoneyInfo) {
+        // 重新计算你不同订单付款数量
+        const orderNo = k;
+        let money = 0;
+        this.dataInfo.composeProductList.forEach((item) => {
+          item.splitOrderDetailList.forEach((v) => {
+            if (v.orderNo === orderNo) {
+              if (item.totalPreState === true) {
+                money += 0;
+              } else {
+                money += v.totalMoney;
+              }
+            }
+          });
+        });
+        this.totalPayerMoneyInfo[k].totalMoney = money;
         if (payerObj[this.totalPayerMoneyInfo[k].customerCode]) {
           const totalmoney = parseFloat(payerObj[this.totalPayerMoneyInfo[k].customerCode].totalMoney)
             + parseFloat(this.totalPayerMoneyInfo[k].totalMoney);
@@ -449,7 +466,7 @@ export default {
     },
     // 提交订单
     async submitOrder() {
-      debugger
+      debugger;
       console.log(this.payerMoneyList);
       let state = true;
       this.payerMoneyList.forEach((item) => {
@@ -476,6 +493,7 @@ export default {
         const billNo = item.billNo;
         const billName = item.billName;
         const conCode = item.conCode;
+        const wdNo = item.wdNo;
         const orderItem = {
           groupingNo: item.composeOrderNo,
           orderDetailList: []
@@ -491,6 +509,7 @@ export default {
             billNo,
             billName,
             conCode,
+            wdNo,
             orderNo: v.orderNo,
             stockType: v.stockType,
             province: v.splitOrderProductList[0].province,
@@ -502,6 +521,8 @@ export default {
             priceType: v.splitOrderProductList[0].priceType,
             isCollectionAddress: v.splitOrderProductList[0].isCollectionAddress,
             idCardNo: v.splitOrderProductList[0].idCardNo,
+            iphoneNo: v.splitOrderProductList[0].iphoneNo,
+            userName: v.splitOrderProductList[0].userName,
             deliveryYd: v.splitOrderProductList[0].deliveryYd,
             isCheckCreditModel: v.splitOrderProductList[0].isCheckCreditModel,
             paytoCode: this.totalPayerMoneyInfo[v.orderNo].customerCode,
