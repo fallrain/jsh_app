@@ -672,16 +672,18 @@ export default {
           let invoicePrice;
           const versions = this.getPriceVersionData(v);
           const version = versions.find(data => data.priceType);
-          // 找不到，但是还有选择的版本，则是版本调货,版本掉货无价格，需要从普通价取
-          if (!version && versions.length) {
+          // 查找正品样机
+          const realExampleProduct = versions.find(vs => vs.$isRealProduct);
+          // 1.找不到，但是还有选择的版本，则是版本调货,版本掉货无价格，需要从普通价取
+          // 2.正品样机也从普通价格取
+          if ((!version && versions.length) || realExampleProduct) {
             invoicePrice = v.$PriceInfo.commonPrice.invoicePrice;
           } else {
             invoicePrice = version.invoicePrice;
           }
           const curTotal = this.jshUtil.arithmetic(invoicePrice, num, 3);
           totalGoodsPrice = this.jshUtil.arithmetic(totalGoodsPrice, curTotal);
-          // 查找正品样机
-          const realExampleProduct = versions.find(vs => vs.$isRealProduct);
+          // 正品样机还需要再计算一次，普通价格之和加正品样机价格之和
           if (realExampleProduct) {
             const {
               invoicePrice: realInvoicePrice,
