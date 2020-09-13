@@ -94,11 +94,16 @@ export default {
       saleInfo: USER.GET_SALE,
     })
   },
+  onLoad() {
+  },
   methods: {
     tabClick(item, index) {
       console.log(index);
-      if (index !== undefined) {
+      if (index === 0 || index === 1) {
+        console.log(11111);
         this.tabIndex = index;
+      } else {
+        this.tabIndex = 0;
       }
       this.getMessageList();
     },
@@ -220,10 +225,6 @@ export default {
 
 
   },
-
-  onLoad() {
-    this.tabClick(1);
-  }
 };
 </script>
 <style lang="scss" scoped>
