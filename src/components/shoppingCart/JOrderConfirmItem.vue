@@ -46,7 +46,9 @@
           ></j-switch>
           <j-switch
             v-if="goods.splitOrderProductList[0].farWeek === '1'"
-            :active.sync="goods.splitOrderProductList[0].farWeek === '1'"
+            :active.sync="goods.splitOrderProductList[0].isCheckFarWeek"
+            :stateMap="['1','0']"
+            @change="goodsChange"
             inf="远周次"
           ></j-switch>
           <view class="jOrderConfirmItem-detail-match-type-text ml20">
@@ -414,6 +416,10 @@ export default {
       });
     },
     isCreditModeChange() {
+      /* switch change */
+      this.$emit('change', this.orderItem, this.index);
+    },
+    goodsChange() {
       /* switch change */
       this.$emit('change', this.orderItem, this.index);
     },
