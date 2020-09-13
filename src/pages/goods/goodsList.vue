@@ -528,12 +528,15 @@ export default {
           uni.showModal({
             title: '',
             content: '当前未找到符合筛选条件的数据，请重新选择',
+            showCancel : false,
             success: (res) => {
+              this.filterForm.name = '';
               this.tabConditions = {};
               this.filterReset();
               this.mescroll.resetUpScroll(true);
               this.getGoodsList();
-            }
+            },
+
           });
         }
       } else {
