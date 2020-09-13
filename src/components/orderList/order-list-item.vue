@@ -17,7 +17,7 @@
             <view class="produceDetailItem-cnt-info">数量：{{info.details[0].jshd_qty}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-cnt-info">订单类型：{{info.details[0].waysOfPurchasingDto}}</view>
+            <view class="produceDetailItem-cnt-info">购买方式：{{info.info.waysOfPurchasingDto}}</view>
           </view>
         </view>
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
@@ -83,7 +83,7 @@
             <view class="produceDetailItem-cnt-info">数量：{{item.jshd_qty}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-cnt-info">订单类型：{{item.waysOfPurchasingDto}}</view>
+            <view class="produceDetailItem-cnt-info">购买方式：{{item.waysOfPurchasingDto}}</view>
           </view>
         </view>
       </view>
@@ -194,10 +194,9 @@ export default {
   },
   created() {
     console.log('11111111');
-        console.log(this.info)
+    console.log(this.info)
 
     const details = this[ORDER.GET_ORDER].orderDetail.details;
-
     // 判断订单节点是否存在
     if (details.jshd_tags == 'CROWD_FUNDING'
     && details.jshd_product_type == '3'
