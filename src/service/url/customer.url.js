@@ -33,7 +33,11 @@ const urls = {
   changeDefaultSendTo(sendToCode) {
     /* 切换默认送达方信息 */
     return `/customers/auxiliary/relations/${sendToCode}/default`;
-  }
+  },
+  // 签约信息
+  signedInf: '/rrsCrowdftoUnit/signPage',
+  // 签约
+  sign: '/rrsCrowdftoUnit/signed'
 };
 util.addPrefix(baseURL, urls);
 export default urls;
