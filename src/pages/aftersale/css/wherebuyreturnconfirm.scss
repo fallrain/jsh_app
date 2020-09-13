@@ -1,0 +1,117 @@
+.confirm-bg {
+  height: 1496px;
+  width: 750px;
+  background-color: rgba(245, 245, 245, 1);
+  padding-top: 28px;
+}
+.con-box {
+  margin-left: 24px;
+  width: 702px;
+  padding-bottom:24px; 
+  background: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  border-top: 4px#2283E2 solid;
+  display: flex;
+  flex-direction: column;
+}
+.con-row1 {
+  margin-top: 24px;
+  margin-left: 24px;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(34, 131, 226, 1);
+  line-height: 40px;
+}
+.line {
+  margin: 24px 26px 0 24px;
+  border-top: 2px dashed #c3c3c3;
+}
+.line2 {
+  margin: 30px 26px 0 24px;
+  border-top: 2px solid #c3c3c3;
+}
+.con-row2 {
+  margin-top: 18px;
+  margin-left: 24px;
+  margin-right: 24px;
+  display: flex;
+}
+.con-row3 {
+  margin-top: 20px;
+  margin-left: 24px;
+  margin-right: 24px;
+  display: flex;
+}
+.con-row4 {
+  margin-top: 24px;
+  margin-left: 24px;
+  margin-right: 32px;
+  display: flex;
+}
+.con-row5 {
+  margin-top: 30px;
+  margin-left: 52px;
+  margin-right: 32px;
+  display: flex;
+}
+.row2-left1 {
+  margin-left: 28px;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+  line-height: 40px;
+}
+.row2-left2 {
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+  line-height: 40px;
+}
+.row2-right {
+  margin-right: 0;
+  margin-left: auto;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(153, 153, 153, 1);
+  line-height: 40px;
+}
+.row2-right2 {
+  margin-top: -4px;
+  margin-right: 0;
+  margin-left: auto;
+  width: 162px;
+  height: 50px;
+  font-size: 36px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(237, 40, 86, 1);
+  line-height: 50px;
+}
+.button {
+  margin-left: 480px;
+  margin-top: 22px;
+  width: 198px;
+  height: 58px;
+  background: rgba(34, 131, 226, 1);
+  border-radius: 29px;
+  display: flex;
+}
+.button-title {
+  margin-left: 72px;
+  margin-top: 10px;
+  width: 56px;
+  height: 40px;
+  font-size: 28px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  line-height: 40px;
+}

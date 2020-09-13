@@ -34,6 +34,9 @@ const urls = {
     /* 切换默认送达方信息 */
     return `/customers/auxiliary/relations/${sendToCode}/default`;
   },
+  getAccountMsg() {
+
+  },
   // 签约信息
   signedInf: '/rrsCrowdftoUnit/signPage',
   // 签约

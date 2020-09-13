@@ -1,0 +1,63 @@
+.jTab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.jTab-list {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-bottom: 4px;
+
+  .uni-scroll-view {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .uni-scroll-view-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-bottom: 4px;
+  }
+}
+
+.jTab-item {
+  position: relative;
+  flex-shrink: 0;
+  height: 50px;
+  line-height: 50px;
+  font-size: 28px;
+  color: #666;
+  margin-right: 40px;
+
+  &.active {
+    font-size: 36px;
+    color: #ED2856;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #ED2856;
+    }
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.jTab-right {
+  flex-shrink: 0;
+}

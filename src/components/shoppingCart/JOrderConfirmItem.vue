@@ -44,6 +44,11 @@
             inf="统仓统配"
             @change="isCreditModeChange"
           ></j-switch>
+          <j-switch
+            v-if="goods.splitOrderProductList[0].farWeek === '1'"
+            :active.sync="goods.splitOrderProductList[0].farWeek === '1'"
+            inf="远周次"
+          ></j-switch>
           <view class="jOrderConfirmItem-detail-match-type-text ml20">
             <view class="stock-type">
               满足方式：{{goods.stockTypeName}}
@@ -82,7 +87,12 @@
               <text v-else>请选择付款方</text>
             </view>
           </view>
-          <view v-if="goods.splitOrderProductList[0].isBbOrProject&&orderItem.yunCangType!=='yc'&&orderItem.yunCangType!=='ydyc'" class="jOrderConfirmItem-detail-mark-item">
+          <view v-if="goods.splitOrderProductList[0].isBbOrProject
+          &&orderItem.yunCangType!=='yc'
+          &&orderItem.yunCangType!=='ydyc'
+          &&currentPayer[goods.orderNo].payerType !=='98'
+          &&currentPayer[goods.orderNo].payerType !=='99'"
+                class="jOrderConfirmItem-detail-mark-item">
             <view class="jOrderConfirmItem-detail-mark-item-name">
               <text class="jOrderConfirmItem-detail-mark-item-name-star">*</text>备注信息
               <view class="jOrderConfirmItem-detail-mark-item-name-icon iconfont iconxia"></view>
@@ -118,11 +128,8 @@
         </view>
         <view class="dis-flex">
           <view class="jOrderConfirmItem-total-text">共计金额：</view>
-          <view v-if="!orderItem.totalPreState" class="jOrderConfirmItem-total-price ml20">
-            ¥ {{toFixedNum(orderItem.totalMoney)}}
-          </view>
-          <view v-else class="jOrderConfirmItem-total-price ml20">
-            ¥ {{toFixedNum(orderItem.totalPreAmount)}}
+          <view class="jOrderConfirmItem-total-price ml20">
+            ¥ {{getTotalMoneyHJ}}
           </view>
         </view>
       </view>
@@ -246,6 +253,9 @@ export default {
     selfValue(val) {
       this.orderItem.conCode = val;
     },
+    WDval(val) {
+      this.orderItem.wdNo = val;
+    },
     payInfoData() {
       // 初始化地址信息
       for (const key in this.payInfoData) {
@@ -276,10 +286,30 @@ export default {
       console.log(this.orderItem);
     },
     currentchosePayerOption(val) {
-      console.log(val);
       console.log(this.currentOrderNo);
       const currentPayer = this.payerOptions[this.currentOrderNo].find(v => v.customerCode === val[0]);
       this.$set(this.currentPayer, this.currentOrderNo, currentPayer);
+      console.log(this.currentPayer);
+      this.orderItem.splitOrderDetailList.forEach((item) => {
+        if (item.splitOrderProductList[0].isBbOrProject === true
+          && (currentPayer.payerType === '98' || currentPayer.payerType === '99')) {
+          uni.showToast({
+            title: '融资户暂不支持异地配送下单！',
+            icon: 'none'
+          });
+          item.splitOrderProductList[0].address = '';
+          item.splitOrderProductList[0].addressName = '';
+          item.splitOrderProductList[0].area = '';
+          item.splitOrderProductList[0].areaCode = '';
+          item.splitOrderProductList[0].city = '';
+          item.splitOrderProductList[0].idCardNo = '';
+          item.splitOrderProductList[0].iphoneNo = '';
+          item.splitOrderProductList[0].jdWarehouseId = '';
+          item.splitOrderProductList[0].province = '';
+          item.splitOrderProductList[0].userName = '';
+        }
+      });
+      console.log(this.orderItem);
       this.getPayerMoneyInfo();
     },
     billInfoList() {
@@ -321,6 +351,20 @@ export default {
           return true;
         }
       };
+    },
+    getTotalMoneyHJ() {
+      let money = 0;
+      this.orderItem.splitOrderDetailList.forEach((item) => {
+        if (item.splitOrderProductList[0].isCheckCreditModel === '1'
+          && this.orderItem.totalPreState) {
+          money += item.splitOrderProductList[0].totalMoney;
+        } else if (this.orderItem.totalPreState) {
+          money += 0;
+        } else {
+          money += item.splitOrderProductList[0].totalMoney;
+        }
+      });
+      return this.toFixedNum(money);
     }
   },
   methods: {
@@ -335,9 +379,10 @@ export default {
     getPayerMoneyInfo() {
       const currentPayerMoneyInfo = {
       };
+      console.log(this.currentPayer);
       console.log(this.orderItem);
       this.orderItem.splitOrderDetailList.forEach((item) => {
-        console.log(item)
+        console.log(item);
         const itemObj = {
           totalMoney: item.totalMoney,
           customerCode: this.currentPayer[item.orderNo].customerCode,
@@ -351,6 +396,7 @@ export default {
         }
         currentPayerMoneyInfo[item.orderNo] = itemObj;
       });
+      console.log(currentPayerMoneyInfo);
       this.$emit('payerMoneyInfo', currentPayerMoneyInfo);
     },
     showPayer(currentOrderNo) {
@@ -362,7 +408,7 @@ export default {
       this.payerPickerShow = true;
     },
     goRemarks(index, goodsInfo) {
-      const goodInfo = JSON.stringify(goodsInfo)
+      const goodInfo = JSON.stringify(goodsInfo);
       uni.navigateTo({
         url: `/pages/shoppingCart/orderConfirmRemarks?orderIndex=${this.index}&productIndex=${index}&goodInfo=${goodInfo}`
       });

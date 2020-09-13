@@ -4,6 +4,8 @@
       <j-search-input
           v-model="name"
           @search="silentReSearch"
+          :placeholder="mendli"
+          placeholder-class="col_c"
       ></j-search-input>
       <button
           type="button"
@@ -35,6 +37,8 @@
 </template>
 <script>
 import JSearchInput from '../../components/form/JSearchInput';
+import { USER } from '@/store/mutationsTypes';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'historical',
@@ -45,10 +49,31 @@ export default {
     return {
       name: '',
       val: '',
-      history: []
+      history: [],
+      // 轮播搜索词
+      allMendli: {},
+      mend: [],
+      mendli: '',
+      mendOrder: {},
+      index: 0
     };
   },
+  onLoad(option) {
+    this.mendli = option.name;
+    // this.allMendli = JSON.parse(aaa);
+    // this.name = this.allMendli.recoWord;
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      tokenUserInf: USER.GET_TOKEN_USER,
+    })
+  },
   created() {
+    (async () => {
+      await this.getShow();
+    })();
+    this.getShowTwo();
     console.log(localStorage.getItem('history'));
     if (localStorage.getItem('history')) {
       console.log(1111);
@@ -60,6 +85,50 @@ export default {
     console.log(this.history);
   },
   methods: {
+    async getShow() {
+      const params = {
+        bigChannel: [this.saleInfo.channel],
+        centerCode: [this.saleInfo.tradeCode],
+        custCode: [this.saleInfo.customerCode],
+        smallChannel: [this.saleInfo.subChannel],
+        type: 1,
+        userId: this.tokenUserInf.name,
+        userName: this.tokenUserInf.nickname
+      };
+      const { code, data } = await this.commodityService.show({
+        pageNum: 1,
+        pageSize: 4,
+        params
+      });
+      if (code === '10000') {
+        this.allMendli = data;
+        let word = '';
+        data.records.forEach((item) => {
+          word = item.recoWord;
+          this.mend.push(word);
+        });
+        console.log(this.mend);
+        this.mend.map((item, index) => {
+          if (this.mendli === item) {
+            this.index = index;
+          }
+        });
+        // this.mendli = this.mend[0];
+      }
+    },
+    getShowTwo() {
+      const _this = this;
+      // let index = 0;
+      setInterval(() => {
+        // console.log(1111);
+        _this.mendli = _this.mend[this.index];
+        // console.log(_this.mendli);
+        this.index += 1;
+        if (this.index >= _this.mend.length) {
+          this.index = 0;
+        }
+      }, 5000);
+    },
     silentReSearch() {
       /* 静默搜索 */
       // this.mescroll.resetUpScroll(true);
@@ -89,9 +158,22 @@ export default {
         //   data: JSON.stringify(this.history),
         // });
       } else {
-        uni.navigateTo({
-          url: '/pages/goods/goodsList'
+        let liM = {};
+        this.allMendli.records.forEach((item) => {
+          if (this.mendli === item.recoWord) {
+            liM = item;
+          }
         });
+        console.log(liM);
+        if (liM.openWay === '1') {
+          uni.navigateTo({
+            url: `/pages/index/searchTerms?url=${liM.url}`
+          });
+        } else {
+          uni.navigateTo({
+            url: `/pages/goods/goodsList?name=${liM.recoWord}`
+          });
+        }
       }
     },
     goGoods(item) {
@@ -110,6 +192,12 @@ export default {
 </script>
 
 <style scoped>
+.col_c{
+  color: #ccc;
+  font-size: 28px;
+  font-family: PingFangSC-Light, PingFang SC;
+  font-weight: 300;
+}
 /deep/ .jSearchInput-wrap{
   margin:24px 22px 24px 24px;
   z-index:100;

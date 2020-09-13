@@ -20,7 +20,8 @@
       </view>
       <view class="jSampleMachine-cnt-opts">
         <uni-number-box
-          :disabled="true"
+          v-if="goods.detailList"
+          :max="Number(goods.detailList[0].YGS_KYKCL)"
           @change="goodsNumChange"
         ></uni-number-box>
         <button

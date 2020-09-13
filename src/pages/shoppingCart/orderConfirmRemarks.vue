@@ -130,7 +130,7 @@
       indicatorStyle=""
       :addressData="addressData"
       :show.sync="addressPickerShow"
-      v-model="currentAdds"
+      v-model="resultAdds"
       @changeData="changeData"
       @sureVal="sureVal"
     ></j-address-picker>
@@ -211,7 +211,9 @@ export default {
         isCollectionAddress: false,
         deliveryYd: false,
         jdWarehouseId: ''
-      }
+      },
+      orderIndex: 0,
+      productIndex: 0
     };
   },
   onLoad(option) {
@@ -220,10 +222,32 @@ export default {
       this.initCurrentAdd();
     }
     console.log(this.goodInfo);
+    this.orderIndex = option.orderIndex;
+    this.productIndex = option.productIndex;
     this.form.orderIndex = option.orderIndex;
     this.form.productIndex = option.productIndex;
+    if (this.goodInfo.isCollectionAddress === '2') {
+      this.form.isCollectionAddress = true;
+    } else {
+      this.form.isCollectionAddress = false;
+    }
+    if (this.goodInfo.deliveryYd === '1') {
+      this.form.deliveryYd = true;
+    } else {
+      this.form.deliveryYd = false;
+    }
+    if (this.goodInfo.jdWarehouseId === 1) {
+      // 京东异地
+      this.showType[0].checked = false;
+      this.showType[1].checked = true;
+      this.getAddListJDYD();
+    } else {
+      // 直发异地
+      this.showType[0].checked = true;
+      this.showType[1].checked = false;
+      this.getAddListZFYD();
+    }
     this.initAddress();
-    this.getAddListZFYD();
   },
   computed: {
     ...mapGetters({
@@ -373,10 +397,11 @@ export default {
         area: this.addressData.area[this.resultAdds[2]]
       };
       console.log(this.currentAdd);
-      this.form.province = this.choosedAdd.province.laname;
-      this.form.city = this.choosedAdd.city.laname;
-      this.form.area = this.choosedAdd.area.laname;
-      this.form.areaCode = this.choosedAdd.area.lacountyid;
+      console.log(this.resultAdds);
+      this.form.province = this.currentAdd.province.laname;
+      this.form.city = this.currentAdd.city.laname;
+      this.form.area = this.currentAdd.area.laname;
+      this.form.areaCode = this.currentAdd.area.lacountyid;
       this.form.addressName = `${this.currentAdd.province.laname}${this.currentAdd.city.laname}${this.currentAdd.area.laname}`;
     },
     // 显示地址选择
@@ -431,6 +456,22 @@ export default {
       uni.navigateBack();
     },
     radioChange(e) {
+      this.form = {
+        orderIndex: this.orderIndex,
+        productIndex: this.productIndex,
+        userName: '',
+        iphoneNo: '',
+        idcardNo: '',
+        province: '',
+        city: '',
+        area: '',
+        areaCode: '',
+        address: '',
+        addressName: '',
+        isCollectionAddress: false,
+        deliveryYd: false,
+        jdWarehouseId: ''
+      };
       if (e.target.value === 'jdyd') {
         this.form.jdWarehouseId = 1;
         this.getAddListJDYD();

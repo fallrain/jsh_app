@@ -2,18 +2,30 @@
   <view class="orList">
     <view class="padding-15">
       <view style="display:flex">
-        <view style="width:320px">
-        <j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
+        <view style="width:330px">
+        <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
           <template #right>
-            <!-- <view @click="moreAction" class="jtabRight">
-              MORE
-            </view> -->
-            <view  @click="moreAction" class="iconfont iconshaixuan1"></view>
+            <i  @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
           </template>
-        </j-tab>
+        </order-j-tab>
         </view>
       </view>
-      <order-list-item v-for="(iten,index) in orderListInfo" :key="index" :info="iten" :index="index" @goDetail="goDetail"></order-list-item>
+      <mescroll-body
+        ref="mescrollRef"
+        @init="mescrollInit"
+        :up="jMescrollUpOptions"
+        :down="jMescrollDownOptions"
+        @down="jMescrollDownCallback"
+        @up="upCallback"
+      >
+        <order-list-item
+          v-for="(iten,index) in orderListInfo"
+          :key="index"
+          :info="iten"
+          :index="index"
+          @goDetail="goDetail">
+        </order-list-item>
+      </mescroll-body>
     </view>
     <j-drawer
       :show.sync="isShowGoodsFilterDrawer"
@@ -24,7 +36,7 @@
         <view >
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
-              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-type
@@ -38,6 +50,7 @@
               class="orderList-drawer-filter-input"
               type="text"
               :placeholder="`请输入${orderTypeStr}`"
+              placeholder-style="color:#DBDBDB"
               v-model="serviNO"
             >
           </view>
@@ -53,13 +66,15 @@
                 class="orderList-drawer-filter-down-input"
                 type="text"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
                 v-model="translateInput"
               >
-              <i @click="industryAction" class="iconfont iconxia left-10"></i>
+              <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
             <order-list-industry
                     :is-order-industry="orderIndustry"
                     :industry-list="industryList"
+                    @selectInfoIndustry="selectInfoIndustry"
             ></order-list-industry>
           </view>
           <view   class="industry-brand-child">
@@ -72,8 +87,9 @@
                 type="text"
                 v-model="producntBandName"
                 :placeholder="`请选择`"
+                placeholder-style="color:#DBDBDB"
               >
-              <i @click="productBandAction" class="iconfont iconxia left-10"></i>
+              <i @click="productBandAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
           </view>
         </view>
@@ -90,6 +106,7 @@
           class="orderList-drawer-filter-input"
           type="text"
           :placeholder="`请输入送达方`"
+          placeholder-style="color:#DBDBDB"
           v-model="songda"
           >
           </view>
@@ -97,7 +114,7 @@
         <view>
           <view class="addressee">
             <view>
-              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia left-10"></i></text>
+              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-model :is-order-model="orderModelshow"
@@ -110,6 +127,7 @@
             class="orderList-drawer-filter-input"
             type="text"
             :placeholder="`请输入${orderModelStr}`"
+            placeholder-style="color:#DBDBDB"
             v-model="addresseeInput"
             >
           </view>
@@ -205,10 +223,11 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderReviewStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia"  @click="getReview"></i>
+                  <i class="iconfont iconxia dropdownstyle"  @click="getReview"></i>
                   </view>
                 <order-list-review :is-orderreview="orderReviewshow" @selectInfoOrderReview="selectInfoOrderReview"></order-list-review>
               </view>
@@ -221,10 +240,11 @@
                   class="orderList-drawer-filter-down-input"
                   type="text"
                   :placeholder="`请选择`"
+                  placeholder-style="color:#DBDBDB"
                   v-model="orderMarkStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia" @click="getMarketing"></i>
+                  <i class="iconfont iconxia dropdownstyle" @click="getMarketing"></i>
                   </view>
                 <order-list-marketing :is-orderremarketing="orderMarketing" @selectInfoOrderMarketing="selectInfoOrderMarketing"></order-list-marketing>
             </view>
@@ -241,10 +261,11 @@
                       class="orderList-drawer-filter-down-input"
                       type="text"
                       :placeholder="`请选择`"
+                      placeholder-style="color:#DBDBDB"
                       v-model="orderBuyStr"
                       disabled="false"
                     >
-                    <i class="iconfont iconxia" @click="getBuy"></i>
+                    <i class="iconfont iconxia dropdownstyle" @click="getBuy"></i>
                 </view>
               <order-list-buy :is-order-buy="orderBuy" @selectInfoOrderBuy="selectInfoOrderBuy"></order-list-buy>
             </view>
@@ -257,10 +278,11 @@
                     class="orderList-drawer-filter-down-input"
                     type="text"
                     :placeholder="`请选择`"
+                    placeholder-style="color:#DBDBDB"
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
-                    <i class="iconfont iconxia" @click="getDistribution"></i>
+                    <i class="iconfont iconxia dropdownstyle" @click="getDistribution"></i>
                 </view>
               <order-list-distribution :is-order-distribution="orderDistribution" @selectInfoOrderDistribution="selectInfoOrderDistribution"></order-list-distribution>
             </view>
@@ -270,9 +292,10 @@
           <view class="timeFont">
             <text>筛选</text>
           </view>
-          <u-checkbox-group max="3" size="18">
+          <u-checkbox-group max="3">
             <u-checkbox
-                    label-size="10"
+                    label-size="12"
+                    icon-size="12"
                     @change="checkboxChange"
                     v-model="item.checked"
                     v-for="(item, index) in screenlist" :key="index"
@@ -340,7 +363,7 @@
 
 <script>
 import orderListItem from '../../components/orderList/order-list-item';
-import JTab from '../../components/common/JTab';
+import OrderJTab from '../../components/orderList/OrderJTab';
 import JDrawer from '../../components/form/JDrawer';
 import OrderListType from '../../components/orderList/order-list-type';
 import OrderListModel from '../../components/orderList/order-list-model';
@@ -350,6 +373,9 @@ import OrderListBuy from '../../components/orderList/order-list-purchasemethod';
 import OrderListDistribution from '../../components/orderList/order-list-distribution';
 import OrderListIndustry from '../../components/orderList/order-list-industry';
 import JPopPicker from '../../components/form/JPopPicker';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import './css/orderlist.scss';
 
 
@@ -364,9 +390,13 @@ import {
 
 export default {
   name: 'orderList',
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
     orderListItem,
-    JTab,
+    OrderJTab,
     JDrawer,
     JPopPicker,
     OrderListType,
@@ -375,14 +405,15 @@ export default {
     OrderListMarketing,
     OrderListBuy,
     OrderListDistribution,
-    OrderListIndustry
+    OrderListIndustry,
+    MescrollBody
   },
   data() {
     return {
       formDataJson: {},
       orderNoshow: false,
-      orderIndustry: false,
       orderModelshow: false,
+      orderIndustry: false,
       orderReviewshow: false,
       orderMarketing: false,
       orderBuy: false,
@@ -392,6 +423,7 @@ export default {
       serviNO: '',
       bstnk: '',
       brand: '',
+      jshi_sendto_code: '',
       brandInput: '',
       jshi_grouping_no: '',
       jshi_gvs_so_order_no: '',
@@ -529,7 +561,6 @@ export default {
       isProductBandShow: false,
       choseProductBandKeys: [],
       producntBandValue: '',
-      producntBandName: '',
       isShowCalendarDrawer: true,
       // 用户选中的日期
       selectData: '',
@@ -571,7 +602,7 @@ export default {
   },
   created() {
     console.log(this.sexID);
-    this.orderList(this.tabs[this.sexID].id2, this.pageNo);
+    // this.orderList(this.tabs[this.sexID].id2, this.pageNo);
     this.tabs.forEach((each) => {
       each.active = false;
     });
@@ -581,6 +612,11 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
+    async upCallback(pages) {
+      /* 上推加载 */
+      const scrollView = await this.orderList(this.tabs[this.sexID].id2, pages.num);
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+    },
     filterConfirm() {
       this.orderList(this.tabs[this.sexID].id2, this.pageNo);
       this.tabs.forEach((each) => {
@@ -594,7 +630,7 @@ export default {
       this.serviNO = '';
       this.songda = '';
       this.translateInput = '';
-      this.producntBandName='';
+      this.producntBandName = '';
       this.producntBandValue = '';
       this.addresseeInput = '';
       this.orderModelStr = '产品型号';
@@ -614,6 +650,7 @@ export default {
       this.screenlist.map((val) => {
         val.checked = false;
       });
+      this.industry = '';
     },
     // 选择品牌后
     productBandChange(data, productBandOptions) {
@@ -643,10 +680,15 @@ export default {
       this.isShowGoodsFilterDrawer = true;
       console.log(this.productBandList);
     },
+    unique(newarr) {
+      const res = new Map();
+      this.industryList = newarr.filter(newarr => !res.has(newarr.key) && res.set(newarr.key, 1));
+    },
     async getDictionaryByWhereFun(param) {
       const { code, data } = await this.productService.getDictionaryByWhere(param);
       if (code === '1') {
         if (param.dictionaryType == 'INDUSTRIAL') {
+          const industryLists = [];
           // this.industryList = data;
           for (let index = 0; index < data.length; index++) {
             const element = data[index];
@@ -654,8 +696,9 @@ export default {
               key: element.code,
               value: element.codeName
             };
-            this.industryList.push(indus);
+            industryLists.push(indus);
           }
+          this.unique(industryLists);
         } else {
           console.log('===========getDictionaryByWhereFun===========');
           // [{key:1,value:'馒头'}，{key:2,value:'米饭'}]
@@ -673,6 +716,7 @@ export default {
       console.log('===========getDictionaryByWhereFun===========');
     },
     async orderList(e, pgNo) {
+      console.log(pgNo)
       let dingdan;
       let zhengdan;
       let gvs;
@@ -699,9 +743,7 @@ export default {
       }
 
       const param = {
-
         industry: this.industry,
-        product_brand_all: this.product_brand_all,
         product_model_all: xinghao,
         product_code_all: bianhao,
         sap_judge_status: this.orderReviewValue,
@@ -709,7 +751,7 @@ export default {
         waysOfPurchasing: this.orderBuyValue,
         bstnk: dingdan,
         jshi_grouping_no: zhengdan,
-        jshi_gvs_so_order_no:gvs,
+        jshi_gvs_so_order_no: gvs,
         sap_dn5: wuliu,
         jshi_delivery_type: this.orderDistributionValue,
         price_type_all: this.pricetypeall,
@@ -725,14 +767,14 @@ export default {
         sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
-        product_brand_all:this.producntBandValue,
+        product_brand_all: this.producntBandValue,
+        jshi_sendto_code: this.songda,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
         pageNo: pgNo,
         pageSize: 10
       };
-
 
       if (e == 8) {
         param.yjPay = 'MFYJ';
@@ -741,15 +783,28 @@ export default {
 
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
-        this.orderListInfo = data.dataList;
+        if (pgNo === 1) {
+          this.orderListInfo = data.dataList;
+        } else {
+          this.orderListInfo = this.orderListInfo.concat(data.dataList);
+        }
+        if (this.orderListInfo.length === 0) {
+          uni.showToast({
+            title: '暂无数据！',
+            icon: 'none'
+          });
+        }
         // 遍历循环
         for (let index = 0; index < this.orderListInfo.length; index++) {
           const element = this.orderListInfo[index];
           this.buttonLogicJudgmentAction(element.info, index);
         }
       }
-      console.log(`===========orderList===========${e}`);
-      console.log(data);
+      // 当前页码的数据
+      const scrollView = {};
+      scrollView.pageSize = 15;
+      scrollView.total = data.totalNums;
+      return scrollView;
     },
     // 获取按钮显示的数据
     async buttonLogicJudgmentAction(param, index) {
@@ -831,13 +886,13 @@ export default {
       this.orderTypeStr = data;
       if (value === '1') {
         this.jshi_sendto_code = '';
-        this.jshi_gvs_so_order_no='';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
         this.bstnk = this.serviNO;
       }
       if (value === '2') {
         this.jshi_grouping_no = this.serviNO;
-        this.jshi_gvs_so_order_no='';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
         this.bstnk = '';
       }
@@ -851,7 +906,7 @@ export default {
       if (value === '4') {
         console.log(value);
         this.jshi_grouping_no = '';
-        this.jshi_gvs_so_order_no='';
+        this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = this.serviNO;
         this.bstnk = '';
       }
@@ -889,6 +944,13 @@ export default {
       this.orderDistribution = !this.orderDistribution;
       this.orderDistributionStr = data; // 改变了父组件的值
     },
+    selectInfoIndustry(value, data) { // 点击子组件按钮时触发事件
+      console.log(`-------${value}`);
+      this.industry = value;
+      this.orderIndustry = !this.orderIndustry;
+      this.translateInput = data; // 改变了父组件的值
+    },
+
     // 选中某个复选框时，由checkbox时触发
     checkboxChange(e) {
       console.log(e.name);
