@@ -350,7 +350,7 @@ export default {
       const tab = this.tabs.find(v => v.active);
       // 其他条件
       const filtersMap = {
-        name: this.filterForm.name && this.filterForm.name.trim()
+        name: this.filterForm.name && this.filterForm.name.replace(/\s*/g, '')
       };
         // 右侧筛选栏搜索数据
       this.filterList.forEach((item) => {

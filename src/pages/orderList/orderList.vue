@@ -68,6 +68,7 @@
                 :placeholder="`请选择`"
                 placeholder-style="color:#DBDBDB"
                 v-model="translateInput"
+                disabled="false"
               >
               <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
@@ -88,6 +89,7 @@
                 v-model="producntBandName"
                 :placeholder="`请选择`"
                 placeholder-style="color:#DBDBDB"
+                disabled="false"
               >
               <i @click="productBandAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
@@ -294,7 +296,7 @@
           </view>
           <u-checkbox-group max="3">
             <u-checkbox
-                    label-size="12"
+                    label-size="22"
                     icon-size="12"
                     @change="checkboxChange"
                     v-model="item.checked"
@@ -302,7 +304,6 @@
                     :name="item.name"
             >{{item.name}}</u-checkbox>
           </u-checkbox-group>
-
         </view>
         <view class="">
           <view class="timeFont">
@@ -311,7 +312,7 @@
           <u-radio-group @change="radioChange">
             <u-radio
               icon-size="10"
-              label-size="10"
+              label-size="22"
               v-for="(item, index) in labellist" :key="index"
               :name="item.name"
               :disabled="item.disabled"
@@ -734,7 +735,7 @@ export default {
       console.log('===========getDictionaryByWhereFun===========');
     },
     async orderList(e, pgNo) {
-      console.log(pgNo)
+      console.log(pgNo);
       let dingdan;
       let zhengdan;
       let gvs;
@@ -742,22 +743,22 @@ export default {
       let xinghao;
       let bianhao;
       if (this.orderTypeVue === '1') {
-        dingdan = this.serviNO;
+        dingdan = this.serviNO.replaceAll(" ", "");
       }
       if (this.orderTypeVue === '2') {
-        zhengdan = this.serviNO;
+        zhengdan = this.serviNO.replaceAll(" ", "");
       }
       if (this.orderTypeVue === '3') {
-        gvs = this.serviNO;
+        gvs = this.serviNO.replaceAll(" ", "");
       }
       if (this.orderTypeVue === '4') {
-        wuliu = this.serviNO;
+        wuliu = this.serviNO.replaceAll(" ", "");
       }
       if (this.orderModelValue === '1') {
-        xinghao = this.addresseeInput;
+        xinghao = this.addresseeInput.replaceAll(" ", "");
       }
       if (this.orderModelValue === '2') {
-        bianhao = this.addresseeInput;
+        bianhao = this.addresseeInput.replaceAll(" ", "");
       }
 
       const param = {
@@ -786,7 +787,7 @@ export default {
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
         product_brand_all: this.producntBandValue,
-        jshi_sendto_code: this.songda,
+        jshi_sendto_code: this.songda.replaceAll(" ", ""),
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
@@ -909,10 +910,10 @@ export default {
         this.jshi_sendto_code = '';
         this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
-        this.bstnk = this.serviNO;
+        this.bstnk = this.serviNO.replaceAll(" ", "");
       }
       if (value === '2') {
-        this.jshi_grouping_no = this.serviNO;
+        this.jshi_grouping_no = this.serviNO.replaceAll(" ", "");
         this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
         this.bstnk = '';
@@ -920,7 +921,7 @@ export default {
       if (value === '3') {
         console.log(value);
         this.jshi_grouping_no = '';
-        this.jshi_gvs_so_order_no = this.serviNO;
+        this.jshi_gvs_so_order_no = this.serviNO.replaceAll(" ", "");
         this.sap_dn5 = '';
         this.bstnk = '';
       }
@@ -928,7 +929,7 @@ export default {
         console.log(value);
         this.jshi_grouping_no = '';
         this.jshi_gvs_so_order_no = '';
-        this.sap_dn5 = this.serviNO;
+        this.sap_dn5 = this.serviNO.replaceAll(" ", "");
         this.bstnk = '';
       }
     },
@@ -937,12 +938,12 @@ export default {
       this.orderModelshow = !this.orderModelshow;
       this.orderModelStr = data;
       if (value === '1') {
-        this.product_model_all = this.addresseeInput;
+        this.product_model_all = this.addresseeInput.replaceAll(" ", "");
         this.product_code_all = '';
       }
       if (value === '2') {
         this.product_model_all = '';
-        this.product_code_all = this.addresseeInput;
+        this.product_code_all = this.addresseeInput.replaceAll(" ", "");
       }
     },
     selectInfoOrderReview(value, data) {
@@ -980,7 +981,6 @@ export default {
       }
       if (e.name === '整车') {
         this.jshiordersource = !e.value;
-
       }
       if (e.name === '远周次') {
         this.farweeklyall = !e.value;
