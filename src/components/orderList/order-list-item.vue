@@ -2,7 +2,7 @@
   <view class="produceDetailItem">
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
-      <text class="produceDetailItem-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
+      <text class="produceDetailItem-head-text">{{titleAndNo}}</text>
       <text @click="orderFailsAction" class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
     <view v-if="info.details.length<2">
@@ -184,6 +184,7 @@ export default {
       ggfkf:false,
       selfPayButton:false,
       jshi_order_gvs_status:false,
+      titleAndNo:''
     };
   },
   computed: {
@@ -234,6 +235,7 @@ export default {
     console.log('jshi_order_gvs_status'+this.jshi_order_gvs_status)
     console.log('this.jshi_grouping_no'+this.jshi_grouping_no)
 
+    this.titleAndNo = this.info.details.jshd_order_type == 'MFYJ'?('版本号'+this.info.details.jshd_budget_code):('整单订单：'+this.info.info.jshi_grouping_no);
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
