@@ -30,11 +30,11 @@
       <view class="produceDetailItem-fot">
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{info.details[0].jshd_amount}}</span></view>
+            <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{info.details[0].jshd_pre_amount}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{info.details[0].jshd_invoice_price}}</span></view>
+            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</span></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">{{(info.details[0].jshd_pre_rate*1).toFixed(2)}}%</span></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
@@ -94,7 +94,7 @@
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{item.jshd_pre_amount}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{item.jshd_invoice_price}}</span></view>
+            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</span></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
