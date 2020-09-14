@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="abnormal">
-      <i class="iconfont iconjianshezhong"></i>
+      <image src="../../assets/img/exception/jianshe.png" class="abnormal-img"></image>
       <view class="abnormal-title">功能开发中，敬请期待!</view>
       <button class="abnormal-btn" @tap="goIndex">返回</button>
     </view>
@@ -38,9 +38,9 @@ export default {
   margin: 0 auto;
   border-radius: 44px;
 }
-.iconfont {
-  font-size:300px !important;
-  color: #ccc;
+.abnormal-img {
+  width: 270px;
+  height: 270px;
   margin: 0px 240px;
 }
 </style>

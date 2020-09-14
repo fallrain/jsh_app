@@ -326,8 +326,13 @@ status: "正常" -->
             <view 
               @click="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRight"
-              v-else
+              v-else-if="item.payerType != '03' && item.payerType != '07' && item.payerType != '15'"
             >设置为默认设置</view>
+            <view v-if="item.defaultFlag !='1' && item.payerType == '03' ||item.payerType == '07' ||item.payerType == '15'"
+              @click="setFukuanDefaultAction(item.customerCode)"
+              class="firstPageRightGray"
+            >设置为默认设置</view>
+            <!-- payerType -->
           </view>
           <view class="blank"></view>
         </view>
@@ -709,6 +714,15 @@ export default {
     font-size: 28px;
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
+    line-height: 50px;
+    margin-right: 30px;
+  }
+
+  .firstPageRightGray {
+    height: 60px;
+    font-size: 28px;
+    font-weight: 400;
+    color: rgba(51, 51, 51, 1);
     line-height: 50px;
     margin-right: 30px;
   }

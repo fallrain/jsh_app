@@ -139,7 +139,7 @@ import proSpecs from '../../components/productDetail/pro-specs';
 import proComFoot from '../../components/productDetail/pro-com-foot';
 import './css/productDetail.scss';
 import {
-  mapGetters,mapMutations
+  mapGetters, mapMutations
 } from 'vuex';
 import {
   USER, GOODS_LIST
@@ -169,7 +169,8 @@ export default {
       footButtong: { // 底部按钮是否显示问题
         isSale: false,
         isActi: false,
-        isSaleLe: false
+        isSaleLe: false,
+        isflash: false //抢单数量为0时置灰
       },
       ISGUANZHU: false, // 商品关注
       detailInfo: [], // 商品信息
@@ -424,32 +425,6 @@ export default {
           });
           this.ActInfo.push(zh);
         }
-        // if (this.detailInfo.flashSales.length > 0) { // 抢单
-        //   this.ActListInfo.push('抢单');
-        //   const qd = {
-        //     title: '抢单',
-        //     isMore: false,
-        //     // isSe: true,
-        //     isT: false,
-        //     isC: true,
-        //     list: []
-        //   };
-        //   console.log('wwwwwwwwwwwwwwwww', this.flash);
-        //   // if (this.flash.graborders && this.flash.graborders.length > 0) {
-        //   //   this.flash.graborders.forEach((lis) => {
-        //   //     lis.lastUpdateDate = lis.lastUpdateDate.split(' ')[0];
-        //   //     const a = {
-        //   //       titleLe: '抢单',
-        //   //       name: lis.promotionName,
-        //   //       time: lis.lastUpdateDate,
-        //   //       num: lis.availableQuantity
-        //   //     };
-        //   //     console.log(a);
-        //   //     qd.list.push(a);
-        //   //   });
-        //   // }
-        //   this.ActInfo.push(qd);
-        // }
         if (Number(this.detailInfo.isOmsSample)) { // 调货
           this.ActListInfo.push('调货');
           const dh = {
@@ -545,6 +520,20 @@ export default {
           }
           this.ActInfo.push(fx);
         }
+        console.log(this.ActInfo);
+        // this.ActInfo.forEach((item) => {
+        //   console.log('011111111');
+        //   if (item.title === '抢单') {
+        //     item.list.forEach((ele) => {
+        //       console.log('0222222');
+        //       if (ele.num === 0) {
+        //         console.log('03333333');
+        //       // 抢单数量为0
+        //         this.footButtong.isflash = true;
+        //       }
+        //     });
+        //   }
+        // });
       }
     },
     async getHostLost() {
@@ -659,8 +648,10 @@ export default {
       if (this.CheckActivityInfo && (this.CheckActivityInfo.titleLe === '工程版本' || this.CheckActivityInfo.titleLe === '样机版本')) {
         console.log(1111111111111111111111111);
         this.footButtong.isSaleLe = true;
+        // this.footButtong.isflash = false;
       } else {
         this.footButtong.isSaleLe = false;
+        // this.footButtong.isflash = false;
       }
       this.detailInfo.product.invoicePrice = Number(this.CheckActivityInfo.price).toFixed(2);
       console.log(this.CheckActivityInfo);
@@ -680,7 +671,6 @@ export default {
       this.getProductDetail();// 获取产品详情
       this.getHostLost();// 获取热门推荐列表
       this.productQueryInter();// 产品是否关注
-
     },
     checkCut(e) {
       this.toView = e;
@@ -701,7 +691,7 @@ export default {
     putcar() {
       if (this.CheckActivityInfo === '') { // 没选活动
         if (this.detailInfo.flashSales.length > 0) { // 有抢单
-          this.jiaGou1('PT', this.flash.graborders[0].activityType);
+          this.jiaGou1('PT', Number(this.flash.graborders[0].activityType));
         } else {
           this.jiaGou1('PT', 1);
         }

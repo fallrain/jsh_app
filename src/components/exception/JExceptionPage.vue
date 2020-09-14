@@ -1,13 +1,13 @@
 <template>
   <view :class="classJudge">
-    <image :class="imageClass" :src="img[tap]" />
-    <view class="excpag-title" v-show="tap === 0">
+    <image :class="imageClass" :src="img[type]" />
+    <view class="excpag-title" v-show="type === 0">
       <slot name="excpagTitle"></slot>
     </view>
-    <view class="excpag-title1" v-if="tap === 1">
+    <view class="excpag-title1" v-if="type === 1">
       您的购物车还是空的，赶紧行动吧！
     </view>
-    <view class="excpag-title2" v-else-if="tap === 2 || tap === 3">
+    <view class="excpag-title2" v-else-if="type === 2 || type === 3">
       <view class="excpag-title2-top">
         非常抱歉
       </view>
@@ -29,31 +29,31 @@ export default {
   name: 'JExceptionPage',
   data() {
     return {
-      // 图片数组，image标签:src动态绑定数组对应下标项img[tap]
+      // 图片数组，image标签:src动态绑定数组对应下标项img[type]
       img: [img1, img2, img3, img4]
     };
   },
   computed: {
     classJudge() {
       let num = '';
-      if (this.tap === 2 || this.tap === 3) {
+      if (this.type === 2 || this.type === 3) {
         num = 'excpag-bg2';
       } else {
-        num = `excpag-bg${this.tap}`;
+        num = `excpag-bg${this.type}`;
       }
       return num;
     },
     imageClass() {
       let num = '';
-      if (this.tap === 2 || this.tap === 3) {
+      if (this.type === 2 || this.type === 3) {
         num = 'excpag-image2';
       } else {
-        num = `excpag-image${this.tap}`;
+        num = `excpag-image${this.type}`;
       }
       return num;
     }
   },
-  props: { tap: {} }
+  props: { type: {} }
 };
 </script>
 <style></style>
