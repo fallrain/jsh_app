@@ -50,15 +50,15 @@
             @change="isCreditModeChange"
           ></j-switch>
           <j-switch
+            :beforeChange="()=>{return false}"
             v-if="goods.splitOrderProductList[0].isCheckKuanXian === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckKuanXian === '1'"
             inf="款先"
           ></j-switch>
           <j-switch
+            :beforeChange="()=>{return false}"
             v-if="goods.splitOrderProductList[0].farWeek === '1'"
-            :active.sync="goods.splitOrderProductList[0].isCheckFarWeek"
-            :stateMap="['1','0']"
-            @change="goodsChange"
+            :active.sync="goods.splitOrderProductList[0].isCheckFarWeek === '1'"
             inf="远周次"
           ></j-switch>
           <view class="jOrderConfirmItem-detail-match-type-text ml20">
