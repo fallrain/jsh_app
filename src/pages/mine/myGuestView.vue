@@ -268,7 +268,7 @@ status: "正常" -->
           <view class="firstItem">
             <view class="firstPageLeft">是否默认</view>
             <view class="firstPageRight" v-if="item.defaultFlag">是</view>
-            <view @click="setDefaultAction" class="firstPageRight" v-else>设置为默认</view>
+            <view @click="setDefaultAction(item.customerCode)" class="firstPageRight" v-else>设置为默认</view>
           </view>
           <view class="firstPageRightMore">{{item.address}}</view>
         </view>
@@ -322,8 +322,9 @@ status: "正常" -->
             <view
               class="firstPageRight"
               v-if="item.defaultFlag==='1'"
-            >取消默认设置</view>
-            <view
+            >是</view>
+            <view 
+              @click="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRight"
               v-else
             >设置为默认设置</view>
@@ -563,7 +564,7 @@ export default {
         const { code: centerCode, data: centerData } = await this.getValueSync(tradeCodes);
         if (centerCode === '1') {
           this.customers.forEach((v, index) => {
-            this.$set(v, 'centerName', centerData[index].valueMeaning);
+            // this.$set(v, 'centerName', centerData[index].valueMeaning);
           });
         }
       }
@@ -571,7 +572,7 @@ export default {
     async auxiliaryFun(salesGroupCode, status) {
       /* 付款方列表 */
       console.log('auxiliaryFun');
-      const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status);
+      const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status,this.userInf.salesGroupCode);
       if (code === '1') {
         // this.accountTotal = 0;
         // for (let index = 0; index < data.length; index++) {
@@ -601,9 +602,28 @@ export default {
         }
       }
     },
-    setDefaultAction() {
-
+    async setDefaultAction(customerCode) {
+      const {code , data} = await this.customerService.relations(customerCode);
+      if(code === '1') {
+        this.customersFun();
+      } else {
+        uni.showToast({
+          title: '设置失败，稍后重试',
+        });
+      }
     },
+    async setFukuanDefaultAction(code2) {
+      console.log(this.userInf)
+      const {code , data} = await this.customerService.fukuanRelations(code2,this.userInf.salesGroupCode);
+      if(code === '1') {
+          this.auxiliaryFun(this.userInf.customerCode, 1);
+      } else {
+        uni.showToast({
+          title: '设置失败，稍后重试',
+        });
+      }
+    },
+
     tabClick(e) {
       /* 事件处理 */
       this.tabs = e;
