@@ -24,7 +24,6 @@
       <u-lazy-load
         :error-img="errorImg"
         :image="goods.image.masterImage"
-        height="208"
       ></u-lazy-load>
       <image
         :src="tagImg"
