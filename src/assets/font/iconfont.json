@@ -6,6 +6,55 @@
   "description": "巨商汇APP",
   "glyphs": [
     {
+      "icon_id": "17163351",
+      "name": "订单扣款",
+      "font_class": "dingdankoukuan1",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "17163352",
+      "name": "订单评审",
+      "font_class": "dingdanpingshen1",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "17163353",
+      "name": "中心入库",
+      "font_class": "zhongxinruku1",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "17163354",
+      "name": "椭圆形备份",
+      "font_class": "tuoyuanxingbeifen",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "17163355",
+      "name": "工厂发货",
+      "font_class": "gongchangfahuo1",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "17163356",
+      "name": "订单创建",
+      "font_class": "dingdanchuangjian1",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "17163357",
+      "name": "作废订单",
+      "font_class": "zuofeidingdan",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
       "icon_id": "17153293",
       "name": "悬浮购物车",
       "font_class": "xuanfugouwuche",
