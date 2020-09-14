@@ -3,6 +3,13 @@
   padding-bottom: 50px;
 }
 
+.jPopPicker-pop-search-wrap{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-left: 40px;
+  padding-right: 58px;
+}
+
 .jPopPicker-pop-head {
   display: flex;
   align-items: center;
@@ -69,5 +76,12 @@
   text-overflow: ellipsis;
   width: 100%;
   font-size: 28px;
+  color: #666;
+}
+
+.jPopPicker-pop-item-empty{
+  text-align: center;
+  font-size: 26px;
+  padding-right: 58px;
   color: #666;
 }
