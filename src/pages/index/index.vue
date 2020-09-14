@@ -238,7 +238,7 @@ export default {
           id: 1,
           src: require('@/assets/img/index/function-car.png'),
           title: '整车',
-          url: '/pages/vehicleList/vehicleList'
+          url: '/pages/vehicleList/abnormal'
         },
         {
           id: 2,
@@ -418,12 +418,16 @@ export default {
     };
   },
   created() {
-    this.getPageInf();
     (async () => {
       await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       await this[USER.UPDATE_SALE_ASYNC]();
       await this[USER.UPDATE_TOKEN_USER_ASYNC]();
     })().then((res) => {
+      this.getPageInf();
+      this.getXinPin();
+      this.getBaoKuan();
+      this.getZhuanGong();
+      this.getZiYuanJi();
       // this.get()
       console.log(this.defaultSendToInf);
       console.log(this.tokenUserInf);
@@ -469,10 +473,6 @@ export default {
       this.getbannerList();
       this.getIndexList();
       this.getList();
-      this.getXinPin();
-      this.getBaoKuan();
-      this.getZhuanGong();
-      this.getZiYuanJi();
       this.getShow();
     },
     // watch: {

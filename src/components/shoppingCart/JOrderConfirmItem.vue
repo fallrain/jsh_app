@@ -159,6 +159,7 @@
     ></j-pop-picker>
     <j-pop-picker
       title="开票方"
+      :isShowSearch="true"
       :show.sync="invoicePickerShow"
       :options="invoiceOptions"
       :choseKeys.sync="currentinvoiceOption"

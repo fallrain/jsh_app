@@ -12,30 +12,46 @@
           @tap="close"
         ></view>
       </view>
-
+      <view
+        class="jPopPicker-pop-search-wrap"
+        v-if="isShowSearch"
+      >
+        <j-search-input
+          @change="search"
+          @search="search"
+          placeholder="请输入搜索信息"
+          v-model="searchValue"
+        ></j-search-input>
+      </view>
       <scroll-view
         :scroll-y="true"
         class="jPopPicker-pop-item-wrap"
       >
-        <view
-          :class="[
+        <template v-for="(item) in options">
+          <view
+            :class="[
             'jPopPicker-pop-item',
             choseKeys.find(v=>v===item[keyName]) && 'active'
           ]"
-          v-for="(item) in options"
-          :key="item[keyName]"
-          @tap="check(item)"
-        >
-          <view
-            :class="[
+            :key="item[keyName]"
+            @tap="check(item)"
+            v-if="!item.isHide"
+          >
+            <view
+              :class="[
             'jPopPicker-pop-item-icon iconfont icontick',
           ]"
-          ></view>
-          <view class="jPopPicker-pop-item-cnt">
-            <text v-if="isShowValue">{{item.value}}</text>
-            <slot v-bind:data="item"></slot>
+            ></view>
+            <view class="jPopPicker-pop-item-cnt">
+              <text v-if="isShowValue">{{item.value}}</text>
+              <slot v-bind:data="item"></slot>
+            </view>
           </view>
-        </view>
+        </template>
+        <view
+          class="jPopPicker-pop-item-empty"
+          v-if="isEmpty"
+        >没有匹配的相关数据~</view>
       </scroll-view>
     </view>
   </uni-popup>
@@ -43,10 +59,12 @@
 
 <script>
 import './css/jPopPicker.scss';
+import JSearchInput from './JSearchInput';
 
 export default {
   name: 'JPopPicker',
   components: {
+    JSearchInput
   },
   props: {
     // 类型：radio/checkbox
@@ -95,16 +113,34 @@ export default {
     // 不能点击时候的回调
     cantCheckedCallback: {
       type: Function
+    },
+    // 是否显示搜索框
+    isShowSearch: {
+      type: Boolean,
+      default: false
+    },
+    // 搜索的key
+    searchKeys: {
+      type: Array,
+      default: () => ['value']
     }
   },
   data() {
     return {
       // 选中的选项
       choseOptions: [],
+      // 搜索的值
+      searchValue: ''
     };
   },
   created() {
     console.log(this.options);
+  },
+  computed: {
+    isEmpty() {
+      /* 是否是空的 */
+      return !(this.options && this.options.length && this.options.filter(v => !v.isHide).length);
+    }
   },
   watch: {
     show(val) {
@@ -173,6 +209,23 @@ export default {
     confirm() {
       /* 确定 */
       this.$emit('update:show', false);
+    },
+    search() {
+      /* 搜索 */
+      this.$u.throttle(() => {
+        const searchKeys = this.searchKeys;
+        const searchValue = this.searchValue.trim();
+        if (searchValue === '') {
+          this.options.forEach((v) => {
+            this.$set(v, 'isHide', false);
+          });
+        } else {
+          this.options.forEach((v) => {
+            const isContain = !!searchKeys.find(key => v[key].includes(searchValue));
+            this.$set(v, 'isHide', !isContain);
+          });
+        }
+      }, 250, false);
     }
   }
 };
