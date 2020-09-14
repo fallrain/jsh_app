@@ -268,7 +268,7 @@ status: "正常" -->
           <view class="firstItem">
             <view class="firstPageLeft">是否默认</view>
             <view class="firstPageRight" v-if="item.defaultFlag">是</view>
-            <view @click="setDefaultAction" class="firstPageRight" v-else>设置为默认</view>
+            <view @click="setDefaultAction(item.customerCode)" class="firstPageRight" v-else>设置为默认</view>
           </view>
           <view class="firstPageRightMore">{{item.address}}</view>
         </view>
@@ -563,7 +563,7 @@ export default {
         const { code: centerCode, data: centerData } = await this.getValueSync(tradeCodes);
         if (centerCode === '1') {
           this.customers.forEach((v, index) => {
-            this.$set(v, 'centerName', centerData[index].valueMeaning);
+            // this.$set(v, 'centerName', centerData[index].valueMeaning);
           });
         }
       }
@@ -601,8 +601,15 @@ export default {
         }
       }
     },
-    setDefaultAction() {
-
+    async setDefaultAction(customerCode) {
+      const {code , data} = await this.customerService.relations(customerCode);
+      if(code === '1') {
+        this.customersFun();
+      } else {
+        uni.showToast({
+          title: '设置失败，稍后重试',
+        });
+      }
     },
     tabClick(e) {
       /* 事件处理 */
