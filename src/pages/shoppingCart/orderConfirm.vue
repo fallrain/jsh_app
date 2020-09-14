@@ -402,6 +402,9 @@ export default {
       const condition = this.getPayForm();
       const { code, data } = await this.orderService.paytoInfo(condition);
       if (code === '1') {
+        /*for (const k in data) {
+          data[k][0].isCanChecked = false;
+        }*/
         this.payInfoData = data;
         let payList = [];
         // 处理账户余额信息
