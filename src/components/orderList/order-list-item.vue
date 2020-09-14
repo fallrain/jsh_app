@@ -2,8 +2,8 @@
   <view class="produceDetailItem">
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
-      <text class="produceDetailItem-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
-      <text class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
+      <text class="produceDetailItem-head-text">{{titleAndNo}}</text>
+      <text @click="orderFailsAction" class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
     <view v-if="info.details.length<2">
       <view class="produceDetailItem-cnt" @click="goDetail">
@@ -17,7 +17,7 @@
             <view class="produceDetailItem-cnt-info">数量：{{info.details[0].jshd_qty}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-cnt-info">订单类型：{{info.details[0].waysOfPurchasingDto}}</view>
+            <view class="produceDetailItem-cnt-info">购买方式：{{info.info.waysOfPurchasingDto}}</view>
           </view>
         </view>
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
@@ -30,15 +30,15 @@
       <view class="produceDetailItem-fot">
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{info.details[0].jshd_amount}}</span></view>
+            <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{info.details[0].jshd_pre_amount}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{info.details[0].jshd_invoice_price}}</span></view>
+            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</span></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">{{(info.details[0].jshd_pre_rate*1).toFixed(2)}}%</span></view>
             <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">{{(100-(info.details[0].jshd_pre_rate*1)).toFixed(2)}}%</span></view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">{{(parseFloat(info.details[0].jshd_invoice_price) - parseFloat(info.details[0].jshd_pre_amount)).toFixed(2)}}</span></view>
           </view>
         </view>
         <view class=" col-25 padding-4">
@@ -83,7 +83,7 @@
             <view class="produceDetailItem-cnt-info">数量：{{item.jshd_qty}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-cnt-info">订单类型：{{item.waysOfPurchasingDto}}</view>
+            <view class="produceDetailItem-cnt-info">购买方式：{{item.waysOfPurchasingDto}}</view>
           </view>
         </view>
       </view>
@@ -94,11 +94,11 @@
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{item.jshd_pre_amount}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{item.jshd_invoice_price}}</span></view>
+            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</span></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-fot-info">预定金比例:<span class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">{{(100-(item.jshd_pre_rate*1)).toFixed(2)}}%</span></view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-fot-info">尾款:<span class="produceDetailItem-fot-color">{{parseFloat(product.jshd_pre_amount).toFixed(2)}}</span></view>
           </view>
         </view>
         <view v-if="invalidButton"  class=" col-25 padding-4">
@@ -184,6 +184,7 @@ export default {
       ggfkf:false,
       selfPayButton:false,
       jshi_order_gvs_status:false,
+      titleAndNo:''
     };
   },
   computed: {
@@ -193,10 +194,9 @@ export default {
   },
   created() {
     console.log('11111111');
-        console.log(this.info)
+    console.log(this.info)
 
     const details = this[ORDER.GET_ORDER].orderDetail.details;
-
     // 判断订单节点是否存在
     if (details.jshd_tags == 'CROWD_FUNDING'
     && details.jshd_product_type == '3'
@@ -227,8 +227,14 @@ export default {
     }
     if(info.jshi_order_gvs_status == '1') {
       this.jshi_order_gvs_status = true;
+    } else {
+      this.jshi_order_gvs_status = false;
     }
 
+    // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
+
+    // debugger
+    this.titleAndNo = this.info.details[0].jshd_price_type == 'MFYJ'?('版本号:'+this.info.details[0].jshd_price_version):('整单订单：'+this.info.info.jshi_grouping_no);
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
@@ -236,6 +242,7 @@ export default {
     getMore() {
       const info = this[ORDER.GET_ORDER].orderDetail.info;
       console.log('=====getMore=======')
+
       console.log(this.info)
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
@@ -251,6 +258,8 @@ export default {
       }
       if(info.jshi_order_gvs_status == '1') {
         this.jshi_order_gvs_status = true;
+      } else {
+        this.jshi_order_gvs_status = false;
       }
 
       console.log(this);
@@ -269,6 +278,15 @@ export default {
       uni.navigateTo({
         url: '/pages/orderList/orderWL'
       });
+    },
+    orderFailsAction() {
+      if(this.info.info.selfUseOrderStatus == '下单失败') {
+        uni.showModal({
+          title: '提示',
+          content: this.info.info.jshi_error_msg,
+          showCancel:false
+        });
+      }
     },
     async  orderCancle() {
       const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);

@@ -2,7 +2,7 @@
   <view class="order-info-con">
     <view class="order-info-head">
       <button type="button" class="order-info-head-btn">组合</button>
-      <text class="order-info-head-text">整单订单：202006191745435</text>
+      <text class="order-info-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
     </view>
     <view :class="showler ? '' : 'showType'">
       <view class="order-info-cnt" v-for="(product,index) in products" :key="index">
@@ -12,11 +12,11 @@
         <view>
           <view class="order-info-cnt-text">{{product.jshd_product_name}}</view>
           <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥{{product.jshd_invoice_price}}</span></view>
+            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥{{parseFloat(product.jshd_invoice_price).toFixed(2)}}</span></view>
             <view class="order-info-cnt-info">X&nbsp;{{product.jshd_qty}}</view>
           </view>
           <view class="order-info-cnt-inf" v-if="product.jshd_pre_rate!==''">
-            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">{{(product.jshd_pre_rate*1).toFixed(2)}}%</span> | 尾款：<span style="color: #ED2856;">{{(100-(product.jshd_pre_rate*1)).toFixed(2)}}%</span>  </view>
+            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">{{(product.jshd_pre_rate*1).toFixed(2)}}%</span> | 尾款：<span style="color: #ED2856;">{{(parseFloat(product.jshd_invoice_price) - parseFloat(product.jshd_pre_amount)).toFixed(2)}}</span>  </view>
           </view>
         </view>
       </view>
@@ -27,6 +27,17 @@
 </template>
 
 <script>
+
+import {
+  ORDER,
+  USER
+} from '../../store/mutationsTypes';
+import {
+  mapMutations,
+  mapGetters
+} from 'vuex';
+
+
 export default {
   name: 'orderDetailInfo',
   props: {
@@ -35,10 +46,19 @@ export default {
       default() {
         return [];
       }
-    }
+    },
+  },
+   computed: {
+    ...mapGetters([
+      ORDER.GET_ORDER
+    ]),
+  },
+  created() {
+    this.info = this[ORDER.GET_ORDER].orderDetail;
   },
   data() {
     return {
+      info:{},
       showler: false
     };
   },

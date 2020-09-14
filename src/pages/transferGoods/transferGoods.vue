@@ -474,7 +474,7 @@ export default {
       const tab = this.tabs.find(v => v.active);
       // 其他条件
       const filtersMap = {
-        name: this.filterForm.name
+        name: this.filterForm.name && this.filterForm.name.replace(/\s*/g, '')
       };
       // console.log(this.filterForm)
       // console.log(this.filterList)

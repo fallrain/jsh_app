@@ -80,5 +80,25 @@ export default {
       sendToCode,
     } = data;
     return jGet(urls.changeDefaultSendTo(sendToCode));
+  },
+  signedInf(data) {
+    /* 签约信息 */
+    const {
+      // 送达方code
+      sendtoCode,
+    } = data;
+    return jGet(urls.signedInf, {
+      sendtoCode
+    });
+  },
+  sign(data) {
+    /* 签约 */
+    const {
+      // 送达方code
+      sendtoCode,
+    } = data;
+    return jGet(urls.sign, {
+      sendtoCode
+    });
   }
 };

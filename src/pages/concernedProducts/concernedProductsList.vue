@@ -152,7 +152,8 @@ export default {
         productName: '',
       },
       // 选中的产品codes
-      choseProductCodes: new Set()
+      choseProductCodes: new Set(),
+      brand: {}
     };
   },
   created() {
@@ -182,6 +183,30 @@ export default {
       });
 
       if (data) {
+        this.brands = data;
+        const brand = Object.keys(data.brandMap);
+        const brandValue = Object.values(data.brandMap);
+        const industry = Object.keys(data.industryMap);
+        const industryValue = Object.values(data.industryMap);
+        const brandMap = [];
+        const industryMap = [];
+        brand.map((item) => {
+          brandMap.push({
+            value: item,
+            isChecked: false
+          });
+        });
+        // brand[0] = `${brand[0]}(${brandValue[0]})`;
+        console.log(brand);
+        industry.map((item) => {
+          industryMap.push({
+            value: item,
+            isChecked: false
+          });
+        });
+        this.filterList[0].data = brandMap;
+        this.filterList[1].data = industryMap;
+        console.log(this.filterList);
         const {
           // 商品列表
           productList
@@ -225,6 +250,7 @@ export default {
         }
 
         this.list = productList || [];
+        console.log(this.list);
       }
     },
     goodsChange(goods, index) {

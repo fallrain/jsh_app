@@ -115,6 +115,15 @@
 import JCell from '../../components/form/JCell';
 import './css/mineBaseInfo.scss';
 
+import {
+  USER
+} from '../../store/mutationsTypes';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
+
+
 export default {
   name: 'myBaseInfo',
   components: {
@@ -128,9 +137,17 @@ export default {
   created() {
     this.getBaseInfo();
   },
+  computed: {
+    ...mapGetters({
+      saleInf: USER.GET_SALE
+    })
+  },
   methods: {
     async getBaseInfo() {
-      const { code, data } = await this.mineServer.mineBaseInfo('8800012497');
+      console.log('=============='+this.saleInf.customerCode)
+      console.log(this.saleInf)
+      const customerCode = this.saleInf.customerCode;
+      const { code, data } = await this.mineServer.mineBaseInfo(customerCode);
       if (code === '1') {
         this.baseList = data;
       }

@@ -36,7 +36,11 @@ const urls = {
   },
   getAccountMsg() {
 
-  }
+  },
+  // 签约信息
+  signedInf: '/rrsCrowdftoUnit/signPage',
+  // 签约
+  sign: '/rrsCrowdftoUnit/signed'
 };
 util.addPrefix(baseURL, urls);
 export default urls;

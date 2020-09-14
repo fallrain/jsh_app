@@ -38,8 +38,8 @@
 .orderList-drawer-filter-down-input {
   font-size: 24px;
   padding: 0 16px;
-  height: 60px;
-  line-height: 60px;
+  height: 55px;
+  line-height: 55px;
   font-family: PingFangSC-Regular, PingFang SC;
 }
 .industry-brand{
@@ -50,7 +50,7 @@
 }
 .industry-brand-child{
   float: left;
-  height: 100px;
+  height: 105px;
   width: calc(50% - 20px);
   margin-right: 20px;
 
@@ -125,11 +125,8 @@
   }
 
 }
-.right-10{
-  margin-left: 10px;
-  .iconxia {
-    font-size: 20px;
-  }
+.left-20{
+  margin-left: 40px;
 }
 .calentdarContent {
   background-color: white;
@@ -221,8 +218,7 @@
   }
 }
 .iconscreen{
-  width: 16px;
-  height: 16px;
+  font-size: 30px;
   color: #ED2856;
 
 }
