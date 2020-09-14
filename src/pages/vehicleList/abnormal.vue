@@ -1,7 +1,7 @@
 <template>
   <view>
-    <view>
-      <image src="" ></image>
+    <view class="abnormal">
+      <i class="iconfont iconjianshezhong"></i>
       <view class="abnormal-title">功能开发中，敬请期待!</view>
       <button class="abnormal-btn" @tap="goIndex">返回</button>
     </view>
@@ -21,8 +21,11 @@ export default {
 };
 </script>
 <style scoped>
+.abnormal {
+  padding-top: 100px;
+}
 .abnormal-title {
-  margin: 30% 20% 10% 30%;
+  margin: 10% 20% 10% 30%;
   color: #666;
   font-size: 30px;
 }
@@ -33,5 +36,10 @@ export default {
   color: #fff;
   margin: 0 auto;
   border-radius: 44px;
+}
+.iconfont {
+  font-size:300px !important;
+  color: #ccc;
+  margin: 0px 240px;
 }
 </style>
