@@ -211,6 +211,7 @@ export default {
   ],
   data() {
     return {
+      isCreated: false,
       // 默认显示购物车
       index: 'gwc',
       tabs: [
@@ -275,6 +276,8 @@ export default {
     };
   },
   created() {
+    // 标记是否第一次进入
+    this.isCreated = true;
     this.setPageInfo();
     // 不加入get set
     this.getBigOrderSignInf = getBigOrderSignInf;
@@ -285,7 +288,10 @@ export default {
   onShow() {
     // 如果已经更新过购物车，则需要刷新下
     if (this.isCartUpdate) {
-      this.reloadPageInfo();
+      // 避免请求两次
+      if (this.isCreated) {
+        this.reloadPageInfo();
+      }
       this[GOODS_LIST.UPDATE_IS_CART_UPDATE](false);
     }
   },
