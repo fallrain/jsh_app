@@ -1,24 +1,23 @@
 <template>
   <view class="announcement">
-    <view 
+    <view
       class="announcement-con"
       v-for="item in list"
       :key="item.id"
     >
-      <view class="announcement-con-title">{{item.title}}</view> 
+      <view class="announcement-con-title" @tap="goInfoDetail(item)">{{item.title}}</view>
       <view class="announcement-con-row">
         <view class="announcement-con-row-at">{{item.typeStr}}</view>
         <view class="announcement-con-row-bt">{{item.creatorDept}}</view>
         <i class="announcement-con-row-icon iconfont iconshijian"></i>
         <view class="announcement-con-row-time">{{item.publishTime}}</view>
       </view>
-      <view class="announcement-con-img">
+      <view class="announcement-con-img" @tap="goInfoDetail(item)">
           <image :src="item.img">
       </view>
-
     </view>
 
-  </view>   
+  </view>
 </template>
 <script>
 import {
@@ -27,6 +26,7 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+
 export default {
   name: 'announcement',
   data() {
@@ -51,47 +51,51 @@ export default {
         // }
 
       ]
-    }
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   computed: {
     ...mapGetters({
-        defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
-        tokenUserInf:USER.GET_TOKEN_USER,
-        saleInfo: USER.GET_SALE
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
+      tokenUserInf: USER.GET_TOKEN_USER,
+      saleInfo: USER.GET_SALE
     })
   },
   methods: {
-      async getList() {
-        let a = 0
-        a = `${this.saleInfo.customerCode}_admin`
-      
-        console.log(a)
-        const { code, data } = await this.messageService.page(this.jshUtil.genQueryStringByObj({
-          title: '',
-          customerCode: Number(this.saleInfo.customerCode),
-          pageNum: 1,
-          pageSize: 10,
-          type: '',
-          creatorDept: '',
-          publishTimeStr: '',
-          unitId: a 
-        }));
-        if (code === '1') {
+    async getList() {
+      let a = 0;
+      a = `${this.saleInfo.customerCode}_admin`;
 
-            data.list.map(item => {
-                item.img = require('@/assets/img/index/new-pic.png')
-               
-            })
-            console.log(data);
-            this.list = data.list
-        }
+      console.log(a);
+      const { code, data } = await this.messageService.page(this.jshUtil.genQueryStringByObj({
+        title: '',
+        customerCode: Number(this.saleInfo.customerCode),
+        pageNum: 1,
+        pageSize: 10,
+        type: '',
+        creatorDept: '',
+        publishTimeStr: '',
+        unitId: a
+      }));
+      if (code === '1') {
+        data.list.map((item) => {
+          item.img = require('@/assets/img/index/new-pic.png');
+        });
+        console.log(data);
+        this.list = data.list;
       }
+    },
+    goInfoDetail(item) {
+      console.log(item);
+      uni.navigateTo({
+        url: `/pages/index/information?id=${item.id}`
+      });
+    }
   }
-    
-}
+
+};
 </script>
 <style scoped>
 .announcement {
@@ -117,7 +121,7 @@ export default {
 .announcement-con-row {
   display: flex;
   margin-bottom: 22px;
-  
+
 }
 .announcement-con-row-at {
   width: 84px;
@@ -155,7 +159,7 @@ export default {
 .announcement-con-img {
   width: 654px;
   height: 160px;
- 
+
 }
 image {
     width: 100%;

@@ -243,7 +243,6 @@ export default {
     this.productQueryInter();// 产品是否关注
     this.productStock();// 获取数量页面的库存字段
     this.getDeliveryAddress();// 获取配送地址列表
-
   },
   methods: {
     ...mapMutations([
@@ -534,7 +533,7 @@ export default {
             this.flash.graborders.forEach((lis) => {
               lis.endTime = lis.endTime.split(' ')[0];
               const a = {
-                titleLe: '抢单',
+                titleLe: '反向定制',
                 name: lis.description,
                 time: lis.endTime,
                 num: lis.availableQuantity,
@@ -702,7 +701,7 @@ export default {
     putcar() {
       if (this.CheckActivityInfo === '') { // 没选活动
         if (this.detailInfo.flashSales.length > 0) { // 有抢单
-          this.jiaGou1('PT', 3);
+          this.jiaGou1('PT', this.flash.graborders[0].activityType);
         } else {
           this.jiaGou1('PT', 1);
         }
@@ -740,10 +739,14 @@ export default {
     async jiaGou1(pt, num1) { // 加入购物车
       // this.CheckActivityInfo
       let stockV = '';
+      let activityId = '';
+      console.log(this.CheckActivityInfo);
       if (pt === 'PT') {
         stockV = this.CheckActivityInfo.name;
+        activityId = this.flash.graborders[0].id;
       } else {
         stockV = '';
+        activityId = '';
       }
 
       const product = [{ priceType: pt,
@@ -758,6 +761,7 @@ export default {
         productList: product, // 产品编码
         saletoCode: this.userInf.customerCode, // 售达方编码,
         sendtoCode: this.addressInfo.id, // 送达方编码
+        activityId
       });
       if (code === '1') {
         this.getShoppingCartList();
