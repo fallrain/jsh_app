@@ -144,6 +144,7 @@ export default {
     margin-top: 12px;
     margin-bottom: 2px;
     padding-left: 36px;
+    flex-wrap: wrap;
   }
 
   .jOveragePay-cnt-item-total-text {

@@ -16,6 +16,7 @@
         v-for="(orderItem,index) in dataInfo.composeProductList"
         :key="index"
         :index="index"
+        :tctpSwitch="tctpSwitch"
         @change="goodsChange"
         @payerMoneyInfo="dealPayerMoneyInfo"
         :orderItem="orderItem"
@@ -123,6 +124,7 @@ export default {
   },
   data() {
     return {
+      tctpSwitch: false,
       totalMoney: 0,
       productGroups: [],
       billInfoList: [],
@@ -192,7 +194,7 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
-      debugger
+      debugger;
       const obj = this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0];
       obj.address = remarksData.address;
       obj.area = remarksData.area;
@@ -244,9 +246,10 @@ export default {
         if (!state) {
           money += item.totalMoney;
         } else {
-          money += item.totalPreAmount;
+          money += 0;
         }
       });
+      console.log(money);
       this.totalMoney = Number(money).toFixed(2);
     },
     async onLoadInit() {
@@ -298,6 +301,15 @@ export default {
         this.getTotal(this.dataInfo);
       }
     },
+    // 查询统仓统配白名单
+    async tctpSwitch() {
+      const { code } = await this.orderService.getTctpSwitch();
+      if (code === '1') {
+        this.tctpSwitch = true;
+      } else {
+        this.tctpSwitch = false;
+      }
+    },
     dealPayerMoneyInfo(payerMoneyInfoItem) {
       this.totalPayerMoneyInfo = {
         ...this.totalPayerMoneyInfo,
@@ -311,13 +323,20 @@ export default {
         // 重新计算你不同订单付款数量
         const orderNo = k;
         let money = 0;
+
         this.dataInfo.composeProductList.forEach((item) => {
           item.splitOrderDetailList.forEach((v) => {
             if (v.orderNo === orderNo) {
               if (item.totalPreState === true) {
                 money += 0;
               } else {
-                money += v.totalMoney;
+                if ((v.stockTypeName === '周承诺' && item.crowdFundingFlag === '1')
+                  || (v.stockTypeName === '款先直发' && item.crowdFundingFlag === '1')
+                ) {
+                  money += v.preAmount;
+                } else {
+                  money += v.totalMoney;
+                }
               }
             }
           });
@@ -466,9 +485,24 @@ export default {
     },
     // 提交订单
     async submitOrder() {
+      if (!this.formSubmit.bestSignVerifyCodeDto.verifyCode) {
+        uni.showToast({
+          title: '请输入验证码',
+          icon: 'none'
+        });
+        return;
+      }
+
       debugger;
       console.log(this.payerMoneyList);
       let state = true;
+      if (this.payerMoneyList.length === 0) {
+        uni.showToast({
+          title: '未查询到余额信息，请重新下单',
+          icon: 'none'
+        });
+        return;
+      }
       this.payerMoneyList.forEach((item) => {
         if (Number(item.balance) < Number(item.totalMoney)
           && Number(item.bookbalance) < Number(item.totalMoney)
@@ -552,9 +586,15 @@ export default {
               console.log(res);
               _this.goIndex();
             } else if (res.cancel) {
+              _this.goIndex();
               console.log('用户点击取消');
             }
           }
+        });
+      } else {
+        uni.showToast({
+          title: data.msg,
+          icon: 'none'
         });
       }
     },

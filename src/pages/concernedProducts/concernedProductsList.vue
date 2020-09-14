@@ -28,15 +28,18 @@
     </view>
     <view class="goodsList-items-wrap">
       <j-goods-item
-        :allPrice="item.$allPrice"
+        :allPrice="item.$allPrice || {}"
         :goods="item"
         :index="index"
         :isEditMode="isEdit"
         :key="item.productCode"
         :saletoCode="userInf.customerCode"
         :sendtoCode="defaultSendToInf.customerCode"
+        :isShowFollow="false"
+        :userInf="userInf"
         @change="goodsChange"
         @check="checkGoods"
+        @delFollow="delFollow"
         v-for="(item,index) in list"
       ></j-goods-item>
     </view>
@@ -63,7 +66,10 @@
             </view>
             <i class="iconfont iconyou goodsList-drawer-filter-head-icon-right"></i>
           </view>
-          <view class="goodsList-drawer-filter-head-ads">{{curChoseDeliveryAddress.name}}</view>
+          <view
+            @tap="showDeliveryAddress"
+            class="goodsList-drawer-filter-head-ads"
+          >{{curChoseDeliveryAddress.name}}</view>
         </view>
       </template>
     </j-drawer>
@@ -133,18 +139,18 @@ export default {
       isShowGoodsFilterDrawer: false,
       // 筛选抽屉数据
       filterList: [
-        {
-          name: '品牌',
-          isExpand: true,
-          type: 'radio',
-          data: []
-        },
-        {
-          name: '产业',
-          isExpand: true,
-          type: 'radio',
-          data: []
-        }
+        // {
+        //   name: '品牌',
+        //   isExpand: true,
+        //   type: 'radio',
+        //   data: []
+        // },
+        // {
+        //   name: '产业',
+        //   isExpand: true,
+        //   type: 'radio',
+        //   data: []
+        // }
       ],
       // 筛选栏表单
       filterForm: {
@@ -153,7 +159,13 @@ export default {
       },
       // 选中的产品codes
       choseProductCodes: new Set(),
-      brand: {}
+      brand: {},
+      // 是否是从编辑删除
+      delFromEdit: true,
+      // 当前选中要删的商品
+      curDelGoods: {},
+      // 前面的搜索参数
+      preSearchCondition: {}
     };
   },
   created() {
@@ -173,45 +185,51 @@ export default {
     ...mapActions([
       USER.UPDATE_DEFAULT_SEND_TO_ASYNC
     ]),
-    async queryCustomerInterestProduct() {
-      /* 列表数据 */
-      const { data } = await this.customerService.queryCustomerInterestProduct({
+    getSearchCondition() {
+      /* 组合搜索参数 */
+      return {
         account: this.userInf.customerCode,
         sendtoCode: this.defaultSendToInf.customerCode,
         customerCode: this.userInf.customerCode,
         ...this.filterForm
-      });
-
+      };
+    },
+    async queryCustomerInterestProduct() {
+      /* 列表数据 */
+      const condition = this.getSearchCondition();
+      const { data } = await this.customerService.queryCustomerInterestProduct(condition);
+      this.preSearchCondition = condition;
       if (data) {
-        this.brands = data;
-        const brand = Object.keys(data.brandMap);
-        const brandValue = Object.values(data.brandMap);
-        const industry = Object.keys(data.industryMap);
-        const industryValue = Object.values(data.industryMap);
-        const brandMap = [];
-        const industryMap = [];
-        brand.map((item) => {
-          brandMap.push({
-            value: item,
-            isChecked: false
-          });
-        });
-        // brand[0] = `${brand[0]}(${brandValue[0]})`;
-        console.log(brand);
-        industry.map((item) => {
-          industryMap.push({
-            value: item,
-            isChecked: false
-          });
-        });
-        this.filterList[0].data = brandMap;
-        this.filterList[1].data = industryMap;
-        console.log(this.filterList);
         const {
           // 商品列表
           productList
         } = data;
         const curList = productList;
+        this.list = curList || [];
+        // this.brands = data;
+        // const brand = Object.keys(data.brandMap);
+        // const brandValue = Object.values(data.brandMap);
+        // const industry = Object.keys(data.industryMap);
+        // const industryValue = Object.values(data.industryMap);
+        // const brandMap = [];
+        // const industryMap = [];
+        // brand.map((item) => {
+        //   brandMap.push({
+        //     value: item,
+        //     isChecked: false
+        //   });
+        // });
+        // // brand[0] = `${brand[0]}(${brandValue[0]})`;
+        // console.log(brand);
+        // industry.map((item) => {
+        //   industryMap.push({
+        //     value: item,
+        //     isChecked: false
+        //   });
+        // });
+        // this.filterList[0].data = brandMap;
+        // this.filterList[1].data = industryMap;
+        // console.log(this.filterList);
         // ** 组合下面2个接口所需的数据
         const {
           userInf,
@@ -248,9 +266,6 @@ export default {
             v.$stock = stockData[v.productCode];
           });
         }
-
-        this.list = productList || [];
-        console.log(this.list);
       }
     },
     goodsChange(goods, index) {
@@ -268,6 +283,12 @@ export default {
     filterConfirm() {
       /* 抽屉筛选确认 */
       // 重新搜索
+      const condition = this.getSearchCondition();
+      const difKeys = this.jshUtil.findDifKey(this.preSearchCondition, condition);
+      // 没有不同则直接返回
+      if (!Object.keys(difKeys).length) {
+        return;
+      }
       this.queryCustomerInterestProduct();
     },
     filterReset() {
@@ -290,6 +311,7 @@ export default {
         if (code === '1') {
           // 配送地址列表
           this.deliveryAddressList = data.map(v => ({
+            ...v,
             id: v.customerCode,
             name: `(${v.customerCode})${v.address}`
           }));
@@ -313,6 +335,15 @@ export default {
       /* 地址数据改变 */
       this.deliveryAddressList = list;
       this.curChoseDeliveryAddress = item;
+      // 更改默认的送达方
+      this.customerService.changeDefaultSendTo({
+        sendToCode: item.customerCode
+      }).then(({ code }) => {
+        if (code === '1') {
+          // 更改成功之后更新store
+          this[USER.UPDATE_DEFAULT_SEND_TO](item);
+        }
+      });
     },
     editModeChange(state) {
       /* 编辑模式改变 */
@@ -329,24 +360,42 @@ export default {
     },
     checkAll(isCheckedAll) {
       /* 选中所有 */
+      if (!isCheckedAll) {
+        this.choseProductCodes.clear();
+      }
       this.list.forEach((v) => {
         this.$set(v, 'isChecked', isCheckedAll);
+        if (isCheckedAll) {
+          this.choseProductCodes.add(v.productCode);
+        }
       });
+    },
+    delFollow(goods) {
+      /* 删除（取消关注） */
+      this.delFromEdit = false;
+      this.curDelGoods = goods;
+      this.$refs.popup.open();
     },
     removeProduct() {
       if (this.choseProductCodes.size) {
+        this.delFromEdit = true;
         this.$refs.popup.open();
       }
     },
     async removeProductConfirm() {
       /* 移除关注 */
+      let productCodeList;
+      if (this.delFromEdit) {
+        productCodeList = [...this.choseProductCodes];
+      } else {
+        productCodeList = [this.curDelGoods.productCode];
+      }
+
       this.$refs.popup.close();
       const { code } = await this.customerService.removeInterestProduct({
         customerCode: this.userInf.customerCode,
         account: this.userInf.customerCode,
-        productCodeList: [
-          ...this.choseProductCodes
-        ]
+        productCodeList
       });
         // 删除成功，删除数组
       if (code === '1') {
@@ -355,7 +404,7 @@ export default {
           content: '取消关注成功',
           timeout: 2000,
         });
-        this.delItemByProductCodes(this.choseProductCodes);
+        this.delItemByProductCodes(productCodeList);
       }
     },
     delItemByProductCodes(choseProductCodes) {
@@ -368,6 +417,10 @@ export default {
         }
       });
       this.list = list;
+      // 如果是编辑模式的删除，则清空
+      if (this.delFromEdit) {
+        this.choseProductCodes.clear();
+      }
     },
   }
 };
