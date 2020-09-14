@@ -303,6 +303,7 @@ status: "正常" -->
         v-for="(item,auxiliaryIndex) in payerBalanceList"
       >
         <view class="block">
+          <view style="height:10px"></view>
           <view class="secondPageTitle">
             <view
               class="myGuestView-sign-inf-tag mr12"
@@ -310,6 +311,7 @@ status: "正常" -->
             >默认</view>
             {{item.customerName}}
           </view>
+          <view style="height:10px"></view>
           <view class="breakLine"></view>
           <view class="firstItem">
             <view class="firstPageLeft">付款方编码</view>
@@ -582,11 +584,12 @@ export default {
       const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status,this.userInf.salesGroupCode);
       if (code === '1') {
         // this.accountTotal = 0;
-        // for (let index = 0; index < data.length; index++) {
-        //     const element = data[index];
-        //     this.accountTotal = this.accountTotal + element.
-        // }
-        this.auxiliary = data;
+        this.auxiliary = [];
+        for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            element.balance = 0.00;
+            this.auxiliary.push(element)
+        }
         this.payerBalanceListFun(data)
         console.log(data);
       }
@@ -602,9 +605,9 @@ export default {
             var itme = this.auxiliary[index];
             if(data[index]) {
               itme.balance = data[index].balance;
-              this.payerBalanceList.push(itme)
-              console.log(this.payerBalanceList)
-            }
+            } 
+            this.payerBalanceList.push(itme)
+            console.log(this.payerBalanceList)
           }
         }
       }
