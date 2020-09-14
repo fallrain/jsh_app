@@ -758,7 +758,7 @@ export default {
               this.choseSendAddress = {
                 yunCangCode: detail.id,
                 yunCangFlag: detail.yunCangFlag,
-                name: detail.name,
+                name: `（异地云仓）${detail.name}`,
               };
               this.showToast({
                 type: 'warn',
