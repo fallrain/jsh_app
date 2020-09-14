@@ -172,6 +172,7 @@ export default {
         isSaleLe: false,
         isflash: false //抢单数量为0时置灰
       },
+      activityId: '',
       ISGUANZHU: false, // 商品关注
       detailInfo: [], // 商品信息
       tabs: [
@@ -479,6 +480,7 @@ export default {
             list: []
           };
           console.log('wwwwwwwwwwwwwwwww', this.flash);
+          this.activityId = this.flash.graborders[0].id;
           if (this.flash.graborders && this.flash.graborders.length > 0) {
             this.flash.graborders.forEach((lis) => {
               lis.endTime = lis.endTime.split(' ')[0];
@@ -729,14 +731,13 @@ export default {
     async jiaGou1(pt, num1) { // 加入购物车
       // this.CheckActivityInfo
       let stockV = '';
-      let activityId = '';
+      // let activityId = '';
       console.log(this.CheckActivityInfo);
       if (pt === 'PT') {
         stockV = this.CheckActivityInfo.name;
-        activityId = this.flash.graborders[0].id;
+        // activityId = this.flash.graborders[0].id;
       } else {
         stockV = '';
-        activityId = '';
       }
 
       const product = [{ priceType: pt,
@@ -751,7 +752,7 @@ export default {
         productList: product, // 产品编码
         saletoCode: this.userInf.customerCode, // 售达方编码,
         sendtoCode: this.addressInfo.id, // 送达方编码
-        activityId
+        activityId: this.activityId
       });
       if (code === '1') {
         this.getShoppingCartList();
