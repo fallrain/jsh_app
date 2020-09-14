@@ -144,6 +144,7 @@
     <u-modal
       title="海尔产品反向定制协议"
       v-model="isShowSignModel"
+      :confirm-text="protocolConfirmText"
     >
       <scroll-view
         class="shoppingCart-protocol"
@@ -268,7 +269,9 @@ export default {
       // 是否显示反向定制签约协议
       isShowSignModel: false,
       // 反向定制签约信息
-      signedInf: {}
+      signedInf: {},
+      // 签约信息确定按钮文字
+      protocolConfirmText: ''
     };
   },
   created() {
@@ -1241,6 +1244,14 @@ export default {
       });
       this.customerService.sign({
         sendtoCode: this.userInf.customerCode
+      }).then(({ code, data }) => {
+        if (code === '1') {
+          this.protocolConfirmText = {
+            0: '请到签章系统签章',
+            1: '等待海尔盖章',
+            2: '已签约'
+          }[data] || '确定';
+        }
       });
     }
   }
