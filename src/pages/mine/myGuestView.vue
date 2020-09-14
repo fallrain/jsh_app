@@ -258,8 +258,8 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">状态</view>
-            <view class="tag" v-if="item.deletedFlag === 1">
-              不正常
+            <view class="tag" v-if="item.deletedFlag == 'true'">
+              冻结
             </view>
             <view class="tag" v-else>
               正常
