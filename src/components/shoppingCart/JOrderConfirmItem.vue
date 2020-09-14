@@ -38,10 +38,10 @@
         </view>
         <view class="jOrderConfirmItem-detail-match-type">
           <j-switch
+            :beforeChange="()=>{return false}"
             v-if="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             inf="信用模式"
-            @change="isCreditModeChange"
           ></j-switch>
           <j-switch
             v-if="goods.isTCTP&&tctpSwitch"
