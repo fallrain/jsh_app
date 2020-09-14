@@ -404,7 +404,7 @@ export default {
       // 自有渠道才有版本调货
       if (this.userInf.channelGroup === 'ZY') {
         // oms调货版本信息
-        if (omsSamples && omsSamples.length) {
+        if (omsSamples && omsSamples.length && pt) {
           const version = {
             id: 'transfer',
             title: 'OMS调货',

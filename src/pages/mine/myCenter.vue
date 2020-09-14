@@ -271,7 +271,7 @@ export default {
       this.getUserInfoByToken();
       this.getSaleInfo();
       // this.auxiliaryFun('2110', '1');
-      this.outstandingAmountFun();
+      // this.outstandingAmountFun();
     },
     async getUserInfoByToken() {
       /* 获取token用户信息 */
