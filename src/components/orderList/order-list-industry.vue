@@ -47,7 +47,7 @@ export default {
     position: absolute;
   }
   .order_more{
-    margin-left: -20px;
+    margin-left: 10px;
     position: absolute;
     z-index: 100;
     margin-top: -18px;

@@ -132,6 +132,8 @@ export default {
     silentReSearch() {
       /* 静默搜索 */
       // this.mescroll.resetUpScroll(true);
+      this.name = this.name.replace(/\s*/g, '');
+      // console.log(this.name);
       if ((this.name).trim()) {
         uni.navigateTo({
           url: `/pages/goods/goodsList?name=${this.name}`
