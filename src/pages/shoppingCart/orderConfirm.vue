@@ -256,6 +256,7 @@ export default {
       await this.splitOrder();
       await this.getPayInfo();
       await this.getUserInfById();
+      await this.getTctpSwitch();
       this.billInfoList = [];
       this.productGroups.forEach((item) => {
         this.getBillInfo(item);
@@ -302,7 +303,7 @@ export default {
       }
     },
     // 查询统仓统配白名单
-    async tctpSwitch() {
+    async getTctpSwitch() {
       const { code } = await this.orderService.getTctpSwitch();
       if (code === '1') {
         this.tctpSwitch = true;
