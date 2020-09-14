@@ -28,11 +28,12 @@
     </view>
     <view class="goodsList-items-wrap">
       <j-goods-item
-        :allPrice="item.$allPrice || {}"
+        :allPrice="item.$allPrice"
+        :key="item.productCode"
+        v-for="(item,index) in list"
         :goods="item"
         :index="index"
         :isEditMode="isEdit"
-        :key="item.productCode"
         :saletoCode="userInf.customerCode"
         :sendtoCode="defaultSendToInf.customerCode"
         :isShowFollow="false"
@@ -40,8 +41,11 @@
         @change="goodsChange"
         @check="checkGoods"
         @delFollow="delFollow"
-        v-for="(item,index) in list"
       ></j-goods-item>
+      <j-exception-page
+        :type="3"
+        v-if="!list.length && isLoaded"
+      ></j-exception-page>
     </view>
     <j-drawer
       :show.sync="isShowGoodsFilterDrawer"
@@ -109,10 +113,12 @@ import {
   mapGetters,
   mapMutations
 } from 'vuex';
+import JExceptionPage from '../../components/exception/JExceptionPage';
 
 export default {
   name: 'concernedProductsList',
   components: {
+    JExceptionPage,
     MToast,
     JChooseDeliveryAddress,
     JDrawerFilterItem,
@@ -165,7 +171,8 @@ export default {
       // 当前选中要删的商品
       curDelGoods: {},
       // 前面的搜索参数
-      preSearchCondition: {}
+      preSearchCondition: {},
+      isLoaded: false
     };
   },
   created() {
@@ -198,14 +205,21 @@ export default {
       /* 列表数据 */
       const condition = this.getSearchCondition();
       const { data } = await this.customerService.queryCustomerInterestProduct(condition);
+      this.isLoaded = true;
       this.preSearchCondition = condition;
       if (data) {
         const {
           // 商品列表
           productList
         } = data;
-        const curList = productList;
-        this.list = curList || [];
+        const curList = productList.map(v => ({
+          ...v,
+          number: 1,
+          $PtPrice: {},
+          $allPrice: {},
+          $stock: {}
+        }));
+        this.list = curList;
         // this.brands = data;
         // const brand = Object.keys(data.brandMap);
         // const brandValue = Object.values(data.brandMap);
@@ -266,6 +280,8 @@ export default {
             v.$stock = stockData[v.productCode];
           });
         }
+      } else {
+        this.list = [];
       }
     },
     goodsChange(goods, index) {
