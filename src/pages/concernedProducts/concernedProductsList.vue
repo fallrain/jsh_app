@@ -86,13 +86,6 @@
       :isdistance="true"
       ref="toast"
     ></m-toast>
-    <uni-popup ref="popup" type="dialog">
-      <uni-popup-dialog
-        @confirm="removeProductConfirm"
-        content="是否确认取消关注"
-        type="warn"
-      ></uni-popup-dialog>
-    </uni-popup>
   </view>
 </template>
 
@@ -390,12 +383,23 @@ export default {
       /* 删除（取消关注） */
       this.delFromEdit = false;
       this.curDelGoods = goods;
-      this.$refs.popup.open();
+      this.showPop();
+    },
+    showPop() {
+      uni.showModal({
+        title: '',
+        content: '是否确认取消关注？',
+        success: (res) => {
+          if (res.confirm) {
+            this.removeProductConfirm();
+          }
+        }
+      });
     },
     removeProduct() {
       if (this.choseProductCodes.size) {
         this.delFromEdit = true;
-        this.$refs.popup.open();
+        this.showPop();
       }
     },
     async removeProductConfirm() {
@@ -407,7 +411,6 @@ export default {
         productCodeList = [this.curDelGoods.productCode];
       }
 
-      this.$refs.popup.close();
       const { code } = await this.customerService.removeInterestProduct({
         customerCode: this.userInf.customerCode,
         account: this.userInf.customerCode,
@@ -418,7 +421,7 @@ export default {
         this.$refs.toast.open({
           type: 'success',
           content: '取消关注成功',
-          timeout: 2000,
+          timeout: 200000,
         });
         this.delItemByProductCodes(productCodeList);
       }

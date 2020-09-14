@@ -27,69 +27,69 @@
               v-else></view>
       </view>
       <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
-        <view class="text modeller">
+        <view class="productDetail-text modeller">
           <image v-if="detailInfo.isScf==='1'" src="../../assets/img/orderDetail/rongZi.png" style="width:20px;height:20px;"></image>
           {{detailInfo.product.productName}}
         </view>
       </view>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">编&nbsp;&nbsp;&nbsp;码：{{detailInfo.product.productCode}}</view>
-        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">型&nbsp;&nbsp;&nbsp;号：{{detailInfo.product.productDescribe}}</view>
+        <view class="productDetail-text col-40 smaller" style="-webkit-flex: 1;flex: 1;">编&nbsp;&nbsp;&nbsp;码：{{detailInfo.product.productCode}}</view>
+        <view class="productDetail-text smaller" style="-webkit-flex: 1;flex: 1;">型&nbsp;&nbsp;&nbsp;号：{{detailInfo.product.productDescribe}}</view>
       </view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">供&nbsp;&nbsp;&nbsp;价：￥{{detailInfo.price.supplyPrice}}</view>
-        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">台&nbsp;&nbsp;&nbsp;返：{{detailInfo.price.rebateMoney}}</view>
+        <view class="productDetail-text col-40 smaller" style="-webkit-flex: 1;flex: 1;">供&nbsp;&nbsp;&nbsp;价：￥{{detailInfo.price.supplyPrice}}</view>
+        <view class="productDetail-text smaller" style="-webkit-flex: 1;flex: 1;">台&nbsp;&nbsp;&nbsp;返：{{detailInfo.price.rebateMoney}}</view>
       </view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">返&nbsp;&nbsp;&nbsp;利：
+        <view class="productDetail-text col-40 smaller" style="-webkit-flex: 1;flex: 1;">返&nbsp;&nbsp;&nbsp;利：
           <span v-if="detailInfo.price.rebatePolicy===0">COM</span>
           <span v-else-if="detailInfo.price.rebatePolicy===1">BF</span>
           <span v-else-if="detailInfo.price.rebatePolicy===2">FHQ</span>
           <span v-else-if="detailInfo.price.rebatePolicy===5">BZK</span>
         </view>
-        <view class="text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：{{detailInfo.price.rebateRate}}%</view>
+        <view class="productDetail-text smaller" style="-webkit-flex: 1;flex: 1;">直扣率：{{detailInfo.price.rebateRate}}%</view>
       </view>
       <view class="uni-flex uni-row padding-8">
-        <view class="text col-40 smaller" style="-webkit-flex: 1;flex: 1;">品&nbsp;&nbsp;&nbsp;牌：{{detailInfo.product.productBrand}}</view>
+        <view class="productDetail-text col-40 smaller" style="-webkit-flex: 1;flex: 1;">品&nbsp;&nbsp;&nbsp;牌：{{detailInfo.product.productBrand}}</view>
       </view>
       <view v-show="ActListInfo.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
-        <view class="col text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
-        <view class="col-70 text">
+        <view class="col productDetail-text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
+        <view class="col-70 productDetail-text">
           <view :key="ack" @click="showAct" class="smaller product-detail-lei2" v-for="ack in ActListInfo">{{ack}}
           </view>
         </view>
-        <view class="col-10 text smaller">
+        <view class="col-10 productDetail-text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
       <view v-show="ActListInfo.length>0" v-else class="uni-flex uni-row padding-8">
-        <view class="col text smaller">活&nbsp;动：</view>
-        <view class="col-70 text" @click="showAct">
+        <view class="col productDetail-text smaller">活&nbsp;动：</view>
+        <view @click="showAct" class="col-70 productDetail-text">
           <view class="smaller product-detail-lei3">{{CheckActivityInfo.title}}</view>
         </view>
-        <view class="col-10 text smaller">
+        <view class="col-10 productDetail-text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
        <pro-com-act :info="ActInfo" :show.sync="isShowAct" @getNum="getProductDetail" @isCheckAct="checkedAct"></pro-com-act>
       <view class="lineHigt"></view>
       <view class="uni-flex uni-row padding-8">
-        <view class="col text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
-        <view class="col-70 text" @click="showNum">
+        <view class="col productDetail-text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
+        <view @click="showNum" class="col-70 productDetail-text">
           <view class="smaller">{{productNum}}件</view>
         </view>
-        <view class="col-10 text smaller">
+        <view class="col-10 productDetail-text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
       <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo" @checkedNum="checkedNum($event, item)"></pro-com-num>
       <view class="uni-flex uni-row padding-8">
-        <view class="col text smaller">配送至：</view>
-        <view class="col-70 text" @click="showShip('OPEN')">
+        <view class="col productDetail-text smaller">配送至：</view>
+        <view @click="showShip('OPEN')" class="col-70 productDetail-text">
           <view class="smaller">{{ShipInfo}}</view>
         </view>
-        <view class="col-10 text smaller">
+        <view class="col-10 productDetail-text smaller">
           <view class="text-center iconfont iconyou"></view>
         </view>
       </view>
@@ -146,7 +146,7 @@ import {
 } from '../../store/mutationsTypes';
 
 export default {
-  name: 'ProductDetail',
+  name: 'productDetail',
   components: {
     proComNum,
     proComAct,
