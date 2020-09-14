@@ -100,5 +100,8 @@ export default {
     return jGet(urls.sign, {
       sendtoCode
     });
-  }
+  },
+  relations(userId) {
+    return jGet(urls.relations(userId));
+  },
 };

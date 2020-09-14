@@ -40,7 +40,11 @@ const urls = {
   // 签约信息
   signedInf: '/rrsCrowdftoUnit/signPage',
   // 签约
-  sign: '/rrsCrowdftoUnit/signed'
+  sign: '/rrsCrowdftoUnit/signed',
+  // 设置默认
+  relations(userId) {
+    return `/customers/auxiliary/relations/${userId}/default`;
+  }
 };
 util.addPrefix(baseURL, urls);
 export default urls;
