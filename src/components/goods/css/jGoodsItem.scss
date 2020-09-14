@@ -65,9 +65,9 @@
   padding: 10px;
   flex-shrink: 0;
 
-  image {
-    width: 100%;
-    height: 100%;
+  .u-lazy-item {
+    width: 200px !important;
+    height: 208px !important;
   }
 
   .jGoodsItem-left-float {
