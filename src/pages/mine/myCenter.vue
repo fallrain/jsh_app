@@ -45,7 +45,7 @@
 	  <view class="myOrderRow">
 	    <view class="colorBlock"></view>
 	    <view class="orderTitle">我的订单</view>
-	    <view class="allOrder" @click="goAllOrder">全部订单</view>
+	    <!-- <view class="allOrder" @click="goAllOrder">全部订单</view> -->
 	  </view>
 	  
 	  <view class="order-cataloglist">
@@ -151,6 +151,13 @@ export default {
       // 返利
       outstandingAmount: 0,
       cataloglist: [
+        {
+          id: 0,
+          src: require('./image/all.png'),
+          title: '全部订单',
+          url: '/pages/orderList/orderList',
+          sex: 0,
+        },
         {
           id: 1,
           src: require('./image/jiesuan.png'),
