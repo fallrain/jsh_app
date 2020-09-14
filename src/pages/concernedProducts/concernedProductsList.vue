@@ -35,8 +35,11 @@
         :key="item.productCode"
         :saletoCode="userInf.customerCode"
         :sendtoCode="defaultSendToInf.customerCode"
+        :isShowFollow="false"
+        :userInf="userInf"
         @change="goodsChange"
         @check="checkGoods"
+        @delFollow="delFollow"
         v-for="(item,index) in list"
       ></j-goods-item>
     </view>
@@ -152,7 +155,11 @@ export default {
         productName: '',
       },
       // 选中的产品codes
-      choseProductCodes: new Set()
+      choseProductCodes: new Set(),
+      // 是否是从编辑删除
+      delFromEdit: true,
+      // 当前选中要删的商品
+      curDelGoods: {}
     };
   },
   created() {
@@ -303,24 +310,42 @@ export default {
     },
     checkAll(isCheckedAll) {
       /* 选中所有 */
+      if (!isCheckedAll) {
+        this.choseProductCodes.clear();
+      }
       this.list.forEach((v) => {
         this.$set(v, 'isChecked', isCheckedAll);
+        if (isCheckedAll) {
+          this.choseProductCodes.add(v.productCode);
+        }
       });
+    },
+    delFollow(goods) {
+      /* 删除（取消关注） */
+      this.delFromEdit = false;
+      this.curDelGoods = goods;
+      this.$refs.popup.open();
     },
     removeProduct() {
       if (this.choseProductCodes.size) {
+        this.delFromEdit = true;
         this.$refs.popup.open();
       }
     },
     async removeProductConfirm() {
       /* 移除关注 */
+      let productCodeList;
+      if (this.delFromEdit) {
+        productCodeList = [...this.choseProductCodes];
+      } else {
+        productCodeList = [this.curDelGoods.productCode];
+      }
+
       this.$refs.popup.close();
       const { code } = await this.customerService.removeInterestProduct({
         customerCode: this.userInf.customerCode,
         account: this.userInf.customerCode,
-        productCodeList: [
-          ...this.choseProductCodes
-        ]
+        productCodeList
       });
         // 删除成功，删除数组
       if (code === '1') {
@@ -329,7 +354,7 @@ export default {
           content: '取消关注成功',
           timeout: 2000,
         });
-        this.delItemByProductCodes(this.choseProductCodes);
+        this.delItemByProductCodes(productCodeList);
       }
     },
     delItemByProductCodes(choseProductCodes) {
@@ -342,6 +367,10 @@ export default {
         }
       });
       this.list = list;
+      // 如果是编辑模式的删除，则清空
+      if (this.delFromEdit) {
+        this.choseProductCodes.clear();
+      }
     },
   }
 };

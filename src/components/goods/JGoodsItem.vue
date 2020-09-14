@@ -7,9 +7,15 @@
     >
     </view>
     <view
-      class="jGoodsItem-cnt-like"
+      :class="['jGoodsItem-cnt-like iconfont',goods.$favorite ? 'iconicon3':'iconshoucang1']"
+      v-if="isShowFollow"
       @tap="toggleFollow"
     ></view>
+    <view
+      @tap="handleDelFollow"
+      class="jGoodsItem-cnt-like jGoodsItem-cnt-del iconfont"
+      v-else
+    >x</view>
     <view
       class="jGoodsItem-left"
       @tap="goDetail"
@@ -160,6 +166,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 是否展示收藏
+    isShowFollow: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -671,6 +682,10 @@ export default {
       this.goods.$favorite = false;
       this.$emit('change', this.goods, this.index);
     },
+    handleDelFollow() {
+      /* 删除 */
+      this.$emit('delFollow', this.goods);
+    }
   }
 };
 </script>
