@@ -732,29 +732,40 @@ export default {
     },
     async orderList(e, pgNo) {
       console.log(pgNo);
-      let dingdan;
-      let zhengdan;
-      let gvs;
-      let wuliu;
-      let xinghao;
-      let bianhao;
-      if (this.orderTypeVue === '1') {
-        dingdan = this.serviNO.replaceAll(' ', '');
+      let dingdan = '';
+      let zhengdan = '';
+      let gvs = '';
+      let wuliu = '';
+      let xinghao = '';
+      let bianhao = '';
+      if (this.serviNO !== '') {
+        if (this.orderTypeVue === '1') {
+          console.log(this.serviNO);
+          dingdan = this.serviNO.replaceAll(' ', '');
+        }
+        if (this.orderTypeVue === '2') {
+          zhengdan = this.serviNO.replaceAll(' ', '');
+        }
+        if (this.orderTypeVue === '3') {
+          gvs = this.serviNO.replaceAll(' ', '');
+        }
+        if (this.orderTypeVue === '4') {
+          wuliu = this.serviNO.replaceAll(' ', '');
+        }
       }
-      if (this.orderTypeVue === '2') {
-        zhengdan = this.serviNO.replaceAll(' ', '');
+      if (this.addresseeInput !== '') {
+        if (this.orderModelValue === '1') {
+          xinghao = this.addresseeInput.replaceAll(' ', '');
+        }
+        if (this.orderModelValue === '2') {
+          bianhao = this.addresseeInput.replaceAll(' ', '');
+        }
       }
-      if (this.orderTypeVue === '3') {
-        gvs = this.serviNO.replaceAll(' ', '');
-      }
-      if (this.orderTypeVue === '4') {
-        wuliu = this.serviNO.replaceAll(' ', '');
-      }
-      if (this.orderModelValue === '1') {
-        xinghao = this.addresseeInput.replaceAll(' ', '');
-      }
-      if (this.orderModelValue === '2') {
-        bianhao = this.addresseeInput.replaceAll(' ', '');
+
+      console.log(this.songda)
+      let songda = '';
+      if (this.songda !== '') {
+        songda = this.songda.replaceAll(' ', '');
       }
 
       const param = {
@@ -783,7 +794,7 @@ export default {
         sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
         sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
         product_brand_all: this.producntBandValue,
-        jshi_sendto_code: this.songda.replaceAll(' ', ''),
+        jshi_sendto_code: songda,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: e,
