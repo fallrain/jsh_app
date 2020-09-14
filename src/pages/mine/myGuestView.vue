@@ -267,8 +267,8 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">是否默认</view>
-            <view class="firstPageRight" v-if="item.defaultFlag">取消默认设置</view>
-            <view class="firstPageRight" v-else>默认设置</view>
+            <view class="firstPageRight" v-if="item.defaultFlag">是</view>
+            <view @click="setDefaultAction" class="firstPageRight" v-else>设置为默认</view>
           </view>
           <view class="firstPageRightMore">{{item.address}}</view>
         </view>
@@ -601,6 +601,9 @@ export default {
         }
       }
     },
+    setDefaultAction() {
+
+    },
     tabClick(e) {
       /* 事件处理 */
       this.tabs = e;
@@ -685,7 +688,7 @@ export default {
     height: 60px;
     font-size: 28px;
     font-weight: 400;
-    color: #999;
+    color: rgba(237, 40, 86, 1);
     line-height: 50px;
     margin-right: 30px;
   }
