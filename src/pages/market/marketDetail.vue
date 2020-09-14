@@ -9,7 +9,7 @@
         <text>配送至：{{currentAdd.name}}</text>
         <view class="iconfont iconyou right-style"></view>
       </view>
-      <view class="marketDetail-orders br-b-grey">
+      <view v-if="currentDetail.activityType==='taocan'" class="marketDetail-orders br-b-grey">
         <view>
           <view><span class="text-theme fs36">{{limit1.choosedMainNum}}</span>件</view>
           <view>已选主产品</view>

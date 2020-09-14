@@ -355,6 +355,7 @@ export default {
         // 右侧筛选栏搜索数据
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
+          console.log(v);
           if (v.isChecked) {
             filtersMap[v.searchKey || v.key] = v[v.keyAttr] || 1;
           }
@@ -402,7 +403,7 @@ export default {
         popTabs.push(tab);
       });
       this.popTabs = popTabs;
-      console.log(this.popTabs);
+      // console.log(this.popTabs);
     },
     genFilterDataOfStock(categoryCode) {
       /* 组合有货商品，并选中 */
