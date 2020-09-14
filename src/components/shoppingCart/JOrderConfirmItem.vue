@@ -280,7 +280,7 @@ export default {
         let initcustomerCode = '';
         let offset = 0;
         this.payInfoData[key].forEach((item, index) => {
-          if (item.defaultFlag === '1') {
+          if (item.defaultFlag === '1' && item.isCanChecked) {
             initcustomerCode = item.customerCode;
             offset = index;
           }
@@ -290,7 +290,12 @@ export default {
         });
         if (initcustomerCode === '') {
           // 没有默认付款方选择第一条
-          initcustomerCode = this.payInfoData[key][0].customerCode;
+          this.payInfoData[key].forEach((item, index) => {
+            if (item.isCanChecked) {
+              initcustomerCode = item.customerCode;
+              offset = index;
+            }
+          });
         }
         // 设置付款列表
         this.$set(this.payerOptions, key, this.payInfoData[key]);
