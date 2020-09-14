@@ -38,10 +38,10 @@
         </view>
         <view class="jOrderConfirmItem-detail-match-type">
           <j-switch
+            :beforeChange="()=>{return false}"
             v-if="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             inf="信用模式"
-            @change="isCreditModeChange"
           ></j-switch>
           <j-switch
             v-if="goods.isTCTP&&tctpSwitch"
@@ -50,15 +50,15 @@
             @change="isCreditModeChange"
           ></j-switch>
           <j-switch
+            :beforeChange="()=>{return false}"
             v-if="goods.splitOrderProductList[0].isCheckKuanXian === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckKuanXian === '1'"
             inf="款先"
           ></j-switch>
           <j-switch
+            :beforeChange="()=>{return false}"
             v-if="goods.splitOrderProductList[0].farWeek === '1'"
-            :active.sync="goods.splitOrderProductList[0].isCheckFarWeek"
-            :stateMap="['1','0']"
-            @change="goodsChange"
+            :active.sync="goods.splitOrderProductList[0].isCheckFarWeek === '1'"
             inf="远周次"
           ></j-switch>
           <view class="jOrderConfirmItem-detail-match-type-text ml20">
@@ -280,7 +280,7 @@ export default {
         let initcustomerCode = '';
         let offset = 0;
         this.payInfoData[key].forEach((item, index) => {
-          if (item.defaultFlag === '1') {
+          if (item.defaultFlag === '1' && item.isCanChecked) {
             initcustomerCode = item.customerCode;
             offset = index;
           }
@@ -290,7 +290,12 @@ export default {
         });
         if (initcustomerCode === '') {
           // 没有默认付款方选择第一条
-          initcustomerCode = this.payInfoData[key][0].customerCode;
+          this.payInfoData[key].forEach((item, index) => {
+            if (item.isCanChecked) {
+              initcustomerCode = item.customerCode;
+              offset = index;
+            }
+          });
         }
         // 设置付款列表
         this.$set(this.payerOptions, key, this.payInfoData[key]);

@@ -15,12 +15,17 @@
       @tap="handleDelFollow"
       class="jGoodsItem-cnt-like jGoodsItem-cnt-del iconfont"
       v-else
-    >x</view>
+    >x
+    </view>
     <view
       class="jGoodsItem-left"
       @tap="goDetail"
     >
-      <image :src="goods.image.masterImage"></image>
+      <u-lazy-load
+        :error-img="errorImg"
+        :image="goods.image.masterImage"
+        height="208"
+      ></u-lazy-load>
       <image
         :src="tagImg"
         class="jGoodsItem-left-float"
@@ -31,7 +36,7 @@
       <view class="jGoodsItem-cnt-goodsName j-goods-title" @tap="goDetail">
         {{goods.productName | rmHtml}}
       </view>
-      <view class="jGoodsItem-cnt-price-tips"  @tap="goDetail">
+      <view class="jGoodsItem-cnt-price-tips">
         <view class="jGoodsItem-cnt-price-tips-item">
           直扣：{{jshUtil.arithmetic(goods.$PtPrice && goods.$PtPrice.rebateRate,100,3)}}%
         </view>
@@ -41,7 +46,7 @@
         <view class="jGoodsItem-cnt-price-tips-item">台返：{{goods.$PtPrice && goods.$PtPrice.rebateMoney}}
         </view>
       </view>
-      <view class="jGoodsItem-cnt-price-inf" @tap="goDetail">
+      <view class="jGoodsItem-cnt-price-inf">
         <view class="jGoodsItem-cnt-price">{{priceInf.invoicePrice? priceInf.invoicePrice: '价格即将公布敬请关注'}}</view>
         <view class="jGoodsItem-cnt-price-inf-item">供价：¥{{priceInf.supplyPrice || '--'}}
         </view>
@@ -103,6 +108,10 @@
       ref="toast"
       :isdistance="true"
     ></m-toast>
+    <image
+      :src="`${baseUrl}public/assets/img/goods/defaultImg.png`"
+      class="dis-none"
+    ></image>
   </view>
 </template>
 
@@ -174,6 +183,9 @@ export default {
   },
   data() {
     return {
+      baseUrl: process.env.BASE_URL,
+      // 错误图片
+      errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
       maxGoodsNumber: Number.MAX_VALUE,
       // 是否显示加入购物车按钮
       isShowAddCart: true,
