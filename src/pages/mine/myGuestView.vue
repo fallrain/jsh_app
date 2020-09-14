@@ -258,8 +258,8 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">状态</view>
-            <view class="tag" v-if="item.deletedFlag === 1">
-              不正常
+            <view class="tag" v-if="item.deletedFlag == 'true'">
+              冻结
             </view>
             <view class="tag" v-else>
               正常
@@ -298,7 +298,7 @@ status: "正常" -->
 
       <view
         :key="auxiliaryIndex"
-        v-for="(item,auxiliaryIndex) in auxiliary"
+        v-for="(item,auxiliaryIndex) in payerBalanceList"
       >
         <view class="block">
           <view class="secondPageTitle">
@@ -315,7 +315,7 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">帐户余额</view>
-            <view class="firstPageRightRed">¥ 2323.45</view>
+            <view class="firstPageRightRed">¥ {{item.balance}}</view>
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">是否默认</view>
@@ -404,6 +404,8 @@ export default {
       auxiliary: {},
       // 付款方账户总额
       accountTotal: '',
+      // 
+      payerBalanceList:[],
     };
   },
   created() {
@@ -577,7 +579,26 @@ export default {
         //     this.accountTotal = this.accountTotal + element.
         // }
         this.auxiliary = data;
+        this.payerBalanceListFun(data)
         console.log(data);
+      }
+    },
+     // 付款方余额
+    async payerBalanceListFun(param) {
+      console.log('payerBalanceList');
+      const { code, data } = await this.mineServer.payerBalanceList(param);
+      if (code === '1') {
+        this.payerBalanceList = [];
+        for(var index = 0;index < data.length ;index++) {
+          if(index < this.auxiliary.length) {
+            var itme = this.auxiliary[index];
+            if(data[index]) {
+              itme.balance = data[index].balance;
+              this.payerBalanceList.push(itme)
+              console.log(this.payerBalanceList)
+            }
+          }
+        }
       }
     },
     tabClick(e) {
