@@ -244,7 +244,9 @@ status: "正常" -->
           v-for="(item,customerIndex) in customers"
         >
           <view class="secondPageTitleConten">
+            <view style="height:10px"></view>
             <view class="secondPageTitle">{{item.customerName}}</view>
+            <view style="height:10px"></view>
           </view>
           <view class="breakLine"></view>
 
