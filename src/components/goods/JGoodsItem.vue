@@ -343,7 +343,7 @@ export default {
       let isGcOrYj = false;
       // 特价版本信息
       // isSale为false 无特价
-      if (isSale) {
+      if (isSale && tj) {
         const tjList = tj.specialList;
         if (tjList && tjList.length) {
           const tjVersion = {
@@ -364,7 +364,7 @@ export default {
         }
       }
       // 工程版本信息
-      if (gc.projectList && gc.projectList.length) {
+      if (gc && gc.projectList && gc.projectList.length) {
         const version = {
           id: 'gc',
           title: '工程版本',
@@ -432,7 +432,7 @@ export default {
       // 组合tags
       const tagsTemp = [
         ...this.goods.tags,
-        ...tags
+        ...(tags || [])
       ];
         // isSale为false时代表此商品有活动且不可版本外销售
         // 如果产品isSale为false，即使存在特价标签也不展示
