@@ -916,7 +916,7 @@ export default {
         if (item.active) {
           if (item.name === '整车直发') {
             uni.navigateTo({
-              url: '/pages/vehicleList/vehicleCarList'
+              url: '/pages/vehicleList/abnormal'
             });
           }
           if (item.name === '中心调货') {

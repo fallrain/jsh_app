@@ -222,7 +222,7 @@ export default {
   },
   mounted() {
     // 判断是否传统渠道
-    if(this.userInf.channelGroup == 'CT') {
+    if (this.userInf.channelGroup == 'CT') {
        uni.showModal({
           title: '提示',
           content: '当前客户无整车权限',
@@ -234,7 +234,7 @@ export default {
     ...mapMutations([
       USER.UPDATE_DEFAULT_SEND_TO
     ]),
-    async queSeq() { 
+    async queSeq() {
       const timetamp = new Date().valueOf();
       const typee = this.userInf.channelGroup;
       const { code, data } = await this.vehicleService.queryNewSeq(timetamp, typee);

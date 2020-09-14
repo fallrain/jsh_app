@@ -118,9 +118,10 @@ export default {
     hide() {
       this.$emit('update:show', false);
     },
-    search(val) {
+    search() {
       /* 搜索 */
       this.$u.throttle(() => {
+        const val = this.filterForm.name.trim();
         if (val === '') {
           this.listTemp = this.list;
           return;
@@ -134,7 +135,7 @@ export default {
           }
           return false;
         });
-      }, 500, false);
+      }, 250, false);
     }
   }
 };

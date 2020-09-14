@@ -6,7 +6,6 @@
           <view class="infomation-row-time">{{this.list.time}}</view>
         </view>
         <view class="infomation-con" v-html="this.list.content">
-
         </view>
     </view>
 </template>

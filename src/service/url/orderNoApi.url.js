@@ -30,6 +30,7 @@ const urls = {
     // 获取开票方信息
     return `/billInfo/get/billInfo/${sendtoCode}/${productGroup}`;
   },
+  getTctpSwitch: '/order/get/tctpSwitch', // 获取统仓统配白名单
 };
 util.addPrefix(baseURL, urls);
 export default urls;
