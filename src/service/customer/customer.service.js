@@ -104,4 +104,7 @@ export default {
   relations(userId) {
     return jGet(urls.relations(userId));
   },
+  fukuanRelations(code1,code2) {
+    return jGet(urls.fukuanRelations(code1,code2));
+  },
 };

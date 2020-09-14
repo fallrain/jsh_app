@@ -34,8 +34,8 @@ const urls = {
     return `/customers/${uid}/addresses/all`;
   },
   // 付款方列表
-  auxiliary(salesGroupCode, status) {
-    return `/customers/${salesGroupCode}/payer/all?sales&status=${status}`;
+  auxiliary(salesGroupCode, status,salesGroupCode2) {
+    return `/customers/${salesGroupCode}/payer/all?salesGroupCode=${salesGroupCode2}&status=${status}`;
   },
   // 付款方余额
   payerBalanceList() {

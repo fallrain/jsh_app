@@ -44,6 +44,9 @@ const urls = {
   // 设置默认
   relations(userId) {
     return `/customers/auxiliary/relations/${userId}/default`;
+  },
+  fukuanRelations(code1,code2) {
+    return `/customers/auxiliary/default/${code1}?salesGroupCode=${code2}`;
   }
 };
 util.addPrefix(baseURL, urls);

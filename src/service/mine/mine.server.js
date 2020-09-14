@@ -36,8 +36,8 @@ export default {
     return jGet(url.customers(uid,));
   },
   // 付款方列表
-  auxiliary(salesGroupCode, status) {
-    return jGet(url.auxiliary(salesGroupCode, status));
+  auxiliary(salesGroupCode, status,salesGroupCode2) {
+    return jGet(url.auxiliary(salesGroupCode, status,salesGroupCode2));
   },
   // 付款方余额
   payerBalanceList(param) {
