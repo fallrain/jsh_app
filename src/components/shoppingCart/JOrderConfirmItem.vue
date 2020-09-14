@@ -27,6 +27,11 @@
                 <view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">
                   *{{goods.splitOrderProductList[0].storeNum}}</view>
               </view>
+              <view v-if="(goods.stockTypeName === '周承诺'&&orderItem.crowdFundingFlag==='1')
+                        ||(goods.stockTypeName === '款先直发'&&orderItem.crowdFundingFlag==='1')"
+                    class="jOrderConfirmItem-detail-cnt-text">
+                预定金额：{{goods.preAmount}}
+              </view>
               <view class="jOrderConfirmItem-detail-cnt-text">预计到货时间：{{goods.planInDate}}</view>
             </view>
           </view>
@@ -39,7 +44,7 @@
             @change="isCreditModeChange"
           ></j-switch>
           <j-switch
-            v-if="goods.isTCTP"
+            v-if="goods.isTCTP&&tctpSwitch"
             :active.sync="goods.isTCTP"
             inf="统仓统配"
             @change="isCreditModeChange"
@@ -62,10 +67,10 @@
                   class="store-type">
               {{goods.whCode}}
             </view>
-            <view v-else class="dis-flex">
+            <!--<view v-else class="dis-flex">
               WD：
               <input v-model="WDval" type="text" class="WD-input">
-            </view>
+            </view>-->
           </view>
         </view>
         <view v-if="goods.splitOrderProductList[0].priceType === 'TJ'" class="text-theme">
@@ -126,7 +131,7 @@
       </view>
     </view>
     <view :class="['jOrderConfirmItem-total', isCT&&'bottom-20']">
-      <view class="dis-flex justify-sb">
+      <view class="dis-flex justify-sb flex-wrap">
         <view class="flex-grow-1 dis-flex">
           <view v-if="orderItem.activityName&&orderItem.activityName.indexOf('反向定制')>-1" class="type-flag">反向定制</view>
           <view v-else class="type-flag">{{activityTypeList[orderItem.activityType]}}</view>
@@ -135,7 +140,7 @@
         <view class="dis-flex">
           <view class="jOrderConfirmItem-total-text">共计金额：</view>
           <view class="jOrderConfirmItem-total-price ml20">
-            ¥ {{getTotalMoneyHJ}}
+            ¥ {{orderItem.totalMoney}}
           </view>
         </view>
       </view>
@@ -189,6 +194,9 @@ export default {
     JPopPicker
   },
   props: {
+    tctpSwitch: {
+      type: Boolean
+    },
     // 单个订单
     orderItem: {
       type: Object,
@@ -406,7 +414,7 @@ export default {
           payerType: this.currentPayer[item.orderNo].payerType
         };
         if (this.orderItem.totalPreState === true) {
-          itemObj.totalMoney = this.orderItem.totalPreAmount;
+          itemObj.totalMoney = 0;
         }
         currentPayerMoneyInfo[item.orderNo] = itemObj;
       });
