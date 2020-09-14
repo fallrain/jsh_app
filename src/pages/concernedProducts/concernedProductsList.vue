@@ -421,7 +421,7 @@ export default {
         this.$refs.toast.open({
           type: 'success',
           content: '取消关注成功',
-          timeout: 200000,
+          timeout: 2000,
         });
         this.delItemByProductCodes(productCodeList);
       }
