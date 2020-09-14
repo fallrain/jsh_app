@@ -10,10 +10,11 @@
 
 <script>
 export default {
-  name: "abnormal",
+  name: 'abnormal',
   methods: {
     goIndex() {
-      uni.navigateTo({
+      console.log('111111');
+      uni.reLaunch({
         url: '/pages/index/index'
       });
     }

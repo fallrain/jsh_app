@@ -674,7 +674,7 @@ export default {
           }
           if (item.name === '整车直发') {
             uni.navigateTo({
-              url: '/pages/vehicleList/vehicleCarList'
+              url: '/pages/vehicleList/abnormal'
             });
           }
         }
