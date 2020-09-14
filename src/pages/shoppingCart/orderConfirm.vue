@@ -486,7 +486,7 @@ export default {
     },
     // 提交订单
     async submitOrder() {
-      if (!this.formSubmit.bestSignVerifyCodeDto.verifyCode) {
+      if (!this.formSubmit.bestSignVerifyCodeDto.verifyCode && !this.userInfMianMi) {
         uni.showToast({
           title: '请输入验证码',
           icon: 'none'

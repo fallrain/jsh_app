@@ -161,7 +161,7 @@ export default {
         } = data;
         scrollView.pageSize = data.pageSize;
         scrollView.total = data.total;
-        // console.log(page.result);
+        console.log(scrollView);
         this.messageList = list;
         // this.complete =
         console.log(this.messageList);
