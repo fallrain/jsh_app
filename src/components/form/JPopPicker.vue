@@ -8,6 +8,12 @@
       <view class="jPopPicker-pop-head">
         <view class="jPopPicker-pop-head-title">{{title}}</view>
         <view
+          v-if="isShowSure"
+          class="jPopPicker-pop-head-icon"
+          @tap="confirm"
+        >确定</view>
+        <view
+          v-if="isShowClose"
           class="jPopPicker-pop-head-icon iconfont iconcross"
           @tap="close"
         ></view>
@@ -23,6 +29,7 @@
           v-model="searchValue"
         ></j-search-input>
       </view>
+      <slot name="head"></slot>
       <scroll-view
         :scroll-y="true"
         class="jPopPicker-pop-item-wrap"
@@ -123,7 +130,17 @@ export default {
     searchKeys: {
       type: Array,
       default: () => ['value']
-    }
+    },
+    // 是否显示确定
+    isShowSure: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示 x
+    isShowClose: {
+      type: Boolean,
+      default: true
+    },
   },
   data() {
     return {
@@ -156,6 +173,11 @@ export default {
   methods: {
     close() {
       /* 关闭 */
+      this.$emit('update:show', false);
+    },
+    confirm() {
+      /* 确定按钮 */
+      this.$emit('confirm');
       this.$emit('update:show', false);
     },
     change({ show }) {
@@ -205,10 +227,6 @@ export default {
       });
       version.checked = !curChecked;
       this.$emit('change', this.data);
-    },
-    confirm() {
-      /* 确定 */
-      this.$emit('update:show', false);
     },
     search() {
       /* 搜索 */

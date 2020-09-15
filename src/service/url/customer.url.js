@@ -45,9 +45,12 @@ const urls = {
   relations(userId) {
     return `/customers/auxiliary/relations/${userId}/default`;
   },
-  fukuanRelations(code1,code2) {
+  fukuanRelations(code1, code2) {
     return `/customers/auxiliary/default/${code1}?salesGroupCode=${code2}`;
-  }
+  },
+  payerBalance(payerCode, salesGroupCode) {
+    return `/customers/payerBalance/inquire?payerCode=${payerCode}&salesGroupCode=${salesGroupCode}`;
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;
