@@ -31,7 +31,7 @@
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span></view>
-            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{info.details[0].jshd_pre_amount}}</view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{parseFloat(info.details[0].jshd_pre_amount).toFixed(2)}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</span></view>
@@ -91,7 +91,7 @@
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{item.jshd_amount}}</span></view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{item.jshd_pre_amount}}</view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{parseFloat(item.jshd_pre_amount).toFixed(2)}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</span></view>
