@@ -1,6 +1,6 @@
 <template>
   <view class="orderConfirmRemarks">
-    <view class="orderConfirmRemarks-group p24 fs30">
+    <view v-if="false" class="orderConfirmRemarks-group p24 fs30">
       <radio-group @change="radioChange">
         <label class="radio mr20" v-for="(item, index) in showType" :key="index">
           <radio color="#ED2856" :value="item.value" :checked="item.checked" />
@@ -108,7 +108,8 @@
         </template>
       </j-cell>
     </view>
-    <view v-if="status === 'zfyd'" class="orderConfirmRemarks-group orderConfirmRemarks-group-crossRegion mt24">
+    <view v-if="false" class="orderConfirmRemarks-group orderConfirmRemarks-group-crossRegion mt24">
+    <!--<view v-if="status === 'zfyd'" class="orderConfirmRemarks-group orderConfirmRemarks-group-crossRegion mt24">-->
       <j-cell
         title="收藏地址"
         :titleWrap="false"
