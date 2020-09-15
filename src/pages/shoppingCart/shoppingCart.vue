@@ -281,6 +281,10 @@ export default {
     this.setPageInfo();
     // 不加入get set
     this.getBigOrderSignInf = getBigOrderSignInf;
+    // uni.setTabBarBadge({
+    //   index: 2,
+    //   text: '2'
+    // });
   },
   watch: {
     $route: ['getShoppingCartList']

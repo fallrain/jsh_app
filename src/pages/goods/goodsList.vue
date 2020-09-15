@@ -120,6 +120,18 @@
       :activeItemName="'item'+curChoseDeliveryAddress.customerCode"
       @change="deliveryAddressListChange"
     ></j-choose-delivery-address>
+    <view
+      @tap="goShoppingCart"
+      class="goodsList-shopping-cart-icon"
+    >
+      <view class="iconfont iconxuanfugouwuche1"></view>
+    </view>
+    <view
+      @tap="goTop"
+      class="goodsList-shopping-to-top-icon"
+    >
+      <view class="iconfont icondingbu"></view>
+    </view>
   </view>
 </template>
 
@@ -529,8 +541,8 @@ export default {
           uni.showModal({
             title: '',
             content: '当前未找到符合筛选条件的数据，请重新选择',
-            showCancel : false,
-            success: (res) => {
+            showCancel: false,
+            success: () => {
               this.filterForm.name = '';
               this.tabConditions = {};
               this.filterReset();
@@ -715,6 +727,19 @@ export default {
         }
       });
     },
+    goShoppingCart() {
+      /* 跳转购物车 */
+      uni.switchTab({
+        url: '/pages/shoppingCart/shoppingCart'
+      });
+    },
+    goTop() {
+      /* 回到顶部 */
+      uni.pageScrollTo({
+        scrollTop: 0,
+        duration: 100
+      });
+    }
   }
 };
 </script>
