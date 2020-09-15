@@ -808,6 +808,20 @@ export default {
 
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
+        debugger
+        for (let index = 0; index < data.dataList.length; index++) {
+          const element = data.dataList[index];
+          element.btnsInfo = {
+            estimateButton: "0",
+            invalidButton: "0",
+            orderNo: "",
+            selfPayButton: "0",
+            signInButton: "0",
+            tctpConfirmButton: "0",
+          }
+          data.dataList[index] = element;
+        }
+
         if (pgNo === 1) {
           this.orderListInfo = data.dataList;
         } else {
@@ -838,7 +852,8 @@ export default {
       if (code === '200') {
         const element = this.orderListInfo[index];
         element.btnsInfo = data;
-        this.orderListInfo[index] = element;
+        // this.orderListInfo[index] = element;
+        this.$set(this.orderListInfo,index,element);
         console.log(this.orderListInfo);
         // this.buttonLogicJudgment = data;
         console.log('============');

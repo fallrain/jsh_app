@@ -2,7 +2,7 @@
   <view class="produceDetailItem">
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
-      <text class="produceDetailItem-head-text">{{titleAndNo}}</text>
+      <text class="produceDetailItem-head-text">{{titleAndNoFun}}</text>
       <text @click="orderFailsAction" class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
     <view v-if="info.details.length<2">
@@ -211,7 +211,6 @@ export default {
     this.isOrderMore = !this.isOrderMore;
     console.log(this.index);
     console.log(this.isOrderMore);
-    // debugger
     if(this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
       this.invalidButton = this.info.btnsInfo.invalidButton  == '1';
@@ -223,20 +222,29 @@ export default {
     if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
       if((info.jshi_order_status == '11')||(info.jshi_order_status == '22')) {
         this.ggfkf = true;
+      } else {
+        this.ggfkf = false;
       }
+    } else {
+      this.ggfkf = false;
     }
     if(info.jshi_order_gvs_status == '1') {
       this.jshi_order_gvs_status = true;
     } else {
       this.jshi_order_gvs_status = false;
     }
-
     // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
+    
+  },
+  computed: {
+    titleAndNoFun() {
+      if(this.info.details[0].jshd_price_type == 'MFYJ') {
+        return '版本号:'+this.info.details[0].jshd_price_version;
+      } else {
+        return '整单订单：'+this.info.info.jshi_grouping_no;
+      }
+    }
 
-    // debugger
-    this.titleAndNo = this.info.details[0].jshd_price_type == 'MFYJ'?('版本号:'+this.info.details[0].jshd_price_version):('整单订单：'+this.info.info.jshi_grouping_no);
-    // jshd_tags=CROWD_FUNDING&jshd_product_type=3
-    // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
   methods: {
     getMore() {
@@ -250,12 +258,18 @@ export default {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton;
       this.invalidButton = this.info.btnsInfo.invalidButton;
       this.selfPayButton = this.info.btnsInfo.selfPayButton;
+
       // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
       if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
         if((info.jshi_order_status == '11')||(info.jshi_order_status == '22')) {
           this.ggfkf = true;
+        } else {
+          this.ggfkf = false;
         }
+      } else {
+        this.ggfkf = false;
       }
+
       if(info.jshi_order_gvs_status == '1') {
         this.jshi_order_gvs_status = true;
       } else {
