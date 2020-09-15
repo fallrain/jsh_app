@@ -289,13 +289,21 @@ export default {
           item.value = `(${item.payerCode}) ${item.payerName}`;
         });
         if (initcustomerCode === '') {
+          const arrObj = [];
           // 没有默认付款方选择第一条
           this.payInfoData[key].forEach((item, index) => {
             if (item.isCanChecked) {
-              initcustomerCode = item.customerCode;
-              offset = index;
+              const objItem = {
+                initcustomerCode: item.customerCode,
+                index
+              };
+              arrObj.push(objItem);
             }
           });
+          if (arrObj.length > 0) {
+            initcustomerCode = arrObj[0].customerCode;
+            offset = arrObj[0].index;
+          }
         }
         // 设置付款列表
         this.$set(this.payerOptions, key, this.payInfoData[key]);
