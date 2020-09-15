@@ -50,7 +50,7 @@
         <!-- <view class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>自助作废
         </view> -->
-        <view v-if="ggfkf" class="produceDetailItem-btm">
+        <view v-if="ggfkf" @tap="changePayer" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
         <view v-if="tctpConfirmButton" class="produceDetailItem-btm">
@@ -111,7 +111,9 @@
           <view v-if="invalidButton" class="iconfont iconcancel iconStyle"></view>自助作废
         </view> -->
         <view class="col-25 produceDetailItem-btm">
-          <view v-if="ggfkf" class="iconfont iconcancel iconStyle"></view>更改付款方
+          <view v-if="ggfkf" @tap="changePayer"
+                class="iconfont iconcancel iconStyle"></view>
+          更改付款方
         </view>
         <view v-if="tctpConfirmButton"  class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
@@ -147,6 +149,24 @@
         >
       </order-list-item-more>-->
     </view>
+    <j-pop-picker
+      title="付款方"
+      :isShowSure="true"
+      :isShowClose="false"
+      :isShowSearch="true"
+      :cantCheckedCallback="isNoCanChecked"
+      :show.sync="payerPickerShow"
+      :options="payerOptions"
+      :choseKeys.sync="currentchosePayerOption"
+      @confirm="confirmPayer"
+    >
+      <template v-slot:head>
+        <view class="balance-style">
+          可用余额：￥{{currentPayerOption.balance||currentPayerOption.bookBalance}}
+        </view>
+      </template
+      >
+    </j-pop-picker>
   </view>
 </template>
 
@@ -158,14 +178,15 @@ import {
   mapGetters
 } from 'vuex';
 import {
-  ORDER
+  ORDER, USER
 } from '../../store/mutationsTypes';
-
+import JPopPicker from '../form/JPopPicker';
 
 export default {
   name: 'orderListItem',
   components: {
-    orderListItemMore
+    orderListItemMore,
+    JPopPicker
   },
   props: {
     info: {
@@ -177,24 +198,51 @@ export default {
   },
   data() {
     return {
+      payerPickerShow: false, // 是否显示付款方
+      payerOptions: [], // 更改付款方选项列表
+      currentchosePayerOption: [], // 当前选择的付款方
+      currentPayerOption: {},
       isOrderMore: false,
       tctpConfirmButton: false,
       invalidButton: false,
       showNode: false,
-      ggfkf:false,
-      selfPayButton:false,
-      jshi_order_gvs_status:false,
-      titleAndNo:''
+      ggfkf: false,
+      selfPayButton: false,
+      jshi_order_gvs_status: false,
+      titleAndNo: ''
     };
   },
   computed: {
     ...mapGetters([
       ORDER.GET_ORDER
     ]),
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+    }),
+  },
+  watch: {
+    currentchosePayerOption(newVal, oldVal) {
+      if (newVal[0] !== oldVal[0]) {
+        // 查询余额
+        const itemPayer = this.payerOptions.find(v => v.customerCode === newVal[0]);
+        this.customerService.payerBalance(itemPayer.customerCode, itemPayer.salesGroupCode).then((res) => {
+          if (res.code === '1') {
+            itemPayer.bookBalance = res.data.bookBalance;
+            itemPayer.balance = res.data.balance;
+            this.currentPayerOption = itemPayer;
+            console.log(itemPayer);
+          } else {
+            this.currentPayerOption = itemPayer;
+            console.log(itemPayer);
+          }
+        });
+      }
+    }
   },
   created() {
-    console.log('11111111');
-    console.log(this.info)
+    console.log(this.saleInfo);
+    console.log(this.info);
 
     const details = this[ORDER.GET_ORDER].orderDetail.details;
     // 判断订单节点是否存在
@@ -212,20 +260,20 @@ export default {
     console.log(this.index);
     console.log(this.isOrderMore);
     // debugger
-    if(this.info.btnsInfo) {
+    if (this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
-      this.invalidButton = this.info.btnsInfo.invalidButton  == '1';
-     this.selfPayButton = this.info.btnsInfo.selfPayButton  == '1';
+      this.invalidButton = this.info.btnsInfo.invalidButton == '1';
+      this.selfPayButton = this.info.btnsInfo.selfPayButton == '1';
     }
-    
-    const info = this.info.info
+
+    const info = this.info.info;
     // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
-    if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
-      if((info.jshi_order_status == '11')||(info.jshi_order_status == '22')) {
+    if ((info.jshi_order_type == 'ZK') || (info.jshi_order_type == 'ZJ') || (info.jshi_order_type == 'JK')) {
+      if ((info.jshi_order_status == '11') || (info.jshi_order_status == '22')) {
         this.ggfkf = true;
       }
     }
-    if(info.jshi_order_gvs_status == '1') {
+    if (info.jshi_order_gvs_status == '1') {
       this.jshi_order_gvs_status = true;
     } else {
       this.jshi_order_gvs_status = false;
@@ -234,16 +282,72 @@ export default {
     // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
 
     // debugger
-    this.titleAndNo = this.info.details[0].jshd_price_type == 'MFYJ'?('版本号:'+this.info.details[0].jshd_price_version):('整单订单：'+this.info.info.jshi_grouping_no);
+    this.titleAndNo = this.info.details[0].jshd_price_type == 'MFYJ' ? (`版本号:${this.info.details[0].jshd_price_version}`) : (`整单订单：${this.info.info.jshi_grouping_no}`);
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
   methods: {
+    // 不可以选中的付款方
+    isNoCanChecked() {
+      uni.showToast({
+        title: '风险账号005，请联系当地财务解冻',
+        icon: 'none'
+      });
+    },
+    // 更改付款方
+    async changePayer() {
+      const bstnk = this.info.info.bstnk;
+      // 查询付款方列表
+      const { code, data } = await this.vehicleService.queryPayCode(
+        this.saleInfo.customerCode, '', '', '', bstnk
+      );
+      if (code === '1') {
+        data.data.items.forEach((item) => {
+          item.key = item.customerCode;
+          item.value = `(${item.customerCode})${item.customerName}`;
+        });
+        this.payerOptions = data.data.items;
+        this.payerPickerShow = true;
+        console.log(this.payerOptions);
+      }
+    },
+    confirmPayer() {
+      const that = this;
+      const OrderNo = that.info.info.bstnk;
+      const paytoCode = that.defaultSendToInf.customerCode;
+      const paytoName = that.defaultSendToInf.customerName;
+
+      console.log(that.defaultSendToInf);
+      uni.showModal({
+        title: '提示',
+        content: '是否确认更改付款方',
+        success(res) {
+          if (res.confirm) {
+            that.trafficService.xyChangePayTo(OrderNo, paytoCode, paytoName).then((res) => {
+              if (res.code === '1') {
+                uni.showToast({
+                  title: '更改付款方成功',
+                  icon: 'none'
+                });
+                that.payerPickerShow = false;
+              } else {
+                that.payerPickerShow = false;
+              }
+            });
+          } else if (res.cancel) {
+            uni.showToast({
+              title: '取消更改付款方',
+              icon: 'none'
+            });
+            that.payerPickerShow = false;
+          }
+        }
+      });
+    },
     getMore() {
       const info = this[ORDER.GET_ORDER].orderDetail.info;
-      console.log('=====getMore=======')
-
-      console.log(this.info)
+      console.log('=====getMore=======');
+      console.log(this.info);
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
       console.log(this.isOrderMore);
@@ -251,12 +355,12 @@ export default {
       this.invalidButton = this.info.btnsInfo.invalidButton;
       this.selfPayButton = this.info.btnsInfo.selfPayButton;
       // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
-      if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
-        if((info.jshi_order_status == '11')||(info.jshi_order_status == '22')) {
+      if ((info.jshi_order_type == 'ZK') || (info.jshi_order_type == 'ZJ') || (info.jshi_order_type == 'JK')) {
+        if ((info.jshi_order_status == '11') || (info.jshi_order_status == '22')) {
           this.ggfkf = true;
         }
       }
-      if(info.jshi_order_gvs_status == '1') {
+      if (info.jshi_order_gvs_status == '1') {
         this.jshi_order_gvs_status = true;
       } else {
         this.jshi_order_gvs_status = false;
@@ -280,11 +384,11 @@ export default {
       });
     },
     orderFailsAction() {
-      if(this.info.info.selfUseOrderStatus == '下单失败') {
+      if (this.info.info.selfUseOrderStatus == '下单失败') {
         uni.showModal({
           title: '提示',
           content: this.info.info.jshi_error_msg,
-          showCancel:false
+          showCancel: false
         });
       }
     },

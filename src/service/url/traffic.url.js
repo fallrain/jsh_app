@@ -56,7 +56,10 @@ const urls = {
   },
   ydContact(timestamp, longfeiUSERID, ibrSeq, address, OESBS, ydCardNo, ydName, ydTel) { // 京东异地地址保存
     return `/ydContact/save?timestamp=${timestamp}&longfeiUSERID=${longfeiUSERID}&ibrSeq=${ibrSeq}&address=${address}&OESBS=${OESBS}&ydCardNo=${ydCardNo}&ydName=${ydName}&ydTel=${ydTel}`;
-  }
+  },
+  xyChangePayTo(OrderNo, paytoCode, paytoName) { // 我的订单切换付款方
+    return `/queryOrder/xyChangePayTo?OrderNo=${OrderNo}&payto_code=${paytoCode}&payto_name=${paytoName}`;
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;

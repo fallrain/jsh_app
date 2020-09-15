@@ -387,8 +387,8 @@ export default {
       });
       console.log(this.filterInputs);
       this.filterInputs.forEach((item) => {
-        if (item.value) {
-          condition[item.key] = item.value;
+        if (item.val) {
+          condition[item.key] = item.val;
         }
       });
       return condition;
