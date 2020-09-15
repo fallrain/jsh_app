@@ -575,15 +575,32 @@ export default {
     // 轮播图跳转
     goSwiperDetail(item) {
       console.log(item);
-      if (item.type === 'html') {
+      let aaa = [];
+      let productCode = '';
+      let id = ''
+      if (item.url.indexOf('/detail/') > -1) {
+        aaa = item.url.split('/');
+        console.log(aaa[aaa.length - 1]);
+        productCode = aaa[aaa.length - 1];
         uni.navigateTo({
-          url: `/pages/index/banner?url=${item.url}`
+          url: `/pages/productDetail/productDetail?productCode=${productCode}`
         });
-      } else {
+      } else if (item.url.indexOf('/newsDetail/') > -1) {
+        aaa = item.url.split('/');
+        id = aaa[aaa.length - 1];
         uni.navigateTo({
-          url: `/pages/productDetail/productDetail?productCode=${item.code}`
+          url: `/pages/index/information?id=${id}`
         });
       }
+      // if (item.type === 'html') {
+      //   uni.navigateTo({
+      //     url: `/pages/index/banner?url=${item.url}`
+      //   });
+      // } else {
+      //   uni.navigateTo({
+      //     url: `/pages/productDetail/productDetail?productCode=${item.code}`
+      //   });
+      // }
     },
     // 目录列表跳转
     goCatalog(item) {
