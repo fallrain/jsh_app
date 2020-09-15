@@ -107,9 +107,9 @@ export default {
       });
     },
     alertUrl() {
-      uni.navigateTo({
-        url: '/pages/mine/myAlertUrl'
-      });
+      // uni.navigateTo({
+      //   url: '/pages/mine/myAlertUrl'
+      // });
     }
   }
 };

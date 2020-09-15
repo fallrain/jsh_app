@@ -69,10 +69,11 @@
         ></i>
       </view>
       <view class="jShoppingCartItem-cnt-img-wrap">
-        <image
-          :src="goods.productList && goods.productList[0].productImageUrl"
+        <u-lazy-load
+          :error-img="errorImg"
+          :image="goods.productList && goods.productList[0].productImageUrl"
           @tap="goDetail(goods)"
-        ></image>
+        ></u-lazy-load>
       </view>
       <view class="jShoppingCartItem-cnt-inf">
         <view class="jShoppingCartItem-cnt-inf-title">
@@ -334,6 +335,11 @@
       @change="weekPickerChange"
       title="远周次"
     ></j-pop-picker>
+    <!--只为可以图片打包进去-->
+    <image
+      :src="`${baseUrl}public/assets/img/goods/defaultImg.png`"
+      class="dis-none"
+    ></image>
   </view>
 </template>
 
@@ -402,6 +408,9 @@ export default {
   },
   data() {
     return {
+      baseUrl: process.env.BASE_URL,
+      // 错误图片
+      errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
       // 是否显示版本规格
       isShowSpecifications: false,
       // 版本信息
