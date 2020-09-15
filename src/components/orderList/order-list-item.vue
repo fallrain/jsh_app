@@ -53,7 +53,7 @@
         <view v-if="ggfkf" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
-        <view v-if="tctpConfirmButton" class="produceDetailItem-btm">
+        <view v-if="tctpConfirmButtonFun"  @click="tctpConfirmButtonAction" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
         </view>
         <view v-if="selfPayButton" class="produceDetailItem-btm">
@@ -113,7 +113,7 @@
         <view class="col-25 produceDetailItem-btm">
           <view v-if="ggfkf" class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
-        <view v-if="tctpConfirmButton"  class="col-25 produceDetailItem-btm">
+        <view v-if="tctpConfirmButtonFun" @click="tctpConfirmButtonAction" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
         </view>
         <view v-if="selfPayButton" class="col-25 produceDetailItem-btm">
@@ -209,8 +209,7 @@ export default {
     }
 
     this.isOrderMore = !this.isOrderMore;
-    console.log(this.index);
-    console.log(this.isOrderMore);
+
     if(this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
       this.invalidButton = this.info.btnsInfo.invalidButton  == '1';
@@ -243,14 +242,41 @@ export default {
       } else {
         return '整单订单：'+this.info.info.jshi_grouping_no;
       }
+    },
+    tctpConfirmButtonFun() {
+      return (this.info.btnsInfo.tctpConfirmButton == 1);
     }
 
   },
   methods: {
+    tctpConfirmButtonAction() {
+      uni.showModal({
+          title: '提示',
+          content: '是否确认统舱统配',
+          success: (res) => {
+          if (res.confirm) {
+              this.tctpConfirmNet();
+            } else if (res.cancel) {
+              console.log('用户点击取消');
+            }
+          }
+      });
+    },
+    async tctpConfirmNet() {
+      console.log(this.info.info.bstnk);
+      const bstnk = this.info.info.bstnk
+      const dnLogistics = this.info.info.dnLogistics;
+      const { code } = await this.orderService.tctpConfirm(dnLogistics,bstnk);
+      if (code === '1') {
+        const that = this;
+        uni.showToast({
+          title: '成功'
+        });
+      }
+    },
     getMore() {
       const info = this[ORDER.GET_ORDER].orderDetail.info;
       console.log('=====getMore=======')
-
       console.log(this.info)
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
