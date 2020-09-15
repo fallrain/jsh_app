@@ -662,11 +662,14 @@ export default {
       this.orderMarkStr = '';
       this.orderBuyStr = '';
       this.orderDistributionStr = '';
-      this.orderReviewValue='',
-      this.orderMarkValue='',
-              this.orderBuyValue='',
-              this.orderDistributionValue='',
-              this.priceTypeJudgment='',
+      this.orderReviewValue = '',
+      this.orderMarkValue = '',
+      this.orderBuyValue = '',
+      this.orderDistributionValue = '',
+      this.priceTypeJudgment = '',
+      this.pricetypeall = false, // 样品机
+      this.jshiordersource = false, // 整车
+      this.farweeklyall = false, // 运周次
       this.screenlist.map((val) => {
         val.checked = false;
       });
