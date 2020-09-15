@@ -662,6 +662,11 @@ export default {
       this.orderMarkStr = '';
       this.orderBuyStr = '';
       this.orderDistributionStr = '';
+      this.orderReviewValue='',
+      this.orderMarkValue='',
+              this.orderBuyValue='',
+              this.orderDistributionValue='',
+              this.priceTypeJudgment='',
       this.screenlist.map((val) => {
         val.checked = false;
       });
