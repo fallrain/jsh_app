@@ -66,7 +66,7 @@
                 ({{it.payerCode}}){{it.payerName}}
                 </view>
               </view>
-              <view class="tShoppingCartItem-cnt-price-inf-item">{{item.IBL_PAYMONEYNAME}}</view>
+              <view class="tShoppingCartItem-cnt-price-inf-item" @tap="showPayer(item,index)">{{item.IBL_PAYMONEYNAME}}</view>
             </view>
           </view>
         </view>

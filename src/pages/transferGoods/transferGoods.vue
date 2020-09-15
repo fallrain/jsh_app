@@ -13,7 +13,7 @@
           >搜索
           </button>
         </view>
-        <view class="transfer-m"></view>
+<!--        <view class="transfer-m"></view>-->
         <transfer-goods-head
             class="mb12"
             :tabs="tabs"
