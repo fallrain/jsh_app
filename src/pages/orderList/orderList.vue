@@ -808,7 +808,6 @@ export default {
 
       const { code, data } = await this.orderService.orderList(param);
       if (code === '200') {
-        debugger
         for (let index = 0; index < data.dataList.length; index++) {
           const element = data.dataList[index];
           element.btnsInfo = {

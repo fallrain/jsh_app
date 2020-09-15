@@ -179,7 +179,6 @@ export default {
     return {
       isOrderMore: false,
       tctpConfirmButton: false,
-      showNode: false,
       ggfkf:false,
       selfPayButton:false,
       jshi_order_gvs_status:false,
@@ -194,19 +193,6 @@ export default {
   created() {
     console.log('11111111');
     console.log(this.info)
-
-    const details = this[ORDER.GET_ORDER].orderDetail.details;
-    // 判断订单节点是否存在
-    if (details.jshd_tags == 'CROWD_FUNDING'
-    && details.jshd_product_type == '3'
-    && details.jshi_order_gvs_status == '1'
-    && details.jshi_stock_type == 'ZCN'
-    && details.jshi_stock_type == 'KXZF') {
-      this.showNode = true;
-    } else {
-      this.showNode = false;
-    }
-
     this.isOrderMore = !this.isOrderMore;
 
     if(this.info.btnsInfo) {
@@ -246,8 +232,25 @@ export default {
     },
     invalidButton() {
       return (this.info.btnsInfo.invalidButton  != '0');
+    },
+    showNode() {
+      const details = this.info.details[0];
+      const info = this.info.info;
+      // 判断订单节点是否存在
+      if (details.jshd_tags == 'CROWD_FUNDING'
+      && details.jshd_product_type == '3'
+      && info.jshi_order_gvs_status == '1')
+      {
+        if( info.jshi_stock_type == 'ZCN'
+        || info.jshi_stock_type == 'KXZF'){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
     }
-
   },
   methods: {
     tctpConfirmButtonAction() {
