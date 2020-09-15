@@ -31,6 +31,14 @@ export default {
     this.infoList = this[ORDER.GET_ORDER].orderDetail;
     console.log(this.infoList);
 
+    if(this.infoList.info.jshi_order_gvs_status == '1') {
+      this.buttonList.push(
+        {
+          name: '查看物流', ischeck: false 
+        }
+      );
+    } 
+
     const details = this.infoList.details;
 
     // 判断订单节点是否存在
@@ -40,18 +48,14 @@ export default {
     && details.jshi_stock_type == 'ZCN'
     && details.jshi_stock_type == 'KXZF') {
       this.showNode = true;
-      this.buttonList = [
-        { name: '查看物流', ischeck: false },
-        { name: '订单节点', ischeck: false },
-        { name: '签收', ischeck: true }
-      ]
-    } else {
-      this.showNode = false;
-      this.buttonList = [
-        { name: '查看物流', ischeck: false },
-        { name: '签收', ischeck: true }
-      ]
-    }
+      this.buttonList.push(
+        { name: '订单节点', ischeck: false }
+      )
+    } 
+
+    this.buttonList.push(
+        { name: '签收', ischeck: false }
+      )
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
@@ -59,11 +63,7 @@ export default {
     return {
       infoList:{},
       showNode:false,
-      buttonList: [
-        { name: '查看物流', ischeck: false },
-        { name: '订单节点', ischeck: false },
-        { name: '签收', ischeck: true }
-      ]
+      buttonList: [],
     };
   },
   methods: {
