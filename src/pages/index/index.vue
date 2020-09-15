@@ -1,10 +1,10 @@
 <template>
   <view class="homepage">
 <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
-    <view class="status_bar">
-      <!-- 这里是状态栏 -->
-    </view>
     <view class="homepage-top">
+      <view class="index-status-bar">
+        <!-- 这里是状态栏 -->
+      </view>
       <view class="homepage-top-head">
         <view class='iconfont iconzuo homepage-top-head-iconl'  @tap="goBack"></view>
         <image
@@ -236,33 +236,33 @@ export default {
       cataloglist: [
         {
           id: 1,
-          src: require('@/assets/img/index/function-car.png'),
-          title: '整车',
-          url: '/pages/vehicleList/abnormal'
-        },
-        {
-          id: 2,
-          src: require('@/assets/img/index/function-box.png'),
-          title: '调货',
-          url: '/pages/transferGoods/transferGoods'
-        },
-        {
-          id: 3,
           src: require('@/assets/img/index/function-qiang.png'),
           title: '抢单',
           url: '/pages/goods/goodsList?isFlashSale=1'
         },
         {
-          id: 4,
+          id: 2,
           src: require('@/assets/img/index/function-washingmachine.png'),
           title: '套餐',
           url: '/pages/market/marketList?activityType=taocan'
         },
         {
-          id: 5,
+          id: 3,
           src: require('@/assets/img/index/function-compose.png'),
           title: '组合',
           url: '/pages/market/marketList?activityType=zuhe'
+        },
+        {
+          id: 4,
+          src: require('@/assets/img/index/function-box.png'),
+          title: '调货',
+          url: '/pages/transferGoods/transferGoods'
+        },
+        {
+          id: 5,
+          src: require('@/assets/img/index/function-project.png'),
+          title: '工程',
+          url: '/pages/goods/goodsList?isProject=1'
         },
         {
           id: 6,
@@ -270,29 +270,30 @@ export default {
           title: '特价',
           url: '/pages/goods/goodsList?isSpecialOffer=1'
         },
+
         {
           id: 7,
-          src: require('@/assets/img/index/function-project.png'),
-          title: '工程',
-          url: '/pages/goods/goodsList?isProject=1'
-        },
-        {
-          id: 8,
           src: require('@/assets/img/index/function-tv.png'),
           title: '样机',
           url: '/pages/goods/goodsList?isSample=1'
         },
         {
-          id: 9,
+          id: 8,
           src: require('@/assets/img/index/function-yang.png'),
           title: '样品机',
           url: '/pages/sampleMachine/sampleMachineList'
         },
         {
-          id: 10,
+          id: 9,
           src: require('@/assets/img/index/function-money.png'),
           title: '反向定制',
           url: '/pages/market/marketList?activityType=baoxiao'
+        },
+        {
+          id: 10,
+          src: require('@/assets/img/index/function-car.png'),
+          title: '整车',
+          url: '/pages/vehicleList/abnormal'
         }
       ],
       recommendList: [
