@@ -9,7 +9,7 @@
     <view class="order-base-inf">满足方式：{{baseInfo.stockTypeShow}}</view>
     <view class="order-base-inf">版本调货：{{baseInfo.credit_model_all == '0' ? '否' : '是'}}</view>
     <view class="order-base-inf">信用模式：{{baseInfo.credit_model_all==='0' ? '否' : '是'}}</view>
-    <view class="order-base-inf">远周次：{{baseInfo.far_weekly_all==='0' ? '否' : '是'}}</view>
+    <view class="order-base-inf">远周次：{{baseInfo.far_weekly_all==='0' ? '是' : '否'}}</view>
   </view>
 </template>
 
