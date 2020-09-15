@@ -26,7 +26,7 @@
           </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="(childed,index2) in child.subCats" :key="childed.title" class="nav-right-item">
-              <image :src="imgMap.get(childed.code)"/>
+              <image :src="imgMap.get(childed.code)" @click="checkCat(childed)"/>
               <view @click="checkCat(childed)">{{childed.title}}</view>
             </view>
           </view>

@@ -6,6 +6,7 @@
   min-height: 100vh;
   padding-top: 256px;
   background: #F5F5F5;
+  padding-bottom: 80px;
 
     .transferGoods-head{
       position: fixed;
@@ -20,8 +21,8 @@
     width: 608px !important;
   }
   .transfer-search{
-    position: fixed;
-    top: 86px;
+    position: absolute;
+    top: 0px;
     z-index: 555;
     left: 0;
     right: 0;

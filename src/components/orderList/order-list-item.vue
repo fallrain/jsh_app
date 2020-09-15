@@ -2,7 +2,7 @@
   <view class="produceDetailItem">
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
-      <text class="produceDetailItem-head-text">{{titleAndNo}}</text>
+      <text class="produceDetailItem-head-text">{{titleAndNoFun}}</text>
       <text @click="orderFailsAction" class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
     </view>
     <view v-if="info.details.length<2">
@@ -31,7 +31,7 @@
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span></view>
-            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{info.details[0].jshd_pre_amount}}</view>
+            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{parseFloat(info.details[0].jshd_pre_amount).toFixed(2)}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</span></view>
@@ -42,7 +42,7 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="invalidButton == 1" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="invalidButton" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
@@ -53,7 +53,7 @@
         <view v-if="ggfkf" @tap="changePayer" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
-        <view v-if="tctpConfirmButton" class="produceDetailItem-btm">
+        <view v-if="tctpConfirmButtonFun"  @click="tctpConfirmButtonAction" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
         </view>
         <view v-if="selfPayButton" class="produceDetailItem-btm">
@@ -67,6 +67,9 @@
         </view>
         <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
+        </view>
+        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>整车查看(作废)
         </view>
       </view>
       <!--<order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>-->
@@ -91,7 +94,7 @@
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{item.jshd_amount}}</span></view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{item.jshd_pre_amount}}</view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-cnt-price">预定金金额:¥{{parseFloat(item.jshd_pre_amount).toFixed(2)}}</view>
           </view>
           <view class="produceDetailItem-cnt-inf">
             <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</span></view>
@@ -115,7 +118,7 @@
                 class="iconfont iconcancel iconStyle"></view>
           更改付款方
         </view>
-        <view v-if="tctpConfirmButton"  class="col-25 produceDetailItem-btm">
+        <view v-if="tctpConfirmButtonFun" @click="tctpConfirmButtonAction" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
         </view>
         <view v-if="selfPayButton" class="col-25 produceDetailItem-btm">
@@ -130,6 +133,13 @@
         <view v-if="jshi_order_gvs_status" @click="checkWL" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
         </view>
+        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>整车查看(作废)
+        </view>
+        <view v-if="showZzkkBtn" @click="zzkkAction" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>自主扣款
+        </view>
+
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
           <view class="jOrderConfirmItem-semicircle"></view>
         </view>
@@ -204,12 +214,9 @@ export default {
       currentPayerOption: {},
       isOrderMore: false,
       tctpConfirmButton: false,
-      invalidButton: false,
-      showNode: false,
-      ggfkf: false,
-      selfPayButton: false,
-      jshi_order_gvs_status: false,
-      titleAndNo: ''
+      ggfkf:false,
+      selfPayButton:false,
+      titleAndNo:''
     };
   },
   computed: {
@@ -241,52 +248,117 @@ export default {
     }
   },
   created() {
-    console.log(this.saleInfo);
-    console.log(this.info);
-
-    const details = this[ORDER.GET_ORDER].orderDetail.details;
-    // 判断订单节点是否存在
-    if (details.jshd_tags == 'CROWD_FUNDING'
-    && details.jshd_product_type == '3'
-    && details.jshi_order_gvs_status == '1'
-    && details.jshi_stock_type == 'ZCN'
-    && details.jshi_stock_type == 'KXZF') {
-      this.showNode = true;
-    } else {
-      this.showNode = false;
-    }
-
+    console.log('11111111');
+    console.log(this.info)
     this.isOrderMore = !this.isOrderMore;
-    console.log(this.index);
-    console.log(this.isOrderMore);
-    // debugger
-    if (this.info.btnsInfo) {
+
+    if(this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
-      this.invalidButton = this.info.btnsInfo.invalidButton == '1';
-      this.selfPayButton = this.info.btnsInfo.selfPayButton == '1';
+     this.selfPayButton = this.info.btnsInfo.selfPayButton  == '1';
     }
 
-    const info = this.info.info;
+    const info = this.info.info
     // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
-    if ((info.jshi_order_type == 'ZK') || (info.jshi_order_type == 'ZJ') || (info.jshi_order_type == 'JK')) {
-      if ((info.jshi_order_status == '11') || (info.jshi_order_status == '22')) {
+    if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
+      if((info.jshi_order_status == '11')||(info.jshi_order_status == '22')) {
         this.ggfkf = true;
+      } else {
+        this.ggfkf = false;
       }
-    }
-    if (info.jshi_order_gvs_status == '1') {
-      this.jshi_order_gvs_status = true;
     } else {
-      this.jshi_order_gvs_status = false;
+      this.ggfkf = false;
     }
 
     // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
 
-    // debugger
-    this.titleAndNo = this.info.details[0].jshd_price_type == 'MFYJ' ? (`版本号:${this.info.details[0].jshd_price_version}`) : (`整单订单：${this.info.info.jshi_grouping_no}`);
-    // jshd_tags=CROWD_FUNDING&jshd_product_type=3
-    // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
+  },
+  computed: {
+    titleAndNoFun() {
+      if(this.info.details[0].jshd_price_type == 'MFYJ') {
+        return '版本号:'+this.info.details[0].jshd_price_version;
+      } else {
+        return '整单订单：'+this.info.info.jshi_grouping_no;
+      }
+    },
+    tctpConfirmButtonFun() {
+      return (this.info.btnsInfo.tctpConfirmButton == 1);
+    },
+    invalidButton() {
+      return (this.info.btnsInfo.invalidButton  != '0');
+    },
+    showNode() {
+      const details = this.info.details[0];
+      const info = this.info.info;
+      // 判断订单节点是否存在
+      if (details.jshd_tags == 'CROWD_FUNDING'
+      && details.jshd_product_type == '3'
+      && info.jshi_order_gvs_status == '1')
+      {
+        if( info.jshi_stock_type == 'ZCN'
+        || info.jshi_stock_type == 'KXZF'){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
+    showZzkkBtn() {
+      return (this.info.btnsInfo.selfPayButton != '0');
+    },
+    zcck() {
+      // jshi_order_type IN('ZK','ZJ')&jshi_order_gvs_status=1
+      const details = this.info.details[0];
+      const info = this.info.info;
+      if (info.jshi_order_gvs_status == '1')
+      {
+        if( info.jshi_order_type == 'ZK'
+        || info.jshi_order_type == 'ZJ'){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
+    jshi_order_gvs_status() {
+      const info = this.info.info;
+      if(info.jshi_order_gvs_status == '1') {
+         return true;
+      } else {
+         return false;
+      }
+    },
+
   },
   methods: {
+    tctpConfirmButtonAction() {
+      uni.showModal({
+          title: '提示',
+          content: '是否确认统舱统配',
+          success: (res) => {
+          if (res.confirm) {
+              this.tctpConfirmNet();
+            } else if (res.cancel) {
+              console.log('用户点击取消');
+            }
+          }
+      });
+    },
+    async tctpConfirmNet() {
+      console.log(this.info.info.bstnk);
+      const bstnk = this.info.info.bstnk
+      const dnLogistics = this.info.info.dnLogistics;
+      const { code } = await this.orderService.tctpConfirm(dnLogistics,bstnk);
+      if (code === '1') {
+        const that = this;
+        uni.showToast({
+          title: '成功'
+        });
+      }
+    },
     // 不可以选中的付款方
     isNoCanChecked() {
       uni.showToast({
@@ -346,28 +418,32 @@ export default {
     },
     getMore() {
       const info = this[ORDER.GET_ORDER].orderDetail.info;
-      console.log('=====getMore=======');
-      console.log(this.info);
+      console.log('=====getMore=======')
+      console.log(this.info)
       this.isOrderMore = !this.isOrderMore;
       console.log(this.index);
       console.log(this.isOrderMore);
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton;
-      this.invalidButton = this.info.btnsInfo.invalidButton;
       this.selfPayButton = this.info.btnsInfo.selfPayButton;
+
       // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
-      if ((info.jshi_order_type == 'ZK') || (info.jshi_order_type == 'ZJ') || (info.jshi_order_type == 'JK')) {
-        if ((info.jshi_order_status == '11') || (info.jshi_order_status == '22')) {
+      if((info.jshi_order_type == 'ZK')||(info.jshi_order_type == 'ZJ')||(info.jshi_order_type == 'JK')) {
+        if((info.jshi_order_status == '11')||(info.jshi_order_status == '22')) {
           this.ggfkf = true;
+        } else {
+          this.ggfkf = false;
         }
+      } else {
+        this.ggfkf = false;
       }
-      if (info.jshi_order_gvs_status == '1') {
+
+      if(info.jshi_order_gvs_status == '1') {
         this.jshi_order_gvs_status = true;
       } else {
         this.jshi_order_gvs_status = false;
       }
 
       console.log(this);
-      console.log(`===========${this.invalidButton}`);
     },
     goDetail() {
       this.$emit('goDetail', this.index);
@@ -383,12 +459,26 @@ export default {
         url: '/pages/orderList/orderWL'
       });
     },
+    zzkkAction() {
+      uni.showModal({
+          title: '提示',
+          content: '正在开发',
+          showCancel:false
+      });
+    },
+    zcckAction() {
+      uni.showModal({
+          title: '提示',
+          content: '正在开发',
+          showCancel:false
+      });
+    },
     orderFailsAction() {
-      if (this.info.info.selfUseOrderStatus == '下单失败') {
+      if(this.info.info.selfUseOrderStatus == '下单失败') {
         uni.showModal({
           title: '提示',
           content: this.info.info.jshi_error_msg,
-          showCancel: false
+          showCancel:false
         });
       }
     },

@@ -51,7 +51,7 @@
                 ({{it.payerCode}}){{it.payerName}}
                 </view>
               </view>
-              <view class="transferDetailItem-detail-cnt-inf-item">{{good.IBL_PAYMONEYNAME}}</view>
+              <view class="transferDetailItem-detail-cnt-inf-item" @tap="showPayer(good,index)">{{good.IBL_PAYMONEYNAME}}</view>
             </view>
           </view>
 

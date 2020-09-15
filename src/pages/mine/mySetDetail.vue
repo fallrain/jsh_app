@@ -1,19 +1,19 @@
 <template>
     <view class="bg">
         <view class="topLine"></view>
-        <view class="row">
+        <view @click="personInforClick" class="row">
             <view class="title" @click="personInforClick">个人资料</view>
         </view>
         <view class="line"></view>
-        <view class="row">
+        <view  @click="alertUrl"  class="row">
             <view class="title" @click="alertUrl">修改手机号</view>
         </view>
         <view class="line"></view>
-        <view class="row">
+        <view @click="alertUrl" class="row">
             <view class="title" @click="alertUrl">修改登录密码</view>
         </view>
         <view class="line"></view>
-        <view class="row">
+        <view  @click="alertUrl" class="row">
             <view class="title" @click="alertUrl">更改支付密码</view>
         </view>
         <view class="middleLine"></view>

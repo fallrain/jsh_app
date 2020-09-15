@@ -13,16 +13,16 @@
           >搜索
           </button>
         </view>
-        <view class="transfer-m"></view>
+<!--        <view class="transfer-m"></view>-->
         <transfer-goods-head
-            class="mb12"
-            :tabs="tabs"
-            @confirm="confirm"
-            @tabClick="tabClick"
-            :cargoWareHome="cargoWareHome"
-            :cargoSendWay="cargoSendWay"
-            :popTabs="popTabs"
-            ref="transferGoodsHead"
+          class="mb12"
+          :tabs="tabs"
+          @confirm="confirm"
+          @tabClick="tabClick"
+          :cargoWareHome="cargoWareHome"
+          :cargoSendWay="cargoSendWay"
+          :popTabs="popTabs"
+          ref="transferGoodsHead"
         ></transfer-goods-head>
       </view>
 
@@ -56,8 +56,9 @@
               style="width:120px; height:120px;margin:28% 35% 5% 38%;"
           />
           <view class="else-title">
-            <view class="else-title-l">非常抱歉</view>
-            <text class="else-title-x">没有找到相关的宝贝</text>
+            <view class="else-title-l">~努力加载中~</view>
+<!--            <view class="else-title-l">非常抱歉</view>-->
+<!--            <text class="else-title-x">没有找到相关的宝贝</text>-->
           </view>
         </view>
       </mescroll-body>

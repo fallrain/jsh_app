@@ -5,12 +5,12 @@
         <view class="proCom-foot-shoppingCart iconfont icongouwuchezhengpin"></view>
         <view class="proCom-foot-shoppingCart-text">购物车</view>
       </view>
-<!--      (info.isSale && !info.isflash)||(!info.isSale&&info.isSaleLe)-->
-      <view v-if="info.isSale ||(!info.isSale&&info.isSaleLe)" class="proCom-foot-inf2" @click="putcar">
+<!--      info.isSale ||(!info.isSale&&info.isSaleLe)-->
+      <view v-if="(info.isSale && !info.isflash && !info.isImg)||(!info.isSale&& info.isSaleLe)" class="proCom-foot-inf2" @click="putcar">
         <view class="proCom-foot-inf3">加入购物车</view>
       </view>
-<!--      !info.isSale&&!info.isSaleLe || info.isflash   -->
-      <view v-if="!info.isSale&&!info.isSaleLe" class="proCom-foot-inf2">
+<!--    !info.isSale&&!info.isSaleLe     -->
+      <view v-if="!info.isSale&&!info.isSaleLe || info.isflash || (info.isImg && !info.isSaleLe)" class="proCom-foot-inf2">
         <view class="proCom-foot-inf4">加入购物车</view>
       </view>
       <view v-show="info.isActi" class="proCom-foot-inf2" @click="putplay">
@@ -28,6 +28,9 @@ export default {
       type: Object,
       default: () => {}
     }
+  },
+  created() {
+    console.log(this.info);
   },
   methods: {
     goCarList() {

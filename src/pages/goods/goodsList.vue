@@ -367,7 +367,6 @@ export default {
         // 右侧筛选栏搜索数据
       this.filterList.forEach((item) => {
         item.data.forEach((v) => {
-          console.log(v);
           if (v.isChecked) {
             filtersMap[v.searchKey || v.key] = v[v.keyAttr] || 1;
           }

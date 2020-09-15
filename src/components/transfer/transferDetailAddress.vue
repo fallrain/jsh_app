@@ -34,7 +34,7 @@
         </view>
         <view class="transferDetailAddress-information order">
           <view class="transferDetailAddress-information-text mld">
-            申请单号：
+            系统单号：
             <text class="transferDetailAddress-information-val">{{detailList.IBR_SEQ}}</text>
           </view>
           <view class="transferDetailAddress-information-text mla">

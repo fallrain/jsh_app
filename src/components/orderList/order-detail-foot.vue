@@ -3,8 +3,12 @@
     <view class="uni-flex uni-row order-foot-line">
       <view class="col-25 order-foot-inf" @click="getMore">...</view>
       <view v-for="item in buttonList" :key="item.name">
-        <view class="order-foot-inf2" @click="ckickBot(item)">
+        <view v-if="item.name == ''" class="order-foot-infred" @click="ckickBot(item)"></view>
+
+        <view v-else class="order-foot-inf2" @click="ckickBot(item)">
           <view :class="{'order-foot-inf4':!item.ischeck,'order-foot-inf5':item.ischeck}">{{item.name}}</view>
+        </view>
+
         </view>
       </view>
     </view>
@@ -53,9 +57,20 @@ export default {
       )
     } 
 
-    this.buttonList.push(
+    if(this.infoList.btnsInfo.signInButton == 1) {
+      this.buttonList.push(
         { name: '签收', ischeck: false }
       )
+    }
+
+    if(this.buttonList.length == 1) {
+      this.buttonList.unshift( { name: '', ischeck: false })
+      this.buttonList.unshift( { name: '', ischeck: false })
+    }
+
+    if(this.buttonList.length == 2) {
+      this.buttonList.unshift( { name: '', ischeck: false })
+    }
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
@@ -68,6 +83,7 @@ export default {
   },
   methods: {
     ckickBot(item) {
+      debugger
       if(item.name == '查看物流') {
         uni.navigateTo({
           url: `/pages/orderList/orderWL`
@@ -112,6 +128,13 @@ export default {
     font-size: 28px;
     padding-top: 12px;
     width: 180px;
+  }
+   .order-foot-infred {
+    display: flex;
+    font-size: 28px;
+    padding-top: 12px;
+    width: 180px;
+    /* background: red; */
   }
   .order-foot-inf4 {
     color: #666666;

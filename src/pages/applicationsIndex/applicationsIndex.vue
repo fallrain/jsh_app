@@ -35,12 +35,10 @@
             field="content"
             :dotsStyles="dotsStyles"
           >
-            <swiper class="swiper-box" @change="changePic">
-              <swiper-item
-                v-for="(item,index) in imageList"
-                :key="index">
+            <swiper class="swiper-box" @change="changePic" autoplay="true"  interval="5000" circular="true">
+              <swiper-item v-for="(item,index) in imageList" :key="index">
                 <view class="swiper-item">
-                  <image :src="item.imageUrl" mode="aspectFill"  @tap='goSwiperDetail(item)' />
+                  <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
                 </view>
               </swiper-item>
             </swiper>
