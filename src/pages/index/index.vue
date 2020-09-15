@@ -592,15 +592,6 @@ export default {
           url: `/pages/index/information?id=${id}`
         });
       }
-      // if (item.type === 'html') {
-      //   uni.navigateTo({
-      //     url: `/pages/index/banner?url=${item.url}`
-      //   });
-      // } else {
-      //   uni.navigateTo({
-      //     url: `/pages/productDetail/productDetail?productCode=${item.code}`
-      //   });
-      // }
     },
     // 目录列表跳转
     goCatalog(item) {
