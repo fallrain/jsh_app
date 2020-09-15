@@ -42,7 +42,7 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="invalidButton == 1" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="invalidButton" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
@@ -179,7 +179,6 @@ export default {
     return {
       isOrderMore: false,
       tctpConfirmButton: false,
-      invalidButton: false,
       showNode: false,
       ggfkf:false,
       selfPayButton:false,
@@ -212,7 +211,6 @@ export default {
 
     if(this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
-      this.invalidButton = this.info.btnsInfo.invalidButton  == '1';
      this.selfPayButton = this.info.btnsInfo.selfPayButton  == '1';
     }
     
@@ -245,6 +243,9 @@ export default {
     },
     tctpConfirmButtonFun() {
       return (this.info.btnsInfo.tctpConfirmButton == 1);
+    },
+    invalidButton() {
+      return (this.info.btnsInfo.invalidButton  != '0');
     }
 
   },
@@ -282,7 +283,6 @@ export default {
       console.log(this.index);
       console.log(this.isOrderMore);
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton;
-      this.invalidButton = this.info.btnsInfo.invalidButton;
       this.selfPayButton = this.info.btnsInfo.selfPayButton;
 
       // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
@@ -303,7 +303,6 @@ export default {
       }
 
       console.log(this);
-      console.log(`===========${this.invalidButton}`);
     },
     goDetail() {
       this.$emit('goDetail', this.index);
