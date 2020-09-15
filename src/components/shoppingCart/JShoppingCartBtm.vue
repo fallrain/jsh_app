@@ -189,7 +189,7 @@ export default {
 
   .jShoppingCartBtm-btns-edit-wrap {
     margin-left: auto;
-    height: 42px;
+    height: 44px;
   }
 
   .jShoppingCartBtm-btn-primary {

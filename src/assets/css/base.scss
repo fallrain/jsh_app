@@ -11,6 +11,10 @@
   box-sizing: border-box;
 }
 
+:root {
+}
+
+
 view,
 input,
 button,
@@ -40,11 +44,27 @@ button {
   overflow: hidden;
 }
 
+/*fix*/
+
+.j-safe-padding-top {
+  padding-bottom: constant(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-top);
+}
+
+.j-safe-top {
+  top: constant(safe-area-inset-top);
+  top: env(safe-area-inset-top);
+}
+
+
+/*fix end*/
+
 /*fix uni-app*/
 
 .uni-popup {
   .uni-transition {
-    bottom: var(--window-bottom) !important;
+   bottom: calc(var(--window-bottom) - constant(safe-area-inset-bottom)) !important;
+   bottom: calc(var(--window-bottom) - env(safe-area-inset-bottom)) !important;
   }
 }
 
