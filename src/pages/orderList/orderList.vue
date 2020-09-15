@@ -738,36 +738,27 @@ export default {
       let wuliu = '';
       let xinghao = '';
       let bianhao = '';
-      if (this.serviNO !== '') {
-        if (this.orderTypeVue === '1') {
-          console.log(this.serviNO);
-          dingdan = this.serviNO.replaceAll(' ', '');
-        }
-        if (this.orderTypeVue === '2') {
-          zhengdan = this.serviNO.replaceAll(' ', '');
-        }
-        if (this.orderTypeVue === '3') {
-          gvs = this.serviNO.replaceAll(' ', '');
-        }
-        if (this.orderTypeVue === '4') {
-          wuliu = this.serviNO.replaceAll(' ', '');
-        }
-      }
-      if (this.addresseeInput !== '') {
-        if (this.orderModelValue === '1') {
-          xinghao = this.addresseeInput.replaceAll(' ', '');
-        }
-        if (this.orderModelValue === '2') {
-          bianhao = this.addresseeInput.replaceAll(' ', '');
-        }
-      }
-
-      console.log(this.songda)
       let songda = '';
-      if (this.songda !== '') {
-        songda = this.songda.replaceAll(' ', '');
+      if (this.orderTypeVue === '1') {
+        console.log(this.serviNO);
+        dingdan = this.serviNO;
       }
-
+      if (this.orderTypeVue === '2') {
+        zhengdan = this.serviNO;
+      }
+      if (this.orderTypeVue === '3') {
+        gvs = this.serviNO;
+      }
+      if (this.orderTypeVue === '4') {
+        wuliu = this.serviNO;
+      }
+      if (this.orderModelValue === '1') {
+        xinghao = this.addresseeInput;
+      }
+      if (this.orderModelValue === '2') {
+        bianhao = this.addresseeInput;
+      }
+      songda = this.songda;
       const param = {
         industry: this.industry,
         product_model_all: xinghao,
@@ -915,10 +906,10 @@ export default {
         this.jshi_sendto_code = '';
         this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
-        this.bstnk = this.serviNO.replaceAll(' ', '');
+        this.bstnk = this.serviNO;
       }
       if (value === '2') {
-        this.jshi_grouping_no = this.serviNO.replaceAll(' ', '');
+        this.jshi_grouping_no = this.serviNO;
         this.jshi_gvs_so_order_no = '';
         this.sap_dn5 = '';
         this.bstnk = '';
@@ -926,7 +917,7 @@ export default {
       if (value === '3') {
         console.log(value);
         this.jshi_grouping_no = '';
-        this.jshi_gvs_so_order_no = this.serviNO.replaceAll(' ', '');
+        this.jshi_gvs_so_order_no = this.serviNO;
         this.sap_dn5 = '';
         this.bstnk = '';
       }
@@ -934,7 +925,7 @@ export default {
         console.log(value);
         this.jshi_grouping_no = '';
         this.jshi_gvs_so_order_no = '';
-        this.sap_dn5 = this.serviNO.replaceAll(' ', '');
+        this.sap_dn5 = this.serviNO;
         this.bstnk = '';
       }
     },
@@ -943,12 +934,12 @@ export default {
       this.orderModelshow = !this.orderModelshow;
       this.orderModelStr = data;
       if (value === '1') {
-        this.product_model_all = this.addresseeInput.replaceAll(' ', '');
+        this.product_model_all = this.addresseeInput;
         this.product_code_all = '';
       }
       if (value === '2') {
         this.product_model_all = '';
-        this.product_code_all = this.addresseeInput.replaceAll(' ', '');
+        this.product_code_all = this.addresseeInput;
       }
     },
     selectInfoOrderReview(value, data) {
