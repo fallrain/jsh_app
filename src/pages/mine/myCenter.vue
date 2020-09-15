@@ -111,7 +111,7 @@
 
     <!-- 经营看板 -->
     <view class="focusProduct">
-      <view>
+      <view @click="jjkb">
         <view class="productTitle">经营看板</view>
         <view class="productSubTitle">动态数据实时查看，了解，跟踪</view>
       </view>
@@ -361,6 +361,11 @@ export default {
     productAction() {
       uni.navigateTo({
         url: '/pages/concernedProducts/concernedProductsList'
+      });
+    },
+    jjkb() {
+      uni.navigateTo({
+        url: '/pages/vehicleList/abnormal'
       });
     }
   },

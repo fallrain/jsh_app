@@ -98,5 +98,8 @@ export default {
   getTctpSwitch() {
     return jGet(urlNoApi.getTctpSwitch);
   },
+  tctpConfirm(dn,bstnk) {
+    return jGet(url.tctpConfirm(dn,bstnk));
+  }
 
 };

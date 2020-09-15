@@ -5,23 +5,23 @@
   <view>
     <view style="margin-top: 16px;"></view>
     <view class="img">
-      <i class="iconfont icondingdanchuangjian"></i>
+      <view class="iconfont icondingdanchuangjian1"></view>
     </view>
     <view class="upLine"></view>
     <view class="img">
-      <i class="iconfont icondingdanpingshen"></i>
+      <view class="iconfont icondingdanpingshen1"></view>
     </view>
     <view class="middleLine"></view>
     <view class="img">
-      <i class="iconfont icongongchangfahuo"></i>
+      <i class="iconfont icongongchangfahuo1"></i>
     </view>
     <view class="thirdLine"></view>
     <view class="img">
-      <i class="iconfont iconzhongxinruku"></i>
+      <i class="iconfont iconzhongxinruku1"></i>
     </view>
     <view class="forthLine"></view>
     <view class="img">
-      <i class="iconfont iconzhongxinruku"></i>
+      <i class="iconfont iconzhongxinruku1"></i>
     </view>
   </view>
   <!-- 右边 -->

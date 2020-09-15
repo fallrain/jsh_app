@@ -1,10 +1,10 @@
 <template>
   <view class="homepage">
 <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
-    <view class="status_bar">
-      <!-- 这里是状态栏 -->
-    </view>
     <view class="homepage-top">
+      <view class="index-status-bar">
+        <!-- 这里是状态栏 -->
+      </view>
       <view class="homepage-top-head">
         <view class='iconfont iconzuo homepage-top-head-iconl'  @tap="goBack"></view>
         <image
