@@ -120,18 +120,9 @@
       :activeItemName="'item'+curChoseDeliveryAddress.customerCode"
       @change="deliveryAddressListChange"
     ></j-choose-delivery-address>
-    <view
-      @tap="goShoppingCart"
-      class="goodsList-shopping-cart-icon"
-    >
-      <view class="iconfont iconxuanfugouwuche1"></view>
-    </view>
-    <view
-      @tap="goTop"
-      class="goodsList-shopping-to-top-icon"
-    >
-      <view class="iconfont icondingbu"></view>
-    </view>
+    <j-goods-hover-button
+      :cartNumber="cartNum"
+    ></j-goods-hover-button>
   </view>
 </template>
 
@@ -153,13 +144,16 @@ import {
 } from '@/lib/dataDictionary';
 import {
   mapGetters,
-  mapMutations
+  mapMutations,
+  mapActions,
 } from 'vuex';
 import {
   USER,
   COMMODITY,
-  GOODS_LIST
+  GOODS_LIST,
+  SHOPPING_CART
 } from '../../store/mutationsTypes';
+import JGoodsHoverButton from '../../components/goods/JGoodsHoverButton';
 
 export default {
   name: 'goodsList',
@@ -168,6 +162,7 @@ export default {
     selfMescrollMixin
   ],
   components: {
+    JGoodsHoverButton,
     JDrawerFilterItem,
     JDrawer,
     JSearchInput,
@@ -175,7 +170,6 @@ export default {
     JHeadTab,
     JGoodsItem,
     MescrollBody,
-
   },
   data() {
     return {
@@ -320,12 +314,16 @@ export default {
       userInf: USER.GET_SALE,
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,
       catalogList: COMMODITY.GET_CATALOG_LIST,
+      cartNum: SHOPPING_CART.GET_CART_NUM,
     }),
   },
   methods: {
     ...mapMutations([
       USER.UPDATE_DEFAULT_SEND_TO,
-      GOODS_LIST.UPDATE_IS_CART_UPDATE,
+      GOODS_LIST.UPDATE_IS_CART_UPDATE
+    ]),
+    ...mapActions([
+      SHOPPING_CART.UPDATE_CART_NUM_ASYNC
     ]),
     resetAll() {
       this.tabConditions = {};
@@ -565,6 +563,7 @@ export default {
       /* 加购成功 */
       // 更改是否已经加购了的状态
       this[GOODS_LIST.UPDATE_IS_CART_UPDATE](true);
+      this[SHOPPING_CART.UPDATE_CART_NUM_ASYNC](this.userInf.customerCode);
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
@@ -726,19 +725,6 @@ export default {
         }
       });
     },
-    goShoppingCart() {
-      /* 跳转购物车 */
-      uni.switchTab({
-        url: '/pages/shoppingCart/shoppingCart'
-      });
-    },
-    goTop() {
-      /* 回到顶部 */
-      uni.pageScrollTo({
-        scrollTop: 0,
-        duration: 100
-      });
-    }
   }
 };
 </script>

@@ -69,6 +69,7 @@ function hideLoading() {
   }
   loadingAy.length--;
 }
+
 function showLoading() {
   /* 打开遮罩 */
   uni.showLoading({
@@ -111,6 +112,10 @@ function jSend(option) {
           data,
           statusCode
         } = response;
+        if (data === 'SECURITY_INVALID_TOKEN') {
+          // todo 需要改名为toLogin
+          AlipayJSBridge && AlipayJSBridge.call('popWindow');
+        }
         if (!cfg.noLoading) {
           hideLoading();
         }
@@ -186,6 +191,7 @@ function jGetImage(...args) {
     }
   });
 }
+
 export {
   jSend,
   jGet,

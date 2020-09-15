@@ -179,7 +179,8 @@ import {
 } from 'vuex';
 import {
   GOODS_LIST,
-  USER
+  USER,
+  SHOPPING_CART
 } from '../../store/mutationsTypes';
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
@@ -310,7 +311,8 @@ export default {
     ...mapGetters({
       userInf: USER.GET_SALE,
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
-      isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE
+      isCartUpdate: GOODS_LIST.GET_IS_CART_UPDATE,
+      cartNum: SHOPPING_CART.GET_CART_NUM,
     }),
     validList() {
       /* 有效的商品列表 */
@@ -346,6 +348,7 @@ export default {
     ]),
     ...mapActions([
       USER.UPDATE_DEFAULT_SEND_TO_ASYNC,
+      SHOPPING_CART.UPDATE_CART_NUM_ASYNC
     ]),
     setPageInfo() {
       // 送达方数据初始化
@@ -364,6 +367,8 @@ export default {
       this.getCreditQuota();
       // 获取特价版本
       this.getSpecialPrice();
+      // 重置购物车数量
+      this.updateCartNum();
     },
     reloadPageInfo() {
       /* 重载页面信息 */
@@ -386,6 +391,8 @@ export default {
       const getShoppingCartList = this.getShoppingCartList();
       // 获取特价版本
       const getSpecialPrice = this.getSpecialPrice();
+      // 重置购物车数量
+      const updateCartNum = this.updateCartNum();
       // 重置购物车
       this.resetShoppingCartList();
       // 重置结算底栏信息
@@ -396,8 +403,23 @@ export default {
         getRefreshShoppingCartList,
         getShoppingCartList,
         getSpecialPrice,
-        getCloudStockState
+        getCloudStockState,
+        updateCartNum
       ]).then(() => true);
+    },
+    setCartNum() {
+      /* 设置购物车数量 */
+      const cartNum = this.cartNum;
+      if (cartNum) {
+        uni.setTabBarBadge({
+          index: 2,
+          text: `${cartNum}`
+        });
+      } else {
+        uni.removeTabBarBadge({
+          index: 2
+        });
+      }
     },
     resetSendCustomerList() {
       /* 先重置送达方数据 */
@@ -978,10 +1000,15 @@ export default {
                 const failureIndex = this.failureGoodsList.findIndex(v => v.id === id);
                 this.failureGoodsList.splice(failureIndex, 1);
               });
+              this.updateCartNum();
             }
           }
         }
       });
+    },
+    updateCartNum() {
+      /* 更新购物车数量 */
+      return this[SHOPPING_CART.UPDATE_CART_NUM_ASYNC](this.userInf.customerCode);
     },
     singleDeleteCart(goods) {
       /* 单个移除购物车 */
