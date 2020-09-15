@@ -7,7 +7,7 @@
       </view>
         <scroll-view
           :scroll-y="true"
-          class="filter-drawer-cnt-list"
+          class="proComAct-filter-drawer-cnt-list"
       >
         <view class="pro-act-pop-detail-wrap">
           <view class="pro-act-pop-detail" v-for="(act,indexA) in info" :key="indexA">
