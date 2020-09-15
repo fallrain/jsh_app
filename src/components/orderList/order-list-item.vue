@@ -68,6 +68,9 @@
         <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
         </view>
+        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>整车查看(作废)
+        </view>
       </view>
       <!--<order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>-->
     </view>
@@ -128,6 +131,13 @@
         <view v-if="jshi_order_gvs_status" @click="checkWL" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
         </view>
+        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>整车查看(作废)
+        </view>
+        <view v-if="showZzkkBtn" @click="zzkkAction" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>自主扣款
+        </view>
+
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
           <view class="jOrderConfirmItem-semicircle"></view>
         </view>
@@ -181,7 +191,6 @@ export default {
       tctpConfirmButton: false,
       ggfkf:false,
       selfPayButton:false,
-      jshi_order_gvs_status:false,
       titleAndNo:''
     };
   },
@@ -211,11 +220,7 @@ export default {
     } else {
       this.ggfkf = false;
     }
-    if(info.jshi_order_gvs_status == '1') {
-      this.jshi_order_gvs_status = true;
-    } else {
-      this.jshi_order_gvs_status = false;
-    }
+   
     // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
     
   },
@@ -250,7 +255,35 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    showZzkkBtn() {
+      return (this.info.btnsInfo.selfPayButton != '0');
+    },
+    zcck() {
+      // jshi_order_type IN('ZK','ZJ')&jshi_order_gvs_status=1
+      const details = this.info.details[0];
+      const info = this.info.info;
+      if (info.jshi_order_gvs_status == '1')
+      {
+        if( info.jshi_order_type == 'ZK'
+        || info.jshi_order_type == 'ZJ'){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
+    jshi_order_gvs_status() {
+      const info = this.info.info;
+      if(info.jshi_order_gvs_status == '1') {
+         return true;
+      } else {
+         return false;
+      }
+    },
+
   },
   methods: {
     tctpConfirmButtonAction() {
@@ -319,6 +352,20 @@ export default {
     checkWL() {
       uni.navigateTo({
         url: '/pages/orderList/orderWL'
+      });
+    },
+    zzkkAction() {
+      uni.showModal({
+          title: '提示',
+          content: '正在开发',
+          showCancel:false
+      });
+    },
+    zcckAction() {
+      uni.showModal({
+          title: '提示',
+          content: '正在开发',
+          showCancel:false
       });
     },
     orderFailsAction() {
