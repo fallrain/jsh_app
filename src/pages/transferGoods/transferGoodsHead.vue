@@ -150,7 +150,7 @@ export default {
 
 
 .jHeadTab-list-wrap{
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   z-index: 99;
@@ -164,7 +164,7 @@ export default {
   padding-left: 28px;
   padding-right: 28px;
   background: #fff;
-  height: 66px;
+  height: 58px;
 }
 
 .jHeadTab-item {
