@@ -12,6 +12,7 @@
          <swiper-item v-for="(item, index) in detailInfo.images" :key="index">
            <view class="swiper-item">
              <image class="image" :src="item.masterImage" mode="aspectFill"></image>
+             <image class="image2" src="../../assets/img/product/sellout.png" v-show="isShowImg"></image>
            </view>
          </swiper-item>
        </swiper>
@@ -170,8 +171,10 @@ export default {
         isSale: false,
         isActi: false,
         isSaleLe: false,
-        isflash: false //抢单数量为0时置灰
+        isflash: false, //抢单数量为0时置灰
+        isImg: false // 售罄时置灰
       },
+      isShowImg: false,
       activityId: '',
       ISGUANZHU: false, // 商品关注
       detailInfo: [], // 商品信息
@@ -238,13 +241,16 @@ export default {
     this.addressInfo.id = this.defaultSendTo.customerCode;
     (async () => {
       await this.getAllProductActivity(); // 抢单  反向定制数据
+      await this.getProductDetail();// 获取产品详情
+      await this.productStock();// 获取数量页面的库存字段
+      await this.getDeliveryAddress();// 获取配送地址列表
     })();
 
-    this.getProductDetail();// 获取产品详情
+
     this.getHostLost();// 获取热门推荐列表
     this.productQueryInter();// 产品是否关注
-    this.productStock();// 获取数量页面的库存字段
-    this.getDeliveryAddress();// 获取配送地址列表
+
+
   },
   methods: {
     ...mapMutations([
@@ -305,6 +311,7 @@ export default {
         this.detailInfo = data;
         console.log(this.detailInfo);
         this.footButtong.isSale = this.detailInfo.product.isSale;
+        console.log( this.footButtong.isSale);
         if (this.detailInfo.activities.length > 0) {
           this.detailInfo.activities.forEach((ee) => {
             if (ee === '套餐' || ee === '组合') {
@@ -523,19 +530,19 @@ export default {
           this.ActInfo.push(fx);
         }
         console.log(this.ActInfo);
-        // this.ActInfo.forEach((item) => {
-        //   console.log('011111111');
-        //   if (item.title === '抢单') {
-        //     item.list.forEach((ele) => {
-        //       console.log('0222222');
-        //       if (ele.num === 0) {
-        //         console.log('03333333');
-        //       // 抢单数量为0
-        //         this.footButtong.isflash = true;
-        //       }
-        //     });
-        //   }
-        // });
+        this.ActInfo.forEach((item) => {
+          console.log('011111111');
+          if (item.title === '抢单') {
+            item.list.forEach((ele) => {
+              console.log('0222222');
+              if (ele.num === 0) {
+                console.log('03333333');
+              // 抢单数量为0
+                this.footButtong.isflash = true;
+              }
+            });
+          }
+        });
       }
     },
     async getHostLost() {
@@ -582,6 +589,15 @@ export default {
       if (code === '1') {
         this.stock = data;
         console.log(this.stock);
+        console.log(this.detailInfo);
+        if (this.detailInfo) {
+          if (this.detailInfo.isResource === '1' && Number(this.stock[this.productCode].stockTotalNum) === 0 ) {
+            console.log(this.detailInfo);
+            this.isShowImg = true;
+            this.footButtong.isImg = true;
+            console.log('222222');
+          }
+        }
       }
     },
     guanZhu() {

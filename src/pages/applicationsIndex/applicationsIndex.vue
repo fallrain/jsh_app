@@ -35,7 +35,7 @@
             field="content"
             :dotsStyles="dotsStyles"
           >
-            <swiper class="swiper-box" @change="changePic">
+            <swiper class="swiper-box" @change="changePic" autoplay="true"  interval="5000" circular="true">
               <swiper-item
                 v-for="(item,index) in imageList"
                 :key="index">

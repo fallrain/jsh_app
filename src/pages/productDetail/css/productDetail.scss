@@ -24,8 +24,15 @@
 
 .image {
   width: 100%;
+  position: relative;
 }
-
+.image2 {
+  position:absolute;
+  top: 40px;
+  right:40px;
+  width:180px;
+  height: 120px;
+}
 .productDetail-text {
   margin: 5px 5px;
   padding: 0 10px;
