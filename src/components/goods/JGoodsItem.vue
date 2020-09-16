@@ -30,6 +30,7 @@
         class="jGoodsItem-left-float"
         v-if="tagImg"
       ></image>
+      <image class="image2" src="../../assets/img/product/sellout.png" v-show="isShowImg"></image>
     </view>
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-goodsName j-goods-title" @tap="goDetail">
@@ -182,6 +183,7 @@ export default {
   },
   data() {
     return {
+      isShowImg: false,
       baseUrl: process.env.BASE_URL,
       // 错误图片
       errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
@@ -295,6 +297,11 @@ export default {
             this.isShowAddCart = true;
           }
         }
+      }
+      console.log(this.goods);
+      if (this.goods.isResource === '1' && Number(this.goods.$stock.stockTotalNum) === 0) {
+        this.isShowImg = true;
+        priceInf.disabled = true;
       }
 
       inf = {
