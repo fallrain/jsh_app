@@ -32,18 +32,18 @@
         @up="upCallback"
         ref="mescrollRef"
       >
-        <view class="goodsList-items-wrap" v-if="list.length !== 0">
+      <view class="goodsList-items-wrap" v-if="isShowList">
           <j-goods-item
-            :allPrice="item.$allPrice"
+            v-for="(item,index) in list"
+            :key="item.productCode"
             :goods="item"
             :index="index"
-            :key="item.productCode"
             :saletoCode="userInf.customerCode"
             :sendtoCode="defaultSendToInf.customerCode"
+            :allPrice="item.$allPrice"
             :userInf="userInf"
-            @addCartSuccess="addCartSuccess"
             @change="goodsChange"
-            v-for="(item,index) in list"
+            @addCartSuccess="addCartSuccess"
           ></j-goods-item>
         </view>
         <!--      <Exception v-else>-->
@@ -177,6 +177,7 @@ export default {
   },
   data() {
     return {
+      isShowList: true,
       pageCfg: {
         page: {
           pageSize: 15,
@@ -469,6 +470,12 @@ export default {
           // tab类型搜索条件
           condition: dataCondition
         } = data;
+
+        if (!page.result) {
+          this.isShowList = false;
+        } else {
+          this.isShowList = true;
+        }
         // 组合tab的搜索条件数据（popTabs）
         this.genTabCondition(dataCondition);
         // 当前页码的数据
@@ -554,6 +561,7 @@ export default {
           });
         }
       } else {
+        this.isShowList = false;
         this.mescroll.endErr();
       }
       return scrollView;
