@@ -14,6 +14,7 @@
   z-index: 99;
   width: 100%;
   padding-top: 104px;
+  height: 246px;
 
   .jHeadTab-icon-wrap {
     .iconfont {
@@ -40,6 +41,10 @@
       }
     }
   }
+}
+
+.goodsList-mescroll-wrap {
+  height: calc(100vh - var(--window-top) - 246px);
 }
 
 .goodsList-drawer {
