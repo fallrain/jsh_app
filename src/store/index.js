@@ -7,6 +7,7 @@ import transfer from '@/store/transfer';
 import vehicle from '@/store/vehicle';
 import commodity from '@/store/commodity';
 import goodsList from '@/store/goodsList';
+import shoppingCart from '@/store/shoppingCart';
 
 
 Vue.use(Vuex);
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     transfer,
     vehicle,
     commodity,
-    goodsList
+    goodsList,
+    shoppingCart
   }
 });

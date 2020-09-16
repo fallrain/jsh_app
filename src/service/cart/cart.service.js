@@ -82,5 +82,13 @@ export default {
      * @customerCode:string
      * */
     return jGet(urls.getCloudStockState(customerCode));
-  }
+  },
+  getShoppingCartNum(customerCode) {
+    /* 获取购物车商品数量 */
+    /**
+     * 售达方编码
+     * @customerCode:string
+     * */
+    return jGet(urls.getShoppingCartNum(customerCode));
+  },
 };

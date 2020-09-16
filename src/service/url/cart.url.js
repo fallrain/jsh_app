@@ -37,7 +37,9 @@ const urls = {
   // 更新购物车数量
   updateProductNumber: '/shoppingCart/add/cart/updateProductNumber',
   // 获取云仓权限信息
-  getCloudStockState: customerCode => `/shoppingCart/get/agreement/status/${customerCode}`
+  getCloudStockState: customerCode => `/shoppingCart/get/agreement/status/${customerCode}`,
+  // 获取购物车数量
+  getShoppingCartNum: customerCode => `/shoppingCart/getNumberByValid/${customerCode}`
 };
 util.addPrefix(baseURL, urls);
 export default urls;

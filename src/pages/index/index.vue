@@ -1,28 +1,28 @@
 <template>
   <view class="homepage">
-<!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
+    <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
     <view class="homepage-top">
       <view class="index-status-bar">
         <!-- 这里是状态栏 -->
       </view>
       <view class="homepage-top-head">
-        <view class='iconfont iconzuo homepage-top-head-iconl'  @tap="goBack"></view>
+        <view @tap="goBack" class='iconfont iconzuo homepage-top-head-iconl'></view>
         <image
           class="homepage-top-head-name"
           src="../../assets/img/index/logo-white.png"
           mode="aspectFill"
         ></image>
-        <view class='iconfont iconpeople homepage-top-head-icon'  @tap="service"></view>
+        <view @tap="service" class='iconfont iconpeople homepage-top-head-icon'></view>
       </view>
       <view class="jSearchInput-wrap j-flex-aic">
         <view class="jSearchInput-icon iconfont iconsousuo"></view>
         <input
-            class="jSearchInput"
-            type="text"
-            :placeholder="mendli"
-            placeholder-class="col_c"
-            v-model="name"
-            @tap="confirm"
+          :placeholder="mendli"
+          @tap="confirm"
+          class="jSearchInput"
+          placeholder-class="col_c"
+          type="text"
+          v-model="name"
         >
       </view>
       <!-- 全部 -->
@@ -51,7 +51,7 @@
           :mode="mode"
           field="content"
         >
-          <swiper class="swiper-box" @change="changePic" autoplay="true"  interval="5000" circular="true">
+          <swiper @change="changePic" autoplay="true" circular="true" class="swiper-box" interval="5000">
             <swiper-item v-for="(item,index) in bannerList" :key="index">
               <view class="swiper-item">
                 <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
@@ -87,78 +87,78 @@
     </view>
 
 
-      <!-- 推荐 + 资讯-->
-      <view class="homepage-recommend-info">
-        <!-- 推荐 -->
-        <view class="homepage-recommend">
-          <view
-            class="homepage-recommend-list"
-            v-for="item in recommendList"
-            :key="item.id"
+    <!-- 推荐 + 资讯-->
+    <view class="homepage-recommend-info">
+      <!-- 推荐 -->
+      <view class="homepage-recommend">
+        <view
+          :key="item.id"
+          class="homepage-recommend-list"
+          v-for="item in recommendList"
 
+        >
+          <view class="homepage-recommend-name">
+            <view class="homepage-recommend-title">{{item.title}}</view>
+            <view class="homepage-recommend-describe">{{item.describe}}</view>
+          </view>
+          <swiper
+            @change="change"
+            autoplay="true"
+            circular="true"
+            class="homepage-recommend-swiper"
+            interval="5000"
+            next-margin="68px"
           >
-            <view class="homepage-recommend-name">
-              <view class="homepage-recommend-title">{{item.title}}</view>
-              <view class="homepage-recommend-describe">{{item.describe}}</view>
-            </view>
-            <swiper
-              class="homepage-recommend-swiper"
-              @change="change"
-              next-margin="68px"
-              autoplay="true"
-              interval="5000"
-              circular="true"
+            <swiper-item
+              :key="v.id"
+              class="homepage-recommend-swiper-item"
+              v-for="v in item.data"
             >
-              <swiper-item
-                v-for="v in item.data"
-                :key="v.id"
-                class="homepage-recommend-swiper-item"
-              >
-                <view class="homepage-recommend-imgs" @tap="goDetail(v)">
-                  <image class="homepage-recommend-image" :src="v.imageUrl" mode="aspectFill"/>
-                </view>
-              </swiper-item>
-            </swiper>
+              <view @tap="goDetail(v)" class="homepage-recommend-imgs">
+                <image :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
+              </view>
+            </swiper-item>
+          </swiper>
 
-          </view>
         </view>
-<!--   资讯测试版     -->
-        <!-- 资讯 -->
-<!--        <view class="homepage-info">-->
-<!--          <view class="homepage-info-name">-->
-<!--            <text class="homepage-info-title">热门资讯</text>-->
-<!--            <text class="homepage-info-more">MORE</text>-->
-<!--          </view>-->
-<!--          <view>-->
-<!--            <view-->
-<!--                class="homepage-info-list"-->
-<!--                v-for="item in infoList"-->
-<!--                :key="item.id"-->
-<!--                @click="goCatalog(item.url)"-->
-<!--            >-->
-<!--              <view class="homepage-info-list-hot">{{item.hot}}</view>-->
-<!--              <view class="homepage-info-list-title">{{item.info}}</view>-->
-<!--            </view>-->
-<!--          </view>-->
+      </view>
+      <!--   资讯测试版     -->
+      <!-- 资讯 -->
+      <!--        <view class="homepage-info">-->
+      <!--          <view class="homepage-info-name">-->
+      <!--            <text class="homepage-info-title">热门资讯</text>-->
+      <!--            <text class="homepage-info-more">MORE</text>-->
+      <!--          </view>-->
+      <!--          <view>-->
+      <!--            <view-->
+      <!--                class="homepage-info-list"-->
+      <!--                v-for="item in infoList"-->
+      <!--                :key="item.id"-->
+      <!--                @click="goCatalog(item.url)"-->
+      <!--            >-->
+      <!--              <view class="homepage-info-list-hot">{{item.hot}}</view>-->
+      <!--              <view class="homepage-info-list-title">{{item.info}}</view>-->
+      <!--            </view>-->
+      <!--          </view>-->
 
-<!--        </view>-->
-<!--         资讯正式版 -->
-         <view class="homepage-info">
-          <view class="homepage-info-name">
-            <text class="homepage-info-title">热门资讯</text>
-            <text class="homepage-info-more" @tap="goAnnouncement">MORE</text>
-          </view>
-          <view>
-            <view
+      <!--        </view>-->
+      <!--         资讯正式版 -->
+      <view class="homepage-info">
+        <view class="homepage-info-name">
+          <text class="homepage-info-title">热门资讯</text>
+          <text @tap="goAnnouncement" class="homepage-info-more">MORE</text>
+        </view>
+        <view>
+          <view
             class="homepage-info-list"
             v-for="item in infoList"
             :key="item.id"
           >
             <view class="homepage-info-list-hot" @tap="goInfoDetail(item)">{{item.title}}</view>
           </view>
-          </view>
         </view>
       </view>
+    </view>
     <!-- tabber -->
     <!-- <view
       v-for="item in tabBarList"
@@ -168,13 +168,13 @@
       <image :src="item.img" mode="aspectFill" />
     </view> -->
     <!-- 广告图 直播-->
-<!--     <view class="homepage-nav" v-show="isShowNav">-->
-<!--      <image mode="aspectFill" src="../../assets/img/index/manypeople.png" @tap="goNav"/>-->
-<!--      <i-->
-<!--        @tap="deleteNav"-->
-<!--        class="homepage-nav-close iconfont iconcross"-->
-<!--      ></i>-->
-<!--    </view>-->
+    <!--     <view class="homepage-nav" v-show="isShowNav">-->
+    <!--      <image mode="aspectFill" src="../../assets/img/index/manypeople.png" @tap="goNav"/>-->
+    <!--      <i-->
+    <!--        @tap="deleteNav"-->
+    <!--        class="homepage-nav-close iconfont iconcross"-->
+    <!--      ></i>-->
+    <!--    </view>-->
   </view>
 </template>
 
@@ -184,8 +184,9 @@ import {
   mapGetters
 } from 'vuex';
 import {
+  COMMODITY,
   USER,
-  COMMODITY
+  SHOPPING_CART
 } from '../../store/mutationsTypes';
 
 import {
@@ -203,8 +204,7 @@ import './css/index.scss';
 
 export default {
   name: 'index',
-  components: {
-  },
+  components: {},
 
   data() {
     return {
@@ -422,6 +422,7 @@ export default {
     (async () => {
       await this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
       await this[USER.UPDATE_SALE_ASYNC]();
+      this[SHOPPING_CART.UPDATE_CART_NUM_ASYNC](this.saleInfo.customerCode);
       await this[USER.UPDATE_TOKEN_USER_ASYNC]();
     })().then((res) => {
       this.getPageInf();
@@ -429,25 +430,16 @@ export default {
       this.getBaoKuan();
       this.getZhuanGong();
       this.getZiYuanJi();
-      // this.get()
-      console.log(this.defaultSendToInf);
-      console.log(this.tokenUserInf);
     });
-
-    // this.recommend();
-    // this[USER.UPDATE_DEFAULT_SEND_TO_ASYNC]();
-    // this[USER.UPDATE_SALE_ASYNC]();
-    // this[USER.UPDATE_TOKEN_USER_ASYNC]();
   },
   onLoad() {
-    const _this = this;
     let index = 0;
     setInterval(() => {
       // console.log(1111);
-      _this.mendli = _this.mend[index];
+      this.mendli = this.mend[index];
       // console.log(_this.mendli);
       index += 1;
-      if (index >= _this.mend.length) {
+      if (index >= this.mend.length) {
         index = 0;
       }
     }, 5000);
@@ -468,7 +460,9 @@ export default {
       // 修改token用户信息
       USER.UPDATE_TOKEN_USER_ASYNC,
       // 更新有货商品分类
-      COMMODITY.UPDATE_CATALOG_LIST_ASYNC
+      COMMODITY.UPDATE_CATALOG_LIST_ASYNC,
+      // 获取购物车数量
+      SHOPPING_CART.UPDATE_CART_NUM_ASYNC
     ]),
     getPageInf() {
       this.getbannerList();
@@ -514,7 +508,8 @@ export default {
         const signature = `nonce=${nonce1}&timestamp=${timestamp1}&web_token=${web_token1}&9767b0677a6f46f5d3d0af8c00f3f16c`;
         let sha = hex_sha1(signature);
         sha = sha.toUpperCase();
-        console.log(signature); console.log(sha);
+        console.log(signature);
+        console.log(sha);
         //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
         //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
         //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
@@ -578,7 +573,7 @@ export default {
       console.log(item);
       let aaa = [];
       let productCode = '';
-      let id = ''
+      let id = '';
       if (item.url.indexOf('/detail/') > -1) {
         aaa = item.url.split('/');
         console.log(aaa[aaa.length - 1]);
@@ -739,29 +734,31 @@ export default {
 </script>
 
 <style scoped>
-/deep/  .jSearchInput-wrap {
-  width: 702px;
-  height: 58px;
-  background: rgba(209, 209, 239,1);
-  box-shadow:0px 0px 12px 0px rgba(102,135,168,0.15);
-  opacity: 0.8;
-  border-radius:32px;
-  border: 1px solid #6687A8;
-  padding-left: 22px;
-  padding-right: 26px;
-  margin-right:26px;
-  /*position: absolute;*/
-  /*left: 150px;*/
-  /*top:30px;*/
-  margin-bottom: 32px;
-}
-/deep/ .col_c{
-	color: #fff;
-  font-size: 28px;
-  font-family: PingFangSC-Light, PingFang SC;
-  font-weight: 300;
-  background: rgba(209, 209, 239,0.8);
-	}
+  /deep/ .jSearchInput-wrap {
+    width: 702px;
+    height: 58px;
+    background: rgba(209, 209, 239, 1);
+    box-shadow: 0px 0px 12px 0px rgba(102, 135, 168, 0.15);
+    opacity: 0.8;
+    border-radius: 32px;
+    border: 1px solid #6687A8;
+    padding-left: 22px;
+    padding-right: 26px;
+    margin-right: 26px;
+    /*position: absolute;*/
+    /*left: 150px;*/
+    /*top:30px;*/
+    margin-bottom: 32px;
+  }
+
+  /deep/ .col_c {
+    color: #fff;
+    font-size: 28px;
+    font-family: PingFangSC-Light, PingFang SC;
+    font-weight: 300;
+    background: rgba(209, 209, 239, 0.8);
+  }
+
   /deep/ .jSearchInput-icon {
     color: #fff;
     font-size: 24px;
