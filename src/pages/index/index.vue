@@ -32,7 +32,7 @@
         scroll-with-animation
       >
         <view
-          :class="['homepage-top-center-list',item.active && 'active']"
+          class="homepage-top-center-list"
           v-for="(item,index) in list"
           :key="index"
           scroll-x
@@ -100,6 +100,7 @@
           <view class="homepage-recommend-name">
             <view class="homepage-recommend-title">{{item.title}}</view>
             <view class="homepage-recommend-describe">{{item.describe}}</view>
+            <view v-if="isShowMore">MORE</view>
           </view>
           <swiper
             @change="change"
@@ -296,6 +297,7 @@ export default {
           url: '/pages/vehicleList/abnormal'
         }
       ],
+      isShowMore: false,
       recommendList: [
         {
           id: 1,
@@ -651,6 +653,15 @@ export default {
       if (code === '1') {
         console.log(this.recommendList[0]);
         this.recommendList[0].data = data;
+        this.recommendList.map(item => {
+          // if (item.title === '新品推荐') {
+          //   console.log('1111111111')
+          //   this.isShowMore = true;
+          //   console.log(this.isShowMore)
+          // } else {
+          //   this.isShowMore = false;
+          // }
+        });
       }
     },
     // 爆款推荐
