@@ -100,6 +100,9 @@ export default {
   },
   tctpConfirm(dn,bstnk) {
     return jGet(url.tctpConfirm(dn,bstnk));
-  }
+  },
+  payByCustomer(bstnk) { // 反向定制自主扣款
+    return jGet(url.payByCustomer, bstnk);
+  },
 
 };

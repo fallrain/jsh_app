@@ -38,16 +38,16 @@ export default {
     if(this.infoList.info.jshi_order_gvs_status == '1') {
       this.buttonList.push(
         {
-          name: '查看物流', ischeck: false 
+          name: '查看物流', ischeck: false
         }
       );
-    } 
+    }
 
     const details = this.infoList.details;
 
     // 判断订单节点是否存在
-    if(details.jshd_tags == 'CROWD_FUNDING' 
-    && details.jshd_product_type == '3' 
+    if(details.jshd_tags == 'CROWD_FUNDING'
+    && details.jshd_product_type == '3'
     && details.jshi_order_gvs_status == '1'
     && details.jshi_stock_type == 'ZCN'
     && details.jshi_stock_type == 'KXZF') {
@@ -55,7 +55,7 @@ export default {
       this.buttonList.push(
         { name: '订单节点', ischeck: false }
       )
-    } 
+    }
 
     if(this.infoList.btnsInfo.signInButton == 1) {
       this.buttonList.push(
@@ -83,7 +83,6 @@ export default {
   },
   methods: {
     ckickBot(item) {
-      debugger
       if(item.name == '查看物流') {
         uni.navigateTo({
           url: `/pages/orderList/orderWL`
@@ -99,7 +98,6 @@ export default {
     async orderSelfSignedFun() {
       const { code, data } = await this.orderService.orderSelfSigned(this.infoList.info.bstnk);
       if (code === '1') {
-        debugger
         console.log(data)
       }
     }

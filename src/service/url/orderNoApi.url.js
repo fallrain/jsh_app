@@ -31,6 +31,9 @@ const urls = {
     return `/billInfo/get/billInfo/${sendtoCode}/${productGroup}`;
   },
   getTctpSwitch: '/order/get/tctpSwitch', // 获取统仓统配白名单
+  payByCustomer(OrderNo) { // 反向定制自主扣款
+    return `/crowdFunding/payByCustomer/${OrderNo}`;
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;

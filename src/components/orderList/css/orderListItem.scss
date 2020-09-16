@@ -17,7 +17,6 @@
 .produceDetailItem-head-btn {
   display: inline-block;
   flex-shrink: 0;
-  width: 86px;
   background: $theme-color;
   border-radius: 16px;
   color: #FFFFFF;
@@ -38,7 +37,8 @@
 .produceDetailItem-head-text-status {
   color: $theme-color;
   font-size: 24px;
-  padding-left: 80px;
+  margin-left: auto;
+  padding-right: 10px;
 }
 
 .produceDetailItem-cnt {
@@ -179,4 +179,19 @@
 .balance-style{
   text-align: center;
   color: $theme-color;
+}
+.jmodal-style{
+  .jmodal-item{
+    display: flex;
+    justify-content: flex-start;
+    .key-style{
+      min-width: 200px;
+      text-align: right;
+    }
+    .val-style{
+      text-align: left;
+      flex-grow: 1;
+      flex-wrap: wrap;
+    }
+  }
 }

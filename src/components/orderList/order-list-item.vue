@@ -3,7 +3,10 @@
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
       <text class="produceDetailItem-head-text">{{titleAndNoFun}}</text>
-      <text @click="orderFailsAction" class="produceDetailItem-head-text-status">{{info.info.selfUseOrderStatus}}</text>
+      <text @click="orderFailsAction"
+            class="produceDetailItem-head-text-status">
+        {{info.info.selfUseOrderStatus}}
+      </text>
     </view>
     <view v-if="info.details.length<2">
       <view class="produceDetailItem-cnt" @click="goDetail">
@@ -42,22 +45,20 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="invalidButton" @click="orderCancle" type="button" class="produceDetailItem-fot-btn">订单作废</button>
+          <button v-if="info.btnsInfo.signInButton === '1'"
+                  @click="orderSelfSignedFun"
+                  type="button"
+                  class="produceDetailItem-fot-btn">
+            签收
+          </button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
-        <!--<view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>-->
-        <!-- <view class="produceDetailItem-btm">
-          <view class="iconfont iconcancel iconStyle"></view>自助作废
-        </view> -->
-        <view v-if="ggfkf" @tap="changePayer" class="produceDetailItem-btm">
+        <view v-if="isChangePayer" @tap="changePayer" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
         <view v-if="tctpConfirmButtonFun"  @click="tctpConfirmButtonAction" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
-        </view>
-        <view v-if="selfPayButton" class="produceDetailItem-btm">
-          <view class="iconfont iconcancel iconStyle"></view>前往结算
         </view>
         <view v-if="invalidButton"  @click="orderCancle" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>订单作废
@@ -65,11 +66,21 @@
         <view v-if="showNode" @click="nodeClick" class="produceDetailItem-btm">
           <view class="iconfont icontree iconStyle"></view>订单节点
         </view>
-        <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
+        <view v-if="info.btnsInfo.selfPayButton==='1'
+                  ||info.btnsInfo.selfPayButton==='3'
+                  ||info.btnsInfo.selfPayButton==='4'"
+              @click="zzkkAction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>自主扣款
+        </view>
+        <view v-if="info.btnsInfo.selfPayButton==='2'"
+              @click="zzkkAction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>样机结算
         </view>
         <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>整车查看(作废)
+        </view>
+        <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
         </view>
       </view>
       <!--<order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>-->
@@ -109,20 +120,13 @@
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row2" v-if="index < info.details.length-1">
-        <!--<view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>-->
-        <!-- <view class="col-25 produceDetailItem-btm">
-          <view v-if="invalidButton" class="iconfont iconcancel iconStyle"></view>自助作废
-        </view> -->
         <view class="col-25 produceDetailItem-btm">
-          <view v-if="ggfkf" @tap="changePayer"
+          <view v-if="isChangePayer" @tap="changePayer"
                 class="iconfont iconcancel iconStyle"></view>
           更改付款方
         </view>
         <view v-if="tctpConfirmButtonFun" @click="tctpConfirmButtonAction" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
-        </view>
-        <view v-if="selfPayButton" class="col-25 produceDetailItem-btm">
-          <view  class="iconfont iconcancel iconStyle"></view>前往结算
         </view>
         <view v-if="invalidButton" @click="orderCancle" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>订单作废
@@ -130,16 +134,23 @@
         <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm">
           <view class="iconfont icontree iconStyle"></view>订单节点
         </view>
-        <view v-if="jshi_order_gvs_status" @click="checkWL" class="col-25 produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
+        <view v-if="info.btnsInfo.selfPayButton==='1'
+                  ||info.btnsInfo.selfPayButton==='3'
+                  ||info.btnsInfo.selfPayButton==='4'"
+              @click="zzkkAction(info.btnsInfo.selfPayButton)"
+              class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>自主扣款
+        </view>
+        <view v-if="info.btnsInfo.selfPayButton==='2'"
+              @click="zzkkAction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>样机结算
         </view>
         <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>整车查看(作废)
         </view>
-        <view v-if="showZzkkBtn" @click="zzkkAction" class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>自主扣款
+        <view v-if="jshi_order_gvs_status" @click="checkWL" class="col-25 produceDetailItem-btm">
+          <view class="iconfont iconcar iconStyle iconTransform"></view>查看物流
         </view>
-
         <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
           <view class="jOrderConfirmItem-semicircle"></view>
         </view>
@@ -177,6 +188,37 @@
       </template
       >
     </j-pop-picker>
+    <j-modal
+      :title="currentTitle"
+      :show.sync="show"
+      @confirm="modalConfirm"
+    >
+      <template>
+        <!--信用订单-->
+        <view v-if="info.btnsInfo.selfPayButton==='1'" class="jmodal-style">
+          <view class="">价格：</view>
+          <view class="">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
+          <view class="">数量：</view>
+          <view class="">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
+          <view class="">合计：</view>
+          <view class="">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
+          <view class="">付款方：</view>
+          <view class="">{{info.info.jshi_payto_name}}</view>
+        </view>
+        <!--整车、反向定制订单-->
+        <view v-if="info.btnsInfo.selfPayButton==='3'||info.btnsInfo.selfPayButton==='4'"
+              class="jmodal-style">
+          <view class="jmodal-item">
+            <view class="key-style">付款方：</view>
+            <view class="val-style">{{info.info.jshi_payto_name}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">余额：</view>
+            <view class="val-style">{{currentPayerInfo.balance||currentPayerInfo.bookBalance}}</view>
+          </view>
+        </view>
+      </template>
+    </j-modal>
   </view>
 </template>
 
@@ -191,12 +233,14 @@ import {
   ORDER, USER
 } from '../../store/mutationsTypes';
 import JPopPicker from '../form/JPopPicker';
+import JModal from '../form/JModal';
 
 export default {
   name: 'orderListItem',
   components: {
     orderListItemMore,
-    JPopPicker
+    JPopPicker,
+    JModal
   },
   props: {
     info: {
@@ -208,6 +252,10 @@ export default {
   },
   data() {
     return {
+      show: false,
+      currentTitle: '',
+      currentPayerInfo: {}, // 当前付款方 自主扣款
+      state: '', // 自主扣款类型
       payerPickerShow: false, // 是否显示付款方
       payerOptions: [], // 更改付款方选项列表
       currentchosePayerOption: [], // 当前选择的付款方
@@ -215,7 +263,6 @@ export default {
       isOrderMore: false,
       tctpConfirmButton: false,
       ggfkf: false,
-      selfPayButton: false,
       titleAndNo: ''
     };
   },
@@ -254,9 +301,6 @@ export default {
       }
       return false;
     },
-    showZzkkBtn() {
-      return (this.info.btnsInfo.selfPayButton != '0');
-    },
     zcck() {
       // jshi_order_type IN('ZK','ZJ')&jshi_order_gvs_status=1
       const details = this.info.details[0];
@@ -277,6 +321,18 @@ export default {
       }
       return false;
     },
+    // 更改付款方
+    isChangePayer() {
+      const info = this.info.info;
+      // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
+      if ((info.jshi_order_type === 'ZK') || (info.jshi_order_type === 'ZJ') || (info.jshi_order_type === 'JK')) {
+        if ((info.jshi_order_status === '11') || (info.jshi_order_status === '12')) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    }
   },
   watch: {
     currentchosePayerOption(newVal, oldVal) {
@@ -295,30 +351,18 @@ export default {
           }
         });
       }
+    },
+    info(val) {
+      console.log(val);
     }
   },
   created() {
-    console.log('11111111');
     console.log(this.info);
     this.isOrderMore = !this.isOrderMore;
 
     if (this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
-      this.selfPayButton = this.info.btnsInfo.selfPayButton == '1';
     }
-
-    const info = this.info.info;
-    // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
-    if ((info.jshi_order_type == 'ZK') || (info.jshi_order_type == 'ZJ') || (info.jshi_order_type == 'JK')) {
-      if ((info.jshi_order_status == '11') || (info.jshi_order_status == '22')) {
-        this.ggfkf = true;
-      } else {
-        this.ggfkf = false;
-      }
-    } else {
-      this.ggfkf = false;
-    }
-
     // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
   },
   methods: {
@@ -418,7 +462,7 @@ export default {
 
       // 更改付款方 jshi_order_type IN('ZK','ZJ','JK')&jshi_order_status IN(11,12)
       if ((info.jshi_order_type == 'ZK') || (info.jshi_order_type == 'ZJ') || (info.jshi_order_type == 'JK')) {
-        if ((info.jshi_order_status == '11') || (info.jshi_order_status == '22')) {
+        if ((info.jshi_order_status == '11') || (info.jshi_order_status == '12')) {
           this.ggfkf = true;
         } else {
           this.ggfkf = false;
@@ -439,8 +483,9 @@ export default {
       this.$emit('goDetail', this.index);
     },
     nodeClick() {
+      const itemInfo = JSON.stringify(this.info);
       uni.navigateTo({
-        url: '/pages/orderList/orderNode'
+        url: `/pages/orderList/orderNode?currentInfo=${itemInfo}`
       });
     },
     // 查看物流
@@ -449,12 +494,64 @@ export default {
         url: '/pages/orderList/orderWL'
       });
     },
-    zzkkAction() {
-      uni.showModal({
-        title: '提示',
-        content: '正在开发',
-        showCancel: false
-      });
+    // 自主扣款
+    async zzkkAction(state) {
+      const orderNo = this.info.info.bstnk;
+      const paytoCode = this.info.info.jshi_payto_code;
+      const salesGroupCode = this.saleInfo.salesGroupCode;
+      let title = '';
+      if (state === '1') {
+        // 信用订单
+        title = '信用订单';
+      } else if (state === '3') {
+        // 反向定制
+        title = '反向定制订单';
+      } else if (state === '4') {
+        // 整车
+        title = '整车订单';
+      }
+      this.state = state;
+      this.currentTitle = `${title} ${orderNo}`;
+      if (state === '3' || state === '4') {
+        // 查询付款方余额
+        const { code, data } = await this.customerService.payerBalance(paytoCode, salesGroupCode);
+        if (code === '1') {
+          this.currentPayerInfo = data;
+          this.show = true;
+        }
+      } else {
+        this.show = true;
+      }
+    },
+    // 自主扣款点击确定
+    async modalConfirm() {
+      console.log(this.state);
+      if (this.state === '1') {
+        // 信用订单
+        const orderNo = this.info.info.bstnk;
+        const { msg } = await this.trafficService.XyCutPayment(orderNo);
+        uni.showToast({
+          titel: msg,
+          icon: 'none'
+        });
+      } else if (this.state === '3') {
+        // 反向定制
+        const orderNo = this.info.info.bstnk;
+        const { msg } = await this.trafficService.payByCustomer(orderNo);
+        uni.showToast({
+          titel: msg,
+          icon: 'none'
+        });
+      } else if (this.state === '4') {
+        // 整车
+        const orderNo = this.info.info.jshi_grouping_no;
+        const { msg } = await this.trafficService.payByCustomer(orderNo);
+        uni.showToast({
+          titel: msg,
+          icon: 'none'
+        });
+      }
+      console.log('queding');
     },
     zcckAction() {
       uni.showModal({
@@ -472,12 +569,22 @@ export default {
         });
       }
     },
+    async orderSelfSignedFun() {
+      const { code } = await this.orderService.orderSelfSigned(this.infoList.info.bstnk);
+      if (code === '1') {
+        uni.showToast({
+          title: '订单签收成功',
+          icon: 'none'
+        });
+      }
+    },
     async  orderCancle() {
       const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
       if (code === '1') {
         const that = this;
         uni.showToast({
-          title: '取消订单成功'
+          title: '取消订单成功',
+          icon: 'none'
         });
         setTimeout(() => {
           that.goIndex();

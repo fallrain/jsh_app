@@ -10,10 +10,10 @@
         {{title}}
       </view>
       <view class="jModal-content">
-        <slot>111</slot>
+        <slot></slot>
       </view>
       <view class="jModal-btn">
-        <view @tap="modalCancle" v-if="isCancle" class="btn-cancle">取消</view>
+        <view @tap="modalCancle" v-if="isCancle" class="btn-cancle">取消1</view>
         <view @tap="modalSure" class="btn-sure">确定</view>
       </view>
     </view>
@@ -39,13 +39,14 @@ export default {
   },
   methods: {
     cancel() {
-      debugger;
       this.$emit('update:show', false);
     },
     modalCancle() {
+      debugger
       this.$emit('update:show', false);
     },
     modalSure() {
+      debugger
       this.$emit('confirm');
     },
   }

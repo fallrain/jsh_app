@@ -194,7 +194,6 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
-      debugger;
       const obj = this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0];
       obj.address = remarksData.address;
       obj.area = remarksData.area;
@@ -497,7 +496,6 @@ export default {
         return;
       }
 
-      debugger;
       console.log(this.payerMoneyList);
       let state = true;
       if (this.payerMoneyList.length === 0) {

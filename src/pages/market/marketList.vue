@@ -18,9 +18,8 @@
       <view class="marketList-items-wrap">
         <j-activity-item
           v-for="(item,index) in list"
-          :key="index+'^-^'"
+          :key="'^-^'+index"
           :activity="item"
-          :calue="calue"
           @activityDetail ="activityDetail"
           @goOrder ="goOrder"
           @getNum="getNum"
@@ -141,8 +140,7 @@ export default {
   },
   data() {
     return {
-      calue: 1, // 套餐数量
-      allNum: 15, // 总套餐数量
+      allNum: 0, // 总套餐数量
       form: {
         activityId: '',
         activityName: '',
@@ -314,7 +312,7 @@ export default {
       const { code, data } = await this.marketService.activityList(condition);
       if (code === '1') {
         data.list.forEach((item) => {
-          item.choosedNum = 0;
+          item.choosedNum = 1;
         });
         if (data.pageNum === 1) {
           this.list = data.list;
@@ -526,11 +524,6 @@ export default {
       console.log(detail);
       await this.validateProduct(detail);
     },
-    // 数据改变
-    getNum(item) {
-      console.log(item);
-      this.calue = item;
-    },
     // 产品校验
     async validateProduct(currentInfo) {
       console.log(currentInfo);
@@ -543,7 +536,7 @@ export default {
           {
             activityType: this.getActivityTypeCode(currentInfo.activityType),
             activityId: currentInfo.id,
-            number: this.calue,
+            number: currentInfo.choosedNum,
             productList: [
               {
                 productCode: 'CBAGD4000',
@@ -581,7 +574,7 @@ export default {
       const productArr = [];
       currentInfo.products.forEach((item) => {
         console.log(item);
-        this.allNum = Number(item.promotionNum) * Number(this.calue);
+        this.allNum = Number(item.promotionNum) * Number(currentInfo.choosedNum);
         const productItem = {
           productCode: item.productCode,
           number: this.allNum,
