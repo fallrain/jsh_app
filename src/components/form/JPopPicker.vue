@@ -14,7 +14,7 @@
         >确定</view>
         <view
           v-if="isShowClose"
-          class="jPopPicker-pop-head-icon iconfont iconcross"
+          class="jPopPicker-pop-head-icon iconfont iconcross j-common-icon-close-wrap"
           @tap="close"
         ></view>
       </view>

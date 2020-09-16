@@ -28,6 +28,10 @@ export default {
       type: Number,
       default: 0
     },
+    // 滚动对象
+    scrollObject: {
+      type: Object,
+    }
   },
   methods: {
     goShoppingCart() {
@@ -42,6 +46,9 @@ export default {
         scrollTop: 0,
         duration: 100
       });
+      if (this.scrollObject) {
+        this.scrollObject.scrollTo(0, 100);
+      }
     }
   },
 };

@@ -8,7 +8,7 @@
       <view class="jVersionSpecifications-head j-flex-aic">
         <view class="jVersionSpecifications-head-title">{{title}}</view>
         <view
-          class="jVersionSpecifications-head-title-icon"
+          class="jVersionSpecifications-head-title-icon j-common-icon-close-wrap"
           @tap="close"
         >X
         </view>

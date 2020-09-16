@@ -2,14 +2,17 @@
   <uni-popup
     ref="popup"
     type="bottom"
+    @change="popChange"
   >
     <view class="jRechargeBankPicker-wrap">
       <view class="jRechargeBankPicker-head">
         <view class="jRechargeBankPicker-head-title">{{title}}</view>
-        <view
-          @tap="close"
-          class="jRechargeBankPicker-head-close"
-        >X</view>
+        <view class="jRechargeBankPicker-head-close-wrap">
+          <view
+            @tap="close"
+            class="jRechargeBankPicker-head-close"
+          >X</view>
+        </view>
       </view>
       <view class="jRechargeBankPicker-cnt">
         <view class="jRechargeBankPicker-list-l">
@@ -125,7 +128,7 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(() => {
-          val ? this.open() : this.close();
+          val ? this.$refs.popup.open() : this.$refs.popup.close();
         });
       }
     }
@@ -133,11 +136,14 @@ export default {
   methods: {
     open() {
       if (this.$refs.popup) {
-        this.$refs.popup.open();
+        this.$emit('update:isShow', true);
       }
     },
     close() {
-      this.$refs.popup.close();
+      this.$emit('update:isShow', false);
+    },
+    popChange({ show }) {
+      this.$emit('update:isShow', show);
     },
     check(item, index) {
       /* 选中子item */
@@ -161,6 +167,7 @@ export default {
       item.isChecked = true;
       this.list[this.curParIndex].children[index] = item;
       this.$emit('change', this.list);
+      this.close();
     }
   }
 };
@@ -182,6 +189,12 @@ export default {
     color: #333;
     font-size: 30px;
     line-height: 42px;
+  }
+
+  .jRechargeBankPicker-head-close-wrap{
+    width: 40px;
+    height: 40px;
+    text-align: right;
   }
 
   .jRechargeBankPicker-head-close {

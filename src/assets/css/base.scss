@@ -46,6 +46,18 @@ button {
 
 /*fix*/
 
+::-webkit-scrollbar {
+  display: none!important;
+  width: 0 !important;
+  height: 0 !important;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  display: none;
+}
+
 .j-safe-padding-top {
   padding-bottom: constant(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-top);

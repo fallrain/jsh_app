@@ -8,10 +8,14 @@
       <view class="jChooseDeliveryAddressDrawer">
         <view class="jChooseDeliveryAddressDrawer-head">
           <text>配送至</text>
-          <i
-            class="iconfont iconcross"
+          <view
+            class="j-common-icon-close-wrap"
             @tap="hide"
-          ></i>
+          >
+            <view
+              class="iconfont iconcross"
+            ></view>
+          </view>
         </view>
         <view class="jChooseDeliveryAddressDrawer-search-wrap">
           <j-search-input
