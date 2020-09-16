@@ -30,7 +30,7 @@
       @down="jMescrollDownCallback"
       @up="upCallback"
     >
-      <view class="goodsList-items-wrap" v-if="list.length !== 0">
+      <view class="goodsList-items-wrap" v-if="isShowList">
         <j-goods-item
           v-for="(item,index) in list"
           :key="item.productCode"
@@ -173,6 +173,7 @@ export default {
   },
   data() {
     return {
+      isShowList: true,
       pageCfg: {
         page: {
           pageSize: 15,
@@ -465,6 +466,12 @@ export default {
           // tab类型搜索条件
           condition: dataCondition
         } = data;
+
+        if (!page.result) {
+          this.isShowList = false;
+        } else {
+          this.isShowList = true;
+        }
         // 组合tab的搜索条件数据（popTabs）
         this.genTabCondition(dataCondition);
         // 当前页码的数据
@@ -550,6 +557,7 @@ export default {
           });
         }
       } else {
+        this.isShowList = false;
         this.mescroll.endErr();
       }
       return scrollView;
