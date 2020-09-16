@@ -218,7 +218,34 @@
   }
 }
 .iconscreen{
-  font-size: 30px;
+  font-size: 35px;
   color: #ED2856;
+  margin-left: 15px;
 
+}
+.inputsjtab{
+  display: flex;
+  height: 105px;
+  line-height: 105px;
+}
+.tab-brand-child{
+  float: left;
+  height: 90px;
+  width: 90%;
+  line-height: 90px;
+  margin-right: 10px;
+
+}
+.tab-brand-child1{
+   float: left;
+   height: 90px;
+  line-height: 90px;
+   width: 10%;
+  align-items: center;
+   margin-right: 10px;
+
+ }
+.paddingleftright-15{
+  padding-right: 15px;
+  padding-left: 15px;
 }

@@ -1,13 +1,15 @@
 <template>
   <view class="orList">
-    <view class="padding-15">
+    <view class="paddingleftright-15">
       <view style="display:flex">
-        <view style="width:330px">
-        <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
-          <template #right>
+        <view class="inputsjtab">
+          <view class="tab-brand-child">
+            <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
+            </order-j-tab>
+          </view>
+          <view class="tab-brand-child1">
             <i @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
-          </template>
-        </order-j-tab>
+          </view>
         </view>
       </view>
       <mescroll-body
@@ -134,6 +136,7 @@
             >
           </view>
         </view>
+
         <view>
             <view class="addressee">
               <view >

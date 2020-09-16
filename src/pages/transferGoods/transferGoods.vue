@@ -35,7 +35,7 @@
         @up="upCallback"
       >
         <!-- 产品列表 -->
-        <view class="transferList-items-wrap" v-if="list && list.length > 0">
+        <view class="transferList-items-wrap" v-if="isShowList">
           <transfer-goods-item
             v-for="(item,index) in list"
             :key="index"
@@ -55,10 +55,12 @@
               src="../../assets/img/exception/error-none.png"
               style="width:120px; height:120px;margin:28% 35% 5% 38%;"
           />
+<!--          <view class="else-title" v-if="isShowList">-->
+<!--            <view class="else-title-l">努力加载中</view>-->
+<!--          </view>-->
           <view class="else-title">
-            <view class="else-title-l">~努力加载中~</view>
-<!--            <view class="else-title-l">非常抱歉</view>-->
-<!--            <text class="else-title-x">没有找到相关的宝贝</text>-->
+            <view class="else-title-l">非常抱歉</view>
+            <text class="else-title-x">没有找到相关的宝贝</text>
           </view>
         </view>
       </mescroll-body>
@@ -163,6 +165,7 @@ export default {
   },
   data() {
     return {
+      isShowList: true,
       disable: false,
       list: null,
       sortType: '',
@@ -566,6 +569,11 @@ export default {
       if (code === '1' && data.code === '200') {
         console.log('11111');
         const page = JSON.parse(data.data);
+        if (!data.data) {
+          this.isShowList = false;
+        } else {
+          this.isShowList = true;
+        }
         const curList = page.data;
         scrollView.pageSize = page.pageSize;
         scrollView.total = page.total;
@@ -623,6 +631,7 @@ export default {
         this.getStockNum();
       } else {
         this.list = [];
+        this.isShowList = false;
         this.mescroll.endErr();
         // 暂无数据
         uni.showToast({

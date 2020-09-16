@@ -100,7 +100,7 @@
           <view class="homepage-recommend-name">
             <view class="homepage-recommend-title">{{item.title}}</view>
             <view class="homepage-recommend-describe">{{item.describe}}</view>
-            <view v-if="isShowMore">MORE</view>
+            <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList">MORE</view>
           </view>
           <swiper
             @change="change"
@@ -297,30 +297,33 @@ export default {
           url: '/pages/vehicleList/abnormal'
         }
       ],
-      isShowMore: false,
       recommendList: [
         {
           id: 1,
           title: '新品推荐',
           describe: '人气榜',
+          isShowMore: true,
           data: []
         },
         {
           id: 2,
           title: '爆款推荐',
           describe: 'HOT',
+          isShowMore: false,
           data: []
         },
         {
           id: 3,
           title: '我的专供',
           describe: '热卖好物',
+          isShowMore: false,
           data: []
         },
         {
           id: 4,
           title: '聚划算',
           describe: '精选榜单',
+          isShowMore: false,
           data: []
         },
 
@@ -644,6 +647,12 @@ export default {
     change(e) {
       // this.current = e.detail.current;
     },
+    // more跳转
+    goList() {
+      uni.navigateTo({
+        url: '/pages/goods/goodsList?isNewProduct=1'
+      });
+    },
     // 新品推荐列表
     async getXinPin() {
       const { code, data } = await this.activityService.xinPin({
@@ -653,15 +662,6 @@ export default {
       if (code === '1') {
         console.log(this.recommendList[0]);
         this.recommendList[0].data = data;
-        this.recommendList.map(item => {
-          // if (item.title === '新品推荐') {
-          //   console.log('1111111111')
-          //   this.isShowMore = true;
-          //   console.log(this.isShowMore)
-          // } else {
-          //   this.isShowMore = false;
-          // }
-        });
       }
     },
     // 爆款推荐

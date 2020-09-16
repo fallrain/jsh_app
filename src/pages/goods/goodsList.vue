@@ -22,43 +22,46 @@
         @tabconfirmPup="tabConditionConfirm"
       ></j-head-tab>
     </view>
-    <mescroll-body
-      ref="mescrollRef"
-      @init="mescrollInit"
-      :up="jMescrollUpOptions"
-      :down="jMescrollDownOptions"
-      @down="jMescrollDownCallback"
-      @up="upCallback"
-    >
-      <view class="goodsList-items-wrap" v-if="list.length !== 0">
-        <j-goods-item
-          v-for="(item,index) in list"
-          :key="item.productCode"
-          :goods="item"
-          :index="index"
-          :saletoCode="userInf.customerCode"
-          :sendtoCode="defaultSendToInf.customerCode"
-          :allPrice="item.$allPrice"
-          :userInf="userInf"
-          @change="goodsChange"
-          @addCartSuccess="addCartSuccess"
-        ></j-goods-item>
-      </view>
-<!--      <Exception v-else>-->
-<!--        <slot name="ExcPagTitle2"></slot>-->
-<!--      </Exception>-->
-      <view v-else>
-        <image
-          src="../../assets/img/exception/error-none.png"
-          style="width:120px; height:120px;margin:28% 35% 5% 38%;"
-        />
-        <view class="else-title">
-          <view class="else-title-l">非常抱歉</view>
-          <text class="else-title-x">没有找到相关的宝贝</text>
-<!--          <button v-show="isReset" @tap="resetAll" class="else-title-reset">重置</button>-->
+    <view class="goodsList-mescroll-wrap">
+      <mescroll-uni
+        :down="jMescrollDownOptions"
+        :fixed="false"
+        :up="jMescrollUpOptions"
+        @down="jMescrollDownCallback"
+        @init="mescrollInit"
+        @up="upCallback"
+        ref="mescrollRef"
+      >
+      <view class="goodsList-items-wrap" v-if="isShowList">
+          <j-goods-item
+            v-for="(item,index) in list"
+            :key="item.productCode"
+            :goods="item"
+            :index="index"
+            :saletoCode="userInf.customerCode"
+            :sendtoCode="defaultSendToInf.customerCode"
+            :allPrice="item.$allPrice"
+            :userInf="userInf"
+            @change="goodsChange"
+            @addCartSuccess="addCartSuccess"
+          ></j-goods-item>
         </view>
-      </view>
-    </mescroll-body>
+        <!--      <Exception v-else>-->
+        <!--        <slot name="ExcPagTitle2"></slot>-->
+        <!--      </Exception>-->
+        <view v-else>
+          <image
+            src="../../assets/img/exception/error-none.png"
+            style="width:120px; height:120px;margin:28% 35% 5% 38%;"
+          />
+          <view class="else-title">
+            <view class="else-title-l">非常抱歉</view>
+            <text class="else-title-x">没有找到相关的宝贝</text>
+            <!--          <button v-show="isReset" @tap="resetAll" class="else-title-reset">重置</button>-->
+          </view>
+        </view>
+      </mescroll-uni>
+    </view>
 
     <j-drawer
       :show.sync="isShowGoodsFilterDrawer"
@@ -122,6 +125,7 @@
     ></j-choose-delivery-address>
     <j-goods-hover-button
       :cartNumber="cartNum"
+      :scrollObject="mescroll"
     ></j-goods-hover-button>
   </view>
 </template>
@@ -133,7 +137,7 @@ import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddres
 import JSearchInput from '../../components/form/JSearchInput';
 import JDrawer from '../../components/form/JDrawer';
 import JDrawerFilterItem from '../../components/form/JDrawerFilterItem';
-import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import MescrollUni from '@/components/plugin/mescroll-uni/mescroll-uni.vue';
 import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
 import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import './css/goodsList.scss';
@@ -169,10 +173,11 @@ export default {
     JChooseDeliveryAddress,
     JHeadTab,
     JGoodsItem,
-    MescrollBody,
+    MescrollUni,
   },
   data() {
     return {
+      isShowList: true,
       pageCfg: {
         page: {
           pageSize: 15,
@@ -465,6 +470,12 @@ export default {
           // tab类型搜索条件
           condition: dataCondition
         } = data;
+
+        if (!page.result) {
+          this.isShowList = false;
+        } else {
+          this.isShowList = true;
+        }
         // 组合tab的搜索条件数据（popTabs）
         this.genTabCondition(dataCondition);
         // 当前页码的数据
@@ -550,6 +561,7 @@ export default {
           });
         }
       } else {
+        this.isShowList = false;
         this.mescroll.endErr();
       }
       return scrollView;

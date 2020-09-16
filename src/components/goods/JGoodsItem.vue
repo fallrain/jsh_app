@@ -30,6 +30,11 @@
         class="jGoodsItem-left-float"
         v-if="tagImg"
       ></image>
+      <image
+        class="jGoodsItem-top-right-float"
+        src="https://cdn.jsh.com/img/isNewProduct.png"
+        v-if="newProductImg"
+      ></image>
       <image class="image2" src="../../assets/img/product/sellout.png" v-show="isShowImg"></image>
     </view>
     <view class="jGoodsItem-cnt">
@@ -237,6 +242,13 @@ export default {
         tagAy.push('scf');
       }
       return this[tagAy.join('-')];
+    },
+    newProductImg() {
+      /* 新品图片 */
+      const {
+        isNewProduct
+      } = this.goods;
+      return isNewProduct === '1';
     },
     priceInf() {
       /* 价格信息 */

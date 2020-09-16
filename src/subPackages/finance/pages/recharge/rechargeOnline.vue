@@ -71,7 +71,7 @@
       </view>
     </view>
     <j-recharge-bank-picker
-      :is-show="isShowBankPicker"
+      :is-show.sync="isShowBankPicker"
       :list="bankList"
       title="选择银行"
       @change="bankListChange"

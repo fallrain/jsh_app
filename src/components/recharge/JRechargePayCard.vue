@@ -1,5 +1,5 @@
 <template>
-  <view :class="['jRechargePayCard-wrap','type'+type]">
+  <view :class="['jRechargePayCard-wrap','type'+type, isChecked && 'active']">
     <view
       :class="['jRechargePayCard-check iconfont',isChecked ? 'iconradio':'iconradio1']"
       @tap="handleCheck"
@@ -84,10 +84,10 @@ export default {
 
     &.type0 {
       background: #F2F7FF;
-      border: 1px solid #F2F7FF;
+      border: 4px solid #F2F7FF;
 
       &.active {
-        border: 1px solid #3D96EE;
+        border: 4px solid #3D96EE;
       }
 
       .jRechargePayCard-check {
@@ -97,10 +97,10 @@ export default {
 
     &.type1 {
       background: #FFF5F6;
-      border: 1px solid #FFF5F6;
+      border: 4px solid #FFF5F6;
 
       &.active {
-        border: 1px solid #ED2856;
+        border: 4px solid #ED2856;
       }
 
       .jRechargePayCard-check {

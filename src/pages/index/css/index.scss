@@ -378,15 +378,12 @@
             font-weight: 400;
             color: rgba(194, 163, 111, 1);
             margin-top: 8px;
-            // &:nth-child(2){
-            //     width:90px;
-            //     height:26px;
-            //     background:rgba(255,245,230,1);
-            //     border-radius:13px;
-            //     text-align:center;
-            //     line-height:26px;
-
-            // }
+          }
+          .homepage-recommend-more {
+            font-size: 18px;
+            color: #666;
+            line-height: 40px;
+            margin-left: 36px;
           }
 
         }

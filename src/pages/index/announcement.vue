@@ -8,7 +8,7 @@
       <view class="announcement-con-title" @tap="goInfoDetail(item)">{{item.title}}</view>
       <view class="announcement-con-row">
         <view class="announcement-con-row-at">{{item.typeStr}}</view>
-        <view class="announcement-con-row-bt">{{item.creatorDept}}</view>
+        <view class="announcement-con-row-bt" v-show="item.creatorDept">{{item.creatorDept}}</view>
         <i class="announcement-con-row-icon iconfont iconshijian"></i>
         <view class="announcement-con-row-time">{{item.publishTime}}</view>
       </view>
@@ -119,6 +119,7 @@ export default {
   margin-bottom: 14px;
 }
 .announcement-con-row {
+  position: relative;
   display: flex;
   margin-bottom: 22px;
 
@@ -144,15 +145,20 @@ export default {
   line-height:32px;
   text-align: center;
   font-size: 24px;
-  margin-right: 284px;
+
 }
 .announcement-con-row-icon {
   font-size: 27px !important;
   color: #2283E2;
   margin-top: 4px;
   margin-right: 10px;
+  /*margin-left: 284px;*/
+  position: absolute;
+  right: 130px;
 }
 .announcement-con-row-time {
+  position: absolute;
+  right: 0px;
   font-size: 24px;
   color: #666;
 }
