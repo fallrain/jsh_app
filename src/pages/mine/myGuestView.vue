@@ -50,7 +50,10 @@ status: "正常" -->
         <view class="firstItem">
           <view class="firstPageLeft">门店状态：</view>
           <view class="firstPageRightHasHttp">{{customerBasicInformation.shopFlag}}
-            <view class="http">门店信息详见门店列表</view>
+            <view
+              @tap="goOtherTab(2)"
+              class="http"
+            >门店信息详见门店列表</view>
           </view>
         </view>
         <view class="firstItem">
@@ -63,6 +66,10 @@ status: "正常" -->
         <view class="firstPageRightMore">{{customerBasicInformation.signProductGroup}}</view>
         <view class="firstItem">
           <view class="firstPageLeft">签约产品：</view>
+          <view
+            @tap="goOtherTab(1)"
+            class="http"
+          >查看签约明细</view>
         </view>
         <view class="firstPageRightMore">{{customerBasicInformation.signBrand}}</view>
         <view class="firstItem">
@@ -128,14 +135,23 @@ status: "正常" -->
         </view>
         <view class="firstItem">
           <view class="firstPageLeft">信用订单：</view>
-          <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrder}}</view>
+          <view class="firstPageRight j-flex-aic">
+            {{zhengCheAndFinancialDto.creditOrder}}
+            <view
+              @tap="goOtherTab(4)"
+              class="http"
+              v-if="zhengCheAndFinancialDto.creditOrder==='已开通'"
+            >融资户详情</view>
+          </view>
         </view>
         <view class="firstItem">
           <view class="firstPageLeft">开通日期：</view>
           <!-- <view class="firstPageRightHasHttp">未开通
              <view class="http">去开通</view>
          </view> -->
-          <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrderTime}}</view>
+          <view class="firstPageRight">
+            {{zhengCheAndFinancialDto.creditOrderTime}}
+          </view>
         </view>
         <view class="firstItem">
           <view class="firstPageLeft">信用订单逾期产品：：</view>
@@ -632,7 +648,6 @@ export default {
         });
       }
     },
-
     tabClick(e) {
       /* 事件处理 */
       this.tabs = e;
@@ -644,7 +659,17 @@ export default {
         }
       });
     },
-
+    goOtherTab(index) {
+      /* 去其他tab */
+      this.tabs.forEach((v) => {
+        v.active = false;
+      });
+      this.tabs[index].active = true;
+      this.$nextTick(() => {
+        this.activeTabName = `item${index}`;
+        this.index = `${index}`;
+      });
+    }
   }
 };
 </script>
@@ -693,6 +718,8 @@ export default {
   .firstItem {
     display: flex;
     justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
   .firstPageTitle {
@@ -710,7 +737,6 @@ export default {
     font-weight: 400;
     color: rgba(51, 51, 51, 1);
     line-height: 50px;
-    margin-left: 30px;
   }
 
   .firstPageRight {
@@ -719,7 +745,6 @@ export default {
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
     line-height: 50px;
-    margin-right: 30px;
   }
 
   .firstPageRightGray {
@@ -737,7 +762,6 @@ export default {
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
     line-height: 50px;
-    margin-right: 30px;
   }
 
   .firstPageRightMore {
@@ -759,20 +783,19 @@ export default {
 
   .firstPageRightHasHttp {
     display: flex;
+    align-items: center;
     height: 60px;
     font-size: 28px;
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
     line-height: 50px;
-    margin-right: 30px;
   }
 
   .http {
-    height: 50px;
     font-size: 24px;
     font-weight: 400;
     color: #2283E2;
-    line-height: 50px;
+    line-height: 1;
     text-decoration: underline;
     margin-left: 10px;
   }
