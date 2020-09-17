@@ -242,8 +242,8 @@
       <template>
         <!--信用订单-->
         <view
+          v-if="info.btnsInfo.selfPayButton==='1'"
           class="jmodal-style"
-          v1-if="info.btnsInfo.selfPayButton==='1'"
         >
           <view class="orderListItem-model-item">
             <view
@@ -279,15 +279,17 @@
           </view>
         </view>
         <!--整车、反向定制订单-->
-        <view v-if="info.btnsInfo.selfPayButton==='3'||info.btnsInfo.selfPayButton==='4'"
-              class="jmodal-style">
-          <view class="jmodal-item">
-            <view class="key-style">付款方：</view>
-            <view class="val-style">{{info.info.jshi_payto_name}}</view>
+        <view
+          class="jmodal-style"
+          v-if="info.btnsInfo.selfPayButton==='3' || info.btnsInfo.selfPayButton==='4'"
+        >
+          <view class="orderListItem-model-item">
+            <view class="orderListItem-model-item-name">付款方：</view>
+            <view class="orderListItem-model-item-val">{{info.info.jshi_payto_name}}</view>
           </view>
-          <view class="jmodal-item">
-            <view class="key-style">余额：</view>
-            <view class="val-style">{{currentPayerInfo.balance||currentPayerInfo.bookBalance}}</view>
+          <view class="orderListItem-model-item">
+            <view class="orderListItem-model-item-name">余额：</view>
+            <view class="orderListItem-model-item-val">{{currentPayerInfo.balance||currentPayerInfo.bookBalance}}</view>
           </view>
         </view>
       </template>
