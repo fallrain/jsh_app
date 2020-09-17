@@ -58,7 +58,7 @@
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
         <view v-if="tctpConfirmButtonFun"  @click="tctpConfirmButtonAction" class="produceDetailItem-btm">
-          <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
+          <view class="iconfont iconcancel iconStyle"></view>统仓确认
         </view>
         <view v-if="invalidButton"  @click="orderCancle" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>订单作废
@@ -126,7 +126,7 @@
           更改付款方
         </view>
         <view v-if="tctpConfirmButtonFun" @click="tctpConfirmButtonAction" class="col-25 produceDetailItem-btm">
-          <view class="iconfont iconcancel iconStyle"></view>统舱统配确认
+          <view class="iconfont iconcancel iconStyle"></view>统仓确认
         </view>
         <view v-if="invalidButton" @click="orderCancle" class="col-25 produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>订单作废
@@ -188,26 +188,46 @@
       </template
       >
     </j-pop-picker>
-    <j-modal
-      :title="currentTitle"
+    <order-pop-picker
+      title="自主扣款"
       :show.sync="show"
       @confirm="modalConfirm"
     >
       <template>
         <!--信用订单-->
         <view v-if="info.btnsInfo.selfPayButton==='1'" class="jmodal-style">
-          <view class="">价格：</view>
-          <view class="">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
-          <view class="">数量：</view>
-          <view class="">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
-          <view class="">合计：</view>
-          <view class="">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
-          <view class="">付款方：</view>
-          <view class="">{{info.info.jshi_payto_name}}</view>
+          <view class="jmodal-item">
+            <view class="key-style">反向定制订单：</view>
+            <view class="val-style">{{info.info.bstnk}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">价格：</view>
+            <view class="val-style">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">数量：</view>
+            <view class="val-style">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">合计：</view>
+            <view class="val-style">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">付款方：</view>
+            <view class="val-style">{{info.info.jshi_payto_name}}</view>
+          </view>
         </view>
         <!--整车、反向定制订单-->
         <view v-if="info.btnsInfo.selfPayButton==='3'||info.btnsInfo.selfPayButton==='4'"
               class="jmodal-style">
+          <view v-if="info.btnsInfo.selfPayButton==='3'" class="jmodal-item">
+            <view class="key-style">反向定制订单：</view>
+            <view class="val-style">{{info.info.bstnk}}</view>
+          </view>
+          <view v-if="info.btnsInfo.selfPayButton==='4'" class="jmodal-item">
+            <view class="key-style">整车订单：</view>
+            <view class="val-style">{{info.info.jshi_grouping_no}}</view>
+          </view>
           <view class="jmodal-item">
             <view class="key-style">付款方：</view>
             <view class="val-style">{{info.info.jshi_payto_name}}</view>
@@ -218,7 +238,7 @@
           </view>
         </view>
       </template>
-    </j-modal>
+    </order-pop-picker>
   </view>
 </template>
 
@@ -233,12 +253,14 @@ import {
   ORDER, USER
 } from '../../store/mutationsTypes';
 import JPopPicker from '../form/JPopPicker';
+import OrderPopPicker from './OrderPopPicker';
 import JModal from '../form/JModal';
 
 export default {
   name: 'orderListItem',
   components: {
     orderListItemMore,
+    OrderPopPicker,
     JPopPicker,
     JModal
   },
@@ -363,13 +385,12 @@ export default {
     if (this.info.btnsInfo) {
       this.tctpConfirmButton = this.info.btnsInfo.tctpConfirmButton == '1';
     }
-    // console.log('this.info.details.jshd_price_type'+this.info.details.jshd_price_type)
   },
   methods: {
     tctpConfirmButtonAction() {
       uni.showModal({
         title: '提示',
-        content: '是否确认统舱统配',
+        content: '是否确认统仓统配',
         success: (res) => {
           if (res.confirm) {
             this.tctpConfirmNet();
@@ -384,7 +405,7 @@ export default {
       const bstnk = this.info.info.bstnk;
       const dnLogistics = this.info.info.dnLogistics;
       const { code } = await this.orderService.tctpConfirm(dnLogistics, bstnk);
-      if (code === '1') {
+      if (code === '200') {
         const that = this;
         uni.showToast({
           title: '成功'
@@ -418,8 +439,9 @@ export default {
     confirmPayer() {
       const that = this;
       const OrderNo = that.info.info.bstnk;
-      const paytoCode = that.defaultSendToInf.customerCode;
-      const paytoName = that.defaultSendToInf.customerName;
+      console.log(this.currentPayerOption);
+      const paytoCode = that.currentPayerOption.customerCode;
+      const paytoName = that.currentPayerOption.customerName;
 
       console.log(that.defaultSendToInf);
       uni.showModal({
@@ -480,7 +502,7 @@ export default {
       console.log(this);
     },
     goDetail() {
-      this.$emit('goDetail', this.index);
+      this.$emit('goDetail', this.info);
     },
     nodeClick() {
       const itemInfo = JSON.stringify(this.info);
@@ -537,7 +559,7 @@ export default {
       } else if (this.state === '3') {
         // 反向定制
         const orderNo = this.info.info.bstnk;
-        const { msg } = await this.trafficService.payByCustomer(orderNo);
+        const { msg } = await this.orderService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
           icon: 'none'
@@ -551,7 +573,6 @@ export default {
           icon: 'none'
         });
       }
-      console.log('queding');
     },
     zcckAction() {
       uni.showModal({

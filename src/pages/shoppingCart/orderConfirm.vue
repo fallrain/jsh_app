@@ -22,6 +22,7 @@
         :orderItem="orderItem"
         :payInfoData.sync="payInfoData"
         :billInfoList.sync="billInfoList"
+        :sendType="formSubmit.deliveryType"
       ></j-order-confirm-item>
     </view>
     <view v-if="dataInfo.disableComposeProductList.length > 0" class="mt24">

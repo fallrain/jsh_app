@@ -13,7 +13,7 @@
         <slot></slot>
       </view>
       <view class="jModal-btn">
-        <view @tap="modalCancle" v-if="isCancle" class="btn-cancle">取消1</view>
+        <view @tap="modalCancle" v-if="isCancle" class="btn-cancle">取消</view>
         <view @tap="modalSure" class="btn-sure">确定</view>
       </view>
     </view>

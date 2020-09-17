@@ -13,8 +13,8 @@ const urls = {
   cancelOrderBybstnk(bstnk) {
     return `/myorder/cancelOrder?bstnk=${bstnk}`;
   },
-  tctpConfirm(dn,bstnk) {
-    return `/api/myorder/tctpConfirm?dn=${dn}&isItConfirmed=1&bstnk=${bstnk}`
+  tctpConfirm(dn, bstnk) {
+    return `/myorder/tctpConfirm?dn=${dn}&isItConfirmed=1&bstnk=${bstnk}`;
   }
 };
 util.addPrefix(baseURL, urls);

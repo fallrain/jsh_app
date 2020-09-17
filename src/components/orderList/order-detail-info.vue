@@ -2,10 +2,10 @@
   <view class="order-info-con">
     <view class="order-info-head">
       <button type="button" class="order-info-head-btn">组合</button>
-      <text class="order-info-head-text">整单订单：{{info.info.jshi_grouping_no}}</text>
+      <text class="order-info-head-text">{{titleAndNoFun}}</text>
     </view>
     <view :class="showler ? '' : 'showType'">
-      <view class="order-info-cnt" v-for="(product,index) in products" :key="index">
+      <view class="order-info-cnt" v-for="(product,index) in info.details" :key="index">
         <view class="order-info-cnt-img">
           <image :src="product.jshd_product_img" style="width: 100%;height: 100%;"></image>
         </view>
@@ -20,47 +20,35 @@
           </view>
         </view>
       </view>
-      <view class="order-info-line"></view>
     </view>
-    <view v-if="products.length>2" class="order-info-show" @click="showLer">{{showler ? '收起' : '展开'}}<view :class="['iconfont iconxia',showler && 'order-info-active']" style="padding-left: 4px;padding-top: 4px;"></view></view>
   </view>
 </template>
 
 <script>
 
-import {
-  ORDER,
-  USER
-} from '../../store/mutationsTypes';
-import {
-  mapMutations,
-  mapGetters
-} from 'vuex';
-
-
 export default {
   name: 'orderDetailInfo',
   props: {
-    products: {
-      type: Array,
+    info: {
+      type: Object,
       default() {
-        return [];
+        return {};
       }
     },
   },
-   computed: {
-    ...mapGetters([
-      ORDER.GET_ORDER
-    ]),
-  },
   created() {
-    this.info = this[ORDER.GET_ORDER].orderDetail;
   },
   data() {
     return {
-      info:{},
-      showler: false
     };
+  },
+  computed: {
+    titleAndNoFun() {
+      if (this.info.details[0].jshd_price_type === 'MFYJ') {
+        return `版本号:${this.info.details[0].jshd_price_version}`;
+      }
+      return `整单订单：${this.info.info.jshi_grouping_no}`;
+    },
   },
   methods: {
     showLer() {

@@ -145,7 +145,7 @@ export default {
         activityId: '',
         activityName: '',
         activityType: '',
-        isCheckProduct: false,
+        isCheckProduct: true,
         pageNum: 1,
         pageSize: 5,
         productCode: '',
@@ -241,11 +241,11 @@ export default {
             {
               key: '1',
               value: '全部',
-              isChecked: true
+              isChecked: false
             }, {
               key: '2',
               value: '有效',
-              isChecked: false
+              isChecked: true
             }
           ]
         }
@@ -341,7 +341,7 @@ export default {
         activityId: '',
         activityName: '',
         activityType: '',
-        isCheckProduct: false,
+        isCheckProduct: true,
         productCode: '',
         productGroup: [],
         pageNum: pages.num,

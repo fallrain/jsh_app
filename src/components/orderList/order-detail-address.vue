@@ -55,6 +55,7 @@ export default {
   .order-detail-text{
     color: #666666;
     font-size: 24px;
+    line-height: 70px;
   }
   .order-address-line {
     height: 2px;

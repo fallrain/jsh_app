@@ -814,13 +814,13 @@ export default {
         for (let index = 0; index < data.dataList.length; index++) {
           const element = data.dataList[index];
           element.btnsInfo = {
-            estimateButton: "0",
-            invalidButton: "0",
-            orderNo: "",
-            selfPayButton: "0",
-            signInButton: "0",
-            tctpConfirmButton: "0",
-          }
+            estimateButton: '0',
+            invalidButton: '0',
+            orderNo: '',
+            selfPayButton: '0',
+            signInButton: '0',
+            tctpConfirmButton: '0',
+          };
           data.dataList[index] = element;
         }
 
@@ -855,7 +855,7 @@ export default {
         const element = this.orderListInfo[index];
         element.btnsInfo = data;
         // this.orderListInfo[index] = element;
-        this.$set(this.orderListInfo,index,element);
+        this.$set(this.orderListInfo, index, element);
         console.log(this.orderListInfo);
         // this.buttonLogicJudgment = data;
         console.log('============');
@@ -876,13 +876,13 @@ export default {
       }
       console.log(data);
     },
-    goDetail(e) {
-      console.log(e);
-      this[ORDER.UPDATE_ORDER]({
+    goDetail(info) {
+      const orderDetail = JSON.stringify(info);
+      /* this[ORDER.UPDATE_ORDER]({
         orderDetail: this.orderListInfo[e]
-      });
+      }); */
       uni.navigateTo({
-        url: '/pages/orderList/orderDetail'
+        url: `/pages/orderList/orderDetail?orderDetail=${orderDetail}`
       });
     },
     tabClick(e) {

@@ -44,7 +44,7 @@
             inf="信用模式"
           ></j-switch>
           <j-switch
-            v-if="goods.isTCTP&&tctpSwitch"
+            v-if="goods.isTCTP&&tctpSwitch&&(sendType===2)"
             :active.sync="goods.isTCTP"
             inf="统仓统配"
             @change="isCreditModeChange"
@@ -197,6 +197,10 @@ export default {
     JPopPicker
   },
   props: {
+    sendType: {
+      type: Number,
+      default: 2
+    },
     tctpSwitch: {
       type: Boolean
     },

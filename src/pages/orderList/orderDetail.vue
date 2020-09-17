@@ -15,10 +15,9 @@
         <order-detail-address :addressInfo="infoList.info"></order-detail-address>
       </view>
     </view>
-    <view class="order-detail-line"></view>
     <view class="background-two">
       <view>
-        <order-detail-info :products="infoList.details"></order-detail-info>
+        <order-detail-info :info="infoList"></order-detail-info>
       </view>
       <view>
         <order-detail-base :baseInfo="infoList.info" :details="infoList.details[0]" ></order-detail-base>
@@ -67,9 +66,11 @@ export default {
       ORDER.GET_ORDER
     ]),
   },
-  created() {
-    console.log('11111111');
-    this.infoList = this[ORDER.GET_ORDER].orderDetail;
+  onLoad(options) {
+    if (options.orderDetail) {
+      this.infoList = JSON.parse(options.orderDetail);
+    }
+    console.log(this.infoList)
     this.processJudgement = JSON.parse(this.infoList.info.processJudgement);
     this.processJudgement.jshi_created_time = this.infoList.info.jshi_created_time;
     this.processJudgement.sap_judge_date = this.infoList.info.sap_judge_date;
@@ -82,8 +83,6 @@ export default {
     this.processJudgement.jshi_plan_in_date = this.infoList.info.jshi_plan_in_date;
     this.processJudgement.sap_sys_invoice_time = this.infoList.info.sap_sys_invoice_time;
     this.processJudgement.sap_tax_invoice_time = this.infoList.info.sap_tax_invoice_time;
-    console.log(this.processJudgement);
-    console.log(this.infoList);
   },
 };
 </script>
@@ -104,6 +103,7 @@ export default {
   .background-two{
     height: 100%;
     background: #F5F5F5;
+    padding-top: 1px;
   }
   .orderDetail-head {
     position: relative;

@@ -29,7 +29,7 @@
       <button
         @tap="goOrder(conditionStatus)"
         type="button"
-        class="jProductBtm-right-btn"
+        :class="['jProductBtm-right-btn',conditionStatus&&'active']"
       >成套下单</button>
     </view>
   </view>

@@ -180,15 +180,22 @@
   text-align: center;
   color: $theme-color;
 }
+.title-style{
+
+}
 .jmodal-style{
+  font-size: 32px;
   .jmodal-item{
     display: flex;
     justify-content: flex-start;
+    margin-bottom: 40px;
     .key-style{
+      color: #333;
       min-width: 200px;
       text-align: right;
     }
     .val-style{
+      color: #999;
       text-align: left;
       flex-grow: 1;
       flex-wrap: wrap;

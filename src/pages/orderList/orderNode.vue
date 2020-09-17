@@ -13,22 +13,22 @@
         </view>
         <view class="order-item-content-item">
           <view class="leftTitle">订单金额</view>
-          <view class="rightText">{{parseFloat(infoList.details[0].jshd_amount).toFixed(2)}}</view>
+          <view class="rightText">￥{{parseFloat(infoList.details[0].jshd_amount).toFixed(2)}}</view>
         </view>
         <view class="order-item-content-item">
           <view class="leftTitle">预定金比例</view>
-          <view class="rightText">{{parseFloat(infoList.details[0].jshd_pre_rate).toFixed(2)}}</view>
+          <view class="rightText">{{parseFloat(infoList.details[0].jshd_pre_rate).toFixed(2)}}%</view>
         </view>
         <view class="order-item-content-item">
           <view class="leftTitle">预定金金额</view>
-          <view class="rightText">{{parseFloat(infoList.details[0].jshd_pre_amount).toFixed(2)}}</view>
+          <view class="rightText">￥{{parseFloat(infoList.details[0].jshd_pre_amount).toFixed(2)}}</view>
         </view>
       </view>
     </view>
     <!--订单评审-->
     <view v-if="infoList.info.sap_judge_status" class="order-item">
       <view class="order-item-line">
-        <view class="iconfont icondingdanchuangjian1"></view>
+        <view class="iconfont icondingdanpingshen1"></view>
       </view>
       <view class="order-item-content">
         <view class="order-item-content-item">
@@ -60,25 +60,25 @@
     <!--中心入库-->
     <view v-if="infoList.info.sap_center_recieve_date" class="order-item">
       <view class="order-item-line">
-        <view class="iconfont icondingdanchuangjian1"></view>
+        <view class="iconfont iconzhongxinruku1"></view>
       </view>
       <view class="order-item-content">
         <view class="order-item-content-item">
           <view class="leftTitle">中心入库</view>
-          <view class="rightText">{{infoList.info.sap_center_recieve_date==='1'? '已入库':'未入库'}}</view>
+          <view class="rightText">{{infoList.info.sap_center_recieve_date}}</view>
         </view>
-      </view>
-    </view>
-    <!--入库状态-->
-    <view v-if="infoList.details[0].whDescribe" class="order-item">
-      <view class="order-item-line">
-        <view class="iconfont icondingdanchuangjian1"></view>
-      </view>
-      <view class="order-item-content">
         <view class="order-item-content-item">
           <view class="leftTitle">入库状态</view>
           <view class="rightText">{{infoList.details[0].whDescribe}}</view>
         </view>
+      </view>
+    </view>
+    <!--订单扣款-->
+    <view v-if="infoList.details[0].whDescribe" class="order-item">
+      <view class="order-item-line">
+        <view class="iconfont icondingdankoukuan1"></view>
+      </view>
+      <view class="order-item-content">
         <view class="order-item-content-item">
           <view class="leftTitle">订单扣款</view>
           <view class="rightText">{{formateDate(infoList.info.jshi_pay_time)}}</view>
@@ -86,7 +86,10 @@
         <view class="order-item-content-item">
           <view class="leftTitle">尾款扣减</view>
           <view class="rightText">
-            {{Number(infoList.info.jshd_amount-infoList.info.jshd_pre_amount).toFixed(2)}}
+            {{(Number(infoList.details[0].jshd_amount)-Number(infoList.details[0].jshd_pre_amount).toFixed(2))}}
+            <text v-if="infoList.info.jshi_order_status==='9'"
+              class="ml20"
+            >(成功)</text>
           </view>
         </view>
       </view>
