@@ -34,6 +34,7 @@
   padding-left: 10px;
   min-width: 62%;
 }
+
 .produceDetailItem-head-text-status {
   color: $theme-color;
   font-size: 24px;
@@ -55,6 +56,7 @@
   flex-shrink: 0;
   width: 152px;
   height: 152px;
+
   image {
     width: 100%;
     height: 100%;
@@ -123,8 +125,8 @@
 .produceDetailItem-cnt-price {
   font-size: 16px;
   color: $theme-color;
-  border:1px solid $theme-color;
-  border-radius:18px;
+  border: 1px solid $theme-color;
+  border-radius: 18px;
   margin-left: 8px;
   margin-right: 8px;
   margin-top: 16px;
@@ -173,25 +175,45 @@
   margin-top: auto;
   margin-right: 6px;
 }
+
 .iconTransform {
   transform: rotateY(180deg);
 }
-.balance-style{
+
+.balance-style {
   text-align: center;
   color: $theme-color;
 }
-.jmodal-style{
-  .jmodal-item{
+
+.jmodal-style {
+  .jmodal-item {
     display: flex;
     justify-content: flex-start;
-    .key-style{
+
+    .key-style {
       min-width: 200px;
       text-align: right;
     }
-    .val-style{
+
+    .val-style {
       text-align: left;
       flex-grow: 1;
       flex-wrap: wrap;
     }
   }
+}
+
+.orderListItem-model-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 24px;
+}
+
+.orderListItem-model-item-name{
+  color: #333;
+}
+
+.orderListItem-model-item-val{
+  color: #666;
 }
