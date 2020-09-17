@@ -242,7 +242,7 @@
       <template>
         <!--信用订单-->
         <view
-          v1-if="info.btnsInfo.selfPayButton==='1'"
+          v-if="info.btnsInfo.selfPayButton==='1'"
           class="jmodal-style"
         >
           <view class="orderListItem-model-item">
