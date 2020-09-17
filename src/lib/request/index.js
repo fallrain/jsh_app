@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import configJs from '@/config';
 
 let curConfig;
@@ -10,6 +11,7 @@ if (VUE_APP_PLATFORM === 'h5') {
 } else {
   curConfig = configJs['mp-alipay'][VUE_APP_MODE];
 }
+Vue.prototype.$jConfig = curConfig;
 // 是否已经提示错误，同时间只显示一个
 let isShowModal = false;
 

@@ -28,16 +28,28 @@ export default {
     return jGet(url.getCustomerSigned(uid, 1, 10));
   },
   // 门店信息
-  getBranchInformation(uid) {
-    return jGet(url.getBranchInformation(uid, 1, 10));
+  getBranchInformation(data) {
+    const {
+      // 页码
+      num,
+      // 容量
+      size,
+      // 客户编码
+      customerCode
+    } = data;
+    return jGet(url.getBranchInformation({
+      num,
+      size,
+      customerCode
+    }));
   },
   // 送达方列表
   customers(uid) {
     return jGet(url.customers(uid,));
   },
   // 付款方列表
-  auxiliary(salesGroupCode, status,salesGroupCode2) {
-    return jGet(url.auxiliary(salesGroupCode, status,salesGroupCode2));
+  auxiliary(salesGroupCode, status, salesGroupCode2) {
+    return jGet(url.auxiliary(salesGroupCode, status, salesGroupCode2));
   },
   // 付款方余额
   payerBalanceList(param) {

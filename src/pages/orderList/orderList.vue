@@ -21,9 +21,9 @@
         @up="upCallback"
       >
         <order-list-item
-          v-for="(iten,index) in orderListInfo"
+          :info="item"
           :key="index"
-          :info="iten"
+          v-for="(item,index) in orderListInfo"
           :index="index"
           @goDetail="goDetail">
         </order-list-item>
@@ -854,25 +854,7 @@ export default {
       if (code === '200') {
         const element = this.orderListInfo[index];
         element.btnsInfo = data;
-        // this.orderListInfo[index] = element;
         this.$set(this.orderListInfo, index, element);
-        console.log(this.orderListInfo);
-        // this.buttonLogicJudgment = data;
-        console.log('============');
-        // console.log(this.buttonLogicJudgment)
-        // console.log(this.invalidButton)
-        // console.log(this.invalidButton)
-        //     selfPayButton": "0",
-        // "tctpConfirmButton": "0",
-        // "orderNo": "2000426027",
-        // "invalidButton": "0",
-        // "estimateButton": "0",
-        // "signInButton": "0"
-        //     tctpConfirmButton:统仓统配确认按钮
-        // orderNo:订单号
-        // invalidButton:订单作废按钮
-        // estimateButton:
-        // signInButton:"自主签收按
       }
       console.log(data);
     },

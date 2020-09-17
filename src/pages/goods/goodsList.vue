@@ -32,7 +32,7 @@
         @up="upCallback"
         ref="mescrollRef"
       >
-      <view class="goodsList-items-wrap" v-if="isShowList">
+        <view class="goodsList-items-wrap" v-if="isShowList">
           <j-goods-item
             v-for="(item,index) in list"
             :key="item.productCode"
@@ -147,15 +147,15 @@ import {
   getStockType
 } from '@/lib/dataDictionary';
 import {
+  mapActions,
   mapGetters,
   mapMutations,
-  mapActions,
 } from 'vuex';
 import {
-  USER,
   COMMODITY,
   GOODS_LIST,
-  SHOPPING_CART
+  SHOPPING_CART,
+  USER
 } from '../../store/mutationsTypes';
 import JGoodsHoverButton from '../../components/goods/JGoodsHoverButton';
 

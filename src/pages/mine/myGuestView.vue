@@ -50,7 +50,11 @@ status: "正常" -->
         <view class="firstItem">
           <view class="firstPageLeft">门店状态：</view>
           <view class="firstPageRightHasHttp">{{customerBasicInformation.shopFlag}}
-            <view class="http">门店信息详见门店列表</view>
+            <view
+              @tap="goOtherTab(2)"
+              class="http"
+            >门店信息详见门店列表
+            </view>
           </view>
         </view>
         <view class="firstItem">
@@ -63,6 +67,11 @@ status: "正常" -->
         <view class="firstPageRightMore">{{customerBasicInformation.signProductGroup}}</view>
         <view class="firstItem">
           <view class="firstPageLeft">签约产品：</view>
+          <view
+            @tap="goOtherTab(1)"
+            class="http"
+          >查看签约明细
+          </view>
         </view>
         <view class="firstPageRightMore">{{customerBasicInformation.signBrand}}</view>
         <view class="firstItem">
@@ -128,14 +137,24 @@ status: "正常" -->
         </view>
         <view class="firstItem">
           <view class="firstPageLeft">信用订单：</view>
-          <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrder}}</view>
+          <view class="firstPageRight j-flex-aic">
+            {{zhengCheAndFinancialDto.creditOrder}}
+            <view
+              @tap="goOtherTab(4)"
+              class="http"
+              v-if="zhengCheAndFinancialDto.creditOrder==='已开通'"
+            >融资户详情
+            </view>
+          </view>
         </view>
         <view class="firstItem">
           <view class="firstPageLeft">开通日期：</view>
           <!-- <view class="firstPageRightHasHttp">未开通
              <view class="http">去开通</view>
          </view> -->
-          <view class="firstPageRight">{{zhengCheAndFinancialDto.creditOrderTime}}</view>
+          <view class="firstPageRight">
+            {{zhengCheAndFinancialDto.creditOrderTime}}
+          </view>
         </view>
         <view class="firstItem">
           <view class="firstPageLeft">信用订单逾期产品：：</view>
@@ -198,42 +217,50 @@ status: "正常" -->
 
     <!-- 门店信息 -->
     <view v-if="index === '2'">
-      <view class="block">
-        <view
-          :key="storeIndex"
-          v-for="(item,storeIndex) in branchInformation.branchInformationDtoList"
+      <view class="myGuestView-mescroll-wrap">
+        <mescroll-uni
+          :down="jMescrollDownOptions"
+          :fixed="false"
+          :up="jMescrollUpOptions"
+          @down="jMescrollDownCallback"
+          @init="mescrollInit"
+          @up="getBranchInformationUpCallback"
+          ref="mescrollRef"
         >
-          <view>
-            <view class="secondPageTitleContent">
+          <view
+            :key="storeIndex"
+            class="myGuestView-store-item"
+            v-for="(item,storeIndex) in branchInformation"
+          >
+            <view>
+              <view class="secondPageTitleContent">
                 <view class="secondPageTitle">{{item.sbrName}}</view>
-            </view>
-            <view class="breakLine"></view>
-
-            <view class="firstItem">
-              <view class="firstPageLeft">门店编码</view>
-              <view class="firstPageRight">{{item.addressCode}}</view>
-            </view>
-            <view class="firstItem">
-              <view class="firstPageLeft">建店时间</view>
-              <view class="firstPageRight">{{item.sbrExpectBuildDate}}</view>
-            </view>
-            <view class="firstItem">
-              <view class="firstPageLeft">状态</view>
-              <view class="tag">
-                {{item.shopFlag}}
               </view>
+              <view class="breakLine"></view>
+
+              <view class="firstItem">
+                <view class="firstPageLeft">门店编码</view>
+                <view class="firstPageRight">{{item.addressCode}}</view>
+              </view>
+              <view class="firstItem">
+                <view class="firstPageLeft">建店时间</view>
+                <view class="firstPageRight">{{item.sbrExpectBuildDate}}</view>
+              </view>
+              <view class="firstItem">
+                <view class="firstPageLeft">状态</view>
+                <view class="tag">
+                  {{item.shopFlag}}
+                </view>
+              </view>
+              <view class="firstItem">
+                <view class="firstPageLeft">详细地址</view>
+              </view>
+              <view class="firstPageRightMore">{{item.specificAddress}}</view>
             </view>
-            <view class="firstItem">
-              <view class="firstPageLeft">详细地址</view>
-            </view>
-            <view class="firstPageRightMore">{{item.specificAddress}}</view>
+            <view class="blank"></view>
           </view>
-          <view class="blank"></view>
-        </view>
+        </mescroll-uni>
       </view>
-
-      <view class="tailView"></view>
-
     </view>
 
     <!-- 送达方信息 -->
@@ -308,7 +335,8 @@ status: "正常" -->
             <view
               class="myGuestView-sign-inf-tag mr12"
               v-if="item.defaultFlag==='1'"
-            >默认</view>
+            >默认
+            </view>
             {{item.customerName}}
           </view>
           <view style="height:10px"></view>
@@ -326,22 +354,29 @@ status: "正常" -->
             <view
               class="firstPageRight"
               v-if="item.defaultFlag==='1'"
-            >是</view>
-            <view 
+            >是
+            </view>
+            <view
               @click="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRight"
               v-else-if="item.payerType != '03' && item.payerType != '07' && item.payerType != '15'"
-            >设置为默认设置</view>
-            <view v-if="item.defaultFlag !='1' && item.payerType == '03' ||item.payerType == '07' ||item.payerType == '15'"
+            >设置为默认设置
+            </view>
+            <view
+              v-if="item.defaultFlag !='1' && item.payerType == '03' ||item.payerType == '07' ||item.payerType == '15'"
               @click="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRightGray"
-            >设置为默认设置</view>
+            >设置为默认设置
+            </view>
             <!-- payerType -->
           </view>
           <view class="blank"></view>
         </view>
       </view>
-
+      <!--      <j-exception-page-->
+      <!--        :type="3"-->
+      <!--        v-if="!payerBalanceList.length && isLoaded"-->
+      <!--      ></j-exception-page>-->
       <view class="tailView"></view>
     </view>
 
@@ -349,7 +384,9 @@ status: "正常" -->
 </template>
 
 <script>
-
+import MescrollUni from '@/components/plugin/mescroll-uni/mescroll-uni.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
 import JTab from '../../components/common/JTab';
 import {
   mapActions,
@@ -361,9 +398,13 @@ import {
 
 export default {
   name: 'myGuestView',
-  // import引入的组件需要注入到对象中才能使用
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
-    JTab
+    JTab,
+    MescrollUni
   },
   data() {
     // 这里存放数据
@@ -407,15 +448,17 @@ export default {
       //   签约信息
       customerSigned: {},
       //   门店信息
-      branchInformation: {},
+      branchInformation: [],
+      // 门店信息是否已经加载
+      isStoreInfLoaded: false,
       // 送达方列表
       customers: {},
       // 付款方列表
       auxiliary: {},
       // 付款方账户总额
       accountTotal: '',
-      // 
-      payerBalanceList:[],
+      // 付款方信息
+      payerBalanceList: [],
     };
   },
   created() {
@@ -429,20 +472,25 @@ export default {
       });
       switch (newVal) {
         case '0':
-          this.getCustomerBasicInformation()
+          this.getCustomerBasicInformation();
           break;
         case '1':
           this.getCustomerSigned();
           break;
         case '2':
-          this.getBranchInformation();
+          // 门店信息
+          if (!this.isStoreInfLoaded) {
+            this.$nextTick(() => {
+              this.mescroll.resetUpScroll(true);
+            });
+          }
           break;
-        // 送达方信息
+          // 送达方信息
         case '3':
           this.customersFun();
           break;
-        // 付款方列表
-        case '4': 
+          // 付款方列表
+        case '4':
           this.auxiliaryFun(this.userInf.customerCode, 1);
           break;
         default:
@@ -481,7 +529,7 @@ export default {
       this.getCustomerBasicInformation();
       this.getZhengCheAndFinancialDto();
       this.getCustomerSigned();
-      this.getBranchInformation();
+      // this.getBranchInformation();
     },
     async getSaleInfo() {
       /* 获取售达方信息 */
@@ -490,11 +538,10 @@ export default {
       }
     },
     async getOrderMonthSummery() {
-
       const param = {
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: 7
-      }
+      };
 
       /* 获取基本信息-订单交易状态 */
       const { code, data } = await this.orderService.getOrderMonthSummery(param);
@@ -528,7 +575,7 @@ export default {
         // 签约品牌编码转化为数组
         for (let index = 0; index < tmp.contractMessageDtoList.length; index++) {
           const element = tmp.contractMessageDtoList[index];
-          if(element.brandName) {
+          if (element.brandName) {
             const tagList = element.brandName.split(',');
             element.tagList = tagList;
             contractMessageDtoList.push(element);
@@ -544,14 +591,28 @@ export default {
         console.log(this.customerSigned);
       }
     },
-    async getBranchInformation() {
+    async getBranchInformationUpCallback(pages) {
+      /* 上推加载 */
+      const scrollView = await this.getBranchInformation(pages);
+      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
+    },
+    async getBranchInformation(pages) {
       /* 基本信息- 门店信息 */
-      console.log('getBranchInformation');
-      const { code, data } = await this.mineServer.getBranchInformation(this.userInf.customerCode);
+      const { code, data } = await this.mineServer.getBranchInformation({
+        customerCode: this.userInf.customerCode,
+        ...pages
+      });
+      const scrollView = {};
       if (code === '1') {
-        this.branchInformation = data;
-        console.log(data);
+        // 标记门店信息已经加载成功
+        this.isStoreInfLoaded = true;
+        this.branchInformation = this.branchInformation.concat(data.branchInformationDtoList || []);
+        scrollView.pageSize = 15;
+        scrollView.total = data.total;
+      } else {
+        this.mescroll.endErr();
       }
+      return scrollView;
     },
     getValueSync(value) {
       /* 区域代码 */
@@ -580,41 +641,36 @@ export default {
     },
     async auxiliaryFun(salesGroupCode, status) {
       /* 付款方列表 */
-      console.log('auxiliaryFun');
-      const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status,this.userInf.salesGroupCode);
+      const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status, this.userInf.salesGroupCode);
       if (code === '1') {
-        // this.accountTotal = 0;
         this.auxiliary = [];
         for (let index = 0; index < data.length; index++) {
-            const element = data[index];
-            element.balance = 0.00;
-            this.auxiliary.push(element)
+          const element = data[index];
+          element.balance = 0.00;
+          this.auxiliary.push(element);
         }
-        this.payerBalanceListFun(data)
-        console.log(data);
+        this.payerBalanceListFun(data);
       }
     },
-     // 付款方余额
+    // 付款方余额
     async payerBalanceListFun(param) {
-      console.log('payerBalanceList');
       const { code, data } = await this.mineServer.payerBalanceList(param);
       if (code === '1') {
         this.payerBalanceList = [];
-        for(var index = 0;index < data.length ;index++) {
-          if(index < this.auxiliary.length) {
-            var itme = this.auxiliary[index];
-            if(data[index]) {
+        for (let index = 0; index < data.length; index++) {
+          if (index < this.auxiliary.length) {
+            const itme = this.auxiliary[index];
+            if (data[index]) {
               itme.balance = data[index].balance;
-            } 
-            this.payerBalanceList.push(itme)
-            console.log(this.payerBalanceList)
+            }
+            this.payerBalanceList.push(itme);
           }
         }
       }
     },
     async setDefaultAction(customerCode) {
-      const {code , data} = await this.customerService.relations(customerCode);
-      if(code === '1') {
+      const { code, data } = await this.customerService.relations(customerCode);
+      if (code === '1') {
         this.customersFun();
       } else {
         uni.showToast({
@@ -623,17 +679,16 @@ export default {
       }
     },
     async setFukuanDefaultAction(code2) {
-      console.log(this.userInf)
-      const {code , data} = await this.customerService.fukuanRelations(code2,this.userInf.salesGroupCode);
-      if(code === '1') {
-          this.auxiliaryFun(this.userInf.customerCode, 1);
+      console.log(this.userInf);
+      const { code, data } = await this.customerService.fukuanRelations(code2, this.userInf.salesGroupCode);
+      if (code === '1') {
+        this.auxiliaryFun(this.userInf.customerCode, 1);
       } else {
         uni.showToast({
           title: '设置失败，稍后重试',
         });
       }
     },
-
     tabClick(e) {
       /* 事件处理 */
       this.tabs = e;
@@ -645,7 +700,17 @@ export default {
         }
       });
     },
-
+    goOtherTab(index) {
+      /* 去其他tab */
+      this.tabs.forEach((v) => {
+        v.active = false;
+      });
+      this.tabs[index].active = true;
+      this.$nextTick(() => {
+        this.activeTabName = `item${index}`;
+        this.index = `${index}`;
+      });
+    }
   }
 };
 </script>
@@ -653,7 +718,7 @@ export default {
 <style lang="scss">
   .bg {
     background: rgba(245, 245, 245, 1);
-    min-height: 1400px;
+    min-height: calc(100vh - var(---window-top));
   }
 
   .jtabBg {
@@ -665,7 +730,7 @@ export default {
 
   .block {
     margin: 24px;
-    background: rgba(255, 255, 255, 1);
+    background: #fff;
     border-radius: 10px;
     margin-bottom: 50px;
   }
@@ -694,6 +759,8 @@ export default {
   .firstItem {
     display: flex;
     justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 
   .firstPageTitle {
@@ -711,7 +778,6 @@ export default {
     font-weight: 400;
     color: rgba(51, 51, 51, 1);
     line-height: 50px;
-    margin-left: 30px;
   }
 
   .firstPageRight {
@@ -720,7 +786,6 @@ export default {
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
     line-height: 50px;
-    margin-right: 30px;
   }
 
   .firstPageRightGray {
@@ -738,7 +803,6 @@ export default {
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
     line-height: 50px;
-    margin-right: 30px;
   }
 
   .firstPageRightMore {
@@ -760,20 +824,19 @@ export default {
 
   .firstPageRightHasHttp {
     display: flex;
+    align-items: center;
     height: 60px;
     font-size: 28px;
     font-weight: 400;
     color: rgba(237, 40, 86, 1);
     line-height: 50px;
-    margin-right: 30px;
   }
 
   .http {
-    height: 50px;
     font-size: 24px;
     font-weight: 400;
     color: #2283E2;
-    line-height: 50px;
+    line-height: 1;
     text-decoration: underline;
     margin-left: 10px;
   }
@@ -867,5 +930,15 @@ export default {
     padding-right: 10px;
     text-align: center;
     font-size: 28px;
+  }
+
+  .myGuestView-mescroll-wrap {
+    height: calc(100vh - var(--window-top) - 88px);
+    border-radius: 10px;
+    padding: 24px 24px 0 24px;
+  }
+
+  .myGuestView-store-item {
+    background: #fff;
   }
 </style>

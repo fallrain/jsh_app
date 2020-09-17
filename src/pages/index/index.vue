@@ -6,12 +6,14 @@
         <!-- 这里是状态栏 -->
       </view>
       <view class="homepage-top-head">
-        <view @tap="goBack" class='iconfont iconzuo homepage-top-head-iconl'></view>
-        <image
-          class="homepage-top-head-name"
-          src="../../assets/img/index/logo-white.png"
-          mode="aspectFill"
-        ></image>
+        <view class="j-flex-aic">
+          <view @tap="goBack" class='iconfont iconzuo homepage-top-head-iconl'></view>
+          <image
+            class="homepage-top-head-name"
+            mode="aspectFill"
+            src="../../assets/img/index/logo-white.png"
+          ></image>
+        </view>
         <view @tap="service" class='iconfont iconpeople homepage-top-head-icon'></view>
       </view>
       <view class="jSearchInput-wrap j-flex-aic">

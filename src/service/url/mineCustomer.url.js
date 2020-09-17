@@ -26,15 +26,19 @@ const urls = {
     return `/getCustomerSigned/${uid}?pageNum=${page}&pageSize=${pageCount}`;
   },
   // 门店信息
-  getBranchInformation(uid, page, pageCount) {
-    return `/getBranchInformation/${uid}?pageNum=${page}&pageSize=${pageCount}`;
+  getBranchInformation({
+    num,
+    size,
+    customerCode
+  }) {
+    return `/getBranchInformation/${customerCode}?pageNum=${num}&pageSize=${size}`;
   },
   // 送达方列表
   customers(uid) {
     return `/customers/${uid}/addresses/all`;
   },
   // 付款方列表
-  auxiliary(salesGroupCode, status,salesGroupCode2) {
+  auxiliary(salesGroupCode, status, salesGroupCode2) {
     return `/customers/${salesGroupCode}/payer/all?salesGroupCode=${salesGroupCode2}&status=${status}`;
   },
   // 付款方余额
