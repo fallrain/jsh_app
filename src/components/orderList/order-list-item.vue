@@ -259,7 +259,7 @@
             >数量：</view>
             <view
               class="orderListItem-model-item-val"
-            >{{jshUtil.formatNumber(info.details[0].jshd_qty,2)}}</view>
+            >{{info.details[0].jshd_qty}}</view>
           </view>
           <view class="orderListItem-model-item">
             <view
