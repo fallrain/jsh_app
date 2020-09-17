@@ -560,7 +560,7 @@ export default {
       });
     },
     // 自主扣款
-    async zzkkAction(state) {
+    async selfDeduction(state) {
       const orderNo = this.info.info.bstnk;
       const paytoCode = this.info.info.jshi_payto_code;
       const salesGroupCode = this.saleInfo.salesGroupCode;
@@ -574,6 +574,8 @@ export default {
       } else if (state === '4') {
         // 整车
         title = '整车订单';
+      } else if (state === '2') {
+
       }
       this.state = state;
       this.currentTitle = `${title} ${orderNo}`;
