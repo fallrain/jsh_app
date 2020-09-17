@@ -24,10 +24,12 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('back', (e) => {
-      e.preventDefault();
-      uni.navigateBack();
-    });
+    if (document && document.addEventListener) {
+      document.addEventListener('back', (e) => {
+        e.preventDefault();
+        uni.navigateBack();
+      });
+    }
   },
   onShow() {
     console.log('App Show');

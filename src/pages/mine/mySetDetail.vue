@@ -65,7 +65,7 @@ export default {
       // 清理code token
       uni.setStorageSync('token', '');
       uni.setStorageSync('code', '');
-      AlipayJSBridge.call('popWindow');
+      AlipayJSBridge && AlipayJSBridge.call('popWindow');
     },
     //   个人资料
     personInforClick() {
