@@ -327,7 +327,7 @@ status: "正常" -->
               class="firstPageRight"
               v-if="item.defaultFlag==='1'"
             >是</view>
-            <view 
+            <view
               @click="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRight"
               v-else-if="item.payerType != '03' && item.payerType != '07' && item.payerType != '15'"
@@ -414,8 +414,8 @@ export default {
       auxiliary: {},
       // 付款方账户总额
       accountTotal: '',
-      // 
-      payerBalanceList:[],
+      //
+      payerBalanceList: [],
     };
   },
   created() {
@@ -429,7 +429,7 @@ export default {
       });
       switch (newVal) {
         case '0':
-          this.getCustomerBasicInformation()
+          this.getCustomerBasicInformation();
           break;
         case '1':
           this.getCustomerSigned();
@@ -442,7 +442,7 @@ export default {
           this.customersFun();
           break;
         // 付款方列表
-        case '4': 
+        case '4':
           this.auxiliaryFun(this.userInf.customerCode, 1);
           break;
         default:
@@ -490,11 +490,10 @@ export default {
       }
     },
     async getOrderMonthSummery() {
-
       const param = {
         jshi_saleto_code: this.userInf.customerCode,
         orderStatusSelf: 7
-      }
+      };
 
       /* 获取基本信息-订单交易状态 */
       const { code, data } = await this.orderService.getOrderMonthSummery(param);
@@ -528,7 +527,7 @@ export default {
         // 签约品牌编码转化为数组
         for (let index = 0; index < tmp.contractMessageDtoList.length; index++) {
           const element = tmp.contractMessageDtoList[index];
-          if(element.brandName) {
+          if (element.brandName) {
             const tagList = element.brandName.split(',');
             element.tagList = tagList;
             contractMessageDtoList.push(element);
@@ -581,40 +580,40 @@ export default {
     async auxiliaryFun(salesGroupCode, status) {
       /* 付款方列表 */
       console.log('auxiliaryFun');
-      const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status,this.userInf.salesGroupCode);
+      const { code, data } = await this.mineServer.auxiliary(salesGroupCode, status, this.userInf.salesGroupCode);
       if (code === '1') {
         // this.accountTotal = 0;
         this.auxiliary = [];
         for (let index = 0; index < data.length; index++) {
-            const element = data[index];
-            element.balance = 0.00;
-            this.auxiliary.push(element)
+          const element = data[index];
+          element.balance = 0.00;
+          this.auxiliary.push(element);
         }
-        this.payerBalanceListFun(data)
+        this.payerBalanceListFun(data);
         console.log(data);
       }
     },
-     // 付款方余额
+    // 付款方余额
     async payerBalanceListFun(param) {
       console.log('payerBalanceList');
       const { code, data } = await this.mineServer.payerBalanceList(param);
       if (code === '1') {
         this.payerBalanceList = [];
-        for(var index = 0;index < data.length ;index++) {
-          if(index < this.auxiliary.length) {
-            var itme = this.auxiliary[index];
-            if(data[index]) {
+        for (let index = 0; index < data.length; index++) {
+          if (index < this.auxiliary.length) {
+            const itme = this.auxiliary[index];
+            if (data[index]) {
               itme.balance = data[index].balance;
-            } 
-            this.payerBalanceList.push(itme)
-            console.log(this.payerBalanceList)
+            }
+            this.payerBalanceList.push(itme);
+            console.log(this.payerBalanceList);
           }
         }
       }
     },
     async setDefaultAction(customerCode) {
-      const {code , data} = await this.customerService.relations(customerCode);
-      if(code === '1') {
+      const { code, data } = await this.customerService.relations(customerCode);
+      if (code === '1') {
         this.customersFun();
       } else {
         uni.showToast({
@@ -623,10 +622,10 @@ export default {
       }
     },
     async setFukuanDefaultAction(code2) {
-      console.log(this.userInf)
-      const {code , data} = await this.customerService.fukuanRelations(code2,this.userInf.salesGroupCode);
-      if(code === '1') {
-          this.auxiliaryFun(this.userInf.customerCode, 1);
+      console.log(this.userInf);
+      const { code, data } = await this.customerService.fukuanRelations(code2, this.userInf.salesGroupCode);
+      if (code === '1') {
+        this.auxiliaryFun(this.userInf.customerCode, 1);
       } else {
         uni.showToast({
           title: '设置失败，稍后重试',

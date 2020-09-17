@@ -42,19 +42,15 @@
 
     .homepage-top-head {
       display: flex;
+      justify-content: space-between;
       align-self: center;
       margin-bottom: 30px;
 
       .homepage-top-head-name {
         width: 142px;
         height: 44px;
-        //   color:#fff;
         font-size: 28px;
-        margin: 0px 16px 8px 20px;
-        //   .top-head-name-image{
-        //       width:100px;
-        //       height:100px;
-        //   }
+        margin-left: 20px;
       }
 
       .homepage-top-head-input {
@@ -86,9 +82,6 @@
         height: 45px;
         font-size: 48px !important;
         color: #fff;
-        position: absolute;
-        top: 30px;
-        right: 29px;
       }
     }
 
@@ -379,6 +372,7 @@
             color: rgba(194, 163, 111, 1);
             margin-top: 8px;
           }
+
           .homepage-recommend-more {
             font-size: 18px;
             color: #666;
