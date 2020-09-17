@@ -242,7 +242,7 @@
       <template>
         <!--信用订单-->
         <view
-          v-if="info.btnsInfo.selfPayButton==='1'"
+          v1-if="info.btnsInfo.selfPayButton==='1'"
           class="jmodal-style"
         >
           <view class="orderListItem-model-item">
@@ -250,7 +250,7 @@
               class="orderListItem-model-item-name"
             >价格：</view>
             <view
-              class="orderListItem-model-item-val"
+              class="orderListItem-model-item-val j-common-color"
             >¥{{jshUtil.formatNumber(info.details[0].jshd_invoice_price,2)}}</view>
           </view>
           <view class="orderListItem-model-item">
@@ -266,7 +266,7 @@
               class="orderListItem-model-item-name"
             >合计：</view>
             <view
-              class="orderListItem-model-item-val"
+              class="orderListItem-model-item-val j-common-color"
             >¥{{jshUtil.formatNumber(info.details[0].jshd_amount,2)}}</view>
           </view>
           <view class="orderListItem-model-item">
@@ -289,7 +289,9 @@
           </view>
           <view class="orderListItem-model-item">
             <view class="orderListItem-model-item-name">余额：</view>
-            <view class="orderListItem-model-item-val">{{currentPayerInfo.balance||currentPayerInfo.bookBalance}}</view>
+            <view
+              class="orderListItem-model-item-val j-common-color"
+            >{{currentPayerInfo.balance||currentPayerInfo.bookBalance}}</view>
           </view>
         </view>
       </template>
