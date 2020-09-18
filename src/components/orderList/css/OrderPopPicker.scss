@@ -1,31 +1,29 @@
-.jPopPicker-pop {
+.oPopPicker-pop {
   background: #fff;
-  padding-bottom: 50px;
+  padding: 0 40px 50px 40px;
 }
-.zIndex999{
-  z-index: 999;
-}
-.jPopPicker-pop-search-wrap{
+
+.oPopPicker-pop-search-wrap{
   margin-top: 20px;
   margin-bottom: 10px;
   padding-left: 40px;
   padding-right: 58px;
 }
 
-.jPopPicker-pop-head {
+.oPopPicker-pop-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 26px 40px 14px 40px;
+  padding: 26px 0 14px 0;
 }
 
-.jPopPicker-pop-item-wrap{
+.oPopPicker-pop-item-wrap{
   max-height: 760px;
   padding-left: 40px;
   overflow-y: auto;
 }
 
-.jPopPicker-pop-item {
+.oPopPicker-pop-item {
   position: relative;
   display: flex;
   align-items: center;
@@ -39,28 +37,28 @@
   border-bottom: 1px solid #F0F0F0;
 
   &.active {
-    .jPopPicker-pop-item-icon {
+    .oPopPicker-pop-item-icon {
       display: block;
     }
 
-    .jPopPicker-pop-item-cnt {
+    .oPopPicker-pop-item-cnt {
       color: $theme-color;
     }
   }
 }
 
-.jPopPicker-pop-head-title {
+.oPopPicker-pop-head-title {
   font-weight: 600;
   color: #333;
   font-size: 30px;
 }
 
-.jPopPicker-pop-head-icon{
+.oPopPicker-pop-head-icon{
   color: $theme-color;
   font-size: 32px;
 }
 
-.jPopPicker-pop-item-icon {
+.oPopPicker-pop-item-icon {
   position: absolute;
   top: 50%;
   left: 8px;
@@ -70,7 +68,7 @@
   color: $theme-color;
 }
 
-.jPopPicker-pop-item-cnt {
+.oPopPicker-pop-item-cnt {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp:2;
@@ -81,9 +79,18 @@
   color: #666;
 }
 
-.jPopPicker-pop-item-empty{
+.oPopPicker-pop-item-empty{
   text-align: center;
   font-size: 26px;
   padding-right: 58px;
   color: #666;
+}
+.pop-sure{
+  color: #fff;
+  text-align: center;
+  background: $theme-color;
+  height: 60px;
+  line-height: 60px;
+  width: 100%;
+  border-radius: 30px;
 }

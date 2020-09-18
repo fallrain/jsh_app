@@ -168,7 +168,7 @@ export default {
     // },
     async changeNum(value, item, index) {
       console.log(item);
-      //购物车列表数据
+      // 购物车列表数据
       // const { code, data } = await this.transfergoodsService.allOrderList({
       //   timestamp: Date.parse(new Date()),
       //   longfeiUSERID: this.saleInfo.customerCode
@@ -204,7 +204,7 @@ export default {
           qty: value
         });
         if (result.code === '1') {
-          console.log('ddddddddddd',result.data.data.ALLVOLUMN);
+          console.log('ddddddddddd', result.data.data.ALLVOLUMN);
           this.goods.calue = Math.round(result.data.data.ALLVOLUMN / 15 * 100);
           // console.log('hahahhaha', this.goods);
           console.log(index);

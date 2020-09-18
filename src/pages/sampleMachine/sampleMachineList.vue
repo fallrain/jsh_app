@@ -492,7 +492,7 @@ export default {
             id: v.customerCode,
             name: `(${v.customerCode})${v.address}`
           }));
-          console.log(this.deliveryAddressList)
+          console.log(this.deliveryAddressList);
           // 当前配送地址修改
           if (this.deliveryAddressList[0]) {
             this.deliveryAddressList[0].checked = true;

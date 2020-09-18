@@ -22,6 +22,7 @@
         :orderItem="orderItem"
         :payInfoData.sync="payInfoData"
         :billInfoList.sync="billInfoList"
+        :sendType="formSubmit.deliveryType"
       ></j-order-confirm-item>
     </view>
     <view v-if="dataInfo.disableComposeProductList.length > 0" class="mt24">
@@ -194,7 +195,6 @@ export default {
       const remarksData = JSON.parse(data);
       const orderIndex = remarksData.orderIndex;
       const productIndex = remarksData.productIndex;
-      debugger;
       const obj = this.dataInfo.composeProductList[orderIndex].splitOrderDetailList[productIndex].splitOrderProductList[0];
       obj.address = remarksData.address;
       obj.area = remarksData.area;
@@ -402,9 +402,9 @@ export default {
       const condition = this.getPayForm();
       const { code, data } = await this.orderService.paytoInfo(condition);
       if (code === '1') {
-        /*for (const k in data) {
+        /* for (const k in data) {
           data[k][0].isCanChecked = false;
-        }*/
+        } */
         this.payInfoData = data;
         let payList = [];
         // 处理账户余额信息
@@ -439,8 +439,6 @@ export default {
         uni.showToast({
           title: '短信发送成功',
         });
-        // // 提交订单
-        // this.submitOrder();
       }
     },
     // 取消订单
@@ -497,7 +495,6 @@ export default {
         return;
       }
 
-      debugger;
       console.log(this.payerMoneyList);
       let state = true;
       if (this.payerMoneyList.length === 0) {

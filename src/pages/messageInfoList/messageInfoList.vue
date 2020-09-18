@@ -7,7 +7,7 @@
       <view class="message-concent" v-show="tabIndex === 0">
         <view class="uni-flex uni-info" >
           <view class=" message-unread">共{{unread}}条消息未读</view>
-          <view class=" message-read" @click="readAll">全部已读</view>
+          <view @tap="readAll" class=" message-read">全部已读</view>
           <view class=" message-vertical-line"></view>
           <view class=" message-category" @tap="getIsMessage">
             {{ tips }}

@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: "messageTaskDetail"
-}
+  name: 'messageTaskDetail'
+};
 </script>
 
 <style scoped>

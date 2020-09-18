@@ -32,7 +32,7 @@
         @up="upCallback"
         ref="mescrollRef"
       >
-      <view class="goodsList-items-wrap" v-if="isShowList">
+        <view class="goodsList-items-wrap" v-if="isShowList">
           <j-goods-item
             v-for="(item,index) in list"
             :key="item.productCode"
@@ -125,7 +125,7 @@
     ></j-choose-delivery-address>
     <j-goods-hover-button
       :cartNumber="cartNum"
-      :scrollObject="mescroll"
+      @toTop="goTop"
     ></j-goods-hover-button>
   </view>
 </template>
@@ -147,15 +147,15 @@ import {
   getStockType
 } from '@/lib/dataDictionary';
 import {
+  mapActions,
   mapGetters,
   mapMutations,
-  mapActions,
 } from 'vuex';
 import {
-  USER,
   COMMODITY,
   GOODS_LIST,
-  SHOPPING_CART
+  SHOPPING_CART,
+  USER
 } from '../../store/mutationsTypes';
 import JGoodsHoverButton from '../../components/goods/JGoodsHoverButton';
 
@@ -418,7 +418,6 @@ export default {
         popTabs.push(tab);
       });
       this.popTabs = popTabs;
-      // console.log(this.popTabs);
     },
     genFilterDataOfStock(categoryCode) {
       /* 组合有货商品，并选中 */
@@ -433,7 +432,6 @@ export default {
           value: v.stockType,
           isChecked: false
         }));
-        console.log(data);
         // 如果之前有选中的有货商品，设置选中
         const checkedObj = this.filterList[2].data.find(v => v.isChecked);
         if (checkedObj) {
@@ -444,7 +442,6 @@ export default {
         }
         // 修改有货商品
         this.filterList[2].data = data;
-        console.log(this.filterList);
       }
     },
     async getGoodsList(pages) {
@@ -463,7 +460,6 @@ export default {
       this.preSearchCondition = condition;
       const scrollView = {};
       if (code === '1') {
-        console.log(data);
         this.navigate = data;
         const {
           // 商品数据
@@ -545,7 +541,6 @@ export default {
           }
         });
         // 未筛选出数据，重置页面
-        console.log(data.condition);
         if (data.condition.length === 0) {
           uni.showModal({
             title: '',
@@ -570,7 +565,6 @@ export default {
     goodsChange(goods, index) {
       /* 商品数据change */
       this.list[index] = goods;
-      console.log(goods);
     },
     addCartSuccess() {
       /* 加购成功 */
@@ -604,22 +598,17 @@ export default {
     },
     popTabsChange(tabs) {
       /* popTabs change */
-      console.log(tabs);
       this.popTabs = tabs;
     },
     tabConditionConfirm(tabs, index, choseItem) {
       /* 顶部双层tab栏目，第二层点了条件点确认按钮事件 */
       // 组合tabConditions
-      // console.log(tabs);
       const choseTab = tabs[index];
       const conditions = {};
       // todo 显然，通过名字来判断不合理，但是pc端也是如此，待提bug
       if (choseTab.name === '类目') {
         conditions.categoryCode = choseItem.code;
-        console.log(conditions);
       } else {
-        console.log(choseTab);
-        console.log(conditions);
         conditions.attributeName = choseItem.code;
         conditions.attributeValue = choseItem.show;
       }
@@ -627,7 +616,6 @@ export default {
         ...this.tabConditions,
         ...conditions
       };
-      console.log(this.tabConditions);
       this.silentReSearch();
     },
     showFilter() {
@@ -738,6 +726,11 @@ export default {
         }
       });
     },
+    goTop() {
+      if (this.mescroll) {
+        this.mescroll.scrollTo(0, 100);
+      }
+    }
   }
 };
 </script>

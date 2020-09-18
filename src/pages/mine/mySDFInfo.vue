@@ -142,7 +142,6 @@ export default {
   },
   methods: {
     async getBaseInfo() {
-
       const { code, data } = await this.mineServer.mineBaseInfo(this.userInf.customerCode);
       if (code === '1') {
         this.baseList = data;

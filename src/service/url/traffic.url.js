@@ -60,6 +60,12 @@ const urls = {
   xyChangePayTo(OrderNo, paytoCode, paytoName) { // 我的订单切换付款方
     return `/queryOrder/xyChangePayTo?OrderNo=${OrderNo}&payto_code=${paytoCode}&payto_name=${paytoName}`;
   },
+  payByCustomer(OrderNo) { // 整车自主扣款
+    return `/traffic-order/payByCustomer/${OrderNo}`;
+  },
+  XyCutPayment(OrderNo) { // 信用自主扣款
+    return `/XyCutPayment/${OrderNo}`;
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;

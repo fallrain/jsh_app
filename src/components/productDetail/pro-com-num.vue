@@ -1,7 +1,7 @@
 <template>
   <uni-popup ref="pop" type="bottom" @change="change">
     <view class="pro-num-pop">
-      <view class="pro-num-head" @click="close">
+      <view @tap="close" class="pro-num-head">
         <view class="pro-num-head-title"></view>
         <view class="pro-num-head-but">X</view>
       </view>
@@ -71,7 +71,7 @@
         </view>
       </view>
       <view class="pro-num-btn-wrap">
-        <button class="button pro-num-btn" @click="putNum">确定</button>
+        <button @tap="putNum" class="button pro-num-btn">确定</button>
       </view>
     </view>
   </uni-popup>

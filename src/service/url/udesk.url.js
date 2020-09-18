@@ -4,7 +4,7 @@ const baseURL = 'coc/api';
 const urls = {
   // 首页客服
   getUdesk(code) {
-    return `/customers/getCustomerUdeskAreaRelation/${code}`
+    return `/customers/getCustomerUdeskAreaRelation/${code}`;
   }
 };
 util.addPrefix(baseURL, urls);

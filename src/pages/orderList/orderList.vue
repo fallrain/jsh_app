@@ -4,11 +4,11 @@
       <view style="display:flex">
         <view class="inputsjtab">
           <view class="tab-brand-child">
-            <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
+            <order-j-tab :offset="offset" :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
             </order-j-tab>
           </view>
           <view class="tab-brand-child1">
-            <i @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
+            <i @tap="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
           </view>
         </view>
       </view>
@@ -21,9 +21,10 @@
         @up="upCallback"
       >
         <order-list-item
-          v-for="(iten,index) in orderListInfo"
+          :linkNum="linkNum"
+          :info="item"
           :key="index"
-          :info="iten"
+          v-for="(item,index) in orderListInfo"
           :index="index"
           @goDetail="goDetail">
         </order-list-item>
@@ -38,7 +39,7 @@
         <view >
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
-              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
+              <text @tap="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-type
@@ -72,7 +73,7 @@
                 v-model="translateInput"
                 disabled="false"
               >
-              <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
+              <i @tap="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
             <order-list-industry
                     :is-order-industry="orderIndustry"
@@ -93,7 +94,7 @@
                 placeholder-style="color:#DBDBDB"
                 disabled="false"
               >
-              <i @click="productBandAction" class="iconfont iconxia dropdownstyle"></i>
+              <i @tap="productBandAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
           </view>
         </view>
@@ -118,7 +119,7 @@
         <view>
           <view class="addressee">
             <view>
-              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
+              <text @tap="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-model :is-order-model="orderModelshow"
@@ -147,13 +148,13 @@
              class="timeParent"
             >
               <view class="box1">
-                <text @click="orderBegainTimeAction" >{{orderBegainTime.length>0?orderBegainTime:'开始时间'}}</text>
+                <text @tap="orderBegainTimeAction" >{{orderBegainTime.length>0?orderBegainTime:'开始时间'}}</text>
               </view>
               <view class="box2">
                 <text>至</text>
               </view>
               <view class="box3">
-                <text @click="orderEndTimeAction">{{orderEndTime.length>0?orderEndTime:'结束时间'}}</text>
+                <text @tap="orderEndTimeAction">{{orderEndTime.length>0?orderEndTime:'结束时间'}}</text>
               </view>
             </view>
         </view>
@@ -167,13 +168,13 @@
            class="timeParent"
           >
             <view class="box1">
-              <text @click="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
+              <text @tap="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text @click="deductionEndTimeAction">{{deductionEndTime.length>0?deductionEndTime:'结束时间'}}</text>
+              <text @tap="deductionEndTimeAction">{{deductionEndTime.length>0?deductionEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -187,13 +188,13 @@
             class="timeParent"
           >
             <view class="box1">
-              <text @click="invoiceTimeAction">{{invoiceBegainTime.length>0?invoiceBegainTime:'开始时间'}}</text>
+              <text @tap="invoiceTimeAction">{{invoiceBegainTime.length>0?invoiceBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text @click="invoiceEndTimeAction">{{invoiceEndTime.length>0?invoiceEndTime:'结束时间'}}</text>
+              <text @tap="invoiceEndTimeAction">{{invoiceEndTime.length>0?invoiceEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -207,13 +208,13 @@
             class="timeParent"
           >
             <view class="box1">
-              <text @click="goldTaxinvoiceTimeAction">{{goldTaxInvoiceBegainTime.length>0?goldTaxInvoiceBegainTime:'开始时间'}}</text>
+              <text @tap="goldTaxinvoiceTimeAction">{{goldTaxInvoiceBegainTime.length>0?goldTaxInvoiceBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text @click="goldTaxinvoiceEndTimeAction">{{goldTaxInvoiceEndTime.length>0?goldTaxInvoiceEndTime:'结束时间'}}</text>
+              <text @tap="goldTaxinvoiceEndTimeAction">{{goldTaxInvoiceEndTime.length>0?goldTaxInvoiceEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -232,7 +233,7 @@
                   v-model="orderReviewStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia dropdownstyle"  @click="getReview"></i>
+                  <i @tap="getReview"  class="iconfont iconxia dropdownstyle"></i>
                   </view>
                 <order-list-review :is-orderreview="orderReviewshow" @selectInfoOrderReview="selectInfoOrderReview"></order-list-review>
               </view>
@@ -249,7 +250,7 @@
                   v-model="orderMarkStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia dropdownstyle" @click="getMarketing"></i>
+                  <i @tap="getMarketing" class="iconfont iconxia dropdownstyle"></i>
                   </view>
                 <order-list-marketing :is-orderremarketing="orderMarketing" @selectInfoOrderMarketing="selectInfoOrderMarketing"></order-list-marketing>
             </view>
@@ -270,7 +271,7 @@
                       v-model="orderBuyStr"
                       disabled="false"
                     >
-                    <i class="iconfont iconxia dropdownstyle" @click="getBuy"></i>
+                    <i @tap="getBuy" class="iconfont iconxia dropdownstyle"></i>
                 </view>
               <order-list-buy :is-order-buy="orderBuy" @selectInfoOrderBuy="selectInfoOrderBuy"></order-list-buy>
             </view>
@@ -287,7 +288,7 @@
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
-                    <i class="iconfont iconxia dropdownstyle" @click="getDistribution"></i>
+                    <i @tap="getDistribution" class="iconfont iconxia dropdownstyle"></i>
                 </view>
               <order-list-distribution :is-order-distribution="orderDistribution" @selectInfoOrderDistribution="selectInfoOrderDistribution"></order-list-distribution>
             </view>
@@ -342,11 +343,11 @@
       <template>
         <view class="calentdarContent">
           <view style="display:flex">
-            <view @click="calentCancleAction" class="calentCancle">取消</view>
+            <view @tap="calentCancleAction" class="calentCancle">取消</view>
             <view class="calentdarTitle">
                 选择时间
             </view>
-            <view @click="calentVerifyAction" class="calentVerify">确定</view>
+            <view @tap="calentVerifyAction" class="calentVerify">确定</view>
           </view>
           <uni-calendar
           :insert="true"
@@ -411,6 +412,9 @@ export default {
   },
   data() {
     return {
+      offset: 0,
+      currentID2: 0,
+      linkNum:'',
       formDataJson: {},
       orderNoshow: false,
       orderModelshow: false,
@@ -599,8 +603,10 @@ export default {
   },
   onLoad(options) {
     console.log(options);
+    this.offset = Number(options.index)*60
     this.sexID = options.index * 1;
     console.log(this.tabs[this.sexID]);
+    this.getUserInfById();
   },
   created() {
     console.log(this.sexID);
@@ -614,25 +620,33 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
-    async jMescrollDownCallback() {
-      let id222;
+    // 获取上上签验证联系方式
+    async getUserInfById() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const { code, data } = await this.orderService.sendVerify(this.userInf.customerCode);
+      if (code === '1') {
+        const abc = data.data.account;
+        this.linkNum = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+      }
+    },
+    /*async jMescrollDownCallback() {
       this.tabs.forEach((each) => {
         if (each.active) {
           // this.orderList(each.id2, this.pageNo);
-          id222 = each.id2;
+          this.currentID2 = each.id2;
         }
       });
-      console.log(`=========${id222}`);
-      console.log(this.tabs);
-      /* 下拉刷新 */
+      /!* 下拉刷新 *!/
       const scrollView = await this.orderList(this.tabs[this.sexID].id2, 1);
       if (scrollView) {
         this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
       }
-    },
+    },*/
     async upCallback(pages) {
+      debugger
       /* 上推加载 */
       const scrollView = await this.orderList(this.tabs[this.sexID].id2, pages.num);
+      debugger
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     filterConfirm() {
@@ -799,12 +813,12 @@ export default {
         jshi_sendto_code: songda,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
-        orderStatusSelf: e,
+        orderStatusSelf: this.currentID2,
         pageNo: pgNo,
-        pageSize: 10
+        pageSize: 15
       };
 
-      if (e == 8) {
+      if (this.currentID2 === 8) {
         param.yjPay = 'MFYJ';
         param.orderStatusSelf = 7;
       }
@@ -814,13 +828,13 @@ export default {
         for (let index = 0; index < data.dataList.length; index++) {
           const element = data.dataList[index];
           element.btnsInfo = {
-            estimateButton: "0",
-            invalidButton: "0",
-            orderNo: "",
-            selfPayButton: "0",
-            signInButton: "0",
-            tctpConfirmButton: "0",
-          }
+            estimateButton: '0',
+            invalidButton: '0',
+            orderNo: '',
+            selfPayButton: '0',
+            signInButton: '0',
+            tctpConfirmButton: '0',
+          };
           data.dataList[index] = element;
         }
 
@@ -854,35 +868,17 @@ export default {
       if (code === '200') {
         const element = this.orderListInfo[index];
         element.btnsInfo = data;
-        // this.orderListInfo[index] = element;
-        this.$set(this.orderListInfo,index,element);
-        console.log(this.orderListInfo);
-        // this.buttonLogicJudgment = data;
-        console.log('============');
-        // console.log(this.buttonLogicJudgment)
-        // console.log(this.invalidButton)
-        // console.log(this.invalidButton)
-        //     selfPayButton": "0",
-        // "tctpConfirmButton": "0",
-        // "orderNo": "2000426027",
-        // "invalidButton": "0",
-        // "estimateButton": "0",
-        // "signInButton": "0"
-        //     tctpConfirmButton:统仓统配确认按钮
-        // orderNo:订单号
-        // invalidButton:订单作废按钮
-        // estimateButton:
-        // signInButton:"自主签收按
+        this.$set(this.orderListInfo, index, element);
       }
       console.log(data);
     },
-    goDetail(e) {
-      console.log(e);
-      this[ORDER.UPDATE_ORDER]({
+    goDetail(info) {
+      const orderDetail = JSON.stringify(info);
+      /* this[ORDER.UPDATE_ORDER]({
         orderDetail: this.orderListInfo[e]
-      });
+      }); */
       uni.navigateTo({
-        url: '/pages/orderList/orderDetail'
+        url: `/pages/orderList/orderDetail?orderDetail=${orderDetail}`
       });
     },
     tabClick(e) {
@@ -890,6 +886,7 @@ export default {
       console.log(e);
       this.tabs.forEach((each) => {
         if (each.active) {
+          this.currentID2 = each.id2
           this.orderList(each.id2, this.pageNo);
         }
       });

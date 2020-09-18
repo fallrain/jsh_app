@@ -19,7 +19,7 @@
               <view class="v-c-i-flox3">付款方<i class="iconfont iconxia"></i></view>
               <view class="v-d-g-total-price-info" v-if="goods.payCheck">
                 <view class="v-c-i-cnt-price-info-li" v-for="(it,index2) in goods.payVehiList.data.items" :key="index2"
-                      :class="[it.checked && 'active']" @click="payVehicle(index, index2),getPayer(goods, index)">{{it.TMCF_NAME}}</view>
+                      :class="[it.checked && 'active']" @tap="payVehicle(index, index2),getPayer(goods, index)">{{it.TMCF_NAME}}</view>
               </view>
               <view class="v-c-i-cnt-inf-picker-rk">{{goods.payVehCheck.TMCF_NAME}}</view>
             </view>
@@ -110,9 +110,11 @@ export default {
       this.$emit('change', this.goodsList, index);
     },
     async changeNum(value, item) {
-      if (value !== (item.IBL_NUM * 1)) {{
+      if (value !== (item.IBL_NUM * 1)) {
+        {
         // this.$emit('changeNum', value, this.goodsList, item);
-      }}
+        }
+      }
     },
   }
 };

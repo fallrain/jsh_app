@@ -126,7 +126,7 @@ export default {
     tabClick(tabs) {
       this.tabs = tabs;
       console.log(this.tabs);
-      this.tabs.forEach(item => {
+      this.tabs.forEach((item) => {
         if (item.active) {
           if (item.name === '购物车') {
             uni.switchTab({
@@ -372,19 +372,19 @@ export default {
       // 提交订单
       const timetamp = new Date().valueOf();
       const longfeiUSE = this.userInf.customerCode;
-      const { code, data } = await this.vehicleService.cartSubmitPreCheck(timetamp,longfeiUSE,this.zhengCheCode);
+      const { code, data } = await this.vehicleService.cartSubmitPreCheck(timetamp, longfeiUSE, this.zhengCheCode);
       if (code === '1' && data.code === '200') {
-        this.cartSubmit(verifyCo,verifyK);
+        this.cartSubmit(verifyCo, verifyK);
       } else {
         uni.showToast({
           title: data.message,
         });
       }
     },
-    async cartSubmit(verifyCo,verifyK) { // 提交订单
+    async cartSubmit(verifyCo, verifyK) { // 提交订单
       const timetamp = new Date().valueOf();
       const longfeiUSE = this.userInf.customerCode;
-      const { code, data } = await this.vehicleService.cartSubmit(timetamp,longfeiUSE,this.zhengCheCode,verifyCo,verifyK);
+      const { code, data } = await this.vehicleService.cartSubmit(timetamp, longfeiUSE, this.zhengCheCode, verifyCo, verifyK);
       if (code === '1' && data.code === '200') {
         uni.showToast({
           title: '整车提交成功',

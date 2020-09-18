@@ -70,8 +70,8 @@ export default {
             duration: 3000
           });
         } else {
-          this.detailList.orderList.forEach(item => {
-            item.payer.forEach(ele => {
+          this.detailList.orderList.forEach((item) => {
+            item.payer.forEach((ele) => {
               if (ele.customerCode === item.IBL_PAYMONEY) {
                 if (ele.balance > this.detailList.SUMMONEY) {
                   this.$emit('changeVf');

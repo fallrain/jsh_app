@@ -30,7 +30,12 @@
         class="jGoodsItem-left-float"
         v-if="tagImg"
       ></image>
-      <image class="image2" src="../../assets/img/product/sellout.png" v-show="isShowImg"></image>
+      <image
+        class="jGoodsItem-top-right-float"
+        src="https://cdn.jsh.com/img/isNewProduct.png"
+        v-if="newProductImg"
+      ></image>
+      <image class="image2" src="../../assets/img/product/sellout.png" v-if="priceInf.isShowImg"></image>
     </view>
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-goodsName j-goods-title" @tap="goDetail">
@@ -59,7 +64,7 @@
           @change="goodsNumChange"
         ></u-number-box>
         <button
-          v-if="isShowAddCart"
+          v-if="isShowAddCart || priceInf.isShowAddCart"
           :class="['jGoodsItem-cnt-opts-primary ml26',priceInf.disabled && 'disabled']"
           type="button"
           @tap="checkSpecifications"
@@ -183,7 +188,6 @@ export default {
   },
   data() {
     return {
-      isShowImg: false,
       baseUrl: process.env.BASE_URL,
       // 错误图片
       errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
@@ -237,6 +241,13 @@ export default {
         tagAy.push('scf');
       }
       return this[tagAy.join('-')];
+    },
+    newProductImg() {
+      /* 新品图片 */
+      const {
+        isNewProduct
+      } = this.goods;
+      return isNewProduct === '1';
     },
     priceInf() {
       /* 价格信息 */
@@ -294,13 +305,12 @@ export default {
           if (priceInf.invoicePrice === '营销活动进行中') {
             priceInf.disabled = true;
             priceInf.isText = true;
-            this.isShowAddCart = true;
+            priceInf.isShowAddCart = true;
           }
         }
       }
-      console.log(this.goods);
       if (this.goods.isResource === '1' && Number(this.goods.$stock.stockTotalNum) === 0) {
-        this.isShowImg = true;
+        priceInf.isShowImg = true;
         priceInf.disabled = true;
       }
 

@@ -3,7 +3,7 @@
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background" >
       <view v-for="(item,index) in list">
-        <view class="v_More_text" @click="goMessage(item,index)">{{item.typeNameShow}}</view>
+        <view @tap="goMessage(item,index)" class="v_More_text">{{item.typeNameShow}}</view>
       </view>
     </view>
   </view>

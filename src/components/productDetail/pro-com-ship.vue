@@ -1,7 +1,7 @@
 <template>
   <uni-popup ref="pop" type="bottom" @change="change">
     <view class="mask-ship">
-      <view class="top-ship" @click="close">
+      <view @tap="close" class="top-ship">
         <view class="top-ship-title">{{titles}}</view>
         <view class="top-ship-but">X</view>
       </view>
@@ -10,7 +10,7 @@
           class="filter-drawer-cnt-list"
       >
         <view class="sorrowC-ship">
-          <view @click="checkAct(index)" v-for="(ship,index) in info" :key="index">
+          <view :key="index" @tap="checkAct(index)" v-for="(ship,index) in info">
             <view class="uni-flex uni-row textSenRow-ship">
               <view class="textTick-ship col-15 iconfont icontick" :class="ship.checked ? 'cheched' :''"></view>
               <view class="textRow-ship col-80" :class="ship.checked ? 'cheched' :''">{{ship.name}}</view>

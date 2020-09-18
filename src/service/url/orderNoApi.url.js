@@ -31,6 +31,12 @@ const urls = {
     return `/billInfo/get/billInfo/${sendtoCode}/${productGroup}`;
   },
   getTctpSwitch: '/order/get/tctpSwitch', // 获取统仓统配白名单
+  payByCustomer(OrderNo) { // 反向定制自主扣款
+    return `/crowdFunding/payByCustomer/${OrderNo}`;
+  },
+  // 获取样机结算信息
+  generateOfmyyjjsRecord: '/order/mfyjjs/generateOfmyyjjsRecord',
+  toPayMfyjjsRecord: '/order/mfyjjs/toPayMfyjjsRecord', // 支付免费样机
 };
 util.addPrefix(baseURL, urls);
 export default urls;

@@ -3,92 +3,34 @@
     ref="pop"
     type="bottom"
     @change="change"
-    class="zIndex999"
   >
-    <view class="jPopPicker-pop">
-      <view class="jPopPicker-pop-head">
-        <view class="jPopPicker-pop-head-title">{{title}}</view>
-        <view
-          v-if="isShowSure"
-          class="jPopPicker-pop-head-icon"
-          @tap="confirm"
-        >确定</view>
+    <view class="oPopPicker-pop">
+      <view class="oPopPicker-pop-head">
+        <view class="oPopPicker-pop-head-title">{{title}}</view>
         <view
           v-if="isShowClose"
-          class="jPopPicker-pop-head-icon iconfont iconcross j-common-icon-close-wrap"
+          class="oPopPicker-pop-head-icon iconfont iconcross j-common-icon-close-wrap"
           @tap="close"
         ></view>
       </view>
-      <view
-        class="jPopPicker-pop-search-wrap"
-        v-if="isShowSearch"
-      >
-        <j-search-input
-          @change="search"
-          @search="search"
-          placeholder="请输入搜索信息"
-          v-model="searchValue"
-        ></j-search-input>
-      </view>
-      <slot name="head"></slot>
-      <scroll-view
-        :scroll-y="true"
-        class="jPopPicker-pop-item-wrap"
-      >
-        <template v-for="(item) in options">
-          <view
-            :class="[
-            'jPopPicker-pop-item',
-            choseKeys.find(v=>v===item[keyName]) && 'active'
-          ]"
-            :key="item[keyName]"
-            @tap="check(item)"
-            v-if="!item.isHide"
-          >
-            <view
-              :class="[
-            'jPopPicker-pop-item-icon iconfont icontick',
-          ]"
-            ></view>
-            <view class="jPopPicker-pop-item-cnt">
-              <text v-if="isShowValue">{{item.value}}</text>
-              <slot v-bind:data="item"></slot>
-            </view>
-          </view>
-        </template>
-        <view
-          class="jPopPicker-pop-item-empty"
-          v-if="isEmpty"
-        >没有匹配的相关数据~</view>
-      </scroll-view>
+      <slot></slot>
+      <view @tap="confirm" class="pop-sure">确定</view>
     </view>
   </uni-popup>
 </template>
 
 <script>
-import './css/jPopPicker.scss';
-import JSearchInput from './JSearchInput';
+import './css/OrderPopPicker.scss';
 
 export default {
-  name: 'JPopPicker',
+  name: 'OrderPopPicker',
   components: {
-    JSearchInput
   },
   props: {
-    // 类型：radio/checkbox
-    type: {
-      type: String,
-      default: 'radio'
-    },
     // 显示隐藏
     show: {
       type: Boolean,
       default: false
-    },
-    // 可否被点击
-    isCanBeCheck: {
-      type: Boolean,
-      default: true
     },
     // picker 标题
     title: {

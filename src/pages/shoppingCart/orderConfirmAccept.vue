@@ -156,7 +156,6 @@ export default {
             }
           });
         });
-        debugger;
         this.orderData = data;
         // 处理成功失败数量
         this.computeOrderNum();

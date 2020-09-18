@@ -322,7 +322,11 @@
 }
 
 /*col end*/
-
+/*color-start*/
+.text-theme{
+  color: $theme-color;
+}
+/*color-end*/
 /*dis */
 
 .dis-none {
@@ -438,6 +442,10 @@
   width: 40px;
   height: 40px;
   text-align: right;
+}
+
+.j-common-color{
+  color: $theme-color;
 }
 
 /*common end*/
