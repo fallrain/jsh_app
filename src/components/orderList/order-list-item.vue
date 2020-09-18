@@ -3,13 +3,13 @@
     <view class="produceDetailItem-head">
       <button type="button" class="produceDetailItem-head-btn">{{info.info.combinationTag}}</button>
       <text class="produceDetailItem-head-text">{{titleAndNoFun}}</text>
-      <text @click="orderFailsAction"
+      <text @tap="orderFailsAction"
             class="produceDetailItem-head-text-status">
         {{info.info.selfUseOrderStatus}}
       </text>
     </view>
     <view v-if="info.details.length<2">
-      <view class="produceDetailItem-cnt" @click="goDetail">
+      <view @tap="goDetail" class="produceDetailItem-cnt">
         <view class="produceDetailItem-cnt-img">
           <image :src="info.details[0].jshd_product_img"></image>
         </view>
@@ -53,7 +53,7 @@
         </view>
         <view class=" col-25 padding-4">
           <button v-if="info.btnsInfo.signInButton === '1'"
-                  @click="orderSelfSignedFun"
+                  @tap="orderSelfSignedFun"
                   type="button"
                   class="produceDetailItem-fot-btn">
             签收
@@ -288,7 +288,6 @@
 <script>
 import './css/orderListItem.scss';
 import '../shoppingCart/css/jOrderConfirmItem.scss';
-import orderListItemMore from './order-list-itemMore';
 import {
   mapGetters
 } from 'vuex';
@@ -297,15 +296,12 @@ import {
 } from '../../store/mutationsTypes';
 import JPopPicker from '../form/JPopPicker';
 import OrderPopPicker from './OrderPopPicker';
-import JModal from '../form/JModal';
 
 export default {
   name: 'orderListItem',
   components: {
-    orderListItemMore,
     OrderPopPicker,
     JPopPicker,
-    JModal
   },
   props: {
     info: {
@@ -368,7 +364,6 @@ export default {
     },
     zcck() {
       // jshi_order_type IN('ZK','ZJ')&jshi_order_gvs_status=1
-      const details = this.info.details[0];
       const info = this.info.info;
       if (info.jshi_order_gvs_status == '1') {
         if (info.jshi_order_type == 'ZK'
@@ -449,7 +444,6 @@ export default {
       const dnLogistics = this.info.info.dnLogistics;
       const { code } = await this.orderService.tctpConfirm(dnLogistics, bstnk);
       if (code === '200') {
-        const that = this;
         uni.showToast({
           title: '成功'
         });
@@ -492,8 +486,8 @@ export default {
         content: '是否确认更改付款方',
         success(res) {
           if (res.confirm) {
-            that.trafficService.xyChangePayTo(OrderNo, paytoCode, paytoName).then((res) => {
-              if (res.code === '1') {
+            that.trafficService.xyChangePayTo(OrderNo, paytoCode, paytoName).then(({ code }) => {
+              if (code === '1') {
                 uni.showToast({
                   title: '更改付款方成功',
                   icon: 'none'
@@ -644,7 +638,7 @@ export default {
         });
       }
     },
-    async  orderCancle() {
+    async orderCancel() {
       const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
       if (code === '1') {
         const that = this;

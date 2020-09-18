@@ -146,20 +146,22 @@
       v-model="isShowSignModel"
       :confirm-text="protocolConfirmText"
     >
-      <scroll-view
-        class="shoppingCart-protocol"
-        scroll-y
-      >
-        <view class="shoppingCart-protocol-strong">合同编号：{{signedInf.code}}</view>
-        <view class="shoppingCart-protocol-strong">签约时间：{{signedInf.signDate}}</view>
-        <view class="shoppingCart-protocol-strong">签约地点：{{signedInf.code}}</view>
-        <view class="shoppingCart-protocol-strong">甲方：{{signedInf.jia}}</view>
-        <view class="shoppingCart-protocol-strong">乙方：{{signedInf.yi}}</view>
-        <view class="shoppingCart-protocol-strong">协议起止日期：{{signedInf.signDate}}至 {{signedInf.signEndDate}}</view>
-        <view class="shoppingCart-protocol-cnt">
-          <j-big-order-protocol></j-big-order-protocol>
-        </view>
-      </scroll-view>
+      <template #default>
+        <scroll-view
+          class="shoppingCart-protocol"
+          scroll-y
+        >
+          <view class="shoppingCart-protocol-strong">合同编号：{{signedInf.code}}</view>
+          <view class="shoppingCart-protocol-strong">签约时间：{{signedInf.signDate}}</view>
+          <view class="shoppingCart-protocol-strong">签约地点：{{signedInf.code}}</view>
+          <view class="shoppingCart-protocol-strong">甲方：{{signedInf.jia}}</view>
+          <view class="shoppingCart-protocol-strong">乙方：{{signedInf.yi}}</view>
+          <view class="shoppingCart-protocol-strong">协议起止日期：{{signedInf.signDate}}至 {{signedInf.signEndDate}}</view>
+          <view class="shoppingCart-protocol-cnt">
+            <j-big-order-protocol></j-big-order-protocol>
+          </view>
+        </scroll-view>
+      </template>
     </u-modal>
   </view>
 </template>

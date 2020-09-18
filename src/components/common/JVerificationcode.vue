@@ -2,7 +2,7 @@
   <button
     :class="['JVerificationCode-send-code',disabled && 'disabled']"
     :disabled="disabled"
-    @click="sendCode"
+    @tap="sendCode"
     type="button"
   >{{btnText}}
   </button>

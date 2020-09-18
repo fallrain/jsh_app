@@ -445,7 +445,7 @@ export default {
       }
       const {
         inStock
-      } = this.product;
+      } = product;
       return inStock;
     },
     isDirect() {

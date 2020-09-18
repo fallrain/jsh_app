@@ -2,15 +2,15 @@
 	<view class="mescroll-uni-warp">
 		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" :scroll-y='scrollable' :enable-back-to-top="true">
 			<view class="mescroll-uni-content mescroll-render-touch"
-			@touchstart="wxsBiz.touchstartEvent" 
-			@touchmove="wxsBiz.touchmoveEvent" 
-			@touchend="wxsBiz.touchendEvent" 
+			@touchend="wxsBiz.touchendEvent"
+			@touchmove="wxsBiz.touchmoveEvent"
+			@touchstart="wxsBiz.touchstartEvent"
 			@touchcancel="wxsBiz.touchendEvent"
 			:change:prop="wxsBiz.propObserver"
 			:prop="wxsProp">
 				<!-- 状态栏 -->
 				<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
-		
+
 				<view class="mescroll-wxs-content" :style="{'transform': translateY, 'transition': transition}" :change:prop="wxsBiz.callObserver" :prop="callProp">
 					<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 					<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType" :rate="downRate"></mescroll-down> -->
@@ -39,19 +39,19 @@
 						<view v-if="upLoadType===2" class="upwarp-nodata">{{ mescroll.optUp.textNoMore }}</view>
 					</view>
 				</view>
-			
+
 				<!-- 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效) -->
 				<!-- #ifdef H5 -->
 				<view v-if="bottombar && windowBottom>0" class="mescroll-bottombar" :style="{height: windowBottom+'px'}"></view>
 				<!-- #endif -->
-				
+
 				<!-- 适配iPhoneX -->
 				<view v-if="safearea" class="mescroll-safearea"></view>
 			</view>
 		</scroll-view>
 
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
-		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
+		<mescroll-top :option="mescroll.optUp.toTop" @tap="toTopClick" v-model="isShowToTop"></mescroll-top>
 	</view>
 </template>
 
@@ -81,7 +81,7 @@
 	import MescrollTop from './components/mescroll-top.vue';
 	// 引入兼容wxs(含renderjs)写法的mixins
 	import WxsMixin from './wxs/mixins.js';
-	
+
 	export default {
 		mixins: [WxsMixin],
 		components: {
@@ -333,7 +333,7 @@
 			vm.mescroll.viewId = vm.viewId; // 附带id
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
-			
+
 			// 设置高度
 			const sys = uni.getSystemInfoSync();
 			if(sys.windowTop) vm.windowTop = sys.windowTop;
@@ -363,7 +363,7 @@
 						}).exec()
 					}).exec()
 					// #endif
-					
+
 					// #ifndef MP-WEIXIN
 					if (vm.scrollToViewId != y) {
 						vm.scrollToViewId = y;
@@ -388,7 +388,7 @@
 					}, t)
 				}
 			})
-			
+
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
 			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
 				vm.mescroll.optUp.toTop.safearea = vm.safearea;

@@ -113,7 +113,7 @@ export default {
     ...mapMutations([
       TRANSFER.UPDATE_TSHOPCART
     ]),
-    //显示验证码
+    // 显示验证码
     changeVf() {
       this.isShowVf = true;
     },

@@ -223,11 +223,11 @@ export default {
   mounted() {
     // 判断是否传统渠道
     if (this.userInf.channelGroup == 'CT') {
-       uni.showModal({
-          title: '提示',
-          content: '当前客户无整车权限',
-          showCancel:false,
-        });
+      uni.showModal({
+        title: '提示',
+        content: '当前客户无整车权限',
+        showCancel: false,
+      });
     }
   },
   methods: {

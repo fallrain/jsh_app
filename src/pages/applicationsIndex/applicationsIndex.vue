@@ -3,7 +3,7 @@
     <view class="errorImg">
     </view>
     <view class="errorMsg">{{errorMsg}}</view>
-    <button @click="popAction" class="btnStyle">返回</button>
+    <button @tap="popAction" class="btnStyle">返回</button>
   </view>
   <view class="applicationsIndex" v-else>
     <view class="app-nav">
@@ -14,9 +14,9 @@
           <image src="@/assets/img/appIndex/liebiao.png"></image>
         </view>
         <view class="fs24 text-333">{{tokenUserInf.nickname}}，您好！</view>
-        <!-- <view @click="callBBC">建行支付测试</view>
-        <view @click="callABC">农行支付测试</view>
-        <view @click="popAction">返回测试</view> -->
+        <!-- <view @tap="callBBC">建行支付测试</view>
+        <view @tap="callABC">农行支付测试</view>
+        <view @tap="popAction">返回测试</view> -->
         <view class="logo">
           <image src="@/assets/img/appIndex/haier.png"></image>
         </view>
@@ -484,10 +484,10 @@ export default {
       });
     },
     async init(code) {
-      if (!code && ALIPAYH5STARTUPPARAMS) {
-        // 适配iOS客户端
-        code = ALIPAYH5STARTUPPARAMS.webview_options;
-      }
+      // if (!code && window.ALIPAYH5STARTUPPARAMS) {
+      //   // 适配iOS客户端
+      //   code = ALIPAYH5STARTUPPARAMS.webview_options;
+      // }
       // code = 'HSWGj3SWS0OtfqUAAskzjw';
       // 获取token
       await this.getToken(code);
@@ -509,7 +509,7 @@ export default {
     },
     // 返回原生 处理账号锁定
     popAction() {
-      AlipayJSBridge.call('popWindow');
+      AlipayJSBridge && AlipayJSBridge.call('popWindow');
     },
     // 打开建行支付
     callBBC() {

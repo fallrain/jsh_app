@@ -1,7 +1,7 @@
 <template>
   <uni-popup ref="pop" type="bottom" @change="change">
     <view class="pro-act-pop">
-      <view class="pro-act-head" @click="close">
+      <view @tap="close" class="pro-act-head">
         <view class="pro-act-head-title">营销活动</view>
         <view class="pro-act-head-but">X</view>
       </view>
@@ -11,13 +11,13 @@
       >
         <view class="pro-act-pop-detail-wrap">
           <view class="pro-act-pop-detail" v-for="(act,indexA) in info" :key="indexA">
-            <view class="pro-act-pop-detail-head" @click="changeSe(act)">
+            <view @tap="changeSe(act)" class="pro-act-pop-detail-head">
               <text class="pro-act-pop-detail-head-title">{{act.title}}</text>
               <view :class="['pro-act-pop-detail-head-title-arrow iconfont iconxia',!act.isSe && 'active']"></view>
             </view>
             <view v-if="act.isSe&&act.isMore">
               <div :class="['pro-act-pop-detail-item',version.isCheck && 'active']"
-                   v-for="(version,indexB) in act.list" :key="indexB" @click="checkAct(indexA,indexB)">
+                   :key="indexB" @tap="checkAct(indexA,indexB)" v-for="(version,indexB) in act.list">
                 <view class="jVersionSpecifications-pop-detail-item-check" v-if="version.isCheck">
                   <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
                 </view>
@@ -103,8 +103,8 @@
         </view>
       </scroll-view>
       <view class="pro-act-btn-wrap">
-        <button type="button" class="goodsList-drawer-btn-confirm" @click="putAct">确定</button>
-        <button type="button" class="goodsList-drawer-btn-reset" @click="refresh">重置</button>
+        <button @tap="putAct" class="goodsList-drawer-btn-confirm" type="button">确定</button>
+        <button @tap="refresh" class="goodsList-drawer-btn-reset" type="button">重置</button>
       </view>
     </view>
   </uni-popup>

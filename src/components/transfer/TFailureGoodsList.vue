@@ -11,8 +11,12 @@
 
 <script>
 import TFailureGoodsItem from './TFailureGoodsItem';
-import { mapGetters } from 'vuex';
-import { USER } from '@/store/mutationsTypes';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '@/store/mutationsTypes';
 
 
 export default {

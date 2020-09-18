@@ -30,7 +30,7 @@
             <view class='login-pwd-icon-wrap'>
               <view
                 :class="['iconfont', isHidePwd ? 'iconbiyan' : 'iconyanjing']"
-                @click="togglePwdStyle"
+                @tap="togglePwdStyle"
               ></view>
             </view>
           </template>
@@ -184,8 +184,8 @@ export default {
         customerCode: '8800101954',
         saletoCode: '8800101954',
         sendtoCode: '8800101954',
-        salesGroupCodeTwo: '2110', //调货组织编码
-        saletoCodeTwo:"8800101954"
+        salesGroupCodeTwo: '2110', // 调货组织编码
+        saletoCodeTwo: '8800101954'
       });
     }
   }

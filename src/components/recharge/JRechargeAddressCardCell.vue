@@ -5,7 +5,7 @@
       <view
         class="right iconfont iconyou"
         v-if="hasArrow"
-        @click="rightClick"
+        @tap="rightClick"
       ></view>
     </view>
     <view class="jRechargeAddressCardCell-default">

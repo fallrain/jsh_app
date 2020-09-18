@@ -19,7 +19,7 @@
         <view class="history-title">历史记录</view>
         <i
           class="iconfont iconlajitong"
-          @click="deleteItem"
+          @tap="deleteItem"
         ></i>
       </view>
       <view class="history-top">
@@ -37,8 +37,12 @@
 </template>
 <script>
 import JSearchInput from '../../components/form/JSearchInput';
-import { USER } from '@/store/mutationsTypes';
-import { mapGetters } from 'vuex';
+import {
+  USER
+} from '@/store/mutationsTypes';
+import {
+  mapGetters
+} from 'vuex';
 
 export default {
   name: 'historical',
