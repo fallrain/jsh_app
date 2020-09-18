@@ -355,6 +355,7 @@ export default {
     },
     getSearchCondition(pages) {
       /* 获取不同条件下搜索的传参 */
+      console.log(pages);
       let condition = {
         pageNum: pages.num,
         pageSize: pages.size,

@@ -18,6 +18,7 @@ import {
 } from '../../store/mutationsTypes';
 
 export default {
+  name: 'information',
 
   data() {
     return {

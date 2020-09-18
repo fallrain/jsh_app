@@ -278,7 +278,8 @@ export default {
         this.productNum = 1;
         console.log(data);
         // data.price.invoicePrice = data.price.invoicePrice.toFixed(2);
-        if (!data.valid) {
+        // data.valid ?
+        if (!data) {
           this.isInvalid = false;
         } else {
           this.isInvalid = true;

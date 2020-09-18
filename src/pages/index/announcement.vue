@@ -32,6 +32,8 @@ export default {
   data() {
     return {
     //   num: 0,
+      total: 0, // 列表总数
+      pageNo: 1,
       list: [
         // {
         //   id: 1,
@@ -54,7 +56,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getList(1);
   },
   computed: {
     ...mapGetters({
@@ -64,15 +66,15 @@ export default {
     })
   },
   methods: {
-    async getList() {
+    async getList(pageNo) {
       let a = 0;
       a = `${this.saleInfo.customerCode}_admin`;
 
-      console.log(a);
+      console.log(pageNo);
       const { code, data } = await this.messageService.page(this.jshUtil.genQueryStringByObj({
         title: '',
         customerCode: Number(this.saleInfo.customerCode),
-        pageNum: 1,
+        pageNum: pageNo,
         pageSize: 10,
         type: '',
         creatorDept: '',
@@ -84,7 +86,28 @@ export default {
           item.img = require('@/assets/img/index/new-pic.png');
         });
         console.log(data);
-        this.list = data.list;
+        // this.list = data.list;
+        if (pageNo === 1) {
+          this.list = [];
+        }
+        this.list = this.list.concat(data.list);
+        this.pageNo = this.pageNo + 1;
+        this.total = data.total;
+      } else {
+      //   this.list = [];
+      //   uni.showToast({
+      //     title: '暂无数据',
+      //     icon: 'none',
+      //     duration: 3000
+      //   });
+      }
+    },
+    onReachBottom() {
+      console.log('到底了，该加页了');
+      if (this.list.length > 0 && (this.total > (this.pageNo - 1) * 10)) {
+        this.getList(this.pageNo);
+      } else {
+        console.log('到底了，没数了');
       }
     },
     goInfoDetail(item) {

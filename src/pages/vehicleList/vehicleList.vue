@@ -369,6 +369,7 @@ export default {
       }
     },
     async queryEs(pageNo) {
+      console.log(pageNo);
       this.filterList = []; // 右侧筛选品牌类目
       let brandGroup = '';
       if (this.PSLX.brandGroup) {
