@@ -57,9 +57,9 @@
           <text class="v-c-i-cnt-foot-value"> ¥ {{item.SUMMONEY}}</text>
         </view>
         <view class="">
-          <uni-number-box :value="item.IBL_NUM" :max="Number(item.IBL_MAXNUM)"
+          <j-number-box :max="Number(item.IBL_MAXNUM)" :value="item.IBL_NUM"
                           :disabled="Number(item.IBL_MAXNUM) === 0" @change="changeNum($event, item)">
-          </uni-number-box>
+          </j-number-box>
         </view>
       </view>
     </view>
@@ -78,10 +78,12 @@
 <script>
 import './css/vehicleCarItem.scss';
 import vehicleMore from './VehicleMore';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'VehicleCartItem',
   components: {
+    JNumberBox,
     vehicleMore
   },
   props: {
