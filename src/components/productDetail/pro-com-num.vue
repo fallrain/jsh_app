@@ -63,7 +63,7 @@
           <view class="pro-num-pop-wrap">
             <view class="pro-num-pop-wrap4">
               <view class="pro-num-pop-name">库&nbsp;&nbsp;&nbsp;存：</view>
-              <view class="pro-num-pop-val">{{stock[infos.product.productCode].stockTotalNum}}</view>
+              <view class="pro-num-pop-val">{{stock[infos.product.productCode]? stock[infos.product.productCode].stockTotalNum : 0}} </view>
             </view>
           </view>
           <view class="pro-num-pop-wrap" v-for="(store,indexA) in sto.storeInfo" :key="indexA">

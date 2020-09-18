@@ -533,6 +533,7 @@ export default {
             isC: true,
             list: []
           };
+          this.activityId = this.flash.graborders[0].id;
           if (this.flash.graborders && this.flash.graborders.length > 0) {
             this.flash.graborders.forEach((lis) => {
               lis.endTime = lis.endTime.split(' ')[0];
@@ -727,9 +728,12 @@ export default {
       }
     },
     putcar() {
+      console.log(this.flash);
       if (this.CheckActivityInfo === '') { // 没选活动
         if (this.detailInfo.flashSales.length > 0) { // 有抢单
           this.jiaGou1('PT', Number(this.flash.graborders[0].activityType));
+        } else if (this.detailInfo.bigorders.length > 0) {
+          this.jiaGou1('PT', 5);
         } else {
           this.jiaGou1('PT', 1);
         }
@@ -775,12 +779,27 @@ export default {
       } else {
         stockV = '';
       }
-
-      const product = [{ priceType: pt,
-        priceVersion: this.CheckActivityInfo.name,
-        stockVersion: stockV,
-        productCode: this.productCode,
-        number: this.productNum }];
+      let dataFrom = '';
+      let product = [];
+      if (num1 === 5) {
+        dataFrom = 'flashSale';
+        product = [{ priceType: pt,
+          priceVersion: '',
+          stockVersion: '',
+          productCode: this.productCode,
+          number: this.productNum }];
+      } else {
+        product = [{ priceType: pt,
+          priceVersion: this.CheckActivityInfo.name,
+          stockVersion: stockV,
+          productCode: this.productCode,
+          number: this.productNum }];
+      }
+      // const product = [{ priceType: pt,
+      //   priceVersion: this.CheckActivityInfo.name,
+      //   stockVersion: stockV,
+      //   productCode: this.productCode,
+      //   number: this.productNum }];
       const { code } = await this.cartService.addToCart({
         activityType: num1, // 组合类型(1单品2组合3抢购4套餐5成套)
         number: this.productNum,
@@ -788,7 +807,8 @@ export default {
         productList: product, // 产品编码
         saletoCode: this.userInf.customerCode, // 售达方编码,
         sendtoCode: this.addressInfo.id, // 送达方编码
-        activityId: this.activityId
+        activityId: this.activityId,
+        dataFrom
       });
       if (code === '1') {
         this.getShoppingCartList();
