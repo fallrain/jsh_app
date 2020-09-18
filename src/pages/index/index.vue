@@ -102,27 +102,32 @@
           <view class="homepage-recommend-name">
             <view class="homepage-recommend-title">{{item.title}}</view>
             <view class="homepage-recommend-describe">{{item.describe}}</view>
-            <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList">MORE</view>
+            <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList(item)">MORE</view>
           </view>
-          <swiper
-            @change="change"
-            autoplay="true"
-            circular="true"
-            class="homepage-recommend-swiper"
-            interval="5000"
-            next-margin="68px"
-          >
-            <swiper-item
-              :key="v.id"
-              class="homepage-recommend-swiper-item"
-              v-for="v in item.data"
-            >
-              <view @tap="goDetail(v)" class="homepage-recommend-imgs">
-                <image :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
-              </view>
-            </swiper-item>
-          </swiper>
+          <view  v-if="item.data.length !== 0">
+            <swiper
+              @change="change"
+              autoplay="true"
+              circular="true"
+              class="homepage-recommend-swiper"
+              interval="5000"
+              next-margin="65px"
 
+            >
+              <swiper-item
+                :key="v.id"
+                class="homepage-recommend-swiper-item"
+                v-for="v in item.data"
+              >
+                <view @tap="goDetail(v)" class="homepage-recommend-imgs">
+                  <image v-if="v.imageUrl" :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
+                  <image v-if="item.isNewProduct" src="../../assets/img/index/isNewProduct.png" class="homepage-recommend-imaget" mode="aspectFill">
+                  <image v-if="!v.imageUrl" src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
+                </view>
+              </swiper-item>
+            </swiper>
+          </view>
+          <image v-else  src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
         </view>
       </view>
       <!--   资讯测试版     -->
@@ -299,36 +304,40 @@ export default {
           url: '/pages/vehicleList/abnormal'
         }
       ],
+      isShowRecommend: true,
       recommendList: [
         {
           id: 1,
           title: '新品推荐',
           describe: '人气榜',
           isShowMore: true,
+          isNewProduct: true, // 是否显示新品
           data: []
         },
         {
           id: 2,
-          title: '爆款推荐',
-          describe: 'HOT',
-          isShowMore: false,
+          title: '聚划算',
+          describe: '精选榜单',
+          isShowMore: true,
+          isNewProduct: false,
           data: []
         },
         {
           id: 3,
-          title: '我的专供',
-          describe: '热卖好物',
+          title: '爆款推荐',
+          describe: 'HOT',
           isShowMore: false,
+          isNewProduct: false,
           data: []
         },
         {
           id: 4,
-          title: '聚划算',
-          describe: '精选榜单',
+          title: '我的专供',
+          describe: '热卖好物',
           isShowMore: false,
+          isNewProduct: false,
           data: []
-        },
-
+        }
       ],
       isSwiper: true,
       // recommendList: [
@@ -650,10 +659,16 @@ export default {
       // this.current = e.detail.current;
     },
     // more跳转
-    goList() {
-      uni.navigateTo({
-        url: '/pages/goods/goodsList?isNewProduct=1'
-      });
+    goList(item) {
+      if (item.title === '新品推荐') {
+        uni.navigateTo({
+          url: '/pages/goods/goodsList?isNewProduct=1'
+        });
+      } else if (item.title === '聚划算') {
+        uni.navigateTo({
+          url: '/pages/goods/goodsList?isResource=1'
+        });
+      }
     },
     // 新品推荐列表
     async getXinPin() {
@@ -664,28 +679,21 @@ export default {
       if (code === '1') {
         console.log(this.recommendList[0]);
         this.recommendList[0].data = data;
-      }
-    },
-    // 爆款推荐
-    async getBaoKuan() {
-      const { code, data } = await this.activityService.baoKuan({
-        saletoCode: this.saleInfo.customerCode,
-        sendtoCode: this.defaultSendToInf.customerCode,
-      });
-      if (code === '1') {
-        console.log(this.recommendList[1]);
-        this.recommendList[1].data = data;
-      }
-    },
-    // 我的专供
-    async getZhuanGong() {
-      const { code, data } = await this.activityService.zhuanGong({
-        saletoCode: this.saleInfo.customerCode,
-        sendtoCode: this.defaultSendToInf.customerCode,
-      });
-      if (code === '1') {
-        this.recommendList[2].data = data;
-        console.log(this.recommendList[2]);
+        if (this.recommendList[0].data && this.recommendList[0].data.length > 0) {
+          console.log('111111');
+          this.recommendList[0].data.forEach(item => {
+            console.log('22222');
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+              console.log('333333');
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+          console.log('444444');
+        }
       }
     },
     // 聚划算
@@ -695,11 +703,70 @@ export default {
         sendtoCode: this.defaultSendToInf.customerCode,
       });
       if (code === '1') {
-        this.recommendList[3].data = data;
+        this.recommendList[1].data = data;
         console.log(data);
         console.log(this.recommendList);
+        if (this.recommendList[1].data && this.recommendList[1].data.length > 0) {
+          console.log('111111');
+          this.recommendList[1].data.forEach(item => {
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+        }
       }
     },
+    // 爆款推荐
+    async getBaoKuan() {
+      const { code, data } = await this.activityService.baoKuan({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        console.log(this.recommendList[2]);
+        this.recommendList[2].data = data;
+        if (this.recommendList[2].data && this.recommendList[2].data.length > 0) {
+          console.log('111111');
+          this.recommendList[2].data.forEach(item => {
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+        }
+      }
+    },
+    // 我的专供
+    async getZhuanGong() {
+      const { code, data } = await this.activityService.zhuanGong({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        this.recommendList[3].data = data;
+        console.log(this.recommendList[3]);
+        if (this.recommendList[3].data && this.recommendList[3].data.length > 0) {
+          console.log('111111');
+          this.recommendList[3].data.forEach(item => {
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+        }
+      }
+    },
+
     // 应用列表
     async getList() {
       const { code, data } = await this[COMMODITY.UPDATE_CATALOG_LIST_ASYNC]();
