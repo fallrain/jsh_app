@@ -458,7 +458,9 @@ export default {
       });
     }
   },
-  onLoad() {
+  onLoad(param) {
+    this.code = param.webview_options
+
     this.init();
   },
   computed: {

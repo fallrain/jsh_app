@@ -27,7 +27,9 @@
       </view>
       <view class="order-detail-fot-high"></view>
       <view class="orderDetail-foot">
-        <order-detail-foot></order-detail-foot>
+        <order-detail-foot
+          :infoList="infoList"
+        ></order-detail-foot>
       </view>
     </view>
   </view>
@@ -40,7 +42,7 @@ import orderDetailBase from '../../components/orderList/order-detail-base';
 import orderDetailFlow from '../../components/orderList/order-detail-flow';
 import orderDetailFoot from '../../components/orderList/order-detail-foot';
 import {
-  ORDER
+  ORDER, USER
 } from '../../store/mutationsTypes';
 import {
   mapGetters
@@ -65,12 +67,16 @@ export default {
     ...mapGetters([
       ORDER.GET_ORDER
     ]),
+    ...mapGetters({
+      saleInfo: USER.GET_SALE
+    }),
   },
   onLoad(options) {
     if (options.orderDetail) {
       this.infoList = JSON.parse(options.orderDetail);
     }
     console.log(this.infoList);
+    this.getOrderTPL();
     this.processJudgement = JSON.parse(this.infoList.info.processJudgement);
     this.processJudgement.jshi_created_time = this.infoList.info.jshi_created_time;
     this.processJudgement.sap_judge_date = this.infoList.info.sap_judge_date;
@@ -84,6 +90,36 @@ export default {
     this.processJudgement.sap_sys_invoice_time = this.infoList.info.sap_sys_invoice_time;
     this.processJudgement.sap_tax_invoice_time = this.infoList.info.sap_tax_invoice_time;
   },
+  methods: {
+    async getOrderTPL() {
+      const url = 'http://testhaier.jushanghui.com/bspfront/order/orderTPL';
+      const token = uni.getStorageSync('token');
+      const orderID = this.infoList.info.bstnk;
+      const userid = this.saleInfo.customerCode;
+      uni.request({
+        url,
+        method: 'POST',
+        data: {
+          token,
+          orderID,
+          userid
+        },
+        success(response) {
+          console.log(response);
+        },
+        fail(e) {
+          let msg = '请求失败';
+          if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
+            msg = '请求超时';
+          }
+          uni.showToast({
+            titele: msg,
+            icon: 'none'
+          });
+        }
+      });
+    }
+  }
 };
 </script>
 
