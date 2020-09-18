@@ -100,6 +100,8 @@
 
         >
           <view class="homepage-recommend-name">
+            <image v-if="item.isShowPrivate" src="../../assets/img/index/private_logo.png" class="private"></image>
+            <image v-if="item.isShowHot" src="../../assets/img/index/hot_logo.png" class="hot"></image>
             <view class="homepage-recommend-title">{{item.title}}</view>
             <view class="homepage-recommend-describe">{{item.describe}}</view>
             <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList(item)">MORE</view>
@@ -121,8 +123,10 @@
               >
                 <view @tap="goDetail(v)" class="homepage-recommend-imgs">
                   <image v-if="v.imageUrl" :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
-                  <image class="homepage-recommend-imaget" mode="aspectFill" src="../../assets/img/index/isNewProduct.png" v-if="item.isNewProduct"></image>
+                  <image v-if="item.isNewProduct" src="../../assets/img/index/isNewProduct.png" class="homepage-recommend-imaget" mode="aspectFill">
+                  <image v-if="item.isResource" src="../../assets/img/index/icon_resource.gif" class="homepage-recommend-imaget" mode="aspectFill">
                   <image v-if="!v.imageUrl" src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
+
                 </view>
               </swiper-item>
             </swiper>
@@ -312,14 +316,20 @@ export default {
           describe: '人气榜',
           isShowMore: true,
           isNewProduct: true, // 是否显示新品
+          isResource: false, // 巨划算
+          isShowPrivate: false, // 是否显示爆款图
+          isShowHot: false, // 是否显示专供图
           data: []
         },
         {
           id: 2,
-          title: '聚划算',
+          title: '巨划算',
           describe: '精选榜单',
           isShowMore: true,
           isNewProduct: false,
+          isResource: true, // 巨划算
+          isShowPrivate: false, // 是否显示爆款图
+          isShowHot: false, // 是否显示专供图
           data: []
         },
         {
@@ -328,6 +338,9 @@ export default {
           describe: 'HOT',
           isShowMore: false,
           isNewProduct: false,
+          isResource: false, // 巨划算
+          isShowPrivate: true, // 是否显示爆款图
+          isShowHot: false, // 是否显示专供图
           data: []
         },
         {
@@ -336,6 +349,9 @@ export default {
           describe: '热卖好物',
           isShowMore: false,
           isNewProduct: false,
+          isResource: false, // 巨划算
+          isShowPrivate: false, // 是否显示爆款图
+          isShowHot: true, // 是否显示专供图
           data: []
         }
       ],
@@ -613,6 +629,39 @@ export default {
       });
       // console.log(url);
     },
+    //头条公告
+    // async getHeadLines() {
+    //   // const {data} = await this.HaierNoticeService.queryHaierNoticeForCustomerLoginPage()
+    //   const url = 'http://58.56.174.18:9001/home';
+    //   // const token = uni.getStorageSync('token');
+    //   // const userpk = this.infoList.info.bstnk;
+    //   // const userid = this.tokenUserInf.id;
+    //   uni.request({
+    //     url,
+    //     method: 'POST',
+    //     data: {
+    //       // userid: UserService.getUser().uid,
+    //       // token: UserService.getUser().token,
+    //       // userpk: UserService.getUser().pk,
+    //       // pageid: 'CH001'
+    //     },
+    //     success(response) {
+    //       console.log(response);
+    //
+    //     },
+    //     fail(e) {
+    //       let msg = '请求失败';
+    //       if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
+    //         msg = '请求超时';
+    //       }
+    //       uni.showToast({
+    //         titele: msg,
+    //         icon: 'none'
+    //       });
+    //     }
+    //   });
+    // },
+
     // 广告图
     deleteNav() {
       this.isShowNav = false;
@@ -664,7 +713,7 @@ export default {
         uni.navigateTo({
           url: '/pages/goods/goodsList?isNewProduct=1'
         });
-      } else if (item.title === '聚划算') {
+      } else if (item.title === '巨划算') {
         uni.navigateTo({
           url: '/pages/goods/goodsList?isResource=1'
         });
@@ -696,7 +745,7 @@ export default {
         }
       }
     },
-    // 聚划算
+    // 巨划算
     async getZiYuanJi() {
       const { code, data } = await this.activityService.ziYuanJi({
         saletoCode: this.saleInfo.customerCode,

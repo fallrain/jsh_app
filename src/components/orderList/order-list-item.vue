@@ -582,6 +582,8 @@ export default {
         uni.showToast({
           title: '成功'
         });
+        // 重新搜索
+        this.mescroll.resetUpScroll(true);
       }
     },
     // 不可以选中的付款方
@@ -764,7 +766,8 @@ export default {
       if (this.state === '1') {
         // 信用订单
         const orderNo = this.info.info.bstnk;
-        const { msg } = await this.trafficService.XyCutPayment(orderNo);
+        // const { msg } = await this.trafficService.XyCutPayment(orderNo);
+        const { msg } = await this.orderService.payCreditOrderByOrderNo(orderNo);
         uni.showToast({
           titel: msg,
           icon: 'none'

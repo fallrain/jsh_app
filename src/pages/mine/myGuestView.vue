@@ -166,8 +166,6 @@ status: "正常" -->
         <view class="firstPageRightMore">{{customerBasicInformation.marketOrder}}</view>
         <view class="blank"></view>
       </view>
-
-      <view class="tailView"></view>
     </view>
 
     <!-- 签约信息 -->
@@ -177,6 +175,7 @@ status: "正常" -->
       </view>
       <view class="block">
         <view
+          class="bg-white mb24"
           v-for="(item,index) in customerSigned.contractMessageDtoList"
           :key="index"
         >
@@ -210,9 +209,7 @@ status: "正常" -->
             <view class="firstPageRight">{{item.inDate}}</view>
           </view>
         </view>
-        <view class="blank"></view>
       </view>
-      <view class="tailView"></view>
     </view>
 
     <!-- 门店信息 -->
@@ -248,7 +245,10 @@ status: "正常" -->
               </view>
               <view class="firstItem">
                 <view class="firstPageLeft">状态</view>
-                <view class="tag">
+                <view v-if="item.shopFlag === '正常'" class="tag">
+                  {{item.shopFlag}}
+                </view>
+                <view v-else class="tag bg-grey">
                   {{item.shopFlag}}
                 </view>
               </view>
@@ -257,7 +257,6 @@ status: "正常" -->
               </view>
               <view class="firstPageRightMore">{{item.specificAddress}}</view>
             </view>
-            <view class="blank"></view>
           </view>
         </mescroll-uni>
       </view>
@@ -269,13 +268,13 @@ status: "正常" -->
         <view
           :key="customerIndex"
           v-for="(item,customerIndex) in customers"
+          class="mb24 bg-white pb20"
         >
-          <view class="secondPageTitleConten">
+          <view class="secondPageTitleConten br-b-dashed">
             <view style="height:10px"></view>
             <view class="secondPageTitle">{{item.customerName}}</view>
             <view style="height:10px"></view>
           </view>
-          <view class="breakLine"></view>
 
           <view class="firstItem">
             <view class="firstPageLeft">送达方编码</view>
@@ -287,7 +286,7 @@ status: "正常" -->
           </view>
           <view class="firstItem">
             <view class="firstPageLeft">状态</view>
-            <view class="tag" v-if="item.deletedFlag == 'true'">
+            <view class="tag bg-grey" v-if="item.deletedFlag == 'true'">
               冻结
             </view>
             <view class="tag" v-else>
@@ -304,13 +303,12 @@ status: "正常" -->
 
         <view class="blank"></view>
       </view>
-      <view class="tailView"></view>
 
     </view>
 
     <!-- 付款方信息 -->
-    <view v-if="index === '4'">
-      <view class="block">
+    <view class="block" v-if="index === '4'">
+      <view class="block mb24 bg-white">
         <view class="dis-flex">
           <view class="companyImage"></view>
           <view>
@@ -328,6 +326,7 @@ status: "正常" -->
       <view
         :key="auxiliaryIndex"
         v-for="(item,auxiliaryIndex) in payerBalanceList"
+        class=" mb24 bg-white"
       >
         <view class="block">
           <view style="height:10px"></view>
@@ -377,7 +376,6 @@ status: "正常" -->
       <!--        :type="3"-->
       <!--        v-if="!payerBalanceList.length && isLoaded"-->
       <!--      ></j-exception-page>-->
-      <view class="tailView"></view>
     </view>
 
   </view>
@@ -729,10 +727,8 @@ export default {
   }
 
   .block {
-    margin: 24px;
-    background: #fff;
+    padding: 24px;
     border-radius: 10px;
-    margin-bottom: 50px;
   }
 
   .aheadImage {
@@ -750,10 +746,6 @@ export default {
     width: 88px;
     background-size: 100%;
     margin: 24px;
-  }
-
-  .blank {
-    height: 10px;
   }
 
   .firstItem {
@@ -881,7 +873,7 @@ export default {
 
   .tag {
     float: left;
-    background-color: #ED2856;
+    background: #ED2856;
     color: #fff;
     border-radius: 19px;
     height: 38px;
@@ -892,7 +884,21 @@ export default {
     margin-right: 24px;
     font-size: 28px;
   }
-
+  .mb24{
+    margin-bottom: 24px;
+  }
+  .bg-white{
+    background: #fff!important;
+  }
+  .bg-grey{
+    background: #999 !important;
+  }
+  .br-b-dashed{
+    border-bottom: 1px dashed #c3c3c3;
+  }
+  .pb20{
+    padding-bottom: 20px;
+  }
   .breakLine {
     border-top: 1px dashed #C3C3C3;
     margin-bottom: 20px;
@@ -940,5 +946,7 @@ export default {
 
   .myGuestView-store-item {
     background: #fff;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
   }
 </style>

@@ -1,14 +1,12 @@
 <template>
   <view class="order-foot-con">
     <view class="uni-flex uni-row order-foot-line">
-      <view @tap="getMore" class="col-25 order-foot-inf">...</view>
+      <!--<view @tap="getMore" class="col-25 order-foot-inf">...</view>-->
       <view v-for="item in buttonList" :key="item.name">
         <view @tap="ckickBot(item)" class="order-foot-infred" v-if="item.name == ''"></view>
 
         <view v-else class="order-foot-inf2" @click="ckickBot(item)">
           <view :class="{'order-foot-inf4':!item.ischeck,'order-foot-inf5':item.ischeck}">{{item.name}}</view>
-        </view>
-
         </view>
       </view>
     </view>
@@ -25,14 +23,15 @@ import {
 
 export default {
   name: 'orderDetailFoot',
+  props: {
+    infoList: Object
+  },
   computed: {
     ...mapGetters([
       ORDER.GET_ORDER
     ]),
   },
   created() {
-    console.log('11111111');
-    this.infoList = this[ORDER.GET_ORDER].orderDetail;
     console.log(this.infoList);
 
     if (this.infoList.info.jshi_order_gvs_status == '1') {
@@ -76,7 +75,6 @@ export default {
   },
   data() {
     return {
-      infoList: {},
       showNode: false,
       buttonList: [],
     };
@@ -98,6 +96,9 @@ export default {
     async orderSelfSignedFun() {
       const { code, data } = await this.orderService.orderSelfSigned(this.infoList.info.bstnk);
       if (code === '1') {
+        uni.showToast({
+          title: '签收成功'
+        });
         console.log(data);
       }
     }
