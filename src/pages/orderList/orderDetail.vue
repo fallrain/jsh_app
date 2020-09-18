@@ -27,7 +27,9 @@
       </view>
       <view class="order-detail-fot-high"></view>
       <view class="orderDetail-foot">
-        <order-detail-foot></order-detail-foot>
+        <order-detail-foot
+          :infoList="infoList"
+        ></order-detail-foot>
       </view>
     </view>
   </view>

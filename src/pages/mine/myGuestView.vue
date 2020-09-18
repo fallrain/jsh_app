@@ -307,8 +307,8 @@ status: "正常" -->
     </view>
 
     <!-- 付款方信息 -->
-    <view v-if="index === '4'">
-      <view class="block">
+    <view class="block" v-if="index === '4'">
+      <view class="block mb24 bg-white">
         <view class="dis-flex">
           <view class="companyImage"></view>
           <view>
@@ -326,6 +326,7 @@ status: "正常" -->
       <view
         :key="auxiliaryIndex"
         v-for="(item,auxiliaryIndex) in payerBalanceList"
+        class=" mb24 bg-white"
       >
         <view class="block">
           <view style="height:10px"></view>
