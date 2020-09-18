@@ -21,7 +21,7 @@
           <text class="tShoppingCartItem-head-text">装车体积:</text>
           <text class="tShoppingCartItem-head-volume">{{Number(list.data.calue)}}%</text>
       </view>
-      <view class="tShoppingCartItem-btm-btn iconfont iconxia" @click="getMore"></view>
+      <view @tap="getMore" class="tShoppingCartItem-btm-btn iconfont iconxia"></view>
         <view v-show="isOrderMore" class="transfer_more">
           <view class="background">
             <view class="transfer_more_text" @tap="backShoppingCart(list.data.IBR_SEQ)"><view class="iconfont iconcancel transfer_more_iconStyle"></view>选购其他</view>
@@ -99,12 +99,12 @@
         <text class="tShoppingCartItem-cnt-price-subtotal mla">小计： </text>
         <text class="tShoppingCartItem-cnt-price-subprice mlb"> ¥ {{item.SUMMONEY}}</text>
       </view>
-      <uni-number-box
+      <j-number-box
         :value="item.IBL_NUM"
         :max="Number(item.IBL_MAXNUM)"
         :disabled="Number(item.IBL_MAXNUM) === 0"
         @change="changeNum($event, item)"
-        ></uni-number-box>
+        ></j-number-box>
      </view>
     </view>
     <view class="tShoppingCartItem-btm">
@@ -236,7 +236,7 @@ export default {
       console.log(item.isExpand);
       this.$emit('change', this.list, item, this.index);
     },
-    async changeNum(value, item) {
+    async changeNum({ value }, item) {
       if (value !== item.IBL_NUM) {
         const result = await this.transfergoodsService.updateOrderQty({
           timestamp: Date.parse(new Date()),

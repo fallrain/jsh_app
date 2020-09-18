@@ -10,7 +10,7 @@
         :class="[
                   !filterItem.isExpand && 'reverse'
                 ]"
-        @click="toggleExpand(filterItem)"
+        @tap="toggleExpand(filterItem)"
       ></i>
     </view>
     <view
@@ -22,7 +22,7 @@
         :key="filterIndex"
         class="tdrawerfilteritem-list-item"
         :class="[item.isChecked && 'active']"
-        @click="choose(item,filterItem.data)"
+        @tap="choose(item,filterItem.data)"
       >{{item.value}}
       </view>
     </view>
@@ -46,7 +46,7 @@ export default {
     },
   },
   creatd() {
-    console.log(this.filterItem)
+    console.log(this.filterItem);
   },
   methods: {
     toggleExpand(item) {
@@ -74,7 +74,7 @@ export default {
 };
 </script>
  <style lang="scss" scoped>
- 
+
 .tdrawerfilteritem-head {
       display: flex;
       align-items: center;
@@ -85,11 +85,11 @@ export default {
       margin-bottom: 24px;
       margin-top: 32px;
       padding-right: 30px;
-  
+
     .iconxia {
       font-size: 20px;
     }
-  
+
     .reverse {
       display: inline-block;
       transform: rotateX(180deg);
@@ -100,18 +100,18 @@ export default {
     color: #999;
     font-size: 28px;
   }
-  
+
   .tdrawerfilteritem-head-tips {
     font-size: 24px;
     color: #999;
   }
-  
+
   .tdrawerfilteritem-list {
     display: flex;
     flex-wrap: wrap;
     margin-top: 16px;
   }
-  
+
   .tdrawerfilteritem-list-item {
     width: 160px;
     height: 52px;
@@ -123,26 +123,26 @@ export default {
     text-align: center;
     line-height: 60px;
     font-size: 24px;
-  
-  
+
+
     &.active {
       color: #ED2856;
       background: #FFF5F7;
     }
-  
+
     &:nth-child(3n) {
       margin-right: 0;
     }
   }
-  
+
   .tdrawerfilteritem-head-ads-wrap {
     padding-right: 30px;
-  
+
     .tdrawerfilteritem-head {
       padding-right: 0;
     }
   }
-  
+
   .tdrawerfilteritem-head-ads {
     width: 100%;
     height: 52px;
@@ -157,13 +157,13 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .tdrawerfilteritem-price-range {
     display: flex;
     align-items: center;
   }
-  
-  
+
+
   .tdrawerfilteritem-price-ipt {
     width: 160px;
     height: 52px;
@@ -174,7 +174,7 @@ export default {
     padding-right: 30px;
     font-size: 24px;
   }
-  
+
   .tdrawerfilteritem-price-line {
     width: 52px;
     height: 1px;
@@ -182,6 +182,6 @@ export default {
     margin-left: 34px;
     margin-right: 34px;
   }
-  
+
 
 </style>

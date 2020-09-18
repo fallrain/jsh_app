@@ -98,11 +98,22 @@ export default {
   getTctpSwitch() {
     return jGet(urlNoApi.getTctpSwitch);
   },
-  tctpConfirm(dn,bstnk) {
-    return jGet(url.tctpConfirm(dn,bstnk));
+  tctpConfirm(dn, bstnk) {
+    return jGet(url.tctpConfirm(dn, bstnk));
   },
   payByCustomer(bstnk) { // 反向定制自主扣款
-    return jGet(url.payByCustomer, bstnk);
+    return jGet(urlNoApi.payByCustomer, bstnk);
   },
-
+  payCreditOrderByOrderNo(bstnk) { // 信用订单自主扣款
+    return jGet(urlNoApi.payCreditOrderByOrderNo, bstnk);
+  },
+  generateOfmyyjjsRecord(data, cfg) { // 获取样机结算信息
+    return jPostJson(urlNoApi.generateOfmyyjjsRecord, data, cfg);
+  },
+  toPayMfyjjsRecord(data, cfg) { // 支付免费样机
+    return jPostJson(urlNoApi.toPayMfyjjsRecord, data, cfg);
+  },
+  orderTPL(data) { // 订单详情-物流接口BSP接口地址
+    return jPostJson(urlNoApi.orderTPL, data);
+  },
 };

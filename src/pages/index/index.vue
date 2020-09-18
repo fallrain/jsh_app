@@ -1,6 +1,6 @@
 <template>
   <view class="homepage">
-    <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
+    <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @tapLeft="goBack"></uni-nav-bar>-->
     <view class="homepage-top">
       <view class="index-status-bar">
         <!-- 这里是状态栏 -->
@@ -69,7 +69,7 @@
         class="homepage-cataloglist-item"
         v-for="item in cataloglist"
         :key="item.id"
-        @click="goCatalog(item)"
+        @tap="goCatalog(item)"
       >
         <image :src="item.src" class="cataloglist-item-img" mode="aspectFill"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -100,29 +100,38 @@
 
         >
           <view class="homepage-recommend-name">
+            <image v-if="item.isShowPrivate" src="../../assets/img/index/private_logo.png" class="private"></image>
+            <image v-if="item.isShowHot" src="../../assets/img/index/hot_logo.png" class="hot"></image>
             <view class="homepage-recommend-title">{{item.title}}</view>
             <view class="homepage-recommend-describe">{{item.describe}}</view>
-            <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList">MORE</view>
+            <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList(item)">MORE</view>
           </view>
-          <swiper
-            @change="change"
-            autoplay="true"
-            circular="true"
-            class="homepage-recommend-swiper"
-            interval="5000"
-            next-margin="68px"
-          >
-            <swiper-item
-              :key="v.id"
-              class="homepage-recommend-swiper-item"
-              v-for="v in item.data"
-            >
-              <view @tap="goDetail(v)" class="homepage-recommend-imgs">
-                <image :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
-              </view>
-            </swiper-item>
-          </swiper>
+          <view  v-if="item.data.length !== 0">
+            <swiper
+              @change="change"
+              autoplay="true"
+              circular="true"
+              class="homepage-recommend-swiper"
+              interval="5000"
+              next-margin="65px"
 
+            >
+              <swiper-item
+                :key="v.id"
+                class="homepage-recommend-swiper-item"
+                v-for="v in item.data"
+              >
+                <view @tap="goDetail(v)" class="homepage-recommend-imgs">
+                  <image v-if="v.imageUrl" :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
+                  <image v-if="item.isNewProduct" src="../../assets/img/index/isNewProduct.png" class="homepage-recommend-imaget" mode="aspectFill">
+                  <image v-if="item.isResource" src="../../assets/img/index/icon_resource.gif" class="homepage-recommend-imaget" mode="aspectFill">
+                  <image v-if="!v.imageUrl" src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
+
+                </view>
+              </swiper-item>
+            </swiper>
+          </view>
+          <image v-else  src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
         </view>
       </view>
       <!--   资讯测试版     -->
@@ -137,7 +146,7 @@
       <!--                class="homepage-info-list"-->
       <!--                v-for="item in infoList"-->
       <!--                :key="item.id"-->
-      <!--                @click="goCatalog(item.url)"-->
+      <!--                @tap="goCatalog(item.url)"-->
       <!--            >-->
       <!--              <view class="homepage-info-list-hot">{{item.hot}}</view>-->
       <!--              <view class="homepage-info-list-title">{{item.info}}</view>-->
@@ -299,36 +308,52 @@ export default {
           url: '/pages/vehicleList/abnormal'
         }
       ],
+      isShowRecommend: true,
       recommendList: [
         {
           id: 1,
           title: '新品推荐',
           describe: '人气榜',
           isShowMore: true,
+          isNewProduct: true, // 是否显示新品
+          isResource: false, // 巨划算
+          isShowPrivate: false, // 是否显示爆款图
+          isShowHot: false, // 是否显示专供图
           data: []
         },
         {
           id: 2,
-          title: '爆款推荐',
-          describe: 'HOT',
-          isShowMore: false,
+          title: '巨划算',
+          describe: '精选榜单',
+          isShowMore: true,
+          isNewProduct: false,
+          isResource: true, // 巨划算
+          isShowPrivate: false, // 是否显示爆款图
+          isShowHot: false, // 是否显示专供图
           data: []
         },
         {
           id: 3,
-          title: '我的专供',
-          describe: '热卖好物',
+          title: '爆款推荐',
+          describe: 'HOT',
           isShowMore: false,
+          isNewProduct: false,
+          isResource: false, // 巨划算
+          isShowPrivate: true, // 是否显示爆款图
+          isShowHot: false, // 是否显示专供图
           data: []
         },
         {
           id: 4,
-          title: '聚划算',
-          describe: '精选榜单',
+          title: '我的专供',
+          describe: '热卖好物',
           isShowMore: false,
+          isNewProduct: false,
+          isResource: false, // 巨划算
+          isShowPrivate: false, // 是否显示爆款图
+          isShowHot: true, // 是否显示专供图
           data: []
-        },
-
+        }
       ],
       isSwiper: true,
       // recommendList: [
@@ -650,10 +675,16 @@ export default {
       // this.current = e.detail.current;
     },
     // more跳转
-    goList() {
-      uni.navigateTo({
-        url: '/pages/goods/goodsList?isNewProduct=1'
-      });
+    goList(item) {
+      if (item.title === '新品推荐') {
+        uni.navigateTo({
+          url: '/pages/goods/goodsList?isNewProduct=1'
+        });
+      } else if (item.title === '巨划算') {
+        uni.navigateTo({
+          url: '/pages/goods/goodsList?isResource=1'
+        });
+      }
     },
     // 新品推荐列表
     async getXinPin() {
@@ -664,6 +695,45 @@ export default {
       if (code === '1') {
         console.log(this.recommendList[0]);
         this.recommendList[0].data = data;
+        if (this.recommendList[0].data && this.recommendList[0].data.length > 0) {
+          console.log('111111');
+          this.recommendList[0].data.forEach(item => {
+            console.log('22222');
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+              console.log('333333');
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+          console.log('444444');
+        }
+      }
+    },
+    // 巨划算
+    async getZiYuanJi() {
+      const { code, data } = await this.activityService.ziYuanJi({
+        saletoCode: this.saleInfo.customerCode,
+        sendtoCode: this.defaultSendToInf.customerCode,
+      });
+      if (code === '1') {
+        this.recommendList[1].data = data;
+        console.log(data);
+        console.log(this.recommendList);
+        if (this.recommendList[1].data && this.recommendList[1].data.length > 0) {
+          console.log('111111');
+          this.recommendList[1].data.forEach(item => {
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+        }
       }
     },
     // 爆款推荐
@@ -673,8 +743,20 @@ export default {
         sendtoCode: this.defaultSendToInf.customerCode,
       });
       if (code === '1') {
-        console.log(this.recommendList[1]);
-        this.recommendList[1].data = data;
+        console.log(this.recommendList[2]);
+        this.recommendList[2].data = data;
+        if (this.recommendList[2].data && this.recommendList[2].data.length > 0) {
+          console.log('111111');
+          this.recommendList[2].data.forEach(item => {
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+        }
       }
     },
     // 我的专供
@@ -684,22 +766,23 @@ export default {
         sendtoCode: this.defaultSendToInf.customerCode,
       });
       if (code === '1') {
-        this.recommendList[2].data = data;
-        console.log(this.recommendList[2]);
-      }
-    },
-    // 聚划算
-    async getZiYuanJi() {
-      const { code, data } = await this.activityService.ziYuanJi({
-        saletoCode: this.saleInfo.customerCode,
-        sendtoCode: this.defaultSendToInf.customerCode,
-      });
-      if (code === '1') {
         this.recommendList[3].data = data;
-        console.log(data);
-        console.log(this.recommendList);
+        console.log(this.recommendList[3]);
+        if (this.recommendList[3].data && this.recommendList[3].data.length > 0) {
+          console.log('111111');
+          this.recommendList[3].data.forEach(item => {
+            if (!item.imageUrl) {
+              this.isShowRecommend = false;
+            } else {
+              this.isShowRecommend = true;
+            }
+          });
+        } else {
+          this.isShowRecommend = false;
+        }
       }
     },
+
     // 应用列表
     async getList() {
       const { code, data } = await this[COMMODITY.UPDATE_CATALOG_LIST_ASYNC]();

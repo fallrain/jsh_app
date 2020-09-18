@@ -4,7 +4,7 @@
     <view class="topView">
       <!-- 设置 -->
       <view
-        @click='setClick'
+        @tap='setClick'
         class="iconfont iconshezhi mineCenter-set"
       >
       </view>
@@ -12,11 +12,11 @@
       <view class="headerRow">
         <!-- 头像 -->
         <!-- <view
-          @click="sdfClick"
+          @tap="sdfClick"
           class="headerImage"
         > -->
-        <image class="headerImage" :mode="aspectFill" :src="headerImage"
-                        ></image>
+        <image :src="headerImage" class="headerImage" mode="aspectFill"
+        ></image>
         <!-- <image :src="headerImage"></image> -->
         <!-- </view> -->
         <view>
@@ -29,43 +29,31 @@
         </view>
       </view>
     </view>
-    <!-- 金额数据栏 -->
-    <!-- <view class="moneyArea">
-      <view>
-        <view class="moneyName">账户余额（元）</view>
-        <view class="moneyCount">¥ {{accountTotal}}</view>
+    <view class="moneyArea">
+      <view class="myOrderRow">
+        <view class="colorBlock"></view>
+        <view class="orderTitle">我的订单</view>
+        <!-- <view class="allOrder" @tap="goAllOrder">全部订单</view> -->
       </view>
-      <view class="blank"></view>
-      <view>
-        <view class="moneyName">可用返利</view>
-        <view class="moneyCount">¥ {{outstandingAmount}}</view>
+
+      <view class="order-cataloglist">
+        <view
+          :key="item.id"
+          @tap="goCatalog(item.url,item.sex)"
+          class="order-cataloglist-item"
+          v-for="item in cataloglist"
+        >
+          <image :src="item.src" class="infor-item-img" mode="aspectFit"/>
+          <view class="cataloglist-item-title">{{item.title}}</view>
+        </view>
       </view>
-    </view> -->
-	<view class="moneyArea">
-	  <view class="myOrderRow">
-	    <view class="colorBlock"></view>
-	    <view class="orderTitle">我的订单</view>
-	    <!-- <view class="allOrder" @click="goAllOrder">全部订单</view> -->
-	  </view>
-	  
-	  <view class="order-cataloglist">
-	    <view
-	      class="order-cataloglist-item"
-	      v-for="item in cataloglist"
-	      :key="item.id"
-	      @click="goCatalog(item.url,item.sex)"
-	    >
-	      <image :src="item.src" class="infor-item-img" mode="aspectFit"/>
-	      <view class="cataloglist-item-title">{{item.title}}</view>
-	    </view>
-	  </view>
-	</view>
-	<view style="height: 10px;"></view>
+    </view>
+    <view style="height: 10px;"></view>
     <!-- 我的订单 -->
     <!-- <view class="myOrderRow">
       <view class="colorBlock"></view>
       <view class="orderTitle">我的订单</view>
-      <view class="allOrder" @click="goAllOrder">全部订单</view>
+      <view class="allOrder" @tap="goAllOrder">全部订单</view>
     </view>
 
     <view class="order-cataloglist">
@@ -73,7 +61,7 @@
         class="order-cataloglist-item"
         v-for="item in cataloglist"
         :key="item.id"
-        @click="goCatalog(item.url,item.sex)"
+        @tap="goCatalog(item.url,item.sex)"
       >
         <image :src="item.src" class="infor-item-img" mode="aspectFit"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -84,7 +72,7 @@
     <view class="line"></view>
 
     <!-- 商品关注 -->
-    <view @click="productAction" class="focusProduct">
+    <view @tap="productAction" class="focusProduct">
       <view>
         <view class="productTitle">商品关注</view>
         <view class="productSubTitle">快捷便利查看关注商品</view>
@@ -100,7 +88,7 @@
         class="infor-cataloglist-item"
         v-for="item in inforlist"
         :key="item.id"
-        @click="goCatalog(item.url,item.id)"
+        @tap="goCatalog(item.url,item.id)"
       >
         <image :src="item.src" class="cataloglist-item-img" mode="aspectFit"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -111,7 +99,7 @@
 
     <!-- 经营看板 -->
     <view class="focusProduct">
-      <view @click="jjkb">
+      <view @tap="jjkb">
         <view class="productTitle">经营看板</view>
         <view class="productSubTitle">动态数据实时查看，了解，跟踪</view>
       </view>
@@ -140,7 +128,7 @@ export default {
   components: {},
   data() {
     return {
-      headerImage:require('./image/head.png'),
+      headerImage: require('./image/head.png'),
       // 用户信息
       tokenUserInfo: {},
       // 售达方信息
@@ -260,7 +248,7 @@ export default {
     this.setPageInfo();
   },
   mounted() {
-    this.headerImage = this.userInf.headImgUrl ? this.userInf.headImgUrl : require('./image/head.png') ;
+    this.headerImage = this.userInf.headImgUrl ? this.userInf.headImgUrl : require('./image/head.png');
   },
   computed: {
     ...mapGetters({
@@ -478,7 +466,7 @@ export default {
   .myOrderRow {
     display: flex;
     /* margin-top: 40px; */
-	padding-top: 26px;
+    padding-top: 26px;
   }
 
   .colorBlock {

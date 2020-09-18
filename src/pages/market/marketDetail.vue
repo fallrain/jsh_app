@@ -49,7 +49,7 @@
       <j-product-item
         :groupType="currentDetail.activityType"
         v-for="(goods,index) in currentDetail.products"
-        :key="'MMM'+index"
+        :key="goods.id"
         :goods="goods"
         :index="index"
         @change="goodsChange"

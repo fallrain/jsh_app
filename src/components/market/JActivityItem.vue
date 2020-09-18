@@ -29,7 +29,7 @@
           组合失效
         </view>
         <view class="dis-flex">
-          <uni-number-box :max="Number(activity.upperLimit)"></uni-number-box>
+          <j-number-box :max="Number(activity.upperLimit)"></j-number-box>
           <button
             class="btn-default ml26"
             type="button"
@@ -53,7 +53,7 @@
         <view class="">{{activity.upperLimit}}</view>
       </view>
       <view @tap="goDetail()" class="jActivity-pic">
-        <view v-for="(item, index) in activity.products" class="pic-item" :key="index+'#-#'">
+        <view :key="index" class="pic-item" v-for="(item, index) in activity.products">
           <view class="pic-style">
             <image :src="item.imageUrl"></image>
           </view>
@@ -80,7 +80,7 @@
         </view>
         <view @tap="goDetail()" class="jActivity-pic">
           <!--主产品-->
-          <view v-for="(item, index) in activity.products" class="pic-item" :key="index+'%%'">
+          <view :key="item.productCode" class="pic-item" v-for="(item) in activity.products">
             <view
               class="jProductItem-tag bg-theme"
             >主产品
@@ -91,7 +91,7 @@
             <view class="title-style">{{item.productName}}</view>
           </view>
           <!--配比产品-->
-          <view v-for="(item, index) in activity.pbProducts" class="pic-item" :key="index+'$$'">
+          <view :key="item.productCode" class="pic-item" v-for="(item) in activity.pbProducts">
             <view class="pic-style">
               <image :src="item.imageUrl"></image>
             </view>
@@ -107,11 +107,11 @@
             ￥{{totalPrice(activity.products)}}
           </view>
           <view class="dis-flex">
-            <uni-number-box
+            <j-number-box
               :value="Number(activity.choosedNum)"
               :max="Number(activity.upperLimit)"
               @change="changeNum"
-            ></uni-number-box>
+            ></j-number-box>
             <button
               @tap="goOrder"
               class="btn-primary ml26"
@@ -128,7 +128,7 @@
           <view class="text-primary">{{activity.upperLimit}}</view>
         </view>
         <view @tap="goDetail()" class="jActivity-pic">
-          <view v-for="(item, index) in activity.products" class="pic-item" :key="index+'#^#'">
+          <view :key="index" class="pic-item" v-for="(item, index) in activity.products">
             <view class="pic-style">
               <image :src="item.imageUrl"></image>
             </view>
@@ -142,10 +142,12 @@
 
 <script>
 import './css/JActivityItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'JActivityItem',
   components: {
+    JNumberBox
   },
   props: {
     // 活动对象
@@ -186,7 +188,7 @@ export default {
     goOrder() {
       this.$emit('goOrder', this.activity);
     },
-    changeNum(value) {
+    changeNum({ value }) {
       console.log(value);
       this.activity.choosedNum = value;
     }

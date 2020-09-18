@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     cellClick() {
-      this.$emit('cellClick')
+      this.$emit('cellClick');
     }
   }
 };

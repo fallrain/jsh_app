@@ -65,7 +65,7 @@
    * @event {Function} blur 输入框失去焦点时触发，对象形式
    * @event {Function} minus 点击减少按钮时触发(按钮可点击情况下)，对象形式
    * @event {Function} plus 点击增加按钮时触发(按钮可点击情况下)，对象形式
-   * @example <u-number-box :min="1" :max="100"></u-number-box>
+   * @example <j-number-box :min="1" :max="100"></j-number-box>
    */
 export default {
   name: 'JNumberBox',

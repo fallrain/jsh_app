@@ -1,185 +1,185 @@
 <template>
-    <view v-if="loadUserType">
-      <view class="errorImg">
-      </view>
-      <view class="errorMsg">{{errorMsg}}</view>
-      <button @click="popAction" class="btnStyle">返回</button>
+  <view v-if="loadUserType">
+    <view class="errorImg">
     </view>
-    <view v-else class="applicationsIndex">
-      <view class="app-nav">
-        <view class="app-nav-left">
-          <view
-            @tap="openMenu"
-            class="app-nav-left-menu">
-            <image src="@/assets/img/appIndex/liebiao.png"></image>
-          </view>
-          <view class="fs24 text-333">{{tokenUserInf.nickname}}，您好！</view>
-		  <!-- <view @click="callBBC">建行支付测试</view>
-      <view @click="callABC">农行支付测试</view>
-		  <view @click="popAction">返回测试</view> -->
-          <view class="logo">
-            <image src="@/assets/img/appIndex/haier.png"></image>
-          </view>
-        </view>
-        <view class="app-nav-right">
-          <image src="@/assets/img/appIndex/kefu.png" @tap="service"></image>
-        </view>
-      </view>
-      <view class="app-header">
-        <!-- 轮播图 -->
-        <view class="app-header-swiper">
-          <uni-swiper-dot
-            :info="imageList"
-            :current="current"
-            :mode="mode"
-            field="content"
-            :dotsStyles="dotsStyles"
-          >
-            <swiper class="swiper-box" @change="changePic" autoplay="true"  interval="5000" circular="true">
-              <swiper-item v-for="(item,index) in imageList" :key="index">
-                <view class="swiper-item">
-                  <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
-                </view>
-              </swiper-item>
-            </swiper>
-          </uni-swiper-dot>
-          <!--<image src="@/assets/img/appIndex/yuncang-pic.png"></image>-->
-        </view>
-        <view class="app-header-quickly">
-          <view v-if="appFlag" class="lately-app-list">
-            <view
-              v-for="(item, index) in latestApp"
-              :key="index"
-              @tap="goOthers(item.url)"
-              class="app-list-item">
-              <view class="icon-img">
-                <image :src="item.src"></image>
-              </view>
-              <view class="fs24 text-333">{{item.title}}</view>
-            </view>
-          </view>
-          <view v-if="!appFlag" class="my-app-list">
-            <view
-              v-for="(item, index) in myApp"
-              :key="index"
-              @tap="goOthers(item.url)"
-              class="app-list-item">
-              <view class="icon-img">
-                <image :src="item.src"></image>
-              </view>
-              <view class="fs24 text-333">{{item.title}}</view>
-            </view>
-          </view>
-          <view class="quickly-status">
-            <view @tap="changeState(0)" :class="['quickly-status-lately',appFlag&&'active']">
-              最近使用
-            </view>
-            <view @tap="changeState(1)" :class="['quickly-status-my',!appFlag&&'active']">
-              我的应用
-            </view>
-          </view>
-        </view>
-      </view>
-      <view class="app-all">
+    <view class="errorMsg">{{errorMsg}}</view>
+    <button @tap="popAction" class="btnStyle">返回</button>
+  </view>
+  <view class="applicationsIndex" v-else>
+    <view class="app-nav">
+      <view class="app-nav-left">
         <view
-          v-for="(item, index) in list"
-          :key="index"
-          class="app-all-section">
-          <view class="app-all-section-titel">
-            {{item.title}}
-          </view>
-          <view class="app-all-section-list">
-            <view
-              v-for="(v, index1) in item.children"
-              :key="index1"
-              @tap="goOthers(v.url)"
-              class="app-all-section-item">
-              <view class="icon-img">
-                <image :src="v.src"></image>
-              </view>
-              <view class="fs24 text-333">{{v.Subhead}}</view>
-            </view>
-          </view>
+          @tap="openMenu"
+          class="app-nav-left-menu">
+          <image src="@/assets/img/appIndex/liebiao.png"></image>
+        </view>
+        <view class="fs24 text-333">{{tokenUserInf.nickname}}，您好！</view>
+        <!-- <view @tap="callBBC">建行支付测试</view>
+        <view @tap="callABC">农行支付测试</view>
+        <view @tap="popAction">返回测试</view> -->
+        <view class="logo">
+          <image src="@/assets/img/appIndex/haier.png"></image>
         </view>
       </view>
-      <view class="app-function">
-        <view class="app-function-titel">
-          功能区域
-        </view>
-        <view class="app-function-list">
+      <view class="app-nav-right">
+        <image @tap="service" src="@/assets/img/appIndex/kefu.png"></image>
+      </view>
+    </view>
+    <view class="app-header">
+      <!-- 轮播图 -->
+      <view class="app-header-swiper">
+        <uni-swiper-dot
+          :current="current"
+          :dotsStyles="dotsStyles"
+          :info="imageList"
+          :mode="mode"
+          field="content"
+        >
+          <swiper @change="changePic" autoplay="true" circular="true" class="swiper-box" interval="5000">
+            <swiper-item :key="index" v-for="(item,index) in imageList">
+              <view class="swiper-item">
+                <image :src="item.imageUrl" @tap='goSwiperDetail(item)' class="image" mode="aspectFill"/>
+              </view>
+            </swiper-item>
+          </swiper>
+        </uni-swiper-dot>
+        <!--<image src="@/assets/img/appIndex/yuncang-pic.png"></image>-->
+      </view>
+      <view class="app-header-quickly">
+        <view class="lately-app-list" v-if="appFlag">
           <view
-            v-for="(item, index) in functionList"
             :key="index"
             @tap="goOthers(item.url)"
-            class="app-function-item">
-            <image :src="item.src"></image>
+            class="app-list-item"
+            v-for="(item, index) in latestApp">
+            <view class="icon-img">
+              <image :src="item.src"></image>
+            </view>
+            <view class="fs24 text-333">{{item.title}}</view>
+          </view>
+        </view>
+        <view class="my-app-list" v-if="!appFlag">
+          <view
+            :key="index"
+            @tap="goOthers(item.url)"
+            class="app-list-item"
+            v-for="(item, index) in myApp">
+            <view class="icon-img">
+              <image :src="item.src"></image>
+            </view>
+            <view class="fs24 text-333">{{item.title}}</view>
+          </view>
+        </view>
+        <view class="quickly-status">
+          <view :class="['quickly-status-lately',appFlag&&'active']" @tap="changeState(0)">
+            最近使用
+          </view>
+          <view :class="['quickly-status-my',!appFlag&&'active']" @tap="changeState(1)">
+            我的应用
           </view>
         </view>
       </view>
-      <uni-drawer
-        ref="infoDrawer"
-        mode="left"
-      >
-        <view class="info-drawer">
-          <view class="drawer-header">
-            <view class="drawer-header-img">
-              <image src="@/assets/img/appIndex/4.png"></image>
+    </view>
+    <view class="app-all">
+      <view
+        :key="index"
+        class="app-all-section"
+        v-for="(item, index) in list">
+        <view class="app-all-section-titel">
+          {{item.title}}
+        </view>
+        <view class="app-all-section-list">
+          <view
+            :key="index1"
+            @tap="goOthers(v.url)"
+            class="app-all-section-item"
+            v-for="(v, index1) in item.children">
+            <view class="icon-img">
+              <image :src="v.src"></image>
             </view>
-            <view class="drawer-header-info">
-              <view class="fs34 text-333 lh48">{{tokenUserInf.nickname}}，您好。</view>
-              <view class="fs24 text-666">职务：总经理</view>
-            </view>
-          </view>
-          <view class="drawer-menu">
-            <j-cell
-              @cellClick="cellClick('/pages/mine/myBaseInfo?index=0')"
-              class="border-b"
-              title="个人资料"
-            >
-              <template #right>
-                <view
-                  class="drawer-menu-icon iconfont iconyou"
-                ></view>
-              </template>
-            </j-cell>
-            <j-cell
-              @cellClick="cellClick('/pages/mine/myAlterTel')"
-              class="border-b"
-              title="修改手机号"
-            >
-              <template #right>
-                <view
-                  class="drawer-menu-icon iconfont iconyou"
-                ></view>
-              </template>
-            </j-cell>
-            <j-cell
-              @cellClick="cellClick('/pages/mine/myAlertLoginPwd')"
-              class="border-b"
-              title="修改登录密码"
-            >
-              <template #right>
-                <view
-                  class="drawer-menu-icon iconfont iconyou"
-                ></view>
-              </template>
-            </j-cell>
-            <j-cell
-              @cellClick="cellClick('/pages/messageInfoList/messageInfoList?index=0')"
-              class="border-b pos-r"
-              title="待办任务"
-            >
-              <view class="tag-task">1</view>
-              <template #right>
-                <view
-                  class="drawer-menu-icon iconfont iconyou"
-                ></view>
-              </template>
-            </j-cell>
+            <view class="fs24 text-333">{{v.Subhead}}</view>
           </view>
         </view>
-      </uni-drawer>
+      </view>
     </view>
+    <view class="app-function">
+      <view class="app-function-titel">
+        功能区域
+      </view>
+      <view class="app-function-list">
+        <view
+          :key="index"
+          @tap="goOthers(item.url)"
+          class="app-function-item"
+          v-for="(item, index) in functionList">
+          <image :src="item.src"></image>
+        </view>
+      </view>
+    </view>
+    <uni-drawer
+      mode="left"
+      ref="infoDrawer"
+    >
+      <view class="info-drawer">
+        <view class="drawer-header">
+          <view class="drawer-header-img">
+            <image src="@/assets/img/appIndex/4.png"></image>
+          </view>
+          <view class="drawer-header-info">
+            <view class="fs34 text-333 lh48">{{tokenUserInf.nickname}}，您好。</view>
+            <view class="fs24 text-666">职务：总经理</view>
+          </view>
+        </view>
+        <view class="drawer-menu">
+          <j-cell
+            @cellClick="cellClick('/pages/mine/myBaseInfo?index=0')"
+            class="border-b"
+            title="个人资料"
+          >
+            <template #right>
+              <view
+                class="drawer-menu-icon iconfont iconyou"
+              ></view>
+            </template>
+          </j-cell>
+          <j-cell
+            @cellClick="cellClick('/pages/mine/myAlterTel')"
+            class="border-b"
+            title="修改手机号"
+          >
+            <template #right>
+              <view
+                class="drawer-menu-icon iconfont iconyou"
+              ></view>
+            </template>
+          </j-cell>
+          <j-cell
+            @cellClick="cellClick('/pages/mine/myAlertLoginPwd')"
+            class="border-b"
+            title="修改登录密码"
+          >
+            <template #right>
+              <view
+                class="drawer-menu-icon iconfont iconyou"
+              ></view>
+            </template>
+          </j-cell>
+          <j-cell
+            @cellClick="cellClick('/pages/messageInfoList/messageInfoList?index=0')"
+            class="border-b pos-r"
+            title="待办任务"
+          >
+            <view class="tag-task">1</view>
+            <template #right>
+              <view
+                class="drawer-menu-icon iconfont iconyou"
+              ></view>
+            </template>
+          </j-cell>
+        </view>
+      </view>
+    </uni-drawer>
+  </view>
 </template>
 <script>
 import {
@@ -444,17 +444,19 @@ export default {
   },
   created() {
     // 支持由前端 H5 页面禁止
-    AlipayJSBridge.call('setGestureBack', { val: false });
+    AlipayJSBridge && AlipayJSBridge.call('setGestureBack', { val: false });
   },
   mounted() {
     // 适配安卓客户端
-	  AlipayJSBridge.call('myApiGetCode', {
-	    param1: 'JsParam1',
-	  }, (result) => {
-	      if (result.code && result.code.length > 1) {
-	          this.init(result.code);
-	      }
-	  });
+    if (AlipayJSBridge) {
+      AlipayJSBridge.call('myApiGetCode', {
+        param1: 'JsParam1',
+      }, (result) => {
+        if (result.code && result.code.length > 1) {
+          this.init(result.code);
+        }
+      });
+    }
   },
   onLoad(param) {
     this.code = param.webview_options
@@ -484,10 +486,10 @@ export default {
       });
     },
     async init(code) {
-      if (!code) {
-        // 适配iOS客户端
-        code = ALIPAYH5STARTUPPARAMS.webview_options;
-      }
+      // if (!code && window.ALIPAYH5STARTUPPARAMS) {
+      //   // 适配iOS客户端
+      //   code = ALIPAYH5STARTUPPARAMS.webview_options;
+      // }
       // code = 'HSWGj3SWS0OtfqUAAskzjw';
       // 获取token
       await this.getToken(code);
@@ -495,38 +497,38 @@ export default {
       await this.getbannerList();
       // 获取token
       /* if (code.length > 0) {
-        // 获取token
-        await this.getToken(code);
-        // 获取首页轮播图
-        await this.getbannerList();
-      } else {
-        uni.showToast({
-          title: '获取code失败',
-          icon: 'none',
-          duration: 3000
-        });
-      } */
+          // 获取token
+          await this.getToken(code);
+          // 获取首页轮播图
+          await this.getbannerList();
+        } else {
+          uni.showToast({
+            title: '获取code失败',
+            icon: 'none',
+            duration: 3000
+          });
+        } */
     },
-	  // 返回原生 处理账号锁定
-	  popAction() {
-		  AlipayJSBridge.call('popWindow');
-	  },
-	  // 打开建行支付
-	  callBBC() {
-		  // AlipayJSBridge.call('myApiCallCCB', {
-		  //   orderId: '123456',
+    // 返回原生 处理账号锁定
+    popAction() {
+      AlipayJSBridge && AlipayJSBridge.call('popWindow');
+    },
+    // 打开建行支付
+    callBBC() {
+      // AlipayJSBridge.call('myApiCallCCB', {
+      //   orderId: '123456',
       //   payment: '8888',
-		  // }, (result) => {
-		  // 	alert(JSON.stringify(result));
-		  // });
+      // }, (result) => {
+      // 	alert(JSON.stringify(result));
+      // });
     },
     // 打开农行支付
     callABC() {
-		  // AlipayJSBridge.call('myApiCallABC', {
-		  //   tokenId: '14406457162720037182',
-		  // }, (result) => {
-		  // 	alert(JSON.stringify(result));
-		  // });
+      // AlipayJSBridge.call('myApiCallABC', {
+      //   tokenId: '14406457162720037182',
+      // }, (result) => {
+      // 	alert(JSON.stringify(result));
+      // });
     },
     // 获取token
     async getToken(passCode) {
@@ -601,10 +603,10 @@ export default {
         for (let y = 0; y < marketCollusionGroupValue.length; y++) {
           const elementValue = marketCollusionGroupValue[y];
           if (element == elementValue.value) {
-            if(index == data.marketCollusionGroup.length-1) {
+            if (index == data.marketCollusionGroup.length - 1) {
               marketErrorMsg += elementValue.valueMeaning;
             } else {
-              marketErrorMsg += elementValue.valueMeaning + '、';
+              marketErrorMsg += `${elementValue.valueMeaning}、`;
             }
           }
         }
@@ -669,7 +671,8 @@ export default {
         const signature = `nonce=${nonce1}&timestamp=${timestamp1}&web_token=${web_token1}&9767b0677a6f46f5d3d0af8c00f3f16c`;
         let sha = hex_sha1(signature);
         sha = sha.toUpperCase();
-        console.log(signature); console.log(sha);
+        console.log(signature);
+        console.log(sha);
         //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
         //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
         //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
@@ -715,7 +718,7 @@ export default {
       console.log(item);
       let aaa = [];
       let productCode = '';
-      let id = ''
+      let id = '';
       if (item.url.indexOf('/detail/') > -1) {
         aaa = item.url.split('/');
         console.log(aaa[aaa.length - 1]);

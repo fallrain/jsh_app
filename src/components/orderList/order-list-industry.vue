@@ -3,10 +3,10 @@
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
       <view v-for="(item,index) in industryList" :key="item.key">
-        <view class="order_more_text" @click="orderNoClick(item.key,item.value)"><view class="iconfont iconcancel order_more_iconStyle"></view>{{item.value}}</view>
+        <view @tap="orderNoClick(item.key,item.value)" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>{{item.value}}</view>
       </view>
-<!--      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>-->
-<!--      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>-->
+<!--      <view class="order_more_text" @tap="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>-->
+<!--      <view class="order_more_text" @tap="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>-->
 <!--      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>-->
     </view>
   </view>

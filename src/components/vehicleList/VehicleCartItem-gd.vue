@@ -57,9 +57,12 @@
           <text class="v-c-gd-cnt-foot-value"> ¥ {{item.SUMMONEY}}</text>
         </view>
         <view class="">
-          <uni-number-box :value="item.IBL_NUM" :max="Number(item.IBL_MAXNUM)"
-                          :disabled="Number(item.IBL_MAXNUM) === 0" @change="changeNum($event, item)">
-          </uni-number-box>
+          <j-number-box
+            :disabled="Number(item.IBL_MAXNUM) === 0"
+            :max="Number(item.IBL_MAXNUM)"
+            :value="item.IBL_NUM"
+            @change="changeNum($event, item)">
+          </j-number-box>
         </view>
       </view>
     </view>
@@ -148,12 +151,12 @@ export default {
     pullDetail() {
       console.log('22222');
       this.$emit('pullDetail', this.goods, this.index);
-    }
-  },
-  async changeNum(value, item) {
-    if (value !== (item.IBL_NUM * 1)) {
-      this.$emit('changeNum', value, this.goods, item);
-    }
+    },
+    async changeNum(value, item) {
+      if (value !== (item.IBL_NUM * 1)) {
+        this.$emit('changeNum', value, this.goods, item);
+      }
+    },
   },
 };
 </script>

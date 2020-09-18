@@ -12,39 +12,39 @@ import configJs from '@/config';
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
-  data () {
+  data() {
     // 这里存放数据
     return {
-        srcUrl:''
-    }
+      srcUrl: ''
+    };
   },
   // 监听属性 类似于data概念
   computed: {},
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成（可以访问当前this实例）
-  created () {
-      let curConfig;
-        const {
-        VUE_APP_PLATFORM,
-        VUE_APP_MODE
-        } = process.env;
-        if (VUE_APP_PLATFORM === 'h5') {
-        curConfig = configJs.h5[VUE_APP_MODE];
-        } else {
-        curConfig = configJs['mp-alipay'][VUE_APP_MODE];
-        }
-      this.srcUrl = curConfig.baseUrl + '/personalSetting/index?type=password';
+  created() {
+    let curConfig;
+    const {
+      VUE_APP_PLATFORM,
+      VUE_APP_MODE
+    } = process.env;
+    if (VUE_APP_PLATFORM === 'h5') {
+      curConfig = configJs.h5[VUE_APP_MODE];
+    } else {
+      curConfig = configJs['mp-alipay'][VUE_APP_MODE];
+    }
+    this.srcUrl = `${curConfig.baseUrl}/personalSetting/index?type=password`;
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
-  mounted () {
+  mounted() {
   },
-  activated () { }, // 如果页面有keep-alive缓存功能，这个函数会触发
+  activated() { }, // 如果页面有keep-alive缓存功能，这个函数会触发
   // 方法集合
   methods: {
 
   }
-}
+};
 </script>
 
 <style scoped>

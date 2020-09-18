@@ -1,7 +1,7 @@
 <template>
   <uni-popup ref="pop" type="bottom" @change="change">
     <view class="pro-num-pop">
-      <view class="pro-num-head" @click="close">
+      <view @tap="close" class="pro-num-head">
         <view class="pro-num-head-title"></view>
         <view class="pro-num-head-but">X</view>
       </view>
@@ -48,7 +48,14 @@
         <view class="pro-num-pop-wrap">
           <view class="pro-num-pop-wrap4">
             <view class="pro-num-pop-name">数&nbsp;&nbsp;&nbsp;量：</view>
-            <view class="number"><uni-number-box :value="numberValue" :max="Number(stock[infos.product.productCode].stockTotalNum)" :disabled="Number(stock[infos.product.productCode].stockTotalNum) === 0" @change="changeNum" /></view>
+            <view class="number">
+              <j-number-box
+                :disabled="Number(stock[infos.product.productCode].stockTotalNum) === 0"
+                :max="Number(stock[infos.product.productCode].stockTotalNum)"
+                :value="numberValue"
+                @change="changeNum"
+              ></j-number-box>
+            </view>
           </view>
         </view>
         <view class="pro-num-line"></view>
@@ -56,7 +63,7 @@
           <view class="pro-num-pop-wrap">
             <view class="pro-num-pop-wrap4">
               <view class="pro-num-pop-name">库&nbsp;&nbsp;&nbsp;存：</view>
-              <view class="pro-num-pop-val">{{stock[infos.product.productCode].stockTotalNum}}</view>
+              <view class="pro-num-pop-val">{{stock[infos.product.productCode]? stock[infos.product.productCode].stockTotalNum : 0}} </view>
             </view>
           </view>
           <view class="pro-num-pop-wrap" v-for="(store,indexA) in sto.storeInfo" :key="indexA">
@@ -71,7 +78,7 @@
         </view>
       </view>
       <view class="pro-num-btn-wrap">
-        <button class="button pro-num-btn" @click="putNum">确定</button>
+        <button @tap="putNum" class="button pro-num-btn">确定</button>
       </view>
     </view>
   </uni-popup>
@@ -79,10 +86,12 @@
 
 <script>
 import './css/proComNum.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'proComNum',
   components: {
+    JNumberBox
   },
   props: {
     // 显示隐藏
@@ -125,7 +134,7 @@ export default {
     change({ show }) {
       this.$emit('update:show', show);
     },
-    changeNum(value) {
+    changeNum({ value }) {
       this.numberValue = value;
     },
     putNum() { // 确认

@@ -24,12 +24,12 @@
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.stockNum}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
-        <uni-number-box
+        <j-number-box
           :value="goods.amount"
           :max="Number(goods.stockNum)"
           :disabled="Number(goods.stockNum) === 0"
           @change="goodsNumChange($event, goods)"
-        ></uni-number-box>
+        ></j-number-box>
         <button
           class="jGoodsItem-cnt-opts-primary ml26"
           :class="[Number(goods.stockNum) === 0 ? 'disabled' : 'jGoodsItem-cnt-opts-primary']"
@@ -50,10 +50,12 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+import JNumberBox from '../../components/common/JNumberBox';
 
 export default {
   name: 'transferGoodsItem',
   components: {
+    JNumberBox
   },
   data() {
     return {
@@ -106,7 +108,7 @@ export default {
 
   },
   methods: {
-    goodsNumChange(value, goods) {
+    goodsNumChange({ value }, goods) {
       /* 商品数量change */
       if (goods.stockNum === 0) {
         value = 0;

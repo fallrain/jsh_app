@@ -14,13 +14,13 @@
             <view class="sampleMachineConfirm-price">
               ¥ {{confirmInfo.$allPrice.UnitPrice}}
             </view>
-            <uni-number-box
+            <j-number-box
               v-if="confirmInfo.detailList"
               :min="0"
               :max="confirmInfo.detailList[0].YGS_KYKCL"
               v-model="choosedNum"
               @change="change"
-            ></uni-number-box>
+            ></j-number-box>
           </view>
         </view>
       </view>
@@ -101,6 +101,7 @@
     :currentPayer="currentPayer"
     :currentAddress="currentAddress"
     :totalMoney="totalMoney"
+    :isYuncang="isYuncang"
   ></j-samplemachine-alert>
 </view>
 </template>
@@ -115,11 +116,13 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+import JNumberBox from '../../components/common/JNumberBox';
 
 
 export default {
   name: 'sampleMachineConfirm',
   components: {
+    JNumberBox,
     JSwitch,
     JPopPicker,
     JSamplemachineAlert
@@ -127,8 +130,8 @@ export default {
   data() {
     return {
       isShowVf: false,
-      //图片验证码的值
-      verCode: '', //验证码,
+      // 图片验证码的值
+      verCode: '', // 验证码,
       width: 120,
       height: 45,
       // // 验证码初始值
@@ -142,7 +145,7 @@ export default {
         verificationCode: '',
       },
       totalMoney: 0,
-      isSend: true,
+      isSend: false,
       payerPickerShow: false,
       choosedNum: 1,
       confirmInfo: {},
@@ -150,7 +153,8 @@ export default {
       currentPayer: {},
       currentChoosePayer: [],
       payerList: [],
-      isExpand: false
+      isExpand: false,
+      isYuncang: false
     };
   },
   onLoad(option) {
@@ -165,9 +169,9 @@ export default {
   },
   onShow() {
     const _this = this;
-    setTimeout(function() {
+    setTimeout(() => {
       _this.init();
-    }, 1000)
+    }, 1000);
   },
   computed: {
     ...mapGetters({
@@ -189,21 +193,21 @@ export default {
     // 初始化验证码
     init() {
       console.log('start');
-      var context = uni.createCanvasContext('imgcanvas', this),
-          w = this.width,
-          h = this.height;
-      context.setFillStyle("white");
+      const context = uni.createCanvasContext('imgcanvas', this);
+      const w = this.width;
+      const h = this.height;
+      context.setFillStyle('white');
       context.setLineWidth(5);
       context.fillRect(0, 0, w, h);
-      var pool = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "I", "M", "N", "O", "P", "Q", "R", "S",
-            "T", "U", "V", "W", "S", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
-          ],
-          str = '';
+      const pool = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'I', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+        'T', 'U', 'V', 'W', 'S', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+      ];
+      let str = '';
       for (var i = 0; i < 4; i++) {
-        var c = pool[this.rn(0, pool.length - 1)];
-        var deg = this.rn(-30, 30);
+        const c = pool[this.rn(0, pool.length - 1)];
+        const deg = this.rn(-30, 30);
         context.setFontSize(18);
-        context.setTextBaseline("top");
+        context.setTextBaseline('top');
         context.setFillStyle(this.rc(80, 150));
         context.save();
         context.translate(30 * i + 15, parseInt(h / 1.5));
@@ -227,10 +231,10 @@ export default {
       console.log('end');
     },
     rc(min, max) {
-      var r = this.rn(min, max);
-      var g = this.rn(min, max);
-      var b = this.rn(min, max);
-      return "rgb(" + r + "," + g + "," + b + ")";
+      const r = this.rn(min, max);
+      const g = this.rn(min, max);
+      const b = this.rn(min, max);
+      return `rgb(${r},${g},${b})`;
     },
     rn(max, min) {
       return parseInt(Math.random() * (max - min)) + min;
@@ -239,7 +243,7 @@ export default {
       this.init();
     },
     canvasIdErrorCallback(e) {
-      console.error(e.detail.errMsg)
+      console.error(e.detail.errMsg);
     },
     sureOrder() {
       const money = this.currentPayer.balance || this.currentPayer.bookBalance;
@@ -272,10 +276,18 @@ export default {
     changePayer(payerInfo) {
       this.currentPayer = this.payerList.find(v => v.payerCode === payerInfo[0]);
     },
-    change(val) {
-      this.choosedNum = val;
+    change({ value }) {
+      this.choosedNum = value;
     },
     switchChange(val) {
+      this.isYuncang = val;
+      if (this.isYuncang) {
+        uni.showToast({
+          title: '选择入物流托管仓，海尔物流将根据您的需求提供有偿的仓储和配送服务',
+          icon: 'none',
+          duration: 3000
+        });
+      }
       console.log(val);
     },
     async getpayerList() {

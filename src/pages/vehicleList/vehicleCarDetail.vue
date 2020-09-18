@@ -91,10 +91,10 @@ export default {
         });
       }
     },
-    async cartSubmit(verifyCo,verifyK) { // 提交订单
+    async cartSubmit(verifyCo, verifyK) { // 提交订单
       const timetamp = new Date().valueOf();
       const longfeiUSE = this.userInf.customerCode;
-      const { code, data } = await this.vehicleService.cartSubmit(timetamp,longfeiUSE,this.zhengCheCode,verifyCo,verifyK);
+      const { code, data } = await this.vehicleService.cartSubmit(timetamp, longfeiUSE, this.zhengCheCode, verifyCo, verifyK);
       if (code === '1' && data.code === '200') {
         uni.showToast({
           title: '整车提交成功',

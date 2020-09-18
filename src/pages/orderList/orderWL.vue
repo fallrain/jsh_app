@@ -17,12 +17,12 @@ import {
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
-  data () {
+  data() {
     // 这里存放数据
     return {
-        infoList:{},
-        srcUrl:''
-    }
+      infoList: {},
+      srcUrl: ''
+    };
   },
   // 监控data中的数据变化
   watch: {},
@@ -36,19 +36,19 @@ export default {
     console.log('11111111');
     this.infoList = this[ORDER.GET_ORDER].orderDetail;
     const dnLogistics = this.infoList.info.dnLogistics;
-    this.srcUrl = `https://icloud.rrswl.com/web/searchOrdersNo?bstkd=${dnLogistics}`
-    console.log(this.srcUrl)
+    this.srcUrl = `https://icloud.rrswl.com/web/searchOrdersNo?bstkd=${dnLogistics}`;
+    console.log(this.srcUrl);
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
-  mounted () {
+  mounted() {
 
   },
-  activated () { }, // 如果页面有keep-alive缓存功能，这个函数会触发
+  activated() { }, // 如果页面有keep-alive缓存功能，这个函数会触发
   // 方法集合
   methods: {
 
   }
-}
+};
 </script>
 
 <style scoped>

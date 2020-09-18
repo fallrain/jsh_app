@@ -4,7 +4,7 @@
       <view class="v-foot-lin-tex1">车型：<span class="v-foot-lin-tex3">{{carType}}</span></view>
       <view class="v-foot-lin-tex2">已装车体积：<span class="v-foot-lin-tex4">{{tiJiINfo.tiji}}m³/{{tiJiINfo.zhanbi}}%</span></view>
     </view>
-    <view class="v-foot-btn" @click="goVehicleCar">
+    <view @tap="goVehicleCar" class="v-foot-btn">
       <view class="v-foot-btn-text"><i class="iconfont icongouwuchezhengpin v-foot-lin-tex5"></i>购物车&nbsp;({{carNum}})</view>
     </view>
   </view>

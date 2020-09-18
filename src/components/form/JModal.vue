@@ -13,7 +13,7 @@
         <slot></slot>
       </view>
       <view class="jModal-btn">
-        <view @tap="modalCancle" v-if="isCancle" class="btn-cancle">取消1</view>
+        <view @tap="modalCancle" class="btn-cancle" v-if="isCancle">取消</view>
         <view @tap="modalSure" class="btn-sure">确定</view>
       </view>
     </view>
@@ -42,11 +42,11 @@ export default {
       this.$emit('update:show', false);
     },
     modalCancle() {
-      debugger
+      debugger;
       this.$emit('update:show', false);
     },
     modalSure() {
-      debugger
+      debugger;
       this.$emit('confirm');
     },
   }

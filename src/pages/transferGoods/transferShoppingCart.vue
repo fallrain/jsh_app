@@ -659,7 +659,7 @@ export default {
     },
     tabClick(tabs) {
       this.tabs = tabs;
-      this.tabs.forEach(item => {
+      this.tabs.forEach((item) => {
         console.log(item);
         if (item.active) {
           if (item.name === '购物车') {

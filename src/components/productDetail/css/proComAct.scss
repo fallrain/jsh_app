@@ -19,7 +19,7 @@
     padding-left: 30px;
     padding-right: 72%;
     color: #333333;
-    font-size: 30px;
+    font-size: 36px;
   }
   .pro-act-head-but{
     font-size: 32px;
@@ -54,7 +54,7 @@
   height: 48px;
   line-height: 48px;
   padding-left: 32px;
-  font-size: 24px;
+  font-size: 32px;
   color: $theme-color;
 
   &::before {
@@ -125,12 +125,13 @@
 }
 .pro-act-pop-detail-item-oneNam{
   color: #666666;
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .pro-act-pop-detail-item-name {
   color: #999;
-  font-size: 20px;
+  font-size: 26px;
+
 }
 
 .pro-act-pop-detail-thr {
@@ -160,31 +161,36 @@
 .pro-act-pop-detail-item-name-wrap1 {
   display: flex;
   align-items: center;
-  width: 35%;
+  //width: 35%;
   height: 40px;
+  margin-right: 30px;
 }
 .pro-act-pop-detail-item-name-wrap {
   display: flex;
   align-items: center;
-  width: 50%;
+  //width: 50%;
   height: 40px;
+  margin-right: 30px;
 }
 .pro-act-pop-detail-item-name-wrap2 {
   display: flex;
   align-items: center;
-  width: 46%;
+  //width: 46%;
   height: 40px;
+  margin-right: 30px;
 }
 .pro-act-pop-detail-item-name-wrap3 {
   display: flex;
   align-items: center;
-  width: 27%;
+  //width: 27%;
   height: 40px;
+  margin-right: 30px;
 }
 
 .pro-act-pop-detail-item-val-type1 {
   font-size: 28px;
   color: #333;
+  margin-right: 50px;
 }
 
 .pro-act-pop-detail-item-val-type2 {

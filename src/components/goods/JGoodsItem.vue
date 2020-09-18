@@ -35,7 +35,7 @@
         src="https://cdn.jsh.com/img/isNewProduct.png"
         v-if="newProductImg"
       ></image>
-      <image class="image2" src="../../assets/img/product/sellout.png" v-show="isShowImg"></image>
+      <image class="image2" src="../../assets/img/product/sellout.png" v-if="priceInf.isShowImg"></image>
     </view>
     <view class="jGoodsItem-cnt">
       <view class="jGoodsItem-cnt-goodsName j-goods-title" @tap="goDetail">
@@ -58,13 +58,13 @@
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
-        <u-number-box
+        <j-number-box
           :max="maxGoodsNumber"
           :min="1"
           @change="goodsNumChange"
-        ></u-number-box>
+        ></j-number-box>
         <button
-          v-if="isShowAddCart"
+          v-if="isShowAddCart || priceInf.isShowAddCart"
           :class="['jGoodsItem-cnt-opts-primary ml26',priceInf.disabled && 'disabled']"
           type="button"
           @tap="checkSpecifications"
@@ -132,10 +132,12 @@ import threeSpecial from '@/assets/img/goods/threeSpecial.png';
 import threeSpecialScf from '@/assets/img/goods/threeSpecial-scf.png';
 import townSpecial from '@/assets/img/goods/townSpecial.png';
 import townSpecialScf from '@/assets/img/goods/townSpecial-scf.png';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'JGoodsItem',
   components: {
+    JNumberBox,
     JVersionSpecifications,
     MToast
   },
@@ -188,7 +190,6 @@ export default {
   },
   data() {
     return {
-      isShowImg: false,
       baseUrl: process.env.BASE_URL,
       // 错误图片
       errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
@@ -306,13 +307,12 @@ export default {
           if (priceInf.invoicePrice === '营销活动进行中') {
             priceInf.disabled = true;
             priceInf.isText = true;
-            this.isShowAddCart = true;
+            priceInf.isShowAddCart = true;
           }
         }
       }
-      console.log(this.goods);
       if (this.goods.isResource === '1' && Number(this.goods.$stock.stockTotalNum) === 0) {
-        this.isShowImg = true;
+        priceInf.isShowImg = true;
         priceInf.disabled = true;
       }
 
@@ -630,7 +630,7 @@ export default {
         //  促销活动价格类型
         //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
         priceType: priceType ? priceType.toUpperCase() : priceType,
-        // dataFrom: "flashSale",
+        dataFrom: !choseVersion && activityType === 5 ? 'flashSale' : undefined,
         // 价格版本号
         // priceVersion: '',
         // 产品编码

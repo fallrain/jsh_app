@@ -19,7 +19,7 @@
               <view class="v-c-i-flox3">付款方<i class="iconfont iconxia"></i></view>
               <view class="v-d-g-total-price-info" v-if="goods.payCheck">
                 <view class="v-c-i-cnt-price-info-li" v-for="(it,index2) in goods.payVehiList.data.items" :key="index2"
-                      :class="[it.checked && 'active']" @click="payVehicle(index, index2),getPayer(goods, index)">{{it.TMCF_NAME}}</view>
+                      :class="[it.checked && 'active']" @tap="payVehicle(index, index2),getPayer(goods, index)">{{it.TMCF_NAME}}</view>
               </view>
               <view class="v-c-i-cnt-inf-picker-rk">{{goods.payVehCheck.TMCF_NAME}}</view>
             </view>
@@ -36,9 +36,9 @@
             <text class="v-c-i-cnt-foot-value"> ¥ {{goods.SUMMONEY}}</text>
           </view>
           <view class="">
-            <uni-number-box :value="goods.IBL_NUM" :max="Number(goods.IBL_MAXNUM)"
+            <j-number-box :max="Number(goods.IBL_MAXNUM)" :value="goods.IBL_NUM"
                             :disabled="Number(goods.IBL_MAXNUM) === 0" @change="changeNum($event, goods)">
-            </uni-number-box>
+            </j-number-box>
           </view>
         </view>
         <view class="v-d-g-detail-mark-item-name">
@@ -71,10 +71,12 @@
 import './css/vehicleDetailGood.scss';
 import './css/vehicleCarItem.scss';
 import '../shoppingCart/css/jOrderConfirmItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'VehicleDetailGood',
   components: {
+    JNumberBox
   },
   props: {
     goodsList: {// 商品列表
@@ -110,9 +112,11 @@ export default {
       this.$emit('change', this.goodsList, index);
     },
     async changeNum(value, item) {
-      if (value !== (item.IBL_NUM * 1)) {{
+      if (value !== (item.IBL_NUM * 1)) {
+        {
         // this.$emit('changeNum', value, this.goodsList, item);
-      }}
+        }
+      }
     },
   }
 };
