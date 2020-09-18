@@ -15,7 +15,7 @@ const urls = {
   },
   tctpConfirm(dn, bstnk) {
     return `/myorder/tctpConfirm?dn=${dn}&isItConfirmed=1&bstnk=${bstnk}`;
-  }
+  },
 };
 util.addPrefix(baseURL, urls);
 export default urls;

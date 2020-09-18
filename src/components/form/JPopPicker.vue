@@ -3,6 +3,7 @@
     ref="pop"
     type="bottom"
     @change="change"
+    class="zIndex999"
   >
     <view class="jPopPicker-pop">
       <view class="jPopPicker-pop-head">

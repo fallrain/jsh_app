@@ -87,7 +87,7 @@
           自主扣款
         </view>
         <view v-if="info.btnsInfo.selfPayButton==='2'"
-              @click="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+              @click="sampleMachineAccounts()" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           样机结算
         </view>
@@ -173,7 +173,7 @@
           自主扣款
         </view>
         <view v-if="info.btnsInfo.selfPayButton==='2'"
-              @click="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+              @click="sampleMachineAccounts()" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           样机结算
         </view>
@@ -231,6 +231,7 @@
       </template
       >
     </j-pop-picker>
+
     <order-pop-picker
       title="自主扣款"
       :show.sync="show"
@@ -282,6 +283,84 @@
         </view>
       </template>
     </order-pop-picker>
+    <order-pop-picker
+      title="周转样机结算"
+      :show.sync="sampleMachineShow"
+      @confirm="sampleMachineModalConfirm"
+    >
+      <template>
+        <view class="jmodal-style">
+          <view class="jmodal-item">
+            <view class="key-style">版本号：</view>
+            <view class="val-style">{{sampleMachine.detailEntity.priceVersion}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">价格：</view>
+            <view class="val-style text-theme">¥{{(sampleMachine.detailEntity.supplyPrice).toFixed(2)}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">数量：</view>
+            <view class="val-style">{{sampleMachine.detailEntity.discount}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">合计：</view>
+            <view class="val-style">¥{{sampleMachine.detailEntity.amount}}</view>
+          </view>
+          <view @tap="changePay" class="jmodal-item">
+            <view class="key-style">付款方：</view>
+            <view class="val-style">{{currentSampleMachinePayer.value}}</view>
+            <i class="iconfont iconyou"></i>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">余额：</view>
+            <view class="val-style">{{currentSampleMachinePayer.payerBalance.balance||currentSampleMachinePayer.payerBalance.bookBalance}}</view>
+          </view>
+        </view>
+      </template>
+    </order-pop-picker>
+    <!--样机结算付款方-->
+    <j-pop-picker
+      title="付款方"
+      :isShowSearch="true"
+      :cantCheckedCallback="isNoCanChecked"
+      :show.sync="sampleMachinePayerPickerShow"
+      :options="payersSampleMachine"
+      :choseKeys.sync="choosedPayersSampleMachine"
+    >
+    </j-pop-picker>
+    <j-modal
+      :show.sync="modalShow"
+      title="请输入验证码"
+      @confirm="submitOrder"
+    >
+      <template>
+        <view class="Verification-model">
+          <view class="Verification-row">
+            <view class="Verification-send">发送至</view>
+            <input
+              class="Verification-inputView"
+              placeholder="请输入手机号"
+              placeholder-class="col_c"
+              v-model="linkNum"
+            >
+          </view>
+          <view class="Verification-row">
+            <view class="Verification-send">验证码</view>
+            <input
+              class="Verification-inputView"
+              placeholder="请输入验证码"
+              placeholder-class="col_c"
+              v-model="formSubmit.bestSignVerifyCodeDto.verifyCode"
+            >
+          </view>
+          <view
+            class="send-btn">
+            <text v-if="!sendMessageStatus" @tap="sendMessage">发送验证码</text>
+            <text v-if="sendMessageStatus">{{time}}s后重新发送</text>
+          </view>
+        </view>
+      </template>
+    </j-modal>
   </view>
 </template>
 
@@ -313,11 +392,58 @@ export default {
     },
     index: {
       type: [String, Number]
+    },
+    // 发送验证码的联系方式
+    linkNum: {
+      type: String
     }
   },
   data() {
     return {
+      modalShow: false,
+      sendMessageStatus: false, // 是否发送了验证码
+      time: 60,
+      userInfMianMi: false, // 是否免密
+      // 订单提交信息
+      formSubmit: {
+        // 上上签验证信息
+        bestSignVerifyCodeDto: {
+          note: '',
+          verifyCode: '',
+          verifyKey: ''
+        },
+        orderNo: '',
+        paytoCode: '',
+        paytoName: '',
+        paytoType: '',
+        productCode: '',
+        saletoCode: '',
+        sendtoCode: ''
+      },
       show: false,
+      sampleMachineShow: false,
+      sampleMachinePayerPickerShow: false,
+      sampleMachine: {
+        detailEntity: {
+          priceVersion: '',
+          supplyPrice: 0,
+          discount: 0,
+          amount: 0
+        },
+        infoEntity: {
+          paytoCode: '',
+          paytoName: ''
+        }
+      }, // 样机结算数据展示
+      payersSampleMachine: [],
+      choosedPayersSampleMachine: [],
+      currentSampleMachinePayer: {
+        value: '',
+        paytoCode: '',
+        paytoName: '',
+        payerBalance: {}
+      },
+      // 样机付款方数据
       currentTitle: '',
       currentPayerInfo: {}, // 当前付款方 自主扣款
       state: '', // 自主扣款类型
@@ -400,6 +526,13 @@ export default {
     }
   },
   watch: {
+    choosedPayersSampleMachine(val) {
+      this.payersSampleMachine.forEach((item) => {
+        if (item.key === val[0]) {
+          this.currentSampleMachinePayer = item;
+        }
+      });
+    },
     currentchosePayerOption(newVal, oldVal) {
       if (newVal[0] !== oldVal[0]) {
         // 查询余额
@@ -590,6 +723,45 @@ export default {
         this.show = true;
       }
     },
+    // 样机结算
+    async sampleMachineAccounts() {
+      // 查询付款方列表
+      const form = [{
+        isCheckCreditModel: '',
+        orderNo: this.info.info.jshi_order_no,
+        priceType: this.info.details[0].jshd_price_type,
+        priceVersion: this.info.details[0].jshd_price_version,
+        productGroup: this.info.details[0].jshd_product_group,
+        saletoCode: this.info.info.jshi_saleto_code,
+        sendtoCode: this.info.info.jshi_sendto_code,
+      }];
+      const { data, code } = await this.orderService.paytoInfo(form);
+      if (code === '1') {
+        data[this.info.info.jshi_order_no].forEach((item) => {
+          item.key = item.customerCode;
+          item.value = `(${item.customerCode})${item.customerName}`;
+          if (item.defaultFlag === '1') {
+            this.currentSampleMachinePayer = item;
+          }
+        });
+        this.payersSampleMachine = data[this.info.info.jshi_order_no];
+        if (JSON.stringify(this.currentSampleMachinePayer.payerBalance) === '{}') {
+          this.currentSampleMachinePayer = this.payersSampleMachine[0];
+        }
+        console.log(this.currentSampleMachinePayer);
+      }
+      // 获取免费样机信息
+      const orderNo = this.info.info.jshi_order_no;
+      const res = await this.orderService.generateOfmyyjjsRecord({
+        orderNo
+      }, { noToast: true });
+      this.sampleMachine = res.data;
+      this.sampleMachineShow = true;
+    },
+    // 更改样机结算付款方
+    changePay() {
+      this.sampleMachinePayerPickerShow = true;
+    },
     // 自主扣款点击确定
     async modalConfirm() {
       console.log(this.state);
@@ -615,6 +787,67 @@ export default {
         const { msg } = await this.trafficService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
+          icon: 'none'
+        });
+      }
+    },
+    // 样机结算点击确定
+    async sampleMachineModalConfirm() {
+      // 判断是否免密，免密则直接支付否则弹出发送验证码弹窗
+      await this.getUserInfMianMi();
+      if (this.userInfMianMi) {
+        console.log('true,提交');
+        this.submitOrder();
+      } else {
+        this.modalShow = true;
+      }
+    },
+    async getUserInfMianMi() {
+      /* 获取免密 */
+      const data = await this.orderService.mianMi();
+      if (data.code === '1') {
+        this.userInfMianMi = data.data;
+      }
+    },
+    // 发送验证码
+    async sendMessage() {
+      const { code, data } = await this.orderService.send(this.formData.saletoCode);
+      if (code === '1') {
+        this.sendMessageStatus = true;
+        this.formSubmit.bestSignVerifyCodeDto.verifyKey = data.data.verifyKey;
+        uni.showToast({
+          title: '短信发送成功',
+        });
+      }
+    },
+    // 提交周转样机订单
+    async submitOrder() {
+      if (!this.formSubmit.bestSignVerifyCodeDto.verifyCode && !this.userInfMianMi) {
+        uni.showToast({
+          title: '请输入验证码',
+          icon: 'none'
+        });
+        return;
+      }
+      // const balance = this.currentSampleMachinePayer.payerBalance.balance || this.currentSampleMachinePayer.payerBalance.bookBalance;
+      // const amount = this.sampleMachine.detailEntity.amount;
+      this.formSubmit.orderNo = this.sampleMachine.detailEntity.orderNo;
+      this.formSubmit.paytoCode = this.currentSampleMachinePayer.customerCode;
+      this.formSubmit.paytoName = this.currentSampleMachinePayer.customerName;
+      this.formSubmit.paytoType = this.currentSampleMachinePayer.payerType;
+      this.formSubmit.productCode = this.sampleMachine.detailEntity.productCode;
+      this.formSubmit.saletoCode = this.sampleMachine.infoEntity.saletoCode;
+      this.formSubmit.sendtoCode = this.sampleMachine.infoEntity.sendtoCode;
+      const { code, data } = await this.orderService.toPayMfyjjsRecord(this.formSubmit);
+      if (code === '1') {
+        console.log(data);
+        const groupings = JSON.stringify([{ groupingNo: data.groupingNo }]);
+        uni.navigateTo({
+          url: `/pages/shoppingCart/orderConfirmAccept?groupings=${groupings}`
+        });
+      } else {
+        uni.showToast({
+          title: data.msg,
           icon: 'none'
         });
       }

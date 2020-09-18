@@ -6,6 +6,7 @@
       scroll-x
       scroll-with-animation
       :scroll-into-view="activeItemName"
+      :scroll-left="offset"
     >
       <view
         :class="['jTab-item',tab.active && 'active']"
@@ -42,6 +43,9 @@ export default {
     tabs: {
       type: Array,
       default: () => []
+    },
+    offset: {
+      type: Number
     },
     // 选中的tab
     activeItemName: {

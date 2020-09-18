@@ -34,6 +34,9 @@ const urls = {
   payByCustomer(OrderNo) { // 反向定制自主扣款
     return `/crowdFunding/payByCustomer/${OrderNo}`;
   },
+  // 获取样机结算信息
+  generateOfmyyjjsRecord: '/order/mfyjjs/generateOfmyyjjsRecord',
+  toPayMfyjjsRecord: '/order/mfyjjs/toPayMfyjjsRecord', // 支付免费样机
 };
 util.addPrefix(baseURL, urls);
 export default urls;

@@ -439,8 +439,6 @@ export default {
         uni.showToast({
           title: '短信发送成功',
         });
-        // // 提交订单
-        // this.submitOrder();
       }
     },
     // 取消订单

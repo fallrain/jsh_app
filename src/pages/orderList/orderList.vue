@@ -4,7 +4,7 @@
       <view style="display:flex">
         <view class="inputsjtab">
           <view class="tab-brand-child">
-            <order-j-tab :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
+            <order-j-tab :offset="offset" :tabs="tabs" :hasRightSlot="true" @tabClick="tabClick">
             </order-j-tab>
           </view>
           <view class="tab-brand-child1">
@@ -21,6 +21,7 @@
         @up="upCallback"
       >
         <order-list-item
+          :linkNum="linkNum"
           :info="item"
           :key="index"
           v-for="(item,index) in orderListInfo"
@@ -411,6 +412,9 @@ export default {
   },
   data() {
     return {
+      offset: 0,
+      currentID2: 0,
+      linkNum:'',
       formDataJson: {},
       orderNoshow: false,
       orderModelshow: false,
@@ -599,8 +603,10 @@ export default {
   },
   onLoad(options) {
     console.log(options);
+    this.offset = Number(options.index)*60
     this.sexID = options.index * 1;
     console.log(this.tabs[this.sexID]);
+    this.getUserInfById();
   },
   created() {
     console.log(this.sexID);
@@ -614,25 +620,33 @@ export default {
     ...mapMutations([
       ORDER.UPDATE_ORDER
     ]),
-    async jMescrollDownCallback() {
-      let id222;
+    // 获取上上签验证联系方式
+    async getUserInfById() {
+      /* 根据客户/海尔编码获取bestSign系统的account(手机/邮箱) */
+      const { code, data } = await this.orderService.sendVerify(this.userInf.customerCode);
+      if (code === '1') {
+        const abc = data.data.account;
+        this.linkNum = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+      }
+    },
+    /*async jMescrollDownCallback() {
       this.tabs.forEach((each) => {
         if (each.active) {
           // this.orderList(each.id2, this.pageNo);
-          id222 = each.id2;
+          this.currentID2 = each.id2;
         }
       });
-      console.log(`=========${id222}`);
-      console.log(this.tabs);
-      /* 下拉刷新 */
+      /!* 下拉刷新 *!/
       const scrollView = await this.orderList(this.tabs[this.sexID].id2, 1);
       if (scrollView) {
         this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
       }
-    },
+    },*/
     async upCallback(pages) {
+      debugger
       /* 上推加载 */
       const scrollView = await this.orderList(this.tabs[this.sexID].id2, pages.num);
+      debugger
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     filterConfirm() {
@@ -799,12 +813,12 @@ export default {
         jshi_sendto_code: songda,
         jshi_order_channel: this.userInf.channelGroup,
         jshi_saleto_code: this.userInf.customerCode,
-        orderStatusSelf: e,
+        orderStatusSelf: this.currentID2,
         pageNo: pgNo,
-        pageSize: 10
+        pageSize: 15
       };
 
-      if (e == 8) {
+      if (this.currentID2 === 8) {
         param.yjPay = 'MFYJ';
         param.orderStatusSelf = 7;
       }
@@ -872,6 +886,7 @@ export default {
       console.log(e);
       this.tabs.forEach((each) => {
         if (each.active) {
+          this.currentID2 = each.id2
           this.orderList(each.id2, this.pageNo);
         }
       });
