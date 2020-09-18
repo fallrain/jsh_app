@@ -629,6 +629,39 @@ export default {
       });
       // console.log(url);
     },
+    //头条公告
+    // async getHeadLines() {
+    //   // const {data} = await this.HaierNoticeService.queryHaierNoticeForCustomerLoginPage()
+    //   const url = 'http://58.56.174.18:9001/home';
+    //   // const token = uni.getStorageSync('token');
+    //   // const userpk = this.infoList.info.bstnk;
+    //   // const userid = this.tokenUserInf.id;
+    //   uni.request({
+    //     url,
+    //     method: 'POST',
+    //     data: {
+    //       // userid: UserService.getUser().uid,
+    //       // token: UserService.getUser().token,
+    //       // userpk: UserService.getUser().pk,
+    //       // pageid: 'CH001'
+    //     },
+    //     success(response) {
+    //       console.log(response);
+    //
+    //     },
+    //     fail(e) {
+    //       let msg = '请求失败';
+    //       if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
+    //         msg = '请求超时';
+    //       }
+    //       uni.showToast({
+    //         titele: msg,
+    //         icon: 'none'
+    //       });
+    //     }
+    //   });
+    // },
+
     // 广告图
     deleteNav() {
       this.isShowNav = false;
