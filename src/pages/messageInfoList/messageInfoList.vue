@@ -125,13 +125,14 @@ export default {
     async upCallback(pages) {
       /* 上推加载 */
       console.log('3333333dddddddddddddddddd');
-      const scrollView = await this.getMessageList();
+      const scrollView = await this.getMessageList(pages);
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
-    getSearch() {
+    getSearch(pages) {
+      console.log(pages);
     //  获取不同条件下的传参
       let param = {
-        pageNum: 1,
+        pageNum: pages.num,
         pageSize: 10,
         unitId: `${this.saleInfo.customerCode}_admin`,
       };
@@ -150,11 +151,12 @@ export default {
       };
       return param;
     },
-    async getMessageList() {
+    async getMessageList(pages) {
       const scrollView = {};
-      const param = this.getSearch();
+      const param = this.getSearch(pages);
       console.log(param);
       const { code, data } = await this.messageService.messageList(param);
+      let curList = [];
       if (code === '1') {
         const {
           list
@@ -162,10 +164,10 @@ export default {
         scrollView.pageSize = data.pageSize;
         scrollView.total = data.total;
         console.log(scrollView);
-        this.messageList = list;
+        curList = list;
         // this.complete =
         console.log(this.messageList);
-        this.messageList.map((item) => {
+        curList.map((item) => {
           // console.log(item);
           let num = 0;
           if (item.complete === 1) {
@@ -176,6 +178,11 @@ export default {
           }
           this.unread = num;
         });
+        if (pages.num === 1) {
+          this.messageList = curList;
+        } else {
+          this.messageList = this.messageList.concat(curList);
+        }
       }
       return scrollView;
     },
