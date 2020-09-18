@@ -270,10 +270,10 @@
           </view>
           <view v-if="info.btnsInfo.selfPayButton==='4'" class="jmodal-item">
             <view class="key-style">整车订单：</view>
-            <view class="val-style">{{info.info.jshi_grouping_no}}</view>
+            <view class="val-style">{{info.info.bstnk}}</view>
           </view>
           <view class="jmodal-item">
-            <view class="key-style">付款方：</view>
+            <view class="key-style min-w130">付款方：</view>
             <view class="val-style">{{info.info.jshi_payto_name}}</view>
           </view>
           <view class="jmodal-item">
@@ -375,12 +375,14 @@ import {
 } from '../../store/mutationsTypes';
 import JPopPicker from '../form/JPopPicker';
 import OrderPopPicker from './OrderPopPicker';
+import JModal from '../form/JModal';
 
 export default {
   name: 'orderListItem',
   components: {
     OrderPopPicker,
     JPopPicker,
+    JModal
   },
   props: {
     info: {

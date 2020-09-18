@@ -414,7 +414,7 @@ export default {
     return {
       offset: 0,
       currentID2: 0,
-      linkNum:'',
+      linkNum: '',
       formDataJson: {},
       orderNoshow: false,
       orderModelshow: false,
@@ -603,9 +603,9 @@ export default {
   },
   onLoad(options) {
     console.log(options);
-    this.offset = Number(options.index)*60
+    this.offset = Number(options.index) * 50;
     this.sexID = options.index * 1;
-    console.log(this.tabs[this.sexID]);
+    this.currentID2 = this.tabs[this.sexID].id2;
     this.getUserInfById();
   },
   created() {
@@ -629,7 +629,7 @@ export default {
         this.linkNum = abc.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
       }
     },
-    /*async jMescrollDownCallback() {
+    /* async jMescrollDownCallback() {
       this.tabs.forEach((each) => {
         if (each.active) {
           // this.orderList(each.id2, this.pageNo);
@@ -641,12 +641,10 @@ export default {
       if (scrollView) {
         this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
       }
-    },*/
+    }, */
     async upCallback(pages) {
-      debugger
       /* 上推加载 */
       const scrollView = await this.orderList(this.tabs[this.sexID].id2, pages.num);
-      debugger
       this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
     },
     filterConfirm() {
@@ -801,14 +799,14 @@ export default {
         far_weekly_all: this.farweeklyall,
         priceTypeJudgment: this.priceTypeJudgment,
         yjPay: this.yjPay,
-        jshi_created_start_time: `${this.orderBegainTime} 00:00:00`,
-        jshi_created_end_time: `${this.orderEndTime} 00:00:00`,
-        jshi_pay_start_time: `${this.deductionBegainTime} 00:00:00`,
-        jshi_pay_end_time: `${this.deductionEndTime} 00:00:00`,
-        sap_sys_invoice_start_time: `${this.invoiceBegainTime} 00:00:00`,
-        sap_sys_invoice_end_time: `${this.invoiceEndTime} 00:00:00`,
-        sap_tax_invoice_start_time: `${this.goldTaxInvoiceBegainTime} 00:00:00`,
-        sap_tax_invoice_end_time: `${this.goldTaxInvoiceEndTime} 00:00:00`,
+        jshi_created_start_time: '',
+        jshi_created_end_time: '',
+        jshi_pay_start_time: '',
+        jshi_pay_end_time: '',
+        sap_sys_invoice_start_time: '',
+        sap_sys_invoice_end_time: '',
+        sap_tax_invoice_start_time: '',
+        sap_tax_invoice_end_time: '',
         product_brand_all: this.producntBandValue,
         jshi_sendto_code: songda,
         jshi_order_channel: this.userInf.channelGroup,
@@ -817,7 +815,30 @@ export default {
         pageNo: pgNo,
         pageSize: 15
       };
-
+      if (this.orderBegainTime) {
+        param.jshi_created_start_time = `${this.orderBegainTime} 00:00:00`;
+      }
+      if (this.orderEndTime) {
+        param.jshi_created_end_time = `${this.orderEndTime} 00:00:00`;
+      }
+      if (this.deductionBegainTime) {
+        param.jshi_pay_start_time = `${this.deductionBegainTime} 00:00:00`;
+      }
+      if (this.deductionEndTime) {
+        param.jshi_pay_end_time = `${this.deductionEndTime} 00:00:00`;
+      }
+      if (this.invoiceBegainTime) {
+        param.sap_sys_invoice_start_time = `${this.invoiceBegainTime} 00:00:00`;
+      }
+      if (this.invoiceEndTime) {
+        param.sap_sys_invoice_end_time = `${this.invoiceEndTime} 00:00:00`;
+      }
+      if (this.goldTaxInvoiceBegainTime) {
+        param.sap_tax_invoice_start_time = `${this.goldTaxInvoiceBegainTime} 00:00:00`;
+      }
+      if (this.goldTaxInvoiceEndTime) {
+        param.sap_tax_invoice_end_time = `${this.goldTaxInvoiceEndTime} 00:00:00`;
+      }
       if (this.currentID2 === 8) {
         param.yjPay = 'MFYJ';
         param.orderStatusSelf = 7;
@@ -886,7 +907,7 @@ export default {
       console.log(e);
       this.tabs.forEach((each) => {
         if (each.active) {
-          this.currentID2 = each.id2
+          this.currentID2 = each.id2;
           this.orderList(each.id2, this.pageNo);
         }
       });

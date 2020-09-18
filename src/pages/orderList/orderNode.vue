@@ -69,7 +69,11 @@
         </view>
         <view class="order-item-content-item">
           <view class="leftTitle">入库状态</view>
-          <view class="rightText">{{infoList.details[0].whDescribe}}</view>
+          <view class="rightText dis-flex">
+            {{infoList.details[0].whDescribe}}
+            <view v-if="infoList.info.sap_center_recieved=='1'">已入库</view>
+            <view v-if="infoList.info.sap_center_recieved=='2'">未入库</view>
+          </view>
         </view>
       </view>
     </view>
@@ -86,7 +90,7 @@
         <view class="order-item-content-item">
           <view class="leftTitle">尾款扣减</view>
           <view class="rightText">
-            {{(Number(infoList.details[0].jshd_amount)-Number(infoList.details[0].jshd_pre_amount).toFixed(2))}}
+            {{(Number(infoList.details[0].jshd_amount)-Number(infoList.details[0].jshd_pre_amount)).toFixed(2)}}
             <text v-if="infoList.info.jshi_order_status==='9'"
               class="ml20"
             >(成功)</text>
