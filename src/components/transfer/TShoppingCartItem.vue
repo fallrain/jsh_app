@@ -99,12 +99,12 @@
         <text class="tShoppingCartItem-cnt-price-subtotal mla">小计： </text>
         <text class="tShoppingCartItem-cnt-price-subprice mlb"> ¥ {{item.SUMMONEY}}</text>
       </view>
-      <uni-number-box
+      <j-number-box
         :value="item.IBL_NUM"
         :max="Number(item.IBL_MAXNUM)"
         :disabled="Number(item.IBL_MAXNUM) === 0"
         @change="changeNum($event, item)"
-        ></uni-number-box>
+        ></j-number-box>
      </view>
     </view>
     <view class="tShoppingCartItem-btm">
@@ -236,7 +236,7 @@ export default {
       console.log(item.isExpand);
       this.$emit('change', this.list, item, this.index);
     },
-    async changeNum(value, item) {
+    async changeNum({ value }, item) {
       if (value !== item.IBL_NUM) {
         const result = await this.transfergoodsService.updateOrderQty({
           timestamp: Date.parse(new Date()),

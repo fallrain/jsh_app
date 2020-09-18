@@ -36,9 +36,9 @@
             <text class="v-c-i-cnt-foot-value"> ¥ {{goods.SUMMONEY}}</text>
           </view>
           <view class="">
-            <uni-number-box :value="goods.IBL_NUM" :max="Number(goods.IBL_MAXNUM)"
+            <j-number-box :max="Number(goods.IBL_MAXNUM)" :value="goods.IBL_NUM"
                             :disabled="Number(goods.IBL_MAXNUM) === 0" @change="changeNum($event, goods)">
-            </uni-number-box>
+            </j-number-box>
           </view>
         </view>
         <view class="v-d-g-detail-mark-item-name">
@@ -71,10 +71,12 @@
 import './css/vehicleDetailGood.scss';
 import './css/vehicleCarItem.scss';
 import '../shoppingCart/css/jOrderConfirmItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'VehicleDetailGood',
   components: {
+    JNumberBox
   },
   props: {
     goodsList: {// 商品列表

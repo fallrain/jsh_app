@@ -124,9 +124,9 @@ export default {
     temp.set('030107', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/deafault.png');
     temp.set('030108', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/44%E7%94%B5%E7%83%A4%E7%AE%B1.png');
     temp.set('030109', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/45%E8%92%B8%E7%AE%B1.png');
-    temp.set('030110', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/45%E8%92%B8%E7%AE%B1.png');
-    temp.set('030111', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/45%E8%92%B8%E7%AE%B1.png');
-    temp.set('030112', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/45%E8%92%B8%E7%AE%B1.png');
+    temp.set('030110', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/deafault.png');
+    temp.set('030111', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/deafault.png');
+    temp.set('030112', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E5%8E%A8%E6%88%BF%E7%94%B5%E5%99%A8/%E9%9B%86%E6%88%90%E7%81%B6.png');
     temp.set('030201', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/46%E7%94%B5%E7%83%AD%E6%B0%B4%E5%99%A8.png');
     temp.set('030202', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/47%E7%87%83%E6%B0%94%E7%83%AD%E6%B0%B4%E5%99%A8.png');
     temp.set('030203', 'http://haier-btbrrs-public.oss-cn-qingdao.aliyuncs.com/category/%E5%8E%A8%E6%88%BF%E5%8D%AB%E6%B5%B4/%E7%83%AD%E6%B0%B4%E5%99%A8/48%E5%A4%AA%E9%98%B3%E8%83%BD%E4%B8%80%E4%BD%93%E6%9C%BA.png');

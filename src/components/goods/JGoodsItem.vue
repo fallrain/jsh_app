@@ -58,11 +58,11 @@
         <view class="jGoodsItem-cnt-price-inf-item">库存：{{goods.$stock && goods.$stock.stockTotalNum || 0}}</view>
       </view>
       <view class="jGoodsItem-cnt-opts">
-        <u-number-box
+        <j-number-box
           :max="maxGoodsNumber"
           :min="1"
           @change="goodsNumChange"
-        ></u-number-box>
+        ></j-number-box>
         <button
           v-if="isShowAddCart || priceInf.isShowAddCart"
           :class="['jGoodsItem-cnt-opts-primary ml26',priceInf.disabled && 'disabled']"
@@ -132,10 +132,12 @@ import threeSpecial from '@/assets/img/goods/threeSpecial.png';
 import threeSpecialScf from '@/assets/img/goods/threeSpecial-scf.png';
 import townSpecial from '@/assets/img/goods/townSpecial.png';
 import townSpecialScf from '@/assets/img/goods/townSpecial-scf.png';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'JGoodsItem',
   components: {
+    JNumberBox,
     JVersionSpecifications,
     MToast
   },
@@ -628,7 +630,7 @@ export default {
         //  促销活动价格类型
         //  PT:普通价格,TJ:特价,GC:工程,YJCY:样机出样(折扣样机),MFJK:免费机壳,MFYJ:免费样机,MFYJJS:免费样机结算,YPJ:样品机,CTYJ:成套样机
         priceType: priceType ? priceType.toUpperCase() : priceType,
-        // dataFrom: "flashSale",
+        dataFrom: !choseVersion && activityType === 5 ? 'flashSale' : undefined,
         // 价格版本号
         // priceVersion: '',
         // 产品编码

@@ -14,13 +14,13 @@
             <view class="sampleMachineConfirm-price">
               ¥ {{confirmInfo.$allPrice.UnitPrice}}
             </view>
-            <uni-number-box
+            <j-number-box
               v-if="confirmInfo.detailList"
               :min="0"
               :max="confirmInfo.detailList[0].YGS_KYKCL"
               v-model="choosedNum"
               @change="change"
-            ></uni-number-box>
+            ></j-number-box>
           </view>
         </view>
       </view>
@@ -116,11 +116,13 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+import JNumberBox from '../../components/common/JNumberBox';
 
 
 export default {
   name: 'sampleMachineConfirm',
   components: {
+    JNumberBox,
     JSwitch,
     JPopPicker,
     JSamplemachineAlert
@@ -274,8 +276,8 @@ export default {
     changePayer(payerInfo) {
       this.currentPayer = this.payerList.find(v => v.payerCode === payerInfo[0]);
     },
-    change(val) {
-      this.choosedNum = val;
+    change({ value }) {
+      this.choosedNum = value;
     },
     switchChange(val) {
       this.isYuncang = val;
