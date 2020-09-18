@@ -1,17 +1,17 @@
 <template>
-	<view 
-	class="mescroll-body mescroll-render-touch" 
-	:style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}" 
-	@touchstart="wxsBiz.touchstartEvent" 
-	@touchmove="wxsBiz.touchmoveEvent" 
-	@touchend="wxsBiz.touchendEvent" 
+	<view
+	:style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}"
+	@touchend="wxsBiz.touchendEvent"
+	@touchmove="wxsBiz.touchmoveEvent"
+	@touchstart="wxsBiz.touchstartEvent"
+	class="mescroll-body mescroll-render-touch"
 	@touchcancel="wxsBiz.touchendEvent"
 	:change:prop="wxsBiz.propObserver"
 	:prop="wxsProp"
 	>
 		<!-- 状态栏 -->
 		<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
-		
+
 		<view class="mescroll-body-content mescroll-wxs-content" :style="{ transform: translateY, transition: transition }" :change:prop="wxsBiz.callObserver" :prop="callProp">
 			<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 			<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType" :rate="downRate"></mescroll-down> -->
@@ -21,7 +21,7 @@
 					<view class="downwarp-tip">{{downText}}</view>
 				</view>
 			</view>
-	
+
 			<!-- 列表内容 -->
 			<slot></slot>
 
@@ -40,17 +40,17 @@
 				<view v-if="upLoadType===2" class="upwarp-nodata">{{ mescroll.optUp.textNoMore }}</view>
 			</view>
 		</view>
-		
+
 		<!-- 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效) -->
 		<!-- #ifdef H5 -->
 		<view v-if="bottombar && windowBottom>0" class="mescroll-bottombar" :style="{height: windowBottom+'px'}"></view>
 		<!-- #endif -->
-		
+
 		<!-- 适配iPhoneX -->
 		<view v-if="safearea" class="mescroll-safearea"></view>
-		
+
 		<!-- 回到顶部按钮 (fixed元素需写在transform外面,防止降级为absolute)-->
-		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
+		<mescroll-top :option="mescroll.optUp.toTop" @tap="toTopClick" v-model="isShowToTop"></mescroll-top>
 	</view>
 </template>
 
@@ -80,7 +80,7 @@
 	import MescrollTop from './components/mescroll-top.vue';
 	// 引入兼容wxs(含renderjs)写法的mixins
 	import WxsMixin from './wxs/mixins.js';
-	
+
 	export default {
 		mixins: [WxsMixin],
 		components: {

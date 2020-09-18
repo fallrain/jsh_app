@@ -2,9 +2,9 @@
   <view >
     <view class="container" v-if="isInvalid">
   <!--    <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">-->
-  <!--      <view @click="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>-->
-  <!--      <view @click="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>-->
-  <!--      <view @click="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>-->
+  <!--      <view @tap="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>-->
+  <!--      <view @tap="checkCut('specs')" style="margin: auto;" :class="{'checkedCut':specsCheck}">{{tabs[1].name}}</view>-->
+  <!--      <view @tap="checkCut('details')" style="margin: auto;" :class="{'checkedCut':detailsCheck}">{{tabs[2].name}}</view>-->
   <!--    </view>-->
       <scroll-view class="scroller" style="height: 100vh;" :scroll-into-view="toView" scroll-y="true" scroll-with-animation="true">
      <view  style="margin-top:40px;" id="goods">
@@ -23,9 +23,9 @@
         <view class="uni-flex uni-row padding-15" style="display: flex; justify-content: space-between; align-items: center">
           <view class="larger" style="color: #ed2856">¥ {{detailInfo.product.invoicePrice ? detailInfo.product.invoicePrice : ''}}</view>
           <view class="smaller" style="">建议零售价：¥{{detailInfo.product.recommendsalePrice.toFixed(2)}}</view>
-          <view @click="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="color: #ED2856"
+          <view @tap="guanZhu" class="col-10 smaller iconfont iconshoucang1" style="color: #ED2856"
                 v-if="!ISGUANZHU"></view>
-          <view @click="guanZhu" class="col-10 smaller iconfont iconicon3" style="color: #ED2856"
+          <view @tap="guanZhu" class="col-10 smaller iconfont iconicon3" style="color: #ED2856"
                 v-else></view>
         </view>
         <view class="uni-flex uni-row padding-8" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
@@ -58,7 +58,7 @@
         <view v-show="ActListInfo.length>0" v-if="CheckActivityInfo.length<1" class="uni-flex uni-row padding-8">
           <view class="col productDetail-text smaller">活&nbsp;&nbsp;&nbsp;动：</view>
           <view class="col-70 productDetail-text">
-            <view :key="ack" @click="showAct" class="smaller product-detail-lei2" v-for="ack in ActListInfo">{{ack}}
+            <view :key="ack" @tap="showAct" class="smaller product-detail-lei2" v-for="ack in ActListInfo">{{ack}}
             </view>
           </view>
           <view class="col-10 productDetail-text smaller">
@@ -67,7 +67,7 @@
         </view>
         <view v-show="ActListInfo.length>0" v-else class="uni-flex uni-row padding-8">
           <view class="col productDetail-text smaller">活&nbsp;动：</view>
-          <view @click="showAct" class="col-70 productDetail-text">
+          <view @tap="showAct" class="col-70 productDetail-text">
             <view class="smaller product-detail-lei3">{{CheckActivityInfo.title}}</view>
           </view>
           <view class="col-10 productDetail-text smaller">
@@ -78,7 +78,7 @@
         <view class="lineHigt"></view>
         <view class="uni-flex uni-row padding-8">
           <view class="col productDetail-text smaller">已&nbsp;&nbsp;&nbsp;选：</view>
-          <view @click="showNum" class="col-70 productDetail-text">
+          <view @tap="showNum" class="col-70 productDetail-text">
             <view class="smaller">{{productNum}}件</view>
           </view>
           <view class="col-10 productDetail-text smaller">
@@ -88,7 +88,7 @@
         <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo" @checkedNum="checkedNum($event, item)"></pro-com-num>
         <view class="uni-flex uni-row padding-8">
           <view class="col productDetail-text smaller">配送至：</view>
-          <view @click="showShip('OPEN')" class="col-70 productDetail-text">
+          <view @tap="showShip('OPEN')" class="col-70 productDetail-text">
             <view class="smaller">{{ShipInfo}}</view>
           </view>
           <view class="col-10 productDetail-text smaller">
@@ -179,7 +179,7 @@ export default {
         isSale: false,
         isActi: false,
         isSaleLe: false,
-        isflash: false, //抢单数量为0时置灰
+        isflash: false, // 抢单数量为0时置灰
         isImg: false // 售罄时置灰
       },
       isShowImg: false,
@@ -324,7 +324,7 @@ export default {
         this.detailInfo = data;
         console.log(this.detailInfo);
         this.footButtong.isSale = this.detailInfo.product.isSale;
-        console.log( this.footButtong.isSale);
+        console.log(this.footButtong.isSale);
         if (this.detailInfo.activities.length > 0) {
           this.detailInfo.activities.forEach((ee) => {
             if (ee === '套餐' || ee === '组合') {
@@ -556,7 +556,7 @@ export default {
               console.log('0222222');
               if (ele.num === 0) {
                 console.log('03333333');
-              // 抢单数量为0
+                // 抢单数量为0
                 this.footButtong.isflash = true;
               }
             });
@@ -610,7 +610,7 @@ export default {
         console.log(this.stock);
         console.log(this.detailInfo);
         if (this.detailInfo) {
-          if (this.detailInfo.isResource === '1' && Number(this.stock[this.productCode].stockTotalNum) === 0 ) {
+          if (this.detailInfo.isResource === '1' && Number(this.stock[this.productCode].stockTotalNum) === 0) {
             console.log(this.detailInfo);
             this.isShowImg = true;
             this.footButtong.isImg = true;

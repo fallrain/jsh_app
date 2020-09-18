@@ -1,11 +1,11 @@
 <template>
   <view class="VHIItem">
-    <view class="VHIItem-left" @click="goNext">
+    <view @tap="goNext" class="VHIItem-left">
       <image :src="goods.searchImage"></image>
     </view>
     <view class="VHIItem-cnt">
-      <view @click="goNext" v-html="goods.name" class="VHIItem-cnt-goodsName j-goods-title"></view>
-      <view @click="goNext" class="VHIItem-cnt-price-tips">
+      <view @tap="goNext" class="VHIItem-cnt-goodsName j-goods-title" v-html="goods.name"></view>
+      <view @tap="goNext" class="VHIItem-cnt-price-tips">
         <view class="VHIItem-cnt-price-tips-item">直扣：{{goods.$PtPrice.rebateRate*100}}%</view>
         <view class="VHIItem-cnt-price-tips-item">返利：
           <span v-if="goods.$PtPrice.rebatePolicy===0">COM</span>

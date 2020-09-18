@@ -763,7 +763,7 @@ export default {
         this.popTabs[1].children[0].checked = true;
       } else {
         this.popTabs[0].disable = true;
-        this.popTabs[0].children.forEach(item => {
+        this.popTabs[0].children.forEach((item) => {
           console.log(item);
           item.checked = false;
           if (item.name === this.getOrder.T5_OUTWHNAME) {
@@ -779,7 +779,7 @@ export default {
           }
         });
         this.popTabs[1].disable = true;
-        this.popTabs[1].children.forEach(item => {
+        this.popTabs[1].children.forEach((item) => {
           console.log(item);
           item.checked = false;
           if (item.name === this.getOrder.IBR_ADDRESSTYPE) {

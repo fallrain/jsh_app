@@ -1,19 +1,19 @@
 <template>
   <view class="bg">
     <view class="topLine"></view>
-    <view @click="personInforClick" class="row">
-      <view @click="personInforClick" class="title">个人资料</view>
+    <view @tap="personInforClick" class="row">
+      <view @tap="personInforClick" class="title">个人资料</view>
     </view>
     <view class="line"></view>
-    <view @click="alertUrl" class="row">
-      <view @click="alertUrl" class="title">修改手机号</view>
+    <view @tap="alertUrl" class="row">
+      <view @tap="alertUrl" class="title">修改手机号</view>
     </view>
     <view class="line"></view>
-    <view @click="alertUrl" class="row">
-      <view @click="alertUrl" class="title">修改登录密码</view>
+    <view @tap="alertUrl" class="row">
+      <view @tap="alertUrl" class="title">修改登录密码</view>
     </view>
     <view class="line"></view>
-    <view @click="alertUrl" class="row">
+    <view @tap="alertUrl" class="row">
       <view @click="alertUrl" class="title">更改支付密码</view>
     </view>
     <view class="middleLine"></view>
@@ -65,7 +65,7 @@ export default {
       // 清理code token
       uni.setStorageSync('token', '');
       uni.setStorageSync('code', '');
-      AlipayJSBridge.call('popWindow');
+      AlipayJSBridge && AlipayJSBridge.call('popWindow');
     },
     //   个人资料
     personInforClick() {

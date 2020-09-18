@@ -2,12 +2,12 @@
   <view v-show="isOrderremarketing" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>单品</view>
-      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>组合</view>
-      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>抢单</view>
-      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>套餐</view>
-      <view class="order_more_text" @click="orderNoClick('5')"><view class="iconfont iconcancel order_more_iconStyle"></view>成套</view>
-      <view class="order_more_text" @click="orderNoClick('6')"><view class="iconfont iconcancel order_more_iconStyle"></view>反向定制</view>
+      <view @tap="orderNoClick('1')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>单品</view>
+      <view @tap="orderNoClick('2')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>组合</view>
+      <view @tap="orderNoClick('3')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>抢单</view>
+      <view @tap="orderNoClick('4')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>套餐</view>
+      <view @tap="orderNoClick('5')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>成套</view>
+      <view @tap="orderNoClick('6')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>反向定制</view>
     </view>
   </view>
 </template>

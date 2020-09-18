@@ -1,6 +1,6 @@
 <template>
   <view class="homepage">
-    <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @clickLeft="goBack"></uni-nav-bar>-->
+    <!--     <uni-nav-bar left-icon="back" title="采购首页" fixed="true" @tapLeft="goBack"></uni-nav-bar>-->
     <view class="homepage-top">
       <view class="index-status-bar">
         <!-- 这里是状态栏 -->
@@ -69,7 +69,7 @@
         class="homepage-cataloglist-item"
         v-for="item in cataloglist"
         :key="item.id"
-        @click="goCatalog(item)"
+        @tap="goCatalog(item)"
       >
         <image :src="item.src" class="cataloglist-item-img" mode="aspectFill"/>
         <view class="cataloglist-item-title">{{item.title}}</view>
@@ -137,7 +137,7 @@
       <!--                class="homepage-info-list"-->
       <!--                v-for="item in infoList"-->
       <!--                :key="item.id"-->
-      <!--                @click="goCatalog(item.url)"-->
+      <!--                @tap="goCatalog(item.url)"-->
       <!--            >-->
       <!--              <view class="homepage-info-list-hot">{{item.hot}}</view>-->
       <!--              <view class="homepage-info-list-title">{{item.info}}</view>-->

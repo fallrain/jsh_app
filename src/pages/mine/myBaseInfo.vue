@@ -144,8 +144,8 @@ export default {
   },
   methods: {
     async getBaseInfo() {
-      console.log('=============='+this.saleInf.customerCode)
-      console.log(this.saleInf)
+      console.log(`==============${this.saleInf.customerCode}`);
+      console.log(this.saleInf);
       const customerCode = this.saleInf.customerCode;
       const { code, data } = await this.mineServer.mineBaseInfo(customerCode);
       if (code === '1') {

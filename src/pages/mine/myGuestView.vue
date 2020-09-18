@@ -297,7 +297,7 @@ status: "正常" -->
           <view class="firstItem">
             <view class="firstPageLeft">是否默认</view>
             <view class="firstPageRight" v-if="item.defaultFlag">是</view>
-            <view @click="setDefaultAction(item.customerCode)" class="firstPageRight" v-else>设置为默认</view>
+            <view @tap="setDefaultAction(item.customerCode)" class="firstPageRight" v-else>设置为默认</view>
           </view>
           <view class="firstPageRightMore">{{item.address}}</view>
         </view>

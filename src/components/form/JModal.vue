@@ -42,11 +42,11 @@ export default {
       this.$emit('update:show', false);
     },
     modalCancle() {
-      debugger
+      debugger;
       this.$emit('update:show', false);
     },
     modalSure() {
-      debugger
+      debugger;
       this.$emit('confirm');
     },
   }

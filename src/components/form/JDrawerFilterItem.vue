@@ -10,7 +10,7 @@
         :class="[
                   !filterItem.isExpand && 'reverse'
                 ]"
-        @click="toggleExpand(filterItem)"
+        @tap="toggleExpand(filterItem)"
       ></i>
     </view>
     <view
@@ -22,7 +22,7 @@
         :key="filterIndex"
         class="jDrawerFilterItem-list-item"
         :class="[item.isChecked && 'active']"
-        @click="choose(item,filterItem.data)"
+        @tap="choose(item,filterItem.data)"
       >{{item.value}}
       </view>
     </view>

@@ -18,7 +18,7 @@
       <view class="marketList-items-wrap">
         <j-activity-item
           v-for="(item,index) in list"
-          :key="'^-^'+index"
+          :key="index"
           :activity="item"
           @activityDetail ="activityDetail"
           @goOrder ="goOrder"
@@ -33,8 +33,8 @@
       @filterConfirm="filterConfirm"
     >
       <view
-        v-for="(item,index) in filterInputs"
-        :key="index+'^-^'"
+        :key="item.key"
+        v-for="(item) in filterInputs"
         class="marketList-drawer-filter">
         <view class="marketList-drawer-filter-head">
           <view>

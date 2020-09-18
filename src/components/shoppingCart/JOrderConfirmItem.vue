@@ -25,7 +25,8 @@
               <view class="jOrderConfirmItem-detail-cnt-price">
                 ¥{{toFixedNum(goods.splitOrderProductList[0].price)}}
                 <view class="jOrderConfirmItem-detail-cnt-text ml10 mr34">
-                  *{{goods.splitOrderProductList[0].storeNum}}</view>
+                  *{{goods.splitOrderProductList[0].storeNum}}
+                </view>
               </view>
               <view v-if="(goods.stockTypeName === '周承诺'&&orderItem.crowdFundingFlag==='1')
                         ||(goods.stockTypeName === '款先直发'&&orderItem.crowdFundingFlag==='1')"
@@ -38,7 +39,7 @@
         </view>
         <view class="jOrderConfirmItem-detail-match-type">
           <j-switch
-            :beforeChange="()=>{return false}"
+            :beforeChange="disabledSwitch"
             v-if="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckCreditModel === '1'"
             inf="信用模式"
@@ -50,13 +51,13 @@
             @change="isCreditModeChange"
           ></j-switch>
           <j-switch
-            :beforeChange="()=>{return false}"
+            :beforeChange="disabledSwitch"
             v-if="goods.splitOrderProductList[0].isCheckKuanXian === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckKuanXian === '1'"
             inf="款先"
           ></j-switch>
           <j-switch
-            :beforeChange="()=>{return false}"
+            :beforeChange="disabledSwitch"
             v-if="goods.splitOrderProductList[0].farWeek === '1'"
             :active.sync="goods.splitOrderProductList[0].isCheckFarWeek === '1'"
             inf="远周次"
@@ -112,7 +113,8 @@
             <view
               @tap="goRemarks(index,goods.splitOrderProductList[0])"
               class="jOrderConfirmItem-detail-mark-item-val">
-              <view v-if="goods.splitOrderProductList[0].address&&JSON.stringify(goods.splitOrderProductList[0].address)!=='{}'">
+              <view
+                v-if="goods.splitOrderProductList[0].address&&JSON.stringify(goods.splitOrderProductList[0].address)!=='{}'">
                 <text>
                   {{goods.splitOrderProductList[0].addressName}}
                 </text>
@@ -207,7 +209,8 @@ export default {
     // 单个订单
     orderItem: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     // 索引
     index: {
@@ -220,7 +223,8 @@ export default {
     // 付款方信息
     payInfoData: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
   },
   data() {
@@ -327,7 +331,7 @@ export default {
       console.log(this.currentPayer);
       this.orderItem.splitOrderDetailList.forEach((item) => {
         if (item.splitOrderProductList[0].isBbOrProject === true
-          && (currentPayer.payerType === '98' || currentPayer.payerType === '99')) {
+            && (currentPayer.payerType === '98' || currentPayer.payerType === '99')) {
           uni.showToast({
             title: '融资户暂不支持异地配送下单！',
             icon: 'none'
@@ -382,7 +386,7 @@ export default {
     isYJ() {
       return function (val) {
         if (val === 'YJCT' || val === 'YJCY' || val === 'MFJK'
-          || val === 'MFYJ' || val === 'YJ') {
+            || val === 'MFYJ' || val === 'YJ') {
           return true;
         }
       };
@@ -391,7 +395,7 @@ export default {
       let money = 0;
       this.orderItem.splitOrderDetailList.forEach((item) => {
         if (item.splitOrderProductList[0].isCheckCreditModel === '1'
-          && this.orderItem.totalPreState) {
+            && this.orderItem.totalPreState) {
           money += item.splitOrderProductList[0].totalMoney;
         } else if (this.orderItem.totalPreState) {
           money += item.splitOrderProductList[0].totalMoney;
@@ -403,6 +407,10 @@ export default {
     }
   },
   methods: {
+    disabledSwitch() {
+      /* 禁止switch函数 */
+      return false;
+    },
     // 不可以选中的付款方
     isNoCanChecked() {
       uni.showToast({
@@ -419,8 +427,7 @@ export default {
       this.currentinvoiceOption[0] = this.invoiceOptions[0].key;
     },
     getPayerMoneyInfo() {
-      const currentPayerMoneyInfo = {
-      };
+      const currentPayerMoneyInfo = {};
       console.log(this.currentPayer);
       console.log(this.orderItem);
       this.orderItem.splitOrderDetailList.forEach((item) => {

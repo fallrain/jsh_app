@@ -11,7 +11,7 @@
         </view>
       </view>
     </view>
-    <view class="specs-info-show" @click="showLer">
+    <view @tap="showLer" class="specs-info-show">
       {{showler ? '收起' : '展开'}}
       <view :class="['iconfont iconxia',showler && 'specs-info-active']" style="padding-left: 4px;padding-top: 4px;"></view>
     </view>

@@ -1,9 +1,9 @@
 <template>
   <view class="order-foot-con">
     <view class="uni-flex uni-row order-foot-line">
-      <view class="col-25 order-foot-inf" @click="getMore">...</view>
+      <view @tap="getMore" class="col-25 order-foot-inf">...</view>
       <view v-for="item in buttonList" :key="item.name">
-        <view v-if="item.name == ''" class="order-foot-infred" @click="ckickBot(item)"></view>
+        <view @tap="ckickBot(item)" class="order-foot-infred" v-if="item.name == ''"></view>
 
         <view v-else class="order-foot-inf2" @click="ckickBot(item)">
           <view :class="{'order-foot-inf4':!item.ischeck,'order-foot-inf5':item.ischeck}">{{item.name}}</view>
@@ -35,7 +35,7 @@ export default {
     this.infoList = this[ORDER.GET_ORDER].orderDetail;
     console.log(this.infoList);
 
-    if(this.infoList.info.jshi_order_gvs_status == '1') {
+    if (this.infoList.info.jshi_order_gvs_status == '1') {
       this.buttonList.push(
         {
           name: '查看物流', ischeck: false
@@ -46,7 +46,7 @@ export default {
     const details = this.infoList.details;
 
     // 判断订单节点是否存在
-    if(details.jshd_tags == 'CROWD_FUNDING'
+    if (details.jshd_tags == 'CROWD_FUNDING'
     && details.jshd_product_type == '3'
     && details.jshi_order_gvs_status == '1'
     && details.jshi_stock_type == 'ZCN'
@@ -54,51 +54,51 @@ export default {
       this.showNode = true;
       this.buttonList.push(
         { name: '订单节点', ischeck: false }
-      )
+      );
     }
 
-    if(this.infoList.btnsInfo.signInButton == 1) {
+    if (this.infoList.btnsInfo.signInButton == 1) {
       this.buttonList.push(
         { name: '签收', ischeck: false }
-      )
+      );
     }
 
-    if(this.buttonList.length == 1) {
-      this.buttonList.unshift( { name: '', ischeck: false })
-      this.buttonList.unshift( { name: '', ischeck: false })
+    if (this.buttonList.length == 1) {
+      this.buttonList.unshift({ name: '', ischeck: false });
+      this.buttonList.unshift({ name: '', ischeck: false });
     }
 
-    if(this.buttonList.length == 2) {
-      this.buttonList.unshift( { name: '', ischeck: false })
+    if (this.buttonList.length == 2) {
+      this.buttonList.unshift({ name: '', ischeck: false });
     }
     // jshd_tags=CROWD_FUNDING&jshd_product_type=3
     // &jshi_order_gvs_status=1&(jshi_stock_type:"ZCN"|jshi_stock_type:"KXZF")
   },
   data() {
     return {
-      infoList:{},
-      showNode:false,
+      infoList: {},
+      showNode: false,
       buttonList: [],
     };
   },
   methods: {
     ckickBot(item) {
-      if(item.name == '查看物流') {
+      if (item.name == '查看物流') {
         uni.navigateTo({
-          url: `/pages/orderList/orderWL`
+          url: '/pages/orderList/orderWL'
         });
-      } else if(item.name == '签收') {
-        this.orderSelfSignedFun()
-      } else if(item.name == '订单节点') {
+      } else if (item.name == '签收') {
+        this.orderSelfSignedFun();
+      } else if (item.name == '订单节点') {
         uni.navigateTo({
-          url: `/pages/orderList/orderNode`
+          url: '/pages/orderList/orderNode'
         });
       }
     },
     async orderSelfSignedFun() {
       const { code, data } = await this.orderService.orderSelfSigned(this.infoList.info.bstnk);
       if (code === '1') {
-        console.log(data)
+        console.log(data);
       }
     }
   }

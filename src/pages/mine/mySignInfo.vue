@@ -29,9 +29,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      [USER.GET_SALE]: USER.GET_SALE,
-      [USER.GET_TOKEN_USER]: USER.GET_TOKEN_USER,
-      userInf: USER.GET_USER,
     })
   },
   created() {
@@ -39,13 +36,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      USER.UPDATE_SALE_ASYNC,
-      USER.UPDATE_TOKEN_USER_ASYNC,
     ]),
     async getSignList(pageNo) {
-
-      console.log(this.userInf)
-
       const { code, data } = await this.mineServer.mineSignList(this.userInf.customerCode, pageNo);
       if (code === '1') {
         const { contractMessageDtoList } = data;

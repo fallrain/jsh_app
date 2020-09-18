@@ -1,19 +1,19 @@
 <template>
   <view class="proCom-foot-con">
     <view class="proCom-foot-line">
-      <view class="col-25 proCom-foot-inf" @click="goCarList">
+      <view @tap="goCarList" class="col-25 proCom-foot-inf">
         <view class="proCom-foot-shoppingCart iconfont icongouwuchezhengpin"></view>
         <view class="proCom-foot-shoppingCart-text">购物车</view>
       </view>
 <!--      info.isSale ||(!info.isSale&&info.isSaleLe)-->
-      <view v-if="(info.isSale && !info.isflash && !info.isImg)||(!info.isSale&& info.isSaleLe)" class="proCom-foot-inf2" @click="putcar">
+      <view @tap="putcar" class="proCom-foot-inf2" v-if="(info.isSale && !info.isflash && !info.isImg)||(!info.isSale&& info.isSaleLe)">
         <view class="proCom-foot-inf3">加入购物车</view>
       </view>
 <!--    !info.isSale&&!info.isSaleLe     -->
       <view v-if="!info.isSale&&!info.isSaleLe || info.isflash || (info.isImg && !info.isSaleLe)" class="proCom-foot-inf2">
         <view class="proCom-foot-inf4">加入购物车</view>
       </view>
-      <view v-show="info.isActi" class="proCom-foot-inf2" @click="putplay">
+      <view @tap="putplay" class="proCom-foot-inf2" v-show="info.isActi">
         <view :class="{'proCom-foot-inf5':0<1,'proCom-foot-inf6':1<1}">参加活动</view>
       </view>
     </view>

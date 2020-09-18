@@ -21,7 +21,7 @@
           <text class="tShoppingCartItem-head-text">装车体积:</text>
           <text class="tShoppingCartItem-head-volume">{{Number(list.data.calue)}}%</text>
       </view>
-      <view class="tShoppingCartItem-btm-btn iconfont iconxia" @click="getMore"></view>
+      <view @tap="getMore" class="tShoppingCartItem-btm-btn iconfont iconxia"></view>
         <view v-show="isOrderMore" class="transfer_more">
           <view class="background">
             <view class="transfer_more_text" @tap="backShoppingCart(list.data.IBR_SEQ)"><view class="iconfont iconcancel transfer_more_iconStyle"></view>选购其他</view>

@@ -8,7 +8,7 @@
             </order-j-tab>
           </view>
           <view class="tab-brand-child1">
-            <i @click="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
+            <i @tap="moreAction" class="iconfont iconshaixuan1 iconscreen"></i>
           </view>
         </view>
       </view>
@@ -39,7 +39,7 @@
         <view >
           <view class="orderList-drawer-filter-head">
             <view class="basejustify">
-              <text @click="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
+              <text @tap="getType">{{orderTypeStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-type
@@ -73,7 +73,7 @@
                 v-model="translateInput"
                 disabled="false"
               >
-              <i @click="industryAction" class="iconfont iconxia dropdownstyle"></i>
+              <i @tap="industryAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
             <order-list-industry
                     :is-order-industry="orderIndustry"
@@ -94,7 +94,7 @@
                 placeholder-style="color:#DBDBDB"
                 disabled="false"
               >
-              <i @click="productBandAction" class="iconfont iconxia dropdownstyle"></i>
+              <i @tap="productBandAction" class="iconfont iconxia dropdownstyle"></i>
             </view>
           </view>
         </view>
@@ -119,7 +119,7 @@
         <view>
           <view class="addressee">
             <view>
-              <text @click="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
+              <text @tap="getModel">{{orderModelStr}}<i class="iconfont iconxia dropdownstyle"></i></text>
             </view>
           </view>
           <order-list-model :is-order-model="orderModelshow"
@@ -148,13 +148,13 @@
              class="timeParent"
             >
               <view class="box1">
-                <text @click="orderBegainTimeAction" >{{orderBegainTime.length>0?orderBegainTime:'开始时间'}}</text>
+                <text @tap="orderBegainTimeAction" >{{orderBegainTime.length>0?orderBegainTime:'开始时间'}}</text>
               </view>
               <view class="box2">
                 <text>至</text>
               </view>
               <view class="box3">
-                <text @click="orderEndTimeAction">{{orderEndTime.length>0?orderEndTime:'结束时间'}}</text>
+                <text @tap="orderEndTimeAction">{{orderEndTime.length>0?orderEndTime:'结束时间'}}</text>
               </view>
             </view>
         </view>
@@ -168,13 +168,13 @@
            class="timeParent"
           >
             <view class="box1">
-              <text @click="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
+              <text @tap="deductionBegainTimeAction">{{deductionBegainTime.length>0?deductionBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text @click="deductionEndTimeAction">{{deductionEndTime.length>0?deductionEndTime:'结束时间'}}</text>
+              <text @tap="deductionEndTimeAction">{{deductionEndTime.length>0?deductionEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -188,13 +188,13 @@
             class="timeParent"
           >
             <view class="box1">
-              <text @click="invoiceTimeAction">{{invoiceBegainTime.length>0?invoiceBegainTime:'开始时间'}}</text>
+              <text @tap="invoiceTimeAction">{{invoiceBegainTime.length>0?invoiceBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text @click="invoiceEndTimeAction">{{invoiceEndTime.length>0?invoiceEndTime:'结束时间'}}</text>
+              <text @tap="invoiceEndTimeAction">{{invoiceEndTime.length>0?invoiceEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -208,13 +208,13 @@
             class="timeParent"
           >
             <view class="box1">
-              <text @click="goldTaxinvoiceTimeAction">{{goldTaxInvoiceBegainTime.length>0?goldTaxInvoiceBegainTime:'开始时间'}}</text>
+              <text @tap="goldTaxinvoiceTimeAction">{{goldTaxInvoiceBegainTime.length>0?goldTaxInvoiceBegainTime:'开始时间'}}</text>
             </view>
             <view class="box2">
               <text>至</text>
             </view>
             <view class="box3">
-              <text @click="goldTaxinvoiceEndTimeAction">{{goldTaxInvoiceEndTime.length>0?goldTaxInvoiceEndTime:'结束时间'}}</text>
+              <text @tap="goldTaxinvoiceEndTimeAction">{{goldTaxInvoiceEndTime.length>0?goldTaxInvoiceEndTime:'结束时间'}}</text>
             </view>
           </view>
         </view>
@@ -233,7 +233,7 @@
                   v-model="orderReviewStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia dropdownstyle"  @click="getReview"></i>
+                  <i @tap="getReview"  class="iconfont iconxia dropdownstyle"></i>
                   </view>
                 <order-list-review :is-orderreview="orderReviewshow" @selectInfoOrderReview="selectInfoOrderReview"></order-list-review>
               </view>
@@ -250,7 +250,7 @@
                   v-model="orderMarkStr"
                   disabled="false"
                   >
-                  <i class="iconfont iconxia dropdownstyle" @click="getMarketing"></i>
+                  <i @tap="getMarketing" class="iconfont iconxia dropdownstyle"></i>
                   </view>
                 <order-list-marketing :is-orderremarketing="orderMarketing" @selectInfoOrderMarketing="selectInfoOrderMarketing"></order-list-marketing>
             </view>
@@ -271,7 +271,7 @@
                       v-model="orderBuyStr"
                       disabled="false"
                     >
-                    <i class="iconfont iconxia dropdownstyle" @click="getBuy"></i>
+                    <i @tap="getBuy" class="iconfont iconxia dropdownstyle"></i>
                 </view>
               <order-list-buy :is-order-buy="orderBuy" @selectInfoOrderBuy="selectInfoOrderBuy"></order-list-buy>
             </view>
@@ -288,7 +288,7 @@
                     v-model="orderDistributionStr"
                     disabled="false"
                     >
-                    <i class="iconfont iconxia dropdownstyle" @click="getDistribution"></i>
+                    <i @tap="getDistribution" class="iconfont iconxia dropdownstyle"></i>
                 </view>
               <order-list-distribution :is-order-distribution="orderDistribution" @selectInfoOrderDistribution="selectInfoOrderDistribution"></order-list-distribution>
             </view>
@@ -343,11 +343,11 @@
       <template>
         <view class="calentdarContent">
           <view style="display:flex">
-            <view @click="calentCancleAction" class="calentCancle">取消</view>
+            <view @tap="calentCancleAction" class="calentCancle">取消</view>
             <view class="calentdarTitle">
                 选择时间
             </view>
-            <view @click="calentVerifyAction" class="calentVerify">确定</view>
+            <view @tap="calentVerifyAction" class="calentVerify">确定</view>
           </view>
           <uni-calendar
           :insert="true"

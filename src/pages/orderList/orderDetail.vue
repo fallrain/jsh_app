@@ -70,7 +70,7 @@ export default {
     if (options.orderDetail) {
       this.infoList = JSON.parse(options.orderDetail);
     }
-    console.log(this.infoList)
+    console.log(this.infoList);
     this.processJudgement = JSON.parse(this.infoList.info.processJudgement);
     this.processJudgement.jshi_created_time = this.infoList.info.jshi_created_time;
     this.processJudgement.sap_judge_date = this.infoList.info.sap_judge_date;
