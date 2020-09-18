@@ -115,13 +115,13 @@
 
             >
               <swiper-item
+                v-for="v in item.data"
                 :key="v.id"
                 class="homepage-recommend-swiper-item"
-                v-for="v in item.data"
               >
                 <view @tap="goDetail(v)" class="homepage-recommend-imgs">
                   <image v-if="v.imageUrl" :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
-                  <image v-if="item.isNewProduct" src="../../assets/img/index/isNewProduct.png" class="homepage-recommend-imaget" mode="aspectFill">
+                  <image class="homepage-recommend-imaget" mode="aspectFill" src="../../assets/img/index/isNewProduct.png" v-if="item.isNewProduct"></image>
                   <image v-if="!v.imageUrl" src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
                 </view>
               </swiper-item>
@@ -440,7 +440,7 @@ export default {
       await this[USER.UPDATE_SALE_ASYNC]();
       this[SHOPPING_CART.UPDATE_CART_NUM_ASYNC](this.saleInfo.customerCode);
       await this[USER.UPDATE_TOKEN_USER_ASYNC]();
-    })().then((res) => {
+    })().then(() => {
       this.getPageInf();
       this.getXinPin();
       this.getBaoKuan();
@@ -681,7 +681,7 @@ export default {
         this.recommendList[0].data = data;
         if (this.recommendList[0].data && this.recommendList[0].data.length > 0) {
           console.log('111111');
-          this.recommendList[0].data.forEach(item => {
+          this.recommendList[0].data.forEach((item) => {
             console.log('22222');
             if (!item.imageUrl) {
               this.isShowRecommend = false;
@@ -708,7 +708,7 @@ export default {
         console.log(this.recommendList);
         if (this.recommendList[1].data && this.recommendList[1].data.length > 0) {
           console.log('111111');
-          this.recommendList[1].data.forEach(item => {
+          this.recommendList[1].data.forEach((item) => {
             if (!item.imageUrl) {
               this.isShowRecommend = false;
             } else {
@@ -731,7 +731,7 @@ export default {
         this.recommendList[2].data = data;
         if (this.recommendList[2].data && this.recommendList[2].data.length > 0) {
           console.log('111111');
-          this.recommendList[2].data.forEach(item => {
+          this.recommendList[2].data.forEach((item) => {
             if (!item.imageUrl) {
               this.isShowRecommend = false;
             } else {
@@ -754,7 +754,7 @@ export default {
         console.log(this.recommendList[3]);
         if (this.recommendList[3].data && this.recommendList[3].data.length > 0) {
           console.log('111111');
-          this.recommendList[3].data.forEach(item => {
+          this.recommendList[3].data.forEach((item) => {
             if (!item.imageUrl) {
               this.isShowRecommend = false;
             } else {

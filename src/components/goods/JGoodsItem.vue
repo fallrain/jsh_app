@@ -622,9 +622,9 @@ export default {
       }
       const res = await this.cartService.addToCart({
         // 商品组合编码
-        activityId,
+        activityId: choseVersion && product.priceType !== 'TJ' ? null : activityId,
         // 组合类型(1单品2组合3抢购4套餐5成套)
-        activityType: choseVersion ? 1 : (activityType || 1),
+        activityType: choseVersion && product.priceType !== 'TJ' ? 1 : (activityType || 1),
         // 购买的数量(组合就是组合的数量)
         number: isTransfer ? product.number : number,
         //  促销活动价格类型
