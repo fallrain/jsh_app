@@ -101,6 +101,7 @@
     :currentPayer="currentPayer"
     :currentAddress="currentAddress"
     :totalMoney="totalMoney"
+    :isYuncang="isYuncang"
   ></j-samplemachine-alert>
 </view>
 </template>
@@ -142,7 +143,7 @@ export default {
         verificationCode: '',
       },
       totalMoney: 0,
-      isSend: true,
+      isSend: false,
       payerPickerShow: false,
       choosedNum: 1,
       confirmInfo: {},
@@ -150,7 +151,8 @@ export default {
       currentPayer: {},
       currentChoosePayer: [],
       payerList: [],
-      isExpand: false
+      isExpand: false,
+      isYuncang: false
     };
   },
   onLoad(option) {
@@ -276,6 +278,14 @@ export default {
       this.choosedNum = val;
     },
     switchChange(val) {
+      this.isYuncang = val;
+      if (this.isYuncang) {
+        uni.showToast({
+          title: '选择入物流托管仓，海尔物流将根据您的需求提供有偿的仓储和配送服务',
+          icon: 'none',
+          duration: 3000
+        });
+      }
       console.log(val);
     },
     async getpayerList() {

@@ -552,11 +552,11 @@ export default {
         {
           name: '样机',
           disabled: false
-        },
-        {
+        }
+        /*{
           name: '周转样机带结算',
           disabled: false
-        }
+        }*/
       ],
       // lableValue: '工程',
       // 产业

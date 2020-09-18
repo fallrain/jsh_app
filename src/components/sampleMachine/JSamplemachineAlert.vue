@@ -56,6 +56,9 @@ export default {
     JVerificationCode,
   },
   props: {
+    isYuncang: {
+      type: Boolean,
+    },
     show: {
       type: Boolean,
     },
@@ -242,7 +245,7 @@ export default {
             unitPrice: this.confirmInfo.$allPrice.UnitPrice,
             userId: this.saleInfo.customerCode,
             werks: this.confirmInfo.detailList[0].YGS_WERKS,
-            yuncang: 'false',
+            yuncang: this.isYuncang,
           }
         ], {
           timestamp: time,
