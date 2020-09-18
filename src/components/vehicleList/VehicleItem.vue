@@ -20,7 +20,7 @@
         <view class="VHIItem-cnt-price-inf-item">供价：¥{{goods.$PtPrice.supplyPrice.toFixed(2)}}</view>
       </view>
       <view class="VHIItem-cnt-opts">
-        <view class="numberVHI"><uni-number-box :value="goods.$num" @change="goodsNumChange"></uni-number-box></view>
+        <view class="numberVHI"><j-number-box :value="goods.$num" @change="goodsNumChange"></j-number-box></view>
         <button v-if="goods.$PtPrice.invoicePrice!==''&&goods.$PtPrice.invoicePrice!==undefined&&goods.$PtPrice.invoicePrice!==null" @tap="addTransfer" class="VHIItem-cnt-opts-primary ml26" type="button">加入整车</button>
         <button v-else class="VHIItem-cnt-opts-primary-hui ml26" type="button">加入整车</button>
       </view>
@@ -30,10 +30,12 @@
 
 <script>
 import './css/vehicleItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'VehicleItem',
   components: {
+    JNumberBox
   },
   props: {
     goods: {// 商品对象

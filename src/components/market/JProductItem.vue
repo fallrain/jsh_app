@@ -73,12 +73,12 @@
           <view v-if="specialPrice" class="jProductItem-cnt-price">
             ¥ {{computedPrice(goods.choseOtherVersions[0].invoicePrice, goods.choosedNum)}}
           </view>
-          <uni-number-box
+          <j-number-box
             :min="0"
             :max="100000"
             v-model="goods.choosedNum"
             @change="change"
-          ></uni-number-box>
+          ></j-number-box>
         </view>
       </view>
       <view class="">
@@ -156,10 +156,12 @@
 import JSwitch from '../form/JSwitch';
 import JVersionSpecifications from './JVersionSpecifications';
 import './css/JProductItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'jProductItem',
   components: {
+    JNumberBox,
     JVersionSpecifications,
     JSwitch
   },
@@ -241,8 +243,8 @@ export default {
       this.specificationsList = specificationsList;
       console.log(this.specificationsList);
     },
-    change(val) {
-      this.goods.choosedNum = val;
+    change({ value }) {
+      this.goods.choosedNum = value;
       this.isCreditModeChange();
     },
     isCreditModeChange() {

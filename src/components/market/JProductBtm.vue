@@ -14,9 +14,9 @@
       </view>
     </view>
     <view v-if="groupType === 'zuhe'" class="jProductBtm-right">
-      <uni-number-box
+      <j-number-box
         @change="goodsNumChange"
-      ></uni-number-box>
+      ></j-number-box>
       <button
         @tap="goOrder(true)"
         type="button"
@@ -37,10 +37,12 @@
 
 <script>
 import './css/JProductBtm.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'jProductBtm',
   components: {
+    JNumberBox
   },
   props: {
     // 全选
@@ -76,8 +78,8 @@ export default {
       this.$emit('update:checked', checked);
       this.$emit('checkAll', checked);
     },
-    goodsNumChange(val) {
-      this.nums = val;
+    goodsNumChange({ value }) {
+      this.nums = value;
     },
     goOrder(state) {
       if (state === true) {

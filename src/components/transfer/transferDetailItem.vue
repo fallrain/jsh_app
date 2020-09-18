@@ -64,14 +64,13 @@
             <text class="transferDetailItem-cnt-price-subtotal mla">小计： </text>
             <text class="transferDetailItem-cnt-price-subprice mlb"> ¥ {{good.SUMMONEY}}</text>
 
-          <uni-number-box
+          <j-number-box
             :value="good.IBL_NUM"
             :max="Number(good.IBL_MAXNUM)"
             :disabled="Number(good.IBL_MAXNUM) === 0"
             @change="changeNum($event, good, index)"
-
           >
-          </uni-number-box>
+          </j-number-box>
         </view>
         <view class="transferDetailItem-detail-mark-item-name">
             <text class="transferDetailItem-detail-mark-item-name-star">直扣:{{(good.BATERATE*100)}}% </text>|
@@ -101,10 +100,12 @@ import {
   USER
 } from '../../store/mutationsTypes';
 import './css/transferDetailItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'transferDetailItem',
   components: {
+    JNumberBox
   },
   props: {
     // 商品列表
@@ -166,7 +167,7 @@ export default {
     //   // console.log(this.saleInfo.customerCode)
     //
     // },
-    async changeNum(value, item, index) {
+    async changeNum({ value }, item, index) {
       console.log(item);
       // 购物车列表数据
       // const { code, data } = await this.transfergoodsService.allOrderList({

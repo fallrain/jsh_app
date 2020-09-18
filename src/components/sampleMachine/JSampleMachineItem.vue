@@ -19,11 +19,11 @@
         <view v-if="goods.detailList" class="jSampleMachine-cnt-price-inf-item">库存：{{goods.detailList[0].YGS_KYKCL}}</view>
       </view>
       <view class="jSampleMachine-cnt-opts">
-        <uni-number-box
+        <j-number-box
           v-if="goods.detailList"
           :max="Number(goods.detailList[0].YGS_KYKCL)"
           @change="goodsNumChange"
-        ></uni-number-box>
+        ></j-number-box>
         <button
           class="jSampleMachine-cnt-opts-primary ml26"
           type="button"
@@ -54,10 +54,12 @@
 <script>
 import MToast from '@/components/plugin/xuan-popup_2.2/components/xuan-popup/xuan-popup.vue';
 import './css/JSampleMachineItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'jSampleMachine',
   components: {
+    JNumberBox,
     MToast
   },
   props: {
@@ -134,9 +136,9 @@ export default {
         timeout: 2000,
       });
     },
-    goodsNumChange(val) {
+    goodsNumChange({ value }) {
       /* 商品数量change */
-      this.goods.number = val;
+      this.goods.number = value;
       // this.$emit('changeNum', this.goods, this.index);
     }
   }

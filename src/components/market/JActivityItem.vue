@@ -29,7 +29,7 @@
           组合失效
         </view>
         <view class="dis-flex">
-          <uni-number-box :max="Number(activity.upperLimit)"></uni-number-box>
+          <j-number-box :max="Number(activity.upperLimit)"></j-number-box>
           <button
             class="btn-default ml26"
             type="button"
@@ -107,11 +107,11 @@
             ￥{{totalPrice(activity.products)}}
           </view>
           <view class="dis-flex">
-            <uni-number-box
+            <j-number-box
               :value="Number(activity.choosedNum)"
               :max="Number(activity.upperLimit)"
               @change="changeNum"
-            ></uni-number-box>
+            ></j-number-box>
             <button
               @tap="goOrder"
               class="btn-primary ml26"
@@ -142,10 +142,12 @@
 
 <script>
 import './css/JActivityItem.scss';
+import JNumberBox from '../common/JNumberBox';
 
 export default {
   name: 'JActivityItem',
   components: {
+    JNumberBox
   },
   props: {
     // 活动对象
@@ -186,7 +188,7 @@ export default {
     goOrder() {
       this.$emit('goOrder', this.activity);
     },
-    changeNum(value) {
+    changeNum({ value }) {
       console.log(value);
       this.activity.choosedNum = value;
     }
