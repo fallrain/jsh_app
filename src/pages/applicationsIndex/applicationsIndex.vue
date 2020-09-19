@@ -409,7 +409,6 @@ export default {
         //     }
         //   ]
         // }
-
       ],
       functionList: [
         {
@@ -492,7 +491,7 @@ export default {
     async init(code) {
       if (!code) {
         // 适配iOS客户端
-        code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.webview_options;
+        code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.code;
       }
       // 获取token
       await this.getToken(code);
@@ -523,8 +522,6 @@ export default {
     // 获取token
     async getToken(passCode) {
       const tmpCode = uni.getStorageSync('code');
-      // alert('tmp1'+tmpCode + 'passcode' + passCode)
-      // code
       if (tmpCode && (tmpCode === passCode)) {
         return;
       }
