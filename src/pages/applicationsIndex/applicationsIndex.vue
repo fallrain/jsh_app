@@ -36,7 +36,7 @@
           field="content"
         >
           <swiper @change="changePic" autoplay="true" circular="true" class="swiper-box" interval="5000">
-            <swiper-item :key="index" v-for="(item,index) in imageList">
+            <swiper-item class="swiperitem" :key="index" v-for="(item,index) in imageList">
               <view class="swiper-item">
                 <image :src="item.imageUrl" @tap='goSwiperDetail(item)' class="image" mode="aspectFill"/>
               </view>

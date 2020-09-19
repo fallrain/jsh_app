@@ -45,38 +45,39 @@
   background: #fff;
   .app-header-swiper{
     height: 275px;
-    width: 100%;
+    width: 96%;
+    margin-left: 20px;
+    margin-right: 20px;
     //margin-bottom: 44px;
     .uni-swiper-wrapper {
       border-radius: 20px;
-      margin-left: 20px;
-    }
 
-    .homepage-swiper {
-      //   width:670px;
-      //   height:280px;
-      //   position: absolute;
-      top: 170px;
-      left: 24px;
-      border-radius: 20px;
     }
-
-    .swiper-box {
-      width: 702px;
+    .swiperitem {
+      //width: 702px;
       height: 223px;
+      width: 100%;
+      border-radius: 50px;
+    }
+    .swiper-box {
+      //width: 702px;
+      height: 223px;
+      width: 100%;
       border-radius: 20px;
     }
 
     .swiper-item {
-      width: 702px;
+      //width: 702px;
       height: 223px;
+      width: 100%;
       /* #ifndef APP-NVUE */
       display: flex;
       /* #endif */
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border-radius: 10px;
+      padding: 10px;
+      border-radius: 40px;
     }
 
     .image {
