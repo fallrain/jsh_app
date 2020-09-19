@@ -202,6 +202,7 @@ export default {
   },
   data() {
     return {
+      code: '',
       imageList: [
         {
           id: 8798452380983,
@@ -459,8 +460,7 @@ export default {
     }
   },
   onLoad(param) {
-    this.code = param.webview_options
-
+    this.code = param.webview_options;
     this.init();
   },
   computed: {
