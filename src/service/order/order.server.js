@@ -105,7 +105,7 @@ export default {
     return jGet(urlNoApi.payByCustomer, bstnk);
   },
   payCreditOrderByOrderNo(bstnk) { // 信用订单自主扣款
-    return jGet(urlNoApi.payCreditOrderByOrderNo, bstnk);
+    return jGet(urlNoApi.payCreditOrderByOrderNo(bstnk));
   },
   generateOfmyyjjsRecord(data, cfg) { // 获取样机结算信息
     return jPostJson(urlNoApi.generateOfmyyjjsRecord, data, cfg);

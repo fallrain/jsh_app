@@ -2,13 +2,14 @@
   <view class="order-foot-con">
     <view class="uni-flex uni-row order-foot-line">
       <!--<view @tap="getMore" class="col-25 order-foot-inf">...</view>-->
-      <view v-for="item in buttonList" :key="item.name">
+      <!--yanwen say:hide buttons-->
+      <!--<view v-for="item in buttonList" :key="item.name">
         <view @tap="ckickBot(item)" class="order-foot-infred" v-if="item.name == ''"></view>
 
         <view v-else class="order-foot-inf2" @click="ckickBot(item)">
           <view :class="{'order-foot-inf4':!item.ischeck,'order-foot-inf5':item.ischeck}">{{item.name}}</view>
         </view>
-      </view>
+      </view>-->
     </view>
   </view>
 </template>
