@@ -85,7 +85,8 @@
             <view class="text-center iconfont iconyou"></view>
           </view>
         </view>
-        <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo" @checkedNum="checkedNum($event, item)"></pro-com-num>
+        <pro-com-num :show.sync="isShowNum" :stock="stock" :infos="detailInfo"
+                     @checkedNum="checkedNum($event, item)"></pro-com-num>
         <view class="uni-flex uni-row padding-8">
           <view class="col productDetail-text smaller">配送至：</view>
           <view @tap="showShip('OPEN')" class="col-70 productDetail-text">
@@ -611,7 +612,7 @@ export default {
         this.stock = data;
         console.log(this.stock);
         console.log(this.detailInfo);
-        if (this.detailInfo) {
+        if (this.detailInfo && this.stock) {
           if (this.detailInfo.isResource === '1' && Number(this.stock[this.productCode].stockTotalNum) === 0) {
             console.log(this.detailInfo);
             this.isShowImg = true;
@@ -619,6 +620,9 @@ export default {
             console.log('222222');
           }
         }
+      } else {
+        this.stock = 0;
+        console.log(this.stock);
       }
     },
     guanZhu() {

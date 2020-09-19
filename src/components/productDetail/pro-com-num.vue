@@ -50,8 +50,8 @@
             <view class="pro-num-pop-name">数&nbsp;&nbsp;&nbsp;量：</view>
             <view class="number">
               <j-number-box
-                :disabled="Number(stock[infos.product.productCode].stockTotalNum) === 0"
-                :max="Number(stock[infos.product.productCode].stockTotalNum)"
+                :disabled="Number(num) === 0"
+                :max="Number(num)"
                 :value="numberValue"
                 @change="changeNum"
               ></j-number-box>
@@ -104,7 +104,7 @@ export default {
       default: () => {}
     },
     stock: {// 商品库存信息
-      type: Object,
+      type: [Object, Number],
       default: () => {}
     }
   },
@@ -112,14 +112,19 @@ export default {
     return {
       numberValue: 1,
       abled: 0,
+      num: 0
     };
   },
   created() {
     console.log(this.infos.product.productCode);
     console.log(this.stock[this.infos.product.productCode]);
+    if (this.stock) {
+      this.num = this.stock[this.infos.product.productCode].stockTotalNum;
+    }
   },
   watch: {
     show(val) {
+      console.log(val);
       if (val) {
         this.$refs.pop.open();
       } else {
