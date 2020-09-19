@@ -476,6 +476,9 @@ export default {
       }
     }, 5000);
   },
+  onShow() {
+    uni.showTabBar();
+  },
   computed: {
     ...mapGetters({
       defaultSendToInf: USER.GET_DEFAULT_SEND_TO,

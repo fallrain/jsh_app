@@ -460,7 +460,11 @@ export default {
     }
   },
   onLoad() {
+    uni.hideTabBar();
     this.init();
+  },
+  onShow() {
+    uni.hideTabBar();
   },
   computed: {
     ...mapGetters({

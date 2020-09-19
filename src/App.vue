@@ -13,10 +13,7 @@ export default {
         jwtToken
       } = query;
       if (code) {
-        uni.setStorage({
-          key: 'code',
-          data: code
-        });
+        uni.setStorageSync('code', code);
       }
       if (jwtToken) {
         uni.setStorage({

@@ -238,6 +238,9 @@ export default {
   created() {
     this.catalog();
   },
+  onShow() {
+    uni.showTabBar();
+  },
   methods: {
     async catalog() {
       const { code, data } = await this.catalogServer.catalog();

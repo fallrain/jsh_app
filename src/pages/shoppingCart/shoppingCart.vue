@@ -290,6 +290,7 @@ export default {
     // });
   },
   onShow() {
+    uni.showTabBar();
     // 如果已经更新过购物车，则需要刷新下
     if (this.isCartUpdate) {
       // 避免请求两次

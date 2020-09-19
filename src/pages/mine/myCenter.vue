@@ -250,6 +250,9 @@ export default {
   mounted() {
     this.headerImage = this.userInf.headImgUrl ? this.userInf.headImgUrl : require('./image/head.png');
   },
+  onShow() {
+    uni.showTabBar();
+  },
   computed: {
     ...mapGetters({
       [USER.GET_SALE]: USER.GET_SALE,
