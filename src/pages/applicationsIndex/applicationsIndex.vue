@@ -390,7 +390,7 @@ export default {
         //       Subhead: '财务自助'
         //     },
         //     {
-        //       id: 3,
+        //       id: 3,i
         //       src: require('@/assets/img/appIndex/work.png'),
         //       url: '#',
         //       Subhead: '业务办理'
@@ -452,8 +452,14 @@ export default {
       AlipayJSBridge.call('myApiGetCode', {
         param1: 'JsParam1',
       }, (result) => {
-        if (result.code && result.code.length > 1) {
-          this.init(result.code);
+        if (result.code && result.code.length) {
+          uni.setStorage({
+            key: 'code',
+            data: result.code,
+            success: () => {
+              this.init();
+            }
+          });
         }
       });
     }
@@ -484,24 +490,14 @@ export default {
       });
     },
     async init(code) {
-      // code = 'HSWGj3SWS0OtfqUAAskzjw';
+      if (!code) {
+        // 适配iOS客户端
+        code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.webview_options;
+      }
       // 获取token
       await this.getToken(code);
       // 获取首页轮播图
       await this.getbannerList();
-      // 获取token
-      /* if (code.length > 0) {
-          // 获取token
-          await this.getToken(code);
-          // 获取首页轮播图
-          await this.getbannerList();
-        } else {
-          uni.showToast({
-            title: '获取code失败',
-            icon: 'none',
-            duration: 3000
-          });
-        } */
     },
     // 返回原生 处理账号锁定
     popAction() {
@@ -513,7 +509,7 @@ export default {
       //   orderId: '123456',
       //   payment: '8888',
       // }, (result) => {
-      // 	alert(JSON.stringify(result));
+      // alert(JSON.stringify(result));
       // });
     },
     // 打开农行支付
@@ -521,7 +517,7 @@ export default {
       // AlipayJSBridge.call('myApiCallABC', {
       //   tokenId: '14406457162720037182',
       // }, (result) => {
-      // 	alert(JSON.stringify(result));
+      // alert(JSON.stringify(result));
       // });
     },
     // 获取token
@@ -529,7 +525,7 @@ export default {
       const tmpCode = uni.getStorageSync('code');
       // alert('tmp1'+tmpCode + 'passcode' + passCode)
       // code
-      if (tmpCode && (tmpCode == passCode)) {
+      if (tmpCode && (tmpCode === passCode)) {
         return;
       }
       const { code, data } = await this.authService.getTokenByCode({

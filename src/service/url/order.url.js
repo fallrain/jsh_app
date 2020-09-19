@@ -11,6 +11,7 @@ const urls = {
   // 自主签收：
   orderSelfSigned: '/myorder/orderSelfSigned',
   cancelOrderBybstnk(bstnk) {
+    /* 取消订单 */
     return `/myorder/cancelOrder?bstnk=${bstnk}`;
   },
   tctpConfirm(dn, bstnk) {
