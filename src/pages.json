@@ -39,7 +39,13 @@
     {
       "path": "pages/index/liveBroadcast",
       "style": {
-        "navigationBarTitleText": "直播"
+        "navigationBarTitleText": "直播大厅"
+      }
+    },
+    {
+      "path": "pages/index/broadcasDetail",
+      "style": {
+        "navigationBarTitleText": "直播详情"
       }
     },
     {

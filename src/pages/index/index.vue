@@ -179,14 +179,14 @@
       <image :src="item.image" mode="aspectFill" />
       <image :src="item.img" mode="aspectFill" />
     </view> -->
-    <!-- 广告图 直播-->
-    <!--     <view class="homepage-nav" v-show="isShowNav">-->
-    <!--      <image mode="aspectFill" src="../../assets/img/index/manypeople.png" @tap="goNav"/>-->
-    <!--      <i-->
-    <!--        @tap="deleteNav"-->
-    <!--        class="homepage-nav-close iconfont iconcross"-->
-    <!--      ></i>-->
-    <!--    </view>-->
+<!--     广告图 直播-->
+         <view class="homepage-nav" v-show="isShowNav">
+          <image mode="aspectFill" src="../../assets/img/index/manypeople.png" @tap="goNav"/>
+          <i
+            @tap="deleteNav"
+            class="homepage-nav-close iconfont iconcross"
+          ></i>
+        </view>
   </view>
 </template>
 
