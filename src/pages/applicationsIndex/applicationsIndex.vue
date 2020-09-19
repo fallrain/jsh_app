@@ -458,9 +458,7 @@ export default {
       });
     }
   },
-  onLoad(param) {
-    this.code = param.webview_options
-
+  onLoad() {
     this.init();
   },
   computed: {
@@ -486,10 +484,6 @@ export default {
       });
     },
     async init(code) {
-      // if (!code && window.ALIPAYH5STARTUPPARAMS) {
-      //   // 适配iOS客户端
-      //   code = ALIPAYH5STARTUPPARAMS.webview_options;
-      // }
       // code = 'HSWGj3SWS0OtfqUAAskzjw';
       // 获取token
       await this.getToken(code);

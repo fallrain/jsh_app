@@ -414,12 +414,12 @@ export default {
       const cartNum = this.cartNum;
       if (cartNum) {
         uni.setTabBarBadge({
-          index: 2,
+          index: 3,
           text: `${cartNum}`
         });
       } else {
         uni.removeTabBarBadge({
-          index: 2
+          index: 3
         });
       }
     },

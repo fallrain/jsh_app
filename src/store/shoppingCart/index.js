@@ -25,12 +25,12 @@ export default {
       state.cartNum = data;
       if (state.cartNum) {
         uni.setTabBarBadge({
-          index: 2,
+          index: 3,
           text: `${state.cartNum}`
         });
       } else {
         uni.removeTabBarBadge({
-          index: 2
+          index: 3
         });
       }
     }
