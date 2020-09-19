@@ -279,7 +279,7 @@ export default {
         console.log(data);
         // data.price.invoicePrice = data.price.invoicePrice.toFixed(2);
         // data.valid ?
-        if (!data) {
+        if (!data.valid) {
           this.isInvalid = false;
         } else {
           this.isInvalid = true;

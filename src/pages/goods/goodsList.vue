@@ -512,7 +512,10 @@ export default {
               v.$allPrice = allPriceData[v.productCode];
             });
             if (pages.num === 1) {
-              this.list = curList;
+              this.list = [];
+              this.$nextTick(() => {
+                this.list = curList;
+              });
             } else {
               this.list = this.list.concat(curList);
             }

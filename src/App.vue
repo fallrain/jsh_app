@@ -1,18 +1,21 @@
 <script>
 export default {
   onLaunch(options) {
+    uni.showModal({
+      content: JSON.stringify(options)
+    });
     const {
       query
     } = options;
     if (query) {
       const {
-        token,
+        code,
         jwtToken
       } = query;
-      if (token) {
+      if (code) {
         uni.setStorage({
-          key: 'token',
-          data: token
+          key: 'code',
+          data: code
         });
       }
       if (jwtToken) {
