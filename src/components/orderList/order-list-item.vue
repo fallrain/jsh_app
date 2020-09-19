@@ -33,7 +33,11 @@
       <view class="produceDetailItem-fot">
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span>
+            <view v-if="info.details[0].jshd_price_type ==='MFYJ'" class="produceDetailItem-fot-info">
+              结算价:<span class="produceDetailItem-cnt-tiem">¥{{Number(info.btnsInfo.priceObj.invoicePrice).toFixed(2)}}</span>
+            </view>
+            <view v-else class="produceDetailItem-fot-info">
+              合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span>
             </view>
             <view class="produceDetailItem-cnt-price" v-if="info.details[0].jshd_pre_rate!==''">
               预定金金额:¥{{parseFloat(info.details[0].jshd_pre_amount).toFixed(2)}}

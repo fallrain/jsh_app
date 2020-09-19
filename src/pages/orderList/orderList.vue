@@ -413,6 +413,7 @@ export default {
   data() {
     return {
       offset: 0,
+      currentID: 0,
       currentID2: 0,
       linkNum: '',
       formDataJson: {},
@@ -553,10 +554,10 @@ export default {
           name: '样机',
           disabled: false
         }
-        /*{
+        /* {
           name: '周转样机带结算',
           disabled: false
-        }*/
+        } */
       ],
       // lableValue: '工程',
       // 产业
@@ -605,6 +606,7 @@ export default {
     console.log(options);
     this.offset = Number(options.index) * 50;
     this.sexID = options.index * 1;
+    this.currentID = this.tabs[this.sexID].id;
     this.currentID2 = this.tabs[this.sexID].id2;
     this.getUserInfById();
   },
@@ -839,9 +841,10 @@ export default {
       if (this.goldTaxInvoiceEndTime) {
         param.sap_tax_invoice_end_time = `${this.goldTaxInvoiceEndTime} 00:00:00`;
       }
-      if (this.currentID2 === 8) {
-        param.yjPay = 'MFYJ';
+      if (this.currentID === 8) {
+        // param.yjPay = 'MFYJ';
         param.orderStatusSelf = 7;
+        param.jshi_gvs_order_type = 'ZGBR';
       }
 
       const { code, data } = await this.orderService.orderList(param);
@@ -903,10 +906,13 @@ export default {
       });
     },
     tabClick(e) {
+      // 清空筛选值
+      this.filterReset();
       this.tabs = e;
       console.log(e);
       this.tabs.forEach((each) => {
         if (each.active) {
+          this.currentID = each.id;
           this.currentID2 = each.id2;
           this.orderList(each.id2, this.pageNo);
         }
