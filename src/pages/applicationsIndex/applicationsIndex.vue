@@ -409,7 +409,6 @@ export default {
         //     }
         //   ]
         // }
-
       ],
       functionList: [
         {
@@ -447,21 +446,17 @@ export default {
     AlipayJSBridge && AlipayJSBridge.call('setGestureBack', { val: false });
   },
   mounted() {
-    // 适配安卓客户端
-    if (AlipayJSBridge) {
-      AlipayJSBridge.call('myApiGetCode', {
-        param1: 'JsParam1',
-      }, (result) => {
-        if (result.code && result.code.length) {
-          uni.setStorage({
-            key: 'code',
-            data: result.code,
-            success: () => {
-              this.init();
-            }
-          });
-        }
-      });
+    if (process.env.VUE_APP_PLATFORM === 'h5') {
+      // 适配安卓h5客户端
+      if (AlipayJSBridge) {
+        AlipayJSBridge.call('myApiGetCode', {
+          param1: 'JsParam1',
+        }, (result) => {
+          if (result.code && result.code.length) {
+            this.init(result.code);
+          }
+        });
+      }
     }
   },
   onLoad() {
@@ -490,10 +485,13 @@ export default {
       });
     },
     async init(code) {
-      if (!code) {
-        // 适配iOS客户端
-        code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.webview_options;
+      if (process.env.VUE_APP_PLATFORM === 'h5') {
+        if (!code) {
+          // 适配iOS客户端
+          code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.code;
+        }
       }
+
       // 获取token
       await this.getToken(code);
       // 获取首页轮播图
@@ -522,14 +520,19 @@ export default {
     },
     // 获取token
     async getToken(passCode) {
+      let loginCode;
       const tmpCode = uni.getStorageSync('code');
-      // alert('tmp1'+tmpCode + 'passcode' + passCode)
-      // code
-      if (tmpCode && (tmpCode === passCode)) {
-        return;
+      if (process.env.VUE_APP_PLATFORM === 'h5') {
+        if (tmpCode && (tmpCode === passCode)) {
+          return;
+        }
+        loginCode = passCode;
+      } else {
+        loginCode = tmpCode;
       }
+
       const { code, data } = await this.authService.getTokenByCode({
-        code: passCode
+        code: loginCode
       });
       if (code === '1') {
         const token = data.token;

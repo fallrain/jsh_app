@@ -1201,7 +1201,7 @@ export default {
                 if (shoppingCartItem.isFundsFirst) {
                   orderSplitComposeProductData.isCheckKuanXian = product.isFundsFirstMode ? '1' : '0';
                 } else {
-                  orderSplitComposeProductData.kuanXian = '1';
+                  orderSplitComposeProductData.kuanXian = '0';
                   orderSplitComposeProductData.isCheckKuanXian = '1';
                 }
 
