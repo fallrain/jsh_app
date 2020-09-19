@@ -40,7 +40,7 @@ const urls = {
   // 获取样机结算信息
   generateOfmyyjjsRecord: '/order/mfyjjs/generateOfmyyjjsRecord',
   toPayMfyjjsRecord: '/order/mfyjjs/toPayMfyjjsRecord', // 支付免费样机
-  orderTPL: '/order/orderTPL', // 订单详情-物流接口BSP接口地址
+
 
 };
 util.addPrefix(baseURL, urls);

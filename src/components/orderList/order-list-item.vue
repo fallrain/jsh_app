@@ -62,6 +62,13 @@
                   class="produceDetailItem-fot-btn">
             签收
           </button>
+          <button
+            v-if="info.receivedOrderButton.receivedOrderButton === '1'"
+            @tap="receivedOrder"
+            class="produceDetailItem-fot-btn"
+            type="button"
+          >物流拒单
+          </button>
         </view>
       </view>
       <view class="uni-flex uni-row produceDetailItem-btm-row">
@@ -142,12 +149,20 @@
               class="produceDetailItem-fot-color">{{parseFloat(product.jshd_pre_amount).toFixed(2)}}</span></view>
           </view>
         </view>
-        <view class=" col-25 padding-4" v-if="invalidButton">
+        <view class=" col-25 padding-4" v-if="info.btnsInfo.signInButton === '1'">
           <button
-            @click="orderCancel"
+            @tap="orderSelfSignedFun"
             class="produceDetailItem-fot-btn"
             type="button"
-          >订单作废
+          >签收
+          </button>
+        </view>
+        <view class=" col-25 padding-4" v-if="info.receivedOrderButton === '1'">
+          <button
+            @tap="orderSelfSignedFun"
+            class="produceDetailItem-fot-btn"
+            type="button"
+          >物流拒单
           </button>
         </view>
       </view>
@@ -876,6 +891,34 @@ export default {
       if (code === '1') {
         uni.showToast({
           title: '订单签收成功',
+          icon: 'none'
+        });
+      }
+    },
+    // 点击拒收按钮
+    async receivedOrder() {
+      const that = this;
+      uni.showModal({
+        title: '提示',
+        content: '是否同意物流拒单',
+        success(res) {
+          if (res.confirm) {
+            that.dealLogisticsRejection('Y');
+          } else if (res.cancel) {
+            // that.dealLogisticsRejection('N');
+            uni.showToast({
+              title: '取消拒单',
+              icon: 'none'
+            });
+          }
+        }
+      });
+    },
+    async dealLogisticsRejection(falg) {
+      const { code } = this.orderService.logisticsRejection(this.info.info.dnLogistics, falg);
+      if (code === '200') {
+        uni.showToast({
+          title: '物流拒单成功',
           icon: 'none'
         });
       }
