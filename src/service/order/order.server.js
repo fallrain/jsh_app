@@ -113,7 +113,11 @@ export default {
   toPayMfyjjsRecord(data, cfg) { // 支付免费样机
     return jPostJson(urlNoApi.toPayMfyjjsRecord, data, cfg);
   },
-  orderTPL(data) { // 订单详情-物流接口BSP接口地址
-    return jPostJson(urlNoApi.orderTPL, data);
+  buttonReceivedOrder(data) { // 物流拒单按钮是否展示判断
+    return jPostJson(url.buttonReceivedOrder, data);
+  },
+  // 物流拒单
+  logisticsRejection(dn, flag) { // 信用订单自主扣款
+    return jGet(url.logisticsRejection(dn, flag));
   },
 };

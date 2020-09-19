@@ -859,6 +859,7 @@ export default {
             signInButton: '0',
             tctpConfirmButton: '0',
           };
+          element.receivedOrderButton = '';
           data.dataList[index] = element;
         }
 
@@ -867,6 +868,7 @@ export default {
         } else {
           this.orderListInfo = this.orderListInfo.concat(data.dataList);
         }
+        console.log(this.orderListInfo)
         if (this.orderListInfo.length === 0) {
           uni.showToast({
             title: '暂无数据！',
@@ -877,6 +879,10 @@ export default {
         for (let index = 0; index < this.orderListInfo.length; index++) {
           const element = this.orderListInfo[index];
           this.buttonLogicJudgmentAction(element.info, index);
+          if (this.currentID === 7) {
+            // 物流拒单按钮是否出现判断 请求
+            this.buttonReceivedOrder({ dn: element.info.dnLogistics }, index);
+          }
         }
         // 当前页码的数据
         const scrollView = {};
@@ -894,7 +900,15 @@ export default {
         element.btnsInfo = data;
         this.$set(this.orderListInfo, index, element);
       }
-      console.log(data);
+    },
+    // 获取物流拒单按钮显示的数据
+    async buttonReceivedOrder(form, index) {
+      const { code, data } = await this.orderService.buttonReceivedOrder(form);
+      if (code === '200') {
+        const element = this.orderListInfo[index];
+        element.receivedOrderButton = data;
+        this.$set(this.orderListInfo, index, element);
+      }
     },
     goDetail(info) {
       const orderDetail = JSON.stringify(info);

@@ -152,7 +152,6 @@ export default {
     };
   },
   created() {
-    console.log(this.options);
   },
   computed: {
     isEmpty() {

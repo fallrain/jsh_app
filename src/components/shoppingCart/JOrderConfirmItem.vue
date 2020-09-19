@@ -85,6 +85,10 @@
         <view v-if="isYJ(goods.splitOrderProductList[0].priceType)" class="text-theme">
           样机版本号：{{goods.splitOrderProductList[0].priceVersion}}
         </view>
+        <view class="bzAddress" v-if="goods.splitOrderProductList[0].priceType === 'MFJK'
+                &&goods.splitOrderProductList[0].priceInfo.deliveryAddr">
+          {{goods.splitOrderProductList[0].priceInfo.deliveryAddr}}
+        </view>
         <view class="dis-flex">
           <view v-if="orderItem.yunCangType==='yc'" class="yc-flag">云仓</view>
           <view v-if="orderItem.yunCangType==='ydyc'" class="yc-flag">异地云仓</view>
