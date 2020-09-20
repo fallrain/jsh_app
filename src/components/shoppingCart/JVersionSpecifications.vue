@@ -1,8 +1,8 @@
 <template>
-  <uni-popup
-    ref="pop"
-    type="bottom"
-    @change="change"
+  <u-popup
+    :safe-area-inset-bottom="true"
+    mode="bottom"
+    v-model="selfIsShow"
   >
     <view class="jVersionSpecifications-pop">
       <view class="jVersionSpecifications-head j-flex-aic">
@@ -99,7 +99,7 @@
         </button>
       </view>
     </view>
-  </uni-popup>
+  </u-popup>
 </template>
 
 <script>
@@ -146,22 +146,23 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      // 内部三方组件显示隐藏
+      selfIsShow: this.show
+    };
   },
   watch: {
     show(val) {
-      if (val) {
-        this.$refs.pop.open();
-      } else {
-        this.$refs.pop.close();
+      this.selfIsShow = val;
+      if (!val) {
         this.$emit('close');
       }
+    },
+    selfIsShow(val) {
+      this.$emit('update:show', val);
     }
   },
   methods: {
-    change({ show }) {
-      this.$emit('update:show', show);
-    },
     close() {
       /* 关闭弹层 */
       this.$emit('update:show', false);
