@@ -56,6 +56,7 @@ module.exports = {
     wx: 'readonly',
     uni: 'readonly',
     AlipayJSBridge: 'readonly',
-    ALIPAYH5STARTUPPARAMS: 'readonly'
+    ALIPAYH5STARTUPPARAMS: 'readonly',
+    my: 'readonly'
   },
 };

@@ -446,22 +446,41 @@ export default {
     AlipayJSBridge && AlipayJSBridge.call('setGestureBack', { val: false });
   },
   mounted() {
-    if (process.env.VUE_APP_PLATFORM === 'h5') {
-      // 适配安卓h5客户端
-      if (AlipayJSBridge) {
-        AlipayJSBridge.call('myApiGetCode', {
+    try {
+      if (my) {
+        my.call('myApiGetCode', {
           param1: 'JsParam1',
         }, (result) => {
-          if (result.code && result.code.length) {
-            this.init(result.code);
-          }
+          this.androidInitCode(result);
         });
       }
+    } catch (e) {
+    }
+
+    // 适配安卓h5客户端
+    if (AlipayJSBridge) {
+      AlipayJSBridge.call('myApiGetCode', {
+        param1: 'JsParam1',
+      }, (result) => {
+        this.androidInitCode(result);
+      });
     }
   },
   onLoad() {
     uni.hideTabBar();
-    this.init();
+    const platform = uni.getSystemInfoSync().platform;
+    this.platform = platform;
+    // 安卓上来不加载
+    if (platform === 'ios') {
+      let code;
+      if (process.env.VUE_APP_PLATFORM === 'h5') {
+        // 适配iOS h5客户端
+        code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.code;
+      } else {
+        code = uni.getStorageSync('code');
+      }
+      this.init(code);
+    }
   },
   onShow() {
     uni.hideTabBar();
@@ -482,6 +501,11 @@ export default {
       // 修改token用户信息
       USER.UPDATE_TOKEN_USER_ASYNC
     ]),
+    androidInitCode(result) {
+      if (result.code && result.code.length) {
+        this.init(result.code);
+      }
+    },
     // 首页菜单跳转
     cellClick(url) {
       uni.navigateTo({
@@ -489,13 +513,6 @@ export default {
       });
     },
     async init(code) {
-      if (process.env.VUE_APP_PLATFORM === 'h5') {
-        if (!code) {
-          // 适配iOS客户端
-          code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.code;
-        }
-      }
-
       // 获取token
       await this.getToken(code);
       // 获取首页轮播图
@@ -523,26 +540,13 @@ export default {
       // });
     },
     // 获取token
-    async getToken(passCode) {
-      let loginCode;
-      const tmpCode = uni.getStorageSync('code');
-      if (process.env.VUE_APP_PLATFORM === 'h5') {
-        if (tmpCode && (tmpCode === passCode)) {
-          return;
-        }
-        loginCode = passCode;
-      } else {
-        loginCode = tmpCode;
-      }
-
+    async getToken(loginCode) {
       const { code, data } = await this.authService.getTokenByCode({
         code: loginCode
       });
       if (code === '1') {
         const token = data.token;
         uni.setStorageSync('token', token);
-        uni.setStorageSync('code', passCode);
-        // alert('已经存储token'+this.saleInfo.customerCode)
         await this[USER.UPDATE_SALE_ASYNC]();
         await this[USER.UPDATE_TOKEN_USER_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);

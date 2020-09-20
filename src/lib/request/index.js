@@ -115,8 +115,15 @@ function jSend(option) {
           statusCode
         } = response;
         if (data === 'SECURITY_INVALID_TOKEN') {
-          // todo 需要改名为toLogin
-          AlipayJSBridge && AlipayJSBridge.call('popWindow');
+          uni.showModal({
+            title: '提示',
+            content: '登录已经过期，请重新登录',
+            success: (res) => {
+              if (res.confirm) {
+                AlipayJSBridge && AlipayJSBridge.call('popWindow');
+              }
+            }
+          });
         }
         if (!cfg.noLoading) {
           hideLoading();

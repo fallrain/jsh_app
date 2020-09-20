@@ -1,9 +1,6 @@
 <script>
 export default {
   onLaunch(options) {
-    uni.showModal({
-      content: JSON.stringify(options)
-    });
     const {
       query
     } = options;
