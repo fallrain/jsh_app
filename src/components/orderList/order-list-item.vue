@@ -8,7 +8,7 @@
         {{info.info.selfUseOrderStatus}}
       </text>
     </view>
-    <view v-if="info.details.length<2">
+    <view  v-for="(item,index) in info.details" :key="index">
       <view @tap="goDetail" class="produceDetailItem-cnt">
         <view class="produceDetailItem-cnt-img">
           <image :src="info.details[0].jshd_product_img"></image>
@@ -33,25 +33,36 @@
       <view class="produceDetailItem-fot">
         <view class="col-75 padding-left-15">
           <view class="produceDetailItem-cnt-inf">
-            <view v-if="info.details[0].jshd_price_type ==='MFYJ'" class="produceDetailItem-fot-info">
-              结算价:<span class="produceDetailItem-cnt-tiem">¥{{Number(info.btnsInfo.priceObj.invoicePrice).toFixed(2)}}</span>
+            <view v-if="item.jshd_price_type ==='MFYJ'" class="produceDetailItem-fot-info">
+              结算价:
+              <span v-if="info.btnsInfo.priceObj"
+                        class="produceDetailItem-cnt-tiem">
+                ¥{{Number(info.btnsInfo.priceObj.invoicePrice).toFixed(2)}}
+              </span>
             </view>
             <view v-else class="produceDetailItem-fot-info">
-              合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(info.details[0].jshd_amount).toFixed(2)}}</span>
+              合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(item.jshd_amount).toFixed(2)}}</span>
             </view>
-            <view class="produceDetailItem-cnt-price" v-if="info.details[0].jshd_pre_rate!==''">
-              预定金金额:¥{{parseFloat(info.details[0].jshd_pre_amount).toFixed(2)}}
+            <view class="produceDetailItem-cnt-price" v-if="item.jshd_pre_rate!==''">
+              预定金金额:¥{{parseFloat(item.jshd_pre_amount).toFixed(2)}}
             </view>
           </view>
           <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</span>
+            <view class="produceDetailItem-fot-info">
+              <text v-if="item.jshd_price_type.indexOf('YJ')>-1">样机：</text>
+              <text v-else-if="item.jshd_price_type==='TJ'">特价：</text>
+              <text v-else-if="item.jshd_price_type==='GC'">工程：</text>
+              <text v-else>单价：</text>
+              <span class="produceDetailItem-fot-color">
+                ¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}
+              </span>
             </view>
-            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info" v-if="info.details[0].jshd_pre_rate!==''">预定金比例:<span
-              class="produceDetailItem-fot-color">{{(info.details[0].jshd_pre_rate*1).toFixed(2)}}%</span></view>
-            <view v-if="info.details[0].jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info" v-if="info.details[0].jshd_pre_rate!==''">尾款:<span
-              class="produceDetailItem-fot-color">{{(parseFloat(info.details[0].jshd_invoice_price) - parseFloat(info.details[0].jshd_pre_amount)).toFixed(2)}}</span>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">预定金比例:<span
+              class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
+            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">尾款:<span
+              class="produceDetailItem-fot-color">{{(parseFloat(item.jshd_invoice_price) - parseFloat(item.jshd_pre_amount)).toFixed(2)}}</span>
             </view>
           </view>
         </view>
@@ -113,125 +124,6 @@
       </view>
       <!--<order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>-->
     </view>
-    <view v-else-if="info.details.length>0" v-for="(item,index) in info.details" :key="index">
-      <view class="produceDetailItem-cnt" @click="goDetail">
-        <view class="produceDetailItem-cnt-img">
-          <image :src="item.jshd_product_img"></image>
-        </view>
-        <view class="">
-          <view class="produceDetailItem-cnt-text">{{item.jshd_product_name}}</view>
-          <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-cnt-info">下单时间：{{item.jshd_created_time}}</view>
-            <view class="produceDetailItem-cnt-info">数量：{{item.jshd_qty}}</view>
-          </view>
-          <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-cnt-info">购买方式：{{item.waysOfPurchasingDto}}</view>
-          </view>
-        </view>
-      </view>
-      <view class="produceDetailItem-fot">
-        <view class="col-75 padding-left-15">
-          <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">合计:<span
-              class="produceDetailItem-cnt-tiem">¥{{item.jshd_amount}}</span></view>
-            <view class="produceDetailItem-cnt-price" v-if="item.jshd_pre_rate!==''">
-              预定金金额:¥{{parseFloat(item.jshd_pre_amount).toFixed(2)}}
-            </view>
-          </view>
-          <view class="produceDetailItem-cnt-inf">
-            <view class="produceDetailItem-fot-info">单价:<span class="produceDetailItem-fot-color">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</span>
-            </view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">预定金比例:<span
-              class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">尾款:<span
-              class="produceDetailItem-fot-color">{{parseFloat(product.jshd_pre_amount).toFixed(2)}}</span></view>
-          </view>
-        </view>
-        <view class=" col-25 padding-4" v-if="info.btnsInfo.signInButton === '1'">
-          <button
-            @tap="orderSelfSignedFun"
-            class="produceDetailItem-fot-btn"
-            type="button"
-          >签收
-          </button>
-        </view>
-        <view class=" col-25 padding-4" v-if="info.receivedOrderButton === '1'">
-          <button
-            @tap="orderSelfSignedFun"
-            class="produceDetailItem-fot-btn"
-            type="button"
-          >物流拒单
-          </button>
-        </view>
-      </view>
-      <view class="uni-flex uni-row produceDetailItem-btm-row2" v-if="index < info.details.length-1">
-        <view class="col-25 produceDetailItem-btm">
-          <view v-if="isChangePayer" @tap="changePayer"
-                class="iconfont iconcancel iconStyle"></view>
-          更改付款方
-        </view>
-        <view v-if="tctpConfirmButtonFun" @click="tctpConfirmButtonAction" class="col-25 produceDetailItem-btm">
-          <view class="iconfont iconcancel iconStyle"></view>统仓确认
-        </view>
-        <view @click="orderCancel" class="col-25 produceDetailItem-btm" v-if="invalidButton">
-          <view class="iconfont iconcancel iconStyle"></view>
-          订单作废
-        </view>
-        <view v-if="showNode" @click="nodeClick" class="col-25 produceDetailItem-btm">
-          <view class="iconfont icontree iconStyle"></view>
-          订单节点
-        </view>
-        <view v-if="info.btnsInfo.selfPayButton==='1'
-                  ||info.btnsInfo.selfPayButton==='3'
-                  ||info.btnsInfo.selfPayButton==='4'"
-              @click="selfDeduction(info.btnsInfo.selfPayButton)"
-              class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          自主扣款
-        </view>
-        <view v-if="info.btnsInfo.selfPayButton==='2'"
-              @click="sampleMachineAccounts()" class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          样机结算
-        </view>
-        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          整车查看(作废)
-        </view>
-        <view v-if="jshi_order_gvs_status" @click="checkWL" class="col-25 produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          查看物流
-        </view>
-        <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-left">
-          <view class="jOrderConfirmItem-semicircle"></view>
-        </view>
-        <view class="jOrderConfirmItem-semicircle-wrap jOrderConfirmItem-semicircle-right">
-          <view class="jOrderConfirmItem-semicircle"></view>
-        </view>
-      </view>
-      <view class="uni-flex uni-row produceDetailItem-btm-row" v-if="index === info.details.length-1">
-        <view class="col-25 produceDetailItem-btm" style="padding-left: 10px;" @click="getMore">...</view>
-        <view @click="orderCancel" class="col-25 produceDetailItem-btm">
-          <view class="iconfont iconcancel iconStyle"></view>
-          订单作废
-        </view>
-        <view @click="nodeClick" class="col-25 produceDetailItem-btm" v-if="showNode">
-          <view class="iconfont icontree iconStyle"></view>
-          订单节点
-        </view>
-        <view @click="checkWL" class="col-25 produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          查看物流
-        </view>
-      </view>
-      <!--<order-list-item-more
-        :isOrderMore="isOrderMore"
-        :tctpConfirmButton="tctpConfirmButton"
-        >
-      </order-list-item-more>-->
-    </view>
     <j-pop-picker
       title="付款方"
       :isShowSure="true"
@@ -265,15 +157,15 @@
           </view>
           <view class="jmodal-item">
             <view class="key-style">价格：</view>
-            <view class="val-style">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
+            <view class="val-style">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">数量：</view>
-            <view class="val-style">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
+            <view class="val-style">{{parseFloat(item.jshd_qty).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">合计：</view>
-            <view class="val-style">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
+            <view class="val-style">¥{{parseFloat(item.jshd_amount)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">付款方：</view>
@@ -319,7 +211,7 @@
           </view>
           <view class="jmodal-item">
             <view class="key-style">数量：</view>
-            <view class="val-style">{{sampleMachine.detailEntity.discount}}</view>
+            <view class="val-style">{{sampleMachine.detailEntity.qty}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">合计：</view>
