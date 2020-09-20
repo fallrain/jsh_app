@@ -384,7 +384,8 @@ export default {
       return (this.info.btnsInfo.tctpConfirmButton == 1);
     },
     invalidButton() {
-      return (this.info.btnsInfo.invalidButton != '0');
+      /* 是否显示订单作废 */
+      return this.info.btnsInfo.invalidButton !== '0';
     },
     showNode() {
       const details = this.info.details[0];
@@ -825,6 +826,9 @@ export default {
             const bstnk = this.info.info.bstnk;
             const { code } = await this.orderService.cancelOrderBybstnk(bstnk);
             if (code === '1') {
+              // 去掉订单作废按钮
+              this.info.btnsInfo.invalidButton = '0';
+              this.$emit('change', this.info);
               uni.showToast({
                 title: '作废订单成功',
                 icon: 'none'

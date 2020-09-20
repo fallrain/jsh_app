@@ -26,7 +26,9 @@
           :key="index"
           v-for="(item,index) in orderListInfo"
           :index="index"
-          @goDetail="goDetail">
+          @change="orderItemChange($event,index)"
+          @goDetail="goDetail"
+        >
         </order-list-item>
       </mescroll-body>
     </view>
@@ -868,7 +870,7 @@ export default {
         } else {
           this.orderListInfo = this.orderListInfo.concat(data.dataList);
         }
-        console.log(this.orderListInfo)
+        console.log(this.orderListInfo);
         if (this.orderListInfo.length === 0) {
           uni.showToast({
             title: '暂无数据！',
@@ -909,6 +911,10 @@ export default {
         element.receivedOrderButton = data;
         this.$set(this.orderListInfo, index, element);
       }
+    },
+    orderItemChange(item, index) {
+      /* 订单条目chanage */
+      this.orderListInfo[index] = item;
     },
     goDetail(info) {
       const orderDetail = JSON.stringify(info);
