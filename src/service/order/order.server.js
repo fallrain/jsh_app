@@ -117,7 +117,7 @@ export default {
     return jPostJson(url.buttonReceivedOrder, data);
   },
   // 物流拒单
-  logisticsRejection(dn, flag) { // 信用订单自主扣款
+  logisticsRejection(dn, flag) { // 物流拒单
     return jGet(url.logisticsRejection(dn, flag));
   },
 };

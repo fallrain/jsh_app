@@ -37,13 +37,13 @@
               结算价:
               <span v-if="info.btnsInfo.priceObj"
                         class="produceDetailItem-cnt-tiem">
-                ¥{{Number(info.btnsInfo.priceObj.invoicePrice).toFixed(2)}}
+                ¥{{Number(info.btnsInfo.priceObj.amount).toFixed(2)}}
               </span>
             </view>
             <view v-else class="produceDetailItem-fot-info">
               合计:<span class="produceDetailItem-cnt-tiem">¥{{parseFloat(item.jshd_amount).toFixed(2)}}</span>
             </view>
-            <view class="produceDetailItem-cnt-price" v-if="item.jshd_pre_rate!==''">
+            <view class="produceDetailItem-cnt-price" v-if="item.jshd_pre_amount">
               预定金金额:¥{{parseFloat(item.jshd_pre_amount).toFixed(2)}}
             </view>
           </view>
@@ -57,7 +57,7 @@
                 ¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}
               </span>
             </view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
+            <view v-if="item.jshd_pre_amount" class="produceDetailItem-line"></view>
             <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">预定金比例:<span
               class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
             <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
@@ -98,14 +98,12 @@
           <view class="iconfont iconcancel iconStyle"></view>
           订单作废
         </view>
-        <view v-if="showNode" @click="nodeClick" class="produceDetailItem-btm">
+        <view v-if="showNode" @tap="nodeClick" class="produceDetailItem-btm">
           <view class="iconfont icontree iconStyle"></view>
           订单节点
         </view>
-        <view v-if="info.btnsInfo.selfPayButton==='1'
-                  ||info.btnsInfo.selfPayButton==='3'
-                  ||info.btnsInfo.selfPayButton==='4'"
-              @click="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+        <view v-if="info.btnsInfo.selfPayButton==='1'||info.btnsInfo.selfPayButton==='3'||info.btnsInfo.selfPayButton==='4'"
+              @tap="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           自主扣款
         </view>
@@ -158,15 +156,15 @@
           </view>
           <view class="jmodal-item">
             <view class="key-style">价格：</view>
-            <view class="val-style">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</view>
+            <view class="val-style">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">数量：</view>
-            <view class="val-style">{{parseFloat(item.jshd_qty).toFixed(2)}}</view>
+            <view class="val-style">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">合计：</view>
-            <view class="val-style">¥{{parseFloat(item.jshd_amount)}}</view>
+            <view class="val-style">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">付款方：</view>
@@ -680,9 +678,9 @@ export default {
     // 自主扣款点击确定
     async modalConfirm() {
       console.log(this.state);
+      const orderNo = this.info.info.jshi_order_no;
       if (this.state === '1') {
         // 信用订单
-        const orderNo = this.info.info.bstnk;
         // const { msg } = await this.trafficService.XyCutPayment(orderNo);
         const { msg } = await this.orderService.payCreditOrderByOrderNo(orderNo);
         uni.showToast({
@@ -691,7 +689,6 @@ export default {
         });
       } else if (this.state === '3') {
         // 反向定制
-        const orderNo = this.info.info.bstnk;
         const { msg } = await this.orderService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
@@ -699,7 +696,6 @@ export default {
         });
       } else if (this.state === '4') {
         // 整车
-        const orderNo = this.info.info.jshi_grouping_no;
         const { msg } = await this.trafficService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
@@ -807,7 +803,7 @@ export default {
             });
           }
         }
-      })
+      });
     },
     // 点击拒收按钮
     async receivedOrder() {
