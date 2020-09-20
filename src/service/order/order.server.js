@@ -93,7 +93,7 @@ export default {
     return jGet(urlNoApi.getBillInfo(sendtoCode, productGroup));
   },
   orderSelfSigned(bstnk) { // 自主签收
-    return jGet(url.orderSelfSigned, bstnk);
+    return jGet(url.orderSelfSigned(bstnk));
   },
   getTctpSwitch() {
     return jGet(urlNoApi.getTctpSwitch);

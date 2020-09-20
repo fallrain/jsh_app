@@ -58,10 +58,10 @@
               </span>
             </view>
             <view v-if="item.jshd_pre_amount" class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">预定金比例:<span
+            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_amount">预定金比例:<span
               class="produceDetailItem-fot-color">{{(item.jshd_pre_rate*1).toFixed(2)}}%</span></view>
-            <view v-if="item.jshd_pre_rate!==''" class="produceDetailItem-line"></view>
-            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_rate!==''">尾款:<span
+            <view v-if="item.jshd_pre_amount" class="produceDetailItem-line"></view>
+            <view class="produceDetailItem-fot-info" v-if="item.jshd_pre_amount">尾款:<span
               class="produceDetailItem-fot-color">{{(parseFloat(item.jshd_invoice_price) - parseFloat(item.jshd_pre_amount)).toFixed(2)}}</span>
             </view>
           </view>
@@ -109,11 +109,11 @@
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           自主扣款
         </view>
-        <view v-if="info.btnsInfo.selfPayButton==='2'"
+        <!--<view v-if="info.btnsInfo.selfPayButton==='2'"
               @tap="sampleMachineAccounts()" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           样机结算
-        </view>
+        </view>-->
 <!--        <view v-if="zcck" @tap="zcckAction" class="produceDetailItem-btm">-->
 <!--          <view class="iconfont iconcar iconStyle iconTransform"></view>-->
 <!--          整车查看(作废)-->
@@ -158,15 +158,15 @@
           </view>
           <view class="jmodal-item">
             <view class="key-style">价格：</view>
-            <view class="val-style">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</view>
+            <view class="val-style">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">数量：</view>
-            <view class="val-style">{{parseFloat(item.jshd_qty).toFixed(2)}}</view>
+            <view class="val-style">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">合计：</view>
-            <view class="val-style">¥{{parseFloat(item.jshd_amount)}}</view>
+            <view class="val-style">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">付款方：</view>
@@ -390,7 +390,7 @@ export default {
     },
     invalidButton() {
       /* 是否显示订单作废 */
-      return this.info.btnsInfo.invalidButton !== '0';
+      return (this.info.btnsInfo.invalidButton !== '0' && this.info.combinationTag !== '整车');
     },
     showNode() {
       const details = this.info.details[0];
@@ -609,7 +609,7 @@ export default {
     },
     // 自主扣款
     async selfDeduction(state) {
-      const orderNo = this.info.info.bstnk;
+      const orderNo = this.info.info.jshi_order_no;
       const paytoCode = this.info.info.jshi_payto_code;
       const salesGroupCode = this.saleInfo.salesGroupCode;
       let title = '';
