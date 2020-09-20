@@ -102,7 +102,7 @@ export default {
     return jGet(url.tctpConfirm(dn, bstnk));
   },
   payByCustomer(bstnk) { // 反向定制自主扣款
-    return jGet(urlNoApi.payByCustomer, bstnk);
+    return jGet(urlNoApi.payByCustomer(bstnk));
   },
   payCreditOrderByOrderNo(bstnk) { // 信用订单自主扣款
     return jGet(urlNoApi.payCreditOrderByOrderNo(bstnk));

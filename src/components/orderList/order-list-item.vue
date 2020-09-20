@@ -169,6 +169,10 @@
             <view class="val-style">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
           </view>
           <view class="jmodal-item">
+            <view class="key-style">订单号：</view>
+            <view class="val-style">{{info.info.bstnk}}</view>
+          </view>
+          <view class="jmodal-item">
             <view class="key-style">付款方：</view>
             <view class="val-style">{{info.info.jshi_payto_name}}</view>
           </view>
@@ -680,9 +684,9 @@ export default {
     // 自主扣款点击确定
     async modalConfirm() {
       console.log(this.state);
+      const orderNo = this.info.info.jshi_order_no;
       if (this.state === '1') {
         // 信用订单
-        const orderNo = this.info.info.bstnk;
         // const { msg } = await this.trafficService.XyCutPayment(orderNo);
         const { msg } = await this.orderService.payCreditOrderByOrderNo(orderNo);
         uni.showToast({
@@ -691,7 +695,6 @@ export default {
         });
       } else if (this.state === '3') {
         // 反向定制
-        const orderNo = this.info.info.bstnk;
         const { msg } = await this.orderService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
@@ -699,7 +702,6 @@ export default {
         });
       } else if (this.state === '4') {
         // 整车
-        const orderNo = this.info.info.jshi_grouping_no;
         const { msg } = await this.trafficService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
