@@ -67,10 +67,11 @@
           </view>
         </view>
         <view class=" col-25 padding-4">
-          <button v-if="info.btnsInfo.signInButton === '1'"
-                  @tap="orderSelfSignedFun"
-                  type="button"
-                  class="produceDetailItem-fot-btn">
+          <button
+            v-if="info.btnsInfo.signInButton === '1'"
+            @tap="orderSelfSignedFun"
+            type="button"
+            class="produceDetailItem-fot-btn">
             签收
           </button>
           <button
@@ -216,6 +217,10 @@
           <view class="jmodal-item">
             <view class="key-style">合计：</view>
             <view class="val-style">¥{{sampleMachine.detailEntity.amount}}</view>
+          </view>
+          <view class="jmodal-item">
+            <view class="key-style">订单号：</view>
+            <view class="val-style">{{info.info.bstnk}}</view>
           </view>
           <view @tap="changePay" class="jmodal-item">
             <view class="key-style">付款方：</view>
@@ -779,13 +784,29 @@ export default {
       }
     },
     async orderSelfSignedFun() {
-      const { code } = await this.orderService.orderSelfSigned(this.infoList.info.bstnk);
-      if (code === '1') {
-        uni.showToast({
-          title: '订单签收成功',
-          icon: 'none'
-        });
-      }
+      const that = this;
+      uni.showModal({
+        title: '提示',
+        content: '请务必收到货物核实后进行签收',
+        success(res) {
+          if (res.confirm) {
+            that.orderService.orderSelfSigned(that.info.info.bstnk).then((res) => {
+              if (res.code === '1') {
+                uni.showToast({
+                  title: '订单签收成功',
+                  icon: 'none'
+                });
+              }
+            });
+          } else if (res.cancel) {
+            // that.dealLogisticsRejection('N');
+            uni.showToast({
+              title: '取消签收',
+              icon: 'none'
+            });
+          }
+        }
+      })
     },
     // 点击拒收按钮
     async receivedOrder() {
