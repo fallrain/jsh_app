@@ -266,6 +266,7 @@
       type="custom"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
+      @change="specificationsChange"
     >
       <template #head>
         <view class="jVersionSpecifications-pop-head-wrap">
@@ -1043,6 +1044,10 @@ export default {
         }
       }
       return versionData;
+    },
+    specificationsChange(data) {
+      /* 版本规格change */
+      this.specificationsList = data;
     },
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */

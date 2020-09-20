@@ -107,6 +107,7 @@
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
       @close="clearChoseSpecifications"
+      @change="specificationsChange"
     >
     </j-version-specifications>
     <m-toast
@@ -473,6 +474,10 @@ export default {
         }
       }
       this.tags = tagsTemp;
+    },
+    specificationsChange(data) {
+      /* 版本规格change */
+      this.specificationsList = data;
     },
     specificationsConfirm(checkedList) {
       /* 选中版本确认 */
