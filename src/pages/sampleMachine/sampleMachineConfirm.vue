@@ -72,7 +72,7 @@
             name="verCode"
             id="verCode"
         />
-        <view class="canvas-img-code" @click="refresh()">
+        <view @tap="refresh()" class="canvas-img-code">
           <canvas :style="{width:width+'px',height:height+'px'}" canvas-id="imgcanvas" @error="canvasIdErrorCallback"></canvas>
         </view>
       </view>

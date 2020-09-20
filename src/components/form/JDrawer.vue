@@ -18,11 +18,11 @@
           <button
             type="button"
             class="filter-drawer-btn-confirm"
-            @click="filterConfirm"
+            @tap="filterConfirm"
           >确定
           </button>
           <button
-            @click="filterReset"
+            @tap="filterReset"
             type="button"
             class="filter-drawer-btn-reset"
           >重置

@@ -39,7 +39,7 @@
               <i class="iconfont iconxia"></i>
               <view class="v-c-gd-cnt-price-info" v-if="item.payCheck">
                 <view class="v-c-gd-cnt-price-info-li" v-for="(it,index2) in item.payVehiList.data.items" :key="index2"
-                      :class="[it.checked && 'active']" @click="payVehicle(index, index2),getPayer(item)">{{it.TMCF_NAME}}</view>
+                      :class="[it.checked && 'active']" @tap="payVehicle(index, index2),getPayer(item)">{{it.TMCF_NAME}}</view>
               </view>
               <view class="v-c-gd-cnt-inf-picker-rk">{{item.payVehCheck.TMCF_NAME}}</view>
             </view>
@@ -67,7 +67,7 @@
       </view>
     </view>
     <view class="v-c-gd-btm">
-      <view class="v-c-gd-flox5" @click="pullDetail()">
+      <view @tap="pullDetail()" class="v-c-gd-flox5">
         <view class="v-c-gd-cnt-check iconfont iconxiangqing">点击查看详情</view>
       </view>
       <view class="v-c-gd-flox5">

@@ -356,14 +356,14 @@ status: "正常" -->
             >是
             </view>
             <view
-              @click="setFukuanDefaultAction(item.customerCode)"
+              @tap="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRight"
               v-else-if="item.payerType != '03' && item.payerType != '07' && item.payerType != '15'"
             >设置为默认设置
             </view>
             <view
               v-if="item.defaultFlag !='1' && item.payerType == '03' ||item.payerType == '07' ||item.payerType == '15'"
-              @click="setFukuanDefaultAction(item.customerCode)"
+              @tap="setFukuanDefaultAction(item.customerCode)"
               class="firstPageRightGray"
             >设置为默认设置
             </view>

@@ -3,13 +3,13 @@
     <view class="isFixed">
       <view class="vehicle-search j-flex-aic">
         <j-search-input v-model="searchVal" @search="silentReSearch"></j-search-input>
-        <button type="button" class="vehicle-btn" @click="silentReSearch">搜索</button>
+        <button @tap="silentReSearch" class="vehicle-btn" type="button">搜索</button>
       </view>
     </view>
     <view class="nav">
       <view class="nav-left">
         <scroll-view scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower">
-          <view @click="cateClick(index)" :key="index" v-for="(item,index) in categoryList" class="scroll-view-item">
+          <view :key="index" @tap="cateClick(index)" class="scroll-view-item" v-for="(item,index) in categoryList">
             <view :class="index==categoryActive?'active':'noActive'" >{{item.title}}</view>
           </view>
         </scroll-view>
@@ -26,8 +26,8 @@
           </view>
           <view class="uni-flex uni-row" style="-webkit-flex-wrap: wrap;flex-wrap: wrap;">
             <view v-for="(childed,index2) in child.subCats" :key="childed.title" class="nav-right-item">
-              <image :src="imgMap.get(childed.code)" @click="checkCat(childed)"/>
-              <view @click="checkCat(childed)">{{childed.title}}</view>
+              <image :src="imgMap.get(childed.code)" @tap="checkCat(childed)"/>
+              <view @tap="checkCat(childed)">{{childed.title}}</view>
             </view>
           </view>
         </view>

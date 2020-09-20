@@ -87,38 +87,38 @@
         <view v-if="isChangePayer" @tap="changePayer" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
-        <view v-if="tctpConfirmButtonFun"  @click="tctpConfirmButtonAction" class="produceDetailItem-btm">
+        <view @tap="tctpConfirmButtonAction"  class="produceDetailItem-btm" v-if="tctpConfirmButtonFun">
           <view class="iconfont iconcancel iconStyle"></view>统仓确认
         </view>
         <view
-          @click="orderCancel"
+          @tap="orderCancel"
           class="produceDetailItem-btm"
           v-if="invalidButton"
         >
           <view class="iconfont iconcancel iconStyle"></view>
           订单作废
         </view>
-        <view v-if="showNode" @click="nodeClick" class="produceDetailItem-btm">
+        <view @tap="nodeClick" class="produceDetailItem-btm" v-if="showNode">
           <view class="iconfont icontree iconStyle"></view>
           订单节点
         </view>
         <view v-if="info.btnsInfo.selfPayButton==='1'
                   ||info.btnsInfo.selfPayButton==='3'
                   ||info.btnsInfo.selfPayButton==='4'"
-              @click="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
+              @tap="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           自主扣款
         </view>
         <view v-if="info.btnsInfo.selfPayButton==='2'"
-              @click="sampleMachineAccounts()" class="produceDetailItem-btm">
+              @tap="sampleMachineAccounts()" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           样机结算
         </view>
-<!--        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">-->
+<!--        <view v-if="zcck" @tap="zcckAction" class="produceDetailItem-btm">-->
 <!--          <view class="iconfont iconcar iconStyle iconTransform"></view>-->
 <!--          整车查看(作废)-->
 <!--        </view>-->
-        <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
+        <view @tap="checkWL" class="produceDetailItem-btm" v-if="jshi_order_gvs_status">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           查看物流
         </view>

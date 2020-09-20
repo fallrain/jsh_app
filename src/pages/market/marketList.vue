@@ -67,7 +67,7 @@
               :class="[
                       !item.isExpand && 'reverse'
                     ]"
-              @click="toggleExpand(item)"
+              @tap="toggleExpand(item)"
             ></i>
           </view>
           <view
@@ -79,7 +79,7 @@
               :key="filterIndex"
               class="marketList-drawer-filter-list-item"
               :class="[filterItem.isChecked && 'active']"
-              @click="choose(filterItem,item.data,item.type)"
+              @tap="choose(filterItem,item.data,item.type)"
             >{{filterItem.value}}
             </view>
           </view>
