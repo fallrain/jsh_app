@@ -118,6 +118,7 @@ function jSend(option) {
           uni.showModal({
             title: '提示',
             content: '登录已经过期，请重新登录',
+            showCancel: false,
             success: (res) => {
               if (res.confirm) {
                 AlipayJSBridge && AlipayJSBridge.call('popWindow');
