@@ -39,7 +39,7 @@
               class="jVersionSpecifications-pop-detail-list"
               v-if="item.isExpand"
             >
-              <div
+              <view
                 :class="['jVersionSpecifications-pop-detail-item',version.checked && 'active']"
                 :key="vIndex"
                 @tap="handleClick(version,item.list,index,vIndex)"
@@ -79,7 +79,7 @@
                   <view class="jVersionSpecifications-pop-detail-item-name">数量：</view>
                   <view class="jVersionSpecifications-pop-detail-item-val-type3">{{version.num}}</view>
                 </view>
-              </div>
+              </view>
             </view>
           </view>
         </template>
