@@ -2,10 +2,10 @@
   <view v-show="isOrderType" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text" @click="orderNoClick('1')"><view class="iconfont iconcancel order_more_iconStyle"></view>订单号</view>
-      <view class="order_more_text" @click="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>
-      <view class="order_more_text" @click="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVS单号</view>
-      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>
+      <view @tap="orderNoClick('1')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>订单号</view>
+      <view @tap="orderNoClick('2')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>
+      <view @tap="orderNoClick('3')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>GVS单号</view>
+      <view @tap="orderNoClick('4')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>
     </view>
   </view>
 </template>

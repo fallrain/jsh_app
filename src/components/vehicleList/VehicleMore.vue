@@ -2,9 +2,9 @@
   <view v-show="isVehicleMore" :class="{'v_More':fromWhere==='GWCAN','v_More_f':fromWhere==='ZCFKF'}">
     <p v-show="fromWhere==='GWCAN'" style="height: 10px;"><span class="sanjiao"></span></p>
     <view v-show="fromWhere==='GWCAN'" class="background">
-      <view class="v_More_text" @click="goVehicle('1')"><view class="iconfont iconfunction v_More_iconStyle"></view>选购其他</view>
-      <view class="v_More_text" @click="goVehicle('2')"><view class="iconfont iconorder v_More_iconStyle"></view>设置挂单</view>
-      <view class="v_More_text" @click="goVehicle('3')"><view class="iconfont iconcar1 v_More_iconStyle"></view>拼整车</view>
+      <view @tap="goVehicle('1')" class="v_More_text"><view class="iconfont iconfunction v_More_iconStyle"></view>选购其他</view>
+      <view @tap="goVehicle('2')" class="v_More_text"><view class="iconfont iconorder v_More_iconStyle"></view>设置挂单</view>
+      <view @tap="goVehicle('3')" class="v_More_text"><view class="iconfont iconcar1 v_More_iconStyle"></view>拼整车</view>
     </view>
   </view>
 </template>

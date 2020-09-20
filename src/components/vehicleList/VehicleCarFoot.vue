@@ -4,7 +4,7 @@
       <view :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></view>
       <text :class="['v-c-foot-lin-tex1',checked && 'active']">全选</text>
     </view>
-    <text class="v-c-foot-lin-edit" @click="changTex">{{exit ? '编辑' : '取消'}}</text>
+    <text @tap="changTex" class="v-c-foot-lin-edit">{{exit ? '编辑' : '取消'}}</text>
     <view class="v-c-foot-lin-tex2">
       已选中<text class="v-c-foot-lin-tex2-highlight">{{num}}</text>车
     </view>
@@ -13,7 +13,7 @@
       <text>合计：</text>
       <view class="v-c-foot-lin-tex4-price">¥{{numAll.toFixed(2)}}</view>
     </view>
-    <button type="button" class="v-c-foot-btn" @click="comfim">{{exit ? '结算' : '删除'}}
+    <button @tap="comfim" class="v-c-foot-btn" type="button">{{exit ? '结算' : '删除'}}
     </button>
   </view>
 </template>

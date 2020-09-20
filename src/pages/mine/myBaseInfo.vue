@@ -77,7 +77,7 @@
       <view class="mineBaseInfo-group">
         <!-- <j-cell :titleWrap="false" title="子账号">
           <template #right>
-            <view class="mineBaseInfo-right">{{baseList.subAccount}}<view @click="viewDetail" class="mineBaseInfo-detail">查看详情</view></view>
+            <view class="mineBaseInfo-right">{{baseList.subAccount}}<view @tap="viewDetail" class="mineBaseInfo-detail">查看详情</view></view>
           </template>
         </j-cell> -->
         <j-cell :titleWrap="false" title="省/市/区/县">

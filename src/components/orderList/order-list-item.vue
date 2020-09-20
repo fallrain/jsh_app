@@ -87,11 +87,11 @@
         <view v-if="isChangePayer" @tap="changePayer" class="produceDetailItem-btm">
           <view class="iconfont iconcancel iconStyle"></view>更改付款方
         </view>
-        <view v-if="tctpConfirmButtonFun"  @click="tctpConfirmButtonAction" class="produceDetailItem-btm">
+        <view @tap="tctpConfirmButtonAction"  class="produceDetailItem-btm" v-if="tctpConfirmButtonFun">
           <view class="iconfont iconcancel iconStyle"></view>统仓确认
         </view>
         <view
-          @click="orderCancel"
+          @tap="orderCancel"
           class="produceDetailItem-btm"
           v-if="invalidButton"
         >
@@ -102,21 +102,23 @@
           <view class="iconfont icontree iconStyle"></view>
           订单节点
         </view>
-        <view v-if="info.btnsInfo.selfPayButton==='1'||info.btnsInfo.selfPayButton==='3'||info.btnsInfo.selfPayButton==='4'"
+        <view v-if="info.btnsInfo.selfPayButton==='1'
+                  ||info.btnsInfo.selfPayButton==='3'
+                  ||info.btnsInfo.selfPayButton==='4'"
               @tap="selfDeduction(info.btnsInfo.selfPayButton)" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           自主扣款
         </view>
         <view v-if="info.btnsInfo.selfPayButton==='2'"
-              @click="sampleMachineAccounts()" class="produceDetailItem-btm">
+              @tap="sampleMachineAccounts()" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           样机结算
         </view>
-        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          整车查看(作废)
-        </view>
-        <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
+<!--        <view v-if="zcck" @tap="zcckAction" class="produceDetailItem-btm">-->
+<!--          <view class="iconfont iconcar iconStyle iconTransform"></view>-->
+<!--          整车查看(作废)-->
+<!--        </view>-->
+        <view @tap="checkWL" class="produceDetailItem-btm" v-if="jshi_order_gvs_status">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           查看物流
         </view>
@@ -156,15 +158,15 @@
           </view>
           <view class="jmodal-item">
             <view class="key-style">价格：</view>
-            <view class="val-style">¥{{parseFloat(info.details[0].jshd_invoice_price).toFixed(2)}}</view>
+            <view class="val-style">¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">数量：</view>
-            <view class="val-style">{{parseFloat(info.details[0].jshd_qty).toFixed(2)}}</view>
+            <view class="val-style">{{parseFloat(item.jshd_qty).toFixed(2)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">合计：</view>
-            <view class="val-style">¥{{parseFloat(info.details[0].jshd_amount)}}</view>
+            <view class="val-style">¥{{parseFloat(item.jshd_amount)}}</view>
           </view>
           <view class="jmodal-item">
             <view class="key-style">付款方：</view>
@@ -678,9 +680,9 @@ export default {
     // 自主扣款点击确定
     async modalConfirm() {
       console.log(this.state);
-      const orderNo = this.info.info.jshi_order_no;
       if (this.state === '1') {
         // 信用订单
+        const orderNo = this.info.info.bstnk;
         // const { msg } = await this.trafficService.XyCutPayment(orderNo);
         const { msg } = await this.orderService.payCreditOrderByOrderNo(orderNo);
         uni.showToast({
@@ -689,6 +691,7 @@ export default {
         });
       } else if (this.state === '3') {
         // 反向定制
+        const orderNo = this.info.info.bstnk;
         const { msg } = await this.orderService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
@@ -696,6 +699,7 @@ export default {
         });
       } else if (this.state === '4') {
         // 整车
+        const orderNo = this.info.info.jshi_grouping_no;
         const { msg } = await this.trafficService.payByCustomer(orderNo);
         uni.showToast({
           titel: msg,
@@ -803,7 +807,7 @@ export default {
             });
           }
         }
-      });
+      })
     },
     // 点击拒收按钮
     async receivedOrder() {

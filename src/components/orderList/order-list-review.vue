@@ -2,8 +2,8 @@
   <view v-show="isOrderreview" class="order_more">
     <p style="height: 10px;"><span class="sanjiao"></span></p>
     <view class="background">
-      <view class="order_more_text" @click="orderNoClick('Y')"><view class="iconfont iconcancel order_more_iconStyle"></view>通过</view>
-      <view class="order_more_text" @click="orderNoClick('N')"><view class="iconfont iconcancel order_more_iconStyle"></view>失败</view>
+      <view @tap="orderNoClick('Y')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>通过</view>
+      <view @tap="orderNoClick('N')" class="order_more_text"><view class="iconfont iconcancel order_more_iconStyle"></view>失败</view>
     </view>
   </view>
 </template>

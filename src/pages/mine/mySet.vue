@@ -40,7 +40,7 @@
 
     <view
         class="addWx"
-        @click="addWX"
+        @tap="addWX"
       >
       + 添加绑定微信
     </view>

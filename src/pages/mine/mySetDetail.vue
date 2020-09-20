@@ -14,7 +14,7 @@
     </view>
     <view class="line"></view>
     <view @tap="alertUrl" class="row">
-      <view @click="alertUrl" class="title">更改支付密码</view>
+      <view @tap="alertUrl" class="title">更改支付密码</view>
     </view>
     <view class="middleLine"></view>
     <!-- <view class="row">
@@ -35,7 +35,7 @@
       <view class="version">{{version}}{{$jConfig.version || ''}}</view>
     </view>
 
-    <button @click="loginOutAction" class="btnStyle">退出登录</button>
+    <button @tap="loginOutAction" class="btnStyle">退出登录</button>
 
   </view>
 </template>

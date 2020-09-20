@@ -61,7 +61,7 @@
             <view class='login-pwd-icon-wrap'>
               <view
                 class='login-get-sms-code'
-                @click="getSMSCode"
+                @tap="getSMSCode"
               >获取验证码
               </view>
             </view>
@@ -72,12 +72,12 @@
     <view class="login-btns-wrap">
       <Button
         class="login-primary-btn"
-        @click="login"
+        @tap="login"
       >登录
       </Button>
       <Button
         class="login-default-btn mt40"
-        @click="toggleSMSLogin"
+        @tap="toggleSMSLogin"
       >{{loginType === 'SMS' ? '账号登录' : '短信验证码登录'}}
       </Button>
     </view>

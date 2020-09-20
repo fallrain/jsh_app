@@ -6,7 +6,7 @@
       <!--<view v-for="item in buttonList" :key="item.name">
         <view @tap="ckickBot(item)" class="order-foot-infred" v-if="item.name == ''"></view>
 
-        <view v-else class="order-foot-inf2" @click="ckickBot(item)">
+        <view v-else class="order-foot-inf2" @tap="ckickBot(item)">
           <view :class="{'order-foot-inf4':!item.ischeck,'order-foot-inf5':item.ischeck}">{{item.name}}</view>
         </view>
       </view>-->

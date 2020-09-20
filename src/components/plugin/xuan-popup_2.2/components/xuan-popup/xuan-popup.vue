@@ -1,4 +1,4 @@
-﻿<!-- 
+﻿<!--
  *属性 isdistance 每个弹窗之间是否有间距
  *数组形式传值
  *type,类型 success warn info err loading（string）
@@ -9,7 +9,7 @@
 <template>
 	<view class="popup_list">
 		<view v-for="(items,index) of popup_list" :id="items.uuid" :key="items.uuid" >
-			<view class="mpopup" :style="{ background: items.color ,top:index*distance+45+'px'}" :class="[items.animator,items.typeClass]" @click="close(items.uuid,index)">
+			<view :class="[items.animator,items.typeClass]" :style="{ background: items.color ,top:index*distance+45+'px'}" @tap="close(items.uuid,index)" class="mpopup">
 				<view class="pic"><image class="icon" mode="aspectFit" :src="items.icon"></image></view>
 				<text class="text" :style="{ color: items.colortext }">{{ items.content }}</text>
 			</view>
@@ -31,10 +31,10 @@
 				type:Boolean,
 				default:true
 			},
-			
+
 		},
 		methods:{
-			init:function(list){			
+			init:function(list){
 				if (list.type == 'success') {
 					list.icon = '../../static/xuan-popup/success.png';
 					list.typeClass='mpopup-success';
@@ -71,12 +71,12 @@
 				//判断是否可点击消失/可控制消失
 				if(typeof(list.isClick)!='boolean'){list.isClick=false;}
 				//if(typeof(list.isControl)!='boolean'){list.isControl=false;}
-				
+
 				//初始化
-				let new_list=this.init(list);		
+				let new_list=this.init(list);
 				//添加进数组
 				this.popup_list.push(new_list);
-		
+
 				if(!new_list.isClick){
 					this.disappear(new_list.uuid,new_list.timeout);
 				}//可点击消失
@@ -86,7 +86,7 @@
 				// else if(new_list.isControl){
 				// 	this.$emit('Callback',new_list.uuid);
 				// }
-				
+
 			},
 			//自动消失
 			disappear:function(uuid,timeout){
@@ -144,10 +144,10 @@
 							this.popup_list[i].animator='fade_Top';
 							res(uuid)
 							break;
-						} 
+						}
 					}
 				})
-				
+
 			},
 			//更新
 			update:function(update_list){
@@ -157,7 +157,7 @@
 						this.init(this.popup_list[i]);
 						this.popup_list[i].content=update_list.content;
 						break;
-					} 
+					}
 				}
 			},
 			//生成uuid
@@ -185,7 +185,7 @@
 		left: 0;
 		right: 0;
 		margin: 0 auto;
-		border-radius: 5px;	
+		border-radius: 5px;
 		z-index:998;
 		.pic{
 			display: flex;
@@ -244,8 +244,8 @@
 	{
 	    from {
 	        opacity: 0;
-	        -webkit-transform: translate(0,-100px); 
-	        transform: stranslate(0,-100px); 
+	        -webkit-transform: translate(0,-100px);
+	        transform: stranslate(0,-100px);
 	    }
 	    to {
 	        opacity:1;
@@ -258,11 +258,11 @@
 	{
 	    from {
 	        opacity:1;
-	        -webkit-transform: translate(0,10px); 
+	        -webkit-transform: translate(0,10px);
 	        transform: stranslate(0,10px);
 	    }
 	    to {
-	
+
 			opacity: 0;
 			-webkit-transform: translate(0,-100px);
 			transform: stranslate(0,-100px);

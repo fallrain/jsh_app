@@ -7,7 +7,7 @@
       </view>
 <!--      <view class="order_more_text" @tap="orderNoClick('2')"><view class="iconfont iconcancel order_more_iconStyle"></view>整单号</view>-->
 <!--      <view class="order_more_text" @tap="orderNoClick('3')"><view class="iconfont iconcancel order_more_iconStyle"></view>GVC单号</view>-->
-<!--      <view class="order_more_text" @click="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>-->
+<!--      <view class="order_more_text" @tap="orderNoClick('4')"><view class="iconfont iconcancel order_more_iconStyle"></view>物流单号</view>-->
     </view>
   </view>
 </template>

@@ -7,7 +7,7 @@
     </view>
     <view class="v-d-sinfo" v-show="show">
       <view class="v-d-sinfo-li" v-for="(it,index) in infoss.JDWarehouse" :key="index"
-            :class="[(it.IJWH_ADDRESS===adress)&& 'active']" @click="payVehicle(it,index)">{{it.IJWH_ADDRESS}}</view>
+            :class="[(it.IJWH_ADDRESS===adress)&& 'active']" @tap="payVehicle(it,index)">{{it.IJWH_ADDRESS}}</view>
     </view>
     <view v-if="sendType==='edit'" class="v-d-s-inp">
       <j-input v-model="name" placeholder='请输入手机号' handChange="this.valChange">
@@ -30,11 +30,11 @@
         </template>
       </j-input>
     </view>
-    <view v-if="sendType==='edit'" class="v-d-s-but" @click="changeSup"><view class="v-d-s-but-kong">确认</view></view>
+    <view @tap="changeSup" class="v-d-s-but" v-if="sendType==='edit'"><view class="v-d-s-but-kong">确认</view></view>
     <view v-if="sendType==='view'" class="v-d-s-fox4">姓名：{{name}}</view>
     <view v-if="sendType==='view'" class="v-d-s-fox4">手机号：{{mobile}}</view>
     <view v-if="sendType==='view'" class="v-d-s-fox4">身份证号：{{pake}}</view>
-    <view v-if="sendType==='view'" class="v-d-s-but" @click="changeSend"><view class="v-d-s-but-kong">修改</view></view>
+    <view @tap="changeSend" class="v-d-s-but" v-if="sendType==='view'"><view class="v-d-s-but-kong">修改</view></view>
   </view>
 </template>
 
