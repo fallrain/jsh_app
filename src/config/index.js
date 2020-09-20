@@ -4,12 +4,12 @@ export default {
       baseUrl: 'https://mall.jsh.com',
       // baseUrl: 'https://new.jsh.com',
       cBaseUrl: 'https://c-beta.jsh.com',
-      version: '207',
+      version: '214',
     },
     sit: {
       baseUrl: 'https://mall.jsh.com',
       cBaseUrl: 'https://c.jsh.com',
-      version: '207',
+      version: '214',
     },
     prod: {
       baseUrl: 'https://new.jsh.com',
