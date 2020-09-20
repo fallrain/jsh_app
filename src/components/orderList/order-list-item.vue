@@ -114,10 +114,10 @@
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           样机结算
         </view>
-        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">
-          <view class="iconfont iconcar iconStyle iconTransform"></view>
-          整车查看(作废)
-        </view>
+<!--        <view v-if="zcck" @click="zcckAction" class="produceDetailItem-btm">-->
+<!--          <view class="iconfont iconcar iconStyle iconTransform"></view>-->
+<!--          整车查看(作废)-->
+<!--        </view>-->
         <view v-if="jshi_order_gvs_status" @click="checkWL" class="produceDetailItem-btm">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           查看物流
