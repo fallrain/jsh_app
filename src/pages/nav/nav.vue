@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <view>
     <view>
       <view
         v-for="(r,i) in routerData"
@@ -8,7 +8,7 @@
         <navigator :url="'/'+r">{{r}}</navigator>
       </view>
     </view>
-  </div>
+  </view>
 </template>
 
 <script>
