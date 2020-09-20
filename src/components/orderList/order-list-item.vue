@@ -923,18 +923,24 @@ export default {
         });
       }
     },
-    async orderCancel() {
-      const { code } = await this.orderService.cancelOrderBybstnk(this[ORDER.GET_ORDER].orderDetail.info.bstnk);
-      if (code === '1') {
-        const that = this;
-        uni.showToast({
-          title: '取消订单成功',
-          icon: 'none'
-        });
-        setTimeout(() => {
-          that.goIndex();
-        }, 1000);
-      }
+    orderCancel() {
+      /* 是否确认作废此订单 */
+      uni.showModal({
+        title: '提示',
+        content: '是否确认作废此订单？',
+        success: async (res) => {
+          if (res.confirm) {
+            const bstnk = this.info.info.bstnk;
+            const { code } = await this.orderService.cancelOrderBybstnk(bstnk);
+            if (code === '1') {
+              uni.showToast({
+                title: '作废订单成功',
+                icon: 'none'
+              });
+            }
+          }
+        }
+      });
     }
   }
 };
