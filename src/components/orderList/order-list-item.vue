@@ -394,7 +394,7 @@ export default {
     },
     invalidButton() {
       /* 是否显示订单作废 */
-      return (this.info.btnsInfo.invalidButton !== '0' && this.info.combinationTag !== '整车');
+      return (this.info.btnsInfo.invalidButton !== '0' && this.info.info.combinationTag !== '整车');
     },
     showNode() {
       const details = this.info.details[0];
