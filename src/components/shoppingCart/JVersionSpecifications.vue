@@ -27,10 +27,10 @@
             <view class="jVersionSpecifications-pop-detail-head">
               <text class="jVersionSpecifications-pop-detail-head-title">{{item.title}}</text>
               <view
-                :class="[
-                'jVersionSpecifications-pop-detail-head-title-arrow iconfont iconxia',
-                !item.isExpand && 'active'
-              ]"
+                :class="{
+                  'jVersionSpecifications-pop-detail-head-title-arrow iconfont iconxia':true,
+                  'active': !item.isExpand
+                }"
                 @tap="toggleExpand(item)"
               >
               </view>

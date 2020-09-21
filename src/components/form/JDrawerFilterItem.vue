@@ -21,7 +21,9 @@
         v-for="(item,filterIndex) in filterItem.data"
         :key="filterIndex"
         class="jDrawerFilterItem-list-item"
-        :class="[item.isChecked && 'active']"
+        :class="[
+          item.isChecked && 'active'
+        ]"
         @tap="choose(item,filterItem.data)"
       >{{item.value}}
       </view>
