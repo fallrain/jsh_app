@@ -607,8 +607,9 @@ export default {
     },
     // 查看物流
     checkWL() {
+      const itemInfo = JSON.stringify(this.info);
       uni.navigateTo({
-        url: '/pages/orderList/orderWL'
+        url: `/pages/orderList/orderWL?currentInfo=${itemInfo}`
       });
     },
     // 自主扣款
@@ -809,7 +810,7 @@ export default {
             });
           }
         }
-      })
+      });
     },
     // 点击拒收按钮
     async receivedOrder() {
