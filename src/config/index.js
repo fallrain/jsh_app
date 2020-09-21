@@ -14,6 +14,7 @@ export default {
     prod: {
       baseUrl: 'https://new.jsh.com',
       cBaseUrl: 'https://c.jsh.com',
+      version: '005',
     }
   },
   'mp-alipay': {
