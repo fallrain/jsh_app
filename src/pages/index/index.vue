@@ -106,7 +106,7 @@
             <view class="homepage-recommend-describe">{{item.describe}}</view>
             <view v-if="item.isShowMore" class="homepage-recommend-more" @tap="goList(item)">MORE</view>
           </view>
-          <view  v-if="item.data.length !== 0">
+          <view v-if="item.data.length !== 0">
             <swiper
               @change="change"
               autoplay="true"
@@ -123,15 +123,19 @@
               >
                 <view @tap="goDetail(v)" class="homepage-recommend-imgs">
                   <image v-if="v.imageUrl" :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
-                  <image v-if="item.isNewProduct" src="../../assets/img/index/isNewProduct.png" class="homepage-recommend-imaget" mode="aspectFill">
-                  <image v-if="item.isResource" src="../../assets/img/index/icon_resource.gif" class="homepage-recommend-imaget" mode="aspectFill">
-                  <image v-if="!v.imageUrl" src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
+                  <image class="homepage-recommend-imaget" mode="aspectFill"
+                         src="../../assets/img/index/isNewProduct.png" v-if="item.isNewProduct">
+                    <image class="homepage-recommend-imaget" mode="aspectFill"
+                           src="../../assets/img/index/icon_resource.gif" v-if="item.isResource">
+                      <image class="homepage-recommend-image" mode="aspectFill" src="../../assets/img/index/none.png"
+                             v-if="!v.imageUrl"></image>
 
                 </view>
               </swiper-item>
             </swiper>
           </view>
-          <image v-else  src="../../assets/img/index/none.png" class="homepage-recommend-image" mode="aspectFill"></image>
+          <image class="homepage-recommend-image" mode="aspectFill" src="../../assets/img/index/none.png"
+                 v-else></image>
         </view>
       </view>
       <!--   资讯测试版     -->
@@ -179,14 +183,14 @@
       <image :src="item.image" mode="aspectFill" />
       <image :src="item.img" mode="aspectFill" />
     </view> -->
-<!--     广告图 直播-->
-         <view class="homepage-nav" v-show="isShowNav">
-          <image mode="aspectFill" src="../../assets/img/index/manypeople.png" @tap="goNav"/>
-          <i
-            @tap="deleteNav"
-            class="homepage-nav-close iconfont iconcross"
-          ></i>
-        </view>
+    <!--     广告图 直播-->
+    <view class="homepage-nav" v-if="isShowNav">
+      <image :src="liveVideoImg" @tap="goNav"/>
+      <view
+        @tap="deleteNav"
+        class="homepage-nav-close iconfont iconcross"
+      ></view>
+    </view>
   </view>
 </template>
 
@@ -197,8 +201,8 @@ import {
 } from 'vuex';
 import {
   COMMODITY,
-  USER,
-  SHOPPING_CART
+  SHOPPING_CART,
+  USER
 } from '../../store/mutationsTypes';
 
 import {
@@ -212,6 +216,7 @@ import shoppingImg from '@/assets/img/tabbar/shopping.png';
 import shoppingImgImgActive from '@/assets/img/tabbar/shopping-actived.png';
 import mineImg from '@/assets/img/tabbar/mine.png';
 import mineImgImgActive from '@/assets/img/tabbar/mine-actived.png';
+import liveVideoImg from '@/assets/img/index/manypeople.png';
 import './css/index.scss';
 
 export default {
@@ -230,6 +235,7 @@ export default {
         mineImg,
         mineImgImgActive
       },
+      liveVideoImg,
       // 广告图显示
       isShowNav: true,
       // 搜索栏
@@ -526,7 +532,7 @@ export default {
     },
     // 客服
     async service() {
-      let url = '';
+      let params = '';
       const { code, data } = await this.udeskService.getUdesk(this.saleInfo.customerCode, {
         addressArea: this.defaultSendToInf.customerCode
       });
@@ -548,15 +554,11 @@ export default {
         //* c_phone 电话号码（唯一）* nonce 随机数［必填］* timestamp 13位毫秒时间戳［必填］
         //* web_token/weiyi:id  客户ID，如果客户ID为邮箱或手机号，可以用邮箱和手机号［必填］
         //* signature 加密签名，对timestamp、nonce、web_token和c_key进行SHA1加密后的字符串［必填］
-        url = `https://haier.s2.udesk.cn/im_client?web_plugin_id=28198&customer_token=${web_token1}&c_phone=${this.tokenUserInf.phoneNumber}&nonce=${nonce1}&signature=${sha}&timestamp=${timestamp1}&web_token=${web_token1}`;
-        console.log(url);
-        // InAppBrowserService.openAd(url);
-      } else {
-        // PopupService.showToast(response.message);
+        params = `customer_token=${web_token1}&c_phone=${this.tokenUserInf.phoneNumber}&nonce=${nonce1}&signature=${sha}&timestamp=${timestamp1}&web_token=${web_token1}`;
       }
 
       uni.navigateTo({
-        url: `/pages/index/service?url=${url}`
+        url: `/pages/index/service?${params}`
       });
     },
     // 历史记录
@@ -632,7 +634,7 @@ export default {
       });
       // console.log(url);
     },
-    //头条公告
+    // 头条公告
     // async getHeadLines() {
     //   // const {data} = await this.HaierNoticeService.queryHaierNoticeForCustomerLoginPage()
     //   const url = 'http://58.56.174.18:9001/home';

@@ -1,23 +1,23 @@
 <template>
   <view class="liveBroadcas">
-      <view class="liveBroadcas-title mla">
-        <view class="liveBroadcas-title-web">
-          <image src="../../assets/img/index/vdieo.png" class="liveBroadcas-title-img"></image>
-          <view class="liveBroadcas-title-con">直播</view>
-        </view>
-        <view class="liveBroadcas-row" v-if="livingList.length !== 0">
-          <view class="liveBroadcas-row-con" v-for="(item,index) in livingList" :key="index">
-            <image class="liveBroadcas-row-img" :src="item.livePageUrl" @tap="goBroadcas(item)"></image>
-            <view class="liveBroadcas-row-title">{{item.liveName}}</view>
-          </view>
-        </view>
-        <view class="liveBroadcas-else" v-else>
-          <image src="../../assets/img/index/video-none.png" class="liveBroadcas-else-img"></image>
-          <view class="liveBroadcas-else-title">当前暂无直播信息</view>
+    <view class="liveBroadcas-title mla">
+      <view class="liveBroadcas-title-web">
+        <image class="liveBroadcas-title-img" src="../../assets/img/index/vdieo.png"></image>
+        <view class="liveBroadcas-title-con">直播</view>
+      </view>
+      <view class="liveBroadcas-row" v-if="livingList.length !== 0">
+        <view :key="index" class="liveBroadcas-row-con" v-for="(item,index) in livingList">
+          <image :src="item.livePageUrl" @tap="goBroadcas(item)" class="liveBroadcas-row-img"></image>
+          <view class="liveBroadcas-row-title">{{item.liveName}}</view>
         </view>
       </view>
+      <view class="liveBroadcas-else" v-else>
+        <image class="liveBroadcas-else-img" src="../../assets/img/index/video-none.png"></image>
+        <view class="liveBroadcas-else-title">当前暂无直播信息</view>
+      </view>
+    </view>
 
-    <view  class="liveBroadcas-tit">
+    <view class="liveBroadcas-tit">
       <view class="liveBroadcas-title-web">
         <image src="../../assets/img/index/replay.png" class="liveBroadcas-title-img"></image>
         <view class="liveBroadcas-title-con">回放</view>
@@ -85,8 +85,8 @@ export default {
           console.log(res.data.data.livingList);
           that.livingList = res.data.data.livingList;
         },
-        fail(e) {
-          let msg = '请求失败';
+        fail() {
+          const msg = '请求失败';
           // if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
           //   msg = '请求超时';
           // }
@@ -122,7 +122,7 @@ export default {
           // })
         },
         fail(e) {
-          let msg = '请求失败';
+          const msg = '请求失败';
           // if (e && e.errMsg && e.errMsg === 'request:fail timeout') {
           //   msg = '请求超时';
           // }
@@ -133,9 +133,10 @@ export default {
         }
       });
     },
-    goBroadcasTwo(item) {
+    goBroadcasTwo({ playbackUrl }) {
+      const url = encodeURIComponent(playbackUrl);
       uni.navigateTo({
-        url: `/pages/index/broadcasDetail?url=${item.playbackUrl}`
+        url: `/pages/index/broadcasDetail?url=${url}`
       });
     }
   }
@@ -147,9 +148,11 @@ export default {
     background: #F5F5F5;
     padding: 24px;
   }
+
   .mla {
     margin-bottom: 24px;
   }
+
   .liveBroadcas-title {
     width: 100%;
     min-height: 374px;
@@ -157,6 +160,7 @@ export default {
     border-radius: 20px;
     padding: 30px 24px 40px 24px;
   }
+
   .liveBroadcas-title-web {
     display: flex;
     font-size: 36px;
@@ -164,44 +168,53 @@ export default {
     align-items: center;
     margin-bottom: 32px;
   }
+
   .liveBroadcas-title-img {
     width: 50px;
     height: 50px;
     margin-right: 6px;
   }
+
   .liveBroadcas-else {
-    margin:10% 20% 10% 10%;
+    margin: 10% 20% 10% 10%;
     display: flex;
     align-items: center;
   }
+
   .liveBroadcas-else-img {
     width: 84px;
     height: 84px;
     margin-right: 40px;
   }
+
   .liveBroadcas-else-title {
     font-size: 40px;
     color: #BBB9B9;
   }
+
   .liveBroadcas-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
+
   .liveBroadcas-row-con {
     width: 48%;
     margin-bottom: 28px;
   }
+
   .liveBroadcas-row-img {
     width: 100%;
     height: 168px;
     border-radius: 10px;
   }
+
   .liveBroadcas-row-title {
     font-size: 28px;
     color: #333;
     margin-top: 6px;
   }
+
   .liveBroadcas-tit {
     width: 100%;
     background: #FFFFFF;
