@@ -5,7 +5,7 @@
       <view @tap="personInforClick" class="title">个人资料</view>
     </view>
     <view class="line"></view>
-    <view @tap="alertUrl" class="row">
+    <!--<view @tap="alertUrl" class="row">
       <view @tap="alertUrl" class="title">修改手机号</view>
     </view>
     <view class="line"></view>
@@ -15,7 +15,7 @@
     <view class="line"></view>
     <view @tap="alertUrl" class="row">
       <view @tap="alertUrl" class="title">更改支付密码</view>
-    </view>
+    </view>-->
     <view class="middleLine"></view>
     <!-- <view class="row">
         <view class="title">评价</view>

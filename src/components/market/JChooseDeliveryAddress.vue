@@ -104,7 +104,8 @@ export default {
     searchVal(val) {
       const addArr = [];
       this.addressList.forEach((item) => {
-        if (item.addressName.indexOf(val) > -1) {
+        const name = `(${item.addressCode})${item.addressName}`
+        if (name.indexOf(val) > -1) {
           addArr.push(item);
         }
       });

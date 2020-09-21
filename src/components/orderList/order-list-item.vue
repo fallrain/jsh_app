@@ -118,10 +118,10 @@
 <!--          <view class="iconfont iconcar iconStyle iconTransform"></view>-->
 <!--          整车查看(作废)-->
 <!--        </view>-->
-        <view @tap="checkWL" class="produceDetailItem-btm" v-if="jshi_order_gvs_status">
+        <!--<view @tap="checkWL" class="produceDetailItem-btm" v-if="jshi_order_gvs_status">
           <view class="iconfont iconcar iconStyle iconTransform"></view>
           查看物流
-        </view>
+        </view>-->
       </view>
       <!--<order-list-item-more :isOrderMore="isOrderMore"></order-list-item-more>-->
     </view>

@@ -23,7 +23,7 @@
         <order-detail-base :baseInfo="infoList.info" :details="infoList.details[0]" ></order-detail-base>
       </view>
       <view>
-        <order-detail-flow :processJudgement="processJudgement"></order-detail-flow>
+        <order-detail-flow :showTPL="showTPL" :processJudgement="processJudgement"></order-detail-flow>
       </view>
       <view class="order-detail-fot-high"></view>
       <view class="orderDetail-foot">
@@ -59,8 +59,11 @@ export default {
   },
   data() {
     return {
+      showTPL: false,
       infoList: {},
-      processJudgement: [] // 物流信息
+      processJudgement: {
+        outFactoryStatus: []
+      } // 物流信息
     };
   },
   computed: {
@@ -92,10 +95,11 @@ export default {
   },
   methods: {
     getOrderTPL() {
+      const that = this;
       const url = 'http://testhaier.jushanghui.com/bspfront/order/orderTPL';
       const token = uni.getStorageSync('token');
-      // const orderID = this.infoList.info.bstnk;
-      const orderID = 'QFA1400600133';
+      const orderID = this.infoList.info.bstnk;
+      // const orderID = 'QFA1400600133';
       const userid = this.saleInfo.customerCode;
       uni.request({
         url,
@@ -106,9 +110,10 @@ export default {
           userid
         },
         success(response) {
-          if (response.code === '200') {
-            this.processJudgement = response.data.orderxq.outFactoryStatus;
+          if (response.data.code === '200') {
+            that.processJudgement = response.data.data.orderxq;
           }
+          that.showTPL = true;
         },
         fail(e) {
           let msg = '请求失败';

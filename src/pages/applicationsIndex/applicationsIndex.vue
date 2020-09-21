@@ -142,7 +142,7 @@
               ></view>
             </template>
           </j-cell>
-          <j-cell
+          <!--<j-cell
             @cellClick="cellClick('/pages/mine/myAlterTel')"
             class="border-b"
             title="修改手机号"
@@ -163,7 +163,7 @@
                 class="drawer-menu-icon iconfont iconyou"
               ></view>
             </template>
-          </j-cell>
+          </j-cell>-->
           <j-cell
             @cellClick="cellClick('/pages/messageInfoList/messageInfoList?index=0')"
             class="border-b pos-r"
@@ -732,6 +732,11 @@ export default {
         id = aaa[aaa.length - 1];
         uni.navigateTo({
           url: `/pages/index/information?id=${id}`
+        });
+      } else if (item.url.indexOf('/newBanner') > -1) {
+        const options = item.url.split('/newBanner')[1];
+        uni.navigateTo({
+          url: `/pages/index/banner${options}`
         });
       }
     },

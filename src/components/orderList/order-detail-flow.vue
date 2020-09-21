@@ -2,7 +2,19 @@
   <view class="order-flow-con">
     <view class="order-flow-tou">出库状态</view>
     <view class="order-flow-line"></view>
-    <view class="order-flow-steps">
+    <view v-if="showTPL" class="order-flow-list">
+      <view
+        v-for="(item, index) in processJudgement.outFactoryStatus"
+        :key="index"
+        class="order-flow-item">
+        <i v-if="index===(processJudgement.outFactoryStatus.length-1)"
+           class="iconfont iconradio mr20 text-theme"></i>
+        <view v-else class="my-circle mr20"></view>
+        {{item}}
+      </view>
+      <view v-if="processJudgement.outFactoryStatus.length === 0" class="">暂无物流信息，请稍后查询......</view>
+    </view>
+    <view v-if="false" class="order-flow-steps">
       <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'||processJudgement.orderType==='4'">
         <view v-show="'1'===processJudgement.orderCreation" class="order-detail-judge1"></view><!--已经进行完成的流程-xian-->
         <view v-show="'0'===processJudgement.orderCreation" class="order-detail-judge2"></view><!--还未进行完成的流程-->
@@ -139,11 +151,19 @@ export default {
   components: {
   },
   props: {
+    showTPL: {
+      type: Boolean,
+    },
     processJudgement: {
       type: Object,
       default() {
         return {};
       }
+    }
+  },
+  watch: {
+    processJudgement(val) {
+      console.log(val);
     }
   },
   data() {
@@ -158,14 +178,28 @@ export default {
       // customerSignIn: '0', // 客户签收1234
       // invoiceOpening: '0', // 发票开具1234
       // toVoid: '1', // 作废1234
-      type: 1, // 1:五项；2：4项::::
-      activeColor: '#ED2856'
+      // type: 1, // 1:五项；2：4项::::
+      // activeColor: '#ED2856'
     };
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+  .order-flow-list{
+    padding: 24px;
+    .order-flow-item{
+      display: flex;
+      align-items: center;
+      color: #999;
+      .my-circle{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #999;
+      }
+    }
+  }
   .order-flow-con {
     border-radius: 20px;
     background-color: #FFFFFF;

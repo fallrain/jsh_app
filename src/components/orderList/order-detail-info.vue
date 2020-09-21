@@ -4,7 +4,7 @@
       <button type="button" class="order-info-head-btn">组合</button>
       <text class="order-info-head-text">{{titleAndNoFun}}</text>
     </view>
-    <view :class="showler ? '' : 'showType'">
+    <view class="showType">
       <view class="order-info-cnt" v-for="(product,index) in info.details" :key="index">
         <view class="order-info-cnt-img">
           <image :src="product.jshd_product_img" style="width: 100%;height: 100%;"></image>
@@ -51,10 +51,6 @@ export default {
     },
   },
   methods: {
-    showLer() {
-      this.showler = !this.showler;
-      console.log(this.showler);
-    }
   }
 };
 </script>
