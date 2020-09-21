@@ -607,6 +607,7 @@ export default {
     },
     // 轮播图跳转
     goSwiperDetail(item) {
+      debugger;
       console.log(item);
       let aaa = [];
       let productCode = '';
@@ -623,6 +624,11 @@ export default {
         id = aaa[aaa.length - 1];
         uni.navigateTo({
           url: `/pages/index/information?id=${id}`
+        });
+      } else if (item.url.indexOf('/newBanner') > -1) {
+        const options = item.url.split('/newBanner')[1];
+        uni.navigateTo({
+          url: `/pages/index/banner${options}`
         });
       }
     },

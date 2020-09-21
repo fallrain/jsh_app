@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       infoList: {},
-      processJudgement: []
+      processJudgement: [] // 物流信息
     };
   },
   computed: {
@@ -77,7 +77,7 @@ export default {
     }
     console.log(this.infoList);
     this.getOrderTPL();
-    this.processJudgement = JSON.parse(this.infoList.info.processJudgement);
+    /* this.processJudgement = JSON.parse(this.infoList.info.processJudgement);
     this.processJudgement.jshi_created_time = this.infoList.info.jshi_created_time;
     this.processJudgement.sap_judge_date = this.infoList.info.sap_judge_date;
     this.processJudgement.sap_dn1date = this.infoList.info.sap_dn1date;
@@ -88,24 +88,27 @@ export default {
     this.processJudgement.sap_reorder_date = this.infoList.info.sap_reorder_date;
     this.processJudgement.jshi_plan_in_date = this.infoList.info.jshi_plan_in_date;
     this.processJudgement.sap_sys_invoice_time = this.infoList.info.sap_sys_invoice_time;
-    this.processJudgement.sap_tax_invoice_time = this.infoList.info.sap_tax_invoice_time;
+    this.processJudgement.sap_tax_invoice_time = this.infoList.info.sap_tax_invoice_time; */
   },
   methods: {
-    async getOrderTPL() {
+    getOrderTPL() {
       const url = 'http://testhaier.jushanghui.com/bspfront/order/orderTPL';
       const token = uni.getStorageSync('token');
-      const orderID = this.infoList.info.bstnk;
+      // const orderID = this.infoList.info.bstnk;
+      const orderID = 'QFA1400600133';
       const userid = this.saleInfo.customerCode;
       uni.request({
         url,
         method: 'POST',
         data: {
-          token,
+          systemId: '365AppNew',
           orderID,
           userid
         },
         success(response) {
-          console.log(response);
+          if (response.code === '200') {
+            this.processJudgement = response.data.orderxq.outFactoryStatus;
+          }
         },
         fail(e) {
           let msg = '请求失败';

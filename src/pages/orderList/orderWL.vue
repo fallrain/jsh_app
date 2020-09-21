@@ -1,6 +1,6 @@
 <template>
     <view>
-        <web-view :webview-styles="webviewStyles" :src='srcUrl'></web-view>
+        <web-view :src='srcUrl'></web-view>
     </view>
 </template>
 
@@ -32,12 +32,15 @@ export default {
       ORDER.GET_ORDER
     ]),
   },
+  onLoad(options) {
+    if (options.currentInfo) {
+      const info = JSON.parse(options.currentInfo);
+      console.log(info);
+      this.srcUrl = `https://icloud.rrswl.com/web/searchOrdersNo?bstkd=${info.info.dnLogistics}`;
+    }
+  },
   created() {
-    console.log('11111111');
-    this.infoList = this[ORDER.GET_ORDER].orderDetail;
-    const dnLogistics = this.infoList.info.dnLogistics;
-    this.srcUrl = `https://icloud.rrswl.com/web/searchOrdersNo?bstkd=${dnLogistics}`;
-    console.log(this.srcUrl);
+    // this.infoList = this[ORDER.GET_ORDER].orderDetail;
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
   mounted() {

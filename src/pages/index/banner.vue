@@ -1,6 +1,6 @@
 <template>
     <view>
-        <web-view :src="url"></web-view>
+        <web-view width="100%" :src="url"></web-view>
     </view>
 </template>
 <script>
@@ -12,7 +12,12 @@ export default {
     };
   },
   onLoad(option) {
-    this.url = option.url;
+    if (option.url) {
+      this.url = option.url;
+    }
+    if (option.html){
+      this.url = `https://cdn.jsh.com/html/banner/${option.html}.html`
+    }
     // console.log(option)
     console.log(this.url);
   },

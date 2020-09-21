@@ -19,9 +19,15 @@
                 @tap="hide"
               ></i>
             </view>
-            <view class="jChooseDeliveryAddressDrawer-input">
-              <input v-model="searchVal" type="text" placeholder="请输入地址">
+            <view class="mt24">
+              <j-search-input
+                placeholder="请输入搜索信息"
+                v-model="searchVal"
+              ></j-search-input>
             </view>
+            <!--<view class="jChooseDeliveryAddressDrawer-input">
+              <input v-model="searchVal" type="text" placeholder="请输入地址">
+            </view>-->
             <view class="jChooseDeliveryAddressDrawer-list">
               <view
                 :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
@@ -48,10 +54,12 @@
 </template>
 
 <script>
+import JSearchInput from '../form/JSearchInput';
 
 export default {
   name: 'JChooseDeliveryAddress',
   components: {
+    JSearchInput
   },
   props: {
     show: Boolean,

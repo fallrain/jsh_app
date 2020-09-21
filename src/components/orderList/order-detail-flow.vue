@@ -1,6 +1,6 @@
 <template>
   <view class="order-flow-con">
-    <view class="order-flow-tou">订单信息</view>
+    <view class="order-flow-tou">出库状态</view>
     <view class="order-flow-line"></view>
     <view class="order-flow-steps">
       <view class="position-r" v-if="processJudgement.orderType==='1'||processJudgement.orderType==='2'||processJudgement.orderType==='3'||processJudgement.orderType==='4'">
