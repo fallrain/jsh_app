@@ -605,6 +605,7 @@ export default {
     },
     // 轮播图跳转
     goSwiperDetail(item) {
+      debugger;
       console.log(item);
       let aaa = [];
       let productCode = '';
@@ -622,6 +623,11 @@ export default {
         uni.navigateTo({
           url: `/pages/index/information?id=${id}`
         });
+      } else if (item.url.indexOf('/newBanner') > -1) {
+        const options = item.url.split('/newBanner')[1];
+        uni.navigateTo({
+          url: `/pages/index/banner${options}`
+        });
       }
     },
     // 目录列表跳转
@@ -632,7 +638,7 @@ export default {
       });
       // console.log(url);
     },
-    //头条公告
+    // 头条公告
     // async getHeadLines() {
     //   // const {data} = await this.HaierNoticeService.queryHaierNoticeForCustomerLoginPage()
     //   const url = 'http://58.56.174.18:9001/home';
