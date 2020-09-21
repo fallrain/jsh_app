@@ -142,6 +142,17 @@ const util = {
     const typeTemp = type.toUpperCase();
     return getPriceKeyFromAllPrice()[typeTemp];
   },
+  getUrlVal(name, url) {
+    /* 获取url参数 */
+    const urlArgs = url || window.location.search;
+    if (urlArgs) {
+      const reg = new RegExp(`${name}=([^&]+)`);
+      const results = urlArgs.match(reg);
+      if (results) {
+        return results[1];
+      }
+    }
+  },
 };
 
 export default util;

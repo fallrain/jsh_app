@@ -134,7 +134,10 @@ export default {
       });
     },
     goBroadcasTwo({ playbackUrl }) {
-      const url = encodeURIComponent(playbackUrl);
+      let url;
+      url = playbackUrl.replace(/(width=[^&]+)&/, 'width=100%25');
+      url = url.replace(/(height=[^&]+)&/, '');
+      url = encodeURIComponent(url);
       uni.navigateTo({
         url: `/pages/index/broadcasDetail?url=${url}`
       });
