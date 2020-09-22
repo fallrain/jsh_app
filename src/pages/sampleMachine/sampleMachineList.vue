@@ -207,7 +207,7 @@ export default {
     async init() {
       await this.getAddressList();
       await this.queryBrandAndInvsort();
-      this.mescroll.resetUpScroll(true);
+      // this.mescroll.resetUpScroll(true);
     },
     async getAddressList() {
       // 获取地址
@@ -325,7 +325,8 @@ export default {
           title: '暂无数据!',
           duration: 3000
         });
-        scrollView.pageSize = 10;
+        this.list = [];
+        scrollView.pageSize = 15;
         scrollView.total = 0;
         return scrollView;
       }

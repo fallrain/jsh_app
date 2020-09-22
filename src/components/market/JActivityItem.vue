@@ -55,7 +55,11 @@
       <view @tap="goDetail()" class="jActivity-pic">
         <view :key="index" class="pic-item" v-for="(item, index) in activity.products">
           <view class="pic-style">
-            <image :src="item.imageUrl"></image>
+            <u-lazy-load
+              :error-img="errorImg"
+              :image="item.imageUrl"
+            ></u-lazy-load>
+<!--            <image :src="item.imageUrl"></image>-->
           </view>
           <view class="title-style">{{item.productName}}</view>
         </view>
@@ -86,14 +90,22 @@
             >主产品
             </view>
             <view class="pic-style">
-              <image :src="item.imageUrl"></image>
+              <u-lazy-load
+                :error-img="errorImg"
+                :image="item.imageUrl"
+              ></u-lazy-load>
+<!--              <image :src="item.imageUrl"></image>-->
             </view>
             <view class="title-style">{{item.productName}}</view>
           </view>
           <!--配比产品-->
           <view :key="item.productCode" class="pic-item" v-for="(item) in activity.pbProducts">
             <view class="pic-style">
-              <image :src="item.imageUrl"></image>
+              <u-lazy-load
+                :error-img="errorImg"
+                :image="item.imageUrl"
+              ></u-lazy-load>
+<!--              <image :src="item.imageUrl"></image>-->
             </view>
             <view class="title-style">{{item.productName}}</view>
           </view>
@@ -130,7 +142,11 @@
         <view @tap="goDetail()" class="jActivity-pic">
           <view :key="index" class="pic-item" v-for="(item, index) in activity.products">
             <view class="pic-style">
-              <image :src="item.imageUrl"></image>
+              <u-lazy-load
+                :error-img="errorImg"
+                :image="item.imageUrl"
+              ></u-lazy-load>
+<!--              <image :src="item.imageUrl"></image>-->
             </view>
             <view class="title-style">{{item.productName}}</view>
           </view>
@@ -162,7 +178,8 @@ export default {
   },
   data() {
     return {
-
+      // 错误图片
+      errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
     };
   },
 

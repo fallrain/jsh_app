@@ -1,21 +1,24 @@
 <template>
   <view class="jSampleMachineItem">
     <view class="jSampleMachine-left">
-      <image :src="goods.SEARCHIMAGE"></image>
+      <u-lazy-load
+        :error-img="errorImg"
+        :image="goods.SEARCHIMAGE"
+      ></u-lazy-load>
     </view>
     <view class="jSampleMachine-cnt">
       <view class="jSampleMachine-cnt-goodsName j-goods-title">
         {{goods.NAME}}
       </view>
       <view class="jSampleMachine-cnt-price-tips">
-        <view class="jSampleMachine-cnt-price-tips-item">直扣：{{toPercent(goods.$allPrice.ReLossRate)}}%</view>
-        <view class="jSampleMachine-cnt-price-tips-item">返利：{{toFixedNum(goods.$allPrice.ReBateMoney)}}</view>
-        <view class="jSampleMachine-cnt-price-tips-item">台返：{{toFixedNum(goods.$allPrice.RetailPrice)}}</view>
+        <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price-tips-item">直扣：{{toPercent(goods.$allPrice.ReLossRate)}}%</view>
+        <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price-tips-item">返利：{{toFixedNum(goods.$allPrice.ReBateMoney)}}</view>
+        <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price-tips-item">台返：{{toFixedNum(goods.$allPrice.RetailPrice)}}</view>
       </view>
       <view class="jSampleMachine-cnt-price-inf">
-        <view v-if="goods.$allPrice.UnitPrice" class="jSampleMachine-cnt-price">¥ {{toFixedNum(goods.$allPrice.UnitPrice)}}</view>
+        <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price">¥ {{toFixedNum(goods.$allPrice.UnitPrice)}}</view>
         <view v-else class="jSampleMachine-cnt-price fs24 fw600">价格即将发布</view>
-        <view class="jSampleMachine-cnt-price-inf-item">供价：¥{{toFixedNum(goods.$allPrice.ActPrice)}}</view>
+        <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price-inf-item">供价：¥{{toFixedNum(goods.$allPrice.ActPrice)}}</view>
         <view v-if="goods.detailList" class="jSampleMachine-cnt-price-inf-item">库存：{{goods.detailList[0].YGS_KYKCL}}</view>
       </view>
       <view class="jSampleMachine-cnt-opts">
@@ -92,6 +95,8 @@ export default {
   },
   data() {
     return {
+      // 错误图片
+      errorImg: `${process.env.BASE_URL}public/assets/img/goods/defaultImg.png`,
       // 显示选择商品版本弹层
       isShowSpecifications: false,
       // 版本规格信息
@@ -111,7 +116,7 @@ export default {
     },
     toFixedNum() {
       return function (val) {
-        return (new Number(val)).toFixed(2);
+        return (Number(val)).toFixed(2);
       };
     }
   },
