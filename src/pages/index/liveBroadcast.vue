@@ -8,6 +8,9 @@
       <view class="liveBroadcas-row" v-if="livingList.length !== 0">
         <view :key="index" class="liveBroadcas-row-con" v-for="(item,index) in livingList">
           <image :src="item.livePageUrl" @tap="goBroadcas(item)" class="liveBroadcas-row-img"></image>
+          <view v-if="isShowTime" class="liveBroadcas-row-start lb">未开始</view>
+          <view v-if="!isShowTime" class="liveBroadcas-row-start la">直播中</view>
+<!--          <view class="liveBroadcas-row-countDown">倒计时:{{days}}天{{hours}}小时{{minutes}}分{{seconds}}秒</view>-->
           <view class="liveBroadcas-row-title">{{item.liveName}}</view>
         </view>
       </view>
@@ -25,6 +28,7 @@
       <view class="liveBroadcas-row">
         <view class="liveBroadcas-row-con" v-for="(item,index) in list" :key="index">
           <image class="liveBroadcas-row-img" :src="item.livePageUrl" @tap="goBroadcasTwo(item)"></image>
+          <view class="liveBroadcas-row-countDown sj">{{item.year}}年{{item.month}}月{{item.day}}日{{item.hours}}时{{item.minutes}}分</view>
           <view class="liveBroadcas-row-title">{{item.liveName}}</view>
         </view>
       </view>
@@ -46,7 +50,16 @@ export default {
     return {
       id: '',
       livingList: [],
-      list: []
+      list: [],
+      countDown: '', // 倒计时
+      startTime: 0, // 开始时间
+      endTime: 0, // 结束时间
+      isShowTime: true,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0
+
     };
   },
   onLoad(option) {
@@ -84,6 +97,32 @@ export default {
         success(res) {
           console.log(res.data.data.livingList);
           that.livingList = res.data.data.livingList;
+          that.livingList.map((item) => {
+            console.log(item);
+            // setInterval(() => {
+            //   const time = Date.now();
+            //   let start = 0;
+            //   start = item.liveStartDate;
+            //   if (time === start) {
+            //     that.isShowTime = false;
+            //   } else {
+            //     that.isShowTime = true;
+            //     let newtime = parseInt((start - time) / 1000);
+            //     // console.log(newtime);
+            //     that.days = parseInt(newtime / 24 / 3600);
+            //     // time减去整天的秒数，剩下不足一天的秒数
+            //     newtime -= that.days * 24 * 3600;
+            //     that.hours = parseInt(newtime / 3600);
+            //     // 剩下不足一小时的秒数
+            //     newtime -= that.hours * 3600;
+            //     that.minutes = parseInt(newtime / 60);
+            //     that.seconds = newtime % 60;
+            //     // that.countDown = `${days}天${hours}时${minutes}分${seconds}秒`;
+            //     // countDown
+            //     // console.log(that.countDown)
+            //   }
+            // }, 1000);
+          });
         },
         fail() {
           const msg = '请求失败';
@@ -115,11 +154,21 @@ export default {
           userId
         },
         success(res) {
-          that.list = res.data.data.playBackList.list;
+          that.list = res.data.data.playBackList.list.reverse();
           console.log(that.list);
           // this.list.map(item => {
           //   console.log(item.liveName);
           // })
+          let start = 0;
+          that.list.forEach((item) => {
+            start = item.liveStartDate;
+            const time = new Date(start);
+            item.year = time.getFullYear();
+            item.month = time.getMonth()+1;
+            item.day = time.getDate();
+            item.hours = time.getHours();
+            item.minutes = time.getMinutes();
+          });
         },
         fail(e) {
           const msg = '请求失败';
@@ -204,8 +253,43 @@ export default {
   .liveBroadcas-row-con {
     width: 48%;
     margin-bottom: 28px;
+    position: relative;
   }
-
+  .liveBroadcas-row-start {
+    width: 87px;
+    height: 30px;
+    position: absolute;
+    top: 10px;
+    right:5px;
+    font-size: 19px;
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
+  }
+  .la {
+    background: #E70E29;
+  }
+  .lb {
+    background: #56B730;
+  }
+  .liveBroadcas-row-countDown {
+    width: 100%;
+    height: 40px;
+    line-height: center;
+    background: #ccc;
+    opacity: 0.9;
+    color: #fff;
+    position: absolute;
+    left: 0px;
+    bottom: 100px;
+    text-align: center;
+    font-size: 26px;
+  }
+  .sj {
+    position: absolute;
+    left: 0px;
+    top: 128px;
+  }
   .liveBroadcas-row-img {
     width: 100%;
     height: 168px;

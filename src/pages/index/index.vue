@@ -184,13 +184,18 @@
       <image :src="item.img" mode="aspectFill" />
     </view> -->
     <!--     广告图 直播-->
-    <view class="homepage-nav" v-if="isShowNav">
-      <image :src="liveVideoImg" @tap="goNav"/>
-      <view
-        @tap="deleteNav"
-        class="homepage-nav-close iconfont iconcross"
-      ></view>
-    </view>
+<!--    <view class="homepage-nav" v-if="isShowNav">-->
+<!--      <movable-area>-->
+<!--        <movable-view :x="x" :y="y" direction="all" @change="onChange">-->
+<!--&lt;!&ndash;          <image :src="liveVideoImg" @tap="goNav"/>&ndash;&gt;-->
+<!--          <view-->
+<!--              @tap="deleteNav"-->
+<!--              class="homepage-nav-close iconfont iconcross"-->
+<!--          ></view>-->
+<!--        </movable-view>-->
+<!--      </movable-area>-->
+
+<!--    </view>-->
   </view>
 </template>
 
@@ -225,6 +230,12 @@ export default {
 
   data() {
     return {
+      x: 0,
+      y: 0,
+      old: {
+        x: 0,
+        y: 0
+      },
       tabBarImgs: {
         homePageImg,
         homePageImgActive,
@@ -561,6 +572,11 @@ export default {
         url: `/pages/index/service?${params}`
       });
     },
+    onChange(e) {
+      // this.old.x = e.detail.x;
+      // this.old.y = e.detail.y;
+      // console.log(this.old.x, this.old.y);
+    },
     // 历史记录
     confirm() {
       console.log(this.name);
@@ -874,7 +890,7 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .jSearchInput-wrap {
+  /v-deep/ .jSearchInput-wrap {
     width: 702px;
     height: 58px;
     background: rgba(209, 209, 239, 1);
@@ -915,5 +931,6 @@ export default {
   /* /deep/.jSearchInput::-ms-input-placeholder{
     color:#fff;
   } */
+
 
 </style>
