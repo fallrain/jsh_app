@@ -12,7 +12,13 @@
         <view>
           <view class="order-info-cnt-text">{{product.jshd_product_name}}</view>
           <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥{{parseFloat(product.jshd_invoice_price).toFixed(2)}}</span></view>
+            <view class="order-info-cnt-info">
+              单价
+              <span v-if="product.jshd_invoice_price" class="order-info-cnt-price">
+                ¥{{parseFloat(product.jshd_invoice_price).toFixed(2)}}
+              </span>
+              <span v-else class="order-info-cnt-price">--</span>
+            </view>
             <view class="order-info-cnt-info">X&nbsp;{{product.jshd_qty}}</view>
           </view>
           <view class="order-info-cnt-inf" v-if="product.jshd_pre_amount!==''">
