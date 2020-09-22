@@ -322,7 +322,7 @@ export default {
       if (!data.data) {
         uni.showToast({
           icon: 'none',
-          title: '未开通样品机权限!',
+          title: '暂无数据!',
           duration: 3000
         });
         scrollView.pageSize = 10;

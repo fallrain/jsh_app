@@ -53,8 +53,11 @@
               <text v-else-if="item.jshd_price_type==='TJ'">特价：</text>
               <text v-else-if="item.jshd_price_type==='GC'">工程：</text>
               <text v-else>单价：</text>
-              <span class="produceDetailItem-fot-color">
+              <span v-if="item.jshd_invoice_price" class="produceDetailItem-fot-color">
                 ¥{{parseFloat(item.jshd_invoice_price).toFixed(2)}}
+              </span>
+              <span v-else class="produceDetailItem-fot-color">
+                --
               </span>
             </view>
             <view v-if="item.jshd_pre_amount" class="produceDetailItem-line"></view>
