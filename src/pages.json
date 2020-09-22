@@ -334,7 +334,7 @@
     "navigationBarBackgroundColor": "#fff",
     "backgroundColor": "#F8F8F8",
     "mp-alipay": {
-      "allowsBounceVertical": "NO"
+      "allowsBounceVertical": "YES"
     }
   },
   "tabBar": {

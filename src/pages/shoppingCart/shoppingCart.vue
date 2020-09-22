@@ -124,8 +124,8 @@
       <j-address-picker
         :show.sync="isShowAdsPicker"
         :pickerList="sendCustomerList"
-        :beforeCheck="adsPickerBeforeCheck"
-        :beforeCheckParent="adsPickerBeforeCheckParent"
+        @beforeCheck="adsPickerBeforeCheckBind"
+        @beforeCheckParent="adsPickerBeforeCheckParentBind"
         @change="sendCustomerListChange"
       ></j-address-picker>
       <m-toast
@@ -635,7 +635,9 @@ export default {
               });
             } else {
               failureGoodsList.push({
-                ...v
+                ...v,
+                // 此处加入此属性，防止小程序编译出错
+                $errorMsg: []
               });
             }
           });
@@ -747,6 +749,9 @@ export default {
       /* 检查是否有开启了信用模式的商品 */
       return !!this.shoppingList.find(v => v.isCreditMode);
     },
+    adsPickerBeforeCheckParentBind(...args) {
+      return this.adsPickerBeforeCheckParent.call(this, ...args);
+    },
     adsPickerBeforeCheckParent(item) {
       /* 云仓点击前置事件 */
       let state = true;
@@ -758,6 +763,9 @@ export default {
         state = false;
       }
       return state;
+    },
+    adsPickerBeforeCheckBind(...args) {
+      return this.adsPickerBeforeCheck.call(this, ...args);
     },
     adsPickerBeforeCheck({
       item,
