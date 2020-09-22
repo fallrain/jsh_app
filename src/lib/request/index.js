@@ -121,7 +121,11 @@ function jSend(option) {
             showCancel: false,
             success: (res) => {
               if (res.confirm) {
-                AlipayJSBridge && AlipayJSBridge.call('popWindow');
+                try {
+                  AlipayJSBridge && AlipayJSBridge.call('popWindow');
+                } catch (e) {
+                  // eslint-disable-next-line no-empty
+                }
               }
             }
           });

@@ -49,10 +49,14 @@ export default {
     };
   },
   created() {
-    if (AlipayJSBridge) {
-      AlipayJSBridge.call('myApiAppVersion', {}, (result) => {
-        this.version = result.version;
-      });
+    try {
+      if (AlipayJSBridge) {
+        AlipayJSBridge.call('myApiAppVersion', {}, (result) => {
+          this.version = result.version;
+        });
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-empty
     }
   },
   methods: {
@@ -65,7 +69,11 @@ export default {
       // 清理code token
       uni.setStorageSync('token', '');
       uni.setStorageSync('code', '');
-      AlipayJSBridge && AlipayJSBridge.call('popWindow');
+      try {
+        AlipayJSBridge && AlipayJSBridge.call('popWindow');
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
     },
     //   个人资料
     personInforClick() {

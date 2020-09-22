@@ -196,7 +196,8 @@ export default {
     },
     toggleExpand(item) {
       /* 选择规格展开or收起 */
-      item.isExpand = !item.isExpand;
+      // item.isExpand = !item.isExpand;
+      this.$set(item, 'isExpand', !item.isExpand);
       this.$emit('change', this.versionData);
     },
     confirm() {
