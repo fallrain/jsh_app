@@ -258,16 +258,6 @@ export default {
         this.categoryList = data;
         console.log(this.categoryList[0]);
         this.subCategoryList = this.categoryList[0];
-        this.categoryList.forEach((item) => {
-          console.log(item);
-          item.subCats.forEach((v) => {
-            this.imgs.forEach((ele) => {
-              if (v.title === ele.title) {
-                v.images = ele.sub;
-              }
-            });
-          });
-        });
         console.log(this.categoryList);
         this.categoryActive = 0;
       }
