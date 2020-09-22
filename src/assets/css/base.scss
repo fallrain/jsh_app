@@ -107,24 +107,24 @@ button {
     }
   }
 
-  .popup_list {
-    .mpopup {
-      width: 700px;
-      height: 86px;
-
-      .text {
-        text-align: center;
-        font-size: 30px;
-        // color: #67c23a;
-      }
-    }
-  }
-
   .uni-drawer__content{
     padding-top: constant(safe-area-inset-top);
     padding-top: env(safe-area-inset-top);
   }
 
+}
+
+.popup_list {
+  .mpopup {
+    width: 700px;
+    height: 86px;
+
+    .text {
+      text-align: center;
+      font-size: 30px;
+      // color: #67c23a;
+    }
+  }
 }
 
 
