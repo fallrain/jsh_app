@@ -44,21 +44,22 @@
           :key="goods.id"
         >
           <!--筛选出来的产业才显示-->
-          <j-shopping-cart-item
-            :ref="'shoppingCartItem'+goods.id"
-            v-if="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]"
-            :defaultSendTo="defaultSendTo"
-            :goods="goods"
-            :index="index"
-            :userInf="userInf"
-            :versionPrice="versionPrice"
-            :warehouseFlag="choseSendAddress.yunCangFlag"
-            :creditQuotaList="creditQuotaList"
-            @change="goodsChange"
-            @del="singleDeleteCart"
-            @updateNumber="refreshShoppingCartList"
-            @sign="toSign"
-          ></j-shopping-cart-item>
+          <template v-show="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]">
+            <j-shopping-cart-item
+              :creditQuotaList="creditQuotaList"
+              :defaultSendTo="defaultSendTo"
+              :goods="goods"
+              :index="index"
+              :ref="'shoppingCartItem'+goods.id"
+              :userInf="userInf"
+              :versionPrice="versionPrice"
+              :warehouseFlag="choseSendAddress.yunCangFlag"
+              @change="goodsChange"
+              @del="singleDeleteCart"
+              @sign="toSign"
+              @updateNumber="refreshShoppingCartList"
+            ></j-shopping-cart-item>
+          </template>
         </view>
       </view>
       <view
@@ -180,8 +181,8 @@ import {
 } from 'vuex';
 import {
   GOODS_LIST,
-  USER,
-  SHOPPING_CART
+  SHOPPING_CART,
+  USER
 } from '../../store/mutationsTypes';
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
@@ -518,16 +519,16 @@ export default {
       // 先回到顶部
       uni.pageScrollTo({
         scrollTop: 0,
-        duration: 100
       });
+      const shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
       this.choseIndustryData = checkedIndustryOptions;
       const industryCode = data[0];
       if (industryCode === '*') {
-        this.shoppingList.forEach((v) => {
+        shoppingList.forEach((v) => {
           v.$filterIndustryKey = '*';
         });
       } else {
-        this.shoppingList.forEach((v) => {
+        shoppingList.forEach((v) => {
           if (v.productList[0].industryCode === industryCode) {
             v.$filterIndustryKey = industryCode;
           } else {
@@ -535,9 +536,10 @@ export default {
           }
         });
       }
+      this.shoppingList = shoppingList;
       // 更新底栏
       this.updateTotal();
-      // this.isIndustryPickerShow = false;
+      this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
       /* 重置底栏信息 */
@@ -674,7 +676,7 @@ export default {
     },
     goodsChange(goods, index) {
       /* 商品数据change */
-      this.shoppingList[index] = goods;
+      this.$set(this.shoppingList, index, goods);
       this.updateTotal();
     },
     updateTotal() {
