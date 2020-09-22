@@ -443,7 +443,11 @@ export default {
   },
   created() {
     // 支持由前端 H5 页面禁止
-    AlipayJSBridge && AlipayJSBridge.call('setGestureBack', { val: false });
+    try {
+      AlipayJSBridge && AlipayJSBridge.call('setGestureBack', { val: false });
+    } catch (e) {
+      // eslint-disable-next-line no-empty
+    }
   },
   mounted() {
     try {
@@ -458,12 +462,16 @@ export default {
     }
 
     // 适配安卓h5客户端
-    if (AlipayJSBridge) {
-      AlipayJSBridge.call('myApiGetCode', {
-        param1: 'JsParam1',
-      }, (result) => {
-        this.androidInitCode(result);
-      });
+    try {
+      if (AlipayJSBridge) {
+        AlipayJSBridge.call('myApiGetCode', {
+          param1: 'JsParam1',
+        }, (result) => {
+          this.androidInitCode(result);
+        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   },
   onLoad() {
@@ -475,7 +483,11 @@ export default {
       let code;
       if (process.env.VUE_APP_PLATFORM === 'h5') {
         // 适配iOS h5客户端
-        code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.code;
+        try {
+          code = ALIPAYH5STARTUPPARAMS && ALIPAYH5STARTUPPARAMS.code;
+        } catch (e) {
+          // eslint-disable-next-line no-empty
+        }
       } else {
         code = uni.getStorageSync('code');
       }
@@ -520,7 +532,11 @@ export default {
     },
     // 返回原生 处理账号锁定
     popAction() {
-      AlipayJSBridge && AlipayJSBridge.call('popWindow');
+      try {
+        AlipayJSBridge && AlipayJSBridge.call('popWindow');
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
     },
     // 打开建行支付
     callBBC() {

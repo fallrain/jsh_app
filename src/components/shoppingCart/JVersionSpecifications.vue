@@ -130,9 +130,10 @@ export default {
       type: String,
       default: 'checkbox'
     },
-    // 自定义check函数
+    // 是否启用自定义check函数
     customCheckFun: {
-      type: Function
+      type: Boolean,
+      default: false
     },
     // 确认按钮文字
     confirmBtnText: {
@@ -170,33 +171,35 @@ export default {
     handleClick(version, list, parIndex, vIndex) {
       /* 选择版本 */
       if (this.type === 'custom') {
-        this.versionData = this.customCheckFun(this.versionData, list, parIndex, vIndex);
-      } else {
-        const curChecked = version.checked;
-        // 除了当前版本，其他版本的选择都取消
-        this.versionData.forEach((v, index) => {
-          // checkbox模式下可在当前版本里多选
-          if (this.type === 'checkbox') {
-            if (parIndex !== index) {
-              v.list.forEach((otherItem) => {
-                otherItem.checked = false;
-              });
-            }
-          } else {
-            // radio模式下，只能单选
+        this.$emit('customCheck', this.versionData, list, parIndex, vIndex);
+        return;
+      }
+      const curChecked = version.checked;
+      // 除了当前版本，其他版本的选择都取消
+      this.versionData.forEach((v, index) => {
+        // checkbox模式下可在当前版本里多选
+        if (this.type === 'checkbox') {
+          if (parIndex !== index) {
             v.list.forEach((otherItem) => {
               otherItem.checked = false;
             });
           }
-        });
-        version.checked = !curChecked;
-      }
+        } else {
+          // radio模式下，只能单选
+          v.list.forEach((otherItem) => {
+            otherItem.checked = false;
+          });
+        }
+      });
+      version.checked = !curChecked;
+
 
       this.$emit('change', this.versionData);
     },
     toggleExpand(item) {
       /* 选择规格展开or收起 */
-      item.isExpand = !item.isExpand;
+      // item.isExpand = !item.isExpand;
+      this.$set(item, 'isExpand', !item.isExpand);
       this.$emit('change', this.versionData);
     },
     confirm() {
