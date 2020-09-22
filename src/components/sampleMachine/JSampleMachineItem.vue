@@ -3,9 +3,8 @@
     <view class="jSampleMachine-left">
       <u-lazy-load
         :error-img="errorImg"
-        :image="item.imageUrl"
+        :image="goods.SEARCHIMAGE"
       ></u-lazy-load>
-      <image :src="goods.SEARCHIMAGE"></image>
     </view>
     <view class="jSampleMachine-cnt">
       <view class="jSampleMachine-cnt-goodsName j-goods-title">
