@@ -16,7 +16,7 @@
         <text class="jFailureGoodsItem-cnt-head-text">{{goods.productList && goods.productList[0].productName}}</text>
       </view>
       <view class="jFailureGoodsItem-cnt-btm">
-        <view class="jFailureGoodsItem-cnt-btm-tag">{{goods.composeEnableMsg || goods.$errorMsg.join('，')}}</view>
+        <view class="jFailureGoodsItem-cnt-btm-tag">{{goods.composeEnableMsg || (goods.$errorMsg && goods.$errorMsg.join('，'))}}</view>
       </view>
     </view>
   </view>

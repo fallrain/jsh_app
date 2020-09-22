@@ -635,7 +635,9 @@ export default {
               });
             } else {
               failureGoodsList.push({
-                ...v
+                ...v,
+                // 此处加入此属性，防止小程序编译出错
+                $errorMsg: []
               });
             }
           });

@@ -262,8 +262,8 @@
     <j-version-specifications
       :show.sync="isShowSpecifications"
       :versionData="specificationsList"
-      :customCheckFun="specificationsCustomCheckFun"
       type="custom"
+      @customCheck="specificationsCustomCheckFun"
       @confirm="specificationsConfirm"
       @cancel="specificationsCancel"
       @change="specificationsChange"
@@ -1043,7 +1043,7 @@ export default {
           }
         }
       }
-      return versionData;
+      this.specificationsList = versionData;
     },
     specificationsChange(data) {
       /* 版本规格change */
