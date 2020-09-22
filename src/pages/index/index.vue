@@ -23,6 +23,7 @@
           @tap="confirm"
           class="jSearchInput"
           placeholder-class="col_c"
+          :maxlength="-1"
           type="text"
           v-model="name"
         >
@@ -184,31 +185,36 @@
       <image :src="item.img" mode="aspectFill" />
     </view> -->
     <!--     广告图 直播-->
-    <view class="homepage-nav" v-if="isShowNav">
-      <image :src="liveVideoImg" @tap="goNav"/>-->
-      <view
-          @tap="deleteNav"
-          class="homepage-nav-close iconfont iconcross"
-      ></view>
-    </view>
-
-    <!--     广告图 直播-->
 <!--    <view class="homepage-nav" v-if="isShowNav">-->
 <!--      <image :src="liveVideoImg" @tap="goNav"/>&ndash;&gt;-->
 <!--      <view-->
 <!--          @tap="deleteNav"-->
 <!--          class="homepage-nav-close iconfont iconcross"-->
 <!--      ></view>-->
-<!--&lt;!&ndash;      <movable-area>&ndash;&gt;-->
-<!--&lt;!&ndash;        <movable-view :x="x" :y="y" direction="all" @change="onChange">&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;          <image :src="liveVideoImg" @tap="goNav"/>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;          <view&ndash;&gt;-->
-<!--&lt;!&ndash;              @tap="deleteNav"&ndash;&gt;-->
-<!--&lt;!&ndash;              class="homepage-nav-close iconfont iconcross"&ndash;&gt;-->
-<!--&lt;!&ndash;          ></view>&ndash;&gt;-->
-<!--&lt;!&ndash;        </movable-view>&ndash;&gt;-->
-<!--&lt;!&ndash;      </movable-area>&ndash;&gt;-->
 <!--    </view>-->
+
+    <!--     广告图 直播-->
+    <view class="homepage-nav"
+          v-if="isShowNav"
+    >
+<!--      <movable-area>-->
+<!--        <movable-view :x="x" :y="y" direction="all" @change="onChange">-->
+<!--          <image :src="liveVideoImg" @tap="goNav"/>-->
+<!--          <view-->
+<!--              @tap="deleteNav"-->
+<!--              class="homepage-nav-close iconfont iconcross"-->
+<!--          ></view>-->
+<!--        </movable-view>-->
+<!--      </movable-area>-->
+      <view
+          class="homepage-nav-close iconfont iconcross"
+          :style="'left:'+(moveX == 280 & x>0? x:moveX)+'px;top:'+(moveY == 430 & y>0? y:moveY)+'px'"
+          @tap="deleteNav"
+      ></view>
+      <image :src="liveVideoImg" @tap="goNav" class="ball" :style="'left:'+(moveX == 280 & x>0? x:moveX)+'px;top:'+(moveY == 430 & y>0? y:moveY)+'px'"
+              @touchstart="drag_start" @touchmove.prevent="drag_hmove"  mode="aspectFill">
+      </image>
+    </view>
   </view>
 </template>
 
@@ -249,6 +255,11 @@ export default {
         x: 0,
         y: 0
       },
+      start: [0, 0],
+      moveY: 430,
+      moveX: 280,
+      windowWidth: '',
+      windowHeight: '',
       tabBarImgs: {
         homePageImg,
         homePageImgActive,
@@ -494,6 +505,13 @@ export default {
       this.getZiYuanJi();
     });
   },
+  mounted() {
+    const { windowWidth, windowHeight } = uni.getSystemInfoSync();
+
+    this.windowWidth = windowWidth;
+
+    this.windowHeight = windowHeight;
+  },
   onLoad() {
     let index = 0;
     setInterval(() => {
@@ -547,6 +565,27 @@ export default {
         url: '/pages/applicationsIndex/applicationsIndex'
       });
     },
+    drag_start(event) {
+      this.start[0] = event.touches[0].clientX - event.target.offsetLeft;
+      this.start[1] = event.touches[0].clientY - event.target.offsetTop;
+    },
+    drag_hmove(event) {
+      const	tag = event.touches;
+      if (tag[0].clientX < 0) {
+        tag[0].clientX = 0;
+      }
+      if (tag[0].clientY < 0) {
+        tag[0].clientY = 0;
+      }
+      if (tag[0].clientX > this.windowWidth) {
+        tag[0].clientX = this.windowWidth;
+      }
+      if (tag[0].clientY > this.windowHeight) {
+        tag[0].clientY = this.windowHeight;
+      }
+      this.moveX = tag[0].clientX - this.start[0];
+      this.moveY = tag[0].clientY - this.start[1];
+    },
     get() {
       // this.$nextTick(() => {
       // const a = JSON.stringify(this.defaultSendToInf);
@@ -585,10 +624,11 @@ export default {
         url: `/pages/index/service?${params}`
       });
     },
+
     onChange(e) {
-      // this.old.x = e.detail.x;
-      // this.old.y = e.detail.y;
-      // console.log(this.old.x, this.old.y);
+      this.old.x = e.detail.x;
+      this.old.y = e.detail.y;
+      console.log(this.old.x, this.old.y);
     },
     // 历史记录
     confirm() {
@@ -903,7 +943,7 @@ export default {
 </script>
 
 <style scoped>
-  /v-deep/ .jSearchInput-wrap {
+  /deep/ .jSearchInput-wrap {
     width: 702px;
     height: 58px;
     background: rgba(209, 209, 239, 1);
@@ -931,19 +971,44 @@ export default {
   /deep/ .jSearchInput-icon {
     color: #fff;
     font-size: 24px;
+    margin-right: 36px;
   }
 
-  /deep/ .jSearchInput {
-    margin-left: 36px;
-    font-size: 24px;
-    color: #fff;
-    opacity: 0.8;
-    background: rgba(102, 135, 168, 0.15);
-  }
+  /*/deep/ .jSearchInput {*/
+  /*  margin-left: 36px;*/
+  /*  font-size: 24px;*/
+  /*  color: #fff;*/
+  /*  opacity: 0.8;*/
+  /*  background: rgba(102, 135, 168, 0.15);*/
+  /*}*/
 
   /* /deep/.jSearchInput::-ms-input-placeholder{
     color:#fff;
   } */
+  .holdon{
+    width: 100%;
+    height: 100%;
+  }
+  .ball{
+    width: 150px;
+    height: 130px;
+    /*background:linear-gradient(to bottom, #F8F8FF,#87CEFA);*/
+    border-radius: 50%;
+    box-shadow: 0 0 15px #87CEFA;
+    color: #fff;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed !important;
+    z-index: 1000;
 
+  }
+  .homepage-nav-close {
+    position: fixed;
+    font-size: 38px;
+    color: grey;
+    z-index: 1001;
+  }
 
 </style>
