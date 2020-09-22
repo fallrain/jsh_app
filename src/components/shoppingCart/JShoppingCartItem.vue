@@ -394,10 +394,6 @@ export default {
     versionPrice: {
       type: Object
     },
-    // 开启信用模式校验
-    beforeCreditModeChange: {
-      type: Function
-    },
     // 用户信息
     userInf: {
       type: Object
@@ -406,6 +402,10 @@ export default {
     defaultSendTo: {
       type: Object
     },
+    creditQuotaList: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
@@ -727,7 +727,7 @@ export default {
         this.goods.productList[0].number = val;
         this.$emit('change', this.goods, this.index);
       }
-    }
+    },
   },
   methods: {
     goDetail(goods) {
@@ -755,10 +755,7 @@ export default {
     },
     handleBeforeCreditModeChange() {
       /* 检查是否支持开启信用模式 */
-      // 已经开启不用检查
-      if (this.goods.isCreditMode) {
-        return true;
-      }
+      let state = true;
       const {
         productGroup,
         priceInfo
@@ -768,7 +765,12 @@ export default {
       } = this.goods;
         // 计算选择的商品的总价，信用额度做比较，超出则不允许开启
       const totalPrice = this.jshUtil.arithmetic(priceInfo.commonPrice.invoicePrice, number, 3);
-      return this.beforeCreditModeChange && this.beforeCreditModeChange(productGroup, totalPrice);
+      // 检查信用额度是否在范围内
+      const quotaMap = this.creditQuotaList.find(v => v.GROUPCODE === productGroup);
+      if (quotaMap) {
+        state = quotaMap.PLAN >= totalPrice;
+      }
+      return state;
     },
     goodsChange() {
       /* goods chang */

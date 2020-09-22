@@ -184,7 +184,7 @@ export default {
       // @isCanBeCheck 能被点才能点击
       // @isSingle 是否没子元素
       if (item.isCanBeCheck === undefined || item.isCanBeCheck) {
-        if (this.beforeCheckParent && !this.beforeCheckParent(item, index)) {
+        if (this.beforeCheckParent && !this.beforeCheckParent.bind(this.$parent)(item, index)) {
           return;
         }
         this.reset(index);
@@ -206,7 +206,7 @@ export default {
     },
     checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
-      if (this.beforeCheck && !this.beforeCheck({
+      if (this.beforeCheck && !this.beforeCheck.bind(this.$parent)({
         item,
         list,
         parent,

@@ -8,7 +8,6 @@
       >
         <template #right>
           <view
-            v-show="index === 'gwc'"
             @tap="showIndustryPicker"
             class="shoppingCart-tab-picker"
           >
@@ -18,7 +17,7 @@
         </template>
       </j-tab>
     </view>
-    <view v-show="index === 'gwc'">
+    <view>
       <view class="shoppingCart-ads">
         <view class="shoppingCart-ads-total">共{{dataLength.validLength}}件宝贝</view>
         <view
@@ -48,13 +47,13 @@
           <j-shopping-cart-item
             :ref="'shoppingCartItem'+goods.id"
             v-if="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]"
-            :beforeCreditModeChange="checkCreditQuota"
             :defaultSendTo="defaultSendTo"
             :goods="goods"
             :index="index"
             :userInf="userInf"
             :versionPrice="versionPrice"
             :warehouseFlag="choseSendAddress.yunCangFlag"
+            :creditQuotaList="creditQuotaList"
             @change="goodsChange"
             @del="singleDeleteCart"
             @updateNumber="refreshShoppingCartList"
@@ -78,13 +77,13 @@
           <j-shopping-cart-item
             v-if="goods.isValid && goods.$filterIndustryKey === '*'"
             :ref="'shoppingCartItem'+goods.id"
-            :beforeCreditModeChange="checkCreditQuota"
             :goods="goods"
             :index="index"
             :userInf="userInf"
             :defaultSendTo="defaultSendTo"
             :versionPrice="versionPrice"
             :warehouseFlag="choseSendAddress.yunCangFlag"
+            :creditQuotaList="creditQuotaList"
             @change="goodsChange"
             @del="singleDeleteCart"
             @updateNumber="refreshShoppingCartList"
@@ -124,8 +123,8 @@
       <j-address-picker
         :show.sync="isShowAdsPicker"
         :pickerList="sendCustomerList"
-        @beforeCheck="adsPickerBeforeCheckBind"
-        @beforeCheckParent="adsPickerBeforeCheckParentBind"
+        :beforeCheck="adsPickerBeforeCheck"
+        :beforeCheckParent="adsPickerBeforeCheckParent"
         @change="sendCustomerListChange"
       ></j-address-picker>
       <m-toast
@@ -215,8 +214,6 @@ export default {
   data() {
     return {
       isCreated: false,
-      // 默认显示购物车
-      index: 'gwc',
       tabs: [
         {
           id: 'gwc',
@@ -540,7 +537,7 @@ export default {
       }
       // 更新底栏
       this.updateTotal();
-      this.isIndustryPickerShow = false;
+      // this.isIndustryPickerShow = false;
     },
     resetBtmInf() {
       /* 重置底栏信息 */
@@ -661,13 +658,8 @@ export default {
         customerCode: this.userInf.customerCode
       });
       if (code === '1') {
-        this.creditQuotaList = data.data;
+        this.creditQuotaList = data.data || [];
       }
-    },
-    checkCreditQuota(productGroup, totalPrice) {
-      /* 检查信用额度是否在范围内 */
-      const quotaMap = this.creditQuotaList.find(v => v.GROUPCODE === productGroup);
-      return quotaMap.PLAN >= totalPrice;
     },
     async getSpecialPrice() {
       /* 获取特价版本 */
@@ -1057,21 +1049,6 @@ export default {
         return { code: '1' };
       }
       return { code: '0' };
-    },
-    async unfollowGoods() {
-      /* 取消关注 */
-      const {
-        customerCode
-      } = this.userInf;
-      const { code } = await this.productDetailService.productRemoveInter({
-        account: customerCode,
-        customerCode,
-        productCodeList: [this.goods.productList[0].productCode]
-      });
-      if (code === '1') {
-        this.goods.followState = false;
-        this.$emit('change', this.goods, this.index);
-      }
     },
     async submitOrder() {
       /* 提交订单 */
