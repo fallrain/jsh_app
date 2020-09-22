@@ -184,17 +184,30 @@
       <image :src="item.img" mode="aspectFill" />
     </view> -->
     <!--     广告图 直播-->
-<!--    <view class="homepage-nav" v-if="isShowNav">-->
-<!--      <movable-area>-->
-<!--        <movable-view :x="x" :y="y" direction="all" @change="onChange">-->
-<!--&lt;!&ndash;          <image :src="liveVideoImg" @tap="goNav"/>&ndash;&gt;-->
-<!--          <view-->
-<!--              @tap="deleteNav"-->
-<!--              class="homepage-nav-close iconfont iconcross"-->
-<!--          ></view>-->
-<!--        </movable-view>-->
-<!--      </movable-area>-->
+    <view class="homepage-nav" v-if="isShowNav">
+      <image :src="liveVideoImg" @tap="goNav"/>-->
+      <view
+          @tap="deleteNav"
+          class="homepage-nav-close iconfont iconcross"
+      ></view>
+    </view>
 
+    <!--     广告图 直播-->
+<!--    <view class="homepage-nav" v-if="isShowNav">-->
+<!--      <image :src="liveVideoImg" @tap="goNav"/>&ndash;&gt;-->
+<!--      <view-->
+<!--          @tap="deleteNav"-->
+<!--          class="homepage-nav-close iconfont iconcross"-->
+<!--      ></view>-->
+<!--&lt;!&ndash;      <movable-area>&ndash;&gt;-->
+<!--&lt;!&ndash;        <movable-view :x="x" :y="y" direction="all" @change="onChange">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;          <image :src="liveVideoImg" @tap="goNav"/>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;          <view&ndash;&gt;-->
+<!--&lt;!&ndash;              @tap="deleteNav"&ndash;&gt;-->
+<!--&lt;!&ndash;              class="homepage-nav-close iconfont iconcross"&ndash;&gt;-->
+<!--&lt;!&ndash;          ></view>&ndash;&gt;-->
+<!--&lt;!&ndash;        </movable-view>&ndash;&gt;-->
+<!--&lt;!&ndash;      </movable-area>&ndash;&gt;-->
 <!--    </view>-->
   </view>
 </template>
