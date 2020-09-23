@@ -79,7 +79,19 @@ function showLoading() {
   });
   return new Date().getTime();
 }
+function toLogin() {
+  try {
+    AlipayJSBridge && AlipayJSBridge.call('popWindow');
+  } catch (e) {
+    // eslint-disable-next-line no-empty
+  }
 
+  try {
+    my && my.call('popWindow');
+  } catch (e) {
+    // eslint-disable-next-line no-empty
+  }
+}
 function jSend(option) {
   const selfOptions = JSON.parse(JSON.stringify(option));
   const cfg = selfOptions.cfg || {};
@@ -100,7 +112,6 @@ function jSend(option) {
   }
   const header = {
     Authorization: `Bearer ${token}`,
-    // jsh_app_sign_in: true,
     ...cfg.headers
   };
   return new Promise((resolve) => {
@@ -115,6 +126,19 @@ function jSend(option) {
           data,
           statusCode
         } = response;
+        if (data && data.code === '070') {
+          uni.showModal({
+            title: '提示',
+            content: data.msg,
+            showCancel: false,
+            success: (res) => {
+              if (res.confirm) {
+                toLogin();
+              }
+            }
+          });
+          return resolve(false);
+        }
         if (data === 'SECURITY_INVALID_TOKEN') {
           uni.showModal({
             title: '提示',
@@ -122,14 +146,11 @@ function jSend(option) {
             showCancel: false,
             success: (res) => {
               if (res.confirm) {
-                try {
-                  AlipayJSBridge && AlipayJSBridge.call('popWindow');
-                } catch (e) {
-                  // eslint-disable-next-line no-empty
-                }
+                toLogin();
               }
             }
           });
+          return resolve(false);
         }
         if (!cfg.noLoading) {
           hideLoading();

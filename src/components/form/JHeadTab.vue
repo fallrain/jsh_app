@@ -87,12 +87,6 @@ export default {
     tabHandle(item, index) {
       /* tab 点击事件 */
       // 除去不能点击的item
-      if (!item.noActive) {
-        this.tabs.forEach((v) => {
-          v.active = false;
-        });
-        item.active = true;
-      }
       this.$emit('tabClick', this.tabs, item, index);
     },
     tabTagHandle() {
