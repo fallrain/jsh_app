@@ -483,7 +483,6 @@ export default {
     }
   },
   onLoad() {
-    this.init(111);
     uni.hideTabBar();
     const platform = uni.getSystemInfoSync().platform;
     this.platform = platform;
@@ -738,12 +737,9 @@ export default {
       if (key === 'userId') {
         url += `?userId=${this.saleInfo.customerCode}`;
       }
-      uni.navigateTo({
+      uni.switchTab({
         url
       });
-      // uni.switchTab({
-      //   url
-      // });
     },
     changeState(index) {
       if (index === 0) {
