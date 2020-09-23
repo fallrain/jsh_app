@@ -549,6 +549,11 @@ export default {
       } catch (e) {
         // eslint-disable-next-line no-empty
       }
+      try {
+        my && my.call('popWindow');
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
     },
     // 打开建行支付
     callBBC() {
