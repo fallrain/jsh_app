@@ -999,9 +999,13 @@ export default {
               });
               ids.forEach((id) => {
                 const index = this.shoppingList.findIndex(v => v.id === id);
-                this.shoppingList.splice(index, 1);
+                if (index > -1) {
+                  this.shoppingList.splice(index, 1);
+                }
                 const failureIndex = this.failureGoodsList.findIndex(v => v.id === id);
-                this.failureGoodsList.splice(failureIndex, 1);
+                if (failureIndex > -1) {
+                  this.failureGoodsList.splice(failureIndex, 1);
+                }
               });
               this.updateCartNum();
             }
