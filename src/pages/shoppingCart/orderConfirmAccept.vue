@@ -110,6 +110,7 @@ export default {
   created() {
   },
   onLoad(option) {
+    debugger
     if (option.groupings) {
       this.status = 1;
       this.primaryTheme = false;
@@ -132,10 +133,10 @@ export default {
       this.primaryTheme = true;
       this.wholeorderData = JSON.parse(option.orderData)[0].orderList;
       this.totalMoney = JSON.parse(option.totalMoney);
+      console.log(this.wholeorderData);
 
       // 处理成功失败数量
-      this.computeWholeOrderNum();
-      console.log(this.wholeorderData);
+      this.computeOrderNum();
     }
   },
   methods: {
@@ -191,6 +192,21 @@ export default {
             successNum++;
           }
         });
+      });
+      this.failNum = failNum;
+      this.successNum = successNum;
+      this.total = this.failNum + this.successNum;
+    },
+    // 统计样品机订单成功失败数量
+    computeSampleMachineOrderNum() {
+      let successNum = 0;
+      let failNum = 0;
+      this.wholeorderData.forEach((item) => {
+        if (item.ISFLAG !== '提交成功') {
+          failNum++;
+        } else {
+          successNum++;
+        }
       });
       this.failNum = failNum;
       this.successNum = successNum;

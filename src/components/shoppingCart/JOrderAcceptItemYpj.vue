@@ -17,7 +17,19 @@
         样品机单号：{{orderItem.IBL_KORDERNO}}
       </view>
       <view class="item-content">
-        预计到货时间：{{orderItem.IBL_CREATETIME}}
+        产品名称：{{orderItem.IBL_INVSTD}}
+      </view>
+      <view class="item-content">
+        数量：{{orderItem.IBL_NUM}}
+      </view>
+      <view class="item-content">
+        小计：{{orderItem.IBL_SUMMONEY}}
+      </view>
+      <view class="item-content">
+        下单时间：{{orderItem.IBL_CREATETIME}}
+      </view>
+      <view class="item-content">
+        订单状态：{{orderItem.ISFLAG}}
       </view>
     </view>
   </view>
