@@ -19,7 +19,7 @@
       <view class="jSearchInput-wrap j-flex-aic">
         <view class="jSearchInput-icon iconfont iconsousuo"></view>
         <input
-          :placeholder="mendli"
+          :placeholder="recommendPlaceholder"
           @tap="confirm"
           class="jSearchInput"
           placeholder-class="col_c"
@@ -479,7 +479,8 @@ export default {
       ],
       // 首页推荐轮播
       mend: [],
-      mendli: '',
+      recommendPlaceholderTimer: null,
+      recommendPlaceholder: '',
       // 搜索框轮播数据
       allMendli: {}
       // tabBarList: [
@@ -538,23 +539,18 @@ export default {
     this.windowHeight = windowHeight;
   },
   onLoad() {
-    let index = 0;
-    setInterval(() => {
-      // console.log(1111);
-      this.mendli = this.mend[index];
-      // console.log(_this.mendli);
-      index += 1;
-      if (index >= this.mend.length) {
-        index = 0;
-      }
-    }, 5000);
+
   },
   onShow() {
     uni.showTabBar();
     this.autoplay = true;
+    this.beginRecommendPlaceholderTimer();
   },
   onHide() {
     this.autoplay = false;
+    if (this.recommendPlaceholderTimer) {
+      clearInterval(this.recommendPlaceholderTimer);
+    }
   },
   computed: {
     ...mapGetters({
@@ -582,9 +578,16 @@ export default {
       this.getList();
       this.getShow();
     },
-    // watch: {
-    //   $route: ['getShow']
-    // },
+    beginRecommendPlaceholderTimer() {
+      let index = 0;
+      this.recommendPlaceholderTimer = setInterval(() => {
+        this.recommendPlaceholder = this.mend[index];
+        index += 1;
+        if (index >= this.mend.length) {
+          index = 0;
+        }
+      }, 5000);
+    },
     // 导航栏返回
     goBack() {
       // uni.navigateBack({
