@@ -97,7 +97,7 @@
         </view>
       </view>
       <view
-        :class="['jShoppingCartItem-cnt-like iconfont',goods.followState ? 'iconicon3':'iconshoucang1']"
+        :class="['jShoppingCartItem-cnt-like iconfont',followState ? 'iconicon3':'iconshoucang1']"
         @tap="toggleFollow"
       ></view>
     </view>
@@ -405,6 +405,10 @@ export default {
     creditQuotaList: {
       type: Array,
       default: () => []
+    },
+    // 收藏状态
+    followState: {
+      type: Boolean
     }
   },
   data() {
@@ -664,10 +668,12 @@ export default {
     }
   },
   watch: {
-    versionPrice() {
-      this.genSpecificationsList();
-      this.setFollowState();
-      this.genWeekOptions();
+    versionPrice(val, oldVal) {
+      if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
+        this.genSpecificationsList();
+        this.setFollowState();
+        this.genWeekOptions();
+      }
     },
     isCreditModel(val) {
       /* 如果不支持信用模式了，已经打开的则关闭 */
@@ -738,7 +744,7 @@ export default {
     },
     setPageInf() {
       this.genStockPickerOption();
-      this.genSpecificationsList();
+      // this.genSpecificationsList();
       this.setFollowState();
       this.genWeekOptions();
     },
@@ -828,6 +834,7 @@ export default {
       if (!this.getVersionPriceState()) {
         return;
       }
+      console.count(666);
       const specificationsList = [];
       const product = this.goods.productList[0];
       const {
@@ -1111,8 +1118,7 @@ export default {
         return;
       }
       const state = !!this.versionPrice.product.find(v => v === this.goods.productList[0].productCode);
-      this.goods.followState = state;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('followStateChange', state, this.index);
     },
     toggleFollow() {
       /* 切换关注状态 */
@@ -1131,8 +1137,7 @@ export default {
         customerCode,
         productCode: this.goods.productList[0].productCode
       });
-      this.goods.followState = true;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', true);
     },
     async unFollowGoods() {
       /* 取消关注 */
@@ -1143,8 +1148,7 @@ export default {
         customerCode,
         productCodeList: [this.goods.productList[0].productCode]
       });
-      this.goods.followState = false;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', false);
     },
     handleDel() {
       /* 移除购物车操作 */

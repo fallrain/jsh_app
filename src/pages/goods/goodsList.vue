@@ -42,6 +42,7 @@
             :sendtoCode="defaultSendToInf.customerCode"
             :allPrice="item.$allPrice"
             :userInf="userInf"
+            :followState.sync="item.$favorite"
             @change="goodsChange"
             @addCartSuccess="addCartSuccess"
           ></j-goods-item>
