@@ -834,7 +834,6 @@ export default {
       if (!this.getVersionPriceState()) {
         return;
       }
-      console.count(666);
       const specificationsList = [];
       const product = this.goods.productList[0];
       const {
