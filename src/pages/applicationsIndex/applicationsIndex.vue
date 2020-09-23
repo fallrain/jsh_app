@@ -35,7 +35,13 @@
           :mode="mode"
           field="content"
         >
-          <swiper @change="changePic" autoplay="true" circular="true" class="swiper-box" interval="5000">
+          <swiper
+            :autoplay="autoplay"
+            @change="changePic"
+            circular="true"
+            class="swiper-box"
+            interval="5000"
+          >
             <swiper-item class="swiperitem" :key="index" v-for="(item,index) in imageList">
               <view class="swiper-item">
                 <image :src="item.imageUrl" @tap='goSwiperDetail(item)' class="image" mode="aspectFill"/>
@@ -247,6 +253,8 @@ export default {
           title: '3.24号电热新品'
         }],
       current: 0, // 轮播图第几张
+      // 轮播图自动播放
+      autoplay: true,
       mode: 'round', // 轮播图底部按钮样式
       dotsStyles: {
         backgroundColor: 'rgba(255,255,255,.4)', // 未选择指示点背景色
@@ -496,6 +504,10 @@ export default {
   },
   onShow() {
     uni.hideTabBar();
+    this.autoplay = true;
+  },
+  onHide() {
+    this.autoplay = false;
   },
   computed: {
     ...mapGetters({

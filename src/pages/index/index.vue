@@ -54,7 +54,13 @@
           :mode="mode"
           field="content"
         >
-          <swiper @change="changePic" autoplay="true" circular="true" class="swiper-box" interval="5000">
+          <swiper
+            :autoplay="autoplay"
+            @change="changePic"
+            circular="true"
+            class="swiper-box"
+            interval="5000"
+          >
             <swiper-item class="swiperitem" v-for="(item,index) in bannerList" :key="index">
               <view class="swiper-item">
                 <image class="image" :src="item.imageUrl" mode="aspectFill" @tap='goSwiperDetail(item)'/>
@@ -110,7 +116,7 @@
           <view v-if="item.data.length !== 0">
             <swiper
               @change="change"
-              autoplay="true"
+              :autoplay="autoplay"
               circular="true"
               class="homepage-recommend-swiper"
               interval="5000"
@@ -123,14 +129,30 @@
                 class="homepage-recommend-swiper-item"
               >
                 <view @tap="goDetail(v)" class="homepage-recommend-imgs">
-                  <image v-if="v.imageUrl" :src="v.imageUrl" class="homepage-recommend-image" mode="aspectFill"/>
-                  <image class="homepage-recommend-imaget" mode="aspectFill"
-                         src="../../assets/img/index/isNewProduct.png" v-if="item.isNewProduct">
-                    <image class="homepage-recommend-imaget" mode="aspectFill"
-                           src="../../assets/img/index/icon_resource.gif" v-if="item.isResource">
-                      <image class="homepage-recommend-image" mode="aspectFill" src="../../assets/img/index/none.png"
-                             v-if="!v.imageUrl"></image>
-
+                  <image
+                    :src="v.imageUrl"
+                    class="homepage-recommend-image"
+                    mode="aspectFill"
+                    v-if="v.imageUrl"
+                  ></image>
+                  <image
+                    class="homepage-recommend-imaget"
+                    mode="aspectFill"
+                    src="../../assets/img/index/isNewProduct.png"
+                    v-if="item.isNewProduct"
+                  ></image>
+                  <image
+                    class="homepage-recommend-imaget"
+                    mode="aspectFill"
+                    src="../../assets/img/index/icon_resource.gif"
+                    v-if="item.isResource"
+                  ></image>
+                  <image
+                    class="homepage-recommend-image"
+                    mode="aspectFill"
+                    src="../../assets/img/index/none.png"
+                    v-if="!v.imageUrl"
+                  ></image>
                 </view>
               </swiper-item>
             </swiper>
@@ -207,12 +229,13 @@
 <!--        </movable-view>-->
 <!--      </movable-area>-->
       <view
-          class="homepage-nav-close iconfont iconcross"
-          :style="'left:'+(moveX == 280 & x>0? x:moveX)+'px;top:'+(moveY == 430 & y>0? y:moveY)+'px'"
-          @tap="deleteNav"
+        :style="'left:'+(moveX == 280 & x>0? x:moveX)+'px;top:'+(moveY == 430 & y>0? y:moveY)+'px'"
+        @tap="deleteNav"
+        class="homepage-nav-close iconfont iconcross"
       ></view>
-      <image :src="liveVideoImg" @tap="goNav" class="ball" :style="'left:'+(moveX == 280 & x>0? x:moveX)+'px;top:'+(moveY == 430 & y>0? y:moveY)+'px'"
-              @touchstart="drag_start" @touchmove.prevent="drag_hmove"  mode="aspectFill">
+      <image :src="liveVideoImg" :style="'left:'+(moveX == 280 & x>0? x:moveX)+'px;top:'+(moveY == 430 & y>0? y:moveY)+'px'" @tap="goNav"
+             @touchmove.prevent="drag_hmove"
+             @touchstart="drag_start" class="ball" mode="aspectFill">
       </image>
     </view>
   </view>
@@ -279,6 +302,8 @@ export default {
       list: [],
       // list: ['全部', '水洗空冷', '电视电脑', '厨房卫浴', '手机数码', '生活'],
       current: 0, // 轮播图第几张
+      // 自动播放
+      autoplay: true,
       mode: 'round', // 轮播图底部按钮样式
       dotsStyles: {
         backgroundColor: 'rgba(255,255,255,.4)', // 未选择指示点背景色
@@ -526,6 +551,10 @@ export default {
   },
   onShow() {
     uni.showTabBar();
+    this.autoplay = true;
+  },
+  onHide() {
+    this.autoplay = false;
   },
   computed: {
     ...mapGetters({
@@ -570,7 +599,7 @@ export default {
       this.start[1] = event.touches[0].clientY - event.target.offsetTop;
     },
     drag_hmove(event) {
-      const	tag = event.touches;
+      const tag = event.touches;
       if (tag[0].clientX < 0) {
         tag[0].clientX = 0;
       }
@@ -985,11 +1014,12 @@ export default {
   /* /deep/.jSearchInput::-ms-input-placeholder{
     color:#fff;
   } */
-  .holdon{
+  .holdon {
     width: 100%;
     height: 100%;
   }
-  .ball{
+
+  .ball {
     width: 150px;
     height: 130px;
     /*background:linear-gradient(to bottom, #F8F8FF,#87CEFA);*/
@@ -1004,6 +1034,7 @@ export default {
     z-index: 1000;
 
   }
+
   .homepage-nav-close {
     position: fixed;
     font-size: 38px;
