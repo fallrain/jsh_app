@@ -36,7 +36,7 @@
         共找到{{dataLength.filterLength}}件产品
       </view>
       <view
-        v-if="dataLength.filterLength"
+        v-show="dataLength.filterLength"
         class="shoppingCart-list-filter"
       >
         <view
@@ -44,22 +44,21 @@
           :key="goods.id"
         >
           <!--筛选出来的产业才显示-->
-          <template v-show="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]">
-            <j-shopping-cart-item
-              :creditQuotaList="creditQuotaList"
-              :defaultSendTo="defaultSendTo"
-              :goods="goods"
-              :index="index"
-              :ref="'shoppingCartItem'+goods.id"
-              :userInf="userInf"
-              :versionPrice="versionPrice"
-              :warehouseFlag="choseSendAddress.yunCangFlag"
-              @change="goodsChange"
-              @del="singleDeleteCart"
-              @sign="toSign"
-              @updateNumber="refreshShoppingCartList"
-            ></j-shopping-cart-item>
-          </template>
+          <j-shopping-cart-item
+            :creditQuotaList="creditQuotaList"
+            :defaultSendTo="defaultSendTo"
+            :goods="goods"
+            :index="index"
+            :ref="'shoppingCartItem'+goods.id"
+            :userInf="userInf"
+            :versionPrice="versionPrice"
+            :warehouseFlag="choseSendAddress.yunCangFlag"
+            @change="goodsChange"
+            @del="singleDeleteCart"
+            @sign="toSign"
+            @updateNumber="refreshShoppingCartList"
+            v-show="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]"
+          ></j-shopping-cart-item>
         </view>
       </view>
       <view
@@ -69,14 +68,14 @@
       </view>
       <view
         class="shoppingCart-list"
-        v-if="dataLength.notInFilterLength"
+        v-show="dataLength.notInFilterLength"
       >
         <view
           v-for="(goods,index) in shoppingList"
           :key="goods.id"
         >
           <j-shopping-cart-item
-            v-if="goods.isValid && goods.$filterIndustryKey === '*'"
+            v-show="goods.isValid && goods.$filterIndustryKey === '*'"
             :ref="'shoppingCartItem'+goods.id"
             :goods="goods"
             :index="index"
@@ -104,13 +103,12 @@
       >
         购物车空空如也~
       </view>
-      <block v-if="failureGoodsList.length">
-        <j-failure-goods-list
-          :list="failureGoodsList"
-          @change="failureGoodsListChange"
-          @clear="clearFailureGoods"
-        ></j-failure-goods-list>
-      </block>
+      <j-failure-goods-list
+        :list="failureGoodsList"
+        @change="failureGoodsListChange"
+        @clear="clearFailureGoods"
+        v-show="failureGoodsList.length"
+      ></j-failure-goods-list>
       <j-shopping-cart-btm
         :isCheckedAll.sync="isCheckAll"
         :isEdit.sync="isEdit"

@@ -13,7 +13,7 @@ module.exports = {
     openPage: '#/pages/applicationsIndex/applicationsIndex',
     proxy: {
       '/new/api': {
-        target: 'http://mall.jsh.com',
+        target: 'https://mall.jsh.com',
         // target: 'https://new.jsh.com',
         changeOrigin: true,
         // pathRewrite: {
