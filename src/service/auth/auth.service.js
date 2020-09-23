@@ -13,6 +13,9 @@ export default {
   },
   getTokenByCode(data) {
     /* 根据code获取token */
-    return jGet(urls.getTokenByCode, data);
+    return jGet(urls.getTokenByCode, {
+      ...data,
+      appSignInMark: true
+    });
   },
 };

@@ -100,7 +100,6 @@ function jSend(option) {
   }
   const header = {
     Authorization: `Bearer ${token}`,
-    jsh_app_sign_in: true,
     ...cfg.headers
   };
   return new Promise((resolve) => {
