@@ -1,6 +1,28 @@
 <template>
   <view :key="updateIndex" class="marketDetail">
     <view class="marketDetail-order-infor mb24">
+      <view class="market-detail-head">
+        <view class="title">
+          名称：{{currentDetail.name}}
+        </view>
+        <view class="market-type-info">
+          <view v-if="currentDetail.activityType === 'taocan'" class="type-info-item">
+            <view v-if="currentDetail.proportionType==='1'" class="type-item-left">数量配比：</view>
+            <view v-if="currentDetail.proportionType==='2'" class="type-item-left">金额配比：</view>
+            <view class="type-item-right">
+              {{currentDetail.proportionMain}}:{{currentDetail.proportion}}
+            </view>
+          </view>
+          <view class="type-info-item">
+            <view class="type-item-left">
+              活动结束时间：
+            </view>
+            <view class="type-item-right">
+              {{fomrmateDate(currentDetail.endDate)}}
+            </view>
+          </view>
+        </view>
+      </view>
       <view
         class="marketDetail-ads-detail br-b-grey"
         @tap="showAdsPicker"
@@ -228,6 +250,9 @@ export default {
         PBnum = 0;
       }
       return PBnum;
+    },
+    fomrmateDate() {
+      return val => val.split(' ')[0];
     }
   },
   methods: {
