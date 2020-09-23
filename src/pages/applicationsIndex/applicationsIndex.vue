@@ -55,7 +55,7 @@
         <view class="lately-app-list" v-if="appFlag">
           <view
             :key="index"
-            @tap="goOthers(item.url)"
+            @tap="goOthers(item.url, 'userId')"
             class="app-list-item"
             v-for="(item, index) in latestApp">
             <view class="icon-img">
@@ -267,7 +267,7 @@ export default {
       latestApp: [
         {
           src: require('@/assets/img/appIndex/video.png'),
-          url: '/pages/nav/nav',
+          url: '/pages/index/liveBroadcast',
           title: '直播'
         }
       ],
@@ -483,6 +483,7 @@ export default {
     }
   },
   onLoad() {
+    this.init(111);
     uni.hideTabBar();
     const platform = uni.getSystemInfoSync().platform;
     this.platform = platform;
@@ -569,6 +570,8 @@ export default {
     },
     // 获取token
     async getToken(loginCode) {
+      await this[USER.UPDATE_SALE_ASYNC]();
+      await this[USER.UPDATE_TOKEN_USER_ASYNC]();
       const { code, data } = await this.authService.getTokenByCode({
         code: loginCode
       });
@@ -730,10 +733,17 @@ export default {
         url: '/pages/nav/nav'
       });
     },
-    goOthers(url) {
-      uni.switchTab({
+    goOthers(url, key) {
+      console.log(this.saleInfo);
+      if (key === 'userId') {
+        url += `?userId=${this.saleInfo.customerCode}`;
+      }
+      uni.navigateTo({
         url
       });
+      // uni.switchTab({
+      //   url
+      // });
     },
     changeState(index) {
       if (index === 0) {
