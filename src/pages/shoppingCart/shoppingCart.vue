@@ -105,12 +105,13 @@
       >
         购物车空空如也~
       </view>
-      <j-failure-goods-list
-        :list="failureGoodsList"
-        @change="failureGoodsListChange"
-        @clear="clearFailureGoods"
-        v-show="failureGoodsList.length"
-      ></j-failure-goods-list>
+      <view v-show="failureGoodsList.length">
+        <j-failure-goods-list
+          :list="failureGoodsList"
+          @change="failureGoodsListChange"
+          @clear="clearFailureGoods"
+        ></j-failure-goods-list>
+      </view>
       <j-shopping-cart-btm
         :isCheckedAll.sync="isCheckAll"
         :isEdit.sync="isEdit"

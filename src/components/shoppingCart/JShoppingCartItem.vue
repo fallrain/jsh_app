@@ -1118,7 +1118,7 @@ export default {
         return;
       }
       const state = !!this.versionPrice.product.find(v => v === this.goods.productList[0].productCode);
-      this.$emit('followStateChange', state, this.index);
+      this.$emit('update:followState', state);
     },
     toggleFollow() {
       /* 切换关注状态 */
