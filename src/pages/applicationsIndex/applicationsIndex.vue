@@ -738,13 +738,18 @@ export default {
       });
     },
     goOthers(url, key) {
+      debugger;
       console.log(this.saleInfo);
       if (key === 'userId') {
         url += `?userId=${this.saleInfo.customerCode}`;
+        uni.navigateTo({
+          url
+        });
+      } else {
+        uni.switchTab({
+          url
+        });
       }
-      uni.switchTab({
-        url
-      });
     },
     changeState(index) {
       if (index === 0) {
