@@ -257,7 +257,7 @@ export default {
         });
         if (code === '1' && data.code === '200') {
           uni.showToast({
-            title: data.message,
+            title: data.message
           });
           this.getCargoDispose();
         } else {

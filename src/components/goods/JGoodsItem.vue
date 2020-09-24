@@ -702,8 +702,7 @@ export default {
         customerCode,
         productCode: this.goods.productCode
       });
-      this.goods.$favorite = true;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', true);
     },
     async unFollowGoods() {
       /* 取消关注 */
@@ -714,8 +713,7 @@ export default {
         customerCode,
         productCodeList: [this.goods.productCode]
       });
-      this.goods.$favorite = false;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', false);
     },
     handleDelFollow() {
       /* 删除 */

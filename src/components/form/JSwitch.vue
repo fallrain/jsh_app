@@ -71,8 +71,10 @@ export default {
       return this.stateMap;
     },
     handleClick() {
-      if (this.beforeChange && this.beforeChange() === false) {
-        return;
+      if (this.beforeChange) {
+        if (this.beforeChange.bind(this.$parent)() === false) {
+          return;
+        }
       }
       this.animationIng = true;
       const stateMap = this.getStateMap();

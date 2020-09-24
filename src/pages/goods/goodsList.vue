@@ -42,6 +42,7 @@
             :sendtoCode="defaultSendToInf.customerCode"
             :allPrice="item.$allPrice"
             :userInf="userInf"
+            :followState.sync="item.$favorite"
             @change="goodsChange"
             @addCartSuccess="addCartSuccess"
           ></j-goods-item>
@@ -578,16 +579,21 @@ export default {
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
       if (!tab.noActive) {
-        this.tabs = tabs;
+        this.tabs.forEach((v) => {
+          v.active = false;
+        });
+        const curTab = this.tabs[index];
+        curTab.active = true;
         // tab为价格的时候，降序升序操作
-        if (tab.id === 'price') {
-          const sortDirection = tab.condition.sortDirection;
-          tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
-          tab.iconClass = tab.condition.sortDirection;
-          this.tabs[index] = tab;
+        if (curTab.id === 'price') {
+          const sortDirection = curTab.condition.sortDirection;
+          curTab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+          curTab.iconClass = tab.condition.sortDirection;
+          curTab.active = true;
+          // this.$set(this.tabs, index, tab);
         } else {
           // 重置价格的状态
-          const priceTab = tabs.find(v => v.id === 'price');
+          const priceTab = this.tabs.find(v => v.id === 'price');
           priceTab.condition.sortDirection = 'desc';
           priceTab.iconClass = '';
         }

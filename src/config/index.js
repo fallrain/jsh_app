@@ -1,15 +1,15 @@
 export default {
   h5: {
     dev: {
-      // baseUrl: 'https://mall.jsh.com',
-      baseUrl: 'https://new.jsh.com',
+      // baseUrl: '',
+      baseUrl: 'https://mall.jsh.com',
       cBaseUrl: 'https://c-beta.jsh.com',
-      version: '216',
+      version: '223',
     },
     sit: {
       baseUrl: 'https://mall.jsh.com',
       cBaseUrl: 'https://c.jsh.com',
-      version: '216',
+      version: '223',
     },
     prod: {
       baseUrl: 'https://new.jsh.com',

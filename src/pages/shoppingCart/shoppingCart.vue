@@ -8,7 +8,6 @@
       >
         <template #right>
           <view
-            v-show="index === 'gwc'"
             @tap="showIndustryPicker"
             class="shoppingCart-tab-picker"
           >
@@ -18,7 +17,7 @@
         </template>
       </j-tab>
     </view>
-    <view v-show="index === 'gwc'">
+    <view>
       <view class="shoppingCart-ads">
         <view class="shoppingCart-ads-total">共{{dataLength.validLength}}件宝贝</view>
         <view
@@ -37,7 +36,7 @@
         共找到{{dataLength.filterLength}}件产品
       </view>
       <view
-        v-if="dataLength.filterLength"
+        v-show="dataLength.filterLength"
         class="shoppingCart-list-filter"
       >
         <view
@@ -46,19 +45,20 @@
         >
           <!--筛选出来的产业才显示-->
           <j-shopping-cart-item
-            :ref="'shoppingCartItem'+goods.id"
-            v-if="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]"
-            :beforeCreditModeChange="checkCreditQuota"
+            :creditQuotaList="creditQuotaList"
             :defaultSendTo="defaultSendTo"
             :goods="goods"
             :index="index"
+            :ref="'shoppingCartItem'+goods.id"
             :userInf="userInf"
             :versionPrice="versionPrice"
             :warehouseFlag="choseSendAddress.yunCangFlag"
+            :followState.sync="goods.followState"
             @change="goodsChange"
             @del="singleDeleteCart"
-            @updateNumber="refreshShoppingCartList"
             @sign="toSign"
+            @updateNumber="refreshShoppingCartList"
+            v-show="goods.isValid && goods.$filterIndustryKey === choseIndustryOptions[0]"
           ></j-shopping-cart-item>
         </view>
       </view>
@@ -69,22 +69,23 @@
       </view>
       <view
         class="shoppingCart-list"
-        v-if="dataLength.notInFilterLength"
+        v-show="dataLength.notInFilterLength"
       >
         <view
           v-for="(goods,index) in shoppingList"
           :key="goods.id"
         >
           <j-shopping-cart-item
-            v-if="goods.isValid && goods.$filterIndustryKey === '*'"
+            v-show="goods.isValid && goods.$filterIndustryKey === '*'"
             :ref="'shoppingCartItem'+goods.id"
-            :beforeCreditModeChange="checkCreditQuota"
             :goods="goods"
             :index="index"
             :userInf="userInf"
             :defaultSendTo="defaultSendTo"
             :versionPrice="versionPrice"
             :warehouseFlag="choseSendAddress.yunCangFlag"
+            :creditQuotaList="creditQuotaList"
+            :followState.sync="goods.followState"
             @change="goodsChange"
             @del="singleDeleteCart"
             @updateNumber="refreshShoppingCartList"
@@ -104,13 +105,13 @@
       >
         购物车空空如也~
       </view>
-      <block v-if="failureGoodsList.length">
+      <view v-show="failureGoodsList.length">
         <j-failure-goods-list
           :list="failureGoodsList"
           @change="failureGoodsListChange"
           @clear="clearFailureGoods"
         ></j-failure-goods-list>
-      </block>
+      </view>
       <j-shopping-cart-btm
         :isCheckedAll.sync="isCheckAll"
         :isEdit.sync="isEdit"
@@ -124,8 +125,8 @@
       <j-address-picker
         :show.sync="isShowAdsPicker"
         :pickerList="sendCustomerList"
-        @beforeCheck="adsPickerBeforeCheckBind"
-        @beforeCheckParent="adsPickerBeforeCheckParentBind"
+        :beforeCheck="adsPickerBeforeCheck"
+        :beforeCheckParent="adsPickerBeforeCheckParent"
         @change="sendCustomerListChange"
       ></j-address-picker>
       <m-toast
@@ -181,8 +182,8 @@ import {
 } from 'vuex';
 import {
   GOODS_LIST,
-  USER,
-  SHOPPING_CART
+  SHOPPING_CART,
+  USER
 } from '../../store/mutationsTypes';
 import OrderSplitCompose from '../../model/OrderSplitCompose';
 import OrderSplitComposeProduct from '../../model/OrderSplitComposeProduct';
@@ -215,8 +216,6 @@ export default {
   data() {
     return {
       isCreated: false,
-      // 默认显示购物车
-      index: 'gwc',
       tabs: [
         {
           id: 'gwc',
@@ -521,16 +520,16 @@ export default {
       // 先回到顶部
       uni.pageScrollTo({
         scrollTop: 0,
-        duration: 100
       });
+      const shoppingList = JSON.parse(JSON.stringify(this.shoppingList));
       this.choseIndustryData = checkedIndustryOptions;
       const industryCode = data[0];
       if (industryCode === '*') {
-        this.shoppingList.forEach((v) => {
+        shoppingList.forEach((v) => {
           v.$filterIndustryKey = '*';
         });
       } else {
-        this.shoppingList.forEach((v) => {
+        shoppingList.forEach((v) => {
           if (v.productList[0].industryCode === industryCode) {
             v.$filterIndustryKey = industryCode;
           } else {
@@ -538,6 +537,7 @@ export default {
           }
         });
       }
+      this.shoppingList = shoppingList;
       // 更新底栏
       this.updateTotal();
       this.isIndustryPickerShow = false;
@@ -661,13 +661,8 @@ export default {
         customerCode: this.userInf.customerCode
       });
       if (code === '1') {
-        this.creditQuotaList = data.data;
+        this.creditQuotaList = data.data || [];
       }
-    },
-    checkCreditQuota(productGroup, totalPrice) {
-      /* 检查信用额度是否在范围内 */
-      const quotaMap = this.creditQuotaList.find(v => v.GROUPCODE === productGroup);
-      return quotaMap.PLAN >= totalPrice;
     },
     async getSpecialPrice() {
       /* 获取特价版本 */
@@ -682,7 +677,7 @@ export default {
     },
     goodsChange(goods, index) {
       /* 商品数据change */
-      this.shoppingList[index] = goods;
+      this.$set(this.shoppingList, index, goods);
       this.updateTotal();
     },
     updateTotal() {
@@ -1007,9 +1002,13 @@ export default {
               });
               ids.forEach((id) => {
                 const index = this.shoppingList.findIndex(v => v.id === id);
-                this.shoppingList.splice(index, 1);
+                if (index > -1) {
+                  this.shoppingList.splice(index, 1);
+                }
                 const failureIndex = this.failureGoodsList.findIndex(v => v.id === id);
-                this.failureGoodsList.splice(failureIndex, 1);
+                if (failureIndex > -1) {
+                  this.failureGoodsList.splice(failureIndex, 1);
+                }
               });
               this.updateCartNum();
             }
@@ -1057,21 +1056,6 @@ export default {
         return { code: '1' };
       }
       return { code: '0' };
-    },
-    async unfollowGoods() {
-      /* 取消关注 */
-      const {
-        customerCode
-      } = this.userInf;
-      const { code } = await this.productDetailService.productRemoveInter({
-        account: customerCode,
-        customerCode,
-        productCodeList: [this.goods.productList[0].productCode]
-      });
-      if (code === '1') {
-        this.goods.followState = false;
-        this.$emit('change', this.goods, this.index);
-      }
     },
     async submitOrder() {
       /* 提交订单 */

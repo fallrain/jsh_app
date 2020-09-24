@@ -74,6 +74,11 @@ export default {
       } catch (e) {
         // eslint-disable-next-line no-empty
       }
+      try {
+        my && my.call('popWindow');
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
     },
     //   个人资料
     personInforClick() {

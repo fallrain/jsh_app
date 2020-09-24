@@ -35,7 +35,13 @@
           :mode="mode"
           field="content"
         >
-          <swiper @change="changePic" autoplay="true" circular="true" class="swiper-box" interval="5000">
+          <swiper
+            :autoplay="autoplay"
+            @change="changePic"
+            circular="true"
+            class="swiper-box"
+            interval="5000"
+          >
             <swiper-item class="swiperitem" :key="index" v-for="(item,index) in imageList">
               <view class="swiper-item">
                 <image :src="item.imageUrl" @tap='goSwiperDetail(item)' class="image" mode="aspectFill"/>
@@ -49,7 +55,7 @@
         <view class="lately-app-list" v-if="appFlag">
           <view
             :key="index"
-            @tap="goOthers(item.url)"
+            @tap="goOthers(item.url, 'userId')"
             class="app-list-item"
             v-for="(item, index) in latestApp">
             <view class="icon-img">
@@ -247,6 +253,8 @@ export default {
           title: '3.24号电热新品'
         }],
       current: 0, // 轮播图第几张
+      // 轮播图自动播放
+      autoplay: true,
       mode: 'round', // 轮播图底部按钮样式
       dotsStyles: {
         backgroundColor: 'rgba(255,255,255,.4)', // 未选择指示点背景色
@@ -259,7 +267,7 @@ export default {
       latestApp: [
         {
           src: require('@/assets/img/appIndex/video.png'),
-          url: '/pages/nav/nav',
+          url: '/pages/index/liveBroadcast',
           title: '直播'
         }
       ],
@@ -496,6 +504,10 @@ export default {
   },
   onShow() {
     uni.hideTabBar();
+    this.autoplay = true;
+  },
+  onHide() {
+    this.autoplay = false;
   },
   computed: {
     ...mapGetters({
@@ -526,14 +538,21 @@ export default {
     },
     async init(code) {
       // 获取token
-      await this.getToken(code);
-      // 获取首页轮播图
-      await this.getbannerList();
+      const data = await this.getToken(code);
+      if (data) {
+        // 获取首页轮播图
+        await this.getbannerList();
+      }
     },
     // 返回原生 处理账号锁定
     popAction() {
       try {
         AlipayJSBridge && AlipayJSBridge.call('popWindow');
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
+      try {
+        my && my.call('popWindow');
       } catch (e) {
         // eslint-disable-next-line no-empty
       }
@@ -566,7 +585,9 @@ export default {
         await this[USER.UPDATE_SALE_ASYNC]();
         await this[USER.UPDATE_TOKEN_USER_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
+        return true;
       }
+      return false;
     },
     // 获取用户类型
     async getUserType(customerCode) {
@@ -718,10 +739,19 @@ export default {
         url: '/pages/nav/nav'
       });
     },
-    goOthers(url) {
-      uni.switchTab({
-        url
-      });
+    goOthers(url, key) {
+      debugger;
+      console.log(this.saleInfo);
+      if (key === 'userId') {
+        url += `?userId=${this.saleInfo.customerCode}`;
+        uni.navigateTo({
+          url
+        });
+      } else {
+        uni.switchTab({
+          url
+        });
+      }
     },
     changeState(index) {
       if (index === 0) {

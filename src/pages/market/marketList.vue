@@ -257,7 +257,7 @@ export default {
   },
   onLoad(option) {
     if (option.productCode) {
-      this.filterInputs[1].val = option.productCode;
+      this.filterInputs[1].value = option.productCode;
     }
     if (option.activityType) {
       const activity = option.activityType;
@@ -385,8 +385,8 @@ export default {
       });
       console.log(this.filterInputs);
       this.filterInputs.forEach((item) => {
-        if (item.val) {
-          condition[item.key] = item.val;
+        if (item.value) {
+          condition[item.key] = item.value;
         }
       });
       return condition;

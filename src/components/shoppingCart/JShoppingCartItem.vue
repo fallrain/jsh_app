@@ -97,7 +97,7 @@
         </view>
       </view>
       <view
-        :class="['jShoppingCartItem-cnt-like iconfont',goods.followState ? 'iconicon3':'iconshoucang1']"
+        :class="['jShoppingCartItem-cnt-like iconfont',followState ? 'iconicon3':'iconshoucang1']"
         @tap="toggleFollow"
       ></view>
     </view>
@@ -394,10 +394,6 @@ export default {
     versionPrice: {
       type: Object
     },
-    // 开启信用模式校验
-    beforeCreditModeChange: {
-      type: Function
-    },
     // 用户信息
     userInf: {
       type: Object
@@ -406,6 +402,14 @@ export default {
     defaultSendTo: {
       type: Object
     },
+    creditQuotaList: {
+      type: Array,
+      default: () => []
+    },
+    // 收藏状态
+    followState: {
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -664,10 +668,12 @@ export default {
     }
   },
   watch: {
-    versionPrice() {
-      this.genSpecificationsList();
-      this.setFollowState();
-      this.genWeekOptions();
+    versionPrice(val, oldVal) {
+      if (JSON.stringify(val) !== JSON.stringify(oldVal)) {
+        this.genSpecificationsList();
+        this.setFollowState();
+        this.genWeekOptions();
+      }
     },
     isCreditModel(val) {
       /* 如果不支持信用模式了，已经打开的则关闭 */
@@ -727,7 +733,7 @@ export default {
         this.goods.productList[0].number = val;
         this.$emit('change', this.goods, this.index);
       }
-    }
+    },
   },
   methods: {
     goDetail(goods) {
@@ -738,7 +744,7 @@ export default {
     },
     setPageInf() {
       this.genStockPickerOption();
-      this.genSpecificationsList();
+      // this.genSpecificationsList();
       this.setFollowState();
       this.genWeekOptions();
     },
@@ -755,10 +761,7 @@ export default {
     },
     handleBeforeCreditModeChange() {
       /* 检查是否支持开启信用模式 */
-      // 已经开启不用检查
-      if (this.goods.isCreditMode) {
-        return true;
-      }
+      let state = true;
       const {
         productGroup,
         priceInfo
@@ -768,7 +771,12 @@ export default {
       } = this.goods;
         // 计算选择的商品的总价，信用额度做比较，超出则不允许开启
       const totalPrice = this.jshUtil.arithmetic(priceInfo.commonPrice.invoicePrice, number, 3);
-      return this.beforeCreditModeChange && this.beforeCreditModeChange(productGroup, totalPrice);
+      // 检查信用额度是否在范围内
+      const quotaMap = this.creditQuotaList.find(v => v.GROUPCODE === productGroup);
+      if (quotaMap) {
+        state = quotaMap.PLAN >= totalPrice;
+      }
+      return state;
     },
     goodsChange() {
       /* goods chang */
@@ -1109,8 +1117,7 @@ export default {
         return;
       }
       const state = !!this.versionPrice.product.find(v => v === this.goods.productList[0].productCode);
-      this.goods.followState = state;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', state);
     },
     toggleFollow() {
       /* 切换关注状态 */
@@ -1129,8 +1136,7 @@ export default {
         customerCode,
         productCode: this.goods.productList[0].productCode
       });
-      this.goods.followState = true;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', true);
     },
     async unFollowGoods() {
       /* 取消关注 */
@@ -1141,8 +1147,7 @@ export default {
         customerCode,
         productCodeList: [this.goods.productList[0].productCode]
       });
-      this.goods.followState = false;
-      this.$emit('change', this.goods, this.index);
+      this.$emit('update:followState', false);
     },
     handleDel() {
       /* 移除购物车操作 */

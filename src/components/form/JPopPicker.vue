@@ -215,9 +215,9 @@ export default {
       } else {
         this.choseOptions = [];
       }
-
       this.$emit('update:choseKeys', choseKeysAy);
       this.$emit('change', choseKeysAy, this.choseOptions);
+      this.$emit('update:show', false);
     },
     handleClick(version, list) {
       /* 选择版本 */

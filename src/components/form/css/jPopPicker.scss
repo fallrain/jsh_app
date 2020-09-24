@@ -2,10 +2,12 @@
   background: #fff;
   padding-bottom: 50px;
 }
-.zIndex999{
+
+.zIndex999 {
   z-index: 999;
 }
-.jPopPicker-pop-search-wrap{
+
+.jPopPicker-pop-search-wrap {
   margin-top: 20px;
   margin-bottom: 10px;
   padding-left: 40px;
@@ -19,7 +21,7 @@
   padding: 26px 40px 14px 40px;
 }
 
-.jPopPicker-pop-item-wrap{
+.jPopPicker-pop-item-wrap {
   max-height: 760px;
   padding-left: 40px;
   overflow-y: auto;
@@ -55,7 +57,7 @@
   font-size: 30px;
 }
 
-.jPopPicker-pop-head-icon{
+.jPopPicker-pop-head-icon {
   color: $theme-color;
   font-size: 32px;
 }
@@ -73,7 +75,7 @@
 .jPopPicker-pop-item-cnt {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp:2;
+  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
@@ -81,7 +83,7 @@
   color: #666;
 }
 
-.jPopPicker-pop-item-empty{
+.jPopPicker-pop-item-empty {
   text-align: center;
   font-size: 26px;
   padding-right: 58px;
