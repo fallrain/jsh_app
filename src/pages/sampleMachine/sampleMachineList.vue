@@ -316,10 +316,10 @@ export default {
       if (condition === false) {
         return;
       }
-      const { data } = await this.samplemachineService.queryInventory(condition);
+      const { data, code } = await this.samplemachineService.queryInventory(condition);
       let dataObj = {};
       const scrollView = {};
-      if (!data.data) {
+      if (code !== '1') {
         uni.showToast({
           icon: 'none',
           title: '暂无数据!',
@@ -330,14 +330,15 @@ export default {
         scrollView.total = 0;
         return scrollView;
       }
-      dataObj = JSON.parse(data.data);
+
+      dataObj = data;
       // 当前页码的数据
-      const curList = dataObj.item;
+      const curList = dataObj.list;
       scrollView.pageSize = dataObj.pageSize;
       scrollView.total = dataObj.total;
       console.log(dataObj);
       // 组合下面3个接口所需的数据
-      const productCodes = curList.map(v => v.CODE);
+      const productCodes = curList.map(v => v.code);
       const priceArgsObj = {
         gbid: productCodes,
         longfeiUSERID: this.saleInfo.customerCode,
@@ -359,14 +360,14 @@ export default {
         const allPriceData = allPriceRes.data.data;
         // 注：$为了防止后端属性命名重复，pt为拼音，是为了和后端字段命名保持一致
         curList.forEach((v) => {
-          v.$allPrice = allPriceData[v.CODE];
+          v.$allPrice = allPriceData[v.code];
         });
       }
       if (productQueryInterRes.code === '1') {
         // 添加点赞
         const productQueryInterData = productQueryInterRes.data;
         curList.forEach((v) => {
-          v.$favorite = !!productQueryInterData.find(productCode => v.CODE === productCode);
+          v.$favorite = !!productQueryInterData.find(productCode => v.code === productCode);
         });
       }
       if (pages.num === 1) {
@@ -375,11 +376,6 @@ export default {
         this.list = this.list.concat(curList);
       }
       console.log(this.list);
-      /* if (code === '1') {
-
-      } else {
-        this.mescroll.endErr();
-      } */
       return scrollView;
     },
     async goodsChange(goods, index) {

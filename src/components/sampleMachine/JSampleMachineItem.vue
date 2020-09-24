@@ -3,12 +3,12 @@
     <view class="jSampleMachine-left">
       <u-lazy-load
         :error-img="errorImg"
-        :image="goods.SEARCHIMAGE"
+        :image="goods.searchImage"
       ></u-lazy-load>
     </view>
     <view class="jSampleMachine-cnt">
       <view class="jSampleMachine-cnt-goodsName j-goods-title">
-        {{goods.NAME}}
+        {{goods.name}}
       </view>
       <view class="jSampleMachine-cnt-price-tips">
         <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price-tips-item">直扣：{{toPercent(goods.$allPrice.ReLossRate)}}%</view>
@@ -19,12 +19,12 @@
         <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price">¥ {{toFixedNum(goods.$allPrice.UnitPrice)}}</view>
         <view v-else class="jSampleMachine-cnt-price fs24 fw600">价格即将发布</view>
         <view v-if="goods.$allPrice" class="jSampleMachine-cnt-price-inf-item">供价：¥{{toFixedNum(goods.$allPrice.ActPrice)}}</view>
-        <view v-if="goods.detailList" class="jSampleMachine-cnt-price-inf-item">库存：{{goods.detailList[0].YGS_KYKCL}}</view>
+        <view v-if="goods.detailList" class="jSampleMachine-cnt-price-inf-item">库存：{{goods.detailList[0].ygsKykcl}}</view>
       </view>
       <view class="jSampleMachine-cnt-opts">
         <j-number-box
           v-if="goods.detailList"
-          :max="Number(goods.detailList[0].YGS_KYKCL)"
+          :max="Number(goods.detailList[0].ygsKykcl)"
           @change="goodsNumChange"
         ></j-number-box>
         <button
