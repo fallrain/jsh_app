@@ -43,6 +43,12 @@
           <view class="tShoppingCartItem-cnt-price-inf">
             <view class="tShoppingCartItem-cnt-price">¥ {{item.UNITPRICE}}</view>
             <view class="tShoppingCartItem-cnt-stock">库存：{{item.IBL_MAXNUM}}</view>
+            <j-number-box
+                :value="item.IBL_NUM"
+                :max="Number(item.IBL_MAXNUM)"
+                :disabled="Number(item.IBL_MAXNUM) === 0"
+                @change="changeNum($event, item)"
+            ></j-number-box>
           </view>
            <view class="tShoppingCartItem-btm-version">
             <view
@@ -99,12 +105,6 @@
         <text class="tShoppingCartItem-cnt-price-subtotal mla">小计： </text>
         <text class="tShoppingCartItem-cnt-price-subprice mlb"> ¥ {{item.SUMMONEY}}</text>
       </view>
-      <j-number-box
-        :value="item.IBL_NUM"
-        :max="Number(item.IBL_MAXNUM)"
-        :disabled="Number(item.IBL_MAXNUM) === 0"
-        @change="changeNum($event, item)"
-        ></j-number-box>
      </view>
     </view>
     <view class="tShoppingCartItem-btm">
@@ -123,6 +123,7 @@
 
 <script>
 import TShoppingCartMore from './TShoppingCartMore';
+import JNumberBox from '../common/JNumberBox';
 import './css/TShoppingCartItem.scss';
 import {
   mapGetters
@@ -134,7 +135,8 @@ import {
 export default {
   name: 'TShoppingCartItem',
   components: {
-    TShoppingCartMore
+    TShoppingCartMore,
+    JNumberBox
   },
   props: {
     // 商品数据

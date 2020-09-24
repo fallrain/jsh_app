@@ -86,6 +86,16 @@ export default {
       },
     };
   },
+  watch: {
+    detailList: {
+      // 表示对象中属性变化的处理函数，这个函数只能叫这个名字
+      handler(detailList) {
+        console.log(detailList);
+      },
+      immediate: true,
+      deep: true // 表示开启深度监听
+    }
+  },
   computed: {
     ...mapGetters({
       saleInfo: USER.GET_SALE,

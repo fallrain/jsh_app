@@ -58,7 +58,7 @@
         </view>
         <view class="transferDetailItem-price-foottotal">
           <view class="transferDetailItem-cnt-price-total">
-            库存：
+            <view>库存：</view>
             <text class="transferDetailItem-cnt-stock">{{good.IBL_MAXNUM}}</text>
           </view>
             <text class="transferDetailItem-cnt-price-subtotal mla">小计： </text>
@@ -279,7 +279,7 @@ export default {
         it.isChecked = true;
         console.log(item);
         item.IBL_PAYMONEYNAME = `(${it.payerCode})${it.payerName}`;
-        console.log(item.isChecked);
+        console.log(item.IBL_PAYMONEYNAME);
         // this.$emit('change', item, it, this.index);
         // this.$emit('calBalance')
       }
