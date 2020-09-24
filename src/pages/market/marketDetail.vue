@@ -216,11 +216,25 @@ export default {
       if (proportionMain < this.currentDetail.speNum) {
         proportionMain = this.currentDetail.speNum;
       }
-      console.log(proportionMain);
-      if (proportionMain > this.limit1.choosedMainNum) {
-        return (proportionMain - this.limit1.choosedMainNum);
+      // 存在起订金额
+      let needNum = 0;
+      if (this.currentDetail.spePrice) {
+        // 获取主产品最小价格
+        const smallest = this.getSmallest();
+        const needMoney = this.currentDetail.spePrice - this.limit1.choosedMainMoney;
+        if (needMoney > 0) {
+          needNum = Math.ceil(needMoney / smallest);
+        }
       }
-      return 0;
+      console.log(proportionMain);
+      let needNum1 = 0;
+      if (proportionMain > this.limit1.choosedMainNum) {
+        needNum1 = proportionMain - this.limit1.choosedMainNum;
+      }
+      if (needNum > needNum1) {
+        return needNum;
+      }
+      return needNum1;
     },
     computePB() {
       // 主产品比例
@@ -256,6 +270,19 @@ export default {
     }
   },
   methods: {
+    getSmallest() {
+      let small = 0;
+      this.currentDetail.products.forEach((item) => {
+        if (small === 0) {
+          small = item.priceDto.invoicePrice;
+        } else {
+          if (small > item.priceDto.invoicePrice) {
+            small = item.priceDto.invoicePrice;
+          }
+        }
+      });
+      return small;
+    },
     async initpage() {
       await this.getAddressList();
       await this.getWarehouse();

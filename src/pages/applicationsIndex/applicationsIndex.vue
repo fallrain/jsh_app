@@ -115,7 +115,7 @@
       <view class="app-function-list">
         <view
           :key="index"
-          @tap="goOthers(item.url)"
+          @tap="goOthers(item.url, 'userId')"
           class="app-function-item"
           v-for="(item, index) in functionList">
           <image :src="item.src"></image>
@@ -420,6 +420,10 @@ export default {
       ],
       functionList: [
         {
+          src: require('@/assets/img/appIndex/video-pic.png'),
+          url: '/pages/index/liveBroadcast'
+        },
+        {
           src: require('@/assets/img/appIndex/shouhou-pic.png'),
           url: '#'
         },
@@ -433,10 +437,6 @@ export default {
         },
         {
           src: require('@/assets/img/appIndex/egongcheng-pic.png'),
-          url: '#'
-        },
-        {
-          src: require('@/assets/img/appIndex/video-pic.png'),
           url: '#'
         },
         {

@@ -10,7 +10,7 @@
           <image :src="item.livePageUrl" @tap="goBroadcas(item)" class="liveBroadcas-row-img"></image>
           <view v-if="isShowTime" class="liveBroadcas-row-start lb">未开始</view>
           <view v-if="!isShowTime" class="liveBroadcas-row-start la">直播中</view>
-          <view class="liveBroadcas-row-countDown">倒计时:{{days}}天{{hours}}小时{{minutes}}分{{seconds}}秒</view>
+<!--          <view class="liveBroadcas-row-countDown">倒计时:{{days}}天{{hours}}小时{{minutes}}分{{seconds}}秒</view>-->
           <view class="liveBroadcas-row-title">{{item.liveName}}</view>
         </view>
       </view>
@@ -105,7 +105,6 @@ export default {
             //   start = item.liveStartDate;
             //   if (time === start) {
             //     that.isShowTime = false;
-            //
             //   } else {
             //     that.isShowTime = true;
             //     let newtime = parseInt((start - time) / 1000);
