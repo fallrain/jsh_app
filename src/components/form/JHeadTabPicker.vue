@@ -8,10 +8,10 @@
       v-if="value&&(value[0].type==='ZCPC'||value[0].type==='ZCPSLX'||value[0].type==='ZCLX')"
     >
       <view
-        :class="['jHeadTabPicker-item-ZC',item.checked && 'active']"
+        :class="['jHeadTabPicker-item-ZC',checkedIndex===index && 'active']"
         v-for="(item,index) in value"
         :key="index"
-        @tap="choose(item)"
+        @tap="choose(item,index)"
       >
         <view
           :class="['jHeadTabPicker-item-check iconfont icontick']"
@@ -21,10 +21,10 @@
     </view>
     <view v-else class="jHeadTabPicker-list">
       <view
-        :class="['jHeadTabPicker-item',item.checked && 'active']"
+        :class="['jHeadTabPicker-item',checkedIndex===index && 'active']"
         v-for="(item,index) in value"
         :key="index"
-        @tap="choose(item)"
+        @tap="choose(item,index)"
       >
         <view
           :class="['jHeadTabPicker-item-check iconfont icontick']"
@@ -67,6 +67,11 @@ export default {
       type: Array,
       default: () => {
       }
+    },
+    // 选中的index
+    checkedIndex: {
+      type: [String, Number, Object],
+      default: null
     }
   },
   directives: {
@@ -80,21 +85,17 @@ export default {
       }
     }
   },
-  watch: {
-    // 监控show的状态，触发show事件
-    show(val) {
-      this.$emit('showChange', val);
-    }
-  },
   methods: {
     close() {
       /* 关闭 */
       this.$emit('update:show', false);
+      this.$emit('showChange', false);
     },
     reset() {
-      this.value.forEach((v) => {
-        v.checked = false;
-      });
+      /* 重置 */
+      this.$emit('update:checkedIndex', null);
+      this.$emit('checkedIndexChange', null);
+      // todo 这里不应该发出确认的方法'
       this.$emit('confirm', this.index, this.value);
       if (this.value[0].type === 'ZCJD') {
         this.value[4].checked = true; // 发货基地重置为黄岛
@@ -107,14 +108,16 @@ export default {
     confirm() {
       /* 确定 */
       this.close();
-      this.$emit('confirm', this.index, this.value.find(v => v.checked));
+      let choseItem;
+      if (this.checkedIndex !== null) {
+        choseItem = this.value[this.checkedIndex];
+      }
+      this.$emit('confirm', this.index, choseItem);
     },
-    choose(item) {
+    choose(item, index) {
       /* 选中 */
-      this.value.forEach((v) => {
-        v.checked = false;
-      });
-      item.checked = true;
+      this.$emit('update:checkedIndex', index);
+      this.$emit('checkedIndexChange', index);
       this.$emit('change', this.value, this.index);
     }
   }

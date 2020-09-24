@@ -4,6 +4,7 @@
       class="mb12"
       :tabs="tabs"
       :typeShow="isShowType"
+      :childCheckedIndex.sync="activityIndex"
       @tabClick="tabClick"
       @tabPickerConfirm="tabPickerConfirm"
     ></j-market-head-tab>
@@ -187,6 +188,8 @@ export default {
       // 是否展示地址侧边抽屉
       isShowAddressDrawer: false,
       isShowType: false,
+      // 选中的活动下标
+      activityIndex: null,
       tabs: [
         {
           name: '活动类别',
@@ -203,7 +206,8 @@ export default {
         {
           name: '筛选',
           icon: 'iconshaixuan',
-          handler: 'showFilter'
+          handler: 'showFilter',
+          noActive: true,
         }
       ],
       filterInputs: [
@@ -249,7 +253,9 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      // 选中的活动条目
+      choseActivityItem: {}
     };
   },
   beforeMount() {
@@ -261,9 +267,11 @@ export default {
     }
     if (option.activityType) {
       const activity = option.activityType;
-      this.tabs[0].children.forEach((item) => {
+      this.tabs[0].children.forEach((item, index) => {
         if (item.key === activity) {
-          item.checked = true;
+          // 设置选中的活动和选中的活动条目
+          this.activityIndex = index;
+          this.choseActivityItem = item;
         }
       });
     }
@@ -353,11 +361,10 @@ export default {
         condition.sendtoCode = this.defaultSendToInf.addressCode;
       }
       // 活动类别选择后确认
-      this.tabs[0].children.forEach((item) => {
-        if (item.checked) {
-          condition.activityType = item.key;
-        }
-      });
+      if (this.choseActivityItem.key !== undefined) {
+        condition.activityType = this.choseActivityItem.key;
+      }
+
       this.filterList.forEach((item) => {
         const keyName = item.key;
         let val = '';
@@ -421,9 +428,10 @@ export default {
         this[tab.handler]();
       }
     },
-    tabPickerConfirm() {
+    tabPickerConfirm(tabs, choseItem) {
       // 活动类别选择后确认
       // 重新搜索
+      this.choseActivityItem = choseItem || {};
       this.mescroll.resetUpScroll(true);
     },
     async upCallback(pages) {

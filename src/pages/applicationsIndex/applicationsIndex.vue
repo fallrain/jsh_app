@@ -740,7 +740,6 @@ export default {
       });
     },
     goOthers(url, key) {
-      // debugger;
       console.log(this.saleInfo);
       if (key === 'userId') {
         url += `?userId=${this.saleInfo.customerCode}`;
@@ -748,7 +747,6 @@ export default {
           url
         });
       } else {
-        console.log(url)
         uni.switchTab({
           url
         });
