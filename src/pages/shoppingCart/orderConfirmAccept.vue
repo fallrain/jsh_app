@@ -110,7 +110,7 @@ export default {
   created() {
   },
   onLoad(option) {
-    debugger
+    debugger;
     if (option.groupings) {
       this.status = 1;
       this.primaryTheme = false;
@@ -151,7 +151,7 @@ export default {
       if (code === '1') {
         data.forEach((item) => {
           item.bigOrderDetailList.forEach((v) => {
-            if (v.errorMsg.indexOf('org.spring') > -1) {
+            if (v.errorMsg && v.errorMsg.indexOf('org.spring') > -1) {
               const index = v.errorMsg.indexOf('org.spring');
               v.errorMsg = v.errorMsg.slice(0, index);
             }
