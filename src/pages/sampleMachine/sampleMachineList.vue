@@ -207,7 +207,7 @@ export default {
     async init() {
       await this.getAddressList();
       await this.queryBrandAndInvsort();
-      // this.mescroll.resetUpScroll(true);
+      this.mescroll.resetUpScroll(true);
     },
     async getAddressList() {
       // 获取地址
