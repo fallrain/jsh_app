@@ -1,7 +1,7 @@
 export default {
   h5: {
     dev: {
-      // baseUrl: '',
+      // baseUrl: 'https://new.jsh.com',
       baseUrl: 'https://mall.jsh.com',
       cBaseUrl: 'https://c-beta.jsh.com',
       version: '216',
