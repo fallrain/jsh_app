@@ -7,8 +7,12 @@ export default {
     if (query) {
       const {
         code,
+        token,
         jwtToken
       } = query;
+      if (token) {
+        uni.setStorageSync('token', token);
+      }
       if (code) {
         uni.setStorageSync('code', code);
       }

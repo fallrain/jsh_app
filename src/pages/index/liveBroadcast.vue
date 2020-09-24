@@ -10,7 +10,7 @@
           <image :src="item.livePageUrl" @tap="goBroadcas(item)" class="liveBroadcas-row-img"></image>
           <view v-if="isShowTime" class="liveBroadcas-row-start lb">未开始</view>
           <view v-if="!isShowTime" class="liveBroadcas-row-start la">直播中</view>
-<!--          <view class="liveBroadcas-row-countDown">倒计时:{{days}}天{{hours}}小时{{minutes}}分{{seconds}}秒</view>-->
+          <view class="liveBroadcas-row-countDown">倒计时:{{item.days}}天{{item.hours}}小时{{item.minutes}}分{{item.seconds}}秒</view>
           <view class="liveBroadcas-row-title">{{item.liveName}}</view>
         </view>
       </view>
@@ -77,6 +77,15 @@ export default {
     this.getLiveBroadcast();
     this.getList();
   },
+  wacth: {
+    // livingList:{
+    //   handler(livingList) {
+    //     console.log(this.livingList);
+    //   },
+    //   immediate: true,
+    //   deep: true // 表示开启深度监听
+    // }
+  },
   methods: {
     // 直播
     getLiveBroadcast() {
@@ -97,32 +106,9 @@ export default {
         success(res) {
           console.log(res.data.data.livingList);
           that.livingList = res.data.data.livingList;
-          that.livingList.map((item) => {
-            console.log(item);
-            // setInterval(() => {
-            //   const time = Date.now();
-            //   let start = 0;
-            //   start = item.liveStartDate;
-            //   if (time === start) {
-            //     that.isShowTime = false;
-            //   } else {
-            //     that.isShowTime = true;
-            //     let newtime = parseInt((start - time) / 1000);
-            //     // console.log(newtime);
-            //     that.days = parseInt(newtime / 24 / 3600);
-            //     // time减去整天的秒数，剩下不足一天的秒数
-            //     newtime -= that.days * 24 * 3600;
-            //     that.hours = parseInt(newtime / 3600);
-            //     // 剩下不足一小时的秒数
-            //     newtime -= that.hours * 3600;
-            //     that.minutes = parseInt(newtime / 60);
-            //     console.log(that.minutes);
-            //     that.seconds = newtime % 60;
-            //     // that.countDown = `${days}天${hours}时${minutes}分${seconds}秒`;
-            //     // countDown
-            //     // console.log(that.countDown)
-            //   }
-            // }, 1000);
+          that.livingList.map((item, index) => {
+            console.log(item, index);
+            that.setTime(item, index);
           });
         },
         fail() {
@@ -136,6 +122,45 @@ export default {
           });
         }
       });
+    },
+    setTime(item, index) {
+      console.log(item, index);
+      const that = this;
+      setInterval(() => {
+        const time = Date.now();
+        let start = 0;
+        start = item.liveStartDate;
+        if (time === start) {
+          that.isShowTime = false;
+          return;
+        } else {
+          that.isShowTime = true;
+          let newtime = parseInt((start - time) / 1000);
+
+          that.days = parseInt(newtime / 24 / 3600);
+          // time减去整天的秒数，剩下不足一天的秒数
+          newtime -= that.days * 24 * 3600;
+          that.hours = parseInt(newtime / 3600);
+          // 剩下不足一小时的秒数
+          newtime -= that.hours * 3600;
+          that.minutes = parseInt(newtime / 60);
+          that.seconds = newtime % 60;
+          console.log(that.seconds);
+          that.livingList[index].days = that.days;
+          that.livingList[index].hours = that.hours;
+          that.livingList[index].minutes = that.minutes;
+          that.livingList[index].seconds = that.seconds;
+
+          this.$set(that.livingList, index, that.livingList[index]);
+          //     // that.countDown = `${days}天${hours}时${minutes}分${seconds}秒`;
+          //     // countDown
+          //     // console.log(that.countDown)
+
+        }
+      }, 1000);
+      //   let timer = setTimeout(() => {
+      //     that.getLiveBroadcast()
+      //   })
     },
     goBroadcas(item) {
       uni.navigateTo({
@@ -165,7 +190,7 @@ export default {
             start = item.liveStartDate;
             const time = new Date(start);
             item.year = time.getFullYear();
-            item.month = time.getMonth()+1;
+            item.month = time.getMonth() + 1;
             item.day = time.getDate();
             item.hours = time.getHours();
             item.minutes = time.getMinutes();
@@ -276,7 +301,7 @@ export default {
   .liveBroadcas-row-countDown {
     width: 100%;
     height: 40px;
-    line-height: center;
+    line-height: 40px;
     background: #ccc;
     opacity: 0.9;
     color: #fff;
@@ -284,7 +309,7 @@ export default {
     left: 0px;
     bottom: 100px;
     text-align: center;
-    font-size: 26px;
+    font-size: 24px;
   }
   .sj {
     position: absolute;
