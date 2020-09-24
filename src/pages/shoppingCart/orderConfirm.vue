@@ -284,6 +284,7 @@ export default {
     },
     // 拆单
     async splitOrder() {
+      this.formData.whetherOrNotAppOrder = true;
       const { code, data } = await this.orderService.splitOrder(this.formData);
       if (code === '1') {
         this.dataInfo = data;

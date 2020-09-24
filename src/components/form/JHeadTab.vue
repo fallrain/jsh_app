@@ -28,13 +28,13 @@
         <view
           :class="[
           'jHeadTab-pop-tab-item',
-          item.show && 'active',
+          showIndex===index && 'active',
         ]"
           v-for="(item,index) in popTabs"
           :key="index"
         >
           <view
-            @tap="showSecondCategory(item)"
+            @tap="showSecondCategory(item,index)"
             class="jHeadTab-pop-tab-item-text-wrap"
           >
             <text class="jHeadTab-pop-tab-item-text">{{item.name}}</text>
@@ -47,7 +47,9 @@
       v-for="(pickerItem,pIndex) in popTabs"
       :key="pIndex"
       :index="pIndex"
-      :show.sync="pickerItem.show"
+      :checkedIndex="tabPickerCheckedIndexList[pIndex]"
+      :show="pIndex === showIndex"
+      @checkedIndexChange="tabPickerCheckedIndexChange($event,pIndex)"
       @showChange="tabPickerShowChange"
       v-model="pickerItem.children"
       @change="tabPickerChange"
@@ -76,11 +78,18 @@ export default {
       type: Array,
       default: () => []
     },
+    // 搜索条目选中的index
+    tabPickerCheckedIndexList: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
       // 扩展
-      isExpend: false
+      isExpend: false,
+      // 展开的条目的index
+      showIndex: null,
     };
   },
   methods: {
@@ -92,18 +101,28 @@ export default {
     tabTagHandle() {
       /* tag tab 点击事件 */
     },
-    showSecondCategory(item) {
+    showSecondCategory(item, index) {
       /* 展示二级类目 */
-      const isShow = !item.show;
-      this.popTabs.forEach((inf) => {
-        inf.show = false;
-      });
-      item.show = isShow;
-      this.isExpend = isShow;
+      if (this.showIndex === index) {
+        this.showIndex = null;
+      } else {
+        this.showIndex = index;
+      }
+      // 扩展类
+      this.isExpend = this.showIndex !== null;
       this.$emit('tabPickerChange', this.popTabs);
     },
     tabPickerShowChange(show) {
+      if (!show) {
+        this.showIndex = null;
+      }
       this.isExpend = show;
+    },
+    tabPickerCheckedIndexChange(index, pIndex) {
+      /* 选中的index change事件 */
+      const tabPickerCheckedIndexList = [...this.tabPickerCheckedIndexList];
+      tabPickerCheckedIndexList[pIndex] = index;
+      this.$emit('update:tabPickerCheckedIndexList', tabPickerCheckedIndexList);
     },
     tabPickerChange(children, index) {
       /* 整车专用：拼车跟基地只能选一 */
@@ -138,6 +157,8 @@ export default {
           this.popTabs[0].children[4].checked = true;
         }
       }
+      // 确认则关闭弹出框
+      this.showIndex = null;
       this.$emit('tabconfirmPup', this.popTabs, index, choseChildItem);
     }
   }

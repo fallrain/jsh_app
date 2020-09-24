@@ -3,7 +3,7 @@ import util from '../util/index';
 const baseURL = 'specimen';
 const urls = {
   // 样品机列表 权限
-  queryInventory: '/sampleOrder/queryInventory',
+  queryInventory: '/sampleOrder/queryInventory1',
   // 筛选条件获取
   queryBrandAndInvsort: '/query/queryBrandAndInvsort',
   // 查询产品价格

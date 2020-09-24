@@ -17,6 +17,7 @@
         class="mb12"
         :tabs="tabs"
         :popTabs="popTabs"
+        :tabPickerCheckedIndexList.sync="tabPickerCheckedIndexList"
         @tabClick="tabClick"
         @tabPickerChange="popTabsChange"
         @tabconfirmPup="tabConditionConfirm"
@@ -229,6 +230,8 @@ export default {
         }
       ],
       popTabs: [],
+      // 搜索条目选中的index列表
+      tabPickerCheckedIndexList: [],
       // 选中的tab筛选数据
       tabConditions: {},
       // 筛选抽屉
@@ -403,22 +406,34 @@ export default {
       };
       return condition;
     },
-    genTabCondition(conditions) {
+    genTabCondition(conditions, navigation) {
       /* 组合【搜索tab】的数据 */
       const popTabs = [];
-      conditions.forEach((v) => {
+      const tabPickerCheckedIndexList = [];
+      conditions.forEach((v, index) => {
         const tab = {
           name: v.name,
           show: false
         };
-        tab.children = v.show.map(item => ({
-          ...item,
-          name: item.show,
-          checked: false
-        }));
+        // 默认没有选中的搜索条目
+        tabPickerCheckedIndexList[index] = null;
+        const tabChildren = [];
+        tab.children = v.show.forEach((item) => {
+          tabChildren.push({
+            ...item,
+            name: item.show,
+          });
+          // 设置选中的picker选择条件的下标
+          const checkedIndex = navigation.findIndex(nav => nav.code === item.code && nav.show === item.show);
+          if (checkedIndex > -1) {
+            tabPickerCheckedIndexList[index] = checkedIndex;
+          }
+        });
+        tab.children = tabChildren;
         popTabs.push(tab);
       });
       this.popTabs = popTabs;
+      this.tabPickerCheckedIndexList = tabPickerCheckedIndexList;
     },
     genFilterDataOfStock(categoryCode) {
       /* 组合有货商品，并选中 */
@@ -466,7 +481,9 @@ export default {
           // 商品数据
           page,
           // tab类型搜索条件
-          condition: dataCondition
+          condition: dataCondition,
+          // 选中的条件
+          navigation
         } = data;
 
         if (!page.result) {
@@ -475,7 +492,7 @@ export default {
           this.isShowList = true;
         }
         // 组合tab的搜索条件数据（popTabs）
-        this.genTabCondition(dataCondition);
+        this.genTabCondition(dataCondition, navigation);
         // 当前页码的数据
         const curList = page.result.map(v => ({
           ...v,
@@ -605,9 +622,10 @@ export default {
         this[tab.handler]();
       }
     },
-    popTabsChange(tabs) {
+    popTabsChange() {
+      // eslint-disable-next-line no-unused-vars
       /* popTabs change */
-      this.popTabs = tabs;
+      // this.popTabs = tabs;
     },
     tabConditionConfirm(tabs, index, choseItem) {
       /* 顶部双层tab栏目，第二层点了条件点确认按钮事件 */
