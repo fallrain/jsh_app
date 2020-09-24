@@ -1,5 +1,5 @@
 <template>
-  <view >
+  <view class="product-detail" >
     <view class="container" v-if="isInvalid">
   <!--    <view class="uni-flex uni-row" :class="{'st':true,'sticky-fixed':isF}" v-show="isF">-->
   <!--      <view @tap="checkCut('goods')" style="margin: auto;" :class="{'checkedCut':goodsCheck}">{{tabs[0].name}}</view>-->
@@ -163,9 +163,9 @@ export default {
     proSpecs,
     proComFoot
   },
-  computed: {
-    ...mapGetters({
-      userInf: USER.GET_SALE,
+      computed: {
+        ...mapGetters({
+          userInf: USER.GET_SALE,
       defaultSendTo: USER.GET_DEFAULT_SEND_TO,
     }),
   },

@@ -11,7 +11,7 @@ module.exports = {
     compress: true,
     open: true,
     openPage: '#/pages/applicationsIndex/applicationsIndex',
-    proxy: {
+    /* proxy: {
       '/new/api': {
         target: 'https://mall.jsh.com',
         // target: 'https://new.jsh.com',
@@ -21,7 +21,7 @@ module.exports = {
         // },
         secure: false
       }
-    }
+    } */
   },
   chainWebpack: (config) => {
     config.module.rule('images')
