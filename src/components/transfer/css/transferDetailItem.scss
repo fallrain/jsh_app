@@ -121,9 +121,13 @@
     font-size: 20px;
     color: #333;
     margin-bottom: 24px;
+    .transferDetailItem-cnt-price-total {
+      display: flex;
+      margin-right: 5%;
+    }
     .transferDetailItem-cnt-stock {
       color: #2283E2;
-      margin-right: 196px;
+
     }
     .transferDetailItem-cnt-price-subprice {
       font-size: 28px;

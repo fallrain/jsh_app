@@ -71,18 +71,30 @@ export default {
           });
         } else {
           this.detailList.orderList.forEach((item) => {
-            item.payer.forEach((ele) => {
-              if (ele.customerCode === item.IBL_PAYMONEY) {
-                if (ele.balance > this.detailList.SUMMONEY) {
-                  this.$emit('changeVf');
-                }
-              } else {
-                uni.showModal({
-                  title: '提示',
-                  content: `付款方${item.IBL_PAYMONEY}余额不足，无法提交！`,
-                });
+            console.log(item.IBL_PAYMONEY);
+            const orderPayer = item.payer.find(ele => {
+              if (item.IBL_PAYMONEYNAME.indexOf(ele.customerCode) !== -1 || item.IBL_PAYMONEYNAME.indexOf(ele.customerName)) {
+                console.log(ele);
+                return ele;
               }
             });
+            console.log(orderPayer);
+            if (orderPayer) {
+              console.log(11111);
+              console.log(this.detailList.SUMMONEY);
+              if (Number(orderPayer.balance) > Number(this.detailList.SUMMONEY)) {
+                console.log(orderPayer.balance);
+
+                this.$emit('changeVf');
+                console.log(22222);
+              } else {
+                console.log(333333);
+                uni.showModal({
+                  title: '提示',
+                  content: `付款方${orderPayer.CodeName}余额不足，无法提交！`,
+                });
+              }
+            }
           });
         }
       }

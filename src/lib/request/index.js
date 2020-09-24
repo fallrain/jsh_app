@@ -137,6 +137,9 @@ function jSend(option) {
               }
             }
           });
+          if (!cfg.noLoading) {
+            hideLoading();
+          }
           return resolve(false);
         }
         if (data === 'SECURITY_INVALID_TOKEN') {
@@ -150,6 +153,9 @@ function jSend(option) {
               }
             }
           });
+          if (!cfg.noLoading) {
+            hideLoading();
+          }
           return resolve(false);
         }
         if (!cfg.noLoading) {

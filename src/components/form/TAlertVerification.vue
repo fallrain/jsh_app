@@ -63,8 +63,8 @@ export default {
       default: () => {}
     },
     allOrderList: {
-      type: Array,
-      default: () => []
+      type: [Array, Object],
+      default: () => {}
     },
     typpew: {
       type: String
@@ -91,6 +91,7 @@ export default {
     };
   },
   created() {
+    console.log(this.allOrderList)
     this.setPageInfo();
   },
   computed: {

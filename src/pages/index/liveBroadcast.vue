@@ -116,6 +116,7 @@ export default {
             //     // 剩下不足一小时的秒数
             //     newtime -= that.hours * 3600;
             //     that.minutes = parseInt(newtime / 60);
+            //     console.log(that.minutes);
             //     that.seconds = newtime % 60;
             //     // that.countDown = `${days}天${hours}时${minutes}分${seconds}秒`;
             //     // countDown

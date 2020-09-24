@@ -115,7 +115,7 @@
       <view class="app-function-list">
         <view
           :key="index"
-          @tap="goOthers(item.url)"
+          @tap="goOthers(item.url, 'userId')"
           class="app-function-item"
           v-for="(item, index) in functionList">
           <image :src="item.src"></image>
@@ -420,6 +420,10 @@ export default {
       ],
       functionList: [
         {
+          src: require('@/assets/img/appIndex/video-pic.png'),
+          url: '/pages/index/liveBroadcast'
+        },
+        {
           src: require('@/assets/img/appIndex/shouhou-pic.png'),
           url: '#'
         },
@@ -433,10 +437,6 @@ export default {
         },
         {
           src: require('@/assets/img/appIndex/egongcheng-pic.png'),
-          url: '#'
-        },
-        {
-          src: require('@/assets/img/appIndex/video-pic.png'),
           url: '#'
         },
         {
@@ -538,9 +538,11 @@ export default {
     },
     async init(code) {
       // 获取token
-      await this.getToken(code);
-      // 获取首页轮播图
-      await this.getbannerList();
+      const data = await this.getToken(code);
+      if (data) {
+        // 获取首页轮播图
+        await this.getbannerList();
+      }
     },
     // 返回原生 处理账号锁定
     popAction() {
@@ -574,8 +576,6 @@ export default {
     },
     // 获取token
     async getToken(loginCode) {
-      await this[USER.UPDATE_SALE_ASYNC]();
-      await this[USER.UPDATE_TOKEN_USER_ASYNC]();
       const { code, data } = await this.authService.getTokenByCode({
         code: loginCode
       });
@@ -585,7 +585,9 @@ export default {
         await this[USER.UPDATE_SALE_ASYNC]();
         await this[USER.UPDATE_TOKEN_USER_ASYNC]();
         this.getUserType(this.saleInfo.customerCode);
+        return true;
       }
+      return false;
     },
     // 获取用户类型
     async getUserType(customerCode) {
@@ -738,7 +740,7 @@ export default {
       });
     },
     goOthers(url, key) {
-      debugger;
+      // debugger;
       console.log(this.saleInfo);
       if (key === 'userId') {
         url += `?userId=${this.saleInfo.customerCode}`;
@@ -746,6 +748,7 @@ export default {
           url
         });
       } else {
+        console.log(url)
         uni.switchTab({
           url
         });

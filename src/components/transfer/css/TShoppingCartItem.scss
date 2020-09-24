@@ -193,6 +193,7 @@
   .tShoppingCartItem-cnt-stock{
     font-size: 20px;
     color: #333;
+    margin-right: 20px;
   }
   .tShoppingCartItem-cnt-price-inf-item {
     margin-right: 6px;
@@ -325,13 +326,13 @@
       .tShoppingCartItem-cnt-price-subtotal.mla{
         width:60px;
         height:28px;
-        margin-left:32px;
+        margin-left:50px;
       }
       .tShoppingCartItem-cnt-price-subprice.mlb{
         width: 180px;
         height: 40px;
         font-size: 28px;
-        margin-right: 6px;
+        //margin-right: 6px;
         color: #ED2856;
       }
     }
