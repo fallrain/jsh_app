@@ -576,8 +576,6 @@ export default {
     },
     // 获取token
     async getToken(loginCode) {
-      await this[USER.UPDATE_SALE_ASYNC]();
-      await this[USER.UPDATE_TOKEN_USER_ASYNC]();
       const { code, data } = await this.authService.getTokenByCode({
         code: loginCode
       });
