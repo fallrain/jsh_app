@@ -10,7 +10,7 @@
         :class="[
                   !filterItem.isExpand && 'reverse'
                 ]"
-        @tap="toggleExpand(filterItem)"
+        @tap="toggleExpand"
       ></i>
     </view>
     <view
@@ -24,7 +24,7 @@
         :class="[
           item.isChecked && 'active'
         ]"
-        @tap="choose(item,filterItem.data)"
+        @tap="choose(filterIndex)"
       >{{item.value}}
       </view>
     </view>
@@ -32,6 +32,9 @@
 </template>
 
 <script>
+import {
+  produce
+} from 'immer';
 import './css/jDrawerFilterItem.scss';
 
 export default {
@@ -48,26 +51,31 @@ export default {
     },
   },
   methods: {
-    toggleExpand(item) {
+    toggleExpand() {
       /* 展开或者收起 */
-      item.isExpand = !item.isExpand;
-      this.$emit('change', item, this.index);
+      const filterItem = produce(this.filterItem, (item) => {
+        item.isExpand = !item.isExpand;
+      });
+      this.$emit('change', filterItem, this.index);
     },
-    choose(item, list) {
+    choose(index) {
       /* 选择选项 */
-      if (this.filterItem.type === 'radio') {
-        if (!item.isChecked) {
-          list.forEach((v) => {
-            if (v.isChecked) {
-              v.isChecked = false;
-            }
-          });
+      const nextState = produce(this.filterItem, (filterItem) => {
+        const item = filterItem.data[index];
+        if (filterItem.type === 'radio') {
+          if (!item.isChecked) {
+            filterItem.data.forEach((v) => {
+              if (v.isChecked) {
+                v.isChecked = false;
+              }
+            });
+          }
         }
-      }
-      // 翻转
-      item.isChecked = !item.isChecked;
-      this.filterItem.data = list;
-      this.$emit('change', this.filterItem, this.index);
+        // 翻转
+        item.isChecked = !item.isChecked;
+      });
+
+      this.$emit('change', nextState, this.index);
     },
   }
 };

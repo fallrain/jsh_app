@@ -68,7 +68,7 @@ export default {
   methods: {
     tabHandle(item, index) {
       /* tab 点击事件 */
-      if (!item.noActive) {
+      if (!item.noActive && !item.noPicker) {
         if (this.showIndex === index) {
           this.showIndex = null;
         } else {

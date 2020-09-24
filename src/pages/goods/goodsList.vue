@@ -133,6 +133,9 @@
 </template>
 
 <script>
+import {
+  produce
+} from 'immer';
 import JGoodsItem from '../../components/goods/JGoodsItem';
 import JHeadTab from '../../components/form/JHeadTab';
 import JChooseDeliveryAddress from '../../components/goods/JChooseDeliveryAddress';
@@ -703,11 +706,15 @@ export default {
     },
     filterReset() {
       /* 抽屉筛选重置 */
-      this.filterList.forEach((item) => {
-        item.data.forEach((v) => {
-          v.isChecked = false;
+      this.filterList.forEach((filterItem, index) => {
+        const producer = produce(filterItem, (draft) => {
+          draft.data.forEach((v) => {
+            v.isChecked = false;
+          });
         });
+        this.$set(this.filterList, index, producer);
       });
+
       // 重置最低价 最高价
       this.filterForm.lowPrice = '';
       this.filterForm.highPrice = '';

@@ -19,7 +19,6 @@
         :tabs="tabs"
         :typeShow="isShowType"
         @tabClick="tabClick"
-        @tabPickerConfirm="tabPickerConfirm"
       ></j-market-head-tab>
     </view>
     <mescroll-body
@@ -102,6 +101,9 @@ import {
 import {
   USER
 } from '../../store/mutationsTypes';
+import {
+  produce
+} from 'immer';
 
 export default {
   name: 'sampleMachineList',
@@ -127,11 +129,13 @@ export default {
       tabs: [
         {
           name: '综合',
-          active: true
+          active: true,
+          noPicker: true
         },
         {
           name: '最新上架',
           active: false,
+          noPicker: true,
           condition: {
             sortDirection: 'desc',
             sortType: 'saletime'
@@ -146,6 +150,7 @@ export default {
           ],
           iconClass: '',
           active: false,
+          noPicker: true,
           condition: {
             sortDirection: 'desc',
             sortType: 'price'
@@ -158,6 +163,7 @@ export default {
           ],
           handler: 'showFilter',
           noSearch: true,
+          noActive: true,
           active: false
         }
       ],
@@ -421,13 +427,16 @@ export default {
     },
     tabClick(tabs, tab, index) {
       /* 顶部双层tab栏目，第一层点击事件 */
-      this.tabs = tabs;
+      this.tabs.forEach((v) => {
+        v.active = false;
+      });
+      const curTab = this.tabs[index];
+      curTab.active = true;
       // tab为价格的时候，降序升序操作
       if (tab.id === 'price') {
         const sortDirection = tab.condition.sortDirection;
-        tab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
-        tab.iconClass = tab.condition.sortDirection;
-        this.tabs[index] = tab;
+        curTab.condition.sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+        curTab.iconClass = tab.condition.sortDirection;
       }
       if (!tab.noSearch) {
         this.mescroll.resetUpScroll(true);
@@ -468,10 +477,13 @@ export default {
     },
     filterReset() {
       /* 抽屉筛选重置 */
-      this.filterList.forEach((item) => {
-        item.data.forEach((v) => {
-          v.isChecked = false;
+      this.filterList.forEach((filterItem, index) => {
+        const producer = produce(filterItem, (draft) => {
+          draft.data.forEach((v) => {
+            v.isChecked = false;
+          });
         });
+        this.$set(this.filterList, index, producer);
       });
       // 重新搜索
       this.mescroll.resetUpScroll(true);
