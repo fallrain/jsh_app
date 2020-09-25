@@ -21,7 +21,7 @@
             </view>
             <view class="order-info-cnt-info">X&nbsp;{{product.jshd_qty}}</view>
           </view>
-          <view class="order-info-cnt-inf" v-if="product.jshd_pre_amount!==''">
+          <view class="order-info-cnt-inf" v-if="product.jshd_pre_amount&&product.jshd_pre_amount!==''">
             <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">{{(product.jshd_pre_rate*1).toFixed(2)}}%</span> | 尾款：<span style="color: #ED2856;">{{(parseFloat(product.jshd_invoice_price) - parseFloat(product.jshd_pre_amount)).toFixed(2)}}</span>  </view>
           </view>
         </view>
