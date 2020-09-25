@@ -12,129 +12,156 @@
           @tap="close"
         ></view>
       </view>
-      <view class="jAddressPicker-cnt">
-        <view
-          :class="['jAddressPicker-cnt-item',item.checked && 'active']"
+      <scroll-view
+        :scroll-y="true"
+        class="jAddressPicker-cnt"
+      >
+        <template
           v-for="(item,index) in pickerList"
-          :key="index"
         >
           <view
-            class="jAddressPicker-cnt-item-head"
-            @tap="choose(item,index)"
+            :class="['jAddressPicker-cnt-item',item.checked && 'active']"
+            :key="index"
+            v-if="!item.isHide"
           >
             <view
-              :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icontick']"
-            ></view>
-            <text class="jAddressPicker-cnt-item-text">{{item.name}}</text>
-            <view
-              v-if="item.children"
-              :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
-              @tap="toggleExpand(item)"
-            ></view>
-          </view>
-          <block
-            v-if="item.children && item.isExpand"
-          >
-            <view
-              class="jAddressPicker-cnt-detail"
+              class="jAddressPicker-cnt-item-head"
             >
               <view
-                :class="[
-                  'jAddressPicker-cnt-detail-item',
-                  detail.checked && 'active',
-                  item.childrenType==='short' && 'short'
-                ]"
-                v-for="(detail,dIndex) in item.children"
-                :key="dIndex"
-                @tap="checkDetail(detail,item.children,item)"
-              >
-                <view
-                  class="jVersionSpecifications-pop-detail-item-check"
-                  v-if="detail.checked"
-                >
-                  <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
-                </view>
-                <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
-              </view>
+                :class="['jAddressPicker-cnt-item-check iconfont',item.checked && 'icontick']"
+              ></view>
+              <text
+                @tap="choose(item,index)"
+                class="jAddressPicker-cnt-item-text"
+              >{{item.name}}</text>
+              <view
+                :class="['jAddressPicker-cnt-item-head-icon iconfont iconxia', !item.isExpand && 'active']"
+                @tap="toggleExpand(item,index)"
+                v-if="item.children"
+              ></view>
             </view>
-          </block>
-        </view>
-      </view>
+            <block
+              v-if="item.children && item.isExpand"
+            >
+              <view class="jAddressPicker-search-wrap">
+                <j-search-input
+                  @change="search(item,index)"
+                  @search="search(item,index)"
+                  placeholder="请输入搜索信息"
+                  v-model="item.searchValue"
+                ></j-search-input>
+              </view>
+              <view
+                class="jAddressPicker-cnt-detail"
+              >
+                <template
+                  v-for="(detail,dIndex) in item.children"
+                >
+                  <template v-if="!detail.isHide">
+                    <view
+                      :class="[
+                        'jAddressPicker-cnt-detail-item',
+                        detail.checked && 'active',
+                        item.childrenType==='short' && 'short'
+                      ]"
+                      :key="dIndex"
+                      @tap.stop="checkDetail(detail,item.children,item,index)"
+                    >
+                      <view
+                        class="jVersionSpecifications-pop-detail-item-check"
+                        v-if="detail.checked"
+                      >
+                        <view class="jVersionSpecifications-pop-detail-item-check-icon iconfont icontick"></view>
+                      </view>
+                      <view class="jAddressPicker-cnt-detail-item-inf">{{detail.name}}</view>
+                    </view>
+                  </template>
+                </template>
+              </view>
+            </block>
+          </view>
+        </template>
+      </scroll-view>
     </view>
   </uni-popup>
 </template>
 
 <script>
-import {
-  uniPopup
-} from '@dcloudio/uni-ui';
+import JSearchInput from '../form/JSearchInput';
 import './css/jAddressPicker.scss';
 
 export default {
   name: 'JAddressPicker',
   components: {
-    uniPopup
+    JSearchInput,
   },
   props: {
     // 显示隐藏
     show: {
       type: Boolean,
       default: false
+    },
+    // picker数据
+    // 数据示例：
+    // pickerList: [
+    //   {
+    //     name: '云仓',
+    //     checked: false,
+    //     // 是否无子元素
+    //     isSingle:true,
+    //     // 是否支持搜索
+    //     isShowSearch: true,
+    //     搜索的值
+    //     searchValue:''
+    //     用来搜索的key
+    //     searchKeys: ['keyName1', 'keyName2'],
+    //   },
+    //   {
+    //     name: '异地云仓',
+    //     childrenType: 'short',
+    //     // 是否能被点击
+    //     isCanBeCheck: false,
+    //     checked: false,
+    //     isExpand: true,
+    //     // 是否支持搜索
+    //     isShowSearch: true,
+    //     children: [
+    //       {
+    //         id: 'ccc',
+    //         name: '北京云仓',
+    //         checked: false,
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     name: '配送至',
+    //     checked: false,
+    //     isExpand: true,
+    //     childrenType: 'long',
+    //     // 是否支持搜索
+    //     isShowSearch: true,
+    //     children: [
+    //       {
+    //         id: 'ccc',
+    //         name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
+    //         checked: false,
+    //       }
+    //     ]
+    //   },
+    // ]
+    pickerList: {
+      type: Array,
+      default: () => []
+    },
+    beforeCheckParent: {
+      type: Function
+    },
+    beforeCheck: {
+      type: Function
     }
   },
   data() {
-    return {
-      pickerList: [
-        {
-          name: '云仓',
-          checked: false
-        },
-        {
-          name: '异地云仓',
-          childrenType: 'short',
-          checked: false,
-          isExpand: true,
-          children: [
-            {
-              name: '北京云仓',
-              checked: false,
-            },
-            {
-              name: '上海云仓',
-              checked: false,
-            },
-            {
-              name: '重庆云仓',
-              checked: false,
-            },
-            {
-              name: '青岛云仓',
-              checked: false,
-            }
-          ]
-        },
-        {
-          name: '配送至',
-          checked: false,
-          isExpand: true,
-          childrenType: 'long',
-          children: [
-            {
-              name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
-              checked: false,
-            },
-            {
-              name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
-              checked: false,
-            },
-            {
-              name: '(88003222）山东省青岛市崂山区长宁路街道长宁路173号',
-              checked: false,
-            }
-          ]
-        },
-      ]
-    };
+    return {};
   },
   watch: {
     show(val) {
@@ -154,6 +181,19 @@ export default {
     },
     choose(item, index) {
       /* 选中一个item */
+      // @isCanBeCheck 能被点才能点击
+      // @isSingle 是否没子元素
+      if (item.isCanBeCheck === undefined || item.isCanBeCheck) {
+        if (this.beforeCheckParent && !this.beforeCheckParent.bind(this.$parent)(item, index)) {
+          return;
+        }
+        this.reset(index);
+        item.checked = true;
+        this.$emit('change', this.pickerList, null, item, !item.isSingle);
+      }
+    },
+    reset(index) {
+      /* 重置 */
       this.pickerList.forEach((v, i) => {
         v.checked = false;
         // 存在children 且不是当前的item
@@ -163,22 +203,52 @@ export default {
           });
         }
       });
-      item.checked = true;
     },
-    checkDetail(item, list, parent) {
+    checkDetail(item, list, parent, parIndex) {
       /* 选中一个人详细地址 */
+      if (this.beforeCheck && !this.beforeCheck.bind(this.$parent)({
+        item,
+        list,
+        parent,
+        parIndex
+      })) {
+        return;
+      }
       list.forEach((v) => {
         v.checked = false;
       });
       item.checked = true;
+      this.reset(parIndex);
       // 选中上级
-      if (!parent.checked) {
-        this.choose(parent);
+      if (this.isCanBeCheck && !parent.checked) {
+        this.choose(parent, parIndex);
       }
+      this.$emit('change', this.pickerList, item, parent);
     },
     toggleExpand(item) {
       /* 展开收起 */
       item.isExpand = !item.isExpand;
+      this.$emit('change', this.pickerList, null, item, true, 'expand');
+    },
+    search(item) {
+      /* 搜索功能 */
+      this.$u.throttle(() => {
+        const {
+          searchValue,
+          searchKeys,
+          children
+        } = item;
+        if (searchValue === '') {
+          children.forEach((v) => {
+            this.$set(v, 'isHide', false);
+          });
+          return;
+        }
+        children.forEach((v) => {
+          const isContain = !!searchKeys.find(key => v[key].includes(searchValue));
+          this.$set(v, 'isHide', !isContain);
+        });
+      }, 500, false);
     }
   }
 };

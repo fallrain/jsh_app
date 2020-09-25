@@ -1,12 +1,18 @@
 <template>
   <view class="jFailureGoodsList">
     <view class="jFailureGoodsList-head">
-      <view class="jFailureGoodsList-head-left">失效宝贝3件</view>
-      <view class="jFailureGoodsList-head-opt">清空失效宝贝</view>
+      <view class="jFailureGoodsList-head-left">失效宝贝{{list.length}}件</view>
+      <view
+        @tap="handleClear"
+        class="jFailureGoodsList-head-opt"
+      >清空失效宝贝
+      </view>
     </view>
     <j-failure-goods-item
       v-for="(item,index) in list"
-      :key="index"
+      :goods="item"
+      :showCheck="false"
+      :key="item.id"
       :index="index"
       :checked.sync="item.checked"
       @change="goodsChange"
@@ -32,6 +38,10 @@ export default {
     goodsChange(checked, index) {
       this.list[index].checked = checked;
       this.$emit('change', this.list);
+    },
+    handleClear() {
+      /* 清空失效宝贝 */
+      this.$emit('clear');
     }
   }
 };

@@ -1,8 +1,29 @@
 .jVersionSpecifications-pop {
   position: relative;
-  padding-top: 42px;
+  padding-top: 24px;
   padding-bottom: 120px;
   background: #fff;
+}
+
+.jVersionSpecifications-head {
+  justify-content: space-between;
+  padding-left: 40px;
+  padding-right: 20px;
+}
+
+.jVersionSpecifications-head-title {
+  font-size: 30px;
+  line-height:42px;
+  color: #333;
+}
+
+.jVersionSpecifications-head-title-icon {
+  color: $theme-color;
+  font-size: 24px;
+}
+
+.jVersionSpecifications-pop-head-wrap{
+  padding-left: 24px;
 }
 
 .jVersionSpecifications-pop-head {
@@ -15,8 +36,9 @@
 
 .jVersionSpecifications-pop-head-left {
   flex-shrink: 0;
-  width: 176px;
-  height: 176px;
+  width: 156px;
+  height: 156px;
+  padding: 10px;
 
   image {
     width: 100%;
@@ -57,7 +79,7 @@
 
 .jVersionSpecifications-pop-detail-wrap {
   padding-left: 24px;
-  max-height: 766px;
+  max-height: 666px;
   overflow-y: auto;
 }
 
@@ -98,7 +120,10 @@
 }
 
 .jVersionSpecifications-pop-detail-head-title-arrow {
+  width: 60px;
+  text-align: right;
   color: #999;
+  font-size: 26px;
 
   &.active {
     transform: rotateX(180deg);
@@ -141,6 +166,7 @@
 }
 
 .jVersionSpecifications-pop-detail-item-name {
+  flex-shrink: 0;
   color: #999;
   font-size: 20px;
 }
@@ -148,7 +174,8 @@
 .jVersionSpecifications-pop-detail-item-name-wrap {
   display: flex;
   align-items: center;
-  width: 50%;
+  min-width: 50%;
+  max-width: 100%;
   height: 40px;
 }
 

@@ -5,52 +5,76 @@
       mode="right"
       @change="drawerChange"
     >
-      <view class="jChooseDeliveryAddressDrawer">
-        <view class="jChooseDeliveryAddressDrawer-head">
-          <text>配送至</text>
-          <i
-            class="iconfont iconguanbi"
-            @tap="hide"
-          ></i>
-        </view>
-        <view class="jChooseDeliveryAddressDrawer-list">
-          <view
-            :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
-            v-for="(item,index) in list"
-            :key="index"
-            @tap="check(item)"
-          >
-            <view
-              class="jChooseDeliveryAddressDrawer-item-check"
-            >
+      <view
+        class="scroll-container"
+      >
+        <scroll-view
+          :scroll-y="true"
+        >
+          <view class="jChooseDeliveryAddressDrawer">
+            <view class="jChooseDeliveryAddressDrawer-head">
+              <text>配送至</text>
               <i
-                v-if="item.checked"
-                class="iconfont icondui"
+                class="iconfont iconguanbi"
+                @tap="hide"
               ></i>
             </view>
-            <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.name}}</view>
+            <view class="mt24">
+              <j-search-input
+                placeholder="请输入搜索信息"
+                v-model="searchVal"
+              ></j-search-input>
+            </view>
+            <!--<view class="jChooseDeliveryAddressDrawer-input">
+              <input v-model="searchVal" type="text" placeholder="请输入地址">
+            </view>-->
+            <view class="jChooseDeliveryAddressDrawer-list">
+              <view
+                :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
+                v-for="(item,index) in searchAddResult"
+                :key="index"
+                @tap="check(item)"
+              >
+                <view
+                  class="jChooseDeliveryAddressDrawer-item-check"
+                >
+                  <i
+                    v-if="item.checked"
+                    class="iconfont icondui"
+                  ></i>
+                </view>
+                <view class="jChooseDeliveryAddressDrawer-item-cnt">({{item.addressCode}}){{item.address}}</view>
+              </view>
+            </view>
           </view>
-        </view>
+        </scroll-view>
       </view>
     </uni-drawer>
   </view>
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
+import JSearchInput from '../form/JSearchInput';
 
 export default {
   name: 'JChooseDeliveryAddress',
   components: {
-    uniDrawer
+    JSearchInput
   },
   props: {
-    show: Boolean
+    show: Boolean,
+    // 地址列表
+    addressList: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
   },
   data() {
     return {
+      searchVal: '',
+      searchAddResult: [],
       list: [
         {
           id: 1,
@@ -76,20 +100,38 @@ export default {
       } else {
         jChooseDeliveryAddressDrawer.close();
       }
+    },
+    searchVal(val) {
+      const addArr = [];
+      this.addressList.forEach((item) => {
+        const name = `(${item.addressCode})${item.addressName}`
+        if (name.indexOf(val) > -1) {
+          addArr.push(item);
+        }
+      });
+      this.searchAddResult = addArr;
+    },
+    addressList() {
+      this.searchAddResult = this.addressList;
     }
   },
   methods: {
     drawerChange(val) {
+      if (val === false) {
+        this.searchVal = '';
+      }
       /* 回馈抽屉值，修改props.show */
       this.$emit('update:show', val);
     },
     check(item) {
-      this.list.forEach((v) => {
+      this.addressList.forEach((v) => {
         this.$set(v, 'checked', false);
       });
       this.$set(item, 'checked', true);
+      this.$emit('changeAddress', this.addressList, item);
     },
     hide() {
+      this.searchVal = '';
       this.$emit('update:show', false);
     }
   }
@@ -97,6 +139,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .scroll-container{
+    /*height: 100% !important;*/
+    overflow-y: auto;
+  }
   .jChooseDeliveryAddressDrawer {
     padding: 56px 24px;
     padding-right: 0;
@@ -117,7 +163,18 @@ export default {
       font-weight: 400;
     }
   }
-
+  .jChooseDeliveryAddressDrawer-input{
+    padding-right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    input{
+      width: 400px;
+      height: 60px;
+      line-height: 60px;
+      border: 1px solid #eee;
+      border-radius: 20px;
+    }
+  }
   .jChooseDeliveryAddressDrawer-list{
     margin-top: 10px;
   }

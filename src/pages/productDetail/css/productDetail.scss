@@ -1,0 +1,164 @@
+.product-detail{
+  .prevent {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+
+  .swiper-box {
+    height: 400px;
+  }
+
+  .swiper-item {
+    /* #ifndef APP-NVUE */
+    display: flex;
+    /* #endif */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #999;
+    color: #fff;
+  }
+
+  .image {
+    width: 100%;
+    position: relative;
+  }
+  .image2 {
+    position:absolute;
+    top: 40px;
+    right:40px;
+    width:180px;
+    height: 120px;
+  }
+  .productDetail-text {
+    margin: 5px 5px;
+    padding: 0 10px;
+    text-align: left;
+    color: #777;
+  }
+
+  .lineHigt {
+    background-color: #F5F5F5;
+    height: 10px;
+  }
+
+  .lineHigtT {
+    background-color: #EAEAEA;
+    height: 2px;
+  }
+
+  .smaller {
+    font-size: 24px;
+  }
+
+  .modeller {
+    font-size: 32px;
+    color: #333333;
+  }
+
+  .minLar {
+    font-size: 24px;
+    color: #999999;
+  }
+
+  .larger {
+    font-size: 28px;
+  }
+
+  .scroll-view_H {
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  .scroll-view-item_H {
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+    font-size: 36px;
+    padding-bottom: 20px;
+  }
+
+  .textGui {
+    margin: 5px 5px;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+  }
+
+  .st {
+    height: 100px;
+    width: 750px;
+    background-color: #FFFFFF;
+    z-index: 10;
+    font-size: 32px;
+    color: #666666;
+  }
+
+  .sticky-fixed {
+    //position: fixed;
+    //top: 5%;
+    position: sticky;
+    top: var(--window-top);
+    //position: sticky;
+    //top: 88px;
+    //z-index: 10;
+  }
+
+  .checkedCut {
+    border-bottom: 8px solid #ED2856;
+    color: #ED2856;
+  }
+
+  .product-detail-fot-high {
+    background-color: #F5F5F5;
+    height: 120px;
+  }
+
+  .product-detail-foot {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 88px;
+    background-color: #FFFFFF;
+  }
+
+  .product-detail-lei1 {
+    color: #666666;
+    font-size: 28px;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 95%;
+  }
+
+  .product-detail-lei2 {
+    width: 23%;
+    float: left;
+    background-color: $theme-color;
+    color: #fff;
+    border-radius: 30px;
+    text-align: center;
+    margin-right: 2%;
+    margin-bottom: 20px;
+  }
+
+  .product-detail-lei3 {
+    border: 1px #ED2856 solid;
+    background-color: #FFEDF1;
+    color: #ED2856;
+    border-radius: 30px;
+    text-align: center;
+  }
+  .product-detail-else {
+    margin: 5% 10%;
+  }
+  .product-detail-ele {
+    margin: 5% 10% 3% 28%;
+  }
+
+}

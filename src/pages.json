@@ -1,6 +1,63 @@
 {
+  "easycom": {
+    "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+    "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+  },
   "pages": [
-    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/applicationsIndex/applicationsIndex",
+      "style": {
+        "navigationBarTitleText": "应用首页"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/index/information",
+      "style": {
+        "navigationBarTitleText": "首页新闻资讯"
+      }
+    },
+    {
+      "path": "pages/index/service",
+      "style": {
+        "navigationBarTitleText": "首页客服"
+      }
+    },
+    {
+      "path": "pages/index/historical",
+      "style": {
+        "navigationBarTitleText": "搜索"
+      }
+    },
+    {
+      "path": "pages/index/liveBroadcast",
+      "style": {
+        "navigationBarTitleText": "直播大厅"
+      }
+    },
+    {
+      "path": "pages/index/broadcasDetail",
+      "style": {
+        "navigationBarTitleText": "直播详情"
+      }
+    },
+    {
+      "path": "pages/index/banner",
+      "style": {
+        "navigationBarTitleText": "首页轮播图"
+      }
+    },
+    {
+      "path": "pages/index/announcement",
+      "style": {
+        "navigationBarTitleText": "首页新闻公告"
+      }
+    },
     {
       "path": "pages/nav/nav",
       "style": {
@@ -8,9 +65,9 @@
       }
     },
     {
-      "path": "pages/index/index",
+      "path": "pages/applicationsIndex/applicationsEdit",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "应用首页编辑"
       }
     },
     {
@@ -22,15 +79,15 @@
     {
       "path": "pages/goods/goodsList",
       "style": {
-        "navigationBarTitleText": "商品列表"
+        "navigationBarTitleText": "商品列表",
+        "disableScroll": true
       }
     },
     {
       "path": "pages/shoppingCart/shoppingCart",
       "style": {
         "navigationBarTitleText": "购物车",
-        "navigationStyle": "custom",
-        "transparentTitle": "always"
+        "enablePullDownRefresh": true
       }
     },
     {
@@ -46,9 +103,22 @@
       }
     },
     {
+      "path": "pages/shoppingCart/orderConfirmAccept",
+      "style": {
+        "navigationBarTitleText": "确认订单"
+      }
+    },
+    {
+      "path": "pages/shoppingCart/orderConfirmAcceptDetail",
+      "style": {
+        "navigationBarTitleText": "确认订单"
+      }
+    },
+    {
       "path": "pages/productDetail/productDetail",
       "style": {
-        "navigationBarTitleText": "产品详情"
+        "navigationBarTitleText": "产品详情",
+        "navigationBarBackgroundColor": "#ffffff"
       }
     },
     {
@@ -84,25 +154,229 @@
       }
     },
     {
+      "path": "pages/orderList/orderNode",
+      "style": {
+        "navigationBarTitleText": "订单节点"
+      }
+    },
+    {
+      "path": "pages/orderList/orderWL",
+      "style": {
+        "navigationBarTitleText": "物流"
+      }
+    },
+    {
       "path": "pages/messageInfoList/messageInfoList",
       "style": {
-        "navigationBarTitleText": "消息列表"       
+        "navigationBarTitleText": "消息列表"
       }
-     
     },
     {
       "path": "pages/messageInfoList/messageInfoListDetail",
       "style": {
-        "navigationBarTitleText": "消息列表详情"       
-      }     
+        "navigationBarTitleText": "消息详情列表"
+      }
+    },
+    {
+      "path": "pages/transferGoods/transferGoods",
+      "style": {
+        "navigationBarTitleText": "调货列表页面"
+      }
+    },
+    {
+      "path": "pages/transferGoods/transferShoppingCart",
+      "style": {
+        "navigationBarTitleText": "调货购物车页面"
+      }
+    },
+    {
+      "path": "pages/transferGoods/transferDetail",
+      "style": {
+        "navigationBarTitleText": "中心调货详情页面"
+      }
+    },
+    {
+      "path": "pages/mine/myBaseInfo",
+      "style": {
+        "navigationBarTitleText": "基本信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySignInfo",
+      "style": {
+        "navigationBarTitleText": "签约信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySDFInfo",
+      "style": {
+        "navigationBarTitleText": "售达方信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySet",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myCenter",
+      "style": {
+        "navigationBarTitleText": "个人中心",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myAlterTel",
+      "style": {
+        "navigationBarTitleText": "修改手机号",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myPayAlertPwd",
+      "style": {
+        "navigationBarTitleText": "支付密码修改",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myAlertLoginPwd",
+      "style": {
+        "navigationBarTitleText": "修改登录密码",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myGuestView",
+      "style": {
+        "navigationBarTitleText": "客户视图",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/mySetDetail",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/mine/myAlertUrl",
+      "style": {
+        "navigationBarTitleText": "修改信息",
+        "navigationBarBackgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/sampleMachine/sampleMachineList",
+      "style": {
+        "navigationBarTitleText": "样品机列表"
+      }
+    },
+    {
+      "path": "pages/sampleMachine/sampleMachineConfirm",
+      "style": {
+        "navigationBarTitleText": "样品机确认订单"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleList",
+      "style": {
+        "navigationBarTitleText": "整车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarList",
+      "style": {
+        "navigationBarTitleText": "整车购物车列表"
+      }
+    },
+    {
+      "path": "pages/vehicleList/vehicleCarDetail",
+      "style": {
+        "navigationBarTitleText": "整车购物车详情"
+      }
+    },
+    {
+      "path": "pages/vehicleList/abnormal",
+      "style": {
+        "navigationBarTitleText": "整车"
+      }
+    },
+    {
+      "path": "pages/concernedProducts/concernedProductsList",
+      "style": {
+        "navigationBarTitleText": "我的关注"
+      }
     }
-
+  ],
+  "subPackages": [
+    {
+      "root": "subPackages/finance",
+      "pages": [
+        {
+          "path": "pages/recharge/rechargeOnline",
+          "style": {
+            "navigationBarTitleText": "在线充值"
+          }
+        }
+      ]
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#fff",
+    "backgroundColor": "#F8F8F8",
+    "mp-alipay": {
+      "allowsBounceVertical": "YES"
+    }
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#ED2856",
+    "borderStyle": "#CDCDCD",
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "iconWidth": "20px",
+    "fontSize": "24px",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/applicationsIndex/applicationsIndex",
+        "iconPath": "static/img/shouye.png",
+        "selectedIconPath": "static/img/shouye-actived.png"
+      },
+      {
+        "text": "采购",
+        "pagePath": "pages/index/index",
+        "iconPath": "static/img/shouye.png",
+        "selectedIconPath": "static/img/shouye-actived.png"
+      },
+      {
+        "text": "分类",
+        "pagePath": "pages/category/category",
+        "iconPath": "static/img/fenlei.png",
+        "selectedIconPath": "static/img/fenlei-actived.png"
+      },
+      {
+        "text": "购物车",
+        "pagePath": "pages/shoppingCart/shoppingCart",
+        "iconPath": "static/img/shopping.png",
+        "selectedIconPath": "static/img/shopping-actived.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/mine/myCenter",
+        "iconPath": "static/img/mine.png",
+        "selectedIconPath": "static/img/mine-actived.png"
+      }
+    ]
   },
   "mp-alipay": {
     "gestureBack": "YES"

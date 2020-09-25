@@ -8,15 +8,32 @@
       <view class="jChooseDeliveryAddressDrawer">
         <view class="jChooseDeliveryAddressDrawer-head">
           <text>配送至</text>
-          <i
-            class="iconfont iconcross"
+          <view
+            class="j-common-icon-close-wrap"
             @tap="hide"
-          ></i>
+          >
+            <view
+              class="iconfont iconcross"
+            ></view>
+          </view>
         </view>
-        <view class="jChooseDeliveryAddressDrawer-list">
+        <view class="jChooseDeliveryAddressDrawer-search-wrap">
+          <j-search-input
+            @change="search"
+            @search="search"
+            placeholder="请输入搜索信息"
+            v-model="filterForm.name"
+          ></j-search-input>
+        </view>
+        <scroll-view
+          :scroll-into-view="activeItemName"
+          :scroll-y="true"
+          class="jChooseDeliveryAddressDrawer-list"
+        >
           <view
             :class="['jChooseDeliveryAddressDrawer-item',item.checked && 'active']"
-            v-for="(item,index) in list"
+            v-for="(item,index) in listTemp"
+            :id="'item'+item.customerCode"
             :key="index"
             @tap="check(item)"
           >
@@ -30,41 +47,49 @@
             </view>
             <view class="jChooseDeliveryAddressDrawer-item-cnt">{{item.name}}</view>
           </view>
-        </view>
+        </scroll-view>
       </view>
     </uni-drawer>
   </view>
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
+import JSearchInput from '../form/JSearchInput';
 
 export default {
   name: 'JChooseDeliveryAddress',
   components: {
-    uniDrawer
+    JSearchInput,
   },
   props: {
-    show: Boolean
+    show: {
+      type: Boolean,
+      default: false
+    },
+    // 数据列表
+    list: {
+      type: Array,
+      default: () => []
+    },
+    // 当前选中的item
+    curItem: {
+      type: Object,
+      default: () => {
+      }
+    },
+    // 默认在视口内的item
+    activeItemName: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
-      list: [
-        {
-          id: 1,
-          name: '(8800212607)李沧区重庆中路420号沃尔豪大楼G区A座2008室'
-        },
-        {
-          id: 2,
-          name: '(8800212607)李沧区黑龙江中路342号甲A栋G座2039室'
-        },
-        {
-          id: 3,
-          name: '(8800212607)山东省临淄区齐都花园5号楼1单元502户'
-        }
-      ]
+      filterForm: {
+        // 配送至的地址名
+        name: ''
+      },
+      listTemp: [...this.list]
     };
   },
   watch: {
@@ -76,6 +101,9 @@ export default {
       } else {
         jChooseDeliveryAddressDrawer.close();
       }
+    },
+    list(val) {
+      this.listTemp = [...val];
     }
   },
   methods: {
@@ -84,13 +112,34 @@ export default {
       this.$emit('update:show', val);
     },
     check(item) {
+      /* 选中一个条目 */
       this.list.forEach((v) => {
         this.$set(v, 'checked', false);
       });
       this.$set(item, 'checked', true);
+      this.$emit('change', this.list, item);
     },
     hide() {
       this.$emit('update:show', false);
+    },
+    search() {
+      /* 搜索 */
+      this.$u.throttle(() => {
+        const val = this.filterForm.name.trim();
+        if (val === '') {
+          this.listTemp = this.list;
+          return;
+        }
+        this.listTemp = this.list.filter(({
+          address,
+          addressCode
+        }) => {
+          if (address.includes(val) || addressCode.includes(val)) {
+            return true;
+          }
+          return false;
+        });
+      }, 250, false);
     }
   }
 };
@@ -98,6 +147,7 @@ export default {
 
 <style lang="scss">
   .jChooseDeliveryAddressDrawer {
+    height: 100%;
     padding: 56px 24px;
     padding-right: 0;
   }
@@ -120,7 +170,8 @@ export default {
   }
 
   .jChooseDeliveryAddressDrawer-list {
-    margin-top: 10px;
+    padding-top: 18px;
+    height: calc(100% - 42px);
   }
 
   .jChooseDeliveryAddressDrawer-item {
@@ -151,5 +202,11 @@ export default {
     .iconfont {
       font-size: 36px;
     }
+  }
+
+  .jChooseDeliveryAddressDrawer-search-wrap {
+    width: 100%;
+    margin-top: 40px;
+    padding-right: 44px;
   }
 </style>

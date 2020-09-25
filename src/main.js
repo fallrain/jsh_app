@@ -1,20 +1,24 @@
 import Vue from 'vue';
 import App from './App';
 import store from './store';
+import 'uview-ui/index.scss';
 import '@/assets/css/var.scss';
 import '@/assets/font/iconfont.css';
 import '@/assets/css/base.scss';
 import '@/assets/css/common.scss';
-import {
-  hGet,
-  hPost,
-  hPostJson
-} from '@/lib/request';
+import requestPlugin from '@/lib/request/requestPlugin';
+import servicePlugin from '@/service';
+import filterPlugin from '@/filter';
+import jshUtil from '@/lib/util';
+import uView from 'uview-ui';
 
+Vue.use(uView);
+Vue.use(requestPlugin);
+Vue.use(servicePlugin);
+Vue.use(filterPlugin);
 Vue.config.productionTip = false;
-Vue.prototype.hGet = hGet;
-Vue.prototype.hPost = hPost;
-Vue.prototype.hPostJson = hPostJson;
+// 工具类
+Vue.prototype.jshUtil = jshUtil;
 
 App.mpType = 'app';
 

@@ -1,12 +1,12 @@
 <template>
   <view class="JMarketHeadTab">
     <view class="jMarketTab-warp">
-      <view class="jHeadTab-list">
+      <view class="jMarketTab-list">
         <view
-          class="jHeadTab-item"
+          :class="['jMarketTab-item', item.active && 'active']"
           v-for="(item,index) in tabs"
           :key="index"
-          @tap="tabHandle(item.handler)"
+          @tap="tabHandle(item,index)"
         >
           <text>{{item.name}}</text>
           <view
@@ -20,8 +20,11 @@
       v-for="(pickerItem,pIndex) in tabs"
       :key="pIndex"
       :index="pIndex"
-      :show.sync="pickerItem.show"
+      :checkedIndex="childCheckedIndex"
+      :show="pIndex === showIndex"
       v-model="pickerItem.children"
+      @checkedIndexChange="checkedIndexChange"
+      @confirm="tabPickerConfirm"
       @change="tabPickerChange"
     >
     </j-head-tab-picker>
@@ -44,10 +47,17 @@ export default {
       default: () => []
     },
     // 类别下拉菜单控制
-    typeShow: false
+    typeShow: false,
+    // 搜索条目选中的index
+    childCheckedIndex: {
+      type: [Number, Object],
+      default: null
+    }
   },
   data() {
     return {
+      // 展开的条目的index
+      showIndex: null,
     };
   },
   watch: {
@@ -56,16 +66,34 @@ export default {
     }
   },
   methods: {
-    tabHandle(handler) {
+    tabHandle(item, index) {
       /* tab 点击事件 */
-      this.$emit('tabClick', handler);
+      if (!item.noActive && !item.noPicker) {
+        if (this.showIndex === index) {
+          this.showIndex = null;
+        } else {
+          this.showIndex = index;
+        }
+      } else {
+        this.showIndex = null;
+      }
+      this.$emit('tabClick', this.tabs, item, index);
     },
     tabTagHandle() {
       /* tag tab 点击事件 */
     },
+    checkedIndexChange(index) {
+      /* 选中的活动类型选中change */
+      this.$emit('update:childCheckedIndex', index);
+    },
+    tabPickerConfirm(index, choseChildItem) {
+      // 确认选择
+      // 确认则关闭弹出框
+      this.showIndex = null;
+      this.$emit('tabPickerConfirm', this.tabs, choseChildItem);
+    },
     tabPickerChange(children, index) {
       this.tabs[index].children = children;
-      console.log(this.tabs);
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <view class="jCell">
+  <view @tap="cellClick" class="jCell">
     <view :class="['jCell-title',titleWrap && 'wrap']">
       {{title}}
       <slot name="title"></slot>
@@ -26,6 +26,11 @@ export default {
     titleWrap: {
       type: Boolean,
       default: true
+    }
+  },
+  methods: {
+    cellClick() {
+      this.$emit('cellClick');
     }
   }
 };

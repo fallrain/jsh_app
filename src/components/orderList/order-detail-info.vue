@@ -2,90 +2,61 @@
   <view class="order-info-con">
     <view class="order-info-head">
       <button type="button" class="order-info-head-btn">组合</button>
-      <text class="order-info-head-text">整单订单：202006191745435</text>
+      <text class="order-info-head-text">{{titleAndNoFun}}</text>
     </view>
-    <view :class="showler ? '' : 'showType'">
-      <view class="order-info-cnt">
+    <view class="showType">
+      <view class="order-info-cnt" v-for="(product,index) in info.details" :key="index">
         <view class="order-info-cnt-img">
-          <image src="@/assets/img/goods/example-fridge.jpg" style="width: 100%;height: 100%;"></image>
+          <image :src="product.jshd_product_img" style="width: 100%;height: 100%;"></image>
         </view>
         <view>
-          <view class="order-info-cnt-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高家用静音全自动10KG洗烘一体高温杀菌除高</view>
+          <view class="order-info-cnt-text">{{product.jshd_product_name}}</view>
           <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥1799.00</span></view>
-            <view class="order-info-cnt-info">X&nbsp;3</view>
+            <view class="order-info-cnt-info">
+              单价
+              <span v-if="product.jshd_invoice_price" class="order-info-cnt-price">
+                ¥{{parseFloat(product.jshd_invoice_price).toFixed(2)}}
+              </span>
+              <span v-else class="order-info-cnt-price">--</span>
+            </view>
+            <view class="order-info-cnt-info">X&nbsp;{{product.jshd_qty}}</view>
           </view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">45%</span> | 尾款：<span style="color: #ED2856;">45%</span>  </view>
-          </view>
-        </view>
-      </view>
-      <view class="order-info-line"></view>
-      <view class="order-info-cnt">
-        <view class="order-info-cnt-img">
-          <image src="@/assets/img/goods/example-fridge.jpg" style="width: 100%;height: 100%;"></image>
-        </view>
-        <view>
-          <view class="order-info-cnt-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高家用静音全自动10KG洗烘一体高温杀菌除高</view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥1799.00</span></view>
-            <view class="order-info-cnt-info">X&nbsp;3</view>
-          </view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">45%</span> | 尾款：<span style="color: #ED2856;">45%</span>  </view>
-          </view>
-        </view>
-      </view>
-      <view class="order-info-line"></view>
-      <view class="order-info-cnt">
-        <view class="order-info-cnt-img">
-          <image src="@/assets/img/goods/example-fridge.jpg" style="width: 100%;height: 100%;"></image>
-        </view>
-        <view>
-          <view class="order-info-cnt-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高家用静音全自动10KG洗烘一体高温杀菌除高</view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥1799.00</span></view>
-            <view class="order-info-cnt-info">X&nbsp;3</view>
-          </view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">45%</span> | 尾款：<span style="color: #ED2856;">45%</span>  </view>
-          </view>
-        </view>
-      </view>
-      <view class="order-info-line"></view>
-      <view class="order-info-cnt">
-        <view class="order-info-cnt-img">
-          <image src="@/assets/img/goods/example-fridge.jpg" style="width: 100%;height: 100%;"></image>
-        </view>
-        <view>
-          <view class="order-info-cnt-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温杀菌除高家用静音全自动10KG洗烘一体高温杀菌除高</view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">单价<span class="order-info-cnt-price">¥1799.00</span></view>
-            <view class="order-info-cnt-info">X&nbsp;3</view>
-          </view>
-          <view class="order-info-cnt-inf">
-            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">45%</span> | 尾款：<span style="color: #ED2856;">45%</span>  </view>
+          <view class="order-info-cnt-inf" v-if="product.jshd_pre_amount&&product.jshd_pre_amount!==''">
+            <view class="order-info-cnt-info">预定金比例：<span style="color: #ED2856; padding-right: 5px;">{{(product.jshd_pre_rate*1).toFixed(2)}}%</span> | 尾款：<span style="color: #ED2856;">{{(parseFloat(product.jshd_invoice_price) - parseFloat(product.jshd_pre_amount)).toFixed(2)}}</span>  </view>
           </view>
         </view>
       </view>
     </view>
-    <view class="order-info-show" @click="showLer">{{showler ? '收起' : '展开'}}<view :class="['iconfont iconxia',showler && 'order-info-active']" style="padding-left: 4px;padding-top: 4px;"></view></view>
   </view>
 </template>
 
 <script>
+
 export default {
   name: 'orderDetailInfo',
+  props: {
+    info: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
+  },
+  created() {
+  },
   data() {
     return {
-      showler: false
     };
   },
+  computed: {
+    titleAndNoFun() {
+      if (this.info.details[0].jshd_price_type === 'MFYJ') {
+        return `版本号:${this.info.details[0].jshd_price_version}`;
+      }
+      return `整单订单：${this.info.info.jshi_grouping_no}`;
+    },
+  },
   methods: {
-    showLer() {
-      this.showler = !this.showler;
-      console.log(this.showler);
-    }
   }
 };
 </script>

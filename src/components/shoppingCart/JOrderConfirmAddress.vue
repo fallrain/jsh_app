@@ -6,7 +6,7 @@
         <view class="jOrderConfirmAddress-head-text">配送至</view>
       </view>
       <view class="jOrderConfirmAddress-cnt">
-        (88003222）山东省青岛市市北区重庆路路街道重庆南路1589号甲A栋4座2034室
+        ({{sendtoCode}}){{sendtoAddress}}
       </view>
       <view class="jOrderConfirmAddress-cnt-btm">
         <view class="jOrderConfirmAddress-cnt-btm-type">
@@ -27,31 +27,59 @@
 <script>
 import './css/jOrderConfirmAddress.scss';
 import JRadioGroup from '../form/JRadioGroup';
-
+import {
+  mapGetters, mapMutations
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
 
 export default {
   name: 'JOrderConfirmAddress',
   components: {
     JRadioGroup,
   },
+  props: {
+    sendtoCode: String,
+    sendtoAddress: String
+  },
   data() {
     return {
       radioGroups: [
         {
+          key: 1,
           inf: '自提',
-          checked: true
+          checked: false
         },
         {
+          key: 2,
           inf: '配送',
-          checked: false
+          checked: true
         }
       ]
     };
+  },
+  created() {
+    if (this.saleInfo.channelGroup === 'CT') {
+      this.radioGroups = [
+        {
+          key: 2,
+          inf: '配送',
+          checked: true
+        }
+      ];
+    }
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE
+    })
   },
   methods: {
     radioGroupChange(radioGroup) {
       /* radioGroupChange */
       this.radioGroups = radioGroup;
+      this.$emit('change', this.radioGroups);
     }
   }
 };

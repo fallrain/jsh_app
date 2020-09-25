@@ -1,52 +1,44 @@
 <template>
   <view class="jOveragePay-wrap">
-    <div class="jOveragePay-wrap-head j-flex-aic">
+    <view class="jOveragePay-wrap-head j-flex-aic">
       <view class="iconfont iconmoney jOveragePay-wrap-head-icon"></view>
       <view class="jOveragePay-wrap-head-text ml24">余额支付信息</view>
-    </div>
+    </view>
     <view class="jOveragePay-cnt">
-      <view class="jOveragePay-cnt-item">
+      <view
+        v-for="(item,index) in payerMoneyList"
+        :key="index"
+        class="jOveragePay-cnt-item">
         <view class="jOveragePay-cnt-item-head j-flex-aic">
           <view class="jOveragePay-cnt-item-head-dot"></view>
-          (88003222）青岛鸿程永泰商贸有限公司
+          {{item.customerName}}
         </view>
         <view class="jOveragePay-cnt-item-total j-flex-aic">
           <view class="jOveragePay-cnt-item-total-item">
             <view class="jOveragePay-cnt-item-total-text">可用余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
+            <view
+              v-if="saleInfo.channelGroup === 'ZY'"
+              class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.balance)}}</view>
+            <view
+              v-if="saleInfo.channelGroup === 'CT'"
+              class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.bookbalance)}}</view>
           </view>
           <view class="jOveragePay-cnt-item-total-item-line">
           </view>
           <view class="jOveragePay-cnt-item-total-item">
-            <view class="jOveragePay-cnt-item-total-text">待支付余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
+            <view class="jOveragePay-cnt-item-total-text">待支付金额：</view>
+            <view class="jOveragePay-cnt-item-total-price">¥ {{toFixedNum(item.totalMoney)}}</view>
           </view>
           <button
+            v-if="compareMoney(item.balance, item.totalMoney)&&saleInfo.channelGroup === 'ZY'"
             type="button"
             class="jOveragePay-cnt-item-total-btn"
-          >余额不足，去支付</button>
-        </view>
-      </view>
-      <view class="jOveragePay-cnt-item">
-        <view class="jOveragePay-cnt-item-head j-flex-aic">
-          <view class="jOveragePay-cnt-item-head-dot"></view>
-          (88003222）青岛鸿程永泰商贸有限公司
-        </view>
-        <view class="jOveragePay-cnt-item-total j-flex-aic">
-          <view class="jOveragePay-cnt-item-total-item">
-            <view class="jOveragePay-cnt-item-total-text">可用余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
-          </view>
-          <view class="jOveragePay-cnt-item-total-item-line">
-          </view>
-          <view class="jOveragePay-cnt-item-total-item">
-            <view class="jOveragePay-cnt-item-total-text">待支付余额：</view>
-            <view class="jOveragePay-cnt-item-total-price">¥ 12333.12</view>
-          </view>
+          >余额不足，去充值</button>
           <button
+            v-if="compareMoney(item.bookbalance, item.totalMoney)&&saleInfo.channelGroup === 'CT'"
             type="button"
             class="jOveragePay-cnt-item-total-btn"
-          >余额不足，去支付</button>
+          >余额不足，去充值</button>
         </view>
       </view>
     </view>
@@ -54,8 +46,46 @@
 </template>
 
 <script>
+import {
+  mapGetters, mapMutations
+} from 'vuex';
+import {
+  USER
+} from '../../store/mutationsTypes';
+
 export default {
-  name: 'JOveragePay'
+  name: 'JOveragePay',
+  props: {
+    // 付款方信息
+    payerMoneyList: {
+      type: Array,
+      default: () => []
+    },
+  },
+  created() {
+    console.log(this.payerMoneyList);
+  },
+  watch: {
+    payerMoneyList() {
+      console.log(this.payerMoneyList);
+    }
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+      defaultSendToInf: USER.GET_DEFAULT_SEND_TO
+    }),
+    compareMoney() {
+      return (val1, val2) => (parseFloat(val1) < parseFloat(val2));
+    },
+    toFixedNum() {
+      return function (val) {
+        return (Number(val)).toFixed(2);
+      };
+    }
+  },
+  methods: {
+  },
 };
 </script>
 
@@ -114,6 +144,7 @@ export default {
     margin-top: 12px;
     margin-bottom: 2px;
     padding-left: 36px;
+    flex-wrap: wrap;
   }
 
   .jOveragePay-cnt-item-total-text {

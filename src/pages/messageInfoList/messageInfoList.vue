@@ -1,123 +1,232 @@
 <template>
     <view class="message">
-        <messageInfoListTab :tabs="tabs" 
-            @tabClick="tabClick"
-        >
-        </messageInfoListTab>
-        
-        <view class="message-concent"> 
-          <view class="uni-flex uni-info" >
-            <view class="textRow unread">共{{unread}}条消息未读</view>
-            <view class="textRow read" @click="readAll">全部已读</view>
-            <view class="textRow vertical-line"></view>
-            <view class="textRow message-category">消息类别</view>
+      <messageInfoListTab
+          @tabClick="tabClick"
+      >
+      </messageInfoListTab>
+      <view class="message-concent" v-show="tabIndex === 0">
+        <view class="uni-flex uni-info" >
+          <view class=" message-unread">共{{unread}}条消息未读</view>
+          <view class=" message-read" @click="readAll">全部已读</view>
+          <view class=" message-vertical-line"></view>
+          <view class=" message-category" @tap="getIsMessage">
+            {{ tips }}
           </view>
-          <view v-for="(item,index) in messageList" :key="index" class="textTalRow" @tap="showDetail(item.id,item)">
-            <view class="uni-flex uni-row" >
-                <view class="textRow littleTitle">{{item.littleTitle}}</view>
-                <view class="textRow title">{{item.title}}</view>
-                <view class="textRow time">{{item.time}}</view>
-            </view>
-            <view class="uni-flex uni-row">
-                <view class="textRow info">{{item.info}}</view>
-                <view class="textRow spot isNew" v-show="item.isNew"></view>
-            </view>
+          <i class="iconfont iconxia message-icon" @tap="getIsMessage"></i>
+          <view class="message-list">
+            <message-info-list-more :isMessage="isMessage" @messageName="messageName"></message-info-list-more>
           </view>
         </view>
+        <mescroll-body
+          ref="mescrollRef"
+          @init="mescrollInit"
+          @up="upCallback"
+        >
+          <view v-for="(item,index) in messageList" :key="index" class="message-textTalRow" @tap="showDetail(item.pk,item)">
+            <view class="message-circular" v-if="isExpand"></view>
+            <view class="uni-flex uni-row" >
+                <view class="message-littleTitle">{{item.typeNameShow}}</view>
+                <view class="message-title">{{item.title}}</view>
+                <view class="message-time">{{item.createTime}}</view>
+            </view>
+            <view class="uni-flex uni-row">
+                <view class="message-info">{{item.description}}</view>
+                <view class="message-spot isNew" v-show="item.isNew"></view>
+            </view>
+          </view>
+        </mescroll-body>
+      </view>
+      <view v-show="tabIndex === 1">
+        <message-task></message-task>
+      </view>
     </view>
-</template> 
+</template>
 <script>
 import messageInfoListTab from './messageInfoListTab';
+import messageTask from './messageTask';
+import messageInfoListMore from './messageInfoListMore';
+import MescrollBody from '@/components/plugin/mescroll-uni/mescroll-body.vue';
+import mescrollMixin from '@/components/plugin/mescroll-uni/mescroll-mixins';
+import selfMescrollMixin from '@/mixins/mescroll.mixin';
+import {
+  mapGetters
+} from 'vuex';
+import {
+  USER
+} from '@/store/mutationsTypes';
 
 export default {
   name: 'messageInfoList',
+  mixins: [
+    mescrollMixin,
+    selfMescrollMixin
+  ],
   components: {
-    messageInfoListTab
+    messageInfoListTab,
+    messageInfoListMore,
+    MescrollBody,
+    messageTask
   },
   data() {
     return {
-      tabs: [
-        {
-          id: '1',
-          name: '消息',
-          active: true
-        }, 
-        {
-          id: '2',
-          name: '任务',
-          active: false
-        }
-      ],
-      tabIndex: 1,
+      isMessage: false,
+      pageNo: 1,
+      total: 0, // 列表总数
+      // 未读
+      isExpand: true,
+      flag: false,
+      tabIndex: 0,
       unread: 0,
-      messageList: []
+      messageList: [],
+      messageactive: 0,
+      filter: {},
+      complete: 0,
+      tips: '消息提示',
+      typeName: '',
     };
   },
+  created() {
+    console.log(this.tabIndex);
+  },
+  watch: {
+    $route: ['tabClick']
+  },
+  computed: {
+    ...mapGetters({
+      saleInfo: USER.GET_SALE,
+    })
+  },
   methods: {
-    tabClick(data) {
-      this.tabIndex = data;
-      this.unread = 2;
-      this.messageList = [
-        {
-          id:1,
-          littleTitle:"建店押金",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: true
-        },
-         {
-          id:2,
-          littleTitle:"扣款提醒",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: true
-        }, 
-        {
-          id:3,
-          littleTitle:"订单详情",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        }, 
-        {
-          id:4,
-          littleTitle:"其他",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        },
-        {
-          id:5,
-          littleTitle:"订单详情",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
-        }, 
-        {
-          id:6,
-          littleTitle:"订单详情",
-          title: '整车扣款信息提醒',
-          time: '2020-07-13 12:31:00',
-          info: '尊敬的客户您提报的整车订单，订单200021623445...',
-          isNew: false
+    tabClick(item, index) {
+      console.log(index);
+      // this.tabs = e
+      // if (index !== undefined) {
+      //   this.tabIndex = index;
+      // }
+      this.getMessageList();
+    },
+    messageName(item) {
+      console.log(item);
+      this.isMessage = false;
+      this.tips = item.typeNameShow;
+      if (item.typeNameShow === '全部消息') {
+        this.filter = {};
+      }
+      this.typeName = item.typeName;
+      console.log(this.typeName);
+      this.flag = false;
+      this.pageNo = 1;
+      this.getMessageList(this.pageNo);
+    },
+    getIsMessage() {
+      this.isMessage = !this.isMessage;
+    },
+    getSearch(pageNo) {
+    //  获取不同条件下的传参
+      let param = {
+        pageNum: pageNo,
+        pageSize: 10,
+        unitId: `${this.saleInfo.customerCode}_admin`,
+      };
+      if (!this.isExpand && this.flag) {
+        this.filter.complete = 1;
+        this.filter.createDateStr = '';
+      }
+      const massTypeName = {};
+      if (this.typeName) {
+        massTypeName.typeName = this.typeName;
+      }
+      param = {
+        ...param,
+        ...this.filter,
+        ...massTypeName
+      };
+      return param;
+    },
+    async getMessageList(pageNo) {
+      const param = this.getSearch(pageNo);
+      console.log(param);
+      const { code, data } = await this.messageService.messageList(param);
+      if (code === '1') {
+        // const {
+        //   list
+        // } = data;
+        // // console.log(page.result);
+        // this.messageList = data.list;
+
+        if (pageNo === 1) {
+          this.messageList = [];
         }
-      ];
+        this.messageList = this.messageList.concat(data.list);
+        this.pageNo = this.pageNo + 1;
+        this.total = data.total;
+        console.log(this.messageList);
+        this.messageList.map((item) => {
+          // console.log(item);
+          let num = 0;
+          if (item.complete === 1) {
+            this.isExpand = false;
+          } else {
+            this.isExpand = true;
+            num += 1;
+          }
+          this.unread = num;
+        });
+      }
     },
-    showDetail(id,item) {
-       
-      console.log(id,JSON.stringify(item))
+    onReachBottom() {
+      console.log('到底了，该加页了');
+      if (this.messageList.length > 0 && (this.total > (this.pageNo - 1) * 10)) {
+        this.getMessageList(this.pageNo);
+      } else {
+        console.log('到底了，没数了');
+      }
+    },
+    showDetail(id, item) {
+      console.log(id, JSON.stringify(item));
       uni.navigateTo({
-         url: '/pages/messageInfoList/messageInfoListDetail?id='+ id + '&item='+ JSON.stringify(item)
-      })
-     
+        url: `/pages/messageInfoList/messageInfoListDetail?id=${id}&item=${JSON.stringify(item)}`
+      });
     },
+    // 全部已读
     readAll() {
-    }
+      const _this = this;
+      uni.showModal({
+        title: '',
+        content: '确认全部已读吗',
+        success(res) {
+          if (res.confirm) {
+            console.log(res);
+            _this.updateAllMessageRead();
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        }
+      });
+    },
+    async  updateAllMessageRead() {
+      const { code } = await this.messageService.updateAllMessageRead({
+        unitId: `${this.saleInfo.customerCode}_admin`
+      });
+      if (code === '1') {
+        this.isExpand = false;
+        this.flag = true;
+        this.unread = 0;
+        this.getMessageList(1);
+      }
+    },
+    // 未读
+    // async getNotReadMessageCount() {
+    //   const { code, data } = await this.messageService.getNotReadMessageCount({
+    //     unitId: `${this.saleInfo.customerCode}_admin`
+    //   });
+    //   if (code === '1') {
+    //     // console.log('未读   1111');
+    //     this.unread = data;
+    //   }
+    // }
+
+
   },
 
   onLoad() {
@@ -130,13 +239,13 @@ export default {
   width:750px;
   height:1520px;
   background:rgba(245,245,245,1);
-  
+
  .message-concent{
     box-sizing:border-box;
     width:750px;
     padding:24px;
     .uni-info{
-      .unread{
+      .message-unread{
           width:176px;
           height:34px;
           font-size:24px;
@@ -146,44 +255,64 @@ export default {
           line-height:34px;
           margin:0px 200px 24px 16px;
       }
-      .read{
-        width:96px;
+      .message-read{
         height:34px;
         font-size:24px;
         font-family:PingFangSC-Regular,PingFang SC;
         font-weight:400;
         color:rgba(237,40,86,1);
         line-height:34px;
-        margin:0px 44px 24px 16px;
+        margin:0px 34px 24px 16px;
       }
-      .vertical-line{
+      .message-vertical-line{
         width:2px;
         height:26px;
         background:#C4C4C4;
         margin-top:4px;
       }
       .message-category{
-        width:96px;
         height:34px;
         font-size:24px;
         font-family:PingFangSC-Regular,PingFang SC;
         font-weight:400;
         color:rgba(237,40,86,1);
         line-height:34px;
-        margin:0px 0px 24px 44px;
+        margin:0px 8px 24px 34px;
+      }
+      .message-list{
+        position: absolute;
+        z-index: 200;
+        right: 0px;
+        top: 180px;
+      }
+      .message-icon{
+        font-size:10px;
+        color:rgba(237,40,86,1);
+        margin-top:10px;
+        //position: reletive;
       }
     }
-  
-    .textTalRow{
+
+    .message-textTalRow{
       width:702px;
       height:142px;
       background:rgba(255,255,255,1);
       border-radius:20px;
       padding:24px;
       margin-bottom:24px;
+      position:relative;
+        .message-circular {
+          width:15px;
+          height:15px;
+          border-radius: 10px;
+          background: red;
+          position: absolute;
+          right:20px;
+          top:90px;
+        }
         .uni-flex{
           text-align:center;
-          .littleTitle{
+          .message-littleTitle{
             width:88px;
             height:32px;
             background:rgba(237,40,86,1);
@@ -196,7 +325,7 @@ export default {
             margin:8px 12px 8px 0px;
           }
 
-          .title{
+          .message-title{
             width:272px;
             height:48px;
             font-size:34px;
@@ -205,8 +334,11 @@ export default {
             color:rgba(51,51,51,1);
             line-height:48px;
             margin-right:44px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow:ellipsis;
           }
-          .time{
+          .message-time{
             width:238px;
             height:34px;
             font-size:24px;
@@ -217,7 +349,7 @@ export default {
             text-align:right;
             margin:8px 0 6px 0px;
           }
-          .info{
+          .message-info{
             width:616px;
             height:34px;
             font-size:24px;
@@ -231,7 +363,7 @@ export default {
             text-overflow:ellipsis;
             text-align:left;
           }
-          .spot{
+          .message-spot{
             width:16px;
             height:16px;
             background:rgba(237,40,86,1);
@@ -241,7 +373,7 @@ export default {
             line-height:16px;
           }
         }
-      
+
     }
   }
 }

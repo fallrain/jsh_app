@@ -4,37 +4,40 @@
     ref="filterDrawer"
     mode="right"
   >
-    <view class="filter-drawer">
-      <view class="filter-drawer-cnt-list">
-        <slot></slot>
-      </view>
-      <view class="filter-drawer-btn-wrap">
-        <button
-          type="button"
-          class="filter-drawer-btn-confirm"
-          @click="filterConfirm"
-        >确定
-        </button>
-        <button
-          @click="filterReset"
-          type="button"
-          class="filter-drawer-btn-reset"
-        >重置
-        </button>
+    <view
+      class="scroll-container"
+    >
+      <view class="filter-drawer">
+        <scroll-view
+          :scroll-y="true"
+          class="filter-drawer-cnt-list"
+        >
+          <slot></slot>
+        </scroll-view>
+        <view class="filter-drawer-btn-wrap">
+          <button
+            type="button"
+            class="filter-drawer-btn-confirm"
+            @tap="filterConfirm"
+          >确定
+          </button>
+          <button
+            @tap="filterReset"
+            type="button"
+            class="filter-drawer-btn-reset"
+          >重置
+          </button>
+        </view>
       </view>
     </view>
   </uni-drawer>
 </template>
 
 <script>
-import {
-  uniDrawer
-} from '@dcloudio/uni-ui';
 
 export default {
-  name: 'JHeadTabPicker',
+  name: 'JDrawer',
   components: {
-    uniDrawer
   },
   props: {
     show: Boolean
@@ -47,6 +50,7 @@ export default {
         filterDrawer.open();
       } else {
         filterDrawer.close();
+        this.$emit('filterConfirm');
       }
     }
   },
@@ -61,26 +65,34 @@ export default {
     },
     filterConfirm() {
       /* 确定 */
-      this.$emit('filterConfirm');
+      this.$emit('update:show', false);
     }
   }
 };
 </script>
 
 <style lang="scss">
+  .scroll-container {
+    height: 100%;
+  }
+
   .filter-drawer {
     position: relative;
     height: 100%;
+    overflow: auto;
   }
+
   .filter-drawer-cnt-list {
-    height: calc(100vh - 160px);
+    height: calc(100% - 160px);
     overflow-y: auto;
     padding-left: 32px;
+    /*padding-bottom: 60px;*/
 
     &::-webkit-scrollbar {
       display: none;
     }
   }
+
   .filter-drawer-btn-wrap {
     display: flex;
     align-items: center;

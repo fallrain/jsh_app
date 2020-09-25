@@ -11,12 +11,18 @@
   box-sizing: border-box;
 }
 
+:root {
+}
+
+
 view,
 input,
 button,
 text,
 label,
-image {
+image,
+input,
+scroll-view {
   box-sizing: border-box;
 }
 
@@ -29,3 +35,152 @@ button {
     display: none;
   }
 }
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+/*fix*/
+
+::-webkit-scrollbar {
+  display: none!important;
+  width: 0 !important;
+  height: 0 !important;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  display: none;
+}
+
+.j-safe-padding-top {
+  padding-bottom: constant(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-top);
+}
+
+.j-safe-top {
+  top: constant(safe-area-inset-top);
+  top: env(safe-area-inset-top);
+}
+
+
+/*fix end*/
+
+/*fix uni-app*/
+
+.uni-popup {
+  .uni-transition {
+   bottom: calc(var(--window-bottom) - constant(safe-area-inset-bottom)) !important;
+   bottom: calc(var(--window-bottom) - env(safe-area-inset-bottom)) !important;
+  }
+}
+
+.uni-toast {
+  .uni-icon_toast {
+    &:before {
+      font-size: 60px !important;
+    }
+  }
+
+  .uni-toast__content {
+    font-size: 26px;
+  }
+}
+
+.jsh-app {
+  .uni-body {
+    .uni-popup-dialog {
+      width: 400px;
+
+      .uni-dialog-button {
+        height: 60px;
+      }
+    }
+
+    .uni-dialog-content {
+      padding: 10px 20px 20px 20px;
+    }
+  }
+
+  .uni-drawer__content{
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+  }
+
+}
+
+.popup_list {
+  .mpopup {
+    width: 700px;
+    height: 86px;
+
+    .text {
+      text-align: center;
+      font-size: 30px;
+      // color: #67c23a;
+    }
+  }
+}
+
+
+/*fix uni-app end*/
+
+/*fix uview*/
+
+.j-fix-u-numberBox {
+  .u-numberbox {
+    .uni-input-input {
+      color: $theme-color;
+      font-size: 16px;
+    }
+
+    .u-icon-plus,
+    .u-icon-minus {
+      width: 34px;
+      height: 38px !important;
+      font-weight: 400;
+      border: 1px solid #ddd;
+      background: #fff !important;
+
+      .uicon-minus,
+      .uicon-plus, {
+        font-size: 20px !important;
+        background: #fff;
+      }
+
+      .uicon-minus {
+        color: #999;
+      }
+
+      .uicon-plus, {
+        color: $theme-color;
+      }
+    }
+
+    .u-icon-plus {
+      border-left: 1px solid #ddd;
+    }
+
+    .u-icon-minus {
+      border-right: 1px solid #ddd;
+    }
+
+    .u-number-input {
+      width: 60px !important;
+      height: 38px !important;
+      margin-left: 0;
+      margin-right: 0;
+      background: #fff !important;
+      border: 1px solid #ddd;
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+}
+
+/*fix uview end*/

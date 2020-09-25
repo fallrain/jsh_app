@@ -8,6 +8,9 @@
       :type="type"
       :password="password"
       :placeholder="placeholder"
+      :value="selfValue"
+      :maxlength="maxLength"
+      @input="valChange"
     >
     <view class='jInput-right'>
       <slot></slot>
@@ -32,10 +35,26 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    maxLength: {
+      type: Number,
+      default: 140
+    }
+  },
+  data() {
+    return {
+      selfValue: this.value
+    };
+  },
+  watch: {
+    selfValue(val) {
+      this.$emit('input', val);
     }
   },
   methods: {
-
+    valChange({ detail: { value } }) {
+      this.selfValue = value;
+    }
   }
 };
 </script>

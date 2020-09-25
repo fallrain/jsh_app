@@ -83,12 +83,12 @@
   top: 0;
   width:138px;
   height:42px;
-  background:#ED2856;
   border-radius:20px 0px 20px 0px;
   color: #fff;
   font-size: 28px;
   text-align: center;
   line-height: 42px;
+  z-index: 11;
 }
 
 .jProductItem-head-text {
@@ -180,10 +180,11 @@
 }
 
 .jProductItem-btm {
+  position: relative;
   padding: 28px 0px;
   line-height: 44px;
-  display: flex;
-  justify-content: space-between;
+  //display: flex;
+  justify-content: flex-start;
 }
 
 .jProductItem-btm-tags {
@@ -191,7 +192,7 @@
   align-items: center;
 }
 
-.jProductItem-btm-tag {
+.jProductItem .jProductItem-btm-tag {
   width: 28px;
   height: 28px;
   margin-right: 12px;
@@ -268,7 +269,57 @@
     margin-left: 12px;
   }
 }
+.jProductItem-btm-inf-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+  background: #FFF0ED;
+  font-size: 18px;
+  min-height: 56px;
+  line-height: 28px;
+  padding: 10px 40px 10px 10px;
+  color: #666;
+}
+.jProductItem-btm-inf-close {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 6px;
+  color: $theme-color;
+  font-size: 28px;
+}
+.jProductItem-btm-inf-icon {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 100%;
+  background: $theme-color;
+  margin-right: 6px;
 
+  .iconfont {
+    font-size: 18px;
+    color: #fff;
+  }
+}
 .text-666{
   color: #666;
+}
+.bg-theme{
+  background: $theme-color;
+}
+.bg-primary{
+  background: #2283E2;
+}
+.bg-999{
+  background: #999;
+}
+.jucon-fend{
+  justify-content: flex-end;
+}
+.ml-auto{
+  margin-left: auto;
 }

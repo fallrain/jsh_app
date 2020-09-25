@@ -1,10 +1,50 @@
 .goodsList {
   min-height: 100vh;
+  padding-top: 256px;
   background: #F5F5F5;
 
   .uni-drawer__content {
     width: 608px !important;
   }
+}
+
+.goodsList-head-wrap {
+  position: fixed;
+  top: var(--window-top);
+  z-index: 99;
+  width: 100%;
+  padding-top: 104px;
+  height: 246px;
+
+  .jHeadTab-icon-wrap {
+    .iconfont {
+      font-size: 26px;
+    }
+
+    &.desc {
+      .iconfont:first-child {
+        color: #333;
+      }
+
+      .iconfont:last-child {
+        color: $theme-color;
+      }
+    }
+
+    &.asc {
+      .iconfont:first-child {
+        color: $theme-color;
+      }
+
+      .iconfont:last-child {
+        color: #333;
+      }
+    }
+  }
+}
+
+.goodsList-mescroll-wrap {
+  height: calc(100vh - var(--window-top) - 246px);
 }
 
 .goodsList-drawer {
@@ -20,89 +60,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-}
-
-.goodsList-drawer-filter-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 30px;
-  color: #666;
-  height: 42px;
-  margin-bottom: 24px;
-  margin-top: 32px;
-  padding-right: 30px;
-
-  .iconxia {
-    font-size: 20px;
-  }
-
-  .reverse {
-    display: inline-block;
-    transform: rotateX(180deg);
-  }
-}
-
-.goodsList-drawer-filter-head-icon-right {
-  color: #999;
-  font-size: 28px;
-}
-
-.goodsList-drawer-filter-head-tips {
-  font-size: 24px;
-  color: #999;
-}
-
-.goodsList-drawer-filter-list {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-
-.goodsList-drawer-filter-list-item {
-  width: 160px;
-  height: 52px;
-  margin-bottom: 32px;
-  margin-right: 32px;
-  background: #F7F7F8;
-  border-radius: 26px;
-  color: #666;
-  text-align: center;
-  line-height: 60px;
-  font-size: 24px;
-
-
-  &.active {
-    color: #ED2856;
-    background: #FFF5F7;
-  }
-
-  &:nth-child(3n) {
-    margin-right: 0;
-  }
-}
-
-.goodsList-drawer-filter-head-ads-wrap {
-  padding-right: 30px;
-
-  .goodsList-drawer-filter-head {
-    padding-right: 0;
-  }
-}
-
-.goodsList-drawer-filter-head-ads {
-  width: 100%;
-  height: 52px;
-  line-height: 52px;
-  background: #F7F7F8;
-  border-radius: 24px;
-  color: #666;
-  font-size: 24px;
-  padding-left: 32px;
-  padding-right: 32px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .goodsList-drawer-filter-price-range {
@@ -128,4 +85,31 @@
   background: #DBDBDB;
   margin-left: 34px;
   margin-right: 34px;
+}
+
+//.else-title {
+//
+//}
+.else-title-l {
+  font-size: 32px;
+  color: #666;
+  margin-left: 40%;
+}
+
+.else-title-x {
+  font-size: 28px;
+  color: #999;
+  margin-left: 33%;
+}
+
+.else-title-reset {
+  width: 80%;
+  height: 68px;
+  background: red;
+  margin: 5% auto;
+  border-radius: 30px;
+  line-height: 68px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 10%;
 }

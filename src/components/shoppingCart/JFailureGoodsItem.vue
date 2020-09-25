@@ -1,21 +1,22 @@
 <template>
   <view class="jFailureGoodsItem">
     <view
+      v-if="showCheck"
       class="jShoppingCartItem-cnt-check"
       @tap="choose"
     >
-      <i :class="['iconfont', checked ? 'iconradio active':'iconradio1']"></i>
+      <i :class="['iconfont', checked ? 'iconradio active':'iconradio1',checkDisabled && 'disabled']"></i>
     </view>
     <view class="jShoppingCartItem-cnt-img-wrap">
-      <image src="@/assets/img/goods/example-fridge.jpg"></image>
+      <image :src="goods.productList && goods.productList[0].productImageUrl"></image>
     </view>
     <view class="jFailureGoodsItem-cnt">
       <view class="jFailureGoodsItem-cnt-head">
         <view class="jFailureGoodsItem-cnt-head-tag mr10">失效</view>
-        <text class="jFailureGoodsItem-cnt-head-text">海尔1215DHB(C) 家用静音全自动10KG洗烘一体高温除高品质家用静音全自动10KG洗烘一体高温除高品质</text>
+        <text class="jFailureGoodsItem-cnt-head-text">{{goods.productList && goods.productList[0].productName}}</text>
       </view>
       <view class="jFailureGoodsItem-cnt-btm">
-        <div class="jFailureGoodsItem-cnt-btm-tag">客户未签约</div>
+        <view class="jFailureGoodsItem-cnt-btm-tag">{{goods.composeEnableMsg || (goods.$errorMsg && goods.$errorMsg.join('，'))}}</view>
       </view>
     </view>
   </view>
@@ -25,15 +26,31 @@
 export default {
   name: 'JFailureGoodsItem',
   props: {
+    // 商品数据
+    goods: {
+      type: Object,
+      default: () => {
+      }
+    },
     // 选中
     checked: {
       type: Boolean,
       default: false
     },
+    // 禁止选中
+    checkDisabled: {
+      type: Boolean,
+      default: false
+    },
+    // 显示选中
+    showCheck: {
+      type: Boolean,
+      default: true
+    },
     // 索引
     index: {
       type: Number,
-    }
+    },
   },
   data() {
     return {};
@@ -41,9 +58,11 @@ export default {
   methods: {
     choose() {
       /* 选中 */
-      const checked = !this.checked;
-      this.$emit('update:checked', checked);
-      this.$emit('change', checked, this.index);
+      if (!this.checkDisabled) {
+        const checked = !this.checked;
+        this.$emit('update:checked', checked);
+        this.$emit('change', checked, this.index);
+      }
     }
   }
 };

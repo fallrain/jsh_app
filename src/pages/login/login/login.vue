@@ -11,9 +11,10 @@
         <j-input
           key='accountUser'
           name='account'
-          value="form.account"
+          v-model="form.account"
           placeholder='请输入登录账号'
           handChange="this.valChange"
+          :maxLength="300"
         ></j-input>
       </view>
       <view class='mt60'>
@@ -29,7 +30,7 @@
             <view class='login-pwd-icon-wrap'>
               <view
                 :class="['iconfont', isHidePwd ? 'iconbiyan' : 'iconyanjing']"
-                @click="togglePwdStyle"
+                @tap="togglePwdStyle"
               ></view>
             </view>
           </template>
@@ -60,7 +61,7 @@
             <view class='login-pwd-icon-wrap'>
               <view
                 class='login-get-sms-code'
-                @click="getSMSCode"
+                @tap="getSMSCode"
               >获取验证码
               </view>
             </view>
@@ -71,12 +72,12 @@
     <view class="login-btns-wrap">
       <Button
         class="login-primary-btn"
-        @click="login"
+        @tap="login"
       >登录
       </Button>
       <Button
         class="login-default-btn mt40"
-        @click="toggleSMSLogin"
+        @tap="toggleSMSLogin"
       >{{loginType === 'SMS' ? '账号登录' : '短信验证码登录'}}
       </Button>
     </view>
@@ -143,7 +144,7 @@ export default {
       // 登录方式，默认账户密码
       loginType: 'account',
       // 是否已读
-      isRead: 1
+      isRead: true
     };
   },
   methods: {
@@ -170,6 +171,7 @@ export default {
       });
     },
     login() {
+      uni.setStorageSync('token', this.form.account);
       uni.showModal({
         title: '',
         content: '登录成功',
@@ -177,7 +179,13 @@ export default {
       this[USER.UPDATE_USER]({
         account: 'a0008949',
         name: '程江涛',
-        mobile: '190110119120'
+        mobile: '190110119120',
+        salesGroupCode: '2130', // 销售组织编码
+        customerCode: '8800101954',
+        saletoCode: '8800101954',
+        sendtoCode: '8800101954',
+        salesGroupCodeTwo: '2110', // 调货组织编码
+        saletoCodeTwo: '8800101954'
       });
     }
   }

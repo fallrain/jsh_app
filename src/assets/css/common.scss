@@ -44,6 +44,10 @@
   margin-left: 20px;
 }
 
+.ml22 {
+  margin-left: 22px;
+}
+
 .ml24 {
   margin-left: 24px;
 }
@@ -60,6 +64,10 @@
   margin-left: 40px;
 }
 
+.ml80 {
+  margin-left: 80px;
+}
+
 .mb8 {
   margin-bottom: 8px;
 }
@@ -72,8 +80,12 @@
   margin-bottom: 16px;
 }
 
-.mb24{
+.mb24 {
   margin-bottom: 24px;
+}
+
+.mr4 {
+  margin-right: 6px;
 }
 
 .mr6 {
@@ -96,12 +108,20 @@
   margin-right: 20px;
 }
 
+.mr24 {
+  margin-right: 24px;
+}
+
 .mr32 {
   margin-right: 32px;
 }
 
 .mr34 {
   margin-right: 34px;
+}
+
+.mr40 {
+  margin-right: 40px;
 }
 
 /*margin end*/
@@ -302,6 +322,76 @@
 }
 
 /*col end*/
+/*color-start*/
+.text-theme{
+  color: $theme-color;
+}
+/*color-end*/
+/*dis */
+
+.dis-none {
+  display: none;
+}
+
+.dis-none-imp {
+  display: none !important;
+}
+
+.dis-block {
+  display: block;
+}
+
+.dis-block-imp {
+  display: block !important;
+}
+
+.dis-inline {
+  display: inline;
+}
+
+.dis-inline-imp {
+  display: inline !important;
+}
+
+.dis-ib {
+  display: inline-block;
+}
+
+.dis-ib-imp {
+  display: inline-block !important;
+}
+
+.dis-table {
+  display: table;
+}
+
+.dis-cell {
+  display: table-cell;
+}
+
+.dis-flex {
+  display: flex;
+}
+
+.dis-flex-sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pseudo-clear:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+.pseudo-clear:before {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+/*dis end*/
 
 /*flex start*/
 .dis-flex {
@@ -331,16 +421,34 @@
 /*flex end*/
 
 /*font-size start*/
-.fs20{
+.fs20 {
   font-size: 20px;
 }
-.fs24{
+
+.fs24 {
   font-size: 24px;
 }
-.fs36{
+
+.fs36 {
   font-size: 36px;
 }
+
 /*font-size end*/
+
+
+/*common*/
+
+.j-common-icon-close-wrap{
+  width: 60px;
+  height: 40px;
+  text-align: center;
+}
+
+.j-common-color{
+  color: $theme-color;
+}
+
+/*common end*/
 
 /*公共*/
 
@@ -359,6 +467,25 @@
   font-size: 28px;
   line-height: 40px;
   color: #333;
+  word-break: break-all;
+}
+
+.j-common-btn-default {
+  display: inline-block;
+  width: 100%;
+  height: 88px;
+  text-align: center;
+  line-height: 88px;
+  background: #2283E2;
+  border-radius: 44px;
+  color: #fff;
+  font-size: 30px;
+}
+
+.j-text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /*公共 end*/
@@ -371,10 +498,14 @@
 
   .iconfont {
     font-size: 30px;
-  }
 
-  .iconfont.active {
-    color: $theme-color;
+    &.active {
+      color: $theme-color;
+    }
+
+    &.disabled {
+      color: #ccc;
+    }
   }
 }
 
@@ -417,6 +548,86 @@
   color: #666;
 }
 
+.goodsList-search-tab {
+  position: absolute;
+  top: 0;
+  z-index: 99;
+  left: 0;
+  right: 0;
+  height: 104px;
+  background: #fff;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.goodsList-search-tab-btn {
+  display: inline-block;
+  width: 160px;
+  height: 56px;
+  line-height: 56px;
+  text-align: center;
+  background: $theme-color;
+  border-radius: 28px;
+  color: #fff;
+  font-size: 28px;
+}
+
+.goodsList-drawer-filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30px;
+  color: #666;
+  height: 42px;
+  margin-bottom: 24px;
+  margin-top: 32px;
+  padding-right: 30px;
+
+  .iconxia {
+    font-size: 20px;
+  }
+
+  .reverse {
+    display: inline-block;
+    transform: rotateX(180deg);
+  }
+}
+
+.goodsList-drawer-filter-head-icon-right {
+  color: #999;
+  font-size: 28px;
+}
+
+.goodsList-drawer-filter-head-tips {
+  font-size: 24px;
+  color: #999;
+}
+
+.goodsList-drawer-filter-head-ads-wrap {
+  padding-right: 30px;
+
+  .goodsList-drawer-filter-head {
+    padding-right: 0;
+  }
+}
+
+.goodsList-drawer-filter-head-ads {
+  width: 100%;
+  height: 52px;
+  line-height: 52px;
+  background: #F7F7F8;
+  border-radius: 24px;
+  color: #666;
+  font-size: 24px;
+  padding-left: 32px;
+  padding-right: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 /*商品列表 end*/
 
 /*购物车*/
@@ -432,6 +643,10 @@
   width: 80px;
   height: 80px;
   border-radius: 100%;
+
+  &.type0 {
+    background: #3D96EE;
+  }
 }
 
 .jVersionSpecifications-pop-detail-item-check-icon {
@@ -440,7 +655,7 @@
   left: 30%;
   transform: translate(-50%, -50%);
   color: #fff;
-  font-size: 24px;
+  font-size: 32px;
 }
 
 /*购物车 end*/

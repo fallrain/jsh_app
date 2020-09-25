@@ -46,13 +46,17 @@ module.exports = {
     'no-continue': 0,
     'import/no-dynamic-require': 0,
     'global-require': 0,
-    'import/order': 0
+    'import/order': 0,
+    'default-case': 0
   },
   parserOptions: {
     parser: 'babel-eslint',
   },
   globals: {
     wx: 'readonly',
-    uni: 'readonly'
+    uni: 'readonly',
+    AlipayJSBridge: 'readonly',
+    ALIPAYH5STARTUPPARAMS: 'readonly',
+    my: 'readonly'
   },
 };

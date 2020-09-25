@@ -4,7 +4,7 @@
   height: 130px;
 }
 
-.jHeadTab-list-wrap{
+.jHeadTab-list-wrap {
   position: absolute;
   left: 0;
   right: 0;
@@ -15,11 +15,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 24px;
   padding-left: 28px;
   padding-right: 28px;
   background: #fff;
-  height: 38px;
+  height: 58px;
 }
 
 .jHeadTab-item {
@@ -29,7 +29,7 @@
   font-size: 24px;
 
   &.active {
-    color: #2283E2;
+    color: $theme-color;
   }
 
   .iconfont {
@@ -40,31 +40,45 @@
 $jHeadTab-pop-tab-list: 24px;
 .jHeadTab-pop-tab-list {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding-top: 24px;
   padding-left: 12px;
   padding-right: 12px;
   padding-bottom: $jHeadTab-pop-tab-list;
   background: #fff;
   height: 92px;
+  margin-top: -3px !important;
 
   &.isExpend {
     padding-bottom: 0;
+  }
+
+  .uni-scroll-view-content {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .uni-scroll-view {
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
 .jHeadTab-pop-tab-item {
   position: relative;
+  flex-shrink: 0;
   height: 44px;
+  margin-right: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
   background: #F2F2F7;
   border-radius: 22px;
   color: #666;
   font-size: 24px;
-  padding-left: 20px;
-  padding-right: 20px;
 
   &.active {
-    height: 44px + $jHeadTab-pop-tab-list;
+    height: 46px + $jHeadTab-pop-tab-list;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 
@@ -87,5 +101,9 @@ $jHeadTab-pop-tab-list: 24px;
 }
 
 .jHeadTab-pop-tab-item-icon {
-  font-size: 14px;
+  font-size: 22px;
+}
+
+.jHeadTab-icon-wrap {
+
 }
