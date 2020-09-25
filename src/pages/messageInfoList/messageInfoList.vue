@@ -7,7 +7,7 @@
       <view class="message-concent" v-show="tabIndex === 0">
         <view class="uni-flex uni-info" >
           <view class=" message-unread">共{{unread}}条消息未读</view>
-          <view @tap="readAll" class=" message-read">全部已读</view>
+          <view class=" message-read" @click="readAll">全部已读</view>
           <view class=" message-vertical-line"></view>
           <view class=" message-category" @tap="getIsMessage">
             {{ tips }}
@@ -70,6 +70,8 @@ export default {
   data() {
     return {
       isMessage: false,
+      pageNo: 1,
+      total: 0, // 列表总数
       // 未读
       isExpand: true,
       flag: false,
@@ -94,16 +96,12 @@ export default {
       saleInfo: USER.GET_SALE,
     })
   },
-  onLoad() {
-  },
   methods: {
     tabClick(item, index) {
       console.log(index);
-      if (index === 0 || index === 1) {
-        console.log(11111);
+      // this.tabs = e
+      if (index !== undefined) {
         this.tabIndex = index;
-      } else {
-        this.tabIndex = 0;
       }
       this.getMessageList();
     },
@@ -117,22 +115,16 @@ export default {
       this.typeName = item.typeName;
       console.log(this.typeName);
       this.flag = false;
-      this.getMessageList();
+      this.pageNo = 1;
+      this.getMessageList(this.pageNo);
     },
     getIsMessage() {
       this.isMessage = !this.isMessage;
     },
-    async upCallback(pages) {
-      /* 上推加载 */
-      console.log('3333333dddddddddddddddddd');
-      const scrollView = await this.getMessageList(pages);
-      this.mescroll.endBySize(scrollView.pageSize, scrollView.total);
-    },
-    getSearch(pages) {
-      console.log(pages);
+    getSearch(pageNo) {
     //  获取不同条件下的传参
       let param = {
-        pageNum: pages.num,
+        pageNum: pageNo,
         pageSize: 10,
         unitId: `${this.saleInfo.customerCode}_admin`,
       };
@@ -151,23 +143,25 @@ export default {
       };
       return param;
     },
-    async getMessageList(pages) {
-      const scrollView = {};
-      const param = this.getSearch(pages);
+    async getMessageList(pageNo) {
+      const param = this.getSearch(pageNo);
       console.log(param);
       const { code, data } = await this.messageService.messageList(param);
-      let curList = [];
       if (code === '1') {
-        const {
-          list
-        } = data;
-        scrollView.pageSize = data.pageSize;
-        scrollView.total = data.total;
-        console.log(scrollView);
-        curList = list;
-        // this.complete =
+        // const {
+        //   list
+        // } = data;
+        // // console.log(page.result);
+        // this.messageList = data.list;
+
+        if (pageNo === 1) {
+          this.messageList = [];
+        }
+        this.messageList = this.messageList.concat(data.list);
+        this.pageNo = this.pageNo + 1;
+        this.total = data.total;
         console.log(this.messageList);
-        curList.map((item) => {
+        this.messageList.map((item) => {
           // console.log(item);
           let num = 0;
           if (item.complete === 1) {
@@ -178,13 +172,15 @@ export default {
           }
           this.unread = num;
         });
-        if (pages.num === 1) {
-          this.messageList = curList;
-        } else {
-          this.messageList = this.messageList.concat(curList);
-        }
       }
-      return scrollView;
+    },
+    onReachBottom() {
+      console.log('到底了，该加页了');
+      if (this.messageList.length > 0 && (this.total > (this.pageNo - 1) * 10)) {
+        this.getMessageList(this.pageNo);
+      } else {
+        console.log('到底了，没数了');
+      }
     },
     showDetail(id, item) {
       console.log(id, JSON.stringify(item));
@@ -216,7 +212,7 @@ export default {
         this.isExpand = false;
         this.flag = true;
         this.unread = 0;
-        this.getMessageList();
+        this.getMessageList(1);
       }
     },
     // 未读
@@ -232,6 +228,10 @@ export default {
 
 
   },
+
+  onLoad() {
+    this.tabClick(1);
+  }
 };
 </script>
 <style lang="scss" scoped>
