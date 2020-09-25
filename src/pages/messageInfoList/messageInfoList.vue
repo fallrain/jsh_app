@@ -100,9 +100,9 @@ export default {
     tabClick(item, index) {
       console.log(index);
       // this.tabs = e
-      if (index !== undefined) {
-        this.tabIndex = index;
-      }
+      // if (index !== undefined) {
+      //   this.tabIndex = index;
+      // }
       this.getMessageList();
     },
     messageName(item) {
