@@ -1026,8 +1026,8 @@ export default {
     width: 150px;
     height: 130px;
     /*background:linear-gradient(to bottom, #F8F8FF,#87CEFA);*/
-    border-radius: 50%;
-    box-shadow: 0 0 15px #87CEFA;
+    /*border-radius: 50%;*/
+    /*box-shadow: 0 0 15px #87CEFA;*/
     color: #fff;
     font-size: 30px;
     display: flex;
